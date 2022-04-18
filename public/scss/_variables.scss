@@ -1,0 +1,61 @@
+
+
+
+/* Google font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Nunito+Sans:wght@400;600&display=swap');
+
+$primary:   #3d62e0;
+$success:   #28a745;
+$info:      #17a2b8;
+$warning:   #ffc107;
+$danger:    #dc3545;
+$purple:    #9261c6;
+$pink:      #ff7aa3;
+$white:     #ffffff;
+$dark:      #343a40;
+$light:     #f8f9fa;
+$muted:     #98a6ad;
+$black:     #000;
+
+// stylelint-disable
+$gray-100: #F9F9F9;
+$gray-200: #eee;
+$gray-300: #e7e7e7;
+$gray-400: #b7b6c7;
+$gray-500: #98a6ad;
+$gray-600: #767D8E;
+$gray-700: #435966;
+$gray-800: #3B3B40;
+$gray-900: #212529;
+
+$colors: (
+    "primary": $primary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "dark": $dark,
+    "muted": $muted,
+    "purple": $purple,
+    "pink": $pink,
+    "white": $white,
+    "light": $light
+);
+
+$body-color:  #505458;
+
+$menu-item: #182433;
+
+$font-size-base : 15px;
+
+$box-shadow:   0px 8px 35px 0px  rgba($gray-700, .08);
+
+
+$font-family-primary: 'Nunito Sans', sans-serif;
+
+// Secondary font
+$font-family-secondary: 'Montserrat', sans-serif;
+
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;

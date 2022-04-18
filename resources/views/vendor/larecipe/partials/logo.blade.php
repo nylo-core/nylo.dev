@@ -1,0 +1,1 @@
+<img src="{{ asset('images/nylo_logo.png') }}" style="height: 30px;">
