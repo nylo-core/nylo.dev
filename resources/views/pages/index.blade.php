@@ -5,23 +5,20 @@
 <section class="section home" id="home">
 	<div class="container">
 		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="home-wrapper text-left">
+			<div class="col-md-10 flex justify-content-center text-center">
+				<div class="home-wrapper">
 					<div class="text-tran-box">
-						<h1 class="text-transparent">Powerful <br>micro-framework <br>for Flutter.</h1>
+						<h1 class="text-center text-transparent">The Powerful<br>Micro-Framework for Flutter</h1>
 					</div>
-					<p>Developer tools for everyone to build Flutter apps more elegantly. <br>{{ config('app.name') }} is a micro-framework designed to help structure your projects and provide tools that will make developing apps simpler.</p>
+					<p>Developer tools to build Flutter apps elegantly.</p>
 				</div>
-			</div>
-			<div class="col-md-5 text-center align-self-center">
-				<img class="img-fluid" style="height: 285px;" src="{{ asset('images/hero_animation.gif') }}">
 			</div>
 		</div>
 		<div class="row justify-content-center mt-4">
-			<div class="col-md-11 text-left">
-				<a href="{{ route('landing.download') }}" class="btn btn-outline-primary mr-2"><i class="ri-download-line align-middle"></i> Download</a>
-				<a href="{{ route('larecipe.index') }}" class="btn btn-primary ml-2"><i class="ri-book-open-line align-middle"></i> Documentation</a>
-				<a href="{{ config('project.meta.repos.nylo.repo_name') }}" class="btn btn-muted ml-2"><i class="ri-github-line align-middle"></i> GitHub</a>
+			<div class="col-md-11 text-center">
+				<a href="{{ route('landing.download') }}" class="block btn btn-outline-primary mr-2"><i class="ri-download-line align-middle"></i> Download</a>
+				<a href="/docs" class="block btn btn-primary ml-2"><i class="ri-book-open-line align-middle"></i> Documentation</a>
+				<a href="{{ config('project.meta.repos.nylo.repo_name') }}" target="_BLANK" class="block btn btn-muted ml-2"><i class="ri-github-line align-middle"></i> GitHub</a>
 			</div>
 
 		</div>
@@ -36,7 +33,7 @@
 	</div>
 </div>
 
-<section class="section" id="features">
+<section class="section">
 	<div class="container">
 
 		<div class="row mt-4">
@@ -48,7 +45,7 @@
 					</div>
 					<h3>Faster Development</h3>
 
-					<p class="text-muted">If you already know Flutter you'll be able to start building your apps straight away with little configuration.</p>
+					<p class="text-muted">Out of box {{ config('app.name') }} has routing, localization, </p>
 				</div>
 			</div>
 
@@ -59,7 +56,7 @@
 					</div>
 					<h3>Clean structure</h3>
 
-					<p class="text-muted">We provide the basics setup like the router file, directory setup and themes so you can focus on app development.</p>
+					<p class="text-muted">Streamline your Fluter projects working with {{ config('app.name') }}'s simple directory structure.</p>
 				</div>
 			</div>
 
@@ -79,7 +76,7 @@
 </section>
 
 
-<section class="section bg-light" id="pricing">
+<section class="section bg-light">
 	<div class="container">
 
 		<div class="row">
@@ -113,37 +110,41 @@
 	</div>
 </section>
 
-<section class="section" id="faqs">
+<section class="section bae-blue">
 	<div class="container">
 		<div class="row text-center">
-			<div class="col-sm-12">
-				<h2 class="title">Some quirks and features</h2>
+			<div class="col-10 m-auto">
+				<h3 class="h2">Some Quirks &amp; Features</h3>
 				<p class="title-alt">We're sure you'll enjoy using some of the tools {{ config('app.name') }} has...</p>
 
 				<div class="row text-left">
 					<div class="col-sm-6">
 						<div class="question-box">
-							<h4>Route management</h4>
+							<h4 class="qandf-text-h">Routing</h4>
 							<p>{{ config('app.name') }} provides a simple router file where you can add all your routes. It's very customizable and doesn't require any fiddling in the main.dart file.</p>
-						</div>
-
-						<div class="question-box">
-							<h4>Configuration</h4>
-							<p>We include a .env file and .env-example file where you can add your configuration variables for the project. Fonts, themes are also easy to modify, default projects include Google Fonts so you can choose a wide range of fonts.</p>
 						</div>
 					</div>
 
 					<div class="col-sm-6">
 						<div class="question-box">
-							<h4>Widgets</h4>
-							<p>We've organized the location for your widgets and pages in the new <code>resources</code> directory. You'll be able to keep track of things better.</p>
+							<h4 class="qandf-text-h">Networking</h4>
+							<p>We include a slick networking class that makes writing API Services a breeze. Implement model decoders to parse your JSON payloads into your models.</p>
 						</div>
-						
+					</div>
+				</div>
+				<div class="row text-left mt-4">
+					<div class="col-6">
 						<div class="question-box">
-							<h4>App icons</h4>
+							<h4 class="qandf-text-h">Configuration</h4>
+							<p>We include a .env file where you can add your configuration variables for the project. Fonts, themes are also easy to modify.</p>
+						</div>
+					</div>
+
+					<div class="col-6">
+						<div class="question-box">
+							<h4 class="qandf-text-h">App Icons</h4>
 							<p>Build all your app icons quicker for your project by running <code>flutter pub run flutter_launcher_icons:main</code>.</p>
 						</div>
-
 					</div>
 
 				</div>
@@ -154,13 +155,13 @@
 
 
 <!-- Client section start -->
-<section class="section bg-light" id="clients">
+<section class="section bg-light bottom-grad">
 	<div class="container">
 		<div class="row text-center">
 			<div class="col-sm-12">
-				<h5 class="title h2">Want to understand more?</h5>
-				<a href="{{ $docsIndex }}" class="btn btn-primary mt-2"><i class="ri-book-open-line align-middle"></i> Read the documentation</a>
-			</div> <!-- end Col -->
+				<h5 class="title h2">Get started, learn {{ config('app.name') }}</h5>
+				<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}" class="btn btn-primary mt-2"><i class="ri-book-open-line align-middle"></i> Get Started</a>
+			</div> 
 		</div>
 		<!-- end row -->
 	</div>

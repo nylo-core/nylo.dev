@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Install](#install "Install")
   - [Adding your .env file](#adding-your-env-file "Adding your env file")

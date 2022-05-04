@@ -13,13 +13,13 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="nav navbar-nav ml-auto navbar-center" id="mySidenav">
                     <li class="nav-item">
-                        <a href="{{ route('larecipe.index') }}" class="nav-link scroll">Documentation</a>
+                        <a href="/docs" class="nav-link scroll">Documentation</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('resources.index') }}" class="nav-link scroll">Resources</a>
                     </li>
                     <li class="nav-item">
-                        <a href="https://github.com/nylo-core/framework/blob/master/CHANGELOG.md" target="_BLANK" class="nav-link scroll">Changelog</a>
+                        <a href="https://github.com/nylo-core/framework/blob/{{ $latestVersionOfNylo }}/CHANGELOG.md" target="_BLANK" class="nav-link scroll">Changelog</a>
                     </li>
                     <li class="nav-item">
                         <a href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK" class="nav-link scroll">Packages</a>

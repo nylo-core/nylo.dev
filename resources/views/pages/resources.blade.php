@@ -7,7 +7,7 @@
 
 		<div class="row">
 			<div class="col-sm-12 text-center">
-				<h1>Useful resources</h1>
+				<h1>Useful Resources</h1>
 				<p class="title-alt">We'll add resources here that we think find you'll find useful.</p>
 			</div>
 		</div>
@@ -17,7 +17,7 @@
 			<div class="col-md-7 border-top pt-4 mt-2">
 					<p class="h5"><i class="ri-book-fill"></i> Docs</p>
 					<p>Our official documentation for {{ config('app.name') }}</p>
-					<p><a href="{{ $docsIndex }}">View documentation</a></p>
+					<p><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">View documentation</a></p>
 				</div>
 
 				<div class="col-md-7 border-top pt-4 mt-2">

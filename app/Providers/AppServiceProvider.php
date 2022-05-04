@@ -24,12 +24,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('pages.*', function ($view) {
-            $link = route('larecipe.show', [
-                    'version' => config('larecipe.versions.default'), 
-                    'page' => config('larecipe.docs.landing')
-                ]);
+            $latestVersionOfNylo = array_key_last(config('project.doc-index')['versions']);
 
-            $view->with('docsIndex', $link);
+            $view->with('latestVersionOfNylo', $latestVersionOfNylo);
         });
     }
 }

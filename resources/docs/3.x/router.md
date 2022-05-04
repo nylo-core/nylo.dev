@@ -2,39 +2,32 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - Basics
   - [Adding routes](#adding-routes "Adding routes")
   - [Navigating to pages](#navigating-to-pages "Navigating to pages")
-  - [Passing data to routes](#passing-data-to-routes "Passing data to routes")
+  - [Multiple routers](#add-multiple-routers "Multiple routers")
+- Features
+  - [Passing data to another page](#passing-data-to-another-page "Passing data to another page")
   - [Page transitions](#page-transitions "Page transitions")
   - [Navigation types](#navigation-types "Navigation types")
-  - [Multiple routers](#add-multiple-routers "Multiple routers")
+  - [Navigating back](#navigating-back "Navigating back")
 
 
 <a name="introduction"></a>
 <br>
 ## Introduction
 
-Routes helps us navigate users around our apps. They provide a simple journey usually from the (`/`) index page. You can add routes in Nylo with the `lib/routers/router.dart` file. In this file, you’ll be able to assign the `name` of the route e.g. `“/settings”` and also the widget view you want to show.
+Routes help us navigate users around our apps. They provide a journey usually from the (`/`) index page.
 
-You may also need to pass data from one view to the other and that’s also possible when navigating from a widget. We’ll dive deeper into how all this works in Nylo. 
+You can add routes inside the `lib/routers/router.dart` file. Routes are built with a route name e.g. `“/settings”` and then provide the widget that you want to show.
 
-<a name="adding-routes"></a>
-<br>
-
-## Adding routes
-
-This is the most basic form of adding a new route to your project in the `/lib/routes/router.dart` file.
 
 ``` dart
-buildRouter() => nyRoutes((router) {
+appRouter() => nyRoutes((router) {
   ...
-  router.route("/settings-page", (context) => SettingsPage());
+  router.route("/settings", (context) => SettingsPage());
 
   // add more routes
   // router.route('/home', (context) => HomePage());
@@ -42,14 +35,35 @@ buildRouter() => nyRoutes((router) {
 });
 ```
 
-> {info} Inside the `router.dart` file you'll find the `buildRouter` function, this is called when initializing the app.
+You may also need to pass data from one view to another. In Nylo, that’s possible using the `NyStatefulWidget`. We’ll dive deeper into this to explain how it works.
+
+
+<a name="adding-routes"></a>
+<br>
+
+## Adding routes
+
+Here's the most basic form of adding a new route to your project.
+
+File: <b>/lib/routes/router.dart</b>
+
+``` dart
+appRouter() => nyRoutes((router) {
+  ...
+  router.route("/settings-page", (context) => SettingsPage());
+
+  // My new route
+  router.route('/home', (context) => HomePage());
+
+});
+```
 
 <a name="navigating-to-pages"></a>
 <br>
 
 ## Navigating to pages
 
-You can navigate to new pages using the `Navigator` class as per the below example.
+You can navigate to new pages using the `Navigator` class like in the example below.
 
 ``` dart
 void _pressedSettings() {
@@ -57,15 +71,12 @@ void _pressedSettings() {
 }
 ```
 
-You can also navigate using the `routeTo()` helper if your widget extends `NyState`.
+You can also navigate using the `routeTo()` helper if your widget extends the `NyState` class.
 
 ``` dart
-...
-class SettingsPage extends NyStatefulWidget {
-  final SettingController controller = SettingController();
-  
-  SettingsPage({Key key}) : super(key: key);
-  
+import 'package:nylo_framework/nylo_framework.dart';
+
+class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -75,77 +86,15 @@ class _SettingsPageState extends NyState<SettingsPage> {
   void _pressedSettings() {
       routeTo("/settings-page");
   }
-```
-
-Pass data to the next page.
-``` dart
-// HomePage Widget
-void _pressedSettings() {
-    Navigator.pushNamed(context, "/settings-page", arguments: "Hello World");
-    // or
-    routeTo("/settings-page", data: "Hello World");
-}
-...
-// SettingsPage Widget
-class _SettingsPageState extends NyState<SettingsPage> {
-  ...
-  @override
-  widgetDidLoad() async {
-    print(widget.data()); // Hello World
-  }
-```
-
-Once you're on the new page, you can also call `pop()` to go back to the existing Page.
-``` dart
-// SettingsPage Widget
-class _SettingsPageState extends NyState<SettingsPage> {
-  ...
-  _back() {
-    this.pop();
-  }
-```
-
-<a name="passing-data-to-routes"></a>
-<br>
-
-## Passing data to routes
-
-You may sometimes need to pass data from one screen to another. Here’s a simple example of how that might look in Nylo.
-
-``` dart
-class _HomePageState extends NyState<HomePage> {
-  ...
-  _showProfile() {
-    User user = new User();
-    user.firstName = 'Anthony';
-
-    routeTo("/profile-page", data: user);
-  }
-
 ...
 ```
-
-Next on our other page
-
-``` dart 
-class _ProfilePageState extends NyState<ProfilePage> {
-  ...
-  @override
-  widgetDidLoad() {
-    User user = widget.data();
-    print(user.firstName); // Anthony
-
-  }
-```
-
-Note: For this to work your widget will **need** to extend the `StatefulPageWidget` class and have a controller.
 
 <a name="add-multiple-routers"></a>
 <br>
 
-## Multiple routes
+## Multiple routers
 
-If your `/routes/router.dart` file is getting big or you just want to separate your routes, there's a way. You can first define your new routes in a new file like the below example.
+If your `routes/router.dart` file is getting big or you need to separate your routes, you can. First, define your routes in a new file like the below example.
 
 <br>
 
@@ -161,11 +110,201 @@ NyRouter dashboardRouter() => nyRoutes((router) {
 });
 ```
 
-Then, open `/lib/main.dart` and add the new router.
+Then, open `/lib/app/providers/route_provider.dart` and add the new router.
 
 ``` dart
-Nylo nylo = await Nylo.init(router: buildRouter(), setup: boot);
+import 'package:flutter_app/routes/router.dart';
+import 'package:flutter_app/routes/dashboard_router.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class RouteProvider implements NyProvider {
+
+  boot(Nylo nylo) async {
+    nylo.addRouter(appRouter());
+
+    nylo.addRouter(dashboardRouter()); // new routes
+
+    return nylo;
+  }
+}
+
+...
+```
+
+<a name="passing-data-to-another-page"></a>
+<br>
+
+## Passing data to another page
+
+In this section, we'll show how you can pass data from one widget to another.
+At times it can be useful to send data using the `Navigator` class but you can use the `routeTo` helper too.
+
+``` dart
+// HomePage Widget
+void _pressedSettings() {
+    Navigator.pushNamed(context, "/settings-page", arguments: "Hello World");
+    // or
+    routeTo("/settings-page", data: "Hello World");
+}
+...
+// SettingsPage Widget (other page)
+class _SettingsPageState extends NyState<SettingsPage> {
+  ...
+  @override
+  init() async {
+    print(widget.data()); // Hello World
+  }
+```
+
+More examples
+
+``` dart
+// Home page widget
+class _HomePageState extends NyState<HomePage> {
+
+  _showProfile() {
+    User user = new User();
+    user.firstName = 'Anthony';
+
+    routeTo("/profile-page", data: user);
+  }
+
 ...
 
-nylo.addRouter(dashboardRouter()); // new routes
+// Profile page widget (other page)
+class _ProfilePageState extends NyState<ProfilePage> {
+
+  @override
+  init() {
+    User user = widget.data();
+    print(user.firstName); // Anthony
+
+  }
+```
+
+<a name="page-transitions"></a>
+<br>
+
+## Page Transitions
+
+You can add transitions when you navigate from one page by modifying your `router.dart` file.
+
+``` dart
+import 'package:page_transition/page_transition.dart';
+
+appRouter() => nyRoutes((router) {
+
+  // bottomToTop
+  router.route(
+    "/settings-page", (context) => SettingsPage(), 
+    transition: PageTransitionType.bottomToTop
+    );
+
+  // leftToRightWithFade
+  router.route(
+    '/home', (context) => HomePage(), 
+    transition: PageTransitionType.leftToRightWithFade
+  );
+
+});
+```
+
+Available transitions:
+- PageTransitionType.fade
+- PageTransitionType.rightToLeft
+- PageTransitionType.leftToRight
+- PageTransitionType.topToBottom
+- PageTransitionType.bottomToTop
+- PageTransitionType.scale (with alignment)
+- PageTransitionType.rotate (with alignment)
+- PageTransitionType.size (with alignment)
+- PageTransitionType.rightToLeftWithFade
+- PageTransitionType.leftToRightWithFade
+- PageTransitionType.leftToRightJoined
+- PageTransitionType.rightToLeftJoined
+
+You can also apply a transition when navigating to a new page in your project.
+
+``` dart
+// Home page widget
+class _HomePageState extends NyState<HomePage> {
+
+  _showProfile() {
+    routeTo(
+      "/profile-page", 
+      pageTransition: PageTransitionType.bottomToTop
+    );
+  }
+...
+```
+
+Nylo uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
+
+<a name="page-transitions"></a>
+<br>
+
+## Navgiation Types
+
+When navigating you can specify one of the following if you are using the `routeTo` helper.
+
+- NavigationType.push - push a new page to your apps' route stack.
+- NavigationType.pushReplace - Replace the current route which disposes of the previous route once the new route has finished.
+- NavigationType.popAndPushNamed - Pop the current route off the navigator and push a named route in its place.
+
+``` dart
+// Home page widget
+class _HomePageState extends NyState<HomePage> {
+
+  _showProfile() {
+    routeTo(
+      "/profile-page", 
+      navigationType: NavigationType.pushReplace
+    );
+  }
+...
+```
+
+<a name="navigating-back"></a>
+<br>
+
+## Navgiating back
+
+Once you're on the new page, you can use the `pop()` helper to go back to the existing page.
+
+``` dart
+// SettingsPage Widget
+class _SettingsPageState extends NyState<SettingsPage> {
+
+  _back() {
+    this.pop();
+    // or 
+    Navigator.pop(context);
+  }
+...
+```
+
+If you want to return a value to the previous widget, provide a `result` like in the below example.
+
+``` dart
+// SettingsPage Widget
+class _SettingsPageState extends NyState<SettingsPage> {
+
+  _back() {
+    pop(result: {"status": "COMPLETE"});
+  }
+
+...
+
+// Then get the value from the widget before it using the `onPop` parameter
+// HomePage Widget
+class _HomePageState extends NyState<HomePage> {
+
+  _viewSettings() {
+    routeTo('/settings', onPop: (value) {
+      print(value); // {"status": "COMPLETE"}
+    });
+  }
+...
+
+
 ```

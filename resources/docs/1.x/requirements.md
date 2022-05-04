@@ -2,10 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
-
 <a name="section-1"></a>
 - [Installing Flutter](#installing-flutter "Installing Flutter")
 - [Set up an editor](#set-up-an-editor "Set up an editor")

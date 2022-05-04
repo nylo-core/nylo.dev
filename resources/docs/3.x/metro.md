@@ -1,9 +1,6 @@
-# Metro Cli tool
+# Metro CLI tool
 
 ---
-
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
@@ -14,9 +11,12 @@
   - [Make page](#make-page "Make a new page with Metro")
   - [Make stateless widget](#make-stateless-widget "Make a new stateless widget with Metro")
   - [Make stateful widget](#make-stateful-widget "Make a new stateful widget with Metro")
+  - [Make API Service](#make-api-service "Make a new API Service with Metro")
+  - [Make Event](#make-event "Make a new Event with Metro")
+  - [Make Provider](#make-provider "Make a new provider with Metro")
   - [Make Theme](#make-theme "Make a new theme with Metro")
-- Appicons
-  - [Building appicons](#build-app-icons "Building app icons with Metro")
+- App Icons
+  - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 
 
 <a name="introduction"></a>
@@ -34,7 +34,7 @@ Mac guide
 
 1. **Open your bash\_profile**
 
-``` dart
+``` bash
 sudo open ~/.bash_profile
 ```
 
@@ -55,11 +55,9 @@ If you open a project that uses Nylo, try to run the following in the terminal.
 metro
 ```
 
-You should get an output similar to the below.
+You should see an output similar to the below.
 
 ``` bash
-Metro - Nylo\'s Companion to Build Flutter apps by Anthony Gordon
-
 Usage: 
     command [options] [arguments]
 
@@ -67,8 +65,6 @@ Options
     -h
 
 All commands:
- project
-  project:init
 
  make
   make:controller
@@ -76,6 +72,10 @@ All commands:
   make:page
   make:stateless_widget
   make:stateful_widget
+  make:theme
+  make:event
+  make:provider
+  make:api_service
   make:theme
 
  appicons
@@ -99,7 +99,7 @@ Or with the alias metro
 metro make:controller profile_controller
 ```
 
-This is will create a new controller if it doesn't exist within the `app/controllers` directory.
+This is will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
 <a name="make-model"></a>
 <br>
@@ -118,14 +118,25 @@ Or with the alias metro
 metro make:model product
 ```
 
-This is will create a new model if it doesn't exist within the `app/models` directory.
+It will place the newly created model in `lib/app/models/`.
+
+If you plan to use the same model to represent objects from your API's, add it to your `lib/config/decoders.dart` modelDecoders map.
+
+#### Arguments:
+
+Using the `--force` flag will overwrite an exiting class if it already exists.
+
+``` bash
+metro make:model product --force
+```
+
+Using the `--storage` flag will create a new model that is storable to the users local storage.
 
 ``` bash
 metro make:model product --storable
 ```
-You can also make a Storable model which can be saved to the users local storage.
 
-Learn more on Storable models [here](/docs/2.x/storage)
+Learn more on Storable models <a href="/docs/3.x/storage#introduction-to-storable-models">here</a>.
 
 
 <a name="make-page"></a>
@@ -145,7 +156,7 @@ Or with the alias metro
 metro make:page product_page
 ```
 
-This is will create a new page if it doesn't exist within the `resources/pages/` directory.
+This is will create a new page if it doesn't exist within the `lib/resources/pages/` directory.
 Nylo also supports the use of controllers. Use the below command to create a new page with a controller.
 
 ``` bash
@@ -171,7 +182,7 @@ Or with the alias metro
 metro make:stateless_widget product_rating_widget
 ```
 
-This is will create a new widget if it doesn't exist within the `resources/widgets` directory.
+The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <a name="make-stateful-widget"></a>
 <br>
@@ -188,7 +199,82 @@ Or with the alias metro
 metro make:stateful_widget product_rating_widget
 ```
 
-This is will create a new widget if it doesn't exist within the `resources/widgets` directory.
+The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
+
+<a name="make-api-service"></a>
+<br>
+
+## Make API Service
+
+You can make a new API service by running the below in the terminal.
+
+``` bash
+flutter pub run nylo_framework:main make:api_service user
+```
+
+Or with the alias metro
+
+``` bash
+metro make:api_service user_api_service
+```
+
+You can provide the `--url="https://myapi.com"` option to create an API Service that will use the `url` as the Base URL.
+
+``` bash
+flutter pub run nylo_framework:main make:api_service user --url="https://myapi-baseurl.com"
+```
+
+You can provide a `--model="User"` option to tell Nylo to create a new API Service with the following methods: <b>find</b>, <b>create</b>, <b>delete</b>, <b>update</b> and <b>fetchAll</b>.
+
+``` bash
+flutter pub run nylo_framework:main make:api_service user --model="User"
+```
+
+It will place the newly created API service in `lib/app/networking/`.
+
+<a name="make-event"></a>
+<br>
+
+## Make event
+
+You can make a new event by running the below in the terminal.
+
+``` bash
+flutter pub run nylo_framework:main make:event login_event
+```
+
+Or with the alias metro
+
+``` bash
+metro make:api_service login_event
+```
+
+This is will create a new event in `lib/app/events`.
+
+You will also need to add the event to your `lib/config/events.dart` map for it to be used.
+
+
+<a name="make-provider"></a>
+<br>
+
+## Make provider
+
+Create new providers in your application using the below command.
+
+``` bash
+flutter pub run nylo_framework:main make:provider firebase_provider
+```
+
+Or with the alias metro
+
+``` bash
+metro make:provider firebase_provider
+```
+
+It will place the newly created provider in `lib/app/providers/`.
+
+You will also need to add the provider to your `lib/config/providers.dart` map for it to be used.
+
 
 <a name="make-theme"></a>
 <br>
@@ -207,24 +293,15 @@ Or with the alias metro
 metro make:theme bright_theme
 ```
 
-This is will create a new theme in `resources/themes`.
-
-
 <a name="build-app-icons"></a>
 <br>
 
-## Building app icons
+## Build App Icons
 
 You can generate all the app icons for IOS and Android by running the below command.
 
 ``` bash
-flutter pub run nylo_framework:main appicons:build
+flutter pub run flutter_launcher_icons:main
 ```
 
-Or with the alias metro
-
-``` dart
-metro appicons:build
-```
-
-This uses the pubspec.yaml configuration for your app icon. Check out the next section which explains how you can update your app icon in more detail.
+This uses the <b>flutter_icons</b> configuration in your `pubspec.yaml` file.

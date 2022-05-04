@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to validation")
 - [Validation Rules](#validation-rules "Validation Rules")
@@ -12,13 +9,14 @@
 
 <a name="introduction"></a>
 <br>
+
 ## Introduction
 
-In Nylo, we provide a simple way to can start validating your users input and show them feedback through an alert.
+In Nylo, we provide a simple way to can start validating your user's input and show them feedback through an alert.
 
 We currently have some basic validation rules but we'll be adding more in the future.
 
-Let's take a look how validation works in Nylo.
+Let's take a look at how validation works in Nylo.
 
 ``` dart 
 class ExamplePage extends NyStatefulWidget {
@@ -62,23 +60,23 @@ this.validator(
 );
 ```
 
-This method is handy if you want to quickly validate the users data and display some feedback to the user.
+This method is handy if you want to quickly validate the user's data and display some feedback to the user.
 
 <a name="validation-rules"></a>
 <br>
 
 ## Validation Rules
 
-Here's the available validation rules that you can use in Nylo.
+Here are the available validation rules that you can use in Nylo.
 
 | Rule Name   | Usage | Info |
-|   :-   |  :  | : |
-| email | email  | Checks if the data is a valid email |
-| contains   | contains:jeff,cup,example  | Checks if the data contains a value |
-| url  | url  | Checks if the data is a valid url |
-| boolean  | boolean  | Checks if the data is a valid boolean |
-| min  | min:5  | Checks if the data is a minimum of x characters |
-| max  | max:11  | Checks if the data is a maximum of x characters |
+|---|---|---|
+| Email | email  | Checks if the data is a valid email |
+| Contains   | contains:jeff,cup,example  | Checks if the data contains a value |
+| URL  | url  | Checks if the data is a valid url |
+| Boolean  | boolean  | Checks if the data is a valid boolean |
+| Min  | min:5  | Checks if the data is a minimum of x characters |
+| Max  | max:11  | Checks if the data is a maximum of x characters |
 
 <br>
 
@@ -87,7 +85,7 @@ Here's the available validation rules that you can use in Nylo.
 <a href="#validation-rule-email">email</a> 
 <br>
 
-This allows you to validate if the input a email.
+This allows you to validate if the input is an email.
 
 Usage: `email`
 
@@ -125,7 +123,7 @@ Usage: `url`
 
 Check if the input is a minimum of characters.
 
-Usage: `min:7` - will fail if the users input is less than 7 characters.
+Usage: `min:7` - will fail if the user's input is less than 7 characters.
 
 <br>
 
@@ -133,4 +131,4 @@ Usage: `min:7` - will fail if the users input is less than 7 characters.
 
 Check if the input is a maximum of characters.
 
-Usage: `max:10` - will fail if the users input is more than than 10 characters.
+Usage: `max:10` - will fail if the user's input is more than 10 characters.

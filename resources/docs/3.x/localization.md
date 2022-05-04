@@ -2,30 +2,26 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to localization")
 - [Adding localised files](#adding-localised-files "Adding localised files")
 - Basics
   - [Localizing text](#localizing-text "Localizing text")
     - [Arguments](#arguments "Arguments")
-    - [Updating the locale](#updating-the-locale "Updating the locale")
+  - [Updating the locale](#updating-the-locale "Updating the locale")
   - [Setting a default locale](#setting-a-default-locale "Settings a default locale")
 
 
 <a name="introduction"></a>
 <br>
+
 ## Introduction
 
-Localizing our projects provides us with an easy way to change the language or experience for users in different countries. 
+Localizing our projects provides us with an easy way to change the language for users in different countries. 
 
-If your apps primary Locale was **en** (English) and you wanted to also provide users in Spain with a Spanish version, localising the app would be your best option.
+If your apps primary Locale was **en** (English) but you also wanted to provide users in Spain with a Spanish version, localising the app would be your best option.
 
 Here's an example to localize text in your app using Nylo.
-
-<br>
 
 #### Example of a localized file: `lang/en.json`
 ``` json
@@ -50,7 +46,7 @@ ListView(
 )
 ```
 
-This will display the text from the en.json file. If you support more than one locale, add another file like **es.json** and copy the same keys but change the values to match the locale.
+The above will display the text from the <b>lang/en.json</b> file. If you support more than one locale, add another file like <b>lang/es.json</b> and copy the keys but change the values to match the locale.
 Here's an example.
 #### Example of a English localized file: `lang/en.json`
 ``` json
@@ -69,9 +65,10 @@ Here's an example.
 
 <a name="adding-localised-files"></a>
 <br>
+
 ## Adding Localized files
 
-We include a `lang` directory in the project that can be found at the root of the project. Inside here, you'll be able to include `.json` files for each locale. E.g. es.json for Spanish or pt.json for Portuguese.
+Add all your localization files to the `lang/` directory. Inside here, you'll be able to include your different locales. E.g. <b>es.json</b> for Spanish or <b>pt.json</b> for Portuguese.
 
 #### Example: `lang/en.json`
 ``` dart
@@ -79,7 +76,7 @@ We include a `lang` directory in the project that can be found at the root of th
   "documentation": "documentation",
   "changelog": "changelog",
   "intros": {
-    "hello": "hello @{{first_name}}",
+    "hello": "hello {{first_name}}",
   }
 }
 ```
@@ -90,17 +87,17 @@ We include a `lang` directory in the project that can be found at the root of th
   "documentation": "documentación",
   "changelog": "registro de cambios",
   "intros": {
-    "hello": "hola @{{first_name}}",
+    "hello": "hola {{first_name}}",
   }
 }
 ```
 
 
-Once you’ve added the  `.json` files, you’ll then need to include them within your pubspec.yaml file.
+Once you’ve added the  `.json` files, you’ll need to include them within your pubspec.yaml file.
 
 Go to your **pubspec.yaml** file and then at the `assets` section, add the new files.
 
-> {info} You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
+> You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
 
 
 <a name="localizing-text"></a>
@@ -114,7 +111,6 @@ You can localize any text with a key from your lang `.json` file.
 "documentation".tr()
 // or
 trans("documentation");
-
 ```
 
 You can also use nested keys in the json file. Here's an example below.
@@ -138,12 +134,11 @@ You can also use nested keys in the json file. Here's an example below.
   }
 }
 ```
-#### Example using nested json keys
+#### Example using nested JSON keys
 ``` dart 
 "intros.hello".tr()
 // or
 trans("intros.hello");
-
 ```
 
 <a name="arguments"></a>
@@ -151,15 +146,14 @@ trans("intros.hello");
 
 ### Arguments
 
-You can supply arguments to fill in values for your keys. In the below example, we have a key named **"intros.hello_name"**, it has one fillable value named **"first_name"**.
-To fill in **"first_name"**, we can handle it by passing in a value to the method below.
+You can supply arguments to fill in values for your keys. In the below example, we have a key named **"intros.hello_name"**. It has one fillable value named **"first_name"** to fill this value, pass a value to the method below.
 
 #### Example: `lang/en.json`
 ``` json
 {
   "changelog": "changelog",
   "intros": {
-    "hello_name": "hello @{{first_name}}",
+    "hello_name": "hello {{first_name}}",
   }
 }
 ```
@@ -169,19 +163,16 @@ To fill in **"first_name"**, we can handle it by passing in a value to the metho
 {
   "changelog": "registro de cambios",
   "intros": {
-    "hello_name": "hola @{{first_name}}"
+    "hello_name": "hola {{first_name}}"
   }
 }
 ```
 
-#### Example to fill arguments in your json file.
+Example to fill arguments in your JSON file.
 ``` dart 
-// e.g. Locale('en') English
-// ...
 "intros.hello_name".tr(arguments: {"first_name": "Anthony"}) // Hello Anthony
 // or
 trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Anthony
-
 ```
 
 <a name="updating-the-locale"></a>
@@ -197,9 +188,25 @@ String language = 'es'; // country code must match your json file e.g. pt.json w
 await NyLocalization.instance.setLanguage(context, language: language); // Switches language
 ```
 
-What this will do is update the locale to (Spanish which is) **es**.
+This will update the locale to Spanish.
 
-This can be extremely useful if you wanted to provide users with an options menu to select a language to use in the app. E.g. if they navigated to a settings screen with language flags and selected Spanish. 
+If you widget extends the `NyState` class, you can set the locale by calling the `changeLanguage` helper.
+
+Example below.
+
+```dart 
+class _MyHomePageState extends NyState<MyHomePage> {
+...
+  InkWell(
+    child: Text("Switch to Spanish"), 
+    onTap: () async {
+      await changeLanguage('es');
+    },
+  )
+```
+
+This is useful if you need to provide users with a menu to select a language to use in the app. 
+E.g. if they navigated to a settings screen with language flags and selected Spanish. 
 
 
 <a name="setting-a-default-locale"></a>
@@ -209,7 +216,7 @@ This can be extremely useful if you wanted to provide users with an options menu
 
 You may want to update the default locale when users open your app for the first time, follow the steps below to see how.
 1. First, open the `.env` file.
-2. Next update the `DEFAULT_LOCALE` property to your Locale like the below example.
+2. Next, update the `DEFAULT_LOCALE` property to your Locale like the below example.
 
 ``` dart
 DEFAULT_LOCALE="es" // e.g. for Spanish and you'll then need to add your new .json file in /lang/es.json

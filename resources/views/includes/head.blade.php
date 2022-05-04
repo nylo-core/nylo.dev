@@ -34,5 +34,4 @@
     gtag('config', '{{ config('project.meta.ga_id') }}');
   </script>
   @endenv
-
 </head>

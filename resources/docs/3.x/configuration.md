@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to configuration in Nylo")
 - Environment
@@ -16,20 +13,10 @@
 <br>
 ## Introduction
 
-Nylo provides a `.env` file which contains global configuration variables like the App Name, default locale and private API keys.
+Nylo provides a `.env` file which contains global configuration variables like the app name, default locale and your App's environment.
 
-You can access these values anywhere in the app using the below helper.
+This file is located at the root of your project named <b>".env"</b>.
 
-``` dart
-import 'package:nylo_support/helpers/helper.dart';
-...
-
-String appName = getEnv('APP_NAME');
-```
-
-The `.env` file can be found at the root of the project and should look similar to the below.
-
-You can add new variables here such as strings and booleans.
 ``` env
 APP_NAME=Nylo
 APP_ENV=local
@@ -42,20 +29,37 @@ TIMEZONE=UTC
 DEFAULT_LOCALE=en
 ```
 
+You can add new variables here and then fetch them using the `getEnv()` helper.
+
+<br>
+
+#### Accessing values from the .env file
+
+You can access your `.env` values anywhere in the app using the below helper.
+
+``` dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+String appName = getEnv('APP_NAME');
+```
+
 <a name="environment-configuration"></a>
 <br>
-## Environment configuration
 
-Environment variables are great for using anywhere in our applications. A quick example would be if we wanted to set the name of our application to e.g. `MySuper App` and then use the same value anywhere in our widgets.
+## Environment Configuration
 
-<br>
+Configuring your applications enviroment is simple. 
 
-#### Your .env file
+First open your `.env` file and then update the keys in the enviroment file.
+
+You can also add addtional keys here e.g. `SHOW_ADS="false"`.
+
+<b>Your .env file</b>
 ``` dart
 APP_NAME="My Super App"
 ```
 
-#### Your Text widget
+<b>Your Text widget</b>
 
 ``` dart
 Text(
@@ -68,39 +72,39 @@ Text(
 
 ---
 
-To add global configuration variables to your project, you can use the `.env` file to store add any sensitive values too.
-This file is useful for adding API keys and any information you consider sensitive. It could also be used for anything you might need to access globally throughout your app.
+Best practises:
 
-> {danger} It's important to note that this file should never be committed to your repository (if using version control). By default, it's included within your .gitignore file.
+- Don't store anything sensitive or large.
+
+- Don't commit your `.env` file to a (public/private) repository.
 
 <a name="environment-variable-types"></a>
 <br>
 
 ## Environment Variable Types
 
-The `.env` values are set as type `string` when you are defining them but Nylo will return some values types in a more helpful way like `booleans` and `null` values.
+The values in your <b>.env</b> file are defined as `String`'s but Nylo will return them if they appear to be `Booleans` or `null` values.
 
-| `.env` file | `.env` return type |
-| : |   :-   |
-| DEBUG\_MODE=true |   (bool) true   |
-| SHOW\_ADS=false | (bool) false |
-| APP\_NAME="MySuper App" | (string) "My Super App"   |
-| MAPS\_API\_KEY=null | (null) null  |
+| `.env` file | Return type |
+|---|---|
+| APP\_NAME="MySuper App" | `String` |
+| DEBUG\_MODE=true | `Boolean`  |
+| URL_TERMS=null | `null` |
 
 
 <a name="retrieving-environment-values"></a>
 <br>
 
-## Retrieving environment values
+## Retrieving Environment Values
 
-Fetching values from your `.env` file is simple in Nylo, you can call the `getEnv(String key)` function. 
+Fetching values from your `.env` file is simple in Nylo, you can call the `getEnv(String key)` helper. 
 
 ``` dart
 String appName = getEnv('APP_NAME');
 ```
 
 <br>
-You can also provide a `defaultValue` if the key doesn't exists in the .env file.
+You can also provide a <b>defaultValue</b> if the key doesn't exists in the .env file.
 
 ``` dart
 String locale = getEnv('DEFAULT_LOCALE', defaultValue: "en");

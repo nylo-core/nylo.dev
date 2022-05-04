@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction to storage](#introduction "Introduction to storage")
 - Storing and retrieving data
@@ -18,11 +15,12 @@
 
 <a name="introduction"></a>
 <br>
+
 ## Introduction
 
 In Nylo you can save data to the users device using the `NyStorage` class. 
 
-This uses the [flutter\_secure\_storage](https://pub.dev/packages/flutter_secure_storage) package to save and retrieve data.
+Under the hood, Nylo uses the [flutter\_secure\_storage](https://pub.dev/packages/flutter_secure_storage) package to save and retrieve data.
 
 <a name="store-values"></a>
 <br>
@@ -32,7 +30,7 @@ This uses the [flutter\_secure\_storage](https://pub.dev/packages/flutter_secure
 To store values, you can use the below helper.
 
 ``` dart
-import 'package:nylo_support/helpers/helper.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 NyStorage.store("com.company.myapp.coins", "10");
@@ -47,7 +45,7 @@ NyStorage.store("com.company.myapp.coins", "10");
 To retrieve values, you can use the below helper.
 
 ``` dart
-import 'package:nylo_support/helpers/helper.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 // Default
@@ -65,10 +63,15 @@ double coins = await NyStorage.read<double>("com.company.myapp.coins"); // 10.00
 
 <a name="introduction-to-storable-models"></a>
 <br>
+
 ## Introduction to storable models
 
-Storable models are useful for storing small sized data to the users devices. 
-It can be helpful way to store the users progress in a game, coins or even their api token.
+Storable models are handy for storing small-sized pieces of data on the user's device. 
+
+It's useful for storing information such as:
+- Progress in a game
+- API Token
+- Locale preference
 
 Here's a model that extends the `Storable` class.
 
@@ -112,7 +115,7 @@ After extending the `Storable` class, you then need to override the `toStorage()
 To save a Storable model, you can use the below helper.
 
 ``` dart
-import 'package:nylo_support/helpers/helper.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 User user = new User();
@@ -136,7 +139,7 @@ NyStorage.store(key, user);
 To retrieve a Storable model, you can use the below helper.
 
 ``` dart
-import 'package:nylo_support/helpers/helper.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 String key = "com.company.myapp.auth_user";
 

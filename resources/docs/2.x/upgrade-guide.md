@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Changelog](#changelog "Changelog")
 - [Upgrading to 2.x from 1.x](#upgrading-to-2.x-from-1.x "Upgrading to 2.x from 1.x")

@@ -9,9 +9,9 @@
             <div class="col-md-3 col-sm-6">
                 <h5>Documentation</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{{ route('larecipe.show', ['version' => config('larecipe.versions.default'), 'page' => 'installation']) }}">Installation</a></li>
-                    <li><a href="{{ route('larecipe.show', ['version' => config('larecipe.versions.default'), 'page' => 'requirements']) }}">Requirements</a></li>
-                    <li><a href="{{ route('larecipe.show', ['version' => config('larecipe.versions.default'), 'page' => 'router']) }}">Basics</a></li>
+                    <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">Installation</a></li>
+                    <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'requirements']) }}">Requirements</a></li>
+                    <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'router']) }}">Router</a></li>
                     <li><a href="https://github.com/nylo-core/framework/blob/master/CHANGELOG.md" target="_BLANK">Changelog</a></li>
                 </ul>
             </div>

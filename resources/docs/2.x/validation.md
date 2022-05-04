@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to validation")
 - [Validation Rules](#validation-rules "Validation Rules")

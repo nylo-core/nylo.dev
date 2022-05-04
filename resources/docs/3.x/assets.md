@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to assets")
 - Files
@@ -12,7 +9,6 @@
   - [Returning files](#returning-files "Returning files")
 - Managing assets
   - [Adding new files](#adding-new-files "Adding new files")
-  - [Pubspec.yaml](#pubspec-yaml-assets "Pubspec yaml assets")
 
 
 <a name="introduction"></a>
@@ -65,27 +61,3 @@ getPublicAsset('/video/welcome.mp4');
 ## Adding new files
 
 To add new files open the `public/assets` directory and include your files in a new folder or an existing one.
-
-<a name="pubspec-yaml-assets"></a>
-<br>
-
-## Pubspec yaml assets
-
-> {danger} If you add a new file to the public/assets/ directory, you also need to include it within your pubspec.yaml file under "assets".
-
-You can include your new files like the below example.
-
-Example new file: `public/assets/video/welcome.mp4`
-
-<br>
-
-#### pubspec.yaml file
-``` yaml
-...
-assets:
-  - public/assets/video/welcome.mp4
-  - public/assets/fonts/
-  - public/assets/images/nylo_logo.png
-  - lang/en.json
-  - .env
-```

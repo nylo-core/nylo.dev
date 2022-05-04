@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - App Development
@@ -29,10 +26,10 @@ New installs of Nylo contain standardized file structure and config so you can j
 
 ## New to Flutter?
 
-A great place to start is the official [Flutter website](https://flutter.dev). 
-They have tons of docs to help you understand how things work from the core. 
+A great place to start learning Flutter is through the <a href="https://flutter.dev" target="_BLANK">Flutter website</a>. 
+They have tons of documentation to help you understand how things work from the core. 
 
-You can also subscribe to their YouTube channel for updates and what's happening in the community.
+You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutterdev/featured" target="_BLANK">channel</a> for updates, tutorials and information on Flutter.
 
 
 <a name="maintenance-and-release-schedule"></a>
@@ -40,17 +37,15 @@ You can also subscribe to their YouTube channel for updates and what's happening
 
 ## Maintenance and release schedule
 
-Maintenance of Nylo will be done monthly to check any bugs or weird glitches that might be causing problems.
-The Nylo framework follows [Semantic Versioning](https://semver.org).
+Major releases for Nylo are scheduled annually, but any bugs or weird glitches are dealt with ad hoc. 
+The Nylo framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
 <a name="framework-dependencies"></a>
 <br>
 
 ## Framework dependencies
 
-Without these open source libraries, Nylo wouldn't be where it's at today. 
-
-Support these libraries in any way you can:
+Nylo's <a href="https://github.com/nylo-core/framework" target="_BLANK">framework</a> + <a href="https://github.com/nylo-core/support" target="_BLANK">support</a> library use the below open source libraries:
 
 - [url\_launcher](https://pub.dev/packages/url_launcher)
 - [google\_fonts](https://pub.dev/packages/google_fonts)
@@ -62,8 +57,8 @@ Support these libraries in any way you can:
 - [logger](https://pub.dev/packages/logger)
 - [page\_transition](https://pub.dev/packages/page_transition)
 - [args](https://pub.dev/packages/args)
-- [nylo\_framework](https://pub.dev/packages/nylo_framework)
-- [nylo\_support](https://pub.dev/packages/nylo_support)
+- [analyzer](https://pub.dev/packages/analyzer)
+- [recase](https://pub.dev/packages/recase)
 - [dio](https://pub.dev/packages/dio)
 - [validated](https://pub.dev/packages/validated)
 - [flutter\_styled\_toast](https://pub.dev/packages/flutter_styled_toast)
@@ -77,6 +72,8 @@ Support these libraries in any way you can:
 
 ## Contributors
 
-Here's a shout out to the active contributors to Nylo within the last few months, if you've made a contribution, free free to reach out via <a href="mailto:support@nylo.dev">support@nylo.dev</a> to request us to add you here.
+Here's a shout out to the active contributors to Nylo within the last few months. If you've contributed, reach out via <a href="mailto:support@nylo.dev">support@nylo.dev</a> to request us to add you here.
 
-- [Anthony Gordon (Creator)](https://github.com/agordn52)
+- <a href="https://github.com/agordn52" target="_blank">Anthony Gordon (Creator)</a>
+- <a href="https://github.com/Abdulrasheed1729" target="_blank">Abdulrasheed1729</a>
+- <a href="https://github.com/Rashid-Khabeer" target="_blank">Rashid-Khabeer</a>

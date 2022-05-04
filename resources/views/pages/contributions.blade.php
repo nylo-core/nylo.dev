@@ -35,6 +35,7 @@
                     <li>Areas: the code areas that your PR might effect</li>
                 </ul>
                 <a href="https://github.com/nylo-core/framework">{{ config('app.name') }} Framework Repository</a>
+                <br>
                 <a href="https://github.com/nylo-core/support">{{ config('app.name') }} Support Repository</a>
             </div>
             <div class="col-sm-2 text-center align-content-center">

@@ -2,10 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
-
 <a name="section-1"></a>
 - [Installing Flutter](#installing-flutter "Installing Flutter")
 - [Set up an editor](#set-up-an-editor "Set up an editor")
@@ -14,7 +10,7 @@
 <br>
 ## Installing Flutter
 
-To use Nylo you'll need to already have Flutter installed. You can check out the [Flutter docs](https://flutter.dev/docs/get-started/install) for how to get set up.
+To use Nylo, you'll need to have Flutter installed. Check out the <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter docs</a> for how to get set up.
 
 **Minimum Flutter version: v2.8.0**
 
@@ -41,5 +37,8 @@ flutter doctor -v
 
 ## Set up an editor
 
-You can use most IDE's to build your Flutter projects. Two known favourites are [Android Studio](https://developer.android.com/studio) and [VSCode](https://code.visualstudio.com/).
-Once you have your editor, you can use the simulator or your device to test your projects.
+<a href="https://developer.android.com/studio">Android Studio</a> or <a href="https://code.visualstudio.com">VSCode</a> are great options for Flutter development.
+- Set up <a href="https://docs.flutter.dev/get-started/editor?tab=androidstudio" target="_BLANK">Android Studio</a>
+- Set up <a href="https://docs.flutter.dev/get-started/editor?tab=vscode" target="_BLANK">VS Code</a>
+
+When your editor is ready, you can start building Flutter applications.

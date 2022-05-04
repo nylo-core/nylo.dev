@@ -40,8 +40,8 @@ class GenerateSitemapCommand extends Command
         $docs = config('project.meta.docs');
         foreach ($docs as $version => $links) {
             foreach ($links as $link) {
-                $urlLink = route('larecipe.show', ['version' => $version, 'page' => $link]);
-                $sitemap->add(Url::create($urlLink)->setPriority(0.87));   
+                $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]);
+                $sitemap->add(Url::create($urlLink)->setPriority(0.87));          
             }
         }
 

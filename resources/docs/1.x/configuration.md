@@ -2,9 +2,6 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to configuration in Nylo")
 - Environment
@@ -16,7 +13,7 @@
 <br>
 ## Introduction
 
-Nylo provides a `.env` file which contains global configuration variables like the App Name, default locale and private API keys.
+Nylo provides a `.env` file which contains global configuration variables like the App Name, default locale and API keys.
 
 You can access these values anywhere in the app using the below helper.
 

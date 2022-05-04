@@ -2,106 +2,103 @@
 
 ---
 
-- <span class="text-grey">Sponsors</span>
-- [Become a sponsor](https://nylo.dev/contributions)
-
 <a name="section-1"></a>
 - [Install](#install "Install")
   - [Adding your .env file](#adding-your-env-file "Adding your env file")
   - [Running the project](#running-the-project "Running the project")
-- Setup
-  - [Metro Cli tool](#setup-metro-alias "Setup Metro Cli tool alias")
+- [Metro CLI](#metro-cli "Metro CLI")
+  - [Set up an alias for Metro CLI (Mac)](#set-up-metro-alias-for-mac "Set up an alias for Metro CLI (Mac)")
 
 <a name="install"></a>
 <br>
 ## Install
 
-> {info} You should have Flutter installed from the previous step
+You can either download Nylo <a href="/download">here</a> or clone the git repository using the below command.
 
-``` dart
+```bash
 git clone https://github.com/nylo-core/nylo.git nylo_app
 ```
 
-You will need to run `flutter pub get` on the project to fetch all the packages.
+<b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
 
 <a name="adding-your-env-file"></a>
 <br>
 
 ## Adding your .env file
 
-You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub then this might already be there.
+You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub, this file will already be there.
 
-From the terminal, you can run the below command.
+> The project must have a `.env` file to build the project successfully.
 
-``` bash
-cp .env-example .env
-```
-
-Or if you have the Metro Cli tool alias you can do the below
-``` bash
-flutter pub run nylo_framework:main project:init
-```
-
-> {danger} You must add this because the project won't build without it.
-
----
 
 <a name="running-the-project"></a>
 <br>
 
 ## Running the project
 
-Once you have done the above steps, try to run the project. 
+Nylo projects run in the exact 'normal' way you'd build a Flutter app. Depending on which IDE you have chosen, this part will be slightly different.
 
-You should be greeted with Nylo's default landing screen for new projects.
+Check this guide here for <a href="https://docs.flutter.dev/development/tools/android-studio#running-and-debugging" target="_BLANK">Android Studio</a> or <a  target="_BLANK" href="https://docs.flutter.dev/development/tools/vs-code#run-app-without-breakpoints">Visual Studio Code</a>.
 
----
+Once you have done the above steps, try running the project.
+If the build is successful, the app will display Nylo's default landing screen.
 
-<a name="setup-metro-alias"></a>
+
+<a name="metro-cli"></a>
 <br>
 
 ## Metro CLI tool
 
-Nylo provides a useful CLI tool called Metro. It's been built to make creating things in your project easier, the below list shows what you can create:
+Nylo provides a CLI tool called <b>Metro</b>. 
+It's been built so you can run commands in the terminal to create things. Using Metro, you can create the following in your projects:
+
 - Models
 - Controllers
 - Pages
 - Stateful widgets and stateless widgets
-- Building your app icons
+- Events
+- Providers
+- API Services
 
-<br>
+E.g. Running `flutter pub run nylo_framework:main make:model Property` will create a new 'Property' model in your project.
 
-You can use Metro by running the following command:
+To access the menu, you can run the below in the terminal.
 
   - `flutter pub run nylo_framework:main`
 
-This command is long to type and hard to remember so you can also add a **bash alias** into your `bash_profile`.
-
+<a name="set-up-metro-alias-for-mac"></a>
 <br>
 
-#### Installation for Mac guide
+## Creating an alias for Metro (Mac guide)
+
+Typing `flutter pub run nylo_framework:main` each time you want to run a command is long.
+So, to make things easier, create an alias.
+
+If you're new to aliases, they allow you to create alternative names for your commands.
+
+E.g. `flutter pub run nylo_framework:main` can become `metro`.
 
 ---
 
-1. **Open your bash\_profile**
-``` dart
+1. Open your bash\_profile
+``` bash
 sudo open ~/.bash_profile
 ```
 
-1. **Add this alias to your bash\_profile**
+2. Add this alias to your bash\_profile
 ``` bash
 ...
 alias metro='flutter pub run nylo_framework:main'
 ```
 
-1. **Then run the following**
+3. Then run the following
 ``` bash
 source ~/.bash_profile
 ```
 
+Now you can type `metro` from your terminal to run commands in your Nylo project.
+
 ### Can't find your bash\_profile?
 
-If you are unsure about where to add the above, check out some guides online for where to find your bash\_profile. 
-The above example assumes it's in your `~/` location but it could be in a different location or missing from your setup.
-
-
+If you are unsure where to add the above, check out some guides online for where to find your <b>bash\_profile</b> file.
+The above example assumes that your bash_profile is in your `~/` location.

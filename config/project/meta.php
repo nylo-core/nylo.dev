@@ -3,17 +3,17 @@
 return [
     'repos' => [
         'nylo' => [
-            'version' => 'v2.3.0',
+            'version' => 'v3.1.0',
             'repo_name' => 'http://github.com/nylo-core/nylo'
         ],
 
         'framework' => [
-            'version' => 'v2.3.0',
+            'version' => 'v3.1.0',
             'repo_name' => 'http://github.com/nylo-core/framework'
         ],
 
         'support' => [
-            'version' => 'v2.5.0',
+            'version' => 'v3.0.1',
             'repo_name' => 'http://github.com/nylo-core/support'
         ],
     ],
@@ -54,6 +54,27 @@ return [
             'validation',
             'themes',
             'assets',
+        ],
+        '3.x' => [
+            'what-is-nylo',
+            'requirements',
+            'upgrade-guide',
+            'installation',
+            'configuration',
+            'directory-structure',
+            'router',
+            'controllers',
+            'metro',
+            'app-icons',
+            'storage',
+            'localization',
+            'validation',
+            'themes',
+            'assets',
+            'networking',
+            'providers',
+            'decoders',
+            'events',
         ]
     ]
 ];
