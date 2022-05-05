@@ -191,8 +191,6 @@ Inside this folder, you will find a `LoggingInterceptor` class.
 <b>File: </b> `app/networking/dio/intecetors/logging_interceptor.dart`
 ```dart
 import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class LoggingInterceptor extends Interceptor {
