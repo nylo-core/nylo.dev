@@ -16,7 +16,6 @@ return [
 
 			'basics' => [
 				'router',
-				'networking',
 				'metro',
 				'localization',
 				'storage',
@@ -44,7 +43,6 @@ return [
 
 			'basics' => [
 				'router',
-				'networking',
 				'metro',
 				'localization',
 				'storage',

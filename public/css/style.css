@@ -719,7 +719,6 @@ h6 {
   mix-blend-mode: lighten;
   overflow: hidden;
   font-size: 54px;
-  margin-bottom: 40px;
   font-weight: 600;
   margin-top: 0px;
 }
@@ -1086,4 +1085,7 @@ h6 {
 }
 .bae-blue {
   background-color: #d3e1ee;
+}
+.flex {
+  display: flex;
 }

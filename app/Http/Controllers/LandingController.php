@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Artesaos\SEOTools\Facades\SEOTools;
 use SEO;
 use Request;
 use App\Download;
@@ -14,29 +13,30 @@ class LandingController extends Controller
 {
 	public function __construct()
 	{
-		SEOTools::setDescription(config('app.name') . ' is an open-source app for Flutter that makes building apps simpler, faster and cleaner. It provides the foundation to start creating stright away. View our documentation to lean how you can take advantage of the framework.');
-		SEOTools::setCanonical(Request::url());
-		SEOTools::opengraph()->setUrl(Request::url());
-		SEOTools::twitter()->setSite('@nylo_dev');
-		SEOTools::opengraph()->addProperty('type', 'website');
-        SEOTools::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
+		$this->setDefaultSeo();
+	}
+
+	public function setDefaultSeo()
+	{
+		SEO::setDescription(config('app.name') . ' is an open-source micro-framework for Flutter that makes building apps a breeze. It provides all the basic building blocks to create a modern application.');
+		SEO::setCanonical(Request::url());
+		SEO::opengraph()->setUrl(Request::url());
+		SEO::twitter()->setSite('@nylo_dev');
+		SEO::opengraph()->addProperty('type', 'website');
+        SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
 	}
 
 	public function download(HttpRequest $request)
 	{
-		$latestNyloVersion = config('project.meta.repos.nylo.version');
+		$response = Http::get("https://api.github.com/repos/nylo-core/nylo/releases/latest");
+		abort_if(!$response->successful(), 500);
 
 		$download = Download::create([
-			'project' => 'http://github.com/nylo-core/nylo',
-			'version' => $latestNyloVersion,
+			'project' => 'nylo-core/nylo',
+			'version' => $response->json('name'),
 			'ip' => $request->ip()
 		]);
-
-		abort_if(!$download, 500);
-
-		$response = Http::get("https://api.github.com/repos/nylo-core/nylo/releases/latest");
-
-		abort_if(!$response->successful(), 500);
+		abort_if(!$download, 500);		
 
 		$zipballUrl = $response->json('zipball_url');
 
@@ -45,35 +45,35 @@ class LandingController extends Controller
 
 	public function index()
 	{
-		SEOTools::setTitle(config('app.name') . ' - Powerful Flutter micro-framework');
+		SEO::setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework | Nylo');
 
 		return view('pages.index');
 	}
 
 	public function contributions()
 	{
-		SEOTools::setTitle('Contributions - ' . config('app.name'));
+		SEO::setTitle('Contributions | ' . config('app.name'));
 
 		return view('pages.contributions');
 	}
 
 	public function privacyPolicy()
 	{
-		SEOTools::setTitle('Privacy policy - ' . config('app.name'));
+		SEO::setTitle('Privacy policy | ' . config('app.name'));
 
 		return view('pages.privacy-policy');
 	}
 
 	public function termsAndConditions()
 	{
-		SEOTools::setTitle('Terms and conditions - ' . config('app.name'));
+		SEO::setTitle('Terms and conditions | ' . config('app.name'));
 
 		return view('pages.terms-and-conditions');
 	}
 
 	public function resources()
 	{
-		SEOTools::setTitle('Resources - ' . config('app.name'));
+		SEO::setTitle('Resources | ' . config('app.name'));
 
 		return view('pages.resources');
 	}
@@ -81,11 +81,9 @@ class LandingController extends Controller
 	public function viewDocs($version = '3.x', $page = 'installation')
 	{
 		SEO::setTitle(str($page)->headline() . ' - ' . config('app.name') . ' - Flutter Micro-framework');
-		SEO::setDescription('Documentation for Nylo, a Flutter Micro-framework.');
+		SEO::setDescription(str($page)->headline() . ' documentation for Nylo. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
 		SEO::opengraph()->addProperty('type', 'articles');
 		SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
-
-		// docs,flutter,nylo,dart,app,development,framework
 
 		$mdDocPage = base_path() . '/resources/docs/' . $version . '/' . $page . '.md';
 		abort_if(file_exists($mdDocPage) == false, 404);

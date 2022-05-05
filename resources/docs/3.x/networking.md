@@ -45,10 +45,10 @@ class ApiService extends BaseApiService {
 Variables you can override using the <b>BaseApiService</b> class.
 
 - `baseUrl` - This is the base URL for the API, e.g. "https://jsonplaceholder.typicode.com".
-- `interceptors` - Here, you can add Dio interceptors. Learn more about interceptors [here](https://pub.dev/packages/dio#interceptors).
+- `interceptors` - Here, you can add Dio interceptors. Learn more about interceptors <a href="https://pub.dev/packages/dio#interceptors" target="_BLANK">here</a>.
 - `useInterceptors` - You can set this to true or false. It will let the API Service know whether or not to use your interceptors.
 
-Under the hood, the base networking class uses [Dio](https://pub.dev/packages/dio), a powerful HTTP client.
+Under the hood, the base networking class uses <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>, a powerful HTTP client.
 
 <a name="making-http-requests"></a>
 <br>
@@ -78,7 +78,7 @@ class ApiService extends BaseApiService {
   }
 ```
 
-The `request` argument is a [Dio](https://pub.dev/packages/dio) instance so you can call all the methods from that object.
+The `request` argument is a <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a> instance so you can call all the methods from that object.
 
 <a name="base-options"></a>
 <br>

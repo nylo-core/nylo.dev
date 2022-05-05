@@ -10,6 +10,16 @@ module.exports = {
 
         DEFAULT: {
           css: {
+            blockquote: {
+              p: {
+                '&:before': {
+                  content: 'none',
+                },
+                fontStyle: 'normal !important',
+                marginTop: '3px',
+                marginBottom: '3px'
+              }
+            },
             code: {
               '&:before': {
                 content: 'none !important',

@@ -28,7 +28,7 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 
 You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub, this file will already be there.
 
-> The project must have a `.env` file to build the project successfully.
+> The project must have a `.env` file to build successfully.
 
 
 <a name="running-the-project"></a>

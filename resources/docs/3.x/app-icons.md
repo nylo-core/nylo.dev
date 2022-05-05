@@ -77,8 +77,8 @@ App icon needs to be a .png type.
 
 If you are interested in learning more, you can view the official guidelines from both Google and Apple.
 
-- Apple’s human interface guideline is [here](https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/app-icon/ "Apple’s human interface guideline for App Icons")
-- Google’s icon design specifications are [here](https://developer.android.com/google-play/resources/icon-design-specifications "Google’s guidelines for icon design")
+- Apple’s human interface guideline is <a href="https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/app-icon/" target="_BLANK">here</a>
+- Google’s icon design specifications are <a href="https://developer.android.com/google-play/resources/icon-design-specifications" target="_BLANK">here</a>
 
 
 <a name="configuration"></a>

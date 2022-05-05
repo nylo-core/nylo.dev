@@ -3,12 +3,12 @@
 return [
     'repos' => [
         'nylo' => [
-            'version' => 'v3.1.0',
+            'version' => 'v3.0.1',
             'repo_name' => 'http://github.com/nylo-core/nylo'
         ],
 
         'framework' => [
-            'version' => 'v3.1.0',
+            'version' => 'v3.1.2',
             'repo_name' => 'http://github.com/nylo-core/framework'
         ],
 
