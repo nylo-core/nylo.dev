@@ -8,6 +8,7 @@
   - [Base Options](#base-options "Base Options")
   - [Adding Headers](#adding-headers "Adding Headers")
   - [Interceptors](#interceptors "Interceptors")
+  - [Understanding the network helper](#understanding-the-network-helper "Understanding the network helper")
 - [Using an API Service](#using-an-api-service "Using an API Service")
 - [Create an API Service](#create-an-api-service "Create an API Service")
 - [Morphing JSON payloads to models](#morphing-json-payloads-to-models "Morphing JSON payloads to models")
@@ -65,7 +66,7 @@ class ApiService extends BaseApiService {
   String get baseUrl => "https://jsonplaceholder.typicode.com";
 
   Future<dynamic> fetchUsers() async {
-    return await network<dynamic>(
+    return await network(
         request: (request) {
           // return request.get("/users"); // GET request
           // return request.put("/users", data: {"user": "data"}); // PUT request
@@ -223,6 +224,113 @@ class LoggingInterceptor extends Interceptor {
     handler.next(err);
   }
 }
+```
+
+<a name="understanding-the-network-helper"></a>
+<br>
+
+## Understanding the network helper
+
+The `network` helper provides us with a way to make HTTP requests from our application.
+The helper method can be accessed when using an API Service in Nylo.
+
+```dart
+class ApiService extends BaseApiService {
+  ...
+
+  Future<dynamic> fetchUsers() async {
+    return await network(
+        request: (request) {
+          // return request.get("/users"); // GET request
+          // return request.put("/users", data: {"user": "data"}); // PUT request
+          // return request.post("/users", data: {"user": "data"}); // POST request
+          // return request.delete("/users/1"); // DELETE request
+
+          return request.get("/users");
+        },
+    );
+  }
+```
+
+### Return Types
+
+There are two ways to handle the response from an HTTP request. 
+Let's take a look at both in action, there's no right or wrong way to do this.
+
+#### 1. Using Model Decoders
+
+Model Decoders are a new concept that was introduced in Nylo v3.x. 
+
+They make it easy to return your objects like in the below example.
+
+```dart
+class ApiService extends BaseApiService {
+  ...
+
+  Future<User?> fetchUser() async {
+    return await network<User>(
+        request: (request) => request.get("/users/1"),
+    );
+  }
+```
+
+<b>File: config/decoders.dart</b>
+```dart 
+final modelDecoders = {
+  User: (data) => User.fromJson(data), // add your model and handle the return of the object
+
+  // ...
+};
+```
+
+The `data` parameter will contain the HTTP response body.
+
+Learn more about decoders <a href="/docs/3.x/decoders#model-decoders">here</a>
+
+
+#### 2. Using handleSuccess
+
+The `handleSuccess: (Response response) {}` parameter can return a value from the HTTP body.
+
+```dart
+class ApiService extends BaseApiService {
+  ...
+  // Example: returning an Object
+  Future<User?> findUser() async {
+    return await network(
+        request: (request) => request.get("/users/1"),
+        handleSuccess: (Response response) { // response - Dio Response object
+          dynamic data = response.data;
+          return User.fromJson(data);
+        }
+    );
+  }
+  // Example: returning a String
+  Future<String?> findMessage() async {
+    return await network(
+        request: (request) => request.get("/message/1"),
+        handleSuccess: (Response response) { // response - Dio Response object
+          dynamic data = response.data;
+          if (data['name'] == 'Anthony') {
+            return "It's Anthony";
+          }
+          return "Hello world"; 
+        }
+    );
+  }
+  // Example: returning a bool
+  Future<bool?> updateUser() async {
+    return await network(
+        request: (request) => request.put("/user/1", data: {"name": "Anthony"}),
+        handleSuccess: (Response response) { // response - Dio Response object
+          dynamic data = response.data;
+          if (data['status'] == 'OK') {
+            return true;
+          }
+          return false;
+        }
+    );
+  }
 ```
 
 <a name="using-an-api-service"></a>

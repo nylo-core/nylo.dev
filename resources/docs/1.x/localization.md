@@ -50,7 +50,7 @@ Once you’ve added the  `.json` files, you’ll then need to include them withi
 
 Go to your **pubspec.yaml** file and then at the `assets` section, add the new files.
 
-> {info} You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
+> You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
 
 
 <a name="localizing-text"></a>

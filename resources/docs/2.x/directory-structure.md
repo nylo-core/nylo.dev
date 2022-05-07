@@ -48,7 +48,7 @@ All the app directories are listed inside the `lib` directory where your main.da
 
 All public assets can be found in `public/assets`. This directory is commonly used for images, fonts and more files that you may want to include in your project.
 
-> {info} It's important to add any new files into the `pubspec.yaml` file too.
+> It's important to add any new files into the `pubspec.yaml` file too.
 
 - `app_icon` This is used for generating app\_icons for the project.
 - `images` Include any images here in this directory.

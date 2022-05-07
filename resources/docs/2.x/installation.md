@@ -13,7 +13,7 @@
 <br>
 ## Install
 
-> {info} You should have Flutter installed from the previous step
+> You should have Flutter installed from the previous step
 
 ``` dart
 git clone https://github.com/nylo-core/nylo.git nylo_app
@@ -39,7 +39,7 @@ Or if you have the Metro Cli tool alias you can do the below
 flutter pub run nylo_framework:main project:init
 ```
 
-> {danger} You must add this because the project won't build without it.
+> You must add this because the project won't build without it.
 
 ---
 

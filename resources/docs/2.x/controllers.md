@@ -15,7 +15,7 @@ Before starting, let's go over what a controller is for those new.
 
 Here's a quick summary by [tutorialspoint.com](https://www.tutorialspoint.com/mvc_framework/mvc_framework_controllers.htm#:~:text=Asp.net%20MVC%20Controllers%20are,perform%20one%20or%20more%20actions).
 
-> {primary} The Controller is responsible for controlling the application logic and acts as the coordinator between the View and the Model. The Controller receives an input from the users via the View, then processes the user's data with the help of Model and passes the results back to the View.
+> The Controller is responsible for controlling the application logic and acts as the coordinator between the View and the Model. The Controller receives an input from the users via the View, then processes the user's data with the help of Model and passes the results back to the View.
 
 <br>
 

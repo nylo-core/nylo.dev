@@ -38,7 +38,7 @@ buildRouter() => nyCreateRoutes((router) {
 });
 ```
 
-> {info} Inside the `router.dart` file you'll find the `buildRouter` function, this is called when initializing the app.
+> Inside the `router.dart` file you'll find the `buildRouter` function, this is called when initializing the app.
 
 <a name="navigating-to-pages"></a>
 <br>

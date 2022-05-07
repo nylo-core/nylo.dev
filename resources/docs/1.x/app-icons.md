@@ -17,7 +17,7 @@
 
 You can manage your app icon in Nylo from the `/public/assets/app_icon` directory. We understand that generating all the required dimensions for your app icon can be a laborious task so we have provided a command you can run using our `Metro` Cli tool to auto-generate all your (iOS and Android) icons for you. 
 
-> {info}  Your app icon should be a `.png` with the size dimensions of 1024x1024px
+>  Your app icon should be a `.png` with the size dimensions of 1024x1024px
 
 If you have custom icons for different operating systems you can also just add them manually. This guide will be useful for those needing a tool to build their icons for them.
 
@@ -34,7 +34,7 @@ You can run the below command from the terminal to auto-generate your app icons.
 metro appicons:build
 ```
 
-> {primary} You will need the metro alias setup from the [installation](/docs/1.x/installation) steps
+> You will need the metro alias setup from the [installation](/docs/1.x/installation) steps
 
 This command will use the app icon located in your `/public/assets/app_icon`  directory to make the IOS and Android app icons to the correct dimensions.
 
@@ -47,7 +47,7 @@ This command will use the app icon located in your `/public/assets/app_icon`  di
 
 You can place your 'app icon' inside the `/public/assets/app_icon` directory. 
 
-> {info} Make your the icon filesize is **1024x1024** for the best results. 
+> Make your the icon filesize is **1024x1024** for the best results. 
 
 Once you’ve added your app icon you’ll then need to update the **image\_path** if you’re filename is different to the default Nylo app icon name. 
 

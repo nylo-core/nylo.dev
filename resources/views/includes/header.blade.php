@@ -5,9 +5,6 @@
             <a class="navbar-brand logo" href="{{ route('landing.index') }}">
                 <img src="{{ asset('images/nylo_logo_filled.png') }}" style="height: 50px;" alt="{{ config('app.name') }} logo">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             
             
             <div class="collapse navbar-collapse" id="navbarCollapse">

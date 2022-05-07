@@ -32,7 +32,8 @@ return [
 		'2.x' => [
 			'introduction' => [
 				'what-is-nylo',
-				'requirements'
+				'requirements',
+				'upgrade-guide'
 			],
 
 			'getting-started' => [

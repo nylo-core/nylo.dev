@@ -13,7 +13,7 @@
 <br>
 ## Install
 
-> {info} You should have Flutter installed from the previous step
+> You should have Flutter installed from the previous step
 
 ``` dart
 git clone https://github.com/nylo-core/nylo.git nylo_app
@@ -28,7 +28,7 @@ You will need to run `flutter pub get` on the project to fetch all the packages.
 
 You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub then this might already be there.
 
-> {danger} You must add this because the project won't build without it.
+> You must add this because the project won't build without it.
 
 ---
 

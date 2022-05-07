@@ -18,7 +18,7 @@
 You can build all your app icons automatically using `flutter pub run flutter_launcher_icons:main` from the command line. 
 This will take your current app icon in `/public/assets/app_icon` and auto-generate all your (iOS and Android) icons for you.
 
-> {info}  Your app icon should be a `.png` with the size dimensions of 1024x1024px
+>  Your app icon should be a `.png` with the size dimensions of 1024x1024px
 
 If you have custom icons for different operating systems you can also just add them manually. This guide will be useful for those needing a tool to build their icons for them.
 
@@ -46,7 +46,7 @@ This command will use the app icon located in your `/public/assets/app_icon`  di
 
 You can place your 'app icon' inside the `/public/assets/app_icon` directory. 
 
-> {info} Make your the icon filesize is **1024x1024** for the best results. 
+> Make your the icon filesize is **1024x1024** for the best results. 
 
 Once you’ve added your app icon you’ll then need to update the **image\_path** if you’re filename is different to the default Nylo app icon name. 
 

@@ -14,13 +14,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="row justify-content-center mt-4">
-			<div class="col-md-11 text-center">
-				<a href="{{ route('landing.download') }}" class="block btn btn-outline-primary mr-2"><i class="ri-download-line align-middle"></i> Download</a>
-				<a href="/docs" class="block btn btn-primary ml-2"><i class="ri-book-open-line align-middle"></i> Documentation</a>
-				<a href="{{ config('project.meta.repos.nylo.repo_name') }}" target="_BLANK" class="block btn btn-muted ml-2"><i class="ri-github-line align-middle"></i> GitHub</a>
+		<div id="header-cta-links" class="row justify-content-center mt-4">
+			<div class="col-sm-12 col-md-3 text-center">
+				<a href="{{ route('landing.download') }}" class="block btn-block btn btn-outline-primary"><i class="ri-download-line align-middle"></i> Download</a>
 			</div>
-
+			<div class="col-sm-12 col-md-3 text-center">
+				<a href="/docs" class="block btn-block btn btn-primary"><i class="ri-book-open-line align-middle"></i> Documentation</a>
+			</div>
+			<div class="col-sm-12 col-md-3 text-center">
+				<a href="{{ config('project.meta.repos.nylo.repo_name') }}" target="_BLANK" class="block btn-block btn btn-muted"><i class="ri-github-line align-middle"></i> GitHub</a>
+			</div>
 		</div>
 	</div>
 </section>
@@ -115,7 +118,7 @@
 		<div class="row text-center">
 			<div class="col-10 m-auto">
 				<h3 class="h2">Some Quirks &amp; Features</h3>
-				<p class="title-alt">We're sure you'll enjoy using some of the tools {{ config('app.name') }} has...</p>
+				<p class="title-alt">Here are some of the tools that {{ config('app.name') }} has under the hood...</p>
 
 				<div class="row text-left">
 					<div class="col-sm-6">
@@ -133,14 +136,14 @@
 					</div>
 				</div>
 				<div class="row text-left mt-4">
-					<div class="col-6">
+					<div class="col-sm-6">
 						<div class="question-box">
 							<h4 class="qandf-text-h">Let's Create</h4>
 							<p>Metro is a CLI tool that allows you to create models, pages, widgets, API services and more. Try running <code>flutter pub run nylo_framework:main</code> in your project.</p>
 						</div>
 					</div>
 
-					<div class="col-6">
+					<div class="col-sm-6">
 						<div class="question-box">
 							<h4 class="qandf-text-h">Storage</h4>
 							<p>Secure storage out of the box! Nylo comes with two classes for storage, NyStorage and a lightweight Backpack class for quick access to data on the fly.</p>
@@ -149,14 +152,14 @@
 				</div>
 
 				<div class="row text-left mt-4">
-					<div class="col-6">
+					<div class="col-sm-6">
 						<div class="question-box">
 							<h4 class="qandf-text-h">Configuration</h4>
 							<p>Manage your global configuration from a .env file. You can also easily update your font, themes and localization.</p>
 						</div>
 					</div>
 
-					<div class="col-6">
+					<div class="col-sm-6">
 						<div class="question-box">
 							<h4 class="qandf-text-h">App Icons</h4>
 							<p>Build all your app icons quicker for your project by running <code>flutter pub run flutter_launcher_icons:main</code>.</p>

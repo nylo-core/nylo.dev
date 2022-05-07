@@ -5,7 +5,7 @@
 @if($viewingOldDocs)
 <div class="p-3 bg-gray-50 mb-4 block rounded border-red-400 border-l-2">
 	<span>
-		<b>Notice:</b> You're viewing an old version of the {{ config('app.name') }} documentation.<br>Consider upgrading your project to {{ config('app.name') }} <a href="{{ route('landing.index') }}">{{ $latestVersionOfNylo }}</a>.
+		<b>Notice:</b> You're viewing an old version of the {{ config('app.name') }} documentation.<br>Consider upgrading your project to {{ config('app.name') }} <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">{{ $latestVersionOfNylo }}</a>.
 	</span>
 </div>
 @endif

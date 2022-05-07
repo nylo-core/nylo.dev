@@ -68,7 +68,7 @@ To add new files open the `public/assets` directory and include your files in a 
 
 ## Pubspec yaml assets
 
-> {danger} If you add a new file to the public/assets/ directory, you also need to include it within your pubspec.yaml file under "assets".
+> If you add a new file to the public/assets/ directory, you also need to include it within your pubspec.yaml file under "assets".
 
 You can include your new files like the below example.
 

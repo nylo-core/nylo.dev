@@ -28,15 +28,16 @@ class LandingController extends Controller
 
 	public function download(HttpRequest $request)
 	{
-		$response = Http::get("https://api.github.com/repos/nylo-core/nylo/releases/latest");
+		$project = 'nylo-core/nylo';
+		$response = Http::get("https://api.github.com/repos/" . $project . "/releases/latest");
 		abort_if(!$response->successful(), 500);
 
 		$download = Download::create([
-			'project' => 'nylo-core/nylo',
+			'project' => $project,
 			'version' => $response->json('name'),
 			'ip' => $request->ip()
 		]);
-		abort_if(!$download, 500);		
+		abort_if(!$download, 500);
 
 		$zipballUrl = $response->json('zipball_url');
 
@@ -45,7 +46,7 @@ class LandingController extends Controller
 
 	public function index()
 	{
-		SEO::setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework | Nylo');
+		SEO::setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework | ' . config('app.name'));
 
 		return view('pages.index');
 	}
@@ -78,10 +79,10 @@ class LandingController extends Controller
 		return view('pages.resources');
 	}
 
-	public function viewDocs($version = '3.x', $page = 'installation')
+	public function viewDocs(HttpRequest $request, $version = '3.x', $page = 'installation')
 	{
 		SEO::setTitle(str($page)->headline() . ' - ' . config('app.name') . ' - Flutter Micro-framework');
-		SEO::setDescription(str($page)->headline() . ' documentation for Nylo. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
+		SEO::setDescription(str($page)->headline() . ' documentation for ' . config('app.name') . '. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
 		SEO::opengraph()->addProperty('type', 'articles');
 		SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
 
