@@ -57,7 +57,7 @@ In this practical example, we'll imagine we own an e-commerce app selling t-shir
 When user's make a sucessful payments we want to dispatch an event to handle the following things:
 
 - Clear the user's cart
-- Send the Google Tag manager an event payload to log for analytics.
+- Use Google Tag Manager to log the event for analytics
 
 #### First create an event
 
