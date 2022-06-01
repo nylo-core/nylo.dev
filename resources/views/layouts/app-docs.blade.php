@@ -117,7 +117,7 @@
         </div>
         <div class="lg:pl-[19.5rem]">
 
-            <main class="max-w-3xl mx-auto relative z-20 pt-10 xl:max-w-none">
+            <main class="max-w-3xl mx-auto relative z-20 pt-10">
                 <div class="prose dark:prose-invert prose-blockquote:bg-slate-400/10 prose-blockquote:p-4 prose-blockquote:rounded-md prose-blockquote:shadow-sm self-center m-auto">
                     @yield('content')
 
