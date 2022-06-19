@@ -257,9 +257,9 @@ class ApiService extends BaseApiService {
 There are two ways to handle the response from an HTTP request. 
 Let's take a look at both in action, there's no right or wrong way to do this.
 
-#### 1. Using Model Decoders
+#### Using Model Decoders
 
-Model Decoders are a new concept that was introduced in Nylo v3.x. 
+Model Decoders are a new concept introduced in Nylo v3.x. 
 
 They make it easy to return your objects like in the below example.
 
@@ -283,14 +283,18 @@ final modelDecoders = {
 };
 ```
 
-The `data` parameter will contain the HTTP response body.
+The `data` parameter will contain the <b>HTTP</b> response body.
 
 Learn more about decoders <a href="/docs/3.x/decoders#model-decoders">here</a>
 
 
-#### 2. Using handleSuccess
+#### Using handleSuccess
 
-The `handleSuccess: (Response response) {}` parameter can return a value from the HTTP body.
+The `handleSuccess: (Response response) {}` argument can be used to return a value from the HTTP body.
+
+This method is only called if the <b>HTTP</b> response has a status code equal to 200.
+
+Here's an example below.
 
 ```dart
 class ApiService extends BaseApiService {
@@ -331,6 +335,32 @@ class ApiService extends BaseApiService {
         }
     );
   }
+```
+
+#### Using handleFailure
+
+The `handleFailure` method will be called if the <b>HTTP</b> response returns a status code not equal to 200.
+
+You can provide the <b>network</b> helper with the `handleFailure: (Response response) {}` argument and then handle the response in the function.
+
+Here's an example for how it works.
+
+```dart
+class ApiService extends BaseApiService {
+  ...
+  // Example: returning an Object
+  Future<User?> findUser() async {
+    return await network(
+        request: (request) => request.get("/users/1"),
+        handleFailure: (Response response) { // response - Dio Response object
+          dynamic data = response.data;
+          // Handle the response
+
+          return null;
+        }
+    );
+  }
+}
 ```
 
 <a name="using-an-api-service"></a>
