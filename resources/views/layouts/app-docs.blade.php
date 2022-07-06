@@ -69,6 +69,7 @@
                         <ul x-show="isOpen"
                         @click.away="isOpen = false"
                         class="absolute font-normal bg-white shadow overflow-hidden rounded w-24 border mt-2 py-1 right-0 z-20"
+                        style="display:none;" 
                         >
                         @foreach(array_keys(config('project.doc-index.versions')) as $nyloDocVersion)
                         <li>
