@@ -13,6 +13,7 @@
   - [Retrieve a Storable model](#retrieve-a-storable-model "Retrieving a Storable Model")
 - Lightweight Storage
   - [Backpack Storage](#backpack-storage "Backpack Storage")
+  - [Persist Data with Backpack](#persist-data-with-backpack "Persist Data with Backpack")
 
 <a name="introduction"></a>
 <br>
@@ -37,6 +38,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 NyStorage.store("com.company.myapp.coins", "10");
 ```
 
+Data will persist on the user's device using NyStorage. E.g. if they exit the app, you can retrieve the same data that was stored previously.
 
 <a name="retrieve-values"></a>
 <br>
@@ -186,7 +188,7 @@ Backpack.instance.read('my_lucky_no'); // 7
 
 ### Real world usage
 
-A great example for when you might want to use this class over the NyStorage class is when e.g. storing a user's `api_token` for authentication.
+A great example for when you might want to use this class over the [NyStorage](/docs/3.x/storage#store-values) class is when e.g. storing a user's `api_token` for authentication.
 
 ```dart 
 // login a user
@@ -221,3 +223,22 @@ class ApiService extends BaseApiService {
   }
 }
 ```
+
+<a name="persist-data-with-backpack"></a>
+<br>
+
+## Persist data with Backpack
+
+You can use the [`NyStorage`](/docs/3.x/storage#store-values) class to persist data but if you also need to save it to your App's Backpack storage, use the below parameter "**inBackpack**".
+
+Here's an example.
+
+```dart
+// Store data in secure storage & in memory using Backpack
+await NyStorage.store('user_token', 'a token 123', inBackpack: true);
+
+// Fetch data back with Backpack
+Backpack.instance.read('user_token'); // "a token 123"
+```
+
+> By default, NyStorge will not store data in Backpack unless the `inBackpack` parameter is set to `true`
