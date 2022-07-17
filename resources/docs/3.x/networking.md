@@ -341,7 +341,7 @@ class ApiService extends BaseApiService {
 
 The `handleFailure` method will be called if the <b>HTTP</b> response returns a status code not equal to 200.
 
-You can provide the <b>network</b> helper with the `handleFailure: (Response response) {}` argument and then handle the response in the function.
+You can provide the <b>network</b> helper with the `handleFailure: (DioError dioError) {}` argument and then handle the response in the function.
 
 Here's an example for how it works.
 
@@ -352,7 +352,7 @@ class ApiService extends BaseApiService {
   Future<User?> findUser() async {
     return await network(
         request: (request) => request.get("/users/1"),
-        handleFailure: (Response response) { // response - Dio Response object
+        handleFailure: (DioError dioError) { // response - DioError object
           dynamic data = response.data;
           // Handle the response
 
