@@ -31,6 +31,7 @@
                     <ul class="list-unstyled">
                         <li class="list-inline-item"><a href="https://twitter.com/nylo_dev" target="_BLANK"><i class="ri-twitter-line h5"></i></a></li>
                         <li class="list-inline-item"><a href="https://github.com/nylo-core/nylo" target="_BLANK"><i class="ri-github-line h5"></i></a></li>
+                        <li class="list-inline-item"><a href="https://www.youtube.com/channel/UCUbk3oL0H3luYyhq-pnozNg" target="_BLANK"><i class="ri-youtube-line h5"></i></a></li>
                     </ul>
             </div>
         </div>
@@ -42,9 +43,6 @@
             <div class="row">
                 <div class="col-sm-6">
                     <p class="font-13 copyright">&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved</p>
-                </div>
-                <div class="col-sm-6 text-right">
-                    
                 </div>
             </div>
         </div>
