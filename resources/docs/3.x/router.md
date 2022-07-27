@@ -10,6 +10,7 @@
   - [Multiple routers](#add-multiple-routers "Multiple routers")
 - Features
   - [Passing data to another page](#passing-data-to-another-page "Passing data to another page")
+  - [Query Parameters](#query-parameters "Query Parameters")
   - [Page transitions](#page-transitions "Page transitions")
   - [Navigation types](#navigation-types "Navigation types")
   - [Navigating back](#navigating-back "Navigating back")
@@ -181,6 +182,47 @@ class _ProfilePageState extends NyState<ProfilePage> {
 
   }
 ```
+
+<a name="query-parameters"></a>
+<br>
+
+## Query Parameters
+
+When navigating to a new page, you can provide query parameters. Let's take a look.
+
+```dart
+  // Home page
+  Navigator.pushNamed(context, '/profile?user=7'); // navigate to profile
+
+  ...
+
+  // Profile Page
+  @override
+  init() async {
+    print(widget.queryParameters()); // {"user": 7}
+  }
+```
+As long as your page widget extends the `NyStatefulWidget` and `NyState` class then you can call `widget.queryParameters()` to fetch all the query parameters from the route name.
+
+```dart 
+// Example page
+Navigator.pushNamed(context, '/home?hello=world&say=I%20love%20code');
+...
+
+// Home page
+class MyHomePage extends NyStatefulWidget {
+  ...
+}
+
+class _MyHomePageState extends NyState<MyHomePage> {
+
+  @override
+  init() async {
+    print(widget.queryParameters()); // {"hello": "World", "say": "I love code"}
+  }
+```
+
+> Query parameters must follow the HTTP protocol E.g. /account?userId=1&tab=2
 
 <a name="page-transitions"></a>
 <br>
