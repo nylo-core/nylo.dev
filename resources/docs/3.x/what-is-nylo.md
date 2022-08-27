@@ -77,3 +77,5 @@ Here's a shout out to the active contributors to Nylo within the last few months
 - <a href="https://github.com/agordn52" target="_blank">Anthony Gordon (Creator)</a>
 - <a href="https://github.com/Abdulrasheed1729" target="_blank">Abdulrasheed1729</a>
 - <a href="https://github.com/Rashid-Khabeer" target="_blank">Rashid-Khabeer</a>
+- <a href="https://github.com/lpdevit" target="_blank">lpdevit</a>
+- <a href="https://github.com/youssefKadaouiAbbassi" target="_blank">youssefKadaouiAbbassi</a>
