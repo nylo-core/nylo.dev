@@ -14,6 +14,7 @@
 - Lightweight Storage
   - [Backpack Storage](#backpack-storage "Backpack Storage")
   - [Persist Data with Backpack](#persist-data-with-backpack "Persist Data with Backpack")
+- [Storage keys](#storage-keys "Storage keys")
 
 <a name="introduction"></a>
 <br>
@@ -242,3 +243,54 @@ Backpack.instance.read('user_token'); // "a token 123"
 ```
 
 > By default, NyStorge will not store data in Backpack unless the `inBackpack` parameter is set to `true`
+
+<a name="storage-keys"></a>
+<br>
+
+## Storage Keys
+
+This class is useful to reference **Strings** which you can later use in your `NyStorage` or `Backpack` class.
+You can use the `StorageKey` class to organise all the shared preference Strings in your project.
+
+Open your Nylo project and find **config/storage_keys.dart**, once you open the file, you should see the below.
+> Please note. This file was added in Nylo v3.2.0, if it's missing, you can manually add it.
+
+```dart
+/*
+|--------------------------------------------------------------------------
+| Storage Keys
+| Add your storage keys here and then use them later to retrieve data.
+| E.g. static String userCoins = "USER_COINS";
+| String coins = NyStorage.read( StorageKey.userCoins );
+|
+| Learn more: https://nylo.dev/docs/3.x/storage#storage-keys
+|--------------------------------------------------------------------------
+*/
+
+class StorageKey {
+  static String userToken = "USER_TOKEN";
+
+  /// Add your storage keys here...
+
+}
+```
+
+How to use in your project.
+
+```dart 
+import 'package:flutter_app/config/storage_keys.dart';
+...
+
+class _MyHomePageState extends NyState<MyHomePage> {
+
+  @override
+  init() async {
+    // Store
+    await NyStorage.store( StorageKey.userToken , 'Anthony');
+
+    // Retrieve
+    String userName = await NyStorage.read( StorageKey.userToken );
+  }
+```
+
+This simple class helps organise all your String keys for your Storage variables.
