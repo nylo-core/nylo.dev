@@ -252,7 +252,7 @@ Backpack.instance.read('user_token'); // "a token 123"
 This class is useful to reference **Strings** which you can later use in your `NyStorage` or `Backpack` class.
 You can use the `StorageKey` class to organise all the shared preference Strings in your project.
 
-Open your Nylo project and find **config/storage_keys.dart**, once you open the file, you should see the below.
+Open your Nylo project and open the **"config/storage_keys.dart"** file.
 > Please note. This file was added in Nylo v3.2.0, if it's missing, you can manually add it.
 
 ```dart

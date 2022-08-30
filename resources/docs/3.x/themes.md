@@ -64,13 +64,13 @@ When you are ready to use the new theme, go to `config/app_theme.dart`.
 
 ``` dart
 // Light Colors
-BaseColorStyles lightColors = LightThemeColors();
+ColorStyles lightColors = LightThemeColors();
 
 // Dark Colors
-BaseColorStyles darkColors = DarkThemeColors();
+ColorStyles darkColors = DarkThemeColors();
 
 // My New Bright Colors 
-BaseColorStyles brightColors = BrightThemeColors();
+ColorStyles brightColors = BrightThemeColors();
 ...
 ```
 
@@ -124,7 +124,7 @@ In this file, you should have something similar to the below.
 
 ``` dart
 // e.g Light Theme colors
-class LightThemeColors implements BaseStyles {
+class LightThemeColors implements ColorStyles {
   // general
   Color get background => const Color(0xFFFFFFFF);
   Color get primaryContent => const Color(0xFF000000);
@@ -191,16 +191,16 @@ Text(
 
 Base styles allow you to customize various widget colours from one area in your code.
 
-Nylo ships with pre-configured base styles for your project located `lib/resources/themes/styles/base_styles.dart`.
+Nylo ships with pre-configured base styles for your project located `lib/resources/themes/styles/color_styles.dart`.
 
 These styles provide an interface for your theme colors in `light_theme_colors.dart` and `dart_theme_colors.dart`.
 
 <br>
 
-File `lib/resources/themes/styles/base_styles.dart`
+File `lib/resources/themes/styles/color_styles.dart`
 
 ``` dart
-abstract class BaseStyles {
+abstract class ColorStyles {
   // general
   Color get background;
   Color get primaryContent;
@@ -247,7 +247,7 @@ import 'package:nylo_framework/theme/helper/ny_theme.dart';
 TextButton(onPressed: () {
 
     // set theme to use the "dark theme" 
-    NyTheme.set(context, id: "default_dark_theme");
+    NyTheme.set(context, id: "dark_theme");
     setState(() { });
   
   }, child: Text("Dark Theme")
@@ -258,7 +258,7 @@ TextButton(onPressed: () {
 TextButton(onPressed: () {
 
     // set theme to use the "light theme" 
-    NyTheme.set(context, id: "default_light_theme");
+    NyTheme.set(context, id: "light_theme");
     setState(() { });
   
   }, child: Text("Light Theme")
