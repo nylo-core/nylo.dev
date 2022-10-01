@@ -64,8 +64,9 @@ Nylo's <a href="https://github.com/nylo-core/framework" target="_BLANK">framewor
 - [flutter\_styled\_toast](https://pub.dev/packages/flutter_styled_toast)
 - [animate_do](https://pub.dev/packages/animate_do)
 - [logger](https://pub.dev/packages/logger)
-- [collection](https://github.com/flutter/collection)
+- [collection](https://pub.dev/packages/collection)
 - [flutter](https://github.com/flutter/flutter)
+- [pretty\_dio\_logger](https://pub.dev/packages/pretty_dio_logger)
 
 <a name="contributors"></a>
 <br>

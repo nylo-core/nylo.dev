@@ -309,7 +309,7 @@ class _HomePageState extends NyState<HomePage> {
 <a name="navigating-back"></a>
 <br>
 
-## Navgiating back
+## Navigating back
 
 Once you're on the new page, you can use the `pop()` helper to go back to the existing page.
 
