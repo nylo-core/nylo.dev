@@ -58,7 +58,7 @@ This creates a new theme in your `/resources/themes/` directory and also a theme
 
 You can modify the colors for your new theme in the **/resources/themes/styles/bright_theme_colors.dart** file.
 
-When you are ready to use the new theme, go to `config/app_theme.dart`.
+When you are ready to use the new theme, go to `config/theme.dart`.
 
 **Next**, add the colors below the **Theme Colors** section like the below example.
 
@@ -160,7 +160,7 @@ class LightThemeColors implements ColorStyles {
 ## Using colors in widgets
 
 ``` dart
-import 'package:flutter_app/config/app_theme.dart';
+import 'package:flutter_app/config/theme.dart';
 ...
 
 // gets the light/dark background colour depending on the theme
