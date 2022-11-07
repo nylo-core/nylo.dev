@@ -290,7 +290,7 @@ final appThemes = [
 
 ## Fonts
 
-Updating your primary font throughout the app is easy in Nylo. Open the `lib/config/app_font.dart` file and update the below.
+Updating your primary font throughout the app is easy in Nylo. Open the `lib/config/font.dart` file and update the below.
 
 ``` dart
 final TextStyle appThemeFont = GoogleFonts.lato();
