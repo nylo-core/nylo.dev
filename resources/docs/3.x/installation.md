@@ -30,6 +30,15 @@ You will also need to add a `.env` file to your project at the root level. If yo
 
 > The project must have a `.env` file to build successfully.
 
+### Specific .env file per environment
+
+You can create a `.env.production` file at the rool level of your project. Add it to your assets in `pubspec.yaml` and then run or build your flutter app by specifiying the env file path like below. `ENV_FILE_PATH` defaults to `.env`.
+
+```bash
+flutter run --dart-define ENV_FILE_PATH=.env.production
+
+flutter build --dart-define ENV_FILE_PATH=.env.staging
+```
 
 <a name="running-the-project"></a>
 <br>
