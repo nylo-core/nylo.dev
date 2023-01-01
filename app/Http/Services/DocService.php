@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Download;
 use Illuminate\Support\Facades\Http;
+use Request;
 
 /**
  * Class DocService
@@ -93,7 +94,7 @@ class DocService
         $download = Download::create([
             'project' => $project,
             'version' => $response->json('name'),
-            'ip' => $request->ip()
+            'ip' => Request::ip()
         ]);
         abort_if(!$download, 500);
 
