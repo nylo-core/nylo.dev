@@ -37,11 +37,20 @@ class GenerateSitemapCommand extends Command
         $sitemap->add(Url::create('privacy-policy')->setPriority(0.90));
         $sitemap->add(Url::create('terms-and-conditions')->setPriority(0.90));
 
-        $docs = config('project.meta.docs');
-        foreach ($docs as $version => $links) {
-            foreach ($links as $link) {
-                $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]);
-                $sitemap->add(Url::create($urlLink)->setPriority(0.87));          
+        $docs = config('project.doc-index');
+        if (empty($docs['versions'])) {
+            return;
+        }
+        foreach ($docs['versions'] as $version => $versionLinks) {
+            $links = array_values($versionLinks);
+
+            $collectionLinks = collect($links);
+            $flattenedCollection = $collectionLinks->flatten();
+            $arrayLinks = $flattenedCollection->toArray();
+
+            foreach ($arrayLinks as $link) {
+                $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]); 
+                $sitemap->add(Url::create($urlLink)->setPriority(0.87));
             }
         }
 

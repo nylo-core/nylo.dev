@@ -91,6 +91,43 @@ return [
 				'decoders',
 				'events',
 			],
-		]
+		],
+
+		'4.x' => [
+			'introduction' => [
+				'what-is-nylo',
+				'requirements'
+			],
+
+			'getting-started' => [
+				'installation',
+				'configuration',
+				'directory-structure',
+				'upgrade-guide'
+			],
+
+			'basics' => [
+				'router',
+				'networking',
+				'metro',
+				'localization',
+				'storage',
+				'controllers',
+				'app-icons',
+				'validation',
+			],
+
+			'widgets' => [
+				'themes',
+				'assets',
+				'ny-state',
+			],
+
+			'advanced' => [
+				'providers',
+				'decoders',
+				'events',
+			],
+		],
 	],
 ];

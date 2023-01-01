@@ -80,6 +80,10 @@ h6 {
   font-weight: inherit;
 }
 
+h3 {
+  margin-top: 2.8em !important;
+}
+
 /*
 Reset links to optimize for opt-in styling instead of opt-out.
 */

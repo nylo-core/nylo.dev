@@ -2,107 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use SEO;
-use Request;
-use App\Download;
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Http;
+use App\Http\Services\DocService;
+use App\Http\Services\SeoService;
 
+/**
+ * Class LandingController
+ *
+ * @property SeoService $seoService
+ * @property DocService $docService
+ * @package App\Domain\Landing
+ */
 class LandingController extends Controller
 {
-	public function __construct()
+	public function __construct(SeoService $seoService, DocService $docService)
 	{
-		$this->setDefaultSeo();
+		$this->seoService = $seoService;
+		$this->docService = $docService;
 	}
 
-	public function setDefaultSeo()
+	public function download(HttpRequest $request, $project = 'nylo-core/nylo')
 	{
-		SEO::setDescription(config('app.name') . ' is an open-source micro-framework for Flutter that makes building apps a breeze. It provides all the basic building blocks to create a modern application.');
-		SEO::setCanonical(Request::url());
-		SEO::opengraph()->setUrl(Request::url());
-		SEO::twitter()->setSite('@nylo_dev');
-		SEO::opengraph()->addProperty('type', 'website');
-        SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
-	}
+		$downloadUrl = $this->docService->downloadFile($project);
 
-	public function download(HttpRequest $request)
-	{
-		$project = 'nylo-core/nylo';
-		$response = Http::get("https://api.github.com/repos/" . $project . "/releases/latest");
-		abort_if(!$response->successful(), 500);
-
-		$download = Download::create([
-			'project' => $project,
-			'version' => $response->json('name'),
-			'ip' => $request->ip()
-		]);
-		abort_if(!$download, 500);
-
-		$zipballUrl = $response->json('zipball_url');
-
-		return redirect($zipballUrl);
+		return redirect($downloadUrl);
 	}
 
 	public function index()
 	{
-		SEO::setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework | ' . config('app.name'));
+		$this->seoService->setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework');
 
 		return view('pages.index');
 	}
 
 	public function contributions()
 	{
-		SEO::setTitle('Contributions | ' . config('app.name'));
+		$this->seoService->setTitle('Contributions');
 
 		return view('pages.contributions');
 	}
 
 	public function privacyPolicy()
 	{
-		SEO::setTitle('Privacy policy | ' . config('app.name'));
+		$this->seoService->setTitle('Privacy policy');
 
 		return view('pages.privacy-policy');
 	}
 
 	public function termsAndConditions()
 	{
-		SEO::setTitle('Terms and conditions | ' . config('app.name'));
+		$this->seoService->setTitle('Terms and conditions');
 
 		return view('pages.terms-and-conditions');
 	}
 
 	public function resources()
 	{
-		SEO::setTitle('Resources | ' . config('app.name'));
+		$this->seoService->setTitle('Resources');
 
 		return view('pages.resources');
 	}
 
-	public function viewDocs(HttpRequest $request, $version = '3.x', $page = 'installation')
+	public function viewDocs(HttpRequest $request, $version = '4.x', $page = 'installation')
 	{
-		SEO::setTitle(str($page)->headline() . ' - ' . config('app.name') . ' - Flutter Micro-framework');
-		SEO::setDescription(str($page)->headline() . ' documentation for ' . config('app.name') . '. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
-		SEO::opengraph()->addProperty('type', 'articles');
-		SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
+		$this->seoService->setSeoViewingDocs($page);
 
-		$mdDocPage = base_path() . '/resources/docs/' . $version . '/' . $page . '.md';
-		abort_if(file_exists($mdDocPage) == false, 404);
+		$mdDocPage = $this->docService->checkIfDocExists($version, $page);
 
-		$section = '';
-		foreach (config('project.doc-index')['versions']['3.x'] as $key => $docLink) {
-			if (in_array($page, $docLink)) {
-				$section = $key;
-				break;
-			}
-		}
-
-		$viewingOldDocs = false;
-		$latestVersionOfNylo = array_key_last(config('project.doc-index')['versions']);
-
-		if ($latestVersionOfNylo != $version) {
-			$viewingOldDocs = true;
-		}
+		$section = $this->docService->findDocSection($version, $page);
+		$viewingOldDocs = $this->docService->isViewingOldDocs($version);
+		$latestVersionOfNylo = $this->docService->getLastestVersionNylo();
 
 		return view('docs.template', compact('page', 'version', 'mdDocPage', 'section', 'latestVersionOfNylo', 'viewingOldDocs'));
 	}

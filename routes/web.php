@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+// Route::get('test', function(Request $request) {
+// 	echo ($request->bearerToken());
+// 	return '';
+// });
 
 // Web Routes
 Route::controller(LandingController::class)->group(function () {

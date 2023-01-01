@@ -12,7 +12,7 @@
                     <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">Installation</a></li>
                     <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'requirements']) }}">Requirements</a></li>
                     <li><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'router']) }}">Router</a></li>
-                    <li><a href="https://github.com/nylo-core/framework/blob/master/CHANGELOG.md" target="_BLANK">Changelog</a></li>
+                    <li><a href="https://github.com/nylo-core/framework/blob/4.x/CHANGELOG.md" target="_BLANK">Changelog</a></li>
                 </ul>
             </div>
 
@@ -31,7 +31,7 @@
                     <ul class="list-unstyled">
                         <li class="list-inline-item"><a href="https://twitter.com/nylo_dev" target="_BLANK"><i class="ri-twitter-line h5"></i></a></li>
                         <li class="list-inline-item"><a href="https://github.com/nylo-core/nylo" target="_BLANK"><i class="ri-github-line h5"></i></a></li>
-                        <li class="list-inline-item"><a href="https://www.youtube.com/channel/UCUbk3oL0H3luYyhq-pnozNg" target="_BLANK"><i class="ri-youtube-line h5"></i></a></li>
+                        <li class="list-inline-item"><a href="https://www.youtube.com/@nylo_dev" target="_BLANK"><i class="ri-youtube-line h5"></i></a></li>
                     </ul>
             </div>
         </div>

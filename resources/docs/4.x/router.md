@@ -224,7 +224,7 @@ class _MyHomePageState extends NyState<MyHomePage> {
 
 > Query parameters must follow the HTTP protocol E.g. /account?userId=1&tab=2
 
-<a name="navigation-types"></a>
+<a name="page-transitions"></a>
 <br>
 
 ## Page Transitions
@@ -282,16 +282,17 @@ class _HomePageState extends NyState<HomePage> {
 
 Nylo uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
 
-<a name="page-transitions"></a>
+<a name="navigation-types"></a>
 <br>
 
 ## Navgiation Types
 
 When navigating you can specify one of the following if you are using the `routeTo` helper.
 
-- NavigationType.push - push a new page to your apps' route stack.
-- NavigationType.pushReplace - Replace the current route which disposes of the previous route once the new route has finished.
-- NavigationType.popAndPushNamed - Pop the current route off the navigator and push a named route in its place.
+- **NavigationType.push** - push a new page to your apps' route stack.
+- **NavigationType.pushReplace** - Replace the current route which disposes of the previous route once the new route has finished.
+- **NavigationType.popAndPushNamed** - Pop the current route off the navigator and push a named route in its place.
+- **NavigationType.pushAndForgetAll** - push to a new page and dispose any other pages on the stack.
 
 ``` dart
 // Home page widget
