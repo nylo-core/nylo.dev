@@ -14,6 +14,7 @@
   - [Switching theme](#switching-theme "Switching theme")
   - [Defining themes](#defining-themes "Defining themes")
   - [Fonts](#fonts "Fonts")
+  - [Design](#design "Design")
 
 
 <a name="introduction"></a>
@@ -315,3 +316,19 @@ Once you've added your font, change the variable like the below example.
 ``` dart
 final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
 ```
+
+<a name="design"></a>
+<br>
+
+## Design
+
+The **config/design.dart** file is used for managing the design elements for your app.
+
+`logo` variable is used to display your apps Logo. 
+
+You can modify **resources/widgets/logo_widget.dart** to customize how you want to display your Logo.
+
+`loader` variable is used to display a loader. Nylo will use this variable in some helper methods as the default loader widget.
+
+You can modify **resources/widgets/loader_widget.dart** to customize how you want to display your Loader.
+

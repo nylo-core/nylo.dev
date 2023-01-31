@@ -12,9 +12,9 @@
 
 To use Nylo, you'll need to have Flutter installed. Check out the <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter docs</a> for how to get set up.
 
-**Minimum Flutter version: v3.0.0**
+**Minimum Flutter version: v3.7.0**
 
-**Minimum Dart version: v2.17.0**
+**Minimum Dart version: v2.19.0**
 
 ---
 

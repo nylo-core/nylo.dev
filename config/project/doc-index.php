@@ -127,6 +127,7 @@ return [
 				'providers',
 				'decoders',
 				'events',
+				'slates'
 			],
 		],
 	],
