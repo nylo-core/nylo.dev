@@ -39,7 +39,7 @@ List<NyTemplate> run() => [
       NyTemplate(
         name: "login_page", // name of the file
         saveTo: pagesFolder, // folder to save to
-        pluginsRequired: [], // dependacies that are required for the stub
+        pluginsRequired: [], // dependencies that are required for the stub
         stub: stubLoginPage(), // stub you want to generate in you /stubs directory
       ),
 
