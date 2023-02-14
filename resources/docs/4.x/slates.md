@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [Creating a slate package](#creating-a-slate-package "Creating a Slate package")
+- [Creating a Slate package](#creating-a-slate-package "Creating a Slate package")
 
 
 <a name="introduction"></a>
