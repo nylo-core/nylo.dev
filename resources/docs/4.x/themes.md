@@ -82,7 +82,7 @@ ColorStyles brightColors = BrightThemeColors();
 class ThemeConfig {
 
   // LIGHT
-  static BaseThemeConfig light() => BaseThemeConfig(
+  static BaseThemeConfig<ColorStyles> light() => BaseThemeConfig<ColorStyles>(
     id: "default_light_theme",
     description: "Light theme",
     theme: lightTheme(lightColors),
@@ -90,7 +90,7 @@ class ThemeConfig {
   );
 
   // My new theme
-  static BaseThemeConfig bright() => BaseThemeConfig(
+  static BaseThemeConfig<ColorStyles> bright() => BaseThemeConfig<ColorStyles>(
    id: "default_bright_theme", // id when switching theme in the app
    description: "Bright theme",
    theme: brightTheme(brightColors),

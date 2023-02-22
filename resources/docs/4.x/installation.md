@@ -5,12 +5,13 @@
 <a name="section-1"></a>
 - [Install](#install "Install")
   - [Adding your .env file](#adding-your-env-file "Adding your env file")
-  - [Running the project](#running-the-project "Running the project")
+  - [Running the project](#running-the-project "Running the project")  
 - [Metro CLI](#metro-cli "Metro CLI")
   - [Set up an alias for Metro CLI (Mac)](#set-up-metro-alias-for-mac "Set up an alias for Metro CLI (Mac)")
 
 <a name="install"></a>
 <br>
+
 ## Install
 
 You can either download Nylo <a href="/download">here</a> or clone the git repository using the below command.
@@ -29,16 +30,6 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub, this file will already be there.
 
 > The project must have a `.env` file to build successfully.
-
-### Specific .env file per environment
-
-You can create a `.env.production` file at the rool level of your project. Add it to your assets in `pubspec.yaml` and then run or build your flutter app by specifiying the env file path like below. `ENV_FILE_PATH` defaults to `.env`.
-
-```bash
-flutter run --dart-define ENV_FILE_PATH=.env.production
-
-flutter build --dart-define ENV_FILE_PATH=.env.staging
-```
 
 <a name="running-the-project"></a>
 <br>

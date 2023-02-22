@@ -8,7 +8,7 @@
   - [Configuration](#environment-configuration "Environment configuration")
   - [Variable Types](#environment-variable-types "Environment variable types")
   - [Retriving Values](#retrieving-environment-values "Retriving environment values")
-
+- [Environment flavours](#environment-flavours "Environment flavours")
 <a name="introduction"></a>
 <br>
 ## Introduction
@@ -111,3 +111,41 @@ String locale = getEnv('DEFAULT_LOCALE', defaultValue: "en");
 
 int httpConnectionTimeout = getEnv('HTTP_CONNECTION_TIMEOUT', defaultValue: (60 * 1000));
 ```
+
+<a name="environment-flavours"></a>
+<br>
+
+## Environment flavours
+
+In Nylo, you can build your application from different environment 'flavours'. This allows you to **create** separate `.env` files e.g. 'production', 'staging' or 'developing' and then build your app from the configuration.
+
+### Creating an environment flavour
+
+First, make a new file at the root level of your project, e.g. `.env.production`. Then, you can define all your env variables in this file.
+
+Next, add the new env file to your **'assets'** in the `pubspec.yaml` file.
+
+**pubspec.yaml**
+
+``` dart
+  assets:
+    ...
+    - .env
+    - .env.production // -- new
+```
+
+Then, from the terminal, build your flutter app by specifying the **env** file like in the below example. 
+
+``` bash
+flutter run --dart-define="ENV_FILE=.env.production"
+
+flutter run --dart-define="ENV_FILE=.env.developing"
+
+// or build
+
+flutter build ios --dart-define="ENV_FILE=.env.developing"
+
+flutter build appbundle --dart-define="ENV_FILE=.env.developing"
+```
+
+> The `ENV_FILE` will default to `.env`.
