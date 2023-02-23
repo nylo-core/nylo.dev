@@ -72,7 +72,8 @@ class LandingController extends Controller
 		$section = $this->docService->findDocSection($version, $page);
 		$viewingOldDocs = $this->docService->isViewingOldDocs($version);
 		$latestVersionOfNylo = $this->docService->getLastestVersionNylo();
+		$docsContainPage = $this->docService->checkDocsContainPage($version, $page);
 
-		return view('docs.template', compact('page', 'version', 'mdDocPage', 'section', 'latestVersionOfNylo', 'viewingOldDocs'));
+		return view('docs.template', compact('page', 'version', 'mdDocPage', 'section', 'latestVersionOfNylo', 'viewingOldDocs', 'docsContainPage'));
 	}
 }

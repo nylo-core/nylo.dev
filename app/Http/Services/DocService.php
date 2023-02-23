@@ -100,4 +100,21 @@ class DocService
 
         return $response->json('zipball_url');
     }
+
+    /**
+     * Check if the docs contain a certain page.
+     *
+     * @param String $version
+     * @param String $page
+     * @return bool
+     */
+    public function checkDocsContainPage($version, $page) : bool
+    {
+        $docsIndex = config('project.doc-index');
+        $versions = $docsIndex['versions'][$version];
+        $versionArray = array_values($versions);
+        $docValues = collect($versionArray)->flatten()->toArray();
+
+        return in_array($page, $docValues);
+    }
 }
