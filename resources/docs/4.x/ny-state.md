@@ -373,7 +373,7 @@ class _HomePageState extends NyState<HomePage> {
 
 The `afterLoad` method can be used to display a loader until the state has finished 'loading'.
 
-You can also check other loading keys using the **loadingKey** parameter `afterLoad(child: () {}, loadingKey: 'pull_down_triggered')`.
+You can also check other loading keys using the **loadingKey** parameter `afterLoad(child: () {}, loadingKey: 'home_data')`.
 
 Example
 ```dart
@@ -381,7 +381,11 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
-    setLoading(true, 'pull_down_triggered');
+    setLoading(true, name: 'my_key');
+    await Future.delayed(Duration(seconds: 4), () {
+      print('Wait 4 seconds');
+    });
+    setLoading(false, name: 'my_key');
   }
 
   @override
@@ -389,7 +393,7 @@ class _HomePageState extends NyState<HomePage> {
     return Scaffold(
         body: afterLoad(child: () {
           return Text("Loaded");
-        }, loadingKey: 'pull_down_triggered')
+        }, loadingKey: 'my_key')
     );
   }
 ```
@@ -440,6 +444,10 @@ class _HomePageState extends NyState<HomePage> {
   @override
   init() async {
     setLoading(true, name: 'refreshing_content');
+
+    await Future.delayed(Duration(seconds: 4));
+
+    setLoading(false, name: 'refreshing_content');
   }
 
   @override
