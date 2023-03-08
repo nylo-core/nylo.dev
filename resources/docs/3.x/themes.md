@@ -22,7 +22,7 @@
 
 You can manage your application's UI styles using themes. Themes allow us to change i.e the font size of text, how buttons appear and the general appearance of our application.
 
-If you are new to themes, the examples on the Flutters website will helpe you get started <a href="https://docs.flutter.dev/cookbook/design/themes#creating-an-app-theme" target="_BLANK">here</a>.
+If you are new to themes, the examples on the Flutter website will help you get started <a href="https://docs.flutter.dev/cookbook/design/themes#creating-an-app-theme" target="_BLANK">here</a>.
 
 Out of the box, Nylo includes pre-configured themes for `Light mode` and `Dark mode`.
 
