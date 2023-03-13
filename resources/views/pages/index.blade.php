@@ -59,7 +59,7 @@
 					</div>
 					<h3>Clean structure</h3>
 
-					<p class="text-muted">Streamline your Fluter projects with {{ config('app.name') }}'s directory structure. Every project comes with a boilerplate, default files and CLI tool to create things.</p>
+					<p class="text-muted">Streamline your Flutter projects with {{ config('app.name') }}'s directory structure. Every project comes with a boilerplate, default files and CLI tool to create things.</p>
 				</div>
 			</div>
 
