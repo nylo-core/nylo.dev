@@ -19,4 +19,4 @@ You can understand all the changes by clicking the below link.
 <br>
 ## How to upgrade
 
-You can check the changes in 4.x by clicking the above link "**View changes**" and then implement all the changes into your Nylo project.
+You can check the changes in 4.x by clicking the above link "**View changes**" and then implement all the changes into your {{ config('app.name') }} project.

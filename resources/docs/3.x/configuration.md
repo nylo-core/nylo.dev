@@ -7,7 +7,7 @@
 - Environment
   - [Configuration](#environment-configuration "Environment configuration")
   - [Variable Types](#environment-variable-types "Environment variable types")
-  - [Retriving Values](#retrieving-environment-values "Retriving environment values")
+  - [Retrieving Values](#retrieving-environment-values "Retrieving environment values")
 
 <a name="introduction"></a>
 <br>
@@ -48,9 +48,9 @@ String appName = getEnv('APP_NAME');
 
 ## Environment Configuration
 
-Configuring your applications enviroment is simple. 
+Configuring your applications environment is simple. 
 
-First open your `.env` file and then update the keys in the enviroment file.
+First open your `.env` file and then update the keys in the environment file.
 
 You can also add addtional keys here e.g. `SHOW_ADS="false"`.
 

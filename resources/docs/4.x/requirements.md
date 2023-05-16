@@ -10,7 +10,7 @@
 <br>
 ## Installing Flutter
 
-To use Nylo, you'll need to have Flutter installed. Check out the <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter docs</a> for how to get set up.
+To use {{ config('app.name') }}, you'll need to have Flutter installed. Check out the <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter docs</a> for how to get set up.
 
 **Minimum Flutter version: v3.7.0**
 

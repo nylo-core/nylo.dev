@@ -12,11 +12,11 @@
 
 ## Introduction
 
-In Nylo, we provide a simple way to can start validating your user's input and show them feedback through an alert.
+In {{ config('app.name') }}, we provide a simple way to can start validating your user's input and show them feedback through an alert.
 
 We currently have some basic validation rules but we'll be adding more in the future.
 
-Let's take a look at how validation works in Nylo.
+Let's take a look at how validation works in {{ config('app.name') }}.
 
 ``` dart 
 class ExamplePage extends NyStatefulWidget {
@@ -53,9 +53,9 @@ this.validator(
   }, data: {
     "email address": textEmail // data to be validated
   }, message: {
-    "email address": "oops|it failed" // first section is title, then add a " | " and then provide the the description
+    "email address": "oops|it failed" // first section is title, then add a " | " and then provide the description
   },
-  showAlert: true, // if you want Nylo to display the alert, default : true
+  showAlert: true, // if you want {{ config('app.name') }} to display the alert, default : true
   alertStyle: ToastNotificationStyleType.DANGER // choose from SUCCESS, INFO, WARNING and DANGER
 );
 ```
@@ -67,7 +67,7 @@ This method is handy if you want to quickly validate the user's data and display
 
 ## Validation Rules
 
-Here are the available validation rules that you can use in Nylo.
+Here are the available validation rules that you can use in {{ config('app.name') }}.
 
 | Rule Name   | Usage | Info |
 |---|---|---|

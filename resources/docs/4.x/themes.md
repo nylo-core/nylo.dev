@@ -25,7 +25,7 @@ You can manage your application's UI styles using themes. Themes allow us to cha
 
 If you are new to themes, the examples on the Flutter website will help you get started <a href="https://docs.flutter.dev/cookbook/design/themes#creating-an-app-theme" target="_BLANK">here</a>.
 
-Out of the box, Nylo includes pre-configured themes for `Light mode` and `Dark mode`.
+Out of the box, {{ config('app.name') }} includes pre-configured themes for `Light mode` and `Dark mode`.
 
 The theme will also update if the device enters <b>'light/dark'</b> mode.
 
@@ -192,7 +192,7 @@ Text(
 
 Base styles allow you to customize various widget colours from one area in your code.
 
-Nylo ships with pre-configured base styles for your project located `lib/resources/themes/styles/color_styles.dart`.
+{{ config('app.name') }} ships with pre-configured base styles for your project located `lib/resources/themes/styles/color_styles.dart`.
 
 These styles provide an interface for your theme colors in `light_theme_colors.dart` and `dart_theme_colors.dart`.
 
@@ -235,7 +235,7 @@ You can add additional styles here and then implement the colours in your theme.
 
 ## Switching theme
 
-Nylo supports the ability to switch themes on the fly. 
+{{ config('app.name') }} supports the ability to switch themes on the fly. 
 
 E.g. If you need to switch the theme if a user taps a button to activate the "dark theme".
 
@@ -291,7 +291,7 @@ final appThemes = [
 
 ## Fonts
 
-Updating your primary font throughout the app is easy in Nylo. Open the `lib/config/font.dart` file and update the below.
+Updating your primary font throughout the app is easy in {{ config('app.name') }}. Open the `lib/config/font.dart` file and update the below.
 
 ``` dart
 final TextStyle appThemeFont = GoogleFonts.lato();
@@ -328,7 +328,7 @@ The **config/design.dart** file is used for managing the design elements for you
 
 You can modify **resources/widgets/logo_widget.dart** to customize how you want to display your Logo.
 
-`loader` variable is used to display a loader. Nylo will use this variable in some helper methods as the default loader widget.
+`loader` variable is used to display a loader. {{ config('app.name') }} will use this variable in some helper methods as the default loader widget.
 
 You can modify **resources/widgets/loader_widget.dart** to customize how you want to display your Loader.
 

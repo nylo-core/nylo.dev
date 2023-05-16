@@ -17,9 +17,9 @@
 ## Introduction
 
 Events are powerful when you need to handle logic after something happens in your application.
-Nylo provides a simple implementation of events that allows you to call listeners registered to the event. Listeners can perform logic from the event's payload.
+{{ config('app.name') }} provides a simple implementation of events that allows you to call listeners registered to the event. Listeners can perform logic from the event's payload.
 
-> Nylo events are managed in the `app/events/` directory.
+> {{ config('app.name') }} events are managed in the `app/events/` directory.
 >
 > To register you events, add them into your `config/events.dart` map.
 
@@ -38,7 +38,7 @@ Here are some examples of events your application might have:
 - Product added to cart
 - Successful payment
 
-In Nylo, after creating an Event, you can add your listeners to that event that should handle your desired needs.
+In {{ config('app.name') }}, after creating an Event, you can add your listeners to that event that should handle your desired needs.
 
 If we use the last example "Successful payment", we might have to do the following things:
 

@@ -82,8 +82,6 @@ h6 {
 
 .section {
   position: relative;
-  padding-top: 100px;
-  padding-bottom: 100px;
 }
 
 .section-md {
@@ -658,7 +656,6 @@ h6 {
 }
 
 .navbar-custom {
-  background-color: #f2f6fa;
   border: none;
   padding: 10px 0px;
   margin-bottom: 0px;
@@ -697,11 +694,6 @@ h6 {
   font-size: 13px;
 }
 
-.home {
-  background: rgb(242,246,250);
-  background: linear-gradient(180deg, rgba(242,246,250,1) 0%, rgba(211,225,238,1) 100%);
-}
-
 .home-wrapper p {
   font-size: 16px;
   color: #4d525d;
@@ -715,11 +707,11 @@ h6 {
 
 .text-transparent {
   background: rgb(242,246,250);
-  background: linear-gradient(180deg, rgb(235 241 247) 0%, rgb(224 234 243) 100%);
+  background: #ffffff;
   color: #240e35;
   mix-blend-mode: lighten;
   overflow: hidden;
-  font-size: 54px;
+  font-size: 61px;
   font-weight: 600;
   margin-top: 0px;
 }
@@ -759,15 +751,6 @@ h6 {
 /******************
     Features
 *******************/
-.features-box h3 {
-  font-size: 18px;
-}
-
-.features-box p {
-  line-height: 24px;
-  width: 85%;
-  margin: 10px auto;
-}
 
 .feature-icon i {
   font-size: 36px;
@@ -1095,4 +1078,7 @@ h6 {
  #header-cta-links {
   gap: 10px;
  }
+}
+.borderb-main {
+  border-bottom: 2px solid #f8faff !important;
 }

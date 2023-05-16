@@ -22,7 +22,7 @@ This will take your current app icon in <b>/public/assets/app_icon/</b> and auto
 
 If you have custom icons for different operating systems you can also just add them manually.
 
-Nylo uses the <a href="https://pub.dev/packages/flutter_launcher_icons" target="_BLANK">flutter_launcher_icons</a> library to build icons, to understand the library more you can check out their documentation too.
+{{ config('app.name') }} uses the <a href="https://pub.dev/packages/flutter_launcher_icons" target="_BLANK">flutter_launcher_icons</a> library to build icons, to understand the library more you can check out their documentation too.
 
 <a name="generating-app-icons"></a>
 <br>
@@ -47,7 +47,7 @@ You can place your 'app icon' inside the `/public/assets/app_icon` directory.
 
 > Make your icon filesize is **1024x1024** for the best results. 
 
-Once you’ve added your app icon you’ll then need to update the **image\_path** if you’re filename is different to the default Nylo app icon name. 
+Once you’ve added your app icon you’ll then need to update the **image\_path** if you’re filename is different to the default {{ config('app.name') }} app icon name. 
 
 Open your pubspec.yaml file and look for **image\_path** section, this is where you can update the image path for the file. Make sure that the “image\_path” matches the location for your new app icon.
 

@@ -189,7 +189,7 @@ Backpack.instance.read('my_lucky_no'); // 7
 
 ### Real world usage
 
-A great example for when you might want to use this class over the [NyStorage](/docs/3.x/storage#store-values) class is when e.g. storing a user's `api_token` for authentication.
+A great example for when you might want to use this class over the [NyStorage](/docs/{{$version}}/storage#store-values) class is when e.g. storing a user's `api_token` for authentication.
 
 ```dart 
 // login a user

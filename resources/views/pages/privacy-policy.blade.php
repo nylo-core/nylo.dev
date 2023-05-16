@@ -1,15 +1,18 @@
 @extends('layouts.app-landing')
 
 @section('content')
-<section class="section home" id="home">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h1>Privacy Policy</h1>
-                
-                <p>
-                    {{ config('app.name') }} operates the {{ config('app.url') }} website, which provides the SERVICE.
-                </p>
+
+<section class="prose lg:prose-lg mx-auto mt-[80px] md:px-0 px-6">
+    
+    <div class="">
+        <div class="mb-4">
+        <span class="bg-[#ECF5FC] px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">Updated: 16 May, 2023</span>
+        </div>
+
+        <h1 class="text-5xl font-medium mb-1">Privacy Policy</h1>
+        <p class="text-black mb-[40px]">{{ config('app.name') }} operates the <span class="text-primary-blue">{{ config('app.url') }}</span> website, which provides the SERVICE.</p>
+
+        <div>             
                 <p>
                     This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.
                 </p>
@@ -111,17 +114,8 @@
                 <p>
                     We retain your personal information for as long as necessary to provide the Services you have requested, or for other essential purposes such as complying with our legal obligations, resolving disputes, and enforcing our policies.
                 </p>
-            </div>
         </div>
     </div>
 </section>
-
-<div class="position-relative">
-    <div class="shape overflow-hidden text-footer">
-        <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="#343a40"></path>
-        </svg>
-    </div>
-</div>
 
 @endsection

@@ -2,58 +2,99 @@
 
 @section('content')
 
-<section class="section bg-light">
-	<div class="container">
+<section class="pt-[80px] px-7 md:px-0">
+	<h1 class="text-5xl text-center sora mb-2">Useful <span class="text-primary-blue-deep sora font-semibold">Resources</span></h1>
 
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<h1>Useful Resources</h1>
-				<p class="title-alt">We'll add resources here that we think find you'll find useful.</p>
-			</div>
-		</div>
-
-		<div class="row justify-content-center">
-			
-			<div class="col-md-7 border-top pt-4 mt-2">
-					<p class="h5"><i class="ri-book-fill"></i> Docs</p>
-					<p>Our official documentation for {{ config('app.name') }}</p>
-					<p><a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">View documentation</a></p>
-				</div>
-
-				<div class="col-md-7 border-top pt-4 mt-2">
-					<p class="h5"><i class="ri-smartphone-fill"></i> {{ config('app.name') }}</p>
-					<p>This repository is for those looking to build an app using {{ config('app.name') }}, it contains the default setup for new projects.</p>
-					<p>{{ config('project.meta.repos.nylo.version') }} <a href="{{ config('project.meta.repos.nylo.repo_name') }}/releases/tag/{{ config('project.meta.repos.nylo.version') }}">Release notes</a> | <a href="{{ route('landing.download') }}">Download</a></p>
-				</div>
-
-				<div class="col-md-7 border-top pt-4 mt-2">
-					<p class="h5"><i class="ri-code-box-fill"></i> Framework</p>
-					<p>Our framework package contains the beefy code to run Flutter projects.</p>
-					<p>{{ config('project.meta.repos.framework.version') }} <a href="{{ config('project.meta.repos.framework.repo_name') }}/releases/tag/{{ config('project.meta.repos.framework.version') }}">Release notes</a> | <a href="{{ config('project.meta.repos.framework.repo_name') }}">View repository</a></p>
-				</div>
-
-				<div class="col-md-7 border-top pt-4 mt-2">
-					<p class="h5"><i class="ri-code-box-fill"></i> Support</p>
-					<p>The support library is used by the framework to add support classes in your Flutter projects.</p>
-					<p>{{ config('project.meta.repos.support.version') }} <a href="{{ config('project.meta.repos.support.repo_name') }}/releases/tag/{{ config('project.meta.repos.support.version') }}">Release notes</a> | <a href="{{ config('project.meta.repos.support.repo_name') }}">View repository</a></p>
-				</div>
-
-				<div class="col-md-7 border-top pt-4 mt-2">
-					<p class="h5"><i class="ri-inbox-unarchive-fill"></i> Flutter Packages</p>
-					<p>All our public Flutter packages available.</p>
-					<p><a href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK">View Packages</a></p>
-				</div>
-			
-		</div>
-	</div>
+	<h2 class="text-center mb-10 text-2xl">We'll add resources here that we think find you'll find useful.</h2>
 </section>
 
+<section class="mx-auto">
 
-<div class="position-relative">
-	<div class="shape overflow-hidden text-footer">
-		<svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="#343a40"></path>
-		</svg>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-7 md:px-0 max-w-[806px] mx-auto">
+		
+		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
+			<img src="{{ asset('images/phone.png') }}" class="mb-6 h-[50px]" alt="Create a {{ config('app.name') }} app">
+				<span class="font-semibold text-[20px]">{{ config('app.name') }}</span>
+
+				<span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">{{ config('project.meta.repos.nylo.version') }}</span>
+				
+				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">This repository is for those looking to build an app using {{ config('app.name') }}, it contains the default setup for new projects.</p>
+
+				<div class="flex flex-wrap">
+					
+					<a href="{{ config('project.meta.repos.nylo.repo_name') }}/releases/tag/{{ config('project.meta.repos.nylo.version') }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+					Release Notes <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+
+				<img src="{{ asset('images/rectangle.png') }}" class="w-0.5 mx-2 h-5 m-auto self-center">
+
+				<a href="{{ route('landing.download') }}" class="inline-flex self-center text-[#6C7379]">
+					Download <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+				</div>
+		</div>
+
+
+		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
+			<img src="{{ asset('images/framework.png') }}" class="mb-6 h-[50px]" alt="{{ config('app.name') }} framework library">
+				<span class="font-semibold text-[20px]">Framework</span>
+
+				<span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">{{ config('project.meta.repos.framework.version') }}</span>
+				
+				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Our framework package contains all the essential libraries for running a Flutter project using {{ config('app.name') }}.</p>
+
+				<div class="flex flex-wrap">
+					<a href="{{ config('project.meta.repos.framework.repo_name') }}/releases/tag/{{ config('project.meta.repos.framework.version') }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+					Release Notes <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+
+				<img src="{{ asset('images/rectangle.png') }}" class="w-0.5 mx-2 h-5 m-auto self-center">
+
+				<a href="{{ config('project.meta.repos.framework.repo_name') }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+					Repository <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+				</div>
+		</div>
+
+		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
+			<img src="{{ asset('images/support.png') }}" class="mb-6 h-[50px]" alt="{{ config('app.name') }} support library">
+				<span class="font-semibold text-[20px]">Support</span>
+
+				<span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">{{ config('project.meta.repos.support.version') }}</span>
+				
+				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">The support library is used by the framework to add support classes in your Flutter projects.</p>
+
+				<div class="flex flex-wrap">
+					<a href="{{ config('project.meta.repos.support.repo_name') }}/releases/tag/{{ config('project.meta.repos.support.version') }}" class="inline-flex self-center text-[#6C7379]">
+					Release Notes <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+
+				<img src="{{ asset('images/rectangle.png') }}" class="w-0.5 mx-2 h-5 m-auto self-center">
+
+				<a href="{{ config('project.meta.repos.support.repo_name') }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+					Repository <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+				</div>
+		</div>
+
+
+		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
+			<img src="{{ asset('images/flutter_packages.png') }}" class="mb-6 h-[50px]" alt="Flutter packages">
+				<span class="font-semibold text-[20px]">Flutter Packages</span>
+				
+				<p class="text-[18px] text-[#81888E] clear-both mb-2 mt-2" style="letter-spacing: -0.02em;">Discover all our public Flutter packages available on pub.dev.</p>
+
+				<span class="inline-flex self-center">
+					
+					<a href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+					View packages <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+				</a>
+				</span>
+		</div>
+
 	</div>
-</div>
+
+
+</section>
+
 @endsection

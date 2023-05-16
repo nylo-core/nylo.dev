@@ -13,8 +13,8 @@
 <br>
 ## Introduction
 
-Decoders are a new concept introduced in Nylo which allows you to decode data into objects or classes.
-You'll likely use decoders when dealing with the [networking](/docs/3.x/networking) class or if want to use the `api` helper in Nylo.
+Decoders are a new concept introduced in {{ config('app.name') }} which allows you to decode data into objects or classes.
+You'll likely use decoders when dealing with the [networking](/docs/{{$version}}/networking) class or if want to use the `api` helper in {{ config('app.name') }}.
 
 > By default, the location for decoders is `lib/config/decoders.dart`
 
@@ -27,7 +27,7 @@ The decoders.dart file will contain two variables:
 
 ## Model decoders
 
-Model decoders are new in Nylo, they provide a way for you to morph data payloads into model representations.
+Model decoders are new in {{ config('app.name') }}, they provide a way for you to morph data payloads into model representations.
 
 The `network()` helper method will use the `modelDecoders` variable inside your <b>config/decoders.dart</b> file to determine which decoder to use.
 

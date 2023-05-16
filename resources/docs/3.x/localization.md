@@ -76,7 +76,7 @@ Add all your localization files to the `lang/` directory. Inside here, you'll be
   "documentation": "documentation",
   "changelog": "changelog",
   "intros": {
-    "hello": "hello {{first_name}}",
+    "hello": "hello @{{first_name}}",
   }
 }
 ```
@@ -87,7 +87,7 @@ Add all your localization files to the `lang/` directory. Inside here, you'll be
   "documentation": "documentación",
   "changelog": "registro de cambios",
   "intros": {
-    "hello": "hola {{first_name}}",
+    "hello": "hola @{{first_name}}",
   }
 }
 ```
@@ -153,7 +153,7 @@ You can supply arguments to fill in values for your keys. In the below example, 
 {
   "changelog": "changelog",
   "intros": {
-    "hello_name": "hello {{first_name}}",
+    "hello_name": "hello @{{first_name}}",
   }
 }
 ```
@@ -163,7 +163,7 @@ You can supply arguments to fill in values for your keys. In the below example, 
 {
   "changelog": "registro de cambios",
   "intros": {
-    "hello_name": "hola {{first_name}}"
+    "hello_name": "hola @{{first_name}}"
   }
 }
 ```

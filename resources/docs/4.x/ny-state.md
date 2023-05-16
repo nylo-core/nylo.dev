@@ -12,7 +12,7 @@
 <br>
 ## Introduction
 
-When you create a <a href="/docs/4.x/metro#make-page" target="_BLANK">page</a> in Nylo, it will extend the `NyState` class. This class provides useful utilities to make development easier. 
+When you create a <a href="/docs/4.x/metro#make-page" target="_BLANK">page</a> in {{ config('app.name') }}, it will extend the `NyState` class. This class provides useful utilities to make development easier. 
 
 The `NyState` class can help you with the following:
 
@@ -46,7 +46,7 @@ class _HomePageState extends NyState<HomePage> {
 Once your page extends `NyState` you can initialize the widget using the `init` method.
 This method is called inside `initState` from within your Flutter state and it makes it easier to call async functions.
 
-To create a new page in Nylo, you can run the below command.
+To create a new page in {{ config('app.name') }}, you can run the below command.
 
 ``` bash
 flutter pub run nylo_framework:main make:page product_page

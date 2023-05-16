@@ -1,4 +1,4 @@
-# What is Nylo?
+# What is {{ config('app.name') }}?
 
 ---
 
@@ -16,10 +16,10 @@
 <br>
 ## Introduction
 
-Nylo is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier.
+{{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier.
 This project is open source and MIT-licenced too so you can freely build your projects.
 
-New installs of Nylo contain standardized file structure and config so you can jump straight into developing your project.
+New installs of {{ config('app.name') }} contain standardized file structure and config so you can jump straight into developing your project.
 
 <a name="new-to-flutter"></a>
 <br>
@@ -37,15 +37,15 @@ You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutt
 
 ## Maintenance and release schedule
 
-Major releases for Nylo are scheduled annually, but any bugs or weird glitches are dealt with ad hoc. 
-The Nylo framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
+Major releases for {{ config('app.name') }} are scheduled annually, but any bugs or weird glitches are dealt with ad hoc. 
+The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
 <a name="framework-dependencies"></a>
 <br>
 
 ## Framework dependencies
 
-Nylo's <a href="https://github.com/nylo-core/framework" target="_BLANK">framework</a> + <a href="https://github.com/nylo-core/support" target="_BLANK">support</a> library use the below open source libraries:
+{{ config('app.name') }}'s <a href="https://github.com/nylo-core/framework" target="_BLANK">framework</a> + <a href="https://github.com/nylo-core/support" target="_BLANK">support</a> library use the below open source libraries:
 
 - [url\_launcher](https://pub.dev/packages/url_launcher)
 - [google\_fonts](https://pub.dev/packages/google_fonts)
@@ -73,7 +73,7 @@ Nylo's <a href="https://github.com/nylo-core/framework" target="_BLANK">framewor
 
 ## Contributors
 
-Here's a shout out to the active contributors to Nylo within the last few months. If you've contributed, reach out via <a href="mailto:support@nylo.dev">support@nylo.dev</a> to request us to add you here.
+Here's a shout out to the active contributors to {{ config('app.name') }} within the last few months. If you've contributed, reach out via <a href="mailto:support@nylo.dev">support@nylo.dev</a> to request us to add you here.
 
 - <a href="https://github.com/agordn52" target="_blank">Anthony Gordon (Creator)</a>
 - <a href="https://github.com/Abdulrasheed1729" target="_blank">Abdulrasheed1729</a>

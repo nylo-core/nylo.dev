@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction to Directory structures in Nylo")
+- [Introduction](#introduction "Introduction to Directory structures in {{ config('app.name') }}")
 - [App Directories](#app-directories "App directories")
 - [Public assets](#public-assets "Public assets")
   - [Retrieving image assets](#retrieving-image-assets "Retrieving image assets")
@@ -14,7 +14,7 @@
 
 ## Introduction
 
-Every Nylo project comes with a simple boilerplate for managing your files. It has this structure to streamline the development of your projects.
+Every {{ config('app.name') }} project comes with a simple boilerplate for managing your files. It has this structure to streamline the development of your projects.
 
 The directory structure was inspired by <a href="https://github.com/laravel/laravel" target="_BLANK">Laravel</a>.
 

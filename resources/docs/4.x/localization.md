@@ -21,7 +21,7 @@ Localizing our projects provides us with an easy way to change the language for 
 
 If your apps primary Locale was **en** (English) but you also wanted to provide users in Spain with a Spanish version, localising the app would be your best option.
 
-Here's an example to localize text in your app using Nylo.
+Here's an example to localize text in your app using {{ config('app.name') }}.
 
 #### Example of a localized file: `lang/en.json`
 ``` json
@@ -76,7 +76,7 @@ Add all your localization files to the `lang/` directory. Inside here, you'll be
   "documentation": "documentation",
   "changelog": "changelog",
   "intros": {
-    "hello": "hello {{first_name}}",
+    "hello": "hello @{{first_name}}",
   }
 }
 ```
@@ -87,7 +87,7 @@ Add all your localization files to the `lang/` directory. Inside here, you'll be
   "documentation": "documentación",
   "changelog": "registro de cambios",
   "intros": {
-    "hello": "hola {{first_name}}",
+    "hello": "hola @{{first_name}}",
   }
 }
 ```
@@ -153,7 +153,7 @@ You can supply arguments to fill in values for your keys. In the below example, 
 {
   "changelog": "changelog",
   "intros": {
-    "hello_name": "hello {{first_name}}",
+    "hello_name": "hello @{{first_name}}",
   }
 }
 ```
@@ -163,7 +163,7 @@ You can supply arguments to fill in values for your keys. In the below example, 
 {
   "changelog": "registro de cambios",
   "intros": {
-    "hello_name": "hola {{first_name}}"
+    "hello_name": "hola @{{first_name}}"
   }
 }
 ```
@@ -180,7 +180,7 @@ trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Antho
 
 ## Updating the locale
 
-Updating the locale in the app is simple in Nylo, you can use the below method in your widget.
+Updating the locale in the app is simple in {{ config('app.name') }}, you can use the below method in your widget.
 
 ``` dart
 String language = 'es'; // country code must match your json file e.g. pt.json would be 'pt

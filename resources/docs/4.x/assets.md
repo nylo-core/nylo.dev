@@ -16,7 +16,7 @@
 ## Introduction
 
 In this section, we'll look into how you can manage assets throughout your widgets.
-Nylo provides a few helper methods which make it easy to fetch images, files and more from your `public/assets` directory.
+{{ config('app.name') }} provides a few helper methods which make it easy to fetch images, files and more from your `public/assets` directory.
 
 <a name="displaying-images"></a>
 <br>

@@ -14,7 +14,7 @@
 
 ## Install
 
-You can either download Nylo <a href="/download">here</a> or clone the git repository using the below command.
+You can either download {{ config('app.name') }} <a href="/download">here</a> or clone the git repository using the below command.
 
 ```bash
 git clone https://github.com/nylo-core/nylo.git nylo_app
@@ -27,7 +27,7 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 
 ## Adding your .env file
 
-You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub, this file will already be there.
+You will also need to add a `.env` file to your project at the root level. If you've downloaded {{ config('app.name') }} through our site or on GitHub, this file will already be there.
 
 > The project must have a `.env` file to build successfully.
 
@@ -36,12 +36,12 @@ You will also need to add a `.env` file to your project at the root level. If yo
 
 ## Running the project
 
-Nylo projects run in the exact 'normal' way you'd build a Flutter app. Depending on which IDE you have chosen, this part will be slightly different.
+{{ config('app.name') }} projects run in the exact 'normal' way you'd build a Flutter app. Depending on which IDE you have chosen, this part will be slightly different.
 
 Check this guide here for <a href="https://docs.flutter.dev/development/tools/android-studio#running-and-debugging" target="_BLANK">Android Studio</a> or <a  target="_BLANK" href="https://docs.flutter.dev/development/tools/vs-code#run-app-without-breakpoints">Visual Studio Code</a>.
 
 Once you have done the above steps, try running the project.
-If the build is successful, the app will display Nylo's default landing screen.
+If the build is successful, the app will display {{ config('app.name') }}'s default landing screen.
 
 
 <a name="metro-cli"></a>
@@ -49,7 +49,7 @@ If the build is successful, the app will display Nylo's default landing screen.
 
 ## Metro CLI tool
 
-Nylo provides a CLI tool called <b>Metro</b>. 
+{{ config('app.name') }} provides a CLI tool called <b>Metro</b>. 
 It's been built so you can run commands in the terminal to create things. Using Metro, you can create the following in your projects:
 
 - Models
@@ -98,7 +98,7 @@ alias metro='flutter pub run nylo_framework:main'
 source ~/.bash_profile
 ```
 
-Now you can type `metro` from your terminal to run commands in your Nylo project.
+Now you can type `metro` from your terminal to run commands in your {{ config('app.name') }} project.
 
 ### Can't find your bash\_profile?
 

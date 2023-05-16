@@ -18,11 +18,11 @@
 
 ## Introduction
 
-Nylo makes networking in modern mobile applications simple. You can do GET, PUT, POST and DELETE requests via the base networking class.
+{{ config('app.name') }} makes networking in modern mobile applications simple. You can do GET, PUT, POST and DELETE requests via the base networking class.
 
 Your <b>API Services</b> directory is located here `app/networking/*`
 
-Fresh copies of Nylo will include a default API Service `app/networking/api_service.dart`.
+Fresh copies of {{ config('app.name') }} will include a default API Service `app/networking/api_service.dart`.
 
 ```dart
 class ApiService extends BaseApiService {
@@ -158,7 +158,7 @@ If you're new to interceptors, don't worry. They're a new concept for managing h
 
 Put in simple terms. An 'interceptor' will intercept the request, allowing you to modify the request before it's sent, handle the response after it completes and also what happens if there's an error.
 
-Nylo allows you to add new interceptors to your API Services like in the below example.
+{{ config('app.name') }} allows you to add new interceptors to your API Services like in the below example.
 
 ```dart 
 class ApiService extends BaseApiService {
@@ -206,7 +206,7 @@ class CustomInterceptor extends Interceptor {
 }
 ```
 
-Fresh copies on Nylo will include a `app/networking/dio/intecetors/*` directory.
+Fresh copies on {{ config('app.name') }} will include a `app/networking/dio/intecetors/*` directory.
 
 Inside this folder, you will find a `LoggingInterceptor` class.
 
@@ -253,7 +253,7 @@ class LoggingInterceptor extends Interceptor {
 ## Understanding the network helper
 
 The `network` helper provides us with a way to make HTTP requests from our application.
-The helper method can be accessed when using an API Service in Nylo.
+The helper method can be accessed when using an API Service in {{ config('app.name') }}.
 
 ```dart
 class ApiService extends BaseApiService {
@@ -280,7 +280,7 @@ Let's take a look at both in action, there's no right or wrong way to do this.
 
 #### Using Model Decoders
 
-Model Decoders are a new concept introduced in Nylo v3.x. 
+Model Decoders are a new concept introduced in {{ config('app.name') }} v3.x. 
 
 They make it easy to return your objects like in the below example.
 
@@ -306,7 +306,7 @@ final modelDecoders = {
 
 The `data` parameter will contain the <b>HTTP</b> response body.
 
-Learn more about decoders <a href="/docs/3.x/decoders#model-decoders">here</a>
+Learn more about decoders <a href="/docs/{{$version}}/decoders#model-decoders">here</a>
 
 
 #### Using handleSuccess
@@ -389,7 +389,7 @@ class ApiService extends BaseApiService {
 
 ## Using an API Service
 
-When you need to call an API from a widget there are two different approaches in Nylo.
+When you need to call an API from a widget there are two different approaches in {{ config('app.name') }}.
 
 1. You can create a new instance of the API Service and then call the method you want to use like in the below example.
 
@@ -406,7 +406,7 @@ class _MyHomePageState extends NyState<MyHomePage> {
 ```
 
 2. Use the `api` helper, this method is shorter and works by using your `apiDecoders` variable inside <b>config/decoders.dart</b>. 
-Learn more about decoders <a href="/docs/3.x/decoders">here</a>.
+Learn more about decoders <a href="/docs/{{$version}}/decoders">here</a>.
 
 ```dart
 class _MyHomePageState extends NyState<MyHomePage> {
@@ -527,7 +527,7 @@ class UserApiService extends BaseApiService {
 
 You can automatically decode JSON payloads from your API requests to models using decoders.
 
-Here is an API request that uses Nylo's implementation of decoders.
+Here is an API request that uses {{ config('app.name') }}'s implementation of decoders.
 
 ```dart
 class ApiService extends BaseApiService {
@@ -561,4 +561,4 @@ Here you can provide the different representations of the Model, e.g. to object 
 
 The data argument in the decoder will contain the body payload from the API request.
 
-To get started with decoders, check out this section of the [documentation](/docs/3.x/decoders#model-decoders).
+To get started with decoders, check out this section of the [documentation](/docs/{{$version}}/decoders#model-decoders).

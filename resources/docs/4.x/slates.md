@@ -22,7 +22,7 @@ Here's an example below, i.e installing the [ny_auth_slate](https://pub.dev/pack
 flutter pub run ny_auth_slate:main publish:all
 ```
 
-Download a fresh copy of Nylo and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
+Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
 
 <a name="creating-a-slate-package"></a>
 <br>

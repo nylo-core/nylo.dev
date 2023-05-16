@@ -36,7 +36,7 @@ appRouter() => nyRoutes((router) {
 });
 ```
 
-You may also need to pass data from one view to another. In Nylo, that’s possible using the `NyStatefulWidget`. We’ll dive deeper into this to explain how it works.
+You may also need to pass data from one view to another. In {{ config('app.name') }}, that’s possible using the `NyStatefulWidget`. We’ll dive deeper into this to explain how it works.
 
 
 <a name="adding-routes"></a>
@@ -120,7 +120,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 
 class RouteProvider implements NyProvider {
 
-  boot(Nylo nylo) async {
+  boot({{ config('app.name') }} nylo) async {
     nylo.addRouter(appRouter());
 
     nylo.addRouter(dashboardRouter()); // new routes
@@ -280,7 +280,7 @@ class _HomePageState extends NyState<HomePage> {
 ...
 ```
 
-Nylo uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
+{{ config('app.name') }} uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
 
 <a name="navigation-types"></a>
 <br>

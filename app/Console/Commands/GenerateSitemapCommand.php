@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
+use App\Http\Services\DocService;
 
 class GenerateSitemapCommand extends Command
 {
@@ -27,7 +28,7 @@ class GenerateSitemapCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(DocService $docService)
     {
         $sitemap = Sitemap::create(config('app.url'));
         $sitemap->add(Url::create('/')->setPriority(0.95));
@@ -41,7 +42,14 @@ class GenerateSitemapCommand extends Command
         if (empty($docs['versions'])) {
             return;
         }
+
+        $latestVersionOfNylo = $docService->getLastestVersionNylo();
+
         foreach ($docs['versions'] as $version => $versionLinks) {
+            if ($version != $latestVersionOfNylo) {
+                continue;
+            }
+
             $links = array_values($versionLinks);
 
             $collectionLinks = collect($links);
@@ -50,7 +58,7 @@ class GenerateSitemapCommand extends Command
 
             foreach ($arrayLinks as $link) {
                 $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]); 
-                $sitemap->add(Url::create($urlLink)->setPriority(0.87));
+                $sitemap->add(Url::create($urlLink)->setPriority(0.8));
             }
         }
 

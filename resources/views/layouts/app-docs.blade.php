@@ -63,7 +63,7 @@
                             @click="isOpen = !isOpen" 
                             @keydown.escape="isOpen = false" 
                             >
-                            v<!-- -->{{ $version }}<svg width="6" height="3" class="ml-2 overflow-visible" aria-hidden="true"><path d="M0 0L3 3L6 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>
+                            v{{ $version }}<svg width="6" height="3" class="ml-2 overflow-visible" aria-hidden="true"><path d="M0 0L3 3L6 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>
                         </button>
 
                         <ul x-show="isOpen"

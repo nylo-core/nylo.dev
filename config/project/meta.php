@@ -3,17 +3,17 @@
 return [
     'repos' => [
         'nylo' => [
-            'version' => 'v4.3.1',
+            'version' => 'v5.0.0',
             'repo_name' => 'http://github.com/nylo-core/nylo'
         ],
 
         'framework' => [
-            'version' => 'v4.1.4',
+            'version' => 'v5.0.0',
             'repo_name' => 'http://github.com/nylo-core/framework'
         ],
 
         'support' => [
-            'version' => 'v4.3.1',
+            'version' => 'v5.0.0',
             'repo_name' => 'http://github.com/nylo-core/support'
         ],
     ],

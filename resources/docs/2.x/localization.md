@@ -76,7 +76,7 @@ We include a `lang` directory in the project that can be found at the root of th
   "documentation": "documentation",
   "changelog": "changelog",
   "intros": {
-    "hello": "hello {{first_name}}",
+    "hello": "hello @{{first_name}}",
   }
 }
 ```
@@ -87,7 +87,7 @@ We include a `lang` directory in the project that can be found at the root of th
   "documentation": "documentación",
   "changelog": "registro de cambios",
   "intros": {
-    "hello": "hola {{first_name}}",
+    "hello": "hola @{{first_name}}",
   }
 }
 ```
@@ -156,7 +156,7 @@ To fill in **"first_name"**, we can handle it by passing in a value to the metho
 {
   "changelog": "changelog",
   "intros": {
-    "hello_name": "hello {{first_name}}",
+    "hello_name": "hello @{{first_name}}",
   }
 }
 ```
@@ -166,7 +166,7 @@ To fill in **"first_name"**, we can handle it by passing in a value to the metho
 {
   "changelog": "registro de cambios",
   "intros": {
-    "hello_name": "hola {{first_name}}"
+    "hello_name": "hola @{{first_name}}"
   }
 }
 ```

@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [Install](#install "Installing Metro Alias for Nylo")
+- [Install](#install "Installing Metro Alias for {{ config('app.name') }}")
 - Make Commands
   - [Make controller](#make-controller "Make a new controller with Metro")
   - [Make model](#make-model "Make a new model with Metro")
@@ -24,7 +24,7 @@
 <br>
 ## Introduction
 
-Metro is a CLI tool that works under the hood of the Nylo framework. 
+Metro is a CLI tool that works under the hood of the {{ config('app.name') }} framework. 
 It provides a lot of helpful tools to speed up development.
 
 <a name="install"></a>
@@ -50,7 +50,7 @@ alias metro='flutter pub run nylo_framework:main'
 source ~/.bash_profile
 ```
 
-If you open a project that uses Nylo, try to run the following in the terminal.
+If you open a project that uses {{ config('app.name') }}, try to run the following in the terminal.
 
 ``` bash
 metro
@@ -158,7 +158,7 @@ metro make:page product_page
 ```
 
 This is will create a new page if it doesn't exist within the `lib/resources/pages/` directory.
-Nylo also supports the use of controllers. Use the below command to create a new page with a controller.
+{{ config('app.name') }} also supports the use of controllers. Use the below command to create a new page with a controller.
 
 ``` bash
 metro make:page product_page -c
@@ -225,7 +225,7 @@ You can provide the `--url="https://myapi.com"` option to create an API Service 
 flutter pub run nylo_framework:main make:api_service user --url="https://myapi-baseurl.com"
 ```
 
-You can provide a `--model="User"` option to tell Nylo to create a new API Service with the following methods: <b>find</b>, <b>create</b>, <b>delete</b>, <b>update</b> and <b>fetchAll</b>.
+You can provide a `--model="User"` option to tell {{ config('app.name') }} to create a new API Service with the following methods: <b>find</b>, <b>create</b>, <b>delete</b>, <b>update</b> and <b>fetchAll</b>.
 
 ``` bash
 flutter pub run nylo_framework:main make:api_service user --model="User"
@@ -245,7 +245,7 @@ First you must export your postman collection into a JSON file (using v2.1).
 
 This should give you a file like `JsonPlaceHolder.postman_collection.json`.
 
-You will need to copy this file into your Nylo project.
+You will need to copy this file into your {{ config('app.name') }} project.
 Copy the exported file into the `public/assets/postman` directory. 
 
 E.g. `public/assets/postman/JsonPlaceHolder.postman_collection.json`.
@@ -263,7 +263,7 @@ metro make:api_service json_placeholder --postman="JsonPlaceHolder.postman_colle
 
 This will create new **ApiServices** for your postman collections.
 
-If your Postman collections include varibles such as "BASE_URL" or others. You can define them in Nylo by opening the `postman.json` file which is located at the root of your Nylo project. Then, inside this file, add your variables.
+If your Postman collections include varibles such as "BASE_URL" or others. You can define them in {{ config('app.name') }} by opening the `postman.json` file which is located at the root of your {{ config('app.name') }} project. Then, inside this file, add your variables.
 
 E.g. 
 
@@ -280,7 +280,7 @@ It will also add **Models** to your project if your Postman collections has a sa
 You can check if your collection has saved responses by going to your Postman collection, then selecting a request. You should see a dropdown which will contain any saved responses.
 
 If your collection doesn't contain a saved response, you will need to use Postman to make a HTTP request and then save the response.
-The **name** of the saved response will be used as the name of the **Model** that Nylo will created.
+The **name** of the saved response will be used as the name of the **Model** that {{ config('app.name') }} will created.
 
 <a name="make-event"></a>
 <br>

@@ -3,22 +3,22 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction to configuration in Nylo")
+- [Introduction](#introduction "Introduction to configuration in {{ config('app.name') }}")
 - Environment
   - [Configuration](#environment-configuration "Environment configuration")
   - [Variable Types](#environment-variable-types "Environment variable types")
-  - [Retriving Values](#retrieving-environment-values "Retriving environment values")
+  - [Retrieving Values](#retrieving-environment-values "Retrieving environment values")
 - [Environment flavours](#environment-flavours "Environment flavours")
 <a name="introduction"></a>
 <br>
 ## Introduction
 
-Nylo provides a `.env` file which contains global configuration variables like the app name, default locale and your App's environment.
+{{ config('app.name') }} provides a `.env` file which contains global configuration variables like the app name, default locale and your App's environment.
 
 This file is located at the root of your project named <b>".env"</b>.
 
 ``` env
-APP_NAME=Nylo
+APP_NAME={{ config('app.name') }}
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=https://nylo.dev
@@ -48,9 +48,9 @@ String appName = getEnv('APP_NAME');
 
 ## Environment Configuration
 
-Configuring your applications enviroment is simple. 
+Configuring your applications environment is simple. 
 
-First open your `.env` file and then update the keys in the enviroment file.
+First open your `.env` file and then update the keys in the environment file.
 
 You can also add addtional keys here e.g. `SHOW_ADS="false"`.
 
@@ -83,7 +83,7 @@ Best practises:
 
 ## Environment Variable Types
 
-The values in your <b>.env</b> file are defined as `String`'s but Nylo will return them if they appear to be `Booleans` or `null` values.
+The values in your <b>.env</b> file are defined as `String`'s but {{ config('app.name') }} will return them if they appear to be `Booleans` or `null` values.
 
 | `.env` file | Return type |
 |---|---|
@@ -97,7 +97,7 @@ The values in your <b>.env</b> file are defined as `String`'s but Nylo will retu
 
 ## Retrieving Environment Values
 
-Fetching values from your `.env` file is simple in Nylo, you can call the `getEnv(String key)` helper. 
+Fetching values from your `.env` file is simple in {{ config('app.name') }}, you can call the `getEnv(String key)` helper. 
 
 ``` dart
 String appName = getEnv('APP_NAME');
@@ -117,7 +117,7 @@ int httpConnectionTimeout = getEnv('HTTP_CONNECTION_TIMEOUT', defaultValue: (60 
 
 ## Environment flavours
 
-In Nylo, you can build your application from different environment 'flavours'. This allows you to **create** separate `.env` files e.g. 'production', 'staging' or 'developing' and then build your app from the configuration.
+In {{ config('app.name') }}, you can build your application from different environment 'flavours'. This allows you to **create** separate `.env` files e.g. 'production', 'staging' or 'developing' and then build your app from the configuration.
 
 ### Creating an environment flavour
 

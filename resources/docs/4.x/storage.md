@@ -21,9 +21,9 @@
 
 ## Introduction
 
-In Nylo you can save data to the users device using the `NyStorage` class. 
+In {{ config('app.name') }} you can save data to the users device using the `NyStorage` class. 
 
-Under the hood, Nylo uses the <a href="https://pub.dev/packages/flutter_secure_storage" target="_BLANK">flutter_secure_storage</a> package to save and retrieve data.
+Under the hood, {{ config('app.name') }} uses the <a href="https://pub.dev/packages/flutter_secure_storage" target="_BLANK">flutter_secure_storage</a> package to save and retrieve data.
 
 <a name="store-values"></a>
 <br>
@@ -156,7 +156,7 @@ print(user.username); // Anthony
 
 ## Backpack Storage
 
-Nylo includes a lightweight storage class called `Backpack`. 
+{{ config('app.name') }} includes a lightweight storage class called `Backpack`. 
 This class is designed for storing <b>small-sized</b> pieces of data during a user's session.
 
 The Backpack class isn't asynchronous so you can <b>set/get</b> data on the fly.
@@ -189,7 +189,7 @@ Backpack.instance.read('my_lucky_no'); // 7
 
 ### Real world usage
 
-A great example for when you might want to use this class over the [NyStorage](/docs/3.x/storage#store-values) class is when e.g. storing a user's `api_token` for authentication.
+A great example for when you might want to use this class over the [NyStorage](/docs/{{$version}}/storage#store-values) class is when e.g. storing a user's `api_token` for authentication.
 
 ```dart 
 // login a user
@@ -230,7 +230,7 @@ class ApiService extends BaseApiService {
 
 ## Persist data with Backpack
 
-You can use the [`NyStorage`](/docs/3.x/storage#store-values) class to persist data but if you also need to save it to your App's Backpack storage, use the below parameter "**inBackpack**".
+You can use the [`NyStorage`](/docs/{{$version}}/storage#store-values) class to persist data but if you also need to save it to your App's Backpack storage, use the below parameter "**inBackpack**".
 
 Here's an example.
 
@@ -252,8 +252,8 @@ Backpack.instance.read('user_token'); // "a token 123"
 This class is useful to reference **Strings** which you can later use in your `NyStorage` or `Backpack` class.
 You can use the `StorageKey` class to organise all the shared preference Strings in your project.
 
-Open your Nylo project and open the **"config/storage_keys.dart"** file.
-> Please note. This file was added in Nylo v3.2.0, if it's missing, you can manually add it.
+Open your {{ config('app.name') }} project and open the **"config/storage_keys.dart"** file.
+> Please note. This file was added in {{ config('app.name') }} v3.2.0, if it's missing, you can manually add it.
 
 ```dart
 /*
@@ -263,7 +263,7 @@ Open your Nylo project and open the **"config/storage_keys.dart"** file.
 | E.g. static String userCoins = "USER_COINS";
 | String coins = NyStorage.read( StorageKey.userCoins );
 |
-| Learn more: https://nylo.dev/docs/3.x/storage#storage-keys
+| Learn more: https://nylo.dev/docs/{{$version}}/storage#storage-keys
 |--------------------------------------------------------------------------
 */
 

@@ -13,7 +13,7 @@
 
 ## Introduction to Providers
 
-In Nylo, providers are booted initially from your <b>main.dart</b> file when your application runs. All your providers reside in `/lib/app/providers/*`, you can modify these files or create your providers using <a href="/docs/3.x/metro#make-provider" target="_BLANK">Metro</a>.
+In Nylo, providers are booted initially from your <b>main.dart</b> file when your application runs. All your providers reside in `/lib/app/providers/*`, you can modify these files or create your providers using <a href="/docs/{{$version}}/metro#make-provider" target="_BLANK">Metro</a>.
 
 Providers can be used when you need to initialize a class, package or create something before the app initially loads. I.e. the `route_provider.dart` class is responsible for adding all the routes to Nylo.
 

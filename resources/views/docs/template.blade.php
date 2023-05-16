@@ -12,7 +12,8 @@
 
 <span class="text-gray-400">{{ str($section)->headline() }}</span>
 <article>
-{!! str(file_get_contents($mdDocPage))->markdown() !!}
+
+{!! str( Blade::render(file_get_contents($mdDocPage), ['version' => $version]) )->markdown() !!}
 </article>
 
 @endsection
