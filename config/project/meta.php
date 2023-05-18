@@ -3,7 +3,7 @@
 return [
     'repos' => [
         'nylo' => [
-            'version' => 'v5.0.0',
+            'version' => 'v5.0.1',
             'repo_name' => 'http://github.com/nylo-core/nylo'
         ],
 
