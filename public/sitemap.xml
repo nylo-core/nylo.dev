@@ -1,159 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     <url>
-        <loc>http://nylo.test</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/resources</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/resources</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/contributions</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/contributions</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/privacy-policy</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/privacy-policy</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/terms-and-conditions</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/terms-and-conditions</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/what-is-nylo</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/what-is-nylo</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/requirements</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/requirements</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/installation</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/installation</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/configuration</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/configuration</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/directory-structure</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/directory-structure</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/upgrade-guide</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/upgrade-guide</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/router</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/router</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/networking</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/networking</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/metro</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/metro</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/localization</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/localization</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/storage</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/storage</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/controllers</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/controllers</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/app-icons</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/app-icons</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/validation</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/validation</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/themes</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/authentication</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/assets</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/logging</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/ny-state</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/themes-and-styling</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/providers</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/assets</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/decoders</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/ny-state</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/events</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/ny-future-builder</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
     <url>
-        <loc>http://nylo.test/docs/5.x/slates</loc>
-        <lastmod>2023-04-26T04:16:42+00:00</lastmod>
+        <loc>https://nylo.dev/docs/5.x/ny-text-field</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
-    </url>
+            </url>
+    <url>
+        <loc>https://nylo.dev/docs/5.x/providers</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>https://nylo.dev/docs/5.x/decoders</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>https://nylo.dev/docs/5.x/events</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+            </url>
+    <url>
+        <loc>https://nylo.dev/docs/5.x/slates</loc>
+        <lastmod>2023-05-18T07:02:26+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+            </url>
 </urlset>
