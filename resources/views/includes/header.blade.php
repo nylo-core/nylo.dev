@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 w-full backdrop-blur bg-white/90 flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] supports-backdrop-blur:bg-white/60 dark:bg-transparent border-bottom border-light" style="position: relative;">
+<header class="sticky top-0 z-40 w-full backdrop-blur bg-white/90 flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] supports-backdrop-blur:bg-white/60 dark:bg-transparent border-bottom border-light" style="position: relative; max-height: 83px;">
         <div class="">
             <div class="max-w-8xl mx-auto">
                 <div class="border-b border-slate-900/10 dark:border-slate-300/10 lg:border-0 lg:mx-0 lg:px-32 py-4">
