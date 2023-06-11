@@ -5,7 +5,7 @@
 <section class="pt-[80px] px-7 md:px-0">
 	<h1 class="text-5xl text-center sora mb-2">Useful <span class="text-primary-blue-deep sora font-semibold">Resources</span></h1>
 
-	<h2 class="text-center mb-10 text-2xl">We'll add resources here that we think find you'll find useful.</h2>
+	<h2 class="text-center mb-10 text-2xl">Resources to help you build with {{ config('app.name') }}.</h2>
 </section>
 
 <section class="mx-auto">
