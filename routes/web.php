@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GitHubActionsController;
 
 // Web Routes
 Route::controller(LandingController::class)->group(function () {
@@ -14,3 +15,6 @@ Route::controller(LandingController::class)->group(function () {
 
 // Redirects
 Route::redirect('/docs', '/docs/' . array_key_last(config('project.doc-index')['versions']) . '/installation', 301);
+
+// GitHub Actions
+// Route::post('actions/{repo}/version', [GitHubActionsController::class, 'version'])->name('actions.version');

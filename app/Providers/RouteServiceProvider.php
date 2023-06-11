@@ -45,8 +45,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
+        
+        $this->mapGitHubActionsRoutes();
     }
 
     /**
@@ -76,5 +76,20 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Define the "gh_actions" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapGitHubActionsRoutes()
+    {
+        Route::prefix('api/github/actions')
+            ->middleware('gh_actions')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/github.php'));
     }
 }

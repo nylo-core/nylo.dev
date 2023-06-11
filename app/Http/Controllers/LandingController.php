@@ -4,20 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\DocService;
 use App\Http\Services\SeoService;
+use App\Http\Services\PackageService;
 
 /**
  * Class LandingController
  *
  * @property SeoService $seoService
  * @property DocService $docService
- * @package App\Domain\Landing
+ * @property PackageService $packageService
+ * @package App\Http\Controllers\LandingController
  */
 class LandingController extends Controller
 {
-	public function __construct(SeoService $seoService, DocService $docService)
-	{
+	public function __construct(
+		SeoService $seoService, 
+		DocService $docService, 
+		PackageService $packageService
+	) {
 		$this->seoService = $seoService;
 		$this->docService = $docService;
+		$this->packageService = $packageService;
 	}
 
     /**
@@ -76,8 +82,9 @@ class LandingController extends Controller
 	public function resources()
 	{
 		$this->seoService->setTitle('Resources');
+		$resourceData = $this->packageService->getResourceMetaData();
 
-		return view('pages.resources');
+		return view('pages.resources', compact('resourceData'));
 	}
 
     /**
