@@ -17,4 +17,5 @@ Route::controller(LandingController::class)->group(function () {
 // Redirects
 Route::redirect('/docs', '/docs/' . array_key_last(config('project.doc-index')['versions']) . '/installation', 301);
 
-Route::get('process/site-update', [ProcessController::class, 'siteUpdate']);
+// Processes
+Route::post('process/site-update', [ProcessController::class, 'siteUpdate']);
