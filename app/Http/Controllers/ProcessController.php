@@ -21,6 +21,7 @@ class ProcessController extends Controller
         $result = Process::run('git pull && php artisan migrate --force && php artisan optimize');
         
         if (!$result->successful()) {
+            Log::info($result->output());
             return response()->json(['status' => 'failed', 'error_code' => 19]);
         }
 
