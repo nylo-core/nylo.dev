@@ -5,5 +5,7 @@ return [
     
     'fa_integrity' => env('FONT_AWESOME_INTEGRITY'),
 
-    'gh_auth_token' => env('GH_AUTH_MIDDLEWARE')
+    'gh_auth_token' => env('GH_AUTH_MIDDLEWARE'),
+    
+    'process_token' => env('APP_PROCESS_TOKEN'),
 ];

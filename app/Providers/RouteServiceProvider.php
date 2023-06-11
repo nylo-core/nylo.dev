@@ -90,6 +90,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api/github/actions')
             ->middleware('gh_actions')
             ->namespace($this->namespace)
-            ->group(base_path('routes/github.php'));
+            ->group(base_path('routes/api_github_actions.php'));
     }
 }

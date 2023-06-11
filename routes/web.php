@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GitHubActionsController;
+use App\Http\Controllers\ProcessController;
 
 // Web Routes
 Route::controller(LandingController::class)->group(function () {
@@ -16,5 +17,4 @@ Route::controller(LandingController::class)->group(function () {
 // Redirects
 Route::redirect('/docs', '/docs/' . array_key_last(config('project.doc-index')['versions']) . '/installation', 301);
 
-// GitHub Actions
-// Route::post('actions/{repo}/version', [GitHubActionsController::class, 'version'])->name('actions.version');
+Route::get('process/site-update', [ProcessController::class, 'siteUpdate']);
