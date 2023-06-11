@@ -18,8 +18,8 @@ class ProcessController extends Controller
         $token = $request->bearerToken();
         abort_if($token != config('project.meta.process_token'), 403);
         
-        $result = Process::run('git pull');
-        //  && php artisan migrate --force && php artisan optimize
+        $result = Process::run('git pull && php artisan migrate --force && php artisan optimize');
+        
         if (!$result->successful()) {
             Log::info($result->output());
             Log::info($result->errorOutput());
