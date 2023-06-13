@@ -151,8 +151,8 @@ Here are the available validation rules that you can use in {{ config('app.name'
 | <a href="#validation-rule-capitalized">Capitalized</a>  | capitalized  | Checks if the data is capitalized |
 | <a href="#validation-rule-lowercase">Lowercase</a>  | lowercase  | Checks if the data is lowercase |
 | <a href="#validation-rule-uppercase">Uppercase</a>  | uppercase  | Checks if the data is uppercase |
-| <a href="#validation-rule-us-phone-number">US Phone Number</a>  | phone_us  | Checks if the data is a valid phone US phone number |
-| <a href="#validation-rule-uk-phone-number">UK Phone Number</a>  | phone_uk  | Checks if the data is a valid phone UK phone number |
+| <a href="#validation-rule-us-phone-number">US Phone Number</a>  | phone_number_us  | Checks if the data is a valid phone US phone number |
+| <a href="#validation-rule-uk-phone-number">UK Phone Number</a>  | phone_number_uk  | Checks if the data is a valid phone UK phone number |
 | <a href="#validation-rule-us-zipcode">US Zipcode</a>  | zipcode_us  | Checks if the data is a valid zipcode for the US |
 | <a href="#validation-rule-uk-postcode">UK Postcode</a>  | postcode_uk  | Checks if the data is a valid postcode for the UK |
 
@@ -296,7 +296,7 @@ Usage: `uppercase` - will fail if the user's input is not uppercase.
 
 Check if the input is a valid US Phone Number, e.g. "123-456-7890".
 
-Usage: `phone_us` - will fail if the user's input is not a US phone number.
+Usage: `phone_number_us` - will fail if the user's input is not a US phone number.
 
 <a name="validation-rule-uk-phone-number"></a>
 <br>
@@ -305,7 +305,7 @@ Usage: `phone_us` - will fail if the user's input is not a US phone number.
 
 Check if the input is a valid UK Phone Number, e.g. "07123456789".
 
-Usage: `phone_uk` - will fail if the user's input is not a UK phone number.
+Usage: `phone_number_uk` - will fail if the user's input is not a UK phone number.
 
 <a name="validation-rule-us-zipcode"></a>
 <br>
