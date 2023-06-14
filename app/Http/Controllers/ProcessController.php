@@ -20,14 +20,8 @@ class ProcessController extends Controller
         abort_if($token != config('project.meta.process_token'), 403);
         
         $processGitPull = Process::run(['git', 'pull']);
-        logger('git pull');
-        logger($processGitPull->errorOutput());;
         $exitCodeMigrate = Artisan::call('migrate', ['--force' => true]);
-        logger('migrate');
-        logger($exitCodeMigrate);
         $exitCodeOptimize = Artisan::call('optimize');
-        logger('optimize');
-        logger($exitCodeOptimize);
         
         if (($exitCodeMigrate + $exitCodeOptimize) != 0) {
             return response()->json(['status' => 'failed', 'error_code' => 19]);

@@ -13,7 +13,7 @@
         <p class="text-black mb-[40px]">{{ config('app.name') }} operates the <span class="text-primary-blue">{{ config('app.url') }}</span> website, which provides the SERVICE.</p>
 
         <div>             
-                <p>Welcome to {{ config('app.name') }}</p>
+                <p>Welcome to {{ config('app.name') }}.</p>
                 <p>These terms and conditions outline the rules and regulations for the use of {{ config('app.name') }}'s Website.</p>
 
                 <p>By accessing this website we assume you accept these terms and conditions in full. Do not continue to use {{ config('app.name') }}'s website
