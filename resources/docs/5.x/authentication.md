@@ -17,6 +17,22 @@
 
 In {{ config('app.name') }}, you can use the built-in helpers to make Authentication a breeze.
 
+To authenticate a user, run the below command.
+
+```dart
+User user = User();
+
+await Auth.set(user);
+```
+
+To retrieve a user, run the below command.
+
+```dart
+User? user = await Auth.user<User>();
+
+print(user); // User
+```
+
 Let's imagine the below scenario.
 
 1. A user registers using an email and password.
