@@ -28,7 +28,7 @@ class GitHubActionsController extends Controller
     {
         $version = substr($request->version, 1);
 
-        $didSucceed = $this->packageService->update($repository, $version);
+        $didSucceed = $this->packageService->updateVersion($repository, $version);
 
         if (!$didSucceed) {
             return response()->json(['status' => 'failed', 'error_code' => 539]);

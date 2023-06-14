@@ -12,8 +12,9 @@ jobs:
 
     steps:
       - name: Update nylo.dev
-        uses: alikamal1/Form_Data_HTTP_POST_Action@v.1.0
+        uses: fjogeleit/http-request-action@v1
         with:
           url: 'https://nylo.dev/process/site-update'
-          headers: '{"Authorization": "Bearer ${{ secrets.NYLO_API_PROCESS_SECRET }}"}'
-          data: '{"version": "${{  github.ref_name }}"}'
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json", "Authorization": "Bearer ${{ secrets.NYLO_API_PROCESS_SECRET }}"}'
+          data: '{"version": "${{ github.ref_name }}"}'

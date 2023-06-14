@@ -27,7 +27,7 @@ class PackageService
     /**
      * Get the resource meta data.
      *
-     * @return void
+     * @return mixed
      */
     public function getResourceMetaData()
     {
@@ -84,11 +84,12 @@ class PackageService
      *
      * @return mixed
      */
-    public function update($repository, $version)
+    public function updateVersion($repository, $version)
     {
-        $package = Package::where('repository', $repository)->update([
-            'version' => $version
-        ]);
+        $package = Package::where('repository', $repository)
+                        ->update([
+                            'version' => $version
+                        ]);
         Cache::forget('package-resource-md'); // clear
 
         return $package;
