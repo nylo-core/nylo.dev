@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Process;
-use Artisan;
+use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Artisan;
 use Log;
 
 class ProcessController extends Controller
