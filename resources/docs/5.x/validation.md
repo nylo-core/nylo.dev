@@ -145,7 +145,7 @@ Here are the available validation rules that you can use in {{ config('app.name'
 | <a href="#validation-rule-min">Min</a>  | min:5  | Checks if the data is a minimum of x characters |
 | <a href="#validation-rule-max">Max</a>  | max:11  | Checks if the data is a maximum of x characters |
 | <a href="#validation-rule-not">Not empty</a>  | not_empty  | Checks if the data is not empty |
-| <a href="#validation-rule-regex">Regex</a>  | regex:([0-9]+)  | Checks if the data matches a regex pattern |
+| <a href="#validation-rule-regex">Regex</a>  | r'regex:([0-9]+')  | Checks if the data matches a regex pattern |
 | <a href="#validation-rule-numeric">Numeric</a>  | numeric  | Checks if the data is numeric |
 | <a href="#validation-rule-date">Date</a>  | date  | Checks if the data is a date |
 | <a href="#validation-rule-capitalized">Capitalized</a>  | capitalized  | Checks if the data is capitalized |
@@ -237,7 +237,7 @@ Usage: `not_empty` - will fail if the user's input is empty.
 
 Check the input against a regex pattern.
 
-Usage: `regex:([0-9]+)` - will fail if the user's input does not match the regex pattern.
+Usage: `r'regex:([0-9]+)'` - will fail if the user's input does not match the regex pattern.
 
 
 <a name="validation-rule-numeric"></a>
@@ -336,9 +336,9 @@ You can add custom validation rules for your project by opening the `config/vald
 The `validationRules` variable contains all your custom validation rules. 
 
 ``` dart
-final Map<Type, dynamic> validationRules = {
+final Map<String, dynamic> validationRules = {
   /// Example
-  // SimplePassword: (attribute) => SimplePassword(attribute)
+  // "simple_password": (attribute) => SimplePassword(attribute)
 };
 ```
 
