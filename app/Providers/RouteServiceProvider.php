@@ -47,6 +47,10 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
         
         $this->mapGitHubActionsRoutes();
+        
+        $this->mapGitHubWebhookRoutes();
+        
+        $this->mapWebProcessRoutes();
     }
 
     /**
@@ -91,5 +95,34 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('gh_actions')
             ->namespace($this->namespace)
             ->group(base_path('routes/api_github_actions.php'));
+    }
+
+    /**
+     * Define the "gh_webhook" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapGitHubWebhookRoutes()
+    {
+        Route::prefix('api/github/webhook')
+            ->middleware('gh_webhook')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api_github_webhook.php'));
+    }
+
+    /**
+     * Define the "web_process" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapWebProcessRoutes()
+    {
+        Route::middleware('web_process')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/processes.php'));
     }
 }

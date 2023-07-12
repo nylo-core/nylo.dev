@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Package;
-use Request;
 use Cache;
 
 /**
@@ -86,12 +85,27 @@ class PackageService
      */
     public function updateVersion($repository, $version)
     {
+        $versionNumber = $this->cleanVersion($version);
         $package = Package::where('repository', $repository)
                         ->update([
-                            'version' => $version
+                            'version' => $versionNumber
                         ]);
-        Cache::forget('package-resource-md'); // clear
+
+        // clear cache                        
+        Cache::forget('package-resource-md'); 
 
         return $package;
+    }
+
+    /**
+     * Clean the version tag e.g. 1.0.0
+     * 
+     * @param String $version
+     *
+     * @return String
+     */
+    private function cleanVersion($version)
+    {
+        return str_replace("v", "", $version);
     }
 }

@@ -1,10 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GitHubActionsController;
-use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\LandingController;
 
-// Web Routes
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::controller(LandingController::class)->group(function () {
 	Route::get('/', 'index')->name('landing.index');
 	Route::get('resources', 'resources')->name('resources.index');
@@ -16,6 +20,3 @@ Route::controller(LandingController::class)->group(function () {
 
 // Redirects
 Route::redirect('/docs', '/docs/' . array_key_last(config('project.doc-index')['versions']) . '/installation', 301);
-
-// Processes
-Route::post('process/site-update', [ProcessController::class, 'siteUpdate']);

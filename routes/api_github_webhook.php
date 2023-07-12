@@ -5,11 +5,11 @@ use App\Http\Controllers\GitHubActionsController;
 
 /*
 |--------------------------------------------------------------------------
-| GitHub Actions
+| GitHub WebHooks
 |--------------------------------------------------------------------------
 */
 
-// GitHub Actions
-Route::post('{repo}/version', [GitHubActionsController::class, 'version'])
-		->whereIn('repo', ['nylo', 'support', 'framework'])
-		->name('actions.version');
+// GitHub WebHooks
+Route::post('{repo}/release', [GitHubActionsController::class, 'release'])
+		->whereIn('repo', ['nylo'])
+		->name('repo.release');

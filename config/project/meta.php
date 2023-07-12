@@ -8,4 +8,6 @@ return [
     'gh_auth_token' => env('GH_AUTH_MIDDLEWARE'),
     
     'process_token' => env('APP_PROCESS_TOKEN'),
+
+    'github_webhook_secret' => env('GITHUB_WEBHOOK_SECRET')
 ];

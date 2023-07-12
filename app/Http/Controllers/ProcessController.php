@@ -15,10 +15,7 @@ class ProcessController extends Controller
      * @return Response
      */
     public function siteUpdate(Request $request)
-    {
-        $token = $request->bearerToken();
-        abort_if($token != config('project.meta.process_token'), 403);
-        
+    {        
         $processGitPull = Process::run(['git', 'pull']);
         $exitCodeMigrate = Artisan::call('migrate', ['--force' => true]);
         $exitCodeOptimize = Artisan::call('optimize');
