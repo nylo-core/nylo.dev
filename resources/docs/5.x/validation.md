@@ -145,7 +145,7 @@ Here are the available validation rules that you can use in {{ config('app.name'
 | <a href="#validation-rule-min">Min</a>  | min:5  | Checks if the data is a minimum of x characters |
 | <a href="#validation-rule-max">Max</a>  | max:11  | Checks if the data is a maximum of x characters |
 | <a href="#validation-rule-not">Not empty</a>  | not_empty  | Checks if the data is not empty |
-| <a href="#validation-rule-regex">Regex</a>  | r'regex:([0-9]+')  | Checks if the data matches a regex pattern |
+| <a href="#validation-rule-regex">Regex</a>  | r'regex:([0-9]+)'  | Checks if the data matches a regex pattern |
 | <a href="#validation-rule-numeric">Numeric</a>  | numeric  | Checks if the data is numeric |
 | <a href="#validation-rule-date">Date</a>  | date  | Checks if the data is a date |
 | <a href="#validation-rule-capitalized">Capitalized</a>  | capitalized  | Checks if the data is capitalized |
