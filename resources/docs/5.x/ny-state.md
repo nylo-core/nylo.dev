@@ -109,9 +109,8 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   boot() async {
-    await Future.delayed(Duration(seconds: 4), () {
-      print('Wait 4 seconds');
-    });
+    await Future.delayed(Duration(seconds: 4));
+    print('After 4 seconds...');
   }
 
   @override
@@ -317,7 +316,7 @@ Once you tap the **_login** method, it will block any subsequent requests until 
 <br>
 ### isLocked
 
-This method will check if the state is locked using the `lockRelease` helper.
+This method will check if the state is locked using the [`lockRelease`](#lock-release) helper.
 
 Example
 ```dart
@@ -378,11 +377,12 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
-    setLoading(true, name: 'my_key');
-    await Future.delayed(Duration(seconds: 4), () {
-      print('Wait 4 seconds');
+    super.init();
+
+    awaitData(perform: () async {
+        await Future.delayed(Duration(seconds: 4));
+        print('4 seconds after...');
     });
-    setLoading(false, name: 'my_key');
   }
 
   @override
@@ -390,7 +390,7 @@ class _HomePageState extends NyState<HomePage> {
     return Scaffold(
         body: afterLoad(child: () {
           return Text("Loaded");
-        }, loadingKey: 'my_key')
+        })
     );
   }
 ```
@@ -412,6 +412,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
+    super.init();
     _user = await api<ApiService>((request) => request.fetchUser()); // example
     setState(() {});
   }
@@ -420,7 +421,7 @@ class _HomePageState extends NyState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: afterNotNull(_user, child: () {
-          return Text(_user.firstName);
+          return Text(_user!.firstName);
         })
     );
   }
@@ -440,6 +441,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
+    super.init();
     setLoading(true, name: 'refreshing_content');
 
     await Future.delayed(Duration(seconds: 4));

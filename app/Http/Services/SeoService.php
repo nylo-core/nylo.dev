@@ -41,7 +41,7 @@ class SeoService
     /**
      * Sets the SEO title.
      *
-     * @param String $title
+     * @param string $title
      * @return void
      */
     public function setTitle($title)
@@ -52,7 +52,7 @@ class SeoService
     /**
      * Sets the default SEO when viewing the docs page.
      *
-     * @param String $page
+     * @param string $page
      * @return void
      */
     public function setSeoViewingDocs($page)

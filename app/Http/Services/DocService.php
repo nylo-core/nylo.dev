@@ -27,10 +27,10 @@ class DocService
     /**
      * Get latest version for Nylo.
      *
-     * @param String $page
-     * @return String
+     * @param string $page
+     * @return string
      */
-    public function getLastestVersionNylo() : String
+    public function getLastestVersionNylo() : string
     {
         return array_key_last(config('project.doc-index')['versions']);
     }
@@ -38,7 +38,7 @@ class DocService
     /**
      * Performs a check to see if doc version is old.
      *
-     * @param String $page
+     * @param string $page
      * @return bool
      */
     public function isViewingOldDocs($version) : bool
@@ -50,11 +50,11 @@ class DocService
     /**
      * Finds the correct section that a page belongs to.
      *
-     * @param String $version
-     * @param String $page
-     * @return String
+     * @param string $version
+     * @param string $page
+     * @return string
      */
-    public function findDocSection($version, $page) : String
+    public function findDocSection($version, $page) : string
     {
         foreach (config('project.doc-index')['versions'][$version] as $key => $docLink) {
             if (in_array($page, $docLink)) {
@@ -68,11 +68,11 @@ class DocService
     /**
      * Checks if the docs page exists in the resource path and then returns the path.
      *
-     * @param String $version
-     * @param String $page
-     * @return String
+     * @param string $version
+     * @param string $page
+     * @return string
      */
-    public function checkIfDocExists($version, $page) : String
+    public function checkIfDocExists($version, $page) : string
     {
         $mdDocPage = base_path() . '/resources/docs/' . $version . '/' . $page . '.md';
         abort_if(file_exists($mdDocPage) == false, 404);
@@ -82,10 +82,10 @@ class DocService
     /**
      * Returns the zipball_url to download a project from GitHub.
      *
-     * @param String $project
-     * @return String
+     * @param string $project
+     * @return string
      */
-    public function downloadFile($project) : String
+    public function downloadFile($project) : string
     {
         abort_if(!in_array($project, ['nylo-core/nylo']), 404);
         $response = Http::get("https://api.github.com/repos/" . $project . "/releases/latest");
@@ -104,8 +104,8 @@ class DocService
     /**
      * Check if the docs contain a certain page.
      *
-     * @param String $version
-     * @param String $page
+     * @param string $version
+     * @param string $page
      * @return bool
      */
     public function checkDocsContainPage($version, $page) : bool

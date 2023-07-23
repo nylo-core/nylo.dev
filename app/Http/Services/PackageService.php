@@ -26,7 +26,7 @@ class PackageService
     /**
      * Get the resource meta data.
      *
-     * @return mixed
+     * @return array
      */
     public function getResourceMetaData()
     {
@@ -51,7 +51,9 @@ class PackageService
     /**
      * Get the repository url
      *
-     * @return String
+     * @param Package $package
+     *
+     * @return string
      */
     public function repositoryUrl(Package $package) : string
     {
@@ -61,7 +63,9 @@ class PackageService
     /**
      * Get the Pub dev url
      *
-     * @return String
+     * @param Package $package
+     *
+     * @return string
      */
     public function pubDevUrl(Package $package) : string
     {
@@ -71,7 +75,9 @@ class PackageService
     /**
      * Get the release note url
      *
-     * @return String
+     * @param Package $package
+     *
+     * @return string
      */
     public function releaseNoteUrl(Package $package) : string
     {
@@ -80,6 +86,9 @@ class PackageService
 
     /**
      * Update the package version
+     *
+     * @param string $repository
+     * @param string $version
      *
      * @return mixed
      */
@@ -91,18 +100,18 @@ class PackageService
                             'version' => $versionNumber
                         ]);
 
-        // clear cache                        
-        Cache::forget('package-resource-md'); 
+        // clear cache
+        Cache::forget('package-resource-md');
 
         return $package;
     }
 
     /**
      * Clean the version tag e.g. 1.0.0
-     * 
-     * @param String $version
      *
-     * @return String
+     * @param string $version
+     *
+     * @return string
      */
     private function cleanVersion($version)
     {

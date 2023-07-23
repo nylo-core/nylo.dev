@@ -15,6 +15,13 @@ use Log;
  */
 class GitHubActionsController extends Controller
 {
+    /**
+     * GitHubActionsController constructor
+     *
+     * @param PackageService $packageService
+     *
+     * @return void
+     */
     function __construct(PackageService $packageService)
     {
         $this->packageService = $packageService;
@@ -23,7 +30,10 @@ class GitHubActionsController extends Controller
     /**
      * GitHub Workflow http request to update the latest version of a package.
      *
-     * @return Response
+     * @param GitHubVersionRequest $request
+     * @param string $repository
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function version(GitHubVersionRequest $request, $repository)
     {
@@ -38,7 +48,9 @@ class GitHubActionsController extends Controller
     /**
      * Webhook for Release event.
      *
-     * @return Response
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function release(Request $request)
     {
@@ -48,14 +60,14 @@ class GitHubActionsController extends Controller
         }
 
         $releaseData = $request->release;
-        
+
         if ($releaseData['draft'] != false) {
             Log::debug('GitHubActionsController@release received payload in draft. ' . json_encode($request->input()));
             return response()->json(['status' => 'failed'], 422);
         }
 
         $tagName = $releaseData['tag_name'];
-        
+
         $repositoryData = $request->repository;
         $repositoryName = $repositoryData['name'];
 

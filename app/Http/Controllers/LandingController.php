@@ -17,8 +17,8 @@ use App\Http\Services\PackageService;
 class LandingController extends Controller
 {
 	public function __construct(
-		SeoService $seoService, 
-		DocService $docService, 
+		SeoService $seoService,
+		DocService $docService,
 		PackageService $packageService
 	) {
 		$this->seoService = $seoService;
@@ -29,7 +29,9 @@ class LandingController extends Controller
     /**
      * Download the latest version of Nylo.
      *
-     * @return Response
+     * @param string $project
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
 	public function download($project = 'nylo-core/nylo')
 	{
@@ -41,7 +43,7 @@ class LandingController extends Controller
     /**
      * Index page for Nylo.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 	public function index()
 	{
@@ -53,7 +55,7 @@ class LandingController extends Controller
     /**
      * Privacy policy page for Nylo.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 	public function privacyPolicy()
 	{
@@ -65,7 +67,7 @@ class LandingController extends Controller
     /**
      * Terms and conditions page for Nylo.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 	public function termsAndConditions()
 	{
@@ -77,7 +79,7 @@ class LandingController extends Controller
     /**
      * Resources page for Nylo.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 	public function resources()
 	{
@@ -90,7 +92,10 @@ class LandingController extends Controller
     /**
      * Documentation page for Nylo.
      *
-     * @return Response
+     * @param string $version
+     * @param string $page
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 	public function docs($version = null, $page = 'installation')
 	{
