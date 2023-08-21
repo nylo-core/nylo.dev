@@ -47,18 +47,26 @@ You may also need to pass data from one view to another. In {{ config('app.name'
 
 ## Adding routes
 
-Here's the most basic form of adding a new route to your project.
+This is the easiest way to add new routes to your project.
+
+Run the below command to create a new page.
+
+```dart
+dart run nylo_framework:main make:page profile_page
+```
+
+After running the above, it will create a new page named `ProfilePage` and add it to your `resources/pages/` directory.
+It will also add the new route to your `lib/routes/router.dart` file.
 
 File: <b>/lib/routes/router.dart</b>
 
 ``` dart
 appRouter() => nyRoutes((router) {
   ...
-  router.route(SettingsPage.path, (context) => SettingsPage());
+  router.route(HomePage.path, (context) => HomePage(), initialRoute: true);
 
   // My new route
-  router.route(HomePage.path, (context) => HomePage());
-
+  router.route(ProfilePage.path, (context) => ProfilePage());
 });
 ```
 
