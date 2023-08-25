@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [How to use NyState](#how-to-use-nystate "How to use NyState")
+- [State Management](#state-management "State Management")
 - [Helpers](#helpers "Helpers")
 
 
@@ -58,8 +59,43 @@ Or with the alias metro
 metro make:page product_page
 ```
 
+<a name="state-management"></a>
+<br>
+
+## State Management
+
+``` dart
+class _SettingsTabState extends NyState<SettingsTab> {
+
+  _SettingsTabState() {
+    stateName = SettingsTab.state;
+  }
+
+  @override
+  init() async {
+    super.init();
+    
+  }
+  
+  @override
+  void stateUpdated(data) {
+    // e.g. to update this state from another class
+    // updateState(SettingsTab.state, data: "example payload");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Cart(),
+    );
+  }
+}
+```
+
+
 <a name="helpers"></a>
 <br>
+
 ## Helpers
 
 |  |  |
@@ -76,6 +112,7 @@ metro make:page product_page
 
 <a name="color"></a>
 <br>
+
 ### Color
 
 Returns a color from your current <a href="/docs/{{$version}}/themes#theme-colors" target="_BLANK">theme</a>.
@@ -98,6 +135,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="boot"></a>
 <br>
+
 ### Boot
 
 The `boot` method is used in conjunction with `afterLoad` to make async calls easier. You can call **await** on Future methods inside `boot` and while waiting, the afterLoad method will display a loader (from your **config/design.dart** file). After the boot method has finished, it will display the **child** Widget of your choice.
@@ -155,6 +193,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="showToast"></a>
 <br>
+
 ### showToast
 
 Show a toast notification on the context.
@@ -188,6 +227,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="validate"></a>
 <br>
+
 ### validate
 
 The `validate` helper performs a validation check on data. 
@@ -216,6 +256,7 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 
 <a name="change-language"></a>
 <br>
+
 ### changeLanguage
 
 You can call `changeLanguage` to change the json **/lang** file used on the device.
@@ -245,6 +286,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="when-env"></a>
 <br>
+
 ### whenEnv
 
 You can use `whenEnv` to run a function when your application is in a certain state. 
@@ -268,6 +310,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="lock-release"></a>
 <br>
+
 ### lockRelease
 
 This method will lock the state after a function is called, only until the method has finished will it allow the user to make subsequent requests. This method will also update the state, use `isLocked` to check.
@@ -314,6 +357,7 @@ Once you tap the **_login** method, it will block any subsequent requests until 
 
 <a name="is-locked"></a>
 <br>
+
 ### isLocked
 
 This method will check if the state is locked using the [`lockRelease`](#lock-release) helper.
@@ -340,6 +384,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="is-loading"></a>
 <br>
+
 ### isLoading
 
 The `isLoading` method will check if the state is loading.
@@ -365,6 +410,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="after-load"></a>
 <br>
+
 ### afterLoad
 
 The `afterLoad` method can be used to display a loader until the state has finished 'loading'.
@@ -397,6 +443,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="after-not-null"></a>
 <br>
+
 ### afterNotNull
 
 You can use `afterNotNull` to show a loading widget until a variable has been set.
@@ -429,6 +476,7 @@ class _HomePageState extends NyState<HomePage> {
 
 <a name="set-loading"></a>
 <br>
+
 ### setLoading
 
 You can change to a 'loading' state by using `setLoading`. 

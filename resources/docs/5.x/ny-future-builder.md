@@ -21,20 +21,21 @@ Let's dive into some code.
 2. We want to display the data on the UI for our user
 
 ``` dart
-// 1
-Future<String> _findUser() async {
-  return await NyStorage.read("a_user_from_storage");
+// 1. Example future that takes 3 seconds to complete
+Future<String> _findUserName() async {
+  await Future.delayed(Duration(seconds: 3));
+  return "John Doe";
 }
 
-// 2
+// 2. Use the NyFutureBuilder widget
 @override
 Widget build(BuildContext context) {
   return Scaffold(
     body: SafeArea(
        child: Container(
-         child: NyFutureBuilder(future: _findUser(), child: (context, data) {
-           // data = the return value from Future 'findUser()'
-           return Text(data);
+         child: NyFutureBuilder(future: _findUserName(), child: (context, data) {
+           // data = "John Doe"
+           return Text(data!);
          },),
        ),
     ),

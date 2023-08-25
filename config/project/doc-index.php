@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
 	'versions' => [
@@ -162,10 +162,14 @@ return [
 				'assets',
 				'ny-state',
 				'ny-future-builder',
-				'ny-text-field'
+				'ny-text-field',
+                'ny-pull-to-refresh',
+                'ny-list-view',
+                'ny-switch'
 			],
 
 			'advanced' => [
+                'state-management',
 				'providers',
 				'decoders',
 				'events',

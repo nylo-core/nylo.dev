@@ -60,8 +60,8 @@
                             type="button"
                             aria-haspopup="true"
                             aria-expanded="false"
-                            @click="isOpen = !isOpen" 
-                            @keydown.escape="isOpen = false" 
+                            @click="isOpen = !isOpen"
+                            @keydown.escape="isOpen = false"
                             >
                             v{{ $version }}<svg width="6" height="3" class="ml-2 overflow-visible" aria-hidden="true"><path d="M0 0L3 3L6 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>
                         </button>
@@ -69,7 +69,7 @@
                         <ul x-show="isOpen"
                         @click.away="isOpen = false"
                         class="absolute font-normal bg-white shadow overflow-hidden rounded w-24 border mt-2 py-1 right-0 z-20"
-                        style="display:none;" 
+                        style="display:none;"
                         >
                         @foreach(array_keys(config('project.doc-index.versions')) as $nyloDocVersion)
                         <li>
