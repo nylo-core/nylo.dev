@@ -15,7 +15,7 @@
 
 ## Introduction
 
-In Nylo 5, you can build Widgets to use State Management.
+In Nylo 5, you can build Widgets that use State Management.
 
 In this section, we will learn about the `NyState` class, we'll also dive into some examples.
 
@@ -24,9 +24,9 @@ In this section, we will learn about the `NyState` class, we'll also dive into s
 
 Everything in Flutter is a widget, they are just tiny chunks of UI that you can combine to make a complete app.
 
-When you start building complex pages, you will need to manage the state of your widgets. This means when something changes e.g. data, you can update that widget without having to rebuild the entire page.
+When you start building complex pages, you will need to manage the state of your widgets. This means when something changes, e.g. data, you can update that widget without having to rebuild the entire page.
 
-There's a lot of reasons why this is important, but the main one is performance. If you have a widget that is constantly changing, you don't want to rebuild the entire page every time it changes.
+There are a lot of reasons why this is important, but the main reason is performance. If you have a widget that is constantly changing, you don't want to rebuild the entire page every time it changes.
 
 This is where State Management comes in, it allows you to manage the state of a widget in your application.
 
@@ -38,7 +38,7 @@ This is where State Management comes in, it allows you to manage the state of a 
 
 You should use State Management when you have a widget that needs to be updated without rebuilding the entire page.
 
-For example, let's imagine you have created an ecommerce app. You have built a widget to display the total amount of items in the users cart.
+For example, let's imagine you have created an ecommerce app. You have built a widget to display the total amount of items in the users' cart.
 Let's call this widget `Cart()`.
 
 A state managed `Cart` widget in Nylo would look something like this.
@@ -101,11 +101,11 @@ Let's break this down.
 
 2. `_CartState` extends `NyState<Cart>`.
 
-3. You need to define a **stateName** for the `CartState` class, this is used to identify the state.
+3. You need to define a name for the `state`, this is used to identify the state.
 
 4. The `boot()` method is called when the widget is first loaded.
 
-5. The `stateUpdate()` methods handle what happens when the state is initialized and updated.
+5. The `stateUpdate()` methods handle what happens when the state is updated.
 
 If you want to try this example in your {{ config('app.name') }} project, create a new widget called `Cart`. 
 
@@ -113,7 +113,7 @@ If you want to try this example in your {{ config('app.name') }} project, create
 dart run nylo_framework:main make:stateful_widget cart
 ```
 
-The you can copy the example above and paste the code into it.
+Then you can copy the example above and try it in your project.
 
 Now, to update the cart, you can call the following.
 

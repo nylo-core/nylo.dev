@@ -59,7 +59,7 @@ The `NyListView` widget requires two parameters:
 
 ## Parameters
 
-Here's some important parameters you should know about before using the `NyPullToRefresh` widget.
+Here are some important parameters you should know about before using the `NyPullToRefresh` widget.
 
 | Property | Type | Description |
 | --- | --- | --- |

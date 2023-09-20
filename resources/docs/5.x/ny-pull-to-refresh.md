@@ -79,7 +79,7 @@ When the returned data is an empty array, it will stop the pagination.
 
 ## Parameters
 
-Here's some important parameters you should know about before using the `NyPullToRefresh` widget.
+Here are some important parameters you should know about before using the `NyPullToRefresh` widget.
 
 | Property | Type | Description |
 | --- | --- | --- |

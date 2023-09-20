@@ -54,7 +54,7 @@ In the next section, we'll show a real world example.
 
 In this practical example, we'll imagine we own an e-commerce app selling t-shirts. 
 
-When user's make a successful payment we want to dispatch an event to handle the following things:
+When user's make a successful payment, we want to dispatch an event to handle the following things:
 
 - Clear the user's cart
 - Use Google Tag Manager to log the event for analytics

@@ -16,9 +16,9 @@
 <br>
 ## Introduction
 
-{{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier. {{ config('app.name') }} is an open source and MIT-licenced too so you can freely build your projects.
+{{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier. {{ config('app.name') }} is an open source and MIT-licenced too, so you can freely build your projects.
 
-New installs of {{ config('app.name') }} contain standardized file structure and config so you can jump straight into developing your project.
+New installs of {{ config('app.name') }} contain standardized file structure and config, so you can jump straight into developing your project.
 
 <a name="new-to-flutter"></a>
 <br>
