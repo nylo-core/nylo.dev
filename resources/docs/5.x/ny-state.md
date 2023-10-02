@@ -101,13 +101,13 @@ class _SettingsTabState extends NyState<SettingsTab> {
 |  |  |
 | --- | ----------- |
 | [color](#color "color") | [lockRelease](#lock-release "lockRelease") |
-| [boot](#boot "boot") | [isLocked](#is-locked "isLocked") |
+| [boot](#boot "boot") | [reboot](#reboot "reboot") |
 | [showToast](#showToast "showToast") | [isLoading](#is-loading "isLoading") |
 | [validate](#validate "validate") | [afterLoad](#after-load "afterLoad") |
-| [changeLanguage](#change-language "changeLanguage") | [afterNotNull](#after-not-null "afterNotNull") |
+| [afterNotLocked](#afterNotLocked "afterNotLocked") | [afterNotNull](#after-not-null "afterNotNull") |
 | [whenEnv](#when-env "whenEnv") | [setLoading](#set-loading "setLoading") |
-| [pop](#pop "pop") |  |
-
+| [pop](#pop "pop") | [isLocked](#is-locked "isLocked") |
+| [changeLanguage](#change-language "changeLanguage") |
 
 
 <a name="color"></a>
@@ -163,6 +163,48 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
+<a name="reboot"></a>
+<br>
+
+### Reboot
+
+This method will re-run the `boot` method in your state. It's useful if you want to refresh the data on the page.
+
+Example
+```dart
+class _HomePageState extends NyState<HomePage> {
+
+  List<User> users = [];
+
+  @override
+  boot() async {
+    users = await api<ApiService>((request) => request.fetchUsers());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Users"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                reboot(); // refresh the data
+              },
+            )
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            return Text(users[index].firstName);
+          }
+        ),
+    );
+  }
+}
+```
 
 <a name="pop"></a>
 <br>
@@ -439,6 +481,45 @@ class _HomePageState extends NyState<HomePage> {
         })
     );
   }
+```
+
+<a name="after-not-locked"></a>
+<br>
+
+### afterNotLocked
+
+The `afterNotLocked` method will check if the state is locked. 
+
+If the state is locked it will display the [loading] widget.
+
+Example
+```dart
+class _HomePageState extends NyState<HomePage> {  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: afterNotLocked('login', child: () {
+            return MaterialButton(
+              onPressed: () {
+                login();
+              },
+              child: Text("Login"),
+            );
+          }),
+        )
+    );
+  }
+
+  login() async {
+    await lockRelease('login', perform: () async {
+      await Future.delayed(Duration(seconds: 4));
+      print('4 seconds after...');
+    });
+  }
+}
 ```
 
 <a name="after-not-null"></a>
