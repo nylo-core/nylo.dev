@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction to controllers")
 - [Creating pages and controllers](#creating-pages-and-controllers "Creating pages and controllers")
+- [Using controllers with NyPage](#using-controllers-with-ny-page "Using controllers with NyPage")
 
 <a name="introduction"></a>
 <br>
@@ -57,12 +58,9 @@ Call the controller from your widget.
 class _MyHomePageState extends NyState<MyHomePage> {
   ...
   MaterialButton(
-  child: Text(
-    "Documentation",
-    style: Theme.of(context).textTheme.bodyText1,
+    child: Text("Documentation"),
+    onPressed: widget.controller.onTapDocumentation, // call the action
   ),
-  onPressed: widget.controller.onTapDocumentation,
-),
 ```
 
 If your widget has a controller, you can use `widget.controller` to access its properties.
@@ -77,7 +75,9 @@ You can use `dart run nylo_framework:main make:page account --controller` comman
 You can use the Metro CLI tool to create your pages & controllers automatically. 
 
 ``` dart 
-dart run nylo_framework:main make:page my_cool_page --controller
+dart run nylo_framework:main make:page dashboard_page --controller
+// or
+dart run nylo_framework:main make:page dashboard_page -c
 ```
 
 This will create a new controller in your **app/controllers** directory and a page in your **resources/pages** directory.
@@ -94,7 +94,7 @@ dart run nylo_framework:main make:controller profile_controller
 If you need to pass data from one widget to another, you can send the data using `Navigator` class or use the `routeTo` helper.
 
 ``` dart 
-// User object
+// Send an object to another page
 User user = new User();
 user.firstName = 'Anthony';
 
@@ -111,10 +111,93 @@ class _ProfilePageState extends NyState<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    User user = widget.data();
+    dynamic data = widget.data(); // data passed from previous page
+    
+    User user = data;
     print(user.firstName); // Anthony
-
   }
 ```
 
 The `routeTo(String routeName, data: dynamic)` **data** parameter accepts dynamic types so you can cast the object after it’s returned.
+
+<a name="using-controllers-with-ny-page"></a>
+<br>
+
+## Using controllers with NyPage
+
+The `NyPage` widget makes it easy to use controllers.
+
+You can use controllers by first extending the `NyPage` class and then set the controller like in the below example.
+
+``` dart
+
+import 'package:nylo_framework/nylo_framework.dart';
+import '/app/controllers/my_controller.dart'; // import your controller
+
+class HomePage extends NyPage<MyController> {
+    
+    // init - called when the page is created
+    init() async {
+        // access the controller
+        controller.doSomething(); // call an action from that controller
+        controller.data(); // data passed from a previous page
+        controller.queryParameters(); // query parameters passed from a previous page
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+        appBar: AppBar(
+            title: Text("My Page"),
+        ),
+        body: Center(
+            child: Text("Hello World"),
+        ),
+        );
+    }
+}
+```
+
+It's important that your controller is set in your `config/decoders.dart` file like in the below example.
+
+``` dart
+
+import 'package:nylo_framework/nylo_framework.dart';
+
+...
+
+final Map<Type, BaseController> controllers = {
+  HomeController: HomeController(),
+
+  MyNewController: MyNewController(), // new controller
+  // ...
+};
+```
+
+You should also add all your controllers to Nylo like in the below example:
+
+1. Open `app/providers/app_provider.dart`
+
+2. Add your controllers
+
+``` dart
+
+import 'package:nylo_framework/nylo_framework.dart';
+
+...
+
+class AppProvider implements NyProvider {
+  @override
+  boot(Nylo nylo) async {
+    ...
+    nylo.addControllers(controllers); // adds all controllers to Nylo
+
+    return nylo;
+  
+  }
+...
+```
+
+Now you should be ready to use a controller with your `NyPage`.
+
+Learn more about NyPage [here](/docs/{{$version}}/ny-page).

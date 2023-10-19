@@ -165,7 +165,8 @@ return [
 				'ny-text-field',
                 'ny-pull-to-refresh',
                 'ny-list-view',
-                'ny-switch'
+                'ny-switch',
+                'ny-page'
 			],
 
 			'advanced' => [
