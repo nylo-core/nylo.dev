@@ -4,7 +4,7 @@
 
 ## Built with Laravel ❤️
 
-This site has been built using [Laravel](https://laravel.com) (v9).
+This site has been built using [Laravel](https://laravel.com).
 
 ## Contributing
 
