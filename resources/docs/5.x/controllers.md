@@ -52,7 +52,18 @@ class HomeController extends Controller {
 
 <br>
 
-Call the controller from your widget.
+Call the controller from your page.
+
+``` dart
+class MyHomePage extends NyPage<HomeController> {
+  ...
+  MaterialButton(
+    child: Text("Documentation"),
+    onPressed: controller?.onTapDocumentation, // call the action
+  ),
+```
+
+Or from your Widget
 
 ``` dart
 class _MyHomePageState extends NyState<MyHomePage> {
@@ -100,17 +111,34 @@ user.firstName = 'Anthony';
 
 Navigator.pushNamed(context, '/profile', arguments: user);
 // or
-routeTo('/profile', data: user);
+routeTo(ProfilePage.path, data: user);
 ```
 
-When we navigate to that page, we can call `widget.data()` to get the data.
+When we navigate to the 'Profile' page, we can call `data()` to get the data from the previous page.
+
+``` dart 
+...
+class ProfilePage extends NyPage {
+  
+  @override
+  init() async {
+    super.init();
+    dynamic data = data(); // data passed from previous page
+    
+    User user = data;
+    print(user.firstName); // Anthony
+  }
+```
+
+Or from your `StatefulWidget`
 
 ``` dart 
 ...
 class _ProfilePageState extends NyState<ProfilePage> {
+  
   @override
-  void initState() {
-    super.initState();
+  init() async {
+    super.init();
     dynamic data = widget.data(); // data passed from previous page
     
     User user = data;
