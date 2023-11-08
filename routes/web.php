@@ -15,6 +15,7 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('download', 'download')->name('landing.download')->middleware('throttle:5,1');
 	Route::get('privacy-policy', 'privacyPolicy')->name('landing.privacy-policy');
 	Route::get('terms-and-conditions', 'termsAndConditions')->name('landing.terms-and-conditions');
+    Route::get('tutorials/{version}/{page?}', 'tutorials')->name('tutorials.index');
 	Route::get('docs/{version}/{page?}', 'docs')->name('landing.docs');
 });
 

@@ -18,8 +18,10 @@ Each package you install will use a different command to publish all the files.
 
 Here's an example below, i.e. installing the [ny_auth_slate](https://pub.dev/packages/ny_auth_slate).
 
-```dart
-flutter pub run ny_auth_slate:main publish:all
+``` dart
+dart run nylo_framework:main publish:slate example_slate_package
+// or with Metro 
+metro publish:slate example_slate_package
 ```
 
 Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)

@@ -32,7 +32,7 @@ class GenerateSitemapCommand extends Command
     {
         $sitemap = Sitemap::create(config('app.url'));
         $sitemap->add(Url::create('/')->setPriority(0.95));
-        
+
         $sitemap->add(Url::create('resources')->setPriority(0.90));
         $sitemap->add(Url::create('privacy-policy')->setPriority(0.90));
         $sitemap->add(Url::create('terms-and-conditions')->setPriority(0.90));
@@ -56,8 +56,28 @@ class GenerateSitemapCommand extends Command
             $arrayLinks = $flattenedCollection->toArray();
 
             foreach ($arrayLinks as $link) {
-                $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]); 
+                $urlLink = route('landing.docs', ['version' => $version, 'page' => $link]);
                 $sitemap->add(Url::create($urlLink)->setPriority(0.8));
+            }
+        }
+
+        $docsTutorials = config('project.doc-tutorials');
+        if (empty($docsTutorials['versions'])) {
+            return;
+        }
+
+        foreach ($docsTutorials['versions'] as $version => $versionLinks) {
+            if ($version != $latestVersionOfNylo) {
+                continue;
+            }
+
+            foreach ($versionLinks as $tutorial) {
+                collect($tutorial)->map(function ($data) {
+                    return $data['label'];
+                })->each(function ($label) use ($version, &$sitemap) {
+                    $urlLink = route('tutorials.index', ['version' => $version, 'page' => $label]);
+                    $sitemap->add(Url::create($urlLink)->setPriority(0.70));
+                });
             }
         }
 

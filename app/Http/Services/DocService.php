@@ -48,7 +48,7 @@ class DocService
     }
 
     /**
-     * Finds the correct section that a page belongs to.
+     * Finds the correct section that a page belongs too.
      *
      * @param string $version
      * @param string $page
@@ -62,7 +62,36 @@ class DocService
             }
         }
         return '';
+    }
 
+    /**
+     * Finds the correct Tutorial section that a page belongs too.
+     *
+     * @param string $version
+     * @param string $page
+     * @return string
+     */
+    public function findTutorialSection($version, $page) : string
+    {
+        foreach (config('project.doc-tutorials')['versions'][$version] as $key => $docLink) {
+            $docLabels = collect($docLink)->map(function ($doc) {
+                return $doc['label'];
+            })->toArray();
+            if (in_array($page, $docLabels)) {
+                return $key;
+            }
+        }
+        return '';
+    }
+
+     /**
+     * Checks if doc-tutorials contains a valid $version
+     *
+     * @param string $version
+     */
+    public function containsTutorialsForVersion($version)
+    {
+        abort_if(array_key_exists($version, config('project.doc-tutorials')['versions']) == false, 403, "No tutorials found for $version");
     }
 
     /**
@@ -77,6 +106,39 @@ class DocService
         $mdDocPage = base_path() . '/resources/docs/' . $version . '/' . $page . '.md';
         abort_if(file_exists($mdDocPage) == false, 404);
         return $mdDocPage;
+    }
+
+    /**
+     * Checks if the tutorials docs page exists in the resource path and then returns the path.
+     *
+     * @param string $version
+     * @param string $page
+     * @return string
+     */
+    public function checkIfTutorialsExists($version, $page) : string
+    {
+        return 'docs/' . $version . '/tutorials/' . $page;
+    }
+
+    /**
+     * Returns the tutorial meta data
+     *
+     * @param string $version
+     * @param string $page
+     * @return array
+     */
+    public function getTutorial($version, $page) : array
+    {
+        $docsIndex = config('project.doc-tutorials');
+        $versions = $docsIndex['versions'][$version];
+        foreach ($versions as $docs) {
+            $results = collect($docs)->where('label', $page);
+            if ($results->isEmpty()) {
+                continue;
+            }
+            return collect($docs)->where('label', $page)->first();
+        }
+        return [];
     }
 
     /**

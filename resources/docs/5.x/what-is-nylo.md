@@ -54,7 +54,6 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 - [intl](https://pub.dev/packages/intl)
 - [flutter\_secure\_storage](https://pub.dev/packages/flutter_secure_storage)
 - [flutter\_dotenv](https://pub.dev/packages/flutter_dotenv)
-- [logger](https://pub.dev/packages/logger)
 - [page\_transition](https://pub.dev/packages/page_transition)
 - [args](https://pub.dev/packages/args)
 - [analyzer](https://pub.dev/packages/analyzer)
@@ -65,6 +64,10 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 - [animate_do](https://pub.dev/packages/animate_do)
 - [collection](https://pub.dev/packages/collection)
 - [flutter](https://github.com/flutter/flutter)
+- [equatable](https://pub.dev/packages/equatable)
+- [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+- [pull_to_refresh_flutter3](https://pub.dev/packages/pull_to_refresh_flutter3)
+- [rxdart](https://pub.dev/packages/rxdart)
 - [pretty\_dio\_logger](https://pub.dev/packages/pretty_dio_logger)
 
 <a name="contributors"></a>

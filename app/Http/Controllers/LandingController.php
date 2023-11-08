@@ -90,6 +90,29 @@ class LandingController extends Controller
 	}
 
     /**
+     * Tutorials page for Nylo.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+	public function tutorials($version = null, $page = 'introduction')
+	{
+		$this->seoService->setTitle('Tutorials');
+
+        $latestVersionOfNylo = $this->docService->getLastestVersionNylo();
+
+		if ($version == null) {
+			$version = $latestVersionOfNylo;
+		}
+        $this->docService->containsTutorialsForVersion($version);
+        $section = $this->docService->findTutorialSection($version, $page);
+		$viewingOldDocs = $this->docService->isViewingOldDocs($version);
+        $tutorial = $this->docService->getTutorial($version, $page);
+        abort_if(empty($tutorial), 404);
+
+		return view('docs.tutorials', compact('page', 'tutorial', 'version', 'section', 'latestVersionOfNylo', 'viewingOldDocs'));
+	}
+
+    /**
      * Documentation page for Nylo.
      *
      * @param string $version

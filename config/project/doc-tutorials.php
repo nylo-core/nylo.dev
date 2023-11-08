@@ -1,0 +1,48 @@
+<?php
+
+return [
+	'versions' => [
+		'5.x' => [
+			'Getting Started' => [
+				[
+                    'label' => 'introduction',
+                    'link' => 'https://www.youtube.com/embed/lVvsKfftiKU?si=ZFgk5xvavDMX1yZ_'
+                ],
+				[
+                    'label' => 'routing',
+                    'link' => 'https://www.youtube.com/embed/qaCDJjjYdQs?si=LkONz1stkjHtT9Os'
+                ],
+                [
+                    'label' => 'localization',
+                    'link' => 'https://www.youtube.com/embed/RJyI8vFRimQ?si=msezPj4-7gUsZXHL'
+                ],
+                [
+                    'label' => 'networking',
+                    'link' => 'https://www.youtube.com/embed/PJ-u5mE3yT4?si=AdjyxjREvq4p2diI'
+                ],
+			],
+            'Deeper Dive' => [
+                [
+                    'label' => 'validation',
+                    'link' => 'https://www.youtube.com/embed/7RUNT8b0LUI?si=pLLtrpstKao4ZO_m'
+                ],
+                [
+                    'label' => 'logging',
+                    'link' => 'https://www.youtube.com/embed/rpEMTGxTfkk?si=BR-RLl2ef9pATvjx'
+                ],
+                [
+                    'label' => 'authentication',
+                    'link' => 'https://www.youtube.com/embed/kYYCMfxeIQg?si=xw4qi14G16l_o42V'
+                ],
+				[
+                    'label' => 'events',
+                    'link' => 'https://www.youtube.com/embed/MRppCAvPEXQ?si=sQOBhMJ7z8VEBIHl'
+                ],
+                [
+                    'label' => 'providers',
+                    'link' => 'https://www.youtube.com/embed/0Y13JyV6Cc4?si=ibgLXBiw9x6GqXKn'
+                ],
+			],
+        ]
+    ]
+];
