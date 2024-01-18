@@ -163,8 +163,11 @@ docsearch({
   transformItems(items) {
     return items.map((item) => {
         var sectionName = item.hierarchy.lvl2;
-        if (sectionName == null || sectionName == "") return;
-        var sectionId = sectionName.toLowerCase().replace(' ', '-');
+        if (sectionName == null || sectionName == "") {
+            return item;
+        }
+        // make sectionName an anchor
+        var sectionId = sectionName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
         // remove old anchor
         item.url = item.url.replace(/#.*$/, '');
