@@ -160,6 +160,20 @@ docsearch({
   indexName: '{!! config("project.meta.algolia_index_name") !!}',
   insights: true,
   container: '#search',
+  transformItems(items) {
+    return items.map((item) => {
+        var sectionName = item.hierarchy.lvl2;
+        if (sectionName == null || sectionName == "") return;
+        var sectionId = sectionName.toLowerCase().replace(' ', '-');
+
+        // remove old anchor
+        item.url = item.url.replace(/#.*$/, '');
+
+        item.url = item.url + '#' + sectionId;
+
+        return item;
+    });
+  },
   recordExtractor: ({ helpers }) => {
     return helpers.docsearch({
         recordProps: {
