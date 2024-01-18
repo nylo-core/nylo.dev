@@ -173,7 +173,7 @@ docsearch({
     });
   },
   searchParameters: {
-    facetFilters: ['language:en', 'version:{!! $latestVersionOfNylo !!}'],
+    facetFilters: ['version:latest'],
   },
   debug: false
 });
