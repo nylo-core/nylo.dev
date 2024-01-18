@@ -34,21 +34,10 @@ It provides a lot of helpful tools to speed up development.
 
 Mac guide
 
-1. **Open your bash\_profile**
+**Run the below command from the terminal**
 
 ``` bash
-sudo open ~/.bash_profile
-```
-
-2. **Add this alias to your bash\_profile**
-``` bash
-...
-alias metro='dart run nylo_framework:main'
-```
-
-3. **Then run the following**
-``` bash
-source ~/.bash_profile
+echo "alias metro='dart run nylo_framework:main'" >>~/.bash_profile && source ~/.bash_profile
 ```
 
 If you open a project that uses {{ config('app.name') }}, try to run the following in the terminal.

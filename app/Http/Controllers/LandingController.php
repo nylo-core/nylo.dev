@@ -89,6 +89,18 @@ class LandingController extends Controller
 		return view('pages.resources', compact('resourceData'));
 	}
 
+	/**
+     * Ecosystem page for Nylo.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+	public function ecosystem()
+	{
+		$this->seoService->setTitle('Ecosystem');
+
+		return view('pages.ecosystem');
+	}
+
     /**
      * Tutorials page for Nylo.
      *

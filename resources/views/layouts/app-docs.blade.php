@@ -15,6 +15,13 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.5.0/styles/default.min.css">
 
+    <meta name="docsearch:language" content="en" />
+    @if($latestVersionOfNylo == $version)
+    <meta name="docsearch:version" content="{{ $version }},latest" />
+    @else
+    <meta name="docsearch:version" content="{{ $version }}" />
+    @endif
+
     @env('production')
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('project.meta.ga_id') }}"></script>
@@ -33,8 +40,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    @if(app()->environment('production'))
+    <link rel="stylesheet" href="{{ asset('css/docs.min.css') }}">
+    @else
+    <link rel="stylesheet" href="{{ asset('css/docs.css') }}">
+    @endif
+
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
+    <link rel="preconnect" href="https://CN0FWF0JLR-dsn.algolia.net" crossorigin />
 </head>
 
 <body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900" style="font-family: 'Outfit', sans-serif;">
@@ -52,10 +67,10 @@
                         <img src="{{ asset('images/nylo_logo.png') }}" class="block md:hidden lg:hidden">
                     </a>
 
-                    <div class="relative">
+                    <div class="relative" style="margin-right: 82px;">
                         <div x-data="{isOpen: false}">
                             <button
-                            class="text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5"
+                            class="version-switcher text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5"
                             id="headlessui-menu-button-undefined"
                             type="button"
                             aria-haspopup="true"
@@ -82,7 +97,11 @@
                 </div>
             </div>
 
-            <div class="relative hidden lg:flex items-center ml-auto">
+            <div class="inline-flex mx-4 px-6 py-2 rounded-2xl w-full cursor-pointer" id="search">
+
+            </div>
+
+            <div class="hidden items-center lg:flex relative">
                 @include('docs.nav')
             </div>
         </div>
@@ -117,7 +136,6 @@
             </nav>
         </div>
         <div class="lg:pl-[19.5rem]">
-
             <main class="max-w-3xl mx-auto relative z-20 pt-10">
                 <div class="prose dark:prose-invert prose-blockquote:bg-slate-400/10 prose-blockquote:p-4 prose-blockquote:rounded-md prose-blockquote:shadow-sm self-center m-auto">
                     @yield('content')
@@ -132,6 +150,36 @@
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+
+<script type="text/javascript">
+
+docsearch({
+  appId: '{!! config("project.meta.algolia_app_id") !!}',
+  apiKey: '{!! config("project.meta.algolia_app_key") !!}',
+  indexName: '{!! config("project.meta.algolia_index_name") !!}',
+  insights: true,
+  container: '#search',
+  recordExtractor: ({ helpers }) => {
+    return helpers.docsearch({
+        recordProps: {
+        lvl0: {
+            selectors: "h1",
+        },
+        lvl1: "h2",
+        lvl2: "h3",
+        content: "main p, main li",
+        },
+    });
+  },
+  searchParameters: {
+    facetFilters: ['language:en', 'version:{!! $latestVersionOfNylo !!}'],
+  },
+  debug: false
+});
+
+</script>
+
 <script type="text/javascript">
     $(function() {
         $("#open-menu").click(function() {

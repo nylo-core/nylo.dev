@@ -34,6 +34,7 @@ class GenerateSitemapCommand extends Command
         $sitemap->add(Url::create('/')->setPriority(0.95));
 
         $sitemap->add(Url::create('resources')->setPriority(0.90));
+        $sitemap->add(Url::create('ecosystem')->setPriority(0.60));
         $sitemap->add(Url::create('privacy-policy')->setPriority(0.90));
         $sitemap->add(Url::create('terms-and-conditions')->setPriority(0.90));
 

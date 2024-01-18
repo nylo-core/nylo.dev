@@ -177,5 +177,51 @@ return [
 				'slates'
 			],
 		],
+
+        '5.20.0' => [
+			'introduction' => [
+				'what-is-nylo',
+				'requirements'
+			],
+
+			'getting-started' => [
+				'installation',
+				'configuration',
+				'directory-structure',
+				'upgrade-guide'
+			],
+
+			'basics' => [
+				'router',
+				'networking',
+				'metro',
+				'localization',
+				'storage',
+				'controllers',
+				'app-icons',
+				'validation',
+				'authentication',
+				'logging'
+			],
+
+			'widgets' => [
+				'themes-and-styling',
+				'assets',
+				'ny-state',
+				'ny-future-builder',
+				'ny-text-field',
+                'ny-pull-to-refresh',
+                'ny-list-view',
+                'ny-switch',
+			],
+
+			'advanced' => [
+                'state-management',
+				'providers',
+				'decoders',
+				'events',
+				'slates'
+			],
+		],
 	],
 ];

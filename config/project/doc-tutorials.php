@@ -42,7 +42,25 @@ return [
                     'label' => 'providers',
                     'link' => 'https://www.youtube.com/embed/0Y13JyV6Cc4?si=ibgLXBiw9x6GqXKn'
                 ],
+                [
+                    'label' => 'state management',
+                    'link' => 'https://www.youtube.com/embed/X5EVh1KooFk?si=gengIXC02gGbgRki'
+                ],
 			],
+            'Widgets' => [
+                [
+                    'label' => 'NyPullToRefresh',
+                    'link' => 'https://www.youtube.com/embed/nz6oJiwdggw?si=sRx8lkr6EuoBDIuP'
+                ],
+                [
+                    'label' => 'NyListView',
+                    'link' => 'https://www.youtube.com/embed/mEvoy6SKb5w?si=j7n-G9FXLQfXfdk0'
+                ],
+                [
+                    'label' => 'NyFutureBuilder',
+                    'link' => 'https://www.youtube.com/embed/UGg_XsQCHeA?si=D7cVYW3c9tNxrfHP'
+                ],
+            ]
         ]
     ]
 ];

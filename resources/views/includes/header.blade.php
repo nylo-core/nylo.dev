@@ -14,6 +14,9 @@
                                         <a class="flex hover:text-gray-400 transition-all text-gray-600" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">Documentation</a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('ecosystem.index') }}">Ecosystem</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('resources.index') }}" class="hover:text-gray-400 transition-all text-gray-600">Resources</a>
                                     </li>
 
