@@ -180,6 +180,7 @@
             container: '#search',
             transformItems(items) {
                 return items.map((item) => {
+                    console.log(item.hierarchy);
                     var hierarchy = item.hierarchy;
 
                     if (item.url.indexOf("#nav")) {
@@ -187,12 +188,13 @@
                     }
 
                     var sectionName = null;
-                    if (hierarchy.lvl2 != null) {
-                        sectionName = hierarchy.lvl2;
+
+                    if (hierarchy.lvl3 != null) {
+                        sectionName = hierarchy.lvl3;
                     }
 
-                    if (hierarchy.lvl3 != null && sectionName == null) {
-                        sectionName = hierarchy.lvl3;
+                    if (hierarchy.lvl2 != null && sectionName == null) {
+                        sectionName = hierarchy.lvl2;
                     }
 
                     if (hierarchy.lvl4 != null && sectionName == null) {
@@ -201,7 +203,7 @@
 
                     if (hierarchy.lvl5 != null && sectionName == null) {
 
-                        if (["Getting Started", "Basics", "Introduction", "Advanced"].includes(hierarchy
+                        if (["Getting Started", "Basics", "Introduction", "Advanced", "Widgets"].includes(hierarchy
                                 .lvl5)) {
                             item.url = item.url.replace(/#.*$/, '');
                             return item;
