@@ -28,7 +28,7 @@ Your <b>API Services</b> directory is located here `app/networking/*`
 Fresh copies of {{ config('app.name') }} will include a default API Service `app/networking/api_service.dart`.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ApiService({BuildContext? buildContext}) : super(buildContext);
 
   @override
@@ -46,7 +46,7 @@ class ApiService extends BaseApiService {
 }
 ```
 
-Variables you can override using the <b>BaseApiService</b> class.
+Variables you can override using the <b>NyApiService</b> class.
 
 - `baseUrl` - This is the base URL for the API, e.g. "https://jsonplaceholder.typicode.com".
 - `interceptors` - Here, you can add Dio interceptors. Learn more about interceptors <a href="https://pub.dev/packages/dio#interceptors" target="_BLANK">here</a>.
@@ -62,8 +62,8 @@ Under the hood, the base networking class uses <a href="https://pub.dev/packages
 In your API Service, use the `network` method to build your API request.
 
 ```dart
-class ApiService extends BaseApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext);
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
 
   @override
   String get baseUrl => "https://jsonplaceholder.typicode.com";
@@ -91,15 +91,18 @@ The `request` argument is a <a href="https://pub.dev/packages/dio" target="_BLAN
 
 The `BaseOptions` variable is highly configurable to allow you to modify how your Api Service should send your requests.
 
-Inside your API Service, you can override your constructor.
+Inside your API Service, you can use the `baseOptions` parameter to modify the `BaseOptions` variable.
 
 ```dart 
-class ApiService extends BaseApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext) {
-    baseOptions = BaseOptions(
-      receiveTimeout: 10000, // Timeout in milliseconds (10 seconds)
-      connectTimeout: 5000 // Timeout in milliseconds (5 seconds)
-    );
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) : super(
+    buildContext, 
+    decoders: modelDecoders, 
+    baseOptions: (BaseOptions baseOptions) {
+        return baseOptions
+                  ..connectTimeout = Duration(seconds: 5)
+                  ..sendTimeout = Duration(seconds: 5)
+                  ..receiveTimeout = Duration(seconds: 5);
   }
 ...
 ```
@@ -164,8 +167,8 @@ Put in simple terms. An 'interceptor' will intercept the request, allowing you t
 {{ config('app.name') }} allows you to add new interceptors to your API Services like in the below example.
 
 ```dart 
-class ApiService extends BaseApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext);
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
   ...
 
   @override
@@ -269,7 +272,7 @@ The `network` helper provides us with a way to make HTTP requests from our appli
 The helper method can be accessed when using an API Service in {{ config('app.name') }}.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ...
 
   Future<dynamic> fetchUsers() async {
@@ -298,7 +301,7 @@ Model Decoders are a new concept introduced in {{ config('app.name') }} v3.x.
 They make it easy to return your objects, like in the below example.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ...
 
   Future<User?> fetchUser() async {
@@ -331,7 +334,7 @@ This method is only called if the <b>HTTP</b> response has a status code equal t
 Here's an example below.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ...
   // Example: returning an Object
   Future<User?> findUser() async {
@@ -380,7 +383,7 @@ You can provide the <b>network</b> helper with the `handleFailure: (DioError dio
 Here's an example of how it works.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ...
   // Example: returning an Object
   Future<User?> findUser() async {
@@ -460,7 +463,7 @@ To do this, add the `context` parameter to the `api` helper, example below.
 ...
 
 // Your API Service
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
   ...
 
   // Add this
@@ -493,7 +496,7 @@ dart run nylo_framework:main make:api_service user --model="User"
 This will create an API Service with the following methods.
 
 ```dart
-class UserApiService extends BaseApiService {
+class UserApiService extends NyApiService {
   ...
 
   /// Return a list of users
@@ -544,8 +547,8 @@ You can automatically decode JSON payloads from your API requests to models usin
 Here is an API request that uses {{ config('app.name') }}'s implementation of decoders.
 
 ```dart
-class ApiService extends BaseApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext);
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
 
   Future<User?> fetchUsers() async {
     return await network<User>(
