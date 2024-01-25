@@ -41,7 +41,7 @@ class _ExampleState extends NyState<ExamplePage> {
     String textFieldPass = 'agordon@web.com';
 
     validate(rules: {
-      "email address": [textFieldPass, "email|lowercase"]
+      "email address": [textFieldPass, "email"]
     }, onSuccess: () {
       print('looks good');
       // do something...
