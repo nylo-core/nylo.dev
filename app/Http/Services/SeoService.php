@@ -57,8 +57,13 @@ class SeoService
      */
     public function setSeoViewingDocs($page)
     {
-    	SEO::setTitle(str($page)->headline() . ' - ' . config('app.name') . ' - Flutter Micro-framework');
-		SEO::setDescription(str($page)->headline() . ' documentation for ' . config('app.name') . '. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
+        $docTitle = str($page)->headline();
+        if ($docTitle->startsWith('Ny')) {
+            $docTitle = $docTitle->replace(" ", "");
+        }
+
+    	SEO::setTitle($docTitle . ' - ' . config('app.name') . ' - Flutter Micro-framework');
+		SEO::setDescription($docTitle . ' documentation for ' . config('app.name') . '. Build modern applications on top of the foundation ' . config('app.name') . ' provides from it\'s micro-framework for Flutter.');
 		SEO::opengraph()->addProperty('type', 'articles');
 		SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
     }

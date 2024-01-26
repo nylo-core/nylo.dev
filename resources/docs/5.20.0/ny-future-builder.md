@@ -65,6 +65,7 @@ Widget build(BuildContext context) {
             return Text(data);
          },
          loading: CupertinoActivityIndicator(), // change the default loader
+         useSkeletonizer: true, // enable the skeletonizer effect
          onError: (AsyncSnapshot snapshot) { // handle exceptions thrown from your future.
            print(snapshot.error.toString());
            return Text("Error");

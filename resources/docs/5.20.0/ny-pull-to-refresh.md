@@ -86,8 +86,9 @@ Here are some important parameters you should know about before using the `NyPul
 | child | Widget Function(BuildContext context, dynamic data) {} | The child widget that will be displayed when the data is available. |
 | data | Future Function(int iteration) data | The list of data you want the list view to use. |
 | stateName | String? stateName | You can name the state using `stateName`, later you will need this key to update the state. |
+| useSkeletonizer | bool useSkeletonizer | Enable loading using the skeletonizer effect |
 
-If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/{{$version}}/lib/widgets/ny_pull_to_refresh.dart). 
+If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/5.x/lib/widgets/ny_pull_to_refresh.dart). 
 
 <a name="updating-the-state"></a>
 <br>
