@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\DocService;
 use App\Http\Services\SeoService;
 use App\Http\Services\PackageService;
+use App\Models\OnlineEvent;
 
 /**
  * Class LandingController
@@ -49,7 +50,15 @@ class LandingController extends Controller
 	{
 		$this->seoService->setTitle(config('app.name') . ' - Powerful Flutter Micro-Framework');
 
-		return view('pages.index');
+        $event = cache()->remember('event', now()->addHours(1), function () {
+            $events = OnlineEvent::where('end_date', '>', now())->get();
+            if (empty($events)) {
+                return null;
+            }
+            return $events->first();
+        });
+
+		return view('pages.index', compact('event'));
 	}
 
     /**
