@@ -75,3 +75,5 @@ Here's a shout out to the contributors who have helped build {{ config('app.name
 - <a href="https://github.com/Rashid-Khabeer" target="_blank">Rashid-Khabeer</a>
 - <a href="https://github.com/lpdevit" target="_blank">lpdevit</a>
 - <a href="https://github.com/youssefKadaouiAbbassi" target="_blank">youssefKadaouiAbbassi</a>
+- <a href="https://github.com/jeremyhalin" target="_blank">jeremyhalin</a>
+- <a href="https://github.com/abdulawalarif" target="_blank">abdulawalarif</a>
