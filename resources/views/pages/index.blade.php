@@ -5,15 +5,6 @@
 <section class="relative bg-[url('{{ asset('images/hero_fade.png') }}')] bg-cover bg-bottom">
 	<div class="container lg:px-32 md:px-32 mx-auto px-14 py-48 xl:px-32">
 
-		@if (!empty($event))
-        <div class="text-center mb-5">
-            <div class="block text-xs text-gray-500 mb-2">
-                <span class="">{{ $event->start_date->format('jS F, Y H:i') }}</span> <span class="border-l pl-1 border-gray-100">ICT</span>
-            </div>
-            <a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b>, our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded rounded-2xl text-green-800 text-xs font-semibold">Happening now | Join</span></a>
-        </div>
-		@endif
-
 		<h1 class="lg:max-w-3xl mx-auto font-medium inline lg:block lg:text-5xl mb-7 md:block md:text-4xl sm:inline text-5xl text-center">The Powerful <span class="text-primary-blue font-semibold">Micro-framework</span> for Flutter</h1>
 		<h2 class="mb-7 text-center text-lg text-primary-gray">Developer tools to build Flutter apps elegantly.</h2>
 
