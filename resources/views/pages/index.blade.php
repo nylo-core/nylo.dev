@@ -10,11 +10,7 @@
             <div class="block text-xs text-gray-500 mb-2">
                 <span class="">{{ $event->start_date->format('jS F, Y H:i') }}</span> <span class="border-l pl-1 border-gray-100">ICT</span>
             </div>
-			@if($event->isHappeningNow())
-			<a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b>, our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded rounded-2xl text-green-800 text-xs font-semibold">Happening now | Join</span></a>
-			@else
-			<a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b>, our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded rounded-2xl text-gray-600 text-xs font-semibold">Join</span></a>
-			@endif
+            <a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b>, our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded rounded-2xl text-green-800 text-xs font-semibold">Happening now | Join</span></a>
         </div>
 		@endif
 
