@@ -37,8 +37,18 @@ class OnlineEvent extends Model
      *
      * @return bool
      */
-    public function isHappeningNow()
+    public function isHappeningNow(): bool
     {
         return now()->between($this->start_date, $this->end_date);
+    }
+
+    /**
+     * Check if the event is upcoming.
+     *
+     * @return bool
+     */
+    public function isUpcoming(): bool
+    {
+        return now()->lt($this->start_date);
     }
 }

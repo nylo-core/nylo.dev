@@ -213,6 +213,7 @@ return [
                 'ny-pull-to-refresh',
                 'ny-list-view',
                 'ny-switch',
+                'ny-language-switcher',
 			],
 
 			'advanced' => [

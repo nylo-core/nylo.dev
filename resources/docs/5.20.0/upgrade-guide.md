@@ -13,7 +13,7 @@
 
 You can understand all the changes by clicking the below link.
 
-<a name="View {{ $version }} changes" href="https://github.com/nylo-core/nylo/compare/5.x...{{ $version }}#diff" target="_BLANK">View changes</a>
+<a name="View {{ $version }} changes" href="https://github.com/nylo-core/nylo/compare/4546cfc1e17e4e84b7426dd23d451f99ad4df60c...8d2198db423dd811be03b6e0307232de84f2609e#diff" target="_BLANK">View changes</a>
 
 <a name="how-to-upgrade"></a>
 <br>

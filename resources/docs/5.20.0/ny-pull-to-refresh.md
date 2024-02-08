@@ -4,7 +4,10 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [Usage](#usage "Usage")
+- Usage
+    - [NyPullToRefresh](#usage-nypulltorefresh "Usage NyPullToRefresh")
+    - [NyPullToRefresh.separated](#usage-nypulltorefresh-separated "Usage NyPullToRefresh Separated")
+    - [NyPullToRefresh.grid](#usage-nypulltorefresh-grid "Usage NyPullToRefresh Grid")
 - [Parameters](#parameters "Parameters")
 - [Updating The State](#updating-the-state "Updating The State")
 
@@ -24,31 +27,34 @@ This makes it a great option for those with big data because you'll be able to p
 
 Let's dive into some code.
 
-<a name="usage"></a>
+<a name="usage-nypulltorefresh"></a>
 <br>
 
-## Usage
+## Usage NyPullToRefresh
+
+The `NyPullToRefresh` widget is a helpful widget for handling 'pull to refresh' lists in your Flutter projects.
+
+Here's how you can start using the `NyPullToRefresh` widget.
 
 ``` dart
 @override
-  Widget build(BuildContext context) {
-    return NyPullToRefresh(
-        child: (context, data) {
-            return ListTile(title: Text(data['title']));
-        },
-        data: (int iteration) async {
-            return [
-                {"title": "Clean Room"},
-                {"title": "Go to the airport"},
-                {"title": "Buy new shoes"},
-                {"title": "Go shopping"},
-                {"title": "Find my keys"},
-                {"title": "Clear the garden"}
-            ].paginate(itemsPerPage: 2, page: iteration).toList();
-        },
-        stateName: "todo_list_view",
-    );
-  }
+Widget build(BuildContext context) {
+ return NyPullToRefresh(
+    child: (context, data) {
+        return ListTile(title: Text(data['title']));
+    },
+    data: (int iteration) async {
+        return [
+            {"title": "Clean Room"},
+            {"title": "Go to the airport"},
+            {"title": "Buy new shoes"},
+            {"title": "Go shopping"},
+            {"title": "Find my keys"},
+            {"title": "Clear the garden"}
+        ].paginate(itemsPerPage: 2, page: iteration).toList();
+    },
+ );
+}
 
 // or from an API Service
 // this example uses the Separated ListView, it will add a divider between each item
@@ -73,6 +79,138 @@ Let's dive into some code.
 ```
 
 When the returned data is an empty array, it will stop the pagination.
+
+<a name="usage-nypulltorefresh-separated"></a>
+<br>
+
+## Usage NyPullToRefresh Separated
+
+The `NyPullToRefresh.separated` widget is a helpful widget for handling 'pull to refresh' lists with dividers in your Flutter projects.
+
+Here's how you can start using the `NyPullToRefresh.separated` widget.
+
+``` dart
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+    body: SafeArea(
+        child: NyPullToRefresh.separated(
+            child: (BuildContext context, dynamic data) {
+                return ListTile(title: Text(data['title']));
+            },
+            data: (int iteration) async {
+                return [
+                    {"title": "Clean Room"},
+                    {"title": "Go to the airport"},
+                    {"title": "Buy new shoes"},
+                    {"title": "Go shopping"},
+                    {"title": "Find my keys"}
+                ];
+            },
+            separatorBuilder: (BuildContext context, int index) {
+                return Divider();
+            },
+        )
+    )
+);
+}
+// or from an API
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+    body: SafeArea(
+        child: NyPullToRefresh.separated(
+            child: (BuildContext context, dynamic data) {
+                return ListTile(
+                    title: Text(data['title']),
+                    subtitle: Text(data['completed'].toString())
+                );
+            },
+            data: (int iteration) async {
+                return await api<ApiService>((request) =>
+                        request.get('https://jsonplaceholder.typicode.com/todos'));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+                return Divider();
+            },
+        )
+    )
+);
+}
+```
+
+The `NyPullToRefresh.separated` widget requires three parameters:
+- **child** - This is the widget that will be displayed for each item in the list.
+- **data** - This is the data that will be displayed in the list.
+- **separatorBuilder** - This is the widget that will be displayed between each item in the list.
+
+<a name="usage-nypulltorefresh-grid"></a>
+<br>
+
+## Usage NyPullToRefresh Grid
+
+The `NyPullToRefresh.grid` widget is a helpful widget for handling 'pull to refresh' lists in a grid format in your Flutter projects.
+
+Here's how you can start using the `NyPullToRefresh.grid` widget.
+
+``` dart
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+    body: SafeArea(
+        child: NyPullToRefresh.grid(
+            child: (BuildContext context, dynamic data) {
+                return ListTile(title: Text(data['title']));
+            },
+            data: (int iteration) async {
+                return [
+                    {"title": "Clean Room"},
+                    {"title": "Go to the airport"},
+                    {"title": "Buy new shoes"},
+                    {"title": "Go shopping"},
+                    {"title": "Find my keys"}
+                ];
+            },
+            crossAxisCount: 2, // The number of rows in the grid
+            // mainAxisSpacing: 1.0, // The mainAxis spacing
+            // crossAxisSpacing: 1.0, // The crossAxisSpacing
+        )
+    )
+);
+}
+// or from an API
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+    body: SafeArea(
+        child: NyPullToRefresh.grid(
+            child: (BuildContext context, dynamic data) {
+                return ListTile(
+                    title: Text(data['title']),
+                    subtitle: Text(data['completed'].toString())
+                );
+            },
+            data: (int iteration) async {
+                return await api<ApiService>((request) =>
+                        request.get('https://jsonplaceholder.typicode.com/todos'));
+            },
+            crossAxisCount: 2, // The number of rows in the grid
+            // mainAxisSpacing: 1.0, // The mainAxis spacing
+            // crossAxisSpacing: 1.0, // The crossAxisSpacing
+        )
+    )
+);
+}
+```
+
+The `NyPullToRefresh.grid` widget requires two parameters:
+- **child** - This is the widget that will be displayed for each item in the list.
+- **data** - This is the data that will be displayed in the list.
+
+The `NyPullToRefresh.grid` widget also has some optional parameters:
+- **crossAxisCount** - The number of rows in the grid.
+- **mainAxisSpacing** - The mainAxis spacing.
+- **crossAxisSpacing** - The crossAxisSpacing.
 
 <a name="parameters"></a>
 <br>

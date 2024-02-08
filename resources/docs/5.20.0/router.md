@@ -504,11 +504,11 @@ Learn more about authentication [here](/docs/{{ $version }}/authentication).
 
 ## Route History
 
-In {{ config('app.name') }}, you can access the route history information using a few helpers.
+In {{ config('app.name') }}, you can access the route history information using the below helpers.
 
 ``` dart
 // Get route history
-Nylo.getRouteHistory(); // List<Route<dynamic>>
+Nylo.getRouteHistory(); // List<dynamic>
 
 // Get the current route
 Nylo.getCurrentRoute(); // Route<dynamic>?

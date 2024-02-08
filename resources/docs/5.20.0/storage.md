@@ -8,6 +8,8 @@
   - [Store values](#store-values "Store values")
   - [Retrieve values](#retrieve-values "Retrieve values")
   - [Storage keys](#storage-keys "Storage keys")
+  - [Store JSON](#store-json "Store JSON")
+  - [Retrieve JSON](#retrieve-json "Retrieve JSON")
 - Lightweight Storage
   - [Backpack Storage](#backpack-storage "Backpack Storage")
   - [Persist Data with Backpack](#persist-data-with-backpack "Persist Data with Backpack")
@@ -113,6 +115,41 @@ class _MyHomePageState extends NyState<MyHomePage> {
     String? userName = await StorageKey.userToken.read(); // Anthony
   }
 ```
+
+<a name="store-json"></a>
+<br>
+
+## Store JSON
+
+You can store JSON data using the `NyStorage.storeJson` method.
+
+``` dart
+import 'package:nylo_framework/nylo_framework.dart';
+...
+
+Map<String, dynamic> user = {
+  "name": "Anthony",
+  "email": "agordon@mail.com"
+};
+
+await NyStorage.storeJson("user", user);
+```
+
+<a name="retrieve-json"></a>
+<br>
+
+## Retrieve JSON
+
+You can retrieve JSON data using the `NyStorage.readJson` method.
+
+``` dart
+import 'package:nylo_framework/nylo_framework.dart';
+...
+
+Map<String, dynamic>? user = await NyStorage.readJson("user");
+print(user); // {"name": "Anthony", "email": "agordon@mail.com"}
+```
+
 
 <a name="backpack-storage"></a>
 <br>

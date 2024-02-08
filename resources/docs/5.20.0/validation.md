@@ -247,8 +247,9 @@ Here are the available validation rules that you can use in {{ config('app.name'
 | <a href="#validation-rule-date-in-future">Date in future</a>  | date_in_future  | Check if a date is in the future |
 | <a href="#validation-rule-is-true">Is True</a>  | is_true  | Checks if a value is true |
 | <a href="#validation-rule-is-false">Is False</a>  | is_false  | Checks if a value is false |
+| <a href="#validation-rule-password-v1">Password v1</a>  | password_v1  | Checks for a password that contains:<br> - At least one upper case letter<br>- At least one digit<br>- Minimum of 8 characters  |
+| <a href="#validation-rule-password-v2">Password v2</a>  | password_v2  | Checks for a password that contains:<br> - At least one upper case letter<br>- At least one digit<br>- Minimum of 8 characters<br>- At least one special character  |
 
-<br>
 
 ---
 
@@ -752,16 +753,52 @@ Check if the input is false.
 Usage: `is_false` - will fail if the user's input is not false.
 
 ``` dart
-bool hasIphone = false;
-String brand = "Google";
+bool hasNotifications = false;
 
 validate(rules: {
-  "Phone Compatible": [hasIphone, "is_false"],
-  "Brand": [brand, "contains:apple,samsung,google"]
+  "Phone Compatible": [hasNotifications, "is_false"]
 }, onSuccess: () {
-    // onSuccess would not be called
+    // handle the success case
 });
 ```
+
+<a name="validation-rule-password-v1"></a>
+<br>
+
+### Password v1
+
+Checks for a password that contains:<br> - At least one upper case letter<br>- At least one digit<br>- Minimum of 8 characters
+
+Usage: `password_v1` - will fail if the user's input is not a valid password.
+
+``` dart
+String password = "PrintUp1";
+validate(rules: {
+  "Password": [password, "password_v1"]
+}, onSuccess: () {
+    print("Success! The password is valid");
+});
+```
+
+<a name="validation-rule-password-v2"></a>
+<br>
+
+### Password v2
+
+Checks for a password that contains:<br> - At least one upper case letter<br>- At least one digit<br>- Minimum of 8 characters<br>- At least one special character
+
+Usage: `password_v2` - will fail if the user's input is not a valid password.
+
+``` dart
+String password = "BlueTab1e!";
+validate(rules: {
+  "Password": [password, "password_v2"]
+}, onSuccess: () {
+    print("Success! The password is valid");
+});
+```
+
+---
 
 <a name="custom-validation-rules"></a>
 <br>

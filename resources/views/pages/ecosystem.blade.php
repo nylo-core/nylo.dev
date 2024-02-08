@@ -16,7 +16,7 @@
 			<img src="{{ asset('images/phone.png') }}" class="mb-6 h-[50px]" alt="Create a {{ config('app.name') }} app">
 				<span class="font-semibold text-[20px]">{{ config('app.name') }} Permission Policy</span>
 
-				<span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">v1.1.6</span>
+				<span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">v1.1.8</span>
 
 				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Handle roles and permissions in your Flutter app.</p>
 
