@@ -106,8 +106,9 @@ class LandingController extends Controller
 	public function ecosystem()
 	{
 		$this->seoService->setTitle('Ecosystem');
+        $resourceData = $this->packageService->getResourceMetaData();
 
-		return view('pages.ecosystem');
+		return view('pages.ecosystem', compact('resourceData'));
 	}
 
     /**
