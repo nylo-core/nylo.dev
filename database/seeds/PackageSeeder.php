@@ -12,7 +12,7 @@ class PackageSeeder extends Seeder
      */
     public function run(): void
     {
-        $repositories = ['nylo', 'framework', 'support'];
+        $repositories = ['nylo', 'framework', 'support', 'media-pro', 'permission-policy', 'device-meta'];
         $organization = 'nylo-core';
 
         foreach ($repositories as $repository) {
@@ -21,7 +21,7 @@ class PackageSeeder extends Seeder
                 'organization' => $organization,
                 'version' => '1.0.0',
                 'site' => 'github'
-            ])->create();   
+            ])->create();
         }
     }
 }
