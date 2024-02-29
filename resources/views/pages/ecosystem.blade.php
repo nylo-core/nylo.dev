@@ -55,9 +55,9 @@
 
 
 		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
-				<span class="font-semibold text-[20px]">{{ config('app.name') }} - IAP Paywall</span>
+				<span class="font-semibold text-[20px]">{{ config('app.name') }} IAP Paywall</span>
 
-				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Handle In-app Purchases for your Flutter project.</p>
+				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Handle In-app purchases for your Flutter project.</p>
 
 				<div class="flex flex-wrap">
 					<a href="#" class="inline-flex self-center text-[#6C7379]">
