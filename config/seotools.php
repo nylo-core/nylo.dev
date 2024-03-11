@@ -42,7 +42,7 @@ return [
             'type'        => false,
             'site_name'   => false,
             'images'      => [
-                asset('images/nylo_logo.png'),
+                'https://nylo.dev/images/nylo_logo.png'
             ],
         ],
     ],
@@ -65,7 +65,7 @@ return [
             'url'         => null, // Set null for using Url::current(), set false to total remove
             'type'        => 'WebPage',
             'images'      => [
-                asset('images/nylo_logo.png'),
+                'https://nylo.dev/images/nylo_logo.png'
             ],
         ],
     ],
