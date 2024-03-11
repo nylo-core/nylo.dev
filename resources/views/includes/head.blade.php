@@ -3,17 +3,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
   <meta name="author" content="{{ config('app.name') }}" />
-  {!! SEO::generate(true) !!}
-
-  {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="{{ config('project.meta.fa_integrity') }}" crossorigin="anonymous"> --}}
-
-  <!-- Bootstrap core CSS -->
-  {{-- <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> --}}
+  {!! SEO::generate() !!}
 
   <link href="{{ asset('css/remixicon' . (config('app.env') == 'production' ? '.min' : '') . '.css') }}" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  {{-- <link href="{{ asset('css/style' . (config('app.env') == 'production' ? '.min' : '') . '.css') }}" rel="stylesheet"> --}}
 
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">

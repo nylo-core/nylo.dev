@@ -41,7 +41,9 @@ return [
             'url'         => false, // Set null for using Url::current(), set false to total remove
             'type'        => false,
             'site_name'   => false,
-            'images'      => [],
+            'images'      => [
+                asset('images/nylo_logo.png'),
+            ],
         ],
     ],
     'twitter' => [
@@ -62,7 +64,9 @@ return [
             'description' => false, // set false to total remove
             'url'         => null, // Set null for using Url::current(), set false to total remove
             'type'        => 'WebPage',
-            'images'      => [],
+            'images'      => [
+                asset('images/nylo_logo.png'),
+            ],
         ],
     ],
 ];
