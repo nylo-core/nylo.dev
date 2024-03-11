@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use SEO;
-use Illuminate\Http\Request;
+use Request;
 
 /**
  * Class SeoService
