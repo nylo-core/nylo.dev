@@ -10,6 +10,7 @@
   - [Multiple routers](#add-multiple-routers "Multiple routers")
   - [Initial route](#initial-route "Initial route")
   - [Route Guards](#route-guards "Route Guards")
+  - [Route Groups](#route-groups "Route Groups")
 - Features
   - [Passing data to another page](#passing-data-to-another-page "Passing data to another page")
   - [Query Parameters](#query-parameters "Query Parameters")
@@ -304,6 +305,37 @@ class _ProfilePageState extends NyState<ProfilePage> {
 
   }
 ```
+
+<a name="route-groups"></a>
+<br>
+
+## Route Groups
+
+In {{ config('app.name') }}, you can create route groups to organize your routes.
+
+Route groups are perfect for organizing your routes into categories, like 'auth' or 'admin'.
+
+You can define a route group like in the below example.
+
+``` dart
+appRouter() => nyRoutes((router) {
+  ...
+  router.group(() => {
+    "route_guards": [AuthRouteGuard()],
+    "prefix": "/dashboard"
+  }, (router) {
+    router.route(ChatPage.path, (context) => ChatPage());
+
+    router.route(FollowersPage.path, (context) => FollowersPage());
+  }); 
+```
+
+#### Optional settings for route groups are:
+
+- **route_guards** - This will apply all the route guards defined to the routes in the group. Learn more about route guards [here](#route-guards).
+
+- **prefix** - This will add the prefix to all the routes in the group. E.g. `/dashboard/chat`, `/dashboard/followers`. Now anytime you navigate to a page in the group, it will use the prefix. E.g. `routeTo(ChatPage.path)` will navigate to `/dashboard/chat`.
+
 
 <a name="query-parameters"></a>
 <br>

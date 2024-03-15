@@ -221,7 +221,9 @@ return [
 				'providers',
 				'decoders',
 				'events',
-				'slates'
+				'slates',
+                'app-usage',
+                'scheduler',
 			],
 		],
 	],

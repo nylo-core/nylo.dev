@@ -27,4 +27,21 @@
     </li>
     @endforeach
 
+
+    <li class="mt-12 lg:mt-8">
+        <h5 class="mb-8 lg:mb-3 font-semibold text-slate-900 dark:text-slate-200">Packages</h5>
+
+        <ul class="space-y-6 lg:space-y-2 border-l border-slate-100 dark:border-slate-800">
+            @foreach(config('project.packages-index') as $packageLink)
+            <li>
+                <a target="_BLANK" class="block border-l pl-4 -ml-px border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 hover:text-slate-900"
+                    href="https://pub.dev/packages/{{ str($packageLink['link'])->replace('-', '_') }}"
+                    >
+                    {{ $packageLink['label'] }}
+                </a>
+            </li>
+            @endforeach
+        </ul>
+    </li>
+
 </ul>
