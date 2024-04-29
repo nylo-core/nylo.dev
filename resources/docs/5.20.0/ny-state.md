@@ -6,6 +6,7 @@
 - [Introduction](#introduction "Introduction")
 - [How to use NyState](#how-to-use-nystate "How to use NyState")
 - [State Management](#state-management "State Management")
+- [State Actions](#state-actions "State Actions")
 - [Helpers](#helpers "Helpers")
 
 
@@ -92,6 +93,49 @@ class _SettingsTabState extends NyState<SettingsTab> {
 
 Learn more about state management <a href="/docs/{{$version}}/state-management" target="_BLANK">here</a>.
 You can also watch our YouTube video on State Management <a href="https://youtu.be/X5EVh1KooFk?si=8hYQcXV9lvrSJgEL" target="_BLANK">here</a>.
+
+<a name="state-actions"></a>
+<br>
+
+## State Actions
+
+State actions are methods that can be called from other classes to update the state.
+Out the box, you can use the follow methods to update the state.
+
+- `refreshPage` - Refresh the page.
+- `pop` - Pop the page.
+- `showToastSorry` - Display a sorry toast notification.
+- `showToastWarning` - Display a warning toast notification.
+- `showToastInfo` - Display an info toast notification.
+- `showToastDanger` - Display a danger toast notification.
+- `showToastOops` - Display an oops toast notification.
+- `showToastSuccess` - Display a success toast notification.
+- `showToastCustom` - Display a custom toast notification.
+- `validate` - Validate data from your widget.
+- `changeLanguage` - Update the language in the application.
+- `confirmAction` - Perform a confirm action.
+
+Example
+
+``` dart
+class HomeController extends Controller {
+
+  actions() {    
+    // from the controller, refresh the state of the notification icon
+    StateAction.refreshPage(NotificationIcon.state);
+
+    // from the controller, refresh the state of the pull to refresh widget
+    StateAction.refreshPage(NyPullToRefresh.state);
+
+    // from the controller, pop the current page
+    StateAction.pop(HomeController.path);
+
+  }
+}
+```
+
+You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
+
 
 
 <a name="helpers"></a>
@@ -349,7 +393,6 @@ class _HomePageState extends NyState<HomePage> {
   
   @override
   init() async {
-    super.init();
     whenEnv('developing', perform: () {
       _textEditingController.text = 'test-email@gmail.com';
     });
@@ -685,7 +728,6 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
-    super.init();
 
     awaitData(perform: () async {
         await Future.delayed(Duration(seconds: 4));
@@ -760,7 +802,6 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
-    super.init();
     _user = await api<ApiService>((request) => request.fetchUser()); // example
     setState(() {});
   }
@@ -790,7 +831,6 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   init() async {
-    super.init();
     setLoading(true, name: 'refreshing_content');
 
     await Future.delayed(Duration(seconds: 4));

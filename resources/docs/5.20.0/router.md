@@ -19,6 +19,7 @@
   - [Navigating back](#navigating-back "Navigating back")
   - [Auth page](#auth-page "Auth page")
   - [Route History](#route-history "Route History")
+  - [Deep linking](#deep-linking "Deep linking")
 
 
 <a name="introduction"></a>
@@ -560,3 +561,64 @@ Nylo.getCurrentRouteArguments(); // dynamic
 // Get the previous route arguments
 Nylo.getPreviousRouteArguments(); // dynamic
 ```
+
+<a name="deep-linking"></a>
+<br>
+
+## Deep linking
+
+Deep linking allows you to navigate to a specific page in your app using a URL.
+
+First, ensure you have deep linking enabled in your project.
+
+IOS - <a target="_BLANK" href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#2-adjust-ios-build-settings">Link</a>
+
+Android - <a target="_BLANK" href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml">Link</a>
+
+Next, ensure you have some routes in your project.
+
+``` dart
+// File: /lib/routes/router.dart
+appRouter() => nyRoutes((router) {
+  ...
+  router.route(HomePage.path, (_) => HomePage());
+
+  router.route(ProfilePage.path, (_) => ProfilePage());
+
+  router.route(SettingsPage.path, (_) => SettingsPage());
+});
+```
+
+Now you can navigate to any of the pages using a URL.
+
+``` bash
+// Example URL
+
+https://<web domain>/profile - navigates to the profile page
+https://<web domain>/settings - navigates to the settings page
+
+// Passing parameters to the Page
+https://<web domain>/profile?user=7 - navigates to the profile page with the user ID 7
+```
+
+You can also pass query parameters to the page using the URL.
+
+Let's imagine you have a page that displays a user's profile. You can pass the user ID to the page using the URL.
+
+`https://<web domain>/profile?user=20`
+
+``` dart
+// Profile Page
+class _ProfilePageState extends NyState<ProfilePage> {
+
+  @override
+  init() async {
+    print(queryParameters()); // {"user": 20}
+    
+    print(widget.queryParameters()); // or like this {"user": 20}
+  }
+}
+```
+
+
+---

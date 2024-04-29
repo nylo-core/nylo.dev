@@ -6,8 +6,8 @@
 - [Introduction](#introduction "Introduction")
 - [When to Use State Management](#when-to-use-state-management "When to Use State Management")
 - [Lifecycle](#lifecycle "Lifecycle")
-- Basics
-    - [Updating a State](#updating-a-state "Updating a State")
+- [Updating a State](#updating-a-state "Updating a State")
+- [State Actions](#state-actions "State Actions")
 - [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
 
 <a name="introduction"></a>
@@ -161,6 +161,48 @@ This can be called anywhere in your application.
 
 <a name="building-your-first-widget"></a>
 <br>
+
+<a name="state-actions"></a>
+<br>
+
+## State Actions
+
+State actions are methods that can be called from other classes to update the state.
+Out the box, you can use the follow methods to update the state.
+
+- `refreshPage` - Refresh the page.
+- `pop` - Pop the page.
+- `showToastSorry` - Display a sorry toast notification.
+- `showToastWarning` - Display a warning toast notification.
+- `showToastInfo` - Display an info toast notification.
+- `showToastDanger` - Display a danger toast notification.
+- `showToastOops` - Display an oops toast notification.
+- `showToastSuccess` - Display a success toast notification.
+- `showToastCustom` - Display a custom toast notification.
+- `validate` - Validate data from your widget.
+- `changeLanguage` - Update the language in the application.
+- `confirmAction` - Perform a confirm action.
+
+Example
+
+``` dart
+class HomeController extends Controller {
+
+  actions() {    
+    // from the controller, refresh the state of the notification icon
+    StateAction.refreshPage(NotificationIcon.state);
+
+    // from the controller, refresh the state of the pull to refresh widget
+    StateAction.refreshPage(NyPullToRefresh.state);
+
+    // from the controller, pop the current page
+    StateAction.pop(HomeController.path);
+
+  }
+}
+```
+
+You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
 
 ## Building Your First Widget
 
