@@ -36,8 +36,9 @@ Here's an example.
 Here's how the `network` helper uses modelDecoders.
 
 ```dart
-class ApiService extends BaseApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext);
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) 
+        : super(buildContext, decoders: modelDecoders);
 
   @override
   String get baseUrl => "https://jsonplaceholder.typicode.com";

@@ -206,7 +206,9 @@ Backpack.instance.set('user_token', userToken);
 Now in our API Service, we can set the auth header from our Backpack class without having to wait on the async response.
 
 ```dart
-class ApiService extends BaseApiService {
+class ApiService extends NyApiService {
+  ApiService({BuildContext? buildContext}) 
+        : super(buildContext, decoders: modelDecoders);
   ...
   Future<dynamic> accountDetails() async {
     return await network(
