@@ -12,5 +12,9 @@ return [
     [
         'label' => 'Device Media',
         'link' => 'device-media'
+    ],
+    [
+        'label' => 'Error Stack',
+        'link' => 'error-stack'
     ]
 ];
