@@ -86,6 +86,28 @@
             </div>
     </div>
 
+    @if (!empty($resourceData['laravel-notify-fcm']))
+    <div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
+        <span class="font-semibold text-[20px]">Laravel Notify FCM </span>
+
+        <span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">{{ $resourceData['laravel-notify-fcm']['version'] }}</span>
+
+        <p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Package for sending push notification from a Laravel application</p>
+
+        <div class="flex flex-wrap">
+            <a href="{{ $resourceData['laravel-notify-fcm']['repository_url'] }}" class="inline-flex self-center text-[#6C7379]">
+            View <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+        </a>
+
+        <img src="{{ asset('images/rectangle.png') }}" class="w-0.5 mx-2 h-5 m-auto self-center">
+
+        <a href="{{ $resourceData['laravel-notify-fcm']['release_note_url'] }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+            Release Notes <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+        </a>
+        </div>
+</div>
+@endif
+
 	</div>
 </section>
 
