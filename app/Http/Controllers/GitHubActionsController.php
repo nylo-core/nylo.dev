@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Services\PackageService;
 use App\Http\Requests\GitHubVersionRequest;
-use Log;
 
 /**
  * Class GitHubActionsController
@@ -55,14 +54,12 @@ class GitHubActionsController extends Controller
     public function release(Request $request)
     {
         if ($request->action != 'released') {
-            Log::debug('GitHubActionsController@release received a wrong response action. ' . json_encode($request->input()));
             return response()->json(['status' => 'failed'], 422);
         }
 
         $releaseData = $request->release;
 
         if ($releaseData['draft'] != false) {
-            Log::debug('GitHubActionsController@release received payload in draft. ' . json_encode($request->input()));
             return response()->json(['status' => 'failed'], 422);
         }
 
