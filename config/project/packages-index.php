@@ -10,8 +10,8 @@ return [
         'link' => 'media-pro'
     ],
     [
-        'label' => 'Device Media',
-        'link' => 'device-media'
+        'label' => 'Device Meta',
+        'link' => 'device-meta'
     ],
     [
         'label' => 'Error Stack',
