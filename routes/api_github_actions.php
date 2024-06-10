@@ -11,5 +11,5 @@ use App\Http\Controllers\GitHubActionsController;
 
 // GitHub Actions
 Route::post('{repo}/version', [GitHubActionsController::class, 'version'])
-		->whereIn('repo', ['nylo', 'support', 'framework', 'media-pro', 'permission-policy', 'device-meta', 'error-stack', 'laravel-notify-fcm'])
+		->whereIn('repo', ['nylo', 'support', 'framework', 'media-pro', 'permission-policy', 'device-meta', 'error-stack', 'laravel-notify-fcm', 'laravel-auth-slate'])
 		->name('actions.version');
