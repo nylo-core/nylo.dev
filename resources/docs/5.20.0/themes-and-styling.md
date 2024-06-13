@@ -430,6 +430,33 @@ Text("Hello World").bodyMedium(context)
 Text("Hello World").bodySmall(context)
 ```
 
+<a name="text-extension-label-large"></a>
+<br>
+
+#### Label large
+
+``` dart
+Text("Hello World").labelLarge(context)
+```
+
+<a name="text-extension-label-medium"></a>
+<br>
+
+#### Label medium
+
+``` dart
+Text("Hello World").labelMedium(context)
+```
+
+<a name="text-extension-label-small"></a>
+<br>
+
+#### Label small
+
+``` dart
+Text("Hello World").labelSmall(context)
+```
+
 <a name="text-extension-font-weight-bold"></a>
 <br>
 
