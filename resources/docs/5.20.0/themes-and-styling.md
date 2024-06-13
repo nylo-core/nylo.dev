@@ -310,6 +310,9 @@ Here are the available text extensions that you can use in {{ config('app.name')
 | <a href="#text-extension-body-large">Body Large</a> | bodyLarge(context)  | Applies the **bodyLarge** textTheme |
 | <a href="#text-extension-body-medium">Body Medium</a> | bodyMedium(context)  | Applies the **bodyMedium** textTheme |
 | <a href="#text-extension-body-small">Body Small</a> | bodySmall(context)  | Applies the **bodySmall** textTheme |
+| <a href="#text-extension-label-large">Label Large</a> | labelLarge(context)  | Applies the **labelLarge** textTheme |
+| <a href="#text-extension-label-medium">Label Medium</a> | labelMedium(context)  | Applies the **labelMedium** textTheme |
+| <a href="#text-extension-label-small">Label Small</a> | labelSmall(context)  | Applies the **labelSmall** textTheme |
 | <a href="#text-extension-font-weight-bold">Font Weight Bold</a> | fontWeightBold  | Applies font weight bold to a Text widget |
 | <a href="#text-extension-font-weight-bold">Font Weight Light</a> | fontWeightLight  | Applies font weight light to a Text widget |
 | <a href="#text-extension-set-color">Set Color</a> | setColor(context, (color) => colors.primaryAccent)  | Set a different text color on the Text widget |
