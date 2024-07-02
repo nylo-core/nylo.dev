@@ -201,7 +201,8 @@ return [
 				'app-icons',
 				'validation',
 				'authentication',
-				'logging'
+				'logging',
+                'forms'
 			],
 
 			'widgets' => [
