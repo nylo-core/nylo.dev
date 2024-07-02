@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 w-full backdrop-blur bg-white/90 flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] supports-backdrop-blur:bg-white/60 dark:bg-transparent border-bottom border-light" style="position: relative; max-height: 83px;">
+<header class="backdrop-blur bg-white/90 dark:bg-transparent dark:border-slate-50/[0.06] duration-500 flex-none lg:border-slate-900/10 lg:z-50 sticky supports-backdrop-blur:bg-white/60 top-0 transition-colors w-full z-40" style="position: relative; max-height: 83px;">
         <div class="">
             <div class="max-w-8xl mx-auto">
                 <div class="border-b border-slate-900/10 dark:border-slate-300/10 lg:border-0 lg:mx-0 lg:px-32 py-4">
@@ -8,13 +8,13 @@
                         </a>
 
                         <div class="relative hidden sm:flex items-center ml-auto">
-                            <nav class="text-sm leading-6 font-medium text-slate-700 dark:text-slate-200">
+                            <nav class="leading-6 text-slate-700 dark:text-slate-200">
                                 <ul class="flex space-x-8">
                                     <li>
                                         <a class="flex hover:text-gray-400 transition-all text-gray-600" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">Documentation</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('ecosystem.index') }}">Ecosystem</a>
+                                        <a class="flex hover:text-gray-400 transition-all text-gray-600" href="{{ route('ecosystem.index') }}">Ecosystem</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('resources.index') }}" class="hover:text-gray-400 transition-all text-gray-600">Resources</a>
@@ -37,12 +37,12 @@
 
                             <div class="flex items-center ml-6 pl-6 dark:border-slate-800">
 
-                                <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="bg-primary-blue-deep block transition-all hover:text-white/70 ml-1 px-4 py-2 rounded text-sm text-white" target="_BLANK">Get Started</a>
+                                <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="bg-primary-blue-deep block transition-all hover:text-white/70 ml-1 px-4 py-2 rounded text-white" target="_BLANK">Get Started</a>
 
                             </div>
                         </div>
 
-                        <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="sm:hidden bg-primary-blue-deep block transition-all hover:text-white/70 ml-6 px-4 py-2 rounded text-sm text-white" target="_BLANK">Get Started</a>
+                        <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="sm:hidden bg-primary-blue-deep block transition-all hover:text-white/70 ml-6 px-4 py-2 rounded text-white" target="_BLANK">Get Started</a>
                     </div>
                 </div>
             </div>

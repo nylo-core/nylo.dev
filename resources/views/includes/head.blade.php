@@ -80,5 +80,16 @@
     .text-4xl {
       letter-spacing: -0.01em;
     }
+    .text-h1-gradient {
+        background-clip: text;
+        -webkit-text-fill-color: rgba(0, 0, 0, 0);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        background-image: linear-gradient(129deg, #4f9edd, #479bde, #65a9d9, #15a6c9, #07becc);
+    }
+    .h1-72px {
+        font-size: 72px;
+        line-height: 1.1;
+    }
   </style>
 </head>

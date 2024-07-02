@@ -56,16 +56,16 @@ import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 // Default
-String coins = await NyStorage.read("com.company.myapp.coins"); // 10
+String coins = await NyStorage.read("coins"); // "10" (string)
 
 // String
-String coins = await NyStorage.read<String>("com.company.myapp.coins"); // 10
+String coins = await NyStorage.read<String>("coins"); // "10" (string)
 
 // Integer
-int coins = await NyStorage.read<int>("com.company.myapp.coins"); // 10
+int coins = await NyStorage.read<int>("coins"); // 10 (int)
 
 // double
-double coins = await NyStorage.read<double>("com.company.myapp.coins"); // 10.00
+double coins = await NyStorage.read<double>("coins"); // 10.00 (double)
 ```
 
 

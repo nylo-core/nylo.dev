@@ -2,8 +2,8 @@
 
 @section('content')
 
-<section class="relative bg-[url('{{ asset('images/hero_fade.png') }}')] bg-cover bg-bottom">
-	<div class="container lg:px-32 md:px-32 mx-auto px-14 py-48 xl:px-32">
+<section class="relative bg-[url('{{ asset('images/hero_fade.png') }}')] bg-center bg-repeat-x">
+	<div class="container lg:px-32 md:px-32 mx-auto px-14 pt-40 pb-20 xl:px-32">
 
 		@if (!empty($event))
         <div class="text-center mb-5">
@@ -21,10 +21,10 @@
         </div>
 		@endif
 
-		<h1 class="lg:max-w-3xl mx-auto font-medium inline lg:block lg:text-5xl mb-7 md:block md:text-4xl sm:inline text-5xl text-center">The Powerful <span class="text-primary-blue font-semibold">Micro-framework</span> for Flutter</h1>
-		<h2 class="mb-7 text-center text-lg text-primary-gray">Developer tools to build Flutter apps elegantly.</h2>
+		<h1 class="font-medium lg:max-w-3xl lg:text-7xl m-auto mb-8 md:text-5xl mx-auto text-5xl text-center w-full">The Flutter <br><span class="text-h1-gradient font-semibold clear-both">Micro-framework</span><br> For Modern Apps</h1>
+		<h2 class="mb-7 text-center text-lg text-primary-gray">A solid foundation for building Flutter apps.</h2>
 
-		<div class="w-max mx-auto self-center flex">
+		<div class="w-max mx-auto self-center flex mt-8">
 			<a href="{{ route('landing.download') }}" class="bg-white inline-flex justify-center block border mx-auto px-4 py-2 mr-[12px] rounded w-max hover:border-gray-600 transition-all shadow-sm inline-block">
 				<i class="ri-github-fill mr-2 text-gray-400 hover:text-gray-500 transition-all"></i>
 				<span>Download</span>
@@ -44,7 +44,7 @@
 			<h4 class="font-semibold mb-7 text-2xl text-4xl text-primary-blue sora">Deploy your next Flutter app with Nylo</h4>
 
 			<div class="flex flex-wrap mb-5 text-primary-blue">
-				@foreach(['Router', 'Storage', 'Networking', 'Themes and Styling', 'Configuration', 'Metro'] as $docSection)
+				@foreach(['Router', 'Storage', 'Networking', 'Themes and Styling', 'Configuration', 'Metro', 'Forms'] as $docSection)
 
 				<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => strtolower(\Str::slug($docSection))]) }}" target="_BLANK">
 				<div class="border px-3 py-1 rounded-2xl mr-3 mb-2">
