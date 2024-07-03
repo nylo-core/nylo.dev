@@ -111,8 +111,9 @@ All commands:
   make:route_guard
   make:config
   
-publish
-  publish:slate
+slate
+  slate:publish
+  slate:install
 ```
 
 Now you can type `metro` from your terminal to run commands in your {{ config('app.name') }} project.
