@@ -16,7 +16,9 @@
   - [Make Event](#make-event "Make a new Event with Metro")
   - [Make Provider](#make-provider "Make a new provider with Metro")
   - [Make Theme](#make-theme "Make a new theme with Metro")
+  - [Make Forms](#make-forms "Make a new form with Metro")
   - [Make Route Guard](#make-route-guard "Make a new route guard with Metro")
+  - [Make Config File](#make-config-file "Make a new config file with Metro")
 - App Icons
   - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 
@@ -43,6 +45,8 @@ echo "alias metro='dart run nylo_framework:main'" >>~/.bash_profile && source ~/
 If you open a project that uses {{ config('app.name') }}, try to run the following in the terminal.
 
 ``` bash
+dart run nylo_framework:main
+# or with the alias
 metro
 ```
 
@@ -51,24 +55,30 @@ You should see an output similar to the below.
 ``` bash
 Usage: 
     command [options] [arguments]
-
+    
 Options
     -h
-
+    
 All commands:
-
+ 
  make
   make:controller
   make:model
   make:page
-  make:stateless_widget
   make:stateful_widget
-  make:theme
-  make:event
+  make:stateless_widget
   make:provider
+  make:event
   make:api_service
+  make:interceptor
   make:theme
+  make:form
   make:route_guard
+  make:config
+  
+slate
+  slate:publish
+  slate:install
 ```
 
 <a name="make-controller"></a>
@@ -565,6 +575,44 @@ dart run nylo_framework:main make:theme bright_theme --force
 metro make:theme bright_theme --force
 ```
 
+<a name="make-forms"></a>
+<br>
+
+## Make Forms
+
+- [Making a new form](#making-a-new-form "Make a new form with Metro")
+- [Forcefully make a form](#forcefully-make-a-form "Forcefully make a new form with Metro")
+
+<a name="making-a-new-form"></a>
+<br>
+
+### Making a new form
+
+You can make a new form by running the below in the terminal.
+
+``` bash
+dart run nylo_framework:main make:form car_advert_form
+# or with the alias metro
+metro make:form car_advert_form
+```
+
+This will create a new form in `lib/app/forms`.
+
+<a name="forcefully-make-a-form"></a>
+<br>
+
+### Forcefully make a form
+
+**Arguments:**
+
+Using the `--force` or `-f` flag will overwrite an existing form if it already exists.
+
+``` bash
+dart run nylo_framework:main make:form login_form --force
+# or with the alias metro
+metro make:form login_form --force
+```
+
 <a name="make-route-guard"></a>
 <br>
 
@@ -601,6 +649,44 @@ Using the `--force` or `-f` flag will overwrite an existing route guard if it al
 dart run nylo_framework:main make:route_guard premium_content --force
 # or with the alias metro
 metro make:route_guard premium_content --force
+```
+
+<a name="make-config-file"></a>
+<br>
+
+## Make Config File
+
+- [Making a new config file](#making-a-new-config-file "Make a new config file with Metro")
+- [Forcefully make a config file](#forcefully-make-a-config-file "Forcefully make a new config file with Metro")
+
+<a name="making-a-new-config-file"></a>
+<br>
+
+### Making a new config file
+
+You can make a new config file by running the below in the terminal.
+
+``` bash
+dart run nylo_framework:main make:config shopping_settings
+# or with the alias metro
+metro make:config shopping_settings
+```
+
+This will create a new config file in `lib/app/config`.
+
+<a name="forcefully-make-a-config-file"></a>
+<br>
+
+### Forcefully make a config file
+
+**Arguments:**
+
+Using the `--force` or `-f` flag will overwrite an existing config file if it already exists.
+
+``` bash
+dart run nylo_framework:main make:config app_config --force
+# or with the alias metro
+metro make:config app_config --force
 ```
 
 <a name="build-app-icons"></a>

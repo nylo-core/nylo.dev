@@ -108,6 +108,7 @@ All commands:
   make:api_service
   make:interceptor
   make:theme
+  make:form
   make:route_guard
   make:config
   

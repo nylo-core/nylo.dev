@@ -27,10 +27,9 @@
 ## Form
 
 Forms are a fundermental part of any modern mobile or web application.
-It's important that new fields can be added, the form can be validated and submitted with ease.
+They allow us to collect data from users and submit it to a server or store it locally.
 
-Nylo features a powerful Form builder out of the box to save you time and effort.
-
+We've built a whole new way to do this in Nylo. You can easily add fields, validate and submit data all in one place.
 Let's take a look at how to create a form.
 
 <a name="how-it-works"></a>
@@ -39,6 +38,8 @@ Let's take a look at how to create a form.
 ## How it works
 
 Nylo forms are built using the `NyForm` class.
+
+This class will contain all the fields, casts, validation rules and styles for the form.
 
 ``` dart
 ...
@@ -104,8 +105,6 @@ We have also added casts and validation rules for the fields.
 
 If you build and run the above code, you will see a form with two fields `Email` and `Password`.
 
-Behind the scenes, Nylo will handle the form submission and validation for you.
-
 If you call `form.submit()`, Nylo will validate the form and if the form is valid, it will call the `onSuccess` callback like in the example above.
 
 <a name="creating-a-form"></a>
@@ -119,7 +118,6 @@ You can create a form by running the following command:
 
 ``` bash
 dart run nylo_framework:main make:form AdvertForm
-
 # or with Metro alias
 metro make:form AdvertForm
 ```
@@ -192,7 +190,7 @@ Widget build(BuildContext context) {
 
 This will display the fields associated with the form.
 
-You'll need to provide an additional widget to submit the form.
+You'll need to provide an additional widget to submit the form using `form.submit()`.
 
 
 <a name="submitting-a-form"></a>
