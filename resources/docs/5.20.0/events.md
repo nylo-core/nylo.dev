@@ -214,7 +214,6 @@ class AuthUserListener extends NyListener {
     // handle the payload from event
   }
 }
-
 ```
 
 <a name="listeners-handle-method"></a>

@@ -35,7 +35,7 @@ class ApiService extends NyApiService {
   String get baseUrl => "https://jsonplaceholder.typicode.com";
 
   @override
-  final interceptors = {
+  get interceptors => {
     LoggingInterceptor: LoggingInterceptor()
   };
 
@@ -43,6 +43,7 @@ class ApiService extends NyApiService {
     return await network<User>(
         request: (request) => request.get("/users"),
     );
+  }
 }
 ```
 
@@ -71,10 +72,10 @@ class ApiService extends NyApiService {
   Future<dynamic> fetchUsers() async {
     return await network(
         request: (request) {
-          // return request.get("/users"); // GET request
-          // return request.put("/users", data: {"user": "data"}); // PUT request
-          // return request.post("/users", data: {"user": "data"}); // POST request
-          // return request.delete("/users/1"); // DELETE request
+          // [GET] return request.get("/users");
+          // [PUT] return request.put("/users", data: {"user": "data"});
+          // [POST] return request.post("/users", data: {"user": "data"});
+          // [DELETE] return request.delete("/users/1");
 
           return request.get("/users");
         },
@@ -144,9 +145,9 @@ Or lastly, like the below.
 Future fetchUsers() async {
     return await network(
         request: (request) {
-          request.options.headers = {
+          request.options.headers.addAll({
             "Authorization": "Bearer $token"
-          };
+          });
 
           return request.get("/users");
         },
@@ -172,7 +173,7 @@ class ApiService extends NyApiService {
   ...
 
   @override
-  final interceptors = {
+  Map<Type, Interceptor> get interceptors => {
     LoggingInterceptor: LoggingInterceptor(),
 
     // Add more interceptors for the API Service
@@ -278,10 +279,10 @@ class ApiService extends NyApiService {
   Future<dynamic> fetchUsers() async {
     return await network(
         request: (request) {
-          // return request.get("/users"); // GET request
-          // return request.put("/users", data: {"user": "data"}); // PUT request
-          // return request.post("/users", data: {"user": "data"}); // POST request
-          // return request.delete("/users/1"); // DELETE request
+          // [GET] return request.get("/users");
+          // [PUT] return request.put("/users", data: {"user": "data"});
+          // [POST] return request.post("/users", data: {"user": "data"});
+          // [DELETE] return request.delete("/users/1");
 
           return request.get("/users");
         },
@@ -534,7 +535,6 @@ class UserApiService extends NyApiService {
     );
   }
 }
-
 ```
 
 <a name="morphing-json-payloads-to-models"></a>
