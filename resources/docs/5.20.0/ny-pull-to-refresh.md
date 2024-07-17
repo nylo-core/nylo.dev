@@ -237,7 +237,7 @@ You can update the state of a `NyPullToRefresh` widget by referencing the `state
 
 ``` dart
 _updateListView() {
-    updateState("todo_list_view");
+    StateAction.refresh("todo_list_view");
 }
 ```
 

@@ -17,5 +17,7 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('docs/{version}/{page?}', 'docs')->name('landing.docs');
 });
 
-// Redirects
+/* Redirects
+|-------------------------------------------------------------------------- */
+
 Route::redirect('/docs', '/docs/' . array_key_last(config('project.doc-index')['versions']) . '/installation', 301);
