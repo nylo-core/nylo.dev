@@ -1,13 +1,19 @@
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: [
-  "./resources/**/*.blade.php",
-  "./resources/**/*.js",
-  "./resources/**/*.vue",
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
   ],
   theme: {
+    fontFamily: {
+        'Work sans': ['Work Sans', 'sans-serif'],
+        'Outfit': ['Outfit', 'sans-serif'],
+        'Sora': ['Sora', 'sans-serif'],
+        'sans': ['Work Sans', 'sans-serif'],
+      },
     extend: {
       typography: {
-
         DEFAULT: {
           css: {
             blockquote: {
@@ -17,7 +23,8 @@ module.exports = {
                 },
                 fontStyle: 'normal !important',
                 marginTop: '3px',
-                marginBottom: '3px'
+                marginBottom: '3px',
+                color: '#374151',
               }
             },
             code: {
@@ -45,6 +52,9 @@ module.exports = {
       },
       backdropBlur: {
         xs: '2px',
+      },
+      backgroundImage: {
+        'hero-pattern': "url('/images/hero_fade.png')"
       }
     },
   },

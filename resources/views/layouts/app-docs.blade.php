@@ -41,10 +41,8 @@
 
     <meta name="viewport" content="width=device-width" />
     <meta charset="utf-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if (app()->environment('production'))
         <link rel="stylesheet" href="{{ asset('css/docs.min.css') }}">
@@ -52,14 +50,12 @@
         <link rel="stylesheet" href="{{ asset('css/docs.css') }}">
     @endif
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
     <link rel="preconnect" href="https://CN0FWF0JLR-dsn.algolia.net" crossorigin />
 </head>
 
-<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900"
-    style="font-family: 'Outfit', sans-serif;">
+<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 font-[outfit]">
     <div>
         <div
             class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent">

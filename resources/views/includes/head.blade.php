@@ -15,27 +15,7 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="theme-color" content="#ffffff">
 
-  <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            clifford: '#da373d',
-          }
-        }
-      }
-    }
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sora:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   @env('production')
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -48,48 +28,5 @@
     gtag('config', '{{ config('project.meta.ga_id') }}');
   </script>
   @endenv
-  <style type="text/css">
-    * {
-      font-family: "Work Sans";
-    }
-    .sora {
-      font-family: "Sora";
-    }
-    p {
-      letter-spacing: -0.02em;
-      color: #6C7379;
-    }
-    .text-gray-prime {
-      color: #6C7379;
-    }
-    .text-primary-blue {
-      color: #328DDF;
-    }
-    .text-primary-blue-deep {
-      color: #1A63A4;
-    }
-    .text-primary-gray {
-      color: #6C7379;
-    }
-    .text-primary-gray-400 {
-      color: #979DA2;
-    }
-    .bg-primary-blue-deep {
-      background-color: #1A63A4;
-    }
-    .text-4xl {
-      letter-spacing: -0.01em;
-    }
-    .text-h1-gradient {
-        background-clip: text;
-        -webkit-text-fill-color: rgba(0, 0, 0, 0);
-        -webkit-box-decoration-break: clone;
-        box-decoration-break: clone;
-        background-image: linear-gradient(129deg, #4f9edd, #479bde, #65a9d9, #15a6c9, #07becc);
-    }
-    .h1-72px {
-        font-size: 72px;
-        line-height: 1.1;
-    }
-  </style>
+
 </head>

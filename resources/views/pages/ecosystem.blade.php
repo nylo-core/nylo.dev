@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="pt-[80px] px-7 md:px-0">
-	<h1 class="text-5xl text-center sora mb-2">{{ config('app.name') }}'s <span class="text-primary-blue-deep sora font-semibold">Ecosystem</span></h1>
+	<h1 class="text-5xl text-center font-[sora] mb-2">{{ config('app.name') }}'s <span class="text-primary-blue-deep font-[sora] font-semibold">Ecosystem</span></h1>
 
 	<h2 class="text-center mb-10 text-2xl">Packages &amp; services to help you build with Flutter apps easier.</h2>
 </section>

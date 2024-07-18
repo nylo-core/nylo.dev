@@ -2,7 +2,7 @@
 
 @section('content')
 
-<section class="relative bg-[url('{{ asset('images/hero_fade.png') }}')] bg-center bg-repeat-x">
+<section class="relative bg-center bg-repeat-x" style="background-image: url('{{ asset("/images/hero_fade.png") }}')">
 	<div class="container lg:px-32 md:px-32 mx-auto px-14 pt-40 pb-20 xl:px-32">
 
 		@if (!empty($event))
@@ -41,7 +41,7 @@
 
 		<div class="self-center px-4 md:px-0">
 			<h3 class="text-4xl mb-2 font-medium">Get Started!</h3>
-			<h4 class="font-semibold mb-7 text-2xl text-4xl text-primary-blue sora">Deploy your next Flutter app with Nylo</h4>
+			<h4 class="font-semibold mb-7 text-4xl text-primary-blue font-[sora]">Deploy your next Flutter app with Nylo</h4>
 
 			<div class="flex flex-wrap mb-5 text-primary-blue">
 				@foreach(['Router', 'Storage', 'Networking', 'Themes and Styling', 'Configuration', 'Metro', 'Forms'] as $docSection)
@@ -81,11 +81,11 @@
 
 <section class="mx-auto px-4 container">
 
-		<h3 class="px-5 md:px-0 text-4xl mb-3 font-medium">Powerful tools for <span class="text-primary-blue font-semibold sora">creating</span></h3>
-		<p class="px-5 md:px-0 block border-b border-b-4 border-gray-50 font-semibold mb-8 text-2xl text-gray-300">Write code that works.</p>
+		<h3 class="px-5 md:px-0 text-4xl mb-3 font-medium">Powerful tools for <span class="text-primary-blue font-semibold font-[sora]">creating</span></h3>
+		<p class="px-5 md:px-0 block border-b-4 border-gray-50 font-semibold mb-8 text-2xl text-gray-300">Write code that works.</p>
 
 	<div class="grid grid-cols-1 md:grid-cols-4">
-		<div class="flex flex-col grid grid-cols-4 md:col-span-4 md:flex-row">
+		<div class="flex-col grid grid-cols-4 md:col-span-4 md:flex-row">
 			<div class="col-span-3 md:hidden px-6">
 				<h4 class="font-semibold text-5xl">Routing</h4>
 				<p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">Build complex routes, interfaces and UI pages for your Flutter application.</p>
@@ -144,7 +144,7 @@
 	</div>
 </section>
 
-<div class="bg-[url('{{ asset('images/bg_hero.png') }}')]">
+<div style="background-image: url('{{ asset("/images/bg_hero.png") }}')">
 
 <section class="container mx-auto px-5 md:px-20 pt-[127px] pb-[113px] mt-[80px]">
 
