@@ -166,8 +166,8 @@
 metro make:page HomePage
 # Creates a new page called HomePage
 
-metro make:api_service UserService
-# Creates a new API Service called UserService
+metro make:api_service User
+# Creates a new API Service called UserApiService
 
 metro make:model User
 # Creates a new model called User
