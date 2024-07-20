@@ -37,7 +37,7 @@
 
                             <div class="flex items-center ml-6 pl-6 dark:border-slate-800">
 
-                                <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="bg-primary-blue-deep block transition-all hover:text-white/70 ml-1 px-4 py-2 rounded text-white" target="_BLANK">Get Started</a>
+                                <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="hidden md:block bg-primary-blue-deep transition-all hover:text-white/70 ml-1 px-4 py-2 rounded text-white" target="_BLANK">Get Started</a>
 
                             </div>
                         </div>

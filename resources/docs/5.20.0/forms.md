@@ -21,7 +21,7 @@
   - [NyLoginForm](#ny-login-form "NyLoginForm")
 - [Form Parameters](#form-parameters "Form Parameters")
 - [Listening to Form Changes](#listening-to-form-changes "Listening to Form Changes")
-- [Custom Form Field](#custom-form-fields "Custom Form Field")
+- [Custom Form Cast](#custom-form-casts "Custom Form Cast")
 
 
 <a name="introduction"></a>

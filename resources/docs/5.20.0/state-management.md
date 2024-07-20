@@ -159,9 +159,6 @@ updateState(MyStateName.state, data: "The Data");
 
 This can be called anywhere in your application.
 
-<a name="building-your-first-widget"></a>
-<br>
-
 <a name="state-actions"></a>
 <br>
 
@@ -203,6 +200,9 @@ class HomeController extends Controller {
 ```
 
 You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
+
+<a name="building-your-first-widget"></a>
+<br>
 
 ## Building Your First Widget
 

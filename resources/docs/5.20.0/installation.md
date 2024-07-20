@@ -51,6 +51,7 @@ It's been built, so you can run commands in the terminal to create things. With 
 - API Services
 - Themes
 - Route Guards
+- Forms
 - Configs
 - Interceptors
 

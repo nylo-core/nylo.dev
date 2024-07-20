@@ -17,6 +17,8 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.5.0/styles/default.min.css">
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <meta name="docsearch:language" content="en" />
     @if ($latestVersionOfNylo == $version)
         <meta name="docsearch:version" content="{{ $version }},latest" />
@@ -50,7 +52,6 @@
         <link rel="stylesheet" href="{{ asset('css/docs.css') }}">
     @endif
 
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
     <link rel="preconnect" href="https://CN0FWF0JLR-dsn.algolia.net" crossorigin />
 </head>

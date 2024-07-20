@@ -16,6 +16,16 @@
 	@endif
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script>
+        function copyToClipboard() {
+            const code = this.$el.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                this.copySuccess = true;
+                setTimeout(() => this.copySuccess = false, 2000);
+            });
+        }
+    </script>
 	@yield('scripts')
 </body>
 </html>
