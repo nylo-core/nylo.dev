@@ -85,7 +85,7 @@
 		<p class="pb-5 px-5 md:px-0 block border-b-4 border-gray-50 font-semibold mb-8 text-2xl text-gray-300">Everything you need to build your next Flutter app</p>
 
 	<div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-		<div class="col-span-1 md:col-span-4 gap-10 justify-center inline-flex flex-col md:flex-auto mb-10 md:flex-row" x-data="{
+		<div class="border-b pb-10 col-span-1 md:col-span-4 gap-10 justify-center inline-flex flex-col md:flex-auto mb-10 md:flex-row" x-data="{
             currentTab: 'routing',
         }">
 
