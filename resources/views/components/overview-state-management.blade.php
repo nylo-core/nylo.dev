@@ -1,6 +1,5 @@
 @props(['latestVersionOfNylo'])
 
-<small>Step 1</small>
 <p class="mb-1">Create a state managed widget</p>
 
 <x-code-highlighter language="bash" title="terminal" class="col-span-1 mb-5">

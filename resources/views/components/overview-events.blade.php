@@ -1,7 +1,7 @@
 @props(['latestVersionOfNylo'])
 
 <small>Step 1</small>
-<p class="mb-1">Create your event</p>
+<p class="mb-1 font-medium">Create your event</p>
 
 <x-code-highlighter language="bash" title="terminal" class="col-span-1 mb-5">
 metro make:event Logout
@@ -31,7 +31,7 @@ class DefaultListener extends NyListener {
 </x-code-highlighter>
 
 <small>Step 2</small>
-<p class="mb-1">Dispatch the event</p>
+<p class="mb-1 font-medium">Dispatch the event</p>
 
 <x-code-highlighter language="dart" header="false" class="col-span-1">
 MaterialButton(child: Text("Logout"),
