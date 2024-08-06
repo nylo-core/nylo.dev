@@ -20,6 +20,10 @@ return [
                     'label' => 'networking',
                     'link' => 'https://www.youtube.com/embed/PJ-u5mE3yT4?si=AdjyxjREvq4p2diI'
                 ],
+                [
+                    'label' => 'forms',
+                    'link' => 'https://www.youtube.com/embed/N_iHTZqon3w?si=sk9WqQZPoGLf4oBr'
+                ],
 			],
             'Deeper Dive' => [
                 [
