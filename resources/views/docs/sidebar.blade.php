@@ -12,7 +12,7 @@
         <ul class="space-y-6 lg:space-y-2 border-l border-slate-100 dark:border-slate-800">
             @foreach($docLinks as $docLink)
             <li>
-                <a class="block border-l pl-4 -ml-px border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 {!! Request::is('docs/' . $version . '/' . $docLink) ? 'text-blue-600' : 'hover:text-slate-900' !!}"
+                <a class="block border-l pl-4 -ml-px border-transparent hover:border-slate-400 dark:hover:border-slate-500 dark:text-slate-400 dark:hover:text-slate-300 {!! Request::is('docs/' . $version . '/' . $docLink) ? 'text-[#1f74c1]' : 'text-slate-700 hover:text-slate-900' !!}"
                     href="{{ route('landing.docs', ['page' => $docLink, 'version' => $version]) }}"
                     >
                     @if (str($docLink)->startsWith('ny'))

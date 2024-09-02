@@ -206,9 +206,9 @@ class ApiService extends NyApiService {
     @override
     String get baseUrl => "api.example.com/v1";
 
-    Future userInfo() async {
+    Future posts() async {
         return await network(
-            request: (request) => request.get("/user"),
+            request: (request) => request.get("/posts"),
         );
     }
 }

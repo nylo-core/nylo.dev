@@ -30,7 +30,7 @@ class GenerateSitemapCommand extends Command
      */
     public function handle(DocService $docService)
     {
-        $sitemap = Sitemap::create(config('app.url'));
+        $sitemap = Sitemap::create();
         $sitemap->add(Url::create('/')->setPriority(0.95));
 
         $sitemap->add(Url::create('resources')->setPriority(0.90));

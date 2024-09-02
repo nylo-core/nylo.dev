@@ -159,4 +159,16 @@ class LandingController extends Controller
 
 		return view('docs.template', compact('page', 'version', 'mdDocPage', 'section', 'latestVersionOfNylo', 'viewingOldDocs', 'docsContainPage'));
 	}
+
+    /**
+     * Learn more page for Nylo.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function learnMoreV6()
+    {
+        $this->seoService->setTitle('Learn more - Nylo v6');
+
+        return view('pages.learn-more-v6');
+    }
 }

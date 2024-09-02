@@ -69,6 +69,16 @@
       box-decoration-break: clone;
       background-image: linear-gradient(129deg, #4f9edd, #479bde, #65a9d9, #15a6c9, #07becc);
   }
+
+.text-h1-learn-more {
+    -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-image: linear-gradient(120deg, #4f9cd9, #8db1cd, #5bb3d9, #9abec7, #09c7d6);
+}
+
   .h1-72px {
       font-size: 72px;
       line-height: 1.1;

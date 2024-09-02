@@ -15,6 +15,8 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('terms-and-conditions', 'termsAndConditions')->name('landing.terms-and-conditions');
     Route::get('tutorials/{version}/{page?}', 'tutorials')->name('tutorials.index');
 	Route::get('docs/{version}/{page?}', 'docs')->name('landing.docs');
+
+    Route::get('learn-more/v6', 'learnMoreV6')->name('learn-more.v6');
 });
 
 /* Redirects
