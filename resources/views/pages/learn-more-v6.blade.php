@@ -27,7 +27,7 @@
         </p>
 
         <p>
-            <span class="font-medium">Early access</span> to Nylo v6 will be available for any <a style="text-decoration-line: underline !important;" href="https://github.com/sponsors/agordn52/dashboard">GitHub sponsors</a> 🎉<br>I'll add you to the private repository, where you can start using Nylo v6 early.
+            <span class="font-medium">Early access</span> to Nylo v6 will be available for any <a style="text-decoration-line: underline !important;" href="https://github.com/sponsors/agordn52">GitHub sponsors</a> 🎉<br>I'll add you to the private repository, where you can start using Nylo v6 early.
         </p>
 
         <p class="font-light">
