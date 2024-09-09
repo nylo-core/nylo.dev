@@ -154,7 +154,7 @@ You can pass multiple validation rules into the `validate` helper.
 
 ``` dart
 validate(rules: {
-  "email address": ["john.mail@gmail.com" "email|max:10"] 
+  "email address": ["john.mail@gmail.com", "email|max:10"] 
   // checks data is an email and maximum of 10 characters
 }, onSuccess: () { 
     print("Success! It's a valid email and maximum of 10 characters");
