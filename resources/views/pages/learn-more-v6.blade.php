@@ -26,10 +26,6 @@
             The official release date for Nylo v6 is <span class="font-medium">1<sup>st</sup> October 2024</span>.
         </p>
 
-        <p>
-            <span class="font-medium">Early access</span> to Nylo v6 will be available for any <a style="text-decoration-line: underline !important;" href="https://github.com/sponsors/agordn52">GitHub sponsors</a> 🎉<br>I'll add you to the private repository, where you can start using Nylo v6 early.
-        </p>
-
         <p class="font-light">
             "Stay tuned" - Anthony Gordon, Founder of Nylo
         </p>
