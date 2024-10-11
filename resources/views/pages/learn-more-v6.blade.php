@@ -22,6 +22,10 @@
             V6 has been in development for over 9 months, it's been the hardest release so far but it's also the most <span class="font-medium">exciting</span> one.
         </p>
 
+        <p>
+            The official release date for Nylo v6 is <span class="font-medium">1<sup>st</sup> November 2024</span>.
+        </p>
+
         <p class="font-light">
             "Stay tuned" - Anthony Gordon, Founder of Nylo
         </p>
