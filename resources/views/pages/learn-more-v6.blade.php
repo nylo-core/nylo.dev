@@ -8,7 +8,7 @@
         <span class="bg-[#ECF5FC] border-2 border-gray-300 font-semibold px-3 py-1 rounded-2xl text-gray-600 text-sm">Nylo v6</span>
         </div>
 
-        <h1 class="text-h1-learn-more mb-1">The First of it's <span>Kind</span> ⚡️</h1>
+        <h1 class="text-h1-learn-more mb-1">The First of its <span>Kind</span> ⚡️</h1>
 
         <p>
             Nylo v6 takes mobile app development to a whole new level!
