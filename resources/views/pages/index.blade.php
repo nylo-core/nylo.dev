@@ -103,6 +103,12 @@
                             <svg class="h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M5.5 8.557A2.08 2.08 0 0 1 7 8v1c-.74 0-.948.417-1 .571v5.86c.048.143.251.569 1 .569v1a2.08 2.08 0 0 1-1.5-.557A2.08 2.08 0 0 1 4 17v-1c.74 0 .948-.417 1-.571v-5.86C4.952 9.426 4.749 9 4 9V8a2.08 2.08 0 0 1 1.5.557zM23 6.5v12a1.502 1.502 0 0 1-1.5 1.5h-19A1.502 1.502 0 0 1 1 18.5v-12A1.502 1.502 0 0 1 2.5 5h19A1.502 1.502 0 0 1 23 6.5zm-1 0a.5.5 0 0 0-.5-.5h-19a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h19a.5.5 0 0 0 .5-.5zM12 17h1v-1h-1zm-2 0h1v-1h-1zm-2 0h1v-1H8zm6 0h1v-1h-1zm4 0h1v-1h-1zm-2 0h1v-1h-1z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
                             Forms
                         </li>
+                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'navigation-hub'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'navigation-hub' }">
+                            <svg class="h-5" width="24" xmlns="http://www.w3.org/2000/svg" fill="#000000" width="800px" height="800px" viewBox="0 0 24 24">
+                                <path d="M20,15 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L5.5,4 C4.67157288,4 4,4.67157288 4,5.5 L4,15 L20,15 Z M20,16 L4,16 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L18.5,20 C19.3284271,20 20,19.3284271 20,18.5 L20,16 Z M3,5.5 C3,4.11928813 4.11928813,3 5.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,18.5 C21,19.8807119 19.8807119,21 18.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,5.5 Z"/>
+                              </svg>
+                            Navigation Hub
+                        </li>
                         <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'state-management'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'state-management' }">
                             <svg class="h-5" version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .stone_een{fill:#0B1719;} .st0{fill:#0B1719;} </style> <path class="stone_een" d="M19,20.5c0,1.933-1.567,3.5-3.5,3.5S12,22.433,12,20.5s1.567-3.5,3.5-3.5S19,18.567,19,20.5z M16,16.051 V5.5C16,5.224,15.776,5,15.5,5S15,5.224,15,5.5v10.551C15.166,16.032,15.329,16,15.5,16S15.834,16.032,16,16.051z M15,24.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-1.551C15.834,24.968,15.671,25,15.5,25S15.166,24.968,15,24.949z M24,18.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-7.551C24.834,18.968,24.671,19,24.5,19S24.166,18.968,24,18.949z M25,10.051V5.5 C25,5.224,24.776,5,24.5,5S24,5.224,24,5.5v4.551C24.166,10.032,24.329,10,24.5,10S24.834,10.032,25,10.051z M7,7.051V5.5 C7,5.224,6.776,5,6.5,5S6,5.224,6,5.5v1.551C6.166,7.032,6.329,7,6.5,7S6.834,7.032,7,7.051z M6,15.949V26.5 C6,26.776,6.224,27,6.5,27S7,26.776,7,26.5V15.949C6.834,15.968,6.671,16,6.5,16S6.166,15.968,6,15.949z M6.5,8 C4.567,8,3,9.567,3,11.5S4.567,15,6.5,15s3.5-1.567,3.5-3.5S8.433,8,6.5,8z M24.5,11c-1.933,0-3.5,1.567-3.5,3.5s1.567,3.5,3.5,3.5 s3.5-1.567,3.5-3.5S26.433,11,24.5,11z"></path> </g></svg>
                             State Management
@@ -134,6 +140,10 @@
 
     <div x-show="currentTab === 'state-management'">
     <x-overview-state-management :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-state-management>
+    </div>
+
+    <div x-show="currentTab === 'navigation-hub'">
+    <x-overview-navigation-hub :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-navigation-hub>
     </div>
 
     <div x-show="currentTab === 'events'">
