@@ -31,7 +31,7 @@
         </ul>
 
         <p>
-            We've also updated the documentation to reflect these changes. You can check out the updated documentation <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="underline hover:text-gray-200 transition-all">here</a>.
+            We've also updated the documentation to reflect these changes. You can check out the updated documentation <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="underline hover:text-gray-700 transition-all">here</a>.
         </p>
 
         <p>
