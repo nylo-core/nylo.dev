@@ -2,13 +2,13 @@
 
 <x-code-highlighter language="dart" title="routes/router.dart">
 appRouter() => nyRoutes((router) {
-    router.route(HomePage.path, (context) => HomePage(), initialRoute: true);
+    router.add(HomePage.path).initialRoute();
 
-    router.route(DiscoverPage.path, (context) => DiscoverPage());
+    router.add(DiscoverPage.path);
 
-    router.route(LoginPage.path, (context) => LoginPage());
+    router.add(LoginPage.path);
 
-    router.route(ProfilePage.path, (context) => ProfilePage(),
+    router.add(ProfilePage.path,
         routeGuard: [
             AuthGuard()
         ]

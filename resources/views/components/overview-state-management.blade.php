@@ -32,7 +32,7 @@ class _CartIconState extends NyState<CartIcon> {
 <p class="mb-1">Use the <b>updateState</b> method like in the below code snippet</p>
 
 <x-code-highlighter language="dart" title="another widget" class="col-span-1 mb-5">
-MaterialButton(child: Text("Add to cart"),
+Button.primary(text: "Add to cart",
     onPressed: () {
       updateState(CartIcon.state, data: "2");
     }

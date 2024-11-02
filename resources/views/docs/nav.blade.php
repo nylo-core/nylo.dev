@@ -3,7 +3,9 @@
         <li><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('landing.docs', ['version' => $nyloDocVersion, 'page' => 'installation']) }}">Docs</a></li>
         <li><a href="https://github.com/nylo-core/nylo/discussions" target="_BLANK" class="hover:text-sky-500 dark:hover:text-sky-400">Community</a></li>
         <li><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('resources.index') }}">Resources</a></li>
+        @if($version != '6.x')
         <li><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('tutorials.index', ['version' => '5.x']) }}">Tutorials</a></li>
+        @endif
     </ul>
 </nav>
 <div class="flex items-center border-l border-slate-200 ml-6 dark:border-slate-800">

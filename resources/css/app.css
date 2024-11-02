@@ -192,3 +192,7 @@
 .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
     margin: 0 4px;
 }
+
+.prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    color: #262790;
+}

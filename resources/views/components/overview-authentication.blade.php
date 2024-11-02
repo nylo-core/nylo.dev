@@ -3,17 +3,31 @@
 <p>Authenticate a user</p>
 
 <x-code-highlighter language="dart" header="false" class="col-span-1 mb-5">
-User user = User();
+String userToken = "eyJhbG123...";
 
-await Auth.set(user);
+await Auth.authenticate(data: {"token": userToken});
 </x-code-highlighter>
 
-<p>Now, when your user opens the app they will be authenticated.</p>
+<p class="mb-1">Now, when your user opens the app they will be authenticated.</p>
 
 <x-code-highlighter language="dart" header="false" class="col-span-1 mb-5">
-User? user = await Auth.user<User>();
 
-bool isAuthenticated = await Auth.loggedIn();
+final userData = Auth.data();
+// {"token": "eyJhbG123..."}
+
+bool isAuthenticated = await Auth.isAuthenticated();
+// true
+</x-code-highlighter>
+
+<p class="mb-1">If you've set an <span class="font-medium">authenticatedRoute</span> in your router, then it will present this page when the user opens the app again.</p>
+
+<x-code-highlighter language="dart" title="routes/router.dart" class="col-span-1 mb-5">
+appRouter() => nyRoutes((router) {
+    ...
+    router.add(LandingPage.path).initialRoute();
+
+    router.add(DashboardPage.path).authenticatedRoute();
+    // overrides the initial route when a user is authenticated
 </x-code-highlighter>
 
 <p>Logout the user</p>

@@ -1,5 +1,5 @@
 <div class="text-white text-center py-2 isolate z-10" style="background-image: linear-gradient(129deg, #3b87c4, #3c87c3, #5491bc, #1195b5, #03a4b0);">
-    <p class="text-sm">The First of it's Kind <span class="font-medium">Nylo v6</span> 🔥 <a href="{{ route('learn-more.v6') }}" class="underline hover:text-gray-200 transition-all">Learn more</a></p>
+    <p class="text-sm">Out in the wild <span class="font-medium">Nylo v6</span> 🔥 <a href="{{ route('learn-more.v6') }}" class="underline hover:text-gray-200 transition-all">Learn more</a></p>
 </div>
 
 

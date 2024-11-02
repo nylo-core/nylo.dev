@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem]">
+<html lang="en" class="dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem]" style="overflow: hidden; height: 100%;">
 
 <head>
     <meta name="author" content="{{ config('app.name') }}" />
@@ -56,13 +56,13 @@
     <link rel="preconnect" href="https://CN0FWF0JLR-dsn.algolia.net" crossorigin />
 </head>
 
-<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 font-[outfit]">
+<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 font-[outfit]" style="height: 100%; overflow: auto;">
     <div>
         <div
             class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent">
             <div class="max-w-8xl mx-auto">
                 <div
-                    class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0">
+                    class="py-4 border-b-0 sm:border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0">
                     <div class="relative flex items-center">
                         <a class="mr-3 flex-none w-[2.0625rem] overflow-hidden md:w-auto" href="/">
                             <span class="sr-only">{{ config('app.name') }} home page</span>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        <div class="inline-flex mx-4 px-6 py-2 rounded-2xl w-full cursor-pointer" id="search">
+                        <div class="inline-flex mx-0 sm:mx-4 px-0 sm:px-6 py-2 rounded-2xl w-full cursor-pointer" id="search">
 
                         </div>
 
@@ -133,15 +133,15 @@
             </div>
         </div>
         <div class="overflow-hidden">
-            <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+            <div class="max-w-8xl mx-auto bg-gray-50">
                 <div id="nav-controller"
-                    class="hidden lg:block fixed z-20 inset-0 top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
+                    class="hidden lg:block fixed z-20 inset-0 top-[0rem] sm:top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
                     <nav id="nav" class="lg:text-sm lg:leading-6 relative">
 
-                        <div class="sticky top-0 -ml-0.5 pointer-events-none">
-                            <div class="h-10 bg-white dark:bg-slate-900"></div>
+                        <div class="sticky top-0 -ml-0.5 pointer-events-none hidden sm:block">
+                            <div class="h-10 bg-gray-50 dark:bg-slate-900"></div>
 
-                            <div class="h-8 bg-gradient-to-b from-white dark:from-slate-900"></div>
+                            <div class="h-8 bg-gradient-to-b from-gray-50 dark:from-slate-900"></div>
                         </div>
 
                         @include('docs.sidebar')
@@ -149,7 +149,7 @@
                     </nav>
                 </div>
                 <div class="lg:pl-[19.5rem]">
-                    <main class="max-w-3xl mx-auto relative z-20 pt-10">
+                    <main class="max-w-4xl mx-auto relative z-20 pt-10 bg-white px-4 sm:px-0">
                         <div
                             class="prose dark:prose-invert prose-blockquote:bg-slate-400/10 prose-blockquote:p-4 prose-blockquote:rounded-md prose-blockquote:shadow-sm self-center m-auto">
                             @yield('content')

@@ -227,5 +227,55 @@ return [
                 'scheduler',
 			],
 		],
+
+        '6.x' => [
+			'introduction' => [
+				'what-is-nylo',
+				'requirements'
+			],
+
+			'getting-started' => [
+				'installation',
+				'configuration',
+				'directory-structure',
+				'upgrade-guide'
+			],
+
+			'basics' => [
+				'router',
+				'networking',
+				'metro',
+				'localization',
+				'storage',
+				'controllers',
+				'app-icons',
+				'validation',
+				'authentication',
+				'logging',
+                'forms',
+                'cache'
+			],
+
+			'widgets' => [
+				'themes-and-styling',
+				'assets',
+                'navigation-hub',
+				'ny-state',
+				'ny-future-builder',
+				'ny-text-field',
+                'ny-pull-to-refresh',
+                'ny-list-view',
+                'ny-language-switcher',
+			],
+
+			'advanced' => [
+                'state-management',
+				'providers',
+				'decoders',
+				'events',
+                'app-usage',
+                'scheduler',
+			],
+		],
 	],
 ];

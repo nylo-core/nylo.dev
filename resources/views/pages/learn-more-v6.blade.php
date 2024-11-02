@@ -8,27 +8,37 @@
         <span class="bg-[#ECF5FC] border-2 border-gray-300 font-semibold px-3 py-1 rounded-2xl text-gray-600 text-sm">Nylo v6</span>
         </div>
 
-        <h1 class="text-h1-learn-more mb-1">The First of it's <span>Kind</span> ⚡️</h1>
+        <h1 class="text-h1-learn-more mb-1">Nylo v6 is here!</h1>
 
         <p>
-            Nylo v6 takes mobile app development to a whole new level!
-        </p>
-
-        <p>
-            The goal with Nylo has always been to <span class="font-medium">improve</span> the experience for Flutter developers, making it easier to build functional apps and save time.
-        </p>
-
-        <p class="text-black mb-[40px]">
-            V6 has been in development for over 9 months, it's been the hardest release so far but it's also the most <span class="font-medium">exciting</span> one.
+            The long-awaited Nylo v6 is finally here, and it's packed with a ton of new features and improvements.
         </p>
 
         <p>
-            The official release date for Nylo v6 is <span class="font-medium">1<sup>st</sup> October 2024</span>.
+            Highlights of Nylo v6 include:
         </p>
 
-        <p class="font-light">
-            "Stay tuned" - Anthony Gordon, Founder of Nylo
+        <ul>
+            <li>Improved state performance</li>
+            <li>Router improvements</li>
+            <li>Navigation Hub for managing bottom and top navigation</li>
+            <li>New Scaffold UI package</li>
+            <li>New Cache driver</li>
+            <li>Local push notifications</li>
+            <li>Authentication updates</li>
+            <li>Big updates to Forms</li>
+            <li>Tons of bug fixes and improvements</li>
+        </ul>
+
+        <p>
+            We've also updated the documentation to reflect these changes. You can check out the updated documentation <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="underline hover:text-gray-200 transition-all">here</a>.
         </p>
+
+        <p>
+            Enjoy Nylo v6!
+        </p>
+
+        <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}">Get Started</a>
 
 </section>
 

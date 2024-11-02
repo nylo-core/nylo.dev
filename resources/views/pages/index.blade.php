@@ -206,7 +206,7 @@ class ApiService extends NyApiService {
     @override
     String get baseUrl => "api.example.com/v1";
 
-    Future posts() async {
+    Future<List<Post>> posts() async {
         return await network(
             request: (request) => request.get("/posts"),
         );
@@ -218,9 +218,9 @@ class ApiService extends NyApiService {
 class _HomePageState extends NyState<HomePage> {
 
 @override
-init() async {
-    User user = await api<ApiService>((request) => request.userInfo());
-}
+get init => () async {
+    final posts = await api<ApiService>((request) => request.posts());
+};
 </x-code-highlighter>
 
 		</div>
