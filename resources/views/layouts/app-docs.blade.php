@@ -133,7 +133,7 @@
             </div>
         </div>
         <div class="overflow-hidden">
-            <div class="max-w-8xl mx-auto bg-gray-50">
+            <div class="max-w-8xl mx-auto">
                 <div id="nav-controller"
                     class="hidden lg:block fixed z-20 inset-0 top-[0rem] sm:top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
                     <nav id="nav" class="lg:text-sm lg:leading-6 relative">
@@ -149,7 +149,7 @@
                     </nav>
                 </div>
                 <div class="lg:pl-[19.5rem]">
-                    <main class="max-w-4xl mx-auto relative z-20 pt-10 bg-white px-4 sm:px-0">
+                    <main class="max-w-4xl mx-auto relative z-20 pt-10 px-4 sm:px-0">
                         <div
                             class="prose dark:prose-invert prose-blockquote:bg-slate-400/10 prose-blockquote:p-4 prose-blockquote:rounded-md prose-blockquote:shadow-sm self-center m-auto">
                             @yield('content')
