@@ -11,7 +11,7 @@
         <h1 class="text-h1-learn-more mb-1">Nylo v6 is here!</h1>
 
         <p>
-            The long-awaited Nylo v6 is finally here, and it's packed with a ton of new features and improvements.
+            The long-awaited Nylo v6 is finally here! It's packed with a ton of new features and improvements.
         </p>
 
         <p>
