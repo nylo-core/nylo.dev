@@ -57,6 +57,8 @@
 		<div class="hover:bg-gray-50 p-[24px] rounded border border-2 border-gray-100">
 				<span class="font-semibold text-[20px]">Scaffold UI</span>
 
+                <span class="bg-[#ECF5FC] ml-2 px-2 text-primary-blue-deep rounded-3xl py-1 font-semibold">{{ $resourceData['scaffold-ui']['version'] }}</span>
+
 				<p class="text-[18px] text-[#81888E] mb-2 mt-2" style="letter-spacing: -0.02em;">Package for scaffolding UI in your Flutter project.</p>
 
 				<div class="flex flex-wrap">
