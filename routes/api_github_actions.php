@@ -21,6 +21,6 @@ Route::post('{repo}/version', [GitHubActionsController::class, 'version'])
             'error-stack',
             'laravel-notify-fcm',
             'laravel-auth-slate',
-            'scaffold_ui'
+            'scaffold-ui'
             ])
 		->name('actions.version');
