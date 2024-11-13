@@ -33,7 +33,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     body: SafeArea(
        child: Container(
-         child: NyFutureBuilder(future: _findUserName(), child: (context, data) {
+         child: NyFutureBuilder<String>(future: _findUserName(), child: (context, data) {
            // data = "John Doe"
            return Text(data!);
          },),
@@ -64,8 +64,7 @@ Widget build(BuildContext context) {
          child: (context, data) {
             return Text(data);
          },
-         loading: CupertinoActivityIndicator(), // change the default loader
-         useSkeletonizer: true, // enable the skeletonizer effect
+         loadingStyle: LoadingStyle.normal(child: Text("Loading...")), // change the default loader
          onError: (AsyncSnapshot snapshot) { // handle exceptions thrown from your future.
            print(snapshot.error.toString());
            return Text("Error");
