@@ -224,7 +224,7 @@ class DashboardRouteGuard extends NyRouteGuard {
   @override
   onRequest(PageRequest pageRequest) async {
     // Perform a check if they can access the page
-    bool userLoggedIn = await Auth.loggedIn();
+    bool userLoggedIn = await Auth.isAuthenticated();
     
     if (userLoggedIn == false) {
       return redirectTo(LoginPage.path);
