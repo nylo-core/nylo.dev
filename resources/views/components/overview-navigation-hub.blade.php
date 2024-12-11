@@ -25,10 +25,10 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
     _BaseNavigationHubState() : super(() async {
     return {
         0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home_filled),
+            title: "Home",
+            page: HomeTab(),
+            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home),
         ),
         1: NavigationTab(
             title: "Settings",
