@@ -110,7 +110,7 @@ Let's break this down.
 If you want to try this example in your {{ config('app.name') }} project, create a new widget called `Cart`. 
 
 ``` dart
-dart run nylo_framework:main make:stateful_widget cart
+dart run nylo_framework:main make:state_managed cart
 ```
 
 Then you can copy the example above and try it in your project.

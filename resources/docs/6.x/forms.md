@@ -4,36 +4,41 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-    - [How it works](#how-it-works "How it works")
-- [Creating a form](#creating-a-form "Creating a form")
-- [Displaying a form](#displaying-a-form "Displaying a form")
-- [Submitting a Form](#submitting-a-form "Submitting a Form")
-- Managing Data
-    - [Setting data](#setting-data "Setting data")
-    - [Clearing data](#clearing-data "Clearing data")
-- Form
-    - [Fields](#form-fields "Fields")
-    - [Validation](#form-validation "Validation")
-    - [Casts](#form-casts "Casts")
-    - [Dummy Data](#form-dummy-data "Dummy Data")
-    - [Style](#form-style "Style")
-- Pre-built Forms
-  - [NyLoginForm](#ny-login-form "NyLoginForm")
-- [Form Parameters](#form-parameters "Form Parameters")
-- [Listening to Form Changes](#listening-to-form-changes "Listening to Form Changes")
-- [Custom Form Cast](#custom-form-casts "Custom Form Cast")
-
+  - [How it works](#how-it-works "How it works")
+- [Quick Start](#quick-start "Quick Start")
+- [Creating Forms](#creating-forms "Creating forms")
+- [Field Types](#field-types "Field Types")
+  - [Text Fields](#text-fields "Text Fields")
+  - [Numeric Fields](#numeric-fields "Numeric Fields")
+  - [Selection Fields](#selection-fields "Selection Fields")
+  - [Boolean Fields](#boolean-fields "Boolean Fields")
+  - [Date and Time Fields](#date-and-time-fields "Date and Time Fields")
+  - [Password Fields](#password-fields "Password Fields")
+  - [Masked Input Fields](#masked-input-fields "Masked Input Fields")
+- [Form Validation](#form-validation "Form Validation")
+- [Form Casts](#form-casts "Form Casts")
+- [Managing Form Data](#managing-form-data "Managing Form Data")
+- [Form Styling](#form-styling "Form Styling")
+- [Advanced Features](#advanced-features "Advanced Features")
+  - [Form Layout](#form-layout "Form Layout")
+  - [Conditional Fields](#conditional-fields "Conditional Fields")
+  - [Form Events](#form-events "Form Events")
+- [Pre-built Components](#pre-built-components "Pre-built Components")
+- [API Reference for NyForm](#ny-form-api-reference "API Reference for NyForm")
 
 <a name="introduction"></a>
 <br>
 
-## Introduction to Forms
+## Introduction
 
-Forms are fundamental for any modern mobile or web application.
+Nylo's form system provides:
+- Easy form creation and management
+- Built-in validation
+- Field type casting
+- Form state management
+- Styling customization
+- Data handling utilities
 
-In Nylo you can use the `NyForm` class to manage, validate and submit data all in one place.
-
-It's extremely easy and customizable, let's take a look at how to create a form.
 
 <a name="how-it-works"></a>
 <br>
@@ -85,14 +90,16 @@ LoginForm form = LoginForm();
 
 // add the form using the NyForm widget
 @override
-Widget build(BuildContext context) {
+Widget view(BuildContext context) {
   return Scaffold(
     body: SafeArea(
-      child: NyForm.list(form: form, children: [
-          Button.primary(child: "Submit", submitForm: (form, (data) {
+      child: NyForm(
+        form: form, 
+        footer: Button.primary(child: "Submit", submitForm: (form, (data) {
               printInfo(data);
-          }))
-      ]),
+          }),
+        ),
+      ),
     )
   );
 }
@@ -120,7 +127,7 @@ Each button has a different style and color.
  They all have the ability to submit a form using the `submitForm` parameter.
 
 ``` dart
-Button.primary(child: "Submit", submitForm: (form, (data) {
+Button.primary(text: "Submit", submitForm: (form, (data) {
     printInfo(data);
 }));
 ```
@@ -135,19 +142,19 @@ To submit a form, you can call the `submit` method on a form.
 LoginForm form = LoginForm();
 
 @override
-Widget build(BuildContext context) {
+Widget view(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: NyForm.list(form: form, children: [
-              MaterialButton(
-                  onPressed: () {
-                      form.submit(onSuccess: (data) {
-                          // Do something with the data
-                      });
-                  },
-                  child: Text("Submit"),
-              ),
-          ]),
+          child: NyForm(
+            form: form, 
+            footer: MaterialButton(
+                onPressed: () {
+                    form.submit(onSuccess: (data) {
+                        // Do something with the data
+                    });
+                },
+                child: Text("Submit"),
+            )),
         )
     );
 }
@@ -159,919 +166,608 @@ That's a quick overview of how to create, display and submit a form in Nylo.
 
 This is just scratching the surface, you can customize your forms even further by adding casts, validation rules, dummy data and global styles.
 
-<a name="creating-a-form"></a>
+<a name="creating-forms"></a>
 <br>
 
-## Creating a form
+## Creating Forms
 
-The easiest way to create a form is with `Metro`. 
+### Using the Metro CLI
 
-You can create a form by running the following command:
+The easiest way to create a new form is using the Metro CLI:
 
-``` bash
-dart run nylo_framework:main make:form AdvertForm
-# or with Metro alias
-metro make:form AdvertForm
+```bash
+metro make:form LoginForm
+
+# or
+dart run nylo_framework:main make:form LoginForm
 ```
 
-This will create a new form class in the `lib/app/forms` directory.
+This creates a new form class in `lib/app/forms/login_form.dart`.
 
-``` dart
-import 'package:nylo_framework/nylo_framework.dart';
+### Form Structure
 
-class AdvertForm extends NyFormData {
+Forms in Nylo extend the `NyFormData` class:
 
-  AdvertForm({String? name}) : super(name ?? "advert");
+```dart
+class ProductForm extends NyFormData {
+  ProductForm({String? name}) : super(name ?? "product");
 
-  // Add your fields here
   @override
   fields() => [
-    Field("Name", 
-      validator: FormValidator.rule("not_empty|max:20")
-    ),
-    Field("Price", 
-      cast: FormCast.currency("usd"),
-      validator: FormValidator.rule("not_empty")
-    ),
-    Field("Favourite Color", 
-      value: "Blue",
-      cast: FormCast.picker(
-        options: ["Red", "Green", "Blue", "Yellow"]
-      ),
-      validator: FormValidator.rule("not_empty")
-    ),
+    // Define form fields here
+    Field.text("Name"),
+    Field.number("Price"),
+    Field.textarea("Description")
   ];
 }
 ```
 
-<a name="displaying-a-form"></a>
+<a name="field-types"></a>
 <br>
 
-## Displaying a form
+## Field Types
 
-To display a form, you can use the `NyForm` widget.
+Nylo provides multiple ways to define fields, with the recommended approach using static methods for cleaner syntax:
 
-Once you have created a form, you can display it anywhere in your application.
-
-``` dart
-AdvertForm form = AdvertForm();
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-        children: [
-            NyForm(form: form),
-        ],
-    ),
-  );
-}
-
-// or like this
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-        children: [
-            form.create()
-        ],
-    ),
-  );
-}
-```
-
-This will display the fields associated with the form.
-
-You'll need to provide an additional widget to submit the form using `form.submit()`.
-
-
-<a name="submitting-a-form"></a>
+<a name="text-fields"></a>
 <br>
 
-## Submitting a Form
+### Text Fields
+```dart
+// Recommended approach
+Field.text("Name"),
+Field.textarea("Description"),
+Field.email("Email"),
+Field.capitalizeWords("Title"),
+Field.url("Website"),
 
-To submit a form, you can call the `submit` method on a form.
-
-``` dart
-AdvertForm form = AdvertForm();
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: NyForm(form: form),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        form.submit(onSuccess: (data) {
-          // Do something with the data
-        });
-      },
-      child: Icon(Icons.save),
-    ),
-  );
-}
+// Alternative approach using constructor with casts
+Field("Name", cast: FormCast.text()),
+Field("Description", cast: FormCast.textArea())
 ```
 
-When you call `form.submit()`, Nylo will validate the form and if the form is valid, it will call the `onSuccess` callback with the form data.
-
-You can also use the `onFailure: (error) {}` callback to handle form validation errors.
-
-``` dart
-AdvertForm form = AdvertForm();
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: NyForm(form: form),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        form.submit(
-          onSuccess: (data) {
-            // Do something with the data
-          },
-          onFailure: (error) {
-            // Do something with the error
-          }
-        );
-      },
-      child: Icon(Icons.save),
-    ),
-  );
-}
-```
-
-<a name="setting-data"></a>
+<a name="numeric-fields"></a>
 <br>
 
-## Setting data
+### Numeric Fields
+```dart
+// Recommended approach
+Field.number("Age"),
+Field.currency("Price", currency: "usd"),
+Field.decimal("Score"),
 
-You can set data using the `initialData` parameter.
-
-``` dart
-CarAdvertForm form = CarAdvertForm();
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-      children: [
-        NyForm(form: form, initialData: {
-            "Model": "BMW",
-            "Price": 45000,
-            "Wheel Size": "18",
-        }),
-      ],
-    )
-  );
-}
-
-// or like this
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-      children: [
-        form.create(initialData: {
-            "Model": "BMW",
-            "Price": 45000,
-            "Wheel Size": "18",
-        }),
-      ],
-    )
-  );
-}
+// Alternative approach
+Field("Age", cast: FormCast.number()),
+Field("Price", cast: FormCast.currency("usd"))
 ```
-
-If you need to set data after it's been created, use the `setData` method or `setField` method.
-- `setData` will set all the data at once.
-- `setField` will set the data for a specific field.
-
-``` dart
-CarAdvertForm form = CarAdvertForm();
-
-get init => () async {
-
-  form.initialData(() {
-    return {
-      "Model": "BMW",
-      "Price": 45000,
-      "Wheel Size": "18",
-    };
-  });
-
-  // or by field name
-    form.setData({
-        "Model": "BMW",
-        "Price": 45000,
-        "Wheel Size": "18",
-    });
-
-    // or by field name
-    form.setField("Model", "Mercedes");
-};
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-      children: [
-        NyForm(form: form),
-
-        ElevatedButton(
-          onPressed: () {
-            form.submit(onSuccess: (data) {
-              // Do something with the data
-              // data = { "Model": "Mercedes", "Price": 45000, "Wheel Size": "18" }
-            });
-          },
-          child: Text("Submit"),
-        ),
-      ],
-    )
-  );
-}
-```
-
-<a name="clearing-data"></a>
+<a name="selection-fields"></a>
 <br>
 
-## Clearing Data
+### Selection Fields
+```dart
+// Recommended approach
+Field.picker("Category", options: ["Electronics", "Clothing", "Books"]),
+Field.chips("Tags", options: ["Featured", "Sale", "New"]),
 
-If you need to clear all the data, you can use the `clear` method.
-
-``` dart
-JobForm form = JobForm();
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: ListView(
-      children: [
-        NyForm(form: form),
-        
-        ElevatedButton(child: Text("Clear Data"),
-          onPressed: () {
-            form.clear();
-          },
-        ),
-      ],
-    )
-  );
-}
+// Alternative approach
+Field("Category", 
+  cast: FormCast.picker(
+    options: ["Electronics", "Clothing", "Books"]
+  )
+)
 ```
 
-If you need to clear a specific field, you can use the `clearField` method.
+<a name="boolean-fields"></a>
+<br>
 
-``` dart
-form.clearField("Name");
+### Boolean Fields
+```dart
+// Recommended approach
+Field.checkbox("Accept Terms"),
+Field.switchBox("Enable Notifications"),
+
+// Alternative approach
+Field("Accept Terms", cast: FormCast.checkbox()),
+Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
-<a name="form-fields"></a>
+<a name="date-and-time-fields"></a>
+<br>
 
-## Fields
+### Date and Time Fields
+```dart
+// Recommended approach
+Field.date("Birth Date", 
+  firstDate: DateTime(1900),
+  lastDate: DateTime.now()
+),
+Field.datetime("Appointment"),
 
-The `Field` class in Nylo is important because it defines the fields in your form.
-
-Let's imagine we run a social media app and we have a page where users can upload a 'post'.
-
-The data we need to collect is the **title**, **category**, **description**, and **hash tags**.
-
-``` dart
-class PostForm extends NyFormData {
-
-  PostForm({String? name}) : super(name ?? "post");
-
-  @override
-  fields() => [
-    Field("Title"),
-    Field("Category"),
-    Field("Description"),
-    Field("Hash Tags"),
-  ];
-}
+// Alternative approach
+Field("Birth Date", 
+  cast: FormCast.date(
+    firstDate: DateTime(1900),
+    lastDate: DateTime.now()
+  )
+)
 ```
 
-The above code will create a form with three fields: `Title`, `Category`, `Description`, and `Hash Tags`.
+<a name="password-fields"></a>
+<br>
 
-We can improve it by adding **casts** and **validation rules**.
+### Password Fields
+```dart
+// Recommended approach
+Field.password("Password", viewable: true)
 
-``` dart
-class PostForm extends NyFormData {
-
-  PostForm({String? name}) : super(name ?? "post");
-
-  @override
-  fields() => [
-    Field("Title",
-        cast: FormCast.capitalizeWords(),
-        validate: FormValidator()
-                    .notEmpty()
-                    .maxLength(50),
-    ),
-    Field("Category",
-        cast: FormCast.picker(
-            options: ["Technology", "Fashion", "Food", "Travel"],
-        ),
-        validate: FormValidator()
-                    .contains(["Technology", "Fashion", "Food", "Travel"]),
-    ),
-    Field("Description",
-        cast: FormCast.textArea(),
-        validate: FormValidator(message: "Please write a description")
-                    .notEmpty(),
-    ),
-    Field("Hash Tags", 
-        cast: FormCast.textArea(textAreaSize: TextAreaSize.md),
-        validate: FormValidator.rule("not_empty")
-    ),
-  ];
-}
+// Alternative approach
+Field("Password", cast: FormCast.password(viewable: true))
 ```
 
-This new form now has casts and validation rules.
+<a name="masked-input-fields"></a>
+<br>
 
-When the form is submitted, Nylo will validate the form and if the form is valid, it will call the `onSuccess` callback with the form **data**.
+### Masked Input Fields
+```dart
+// Recommended approach
+Field.mask("Phone", mask: "(###) ###-####"),
+Field.mask("Credit Card", mask: "#### #### #### ####")
 
-### Grouping Fields
-
-If you want to group fields next to each other, you can use a `List`.
-
-It's easy, here's an example:
-
-``` dart
-class PostForm extends NyFormData {
-
-  PostForm({String? name}) : super(name ?? "post");
-
-  @override
-  fields() => [
-    [
-        Field("Title",
-            cast: FormCast.capitalizeWords(),
-        ),
-        Field("Category",
-            cast: FormCast.picker(
-                options: ["Technology", "Fashion", "Food", "Travel"],
-            ),
-        ),
-    ],
-    Field("Description",
-        cast: FormCast.textArea(),
-    ),
-    Field("Hash Tags", 
-        cast: FormCast.textArea(textAreaSize: TextAreaSize.md),
-    ),
-  ];
-}
+// Alternative approach
+Field("Phone", 
+  cast: FormCast.mask(mask: "(###) ###-####")
+)
 ```
-
-If you try this, you will see that the `Title` and `Category` fields are grouped together.
-
-Behind the scenes, Nylo will create a **Row** widget to display the fields.
-
-You can also adjust the mainAxisSpacing and crossAxisSpacing using the `mainAxisSpacing` and `crossAxisSpacing` parameters on the `NyForm` widget.
-
 
 <a name="form-validation"></a>
 <br>
 
-## Validation
+## Form Validation
 
-Nylo is able to validate your form fields using the `FormValidator` class.
+Nylo provides extensive validation capabilities:
 
-Here's all the available validation rules:
-| Method | Description |
-|--------|-------------|
-| `FormValidator.email()` | Validates an email address |
-| `FormValidator.password()` | Validates a password |
-| `FormValidator.notEmpty()` | Validates that the field is not empty |
-| `FormValidator.minLength(5)` | Validates that the field has a minimum length of 5 |
-| `FormValidator.maxLength(10)` | Validates that the field has a maximum length of 10 |
-| `FormValidator.contains(["developer", "manager"])` | Validates that the field contains one of the values in the array |
-| `FormValidator.numeric()` | Validates that the field is a number |
-| `FormValidator.date()` | Validates that the field is a date |
-| `FormValidator.uppercase()` | Validates that the field is uppercase |
-| `FormValidator.lowercase()` | Validates that the field is lowercase |
-| `FormValidator.regex(r"^[a-zA-Z0-9]*$")` | Validates that the field matches a regex pattern |
-| `FormValidator.dateInPast()` | Validates that the date is in the past |
-| `FormValidator.dateInFuture()` | Validates that the date is in the future |
-| `FormValidator.isTrue()` | Validates that the value is true |
-| `FormValidator.isFalse()` | Validates that the value is false |
-| `FormValidator.dateAgeIsYounger(35)` | Validates that the date is younger than 35 |
-| `FormValidator.dateAgeIsOlder(35)` | Validates that the date is older than 35 |
-| `FormValidator.zipcodeUs()` | Validates that the value is a valid US zipcode |
-| `FormValidator.postcodeUk()` | Validates that the value is a valid UK postcode |
+### Basic Validation
+```dart
+Field.text("Username",
+  validate: FormValidator()
+    .notEmpty()
+    .minLength(3)
+    .maxLength(20)
+)
+```
 
-If you need to create a custom validation rule, you can do so by calling `FormValidator.custom` like in the example below.
+### Combined Validation
+```dart
+Field.password("Password",
+  validate: FormValidator()
+    .notEmpty()
+    .minLength(8)
+    .password(strength: 2)
+)
+```
 
-``` dart
-class JobForm extends NyFormData {
-  
-  @override
-  fields() => [
-    Field("Name", validation: FormValidator.notEmpty().maxLength(20)),
-    Field("Age", validation: FormValidator.rule("not_empty|numeric|min:18")),
-    Field("Salary", validation: FormValidator.custom((value) {
-      if (value < 10000) {
-        return false;
-      }
+### Custom Validation
+```dart
+Field.number("Age",
+  validate: FormValidator.custom(
+    (value) {
+      if (value < 18) return false;
+      if (value > 100) return false;
       return true;
-    }, message: "Salary must be greater than 10000")),
-  ];
-}
+    },
+    message: "Age must be between 18 and 100"
+  )
+)
 ```
 
-In the above example, we have defined validation rules for the fields `Name`, `Age` and `Salary`.
-If the form is invalid, the `onFailure` callback will be called with the error message.
+### Validation Examples
 
-You can find all the available validation rules [here](https://nylo.dev/docs/6.x/validation#validation-rules).
+```dart
+// Email validation
+Field.email("Email", 
+  validate: FormValidator.email(
+    message: "Please enter a valid email address"
+  )
+)
 
-### Validate on focus change
+// Password validation with strength levels
+Field.password("Password",
+  validate: FormValidator.password(strength: 2)
+)
 
-This is feature is disabled by default. If you want to enable it, you can do so by setting the `validateOnFocusChange` parameter to `true`.
+// Length validation
+Field.text("Username", 
+  validate: FormValidator()
+    .minLength(3)
+    .maxLength(20)
+)
 
-``` dart
-NyForm(form: accountForm, validateOnFocusChange: true),
+// Phone number validation
+Field.phone("Phone",
+  validate: FormValidator.phoneNumberUs()  // US format
+  // or
+  validate: FormValidator.phoneNumberUk()  // UK format
+)
+
+// URL validation
+Field.url("Website",
+  validate: FormValidator.url()
+)
+
+// Contains validation
+Field.picker("Category",
+  validate: FormValidator.contains(["Tech", "Health", "Sports"])
+)
+
+// Numeric validation
+Field.number("Age",
+  validate: FormValidator()
+    .numeric()
+    .minValue(18)
+    .maxValue(100)
+)
+
+// Date validation
+Field.date("EventDate",
+  validate: FormValidator()
+    .date()
+    .dateInFuture()
+)
+
+// Boolean validation
+Field.checkbox("Terms",
+  validate: FormValidator.isTrue()
+)
+
+// Multiple validators
+Field.text("Username",
+  validate: FormValidator()
+    .notEmpty()
+    .minLength(3)
+    .maxLength(20)
+    .regex(r'^[a-zA-Z0-9_]+$')
+)
 ```
 
-Now, the form will only validate the field when the focus changes.
+### Available Validators
 
-### Custom Error Messages
-
-You can also provide a custom error message for each field.
-
-``` dart
-class JobForm extends NyFormData {
-
-  @override
-  fields() => [
-    Field("Name", 
-        validation: FormValidator(message: "Name is required").notEmpty().maxLength(20)
-    ),
-    Field("Age", 
-        validation: FormValidator.rule("not_empty|numeric|min:25", message: "Age must be a number and greater than 25")
-    ),
-    Field("Salary", validation: FormValidator.custom((value) {
-      if (value < 10000) {
-        return false;
-      }
-      return true;
-    }, message: "Salary must be greater than 10000")),
-  ];
-}
-```
+| Validator | Description |
+|-----------|-------------|
+| `notEmpty()` | Ensures field is not empty |
+| `email()` | Validates email format |
+| `minLength(n)` | Minimum length check |
+| `maxLength(n)` | Maximum length check |
+| `numeric()` | Numbers only |
+| `regex(pattern)` | Custom regex pattern |
+| `contains(list)` | Must contain value from list |
+| `dateInPast()` | Date must be in past |
+| `dateInFuture()` | Date must be in future |
+| `password(strength: 1\|2)` | Password strength validation |
+| `phoneNumberUs()` | US phone format |
+| `phoneNumberUk()` | UK phone format |
+| `url()` | Valid URL format |
+| `zipcodeUs()` | US zipcode format |
+| `postcodeUk()` | UK postcode format |
+| `isTrue()` | Must be true |
+| `isFalse()` | Must be false |
+| `dateAgeIsYounger(age)` | Age younger than specified |
+| `dateAgeIsOlder(age)` | Age older than specified |
 
 <a name="form-casts"></a>
+<br>
 
-## Casts
+## Form Casts
 
-Casts are used to cast the fields to their respective types.
-
-``` dart
-class JobForm extends NyFormData {
-
-  @override
-  fields() => [
-    Field("Age", 
-        cast: FormCast.number()
-    ),
-    Field("Salary", 
-        cast: FormCast.currency("usd"),
-    ),
-    Field("Position", 
-        cast: FormCast.picker(
-            options: ["Developer", "Manager", "Designer", "Tester"]
-        ),
-    ),
-  ];
-}
-```
+Casts transform field input into specific formats:
 
 ### Available Casts
 
-| Method | Description |
-|--------|-------------|
-| `FormCast()` | Default cast |
-| `FormCast.email()` | Cast to email |
-| `FormCast.password()` | Cast to password |
-| `FormCast.password(viewable: true)` | Cast to viewable password |
-| `FormCast.currency("usd")` | Cast to currency (supports multiple [currencies](#all-currencies)) |
-| `FormCast.picker()` | Cast to picker |
-| `FormCast.textArea()` | Cast to textarea |
-| `FormCast.textArea(textAreaSize: TextAreaSize.md)` | Cast to medium textarea |
-| `FormCast.capitalizeWords()` | Cast to capitalize words |
-| `FormCast.capitalizeSentences()` | Cast to capitalize sentences |
-| `FormCast.number()` | Cast to number |
-| `FormCast.phoneNumber()` | Cast to phone number |
-| `FormCast.datetime()` | Cast to datetime |
-| `FormCast.uppercase()` | Cast to uppercase |
-| `FormCast.lowercase()` | Cast to lowercase |
-| `FormCast.chips` | Cast to selectable chips |
-| `FormCast.checkbox` | Cast to checkbox |
-| `FormCast.mask` | Cast to masked input field |
-| `FormCast.switch` | Cast to switch |
-
-You can use any of the above casts in your form.
-
-If you'd like to create your own custom cast, you can do so by creating a new class in `config/form_casts.dart`.
-
-<a name="all-currencies"></a>
-
-### FormCast.currency - all currencies
-
-The `FormCast.currency` cast supports multiple currencies, here's a list of all the available currencies:
-
-| Currency Code | Currency Name |
-|---------------|---------------|
-| `usd` | US Dollar |
-| `eur` | Euro |
-| `gbp` | British Pound Sterling |
-| `jpy` | Japanese Yen |
-| `cny` | Chinese Yuan |
-| `cad` | Canadian Dollar |
-| `aud` | Australian Dollar |
-| `inr` | Indian Rupee |
-| `idr` | Indonesian Rupiah |
-| `sgd` | Singapore Dollar |
-| `myr` | Malaysian Ringgit |
-| `thb` | Thai Baht |
-| `twd` | New Taiwan Dollar |
-| `vnd` | Vietnamese Dong |
-| `zar` | South African Rand |
-| `pkr` | Pakistani Rupee |
-| `chf` | Swiss Franc |
-| `brl` | Brazilian Real |
-| `rub` | Russian Ruble |
-| `krw` | South Korean Won |
-| `mxn` | Mexican Peso |
-| `hkd` | Hong Kong Dollar |
-| `nzd` | New Zealand Dollar |
-| `sek` | Swedish Krona |
-| `aed` | United Arab Emirates Dirham |
-| `dkk` | Danish Krone |
-| `pln` | Polish Zloty |
-| `try` | Turkish Lira |
-| `ngn` | Nigerian Naira |
-| `php` | Philippine Peso |
-| `egp` | Egyptian Pound |
-| `ars` | Argentine Peso |
-| `clp` | Chilean Peso |
-| `cop` | Colombian Peso |
-| `pen` | Peruvian Nuevo Sol |
-| `uah` | Ukrainian Hryvnia |
-| `ils` | Israeli New Sheqel |
-| `czk` | Czech Republic Koruna |
-| `nok` | Norwegian Krone |
-| `bhd` | Bahraini Dinar |
-| `kwd` | Kuwaiti Dinar |
-| `qar` | Qatari Rial |
-| `sar` | Saudi Riyal |
-| `ron` | Romanian Leu |
-| `hrk` | Croatian Kuna |
-| `bgn` | Bulgarian Lev |
-| `huf` | Hungarian Forint |
-| `mad` | Moroccan Dirham |
-| `isk` | Icelandic Krona |
-| `kzt` | Kazakhstani Tenge |
-| `lkr` | Sri Lankan Rupee |
-| `mmk` | Myanmar Kyat |
-| `bdt` | Bangladeshi Taka |
-| `kes` | Kenyan Shilling |
-| `tzs` | Tanzanian Shilling |
-| `ugx` | Ugandan Shilling |
-| `rwf` | Rwandan Franc |
-
-<a name="form-dummy-data"></a>
-<br>
-
-## Dummy Data
-
-You can add dummy data to your form when you are developing your application.
-
-If your `.env` file is set to production, the dummy data will be ignored.
-
-**Example**
-
-``` env
-APP_ENV="developing" # or "production"
-```
-
-
-``` dart
-class FitnessLevelForm extends NyFormData {
-
-  @override
-  fields() => [
-    Field("Name", 
-        cast: FormCast.number(),
-        dummyData: "John Doe"
-    ),
-    Field("Weight", 
-        dummyData: "75 kg"
-    ),
-    Field("Height", 
-        dummyData: "180 cm"
-    ),
-    Field("Hash Tags", 
-        dummyData: "#fitness, #health, #gym"
-    ),
-  ];
-}
-```
-
-In the above example, the fields `Name`, `Weight`, `Height`, and `Hash Tags` will have dummy data when the form is displayed.
-
-> **Note**: Remove to update your .env file to `APP_ENV="production"` to disable dummy data.
-
-<a name="form-style"></a>
-
-## Style
-
-Nylo provides two ways to style your form fields.
-
-The first is by defining a global style for all fields in the form. The second is by styling individual fields.
-
-### Global Style
-
-Global styles are the easiest way to customize your form fields. You can define the style for any field except for the `Picker` and `DateTime` field.
-
-To get started, first navigate to your `/app/forms/style/form_style.dart` file.
-
-This file will contain a class called `FormStyle`, you'll be able to define all your global styles here.
-
-To update the TextField's, override the `textField` method. This function is responsible for styling the TextField's in your form.
-
-``` dart
-import 'package:flutter/material.dart';
-import 'package:nylo_framework/nylo_framework.dart';
-
-class FormStyle extends NyFormStyle {
-
-  /// TextField styles for the form
-  @override
-  FormStyleTextField textField(BuildContext context, Field field) {
-    return {
-     'default': (NyTextField textField) => textField.copyWith(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          filled: true,
-          fillColor: Colors.blue.shade100,
-          labelText: field.name,
-        ),
-      ),
-    };
-  }
-  ...
-```
-
-In the above example, we have defined a global style for all the TextField's in the form.
-
-Note that the `default` key is required to define the default style for all the TextField's.
-
-You can also define more styles, like in the example below:
-
-``` dart
-``` dart
-import 'package:flutter/material.dart';
-import 'package:nylo_framework/nylo_framework.dart';
-
-class FormStyle extends NyFormStyle {
-
-  /// TextField styles for the form
-  @override
-  FormStyleTextField textField(BuildContext context, Field field) {
-    return {
-     'default': (NyTextField textField) => textField.copyWith(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          filled: true,
-          fillColor: Colors.blue.shade100,
-          labelText: field.name,
-        ),
-      ),
-      'minimal': (NyTextField textField) => textField.copyWith(
-        decoration: InputDecoration(
-          ...
-        ),
-      ),
-    };
-  }
-  ...
-```
-
-Now, you can use the `minimal` style in your form.
-
-``` dart
-class ProfileForm extends NyFormData {
-  
-  fields() => [
-    Field("Name", style: "minimal"),
-    Field("Username"),
-  ];
-}
-```
-
-You can also use the `style` parameter, this will override the global style for the field.
-
-Nylo contains a `compact` style that you can use in your form.
-
-``` dart
-class RegisterForm extends NyFormData {
-
-    @override
-    fields() => [
-        Field("Name", 
-            style: "compact".extend(
-                ... // extend the compact style
-            )
-        ),
-        Field("Email", 
-            style: "compact"
-        ),
-        Field("Password", 
-            style: "compact"
-        ),
-        Field("Confirm Password", 
-            style: "compact"
-        ),
-    ];
-}
-```
-
-You can also use the `style` parameter to perform an inline style override.
-
-``` dart
-class RegisterForm extends NyFormData {
-
-    @override
-    fields() => [
-        Field("Name", 
-            style: (NyTextField nyTextField) => nyTextField.copyWith(
-                decoration: InputDecoration(
-                    labelText: "Name",
-                    hintText: "Enter your name",
-                ),
-            ),
-        ),
-        Field("Email", 
-            style: (NyTextField nyTextField) => nyTextField.copyWith(
-                decoration: InputDecoration(
-                    labelText: "Email",
-                    hintText: "Enter your email",
-                ),
-            ),
-        ),
-        Field("Password", 
-            style: (NyTextField nyTextField) => nyTextField.copyWith(
-                decoration: InputDecoration(
-                    labelText: "Password",
-                    hintText: "Enter your password",
-                ),
-            ),
-        ),
-        Field("Confirm Password", 
-            style: (NyTextField nyTextField) => nyTextField.copyWith(
-                decoration: InputDecoration(
-                    labelText: "Confirm Password",
-                    hintText: "Confirm your password",
-                ),
-            ),
-        ),
-    ];
-}
-```
-
-
-<a name="ny-login-form"></a>
-<br>
-
-## Pre-built Forms
-
-Nylo comes with pre-built forms that you can use out of the box. 
-
-This list will be updated as more forms are added.
-
-## NyLoginForm
-
-The `NyLoginForm` is a pre-built login form that you can use in your application.
-
-### Fields
-
-- Email - `FormCast.email()`
-- Password - `FormCast.password()`
-
-``` dart
-NyLoginForm form = Forms.login();
-
-@override
-Widget view(BuildContext context) {
-  return Scaffold(
-    body: NyForm(form),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        form.submit("login", onSuccess: (data) {
-          // Do something with the data
-        });
-      },
-      child: Icon(Icons.save),
-    ),
-  );
-}
-```
-
-
-<a name="form-parameters"></a>
-<br>
-
-## NyForm Parameters
-
-- `key`: The key of the form
-- `form`: The form to display
-- `initialData`: The initial data for the form
-- `crossAxisSpacing`: The cross axis spacing (default: 10)
-- `mainAxisSpacing`: The main axis spacing (default: 10)
-- `onChanged`: The callback when the form changes
-- `validateOnFocusChange`: Validate the form on focus change (default: false)
-- `locked`: Lock the form (default: false)
-
-
-<a name="listening-to-form-changes"></a>
-<br>
-
-## Listening to Form Changes
-
-You can listen to form changes using the `onChanged` callback.
-
-``` dart
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: NyForm(
-      form: form,
-      onChanged: (data) {
-        // Do something with the data
-        // data = { "Name": "John Doe", "Age": 25, "Salary": 45000, "Position": "Developer" }
-      },
-    ),
-  );
-}
-```
-
-<a name="custom-form-casts"></a>
-<br>
-
-## Custom Form Casts
-
-If you want to use custom form casts, you can create them and reuse them in your forms.
-
-First, make sure your `AppProvider` is set up correctly.
-
-``` dart
-class AppProvider implements NyProvider {
-  @override
-  boot(Nylo nylo) async {
-    ...
-    nylo.addFormCasts(formCasts); // Add the form casts
-  }
-```
-
-Inside `config/form_casts.dart`, you can add your custom form casts.
-
-``` dart
-import 'package:nylo_framework/nylo_framework.dart';
-
+| Cast | Description | Example |
+|------|-------------|---------|
+| `FormCast.email()` | Email input | user@example.com |
+| `FormCast.number()` | Numeric input | 42 |
+| `FormCast.currency("usd")` | Currency formatting | $42.99 |
+| `FormCast.capitalizeWords()` | Title case | Hello World |
+| `FormCast.date()` | Date picker | 2024-01-15 |
+| `FormCast.mask()` | Custom input mask | (123) 456-7890 |
+| `FormCast.picker()` | Selection list | - |
+| `FormCast.chips()` | Multi-select chips | - |
+| `FormCast.checkbox()` | Boolean checkbox | - |
+| `FormCast.switchBox()` | Boolean switch | - |
+| `FormCast.textarea()` | Multi-line text | - |
+| `FormCast.password()` | Password input | - |
+
+### Custom Casts
+
+Create custom casts in `config/form_casts.dart`:
+
+```dart
 final Map<String, dynamic> formCasts = {
-  /// Example
-  "age_picker": (Field field, Function(dynamic value)? onChanged) {
-    return MyCustomField(field, onChanged);
-  },
+  "phone": (Field field, Function(dynamic value)? onChanged) {
+    return CustomPhoneField(
+      field: field,
+      onChanged: onChanged
+    );
+  }
 };
 ```
 
-Your custom form cast needs to accept the following parameters:
+<a name="managing-form-data"></a>
+<br>
 
-- `Field field`: The field to cast
-- `Function(dynamic value)? onChanged`: The callback when the field changes
+## Managing Form Data
 
-Nylo will automatically register the form casts for you.
+### Setting Initial Data
+```dart
+NyForm(
+  form: form,
+  loadData: () async {
+    // final userData = api<ApiService>
+    ;
+    return {
+      "name": "John Doe",
+      "email": "john@example.com"
+    };
+  }
+)
 
-Now, you can use your custom form cast in your form.
+// or 
+NyForm(
+  form: form,
+  initialData: {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+)
+```
 
-``` dart
-class JobForm extends NyFormData {
+### Updating Data
+```dart
+// Update single field
+form.setField("name", "Jane Doe");
 
+// Update multiple fields
+form.setData({
+  "name": "Jane Doe",
+  "email": "jane@example.com"
+});
+```
+
+### Clearing Data
+```dart
+// Clear everything
+form.clear();
+
+// Clear specific field
+form.clearField("name");
+```
+
+<a name="form-styling"></a>
+<br>
+
+## Form Styling
+
+### Global Styles
+
+Define global styles in `app/forms/style/form_style.dart`:
+
+```dart
+class FormStyle extends NyFormStyle {
   @override
-  fields() => [
-    Field("Age", 
-        cast: "age_picker"
-    ),
-    Field("Salary", 
-        cast: FormCast.currency("usd"),
-    ),
-    Field("Position", 
-        cast: FormCast.picker(
-            options: ["Developer", "Manager", "Designer", "Tester"]
+  FormStyleTextField textField(BuildContext context, Field field) {
+    return {
+      'default': (NyTextField textField) => textField.copyWith(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          filled: true,
+          fillColor: Colors.grey[100],
         ),
-    ),
-  ];
+      ),
+      'compact': (NyTextField textField) => textField.copyWith(
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 4
+          ),
+        ),
+      ),
+    };
+  }
 }
 ```
+
+### Field-Level Styling
+
+#### Using Style Extension
+```dart
+Field.email("Email",
+  style: "compact".extend(
+    labelText: "Email Address",
+    prefixIcon: Icon(Icons.email),
+    backgroundColor: Colors.grey[100],
+    borderRadius: BorderRadius.circular(8),
+    
+    // Custom decoration states
+    decoration: (data, inputDecoration) {
+      return inputDecoration.copyWith(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.blue)
+        )
+      );
+    },
+    successDecoration: (data, inputDecoration) {
+      return inputDecoration.copyWith(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.green)
+        )
+      );
+    },
+    errorDecoration: (data, inputDecoration) {
+      return inputDecoration.copyWith(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red)
+        )
+      );
+    }
+  )
+)
+```
+
+#### Direct Styling
+```dart
+Field.text("Name",
+  style: (NyTextField textField) => textField.copyWith(
+    decoration: InputDecoration(
+      prefixIcon: Icon(Icons.person),
+      border: OutlineInputBorder(),
+    ),
+  ),
+)
+```
+
+<a name="advanced-features"></a>
+<br>
+
+## Advanced Features
+
+<a name="form-layout"></a>
+<br>
+
+### Form Layout
+```dart
+fields() => [
+  // Single field
+  Field.text("Title"),
+  
+  // Grouped fields in row
+  [
+    Field.text("First Name"),
+    Field.text("Last Name"),
+  ],
+  
+  // Another single field
+  Field.textarea("Bio")
+];
+```
+
+<a name="conditional-fields"></a>
+<br>
+
+### Conditional Fields
+```dart
+Field.checkbox("Has Pets",
+  onChange: (value) {
+    if (value == true) {
+      form.showField("Pet Names");
+    } else {
+      form.hideField("Pet Names");
+    }
+  }
+)
+```
+
+<a name="form-events"></a>
+<br>
+
+### Form Events
+```dart
+NyForm(
+  form: form,
+  onChanged: (field, data) {
+    print("$field changed: $data");
+  },
+  validateOnFocusChange: true
+)
+```
+
+<a name="pre-built-components"></a>
+<br>
+
+## Pre-built Components
+
+### Login Form
+```dart
+NyLoginForm loginForm = Forms.login(
+  emailValidationMessage: "Please enter a valid email",
+  passwordValidationMessage: "Password is required",
+  style: "compact"
+);
+```
+
+<a name="ny-form-api-reference"></a>
+<br>
+
+## API Reference for NyForm
+
+A widget that manages form state, validation, and submission in Nylo applications.
+
+## Constructor
+
+```dart
+NyForm({
+  Key? key,
+  required NyFormData form,
+  double crossAxisSpacing = 10,
+  double mainAxisSpacing = 10,
+  Map<String, dynamic>? initialData,
+  Function(String field, Map<String, dynamic> data)? onChanged,
+  bool validateOnFocusChange = false,
+  Widget? header,
+  Widget? footer,
+  Widget? loading,
+  bool locked = false,
+})
+```
+
+## Parameters
+
+### Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `form` | `NyFormData` | The form to display and manage. Contains field definitions and validation rules. |
+
+### Optional Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `key` | `Key?` | `null` | Controls how one widget replaces another widget in the tree. |
+| `crossAxisSpacing` | `double` | `10` | Spacing between fields in the cross axis direction. |
+| `mainAxisSpacing` | `double` | `10` | Spacing between fields in the main axis direction. |
+| `initialData` | `Map<String, dynamic>?` | `null` | Initial values for form fields. Keys should match field names. |
+| `onChanged` | `Function(String, Map<String, dynamic>)?` | `null` | Callback when any field value changes. Provides field name and complete form data. |
+| `validateOnFocusChange` | `bool` | `false` | Whether to validate fields when focus changes. |
+| `header` | `Widget?` | `null` | Widget to display above the form fields. |
+| `footer` | `Widget?` | `null` | Widget to display below the form fields. |
+| `loading` | `Widget?` | `null` | Widget to display while the form is loading. Defaults to a skeleton loader if not provided. |
+| `locked` | `bool` | `false` | When true, makes the form read-only and prevents user input. |
+
+## Example Usage
+
+```dart
+NyForm(
+  form: LoginForm(),
+  initialData: {
+    "email": "user@example.com",
+    "password": ""
+  },
+  header: Text("Login"),
+  footer: SubmitButton(),
+  onChanged: (field, data) {
+    print("Field $field changed. New data: $data");
+  },
+  validateOnFocusChange: true,
+  crossAxisSpacing: 16,
+  mainAxisSpacing: 20,
+)
+```
+
+## Notes
+
+- The form parameter automatically initializes with the provided `initialData` if any.
+- The `loading` widget is only shown when the form is in a loading state.
+- The `onChanged` callback provides both the changed field name and the complete form data.
+- When `locked` is true, the form becomes non-interactive but still displays values.
+- `header` and `footer` widgets are optional and will only be displayed if provided.

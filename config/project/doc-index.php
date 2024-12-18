@@ -270,6 +270,7 @@ return [
 
 			'advanced' => [
                 'state-management',
+				'push-notifications',
 				'providers',
 				'decoders',
 				'events',
