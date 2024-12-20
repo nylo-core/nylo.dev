@@ -133,7 +133,7 @@
             </div>
         </div>
         <div class="overflow-hidden">
-            <div class="max-w-8xl mx-auto bg-gray-50 dark:bg-slate-400/10">
+            <div class="max-w-8xl mx-auto bg-gray-50 dark:bg-slate-400/10 dark:bg-gray-800">
                 <div id="nav-controller"
                     class="hidden lg:block fixed z-20 inset-0 top-[0rem] sm:top-[3.8125rem] left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
                     <nav id="nav" class="lg:text-sm lg:leading-6 relative">
