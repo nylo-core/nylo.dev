@@ -101,31 +101,55 @@ In this file, you should have something similar to the below.
 // e.g Light Theme colors
 class LightThemeColors implements ColorStyles {
   // general
+  @override
   Color get background => const Color(0xFFFFFFFF);
-  Color get primaryContent => const Color(0xFF000000);
-  Color get primaryAccent => const Color(0xFF87c694);
 
+  @override
+  Color get content => const Color(0xFF000000);
+  @override
+  Color get primaryAccent => const Color(0xFF0045a0);
+
+  @override
   Color get surfaceBackground => Colors.white;
+  @override
   Color get surfaceContent => Colors.black;
 
   // app bar
+  @override
   Color get appBarBackground => Colors.blue;
+  @override
   Color get appBarPrimaryContent => Colors.white;
 
   // buttons
-  Color get buttonBackground => Colors.blueAccent;
-  Color get buttonPrimaryContent => Colors.white;
+  @override
+  Color get buttonBackground => Colors.blue;
+  @override
+  Color get buttonContent => Colors.white;
+
+  @override
+  Color get buttonSecondaryBackground => const Color(0xff151925);
+  @override
+  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
 
   // bottom tab bar
+  @override
   Color get bottomTabBarBackground => Colors.white;
 
   // bottom tab bar - icons
+  @override
   Color get bottomTabBarIconSelected => Colors.blue;
+  @override
   Color get bottomTabBarIconUnselected => Colors.black54;
 
   // bottom tab bar - label
+  @override
   Color get bottomTabBarLabelUnselected => Colors.black45;
+  @override
   Color get bottomTabBarLabelSelected => Colors.black;
+
+  // toast notification
+  @override
+  Color get toastNotificationBackground => Colors.white;
 }
 ```
 
@@ -145,7 +169,7 @@ ThemeColor.get(context).background
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeColor.get(context).primaryContent // Color - primary content
+      color:  ThemeColor.get(context).content // Color - content
   ),
 ),
 
@@ -154,7 +178,7 @@ Text(
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.primaryContent // Light theme colors - primary content
+      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
   ),
 ),
 ```
@@ -176,29 +200,54 @@ File `lib/resources/themes/styles/color_styles.dart`
 
 ``` dart
 abstract class ColorStyles {
+
   // general
+  @override
   Color get background;
-  Color get primaryContent;
+  @override
+  Color get content;
+  @override
   Color get primaryAccent;
 
+  @override
+  Color get surfaceBackground;
+  @override
+  Color get surfaceContent;
+
   // app bar
+  @override
   Color get appBarBackground;
+  @override
   Color get appBarPrimaryContent;
 
-  // buttons
+  @override
   Color get buttonBackground;
-  Color get buttonPrimaryContent;
+  @override
+  Color get buttonContent;
+
+  @override
+  Color get buttonSecondaryBackground;
+  @override
+  Color get buttonSecondaryContent;
 
   // bottom tab bar
+  @override
   Color get bottomTabBarBackground;
 
   // bottom tab bar - icons
+  @override
   Color get bottomTabBarIconSelected;
+  @override
   Color get bottomTabBarIconUnselected;
 
   // bottom tab bar - label
+  @override
   Color get bottomTabBarLabelUnselected;
+  @override
   Color get bottomTabBarLabelSelected;
+
+  // toast notification
+  Color get toastNotificationBackground;
 }
 ```
 
@@ -484,7 +533,7 @@ Text("Hello World").fontWeightLight()
 #### Set color
 
 ``` dart
-Text("Hello World").setColor(context, (color) => colors.primaryAccent)
+Text("Hello World").setColor(context, (color) => colors.content)
 // Color from your colorStyles
 ```
 
