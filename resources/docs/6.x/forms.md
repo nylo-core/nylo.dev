@@ -216,7 +216,7 @@ Nylo provides multiple ways to define fields, with the recommended approach usin
 ```dart
 // Recommended approach
 Field.text("Name"),
-Field.textarea("Description"),
+Field.textArea("Description"),
 Field.email("Email"),
 Field.capitalizeWords("Title"),
 Field.url("Website"),
