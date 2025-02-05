@@ -16,5 +16,9 @@ return [
     [
         'label' => 'Error Stack',
         'link' => 'error-stack'
+    ],
+    [
+        'label' => 'Scaffold UI',
+        'link' => 'scaffold-ui'
     ]
 ];

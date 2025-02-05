@@ -231,7 +231,8 @@ return [
         '6.x' => [
 			'introduction' => [
 				'what-is-nylo',
-				'requirements'
+				'requirements',
+				'contributions'
 			],
 
 			'getting-started' => [
