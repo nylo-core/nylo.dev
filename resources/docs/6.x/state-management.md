@@ -7,6 +7,7 @@
 - [When to Use State Management](#when-to-use-state-management "When to Use State Management")
 - [Lifecycle](#lifecycle "Lifecycle")
 - [Updating a State](#updating-a-state "Updating a State")
+- [Sending actions](#sending-state-actions "Sending actions")
 - [State Actions](#state-actions "State Actions")
 - [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
 
@@ -17,7 +18,11 @@
 
 In Nylo {{$version}}, you can build Widgets that use State Management.
 
-In this section, we will learn about the `NyState`, and `NyPage` class. We'll also dive into some examples.
+Nylo provides two classes for State Management:
+- `NyState` - This is used for building reusable widgets.
+- `NyPage` - This is used for building pages in your application.
+
+In this section you'll learn how to use State Management in your Nylo project.
 
 
 ### Let's first understand State Management
@@ -200,6 +205,146 @@ class HomeController extends Controller {
 ```
 
 You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
+
+<a name="sending-state-actions"></a>
+<br>
+
+## Sending State Actions
+
+In Nylo, you can send action events to your Widgets. 
+
+```
+// Send an action to the widget
+sendAction('hello_world_in_widget', state: MyWidget.state);
+
+// Another example
+sendAction('reset_data', state: HighScore.state);
+```
+
+In your widget, you need the following code to handle the action.
+
+``` dart
+...
+@override
+get stateActions => {
+  "hello_world_in_widget": () {
+    print('Hello world');
+  },
+  "reset_data": () async {
+    // Example
+    _textController.clear();
+    _myData = null;
+    setState(() {});
+  },
+};
+```
+
+This is useful when you want to update the state of a widget from another widget or class.
+
+### NyState - State Actions
+
+First, create your state managed widget.
+
+``` bash
+metro make:state_managed_widget my_widget
+```
+
+This will create a new state managed widget called `MyWidget` in the `lib/resources/widgets/` directory.
+
+If you open that file, you'll be able to define your state actions.
+
+``` dart
+class _MyWidgetState extends NyState<MyWidget> {
+...
+
+@override
+get stateActions => {
+  "print_hello_world": () {
+    print('Hello from the widget');
+  },
+  "reset_data": () {
+    // Example
+    _textController.clear();
+    _myData = null;
+    setState(() {});
+  },
+};
+```
+
+Finally, you can send the action from anywhere in your application.
+
+``` dart
+sendAction('print_hello_world', state: MyWidget.state);
+
+// prints 'Hello from the widget'
+
+sendAction('reset_data', state: MyWidget.state);
+
+// Reset data in widget
+```
+
+### NyPage - State Actions
+
+First, create your state managed page.
+
+``` bash
+metro make:page my_page
+```
+
+This will create a new state managed page called `MyPage` in the `lib/resources/pages/` directory.
+
+If you open that file, you'll be able to define your state actions.
+
+``` dart
+class _MyPageState extends NyPage<MyPage> {
+...
+
+@override
+bool get stateManaged => true;
+
+@override
+get stateActions => {
+  "test_page_action": () {
+    print('Hello from the page');
+  },
+  "reset_data": () {
+    // Example
+    _textController.clear();
+    _myData = null;
+    setState(() {});
+  },
+};
+```
+
+Finally, you can send the action from anywhere in your application.
+
+``` dart
+sendAction('test_page_action', state: MyPage.state);
+
+// prints 'Hello from the page'
+```
+
+You can also define your state actions using the `whenStateAction` method.
+
+``` dart
+@override
+stateUpdated(dynamic data) async {
+  super.stateUpdated(data);
+  ...
+  whenStateAction({
+    "reset_badge": () {
+      // Reset the badge count
+      _count = 0;
+    }
+  });
+}
+```
+
+Then you can send the action from anywhere in your application.
+
+``` dart
+sendAction('reset_badge', state: MyPage.state);
+```
 
 <a name="building-your-first-widget"></a>
 <br>
