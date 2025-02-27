@@ -15,9 +15,15 @@
   - [Date and Time Fields](#date-and-time-fields "Date and Time Fields")
   - [Password Fields](#password-fields "Password Fields")
   - [Masked Input Fields](#masked-input-fields "Masked Input Fields")
+  - [Checkbox Fields](#checkbox-fields "Checkbox Fields")
+  - [Picker Fields](#picker-fields "Picker Fields")
+  - [Radio Fields](#radio-fields "Radio Fields")
+  - [Chip Fields](#chip-fields "Chip Fields")
+  - [Switch Box Fields](#switch-box-fields "Switch Box Fields")
 - [Form Validation](#form-validation "Form Validation")
 - [Form Casts](#form-casts "Form Casts")
 - [Managing Form Data](#managing-form-data "Managing Form Data")
+- [Submit Button](#submit-button "Submit Button")
 - [Form Styling](#form-styling "Form Styling")
 - [Advanced Features](#advanced-features "Advanced Features")
   - [Form Layout](#form-layout "Form Layout")
@@ -248,6 +254,7 @@ Field("Price", cast: FormCast.currency("usd"))
 // Recommended approach
 Field.picker("Category", options: ["Electronics", "Clothing", "Books"]),
 Field.chips("Tags", options: ["Featured", "Sale", "New"]),
+Field.radio("Size", options: ["Small", "Medium", "Large"]),
 
 // Alternative approach
 Field("Category", 
@@ -317,6 +324,83 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field("Phone", 
   cast: FormCast.mask(mask: "(###) ###-####")
 )
+```
+
+<a name="checkbox-fields"></a>
+<br>
+
+### Checkbox Fields
+
+```dart
+// Recommended approach
+Field.checkbox("Accept Terms"),
+
+// Alternative approach
+Field("Accept Terms", cast: FormCast.checkbox())
+```
+
+<a name="picker-fields"></a>
+<br>
+
+### Picker Fields
+
+```dart
+// Recommended approach
+Field.picker("Category", options: ["Electronics", "Clothing", "Books"]),
+
+// Alternative approach
+Field("Category", 
+  cast: FormCast.picker(
+    options: ["Electronics", "Clothing", "Books"]
+  )
+)
+```
+
+<a name="radio-fields"></a>
+<br>
+
+### Radio Fields
+
+```dart
+// Recommended approach
+Field.radio("Size", options: ["Small", "Medium", "Large"]),
+
+// Alternative approach
+Field("Size", 
+  cast: FormCast.radio(
+    options: ["Small", "Medium", "Large"]
+  )
+)
+```
+
+<a name="chip-fields"></a>
+<br>
+
+### Chip Fields
+
+```dart
+// Recommended approach
+Field.chips("Tags", options: ["Featured", "Sale", "New"]),
+
+// Alternative approach
+Field("Tags", 
+  cast: FormCast.chips(
+    options: ["Featured", "Sale", "New"]
+  )
+)
+```
+
+<a name="switch-box-fields"></a>
+<br>
+
+### Switch Box Fields
+
+```dart
+// Recommended approach
+Field.switchBox("Enable Notifications"),
+
+// Alternative approach
+Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
 <a name="form-validation"></a>
@@ -540,6 +624,105 @@ form.clear();
 
 // Clear specific field
 form.clearField("name");
+```
+
+<a name="submit-button"></a>
+<br>
+
+## Submit Button
+
+In your Form class, you can define a submit button:
+
+```dart
+class UserInfoForm extends NyFormData {
+  UserInfoForm({String? name}) : super(name ?? "user_info");
+
+  @override
+  fields() => [
+        Field.text("First Name",
+            style: "compact"
+        ),
+        Field.text("Last Name",
+            style: "compact"
+        ),
+        Field.number("Phone Number",
+            style: "compact"
+        ),
+      ];
+  
+  @override
+  Widget? get submitButton => Button.primary(text: "Submit", 
+                submitForm: (this, (data) {
+                    printInfo(data);
+                }));
+}
+```
+
+The `Button` widget is a pre-built component that can be used to submit a form. 
+All you need to do is pass the `submitForm` parameter to the button.
+
+Out the box, Nylo provides 8 pre-built buttons that you can use to submit a form.
+- `Button.primary`
+- `Button.secondary`
+- `Button.outlined`
+- `Button.textOnly`
+- `Button.icon`
+- `Button.gradient`
+- `Button.rounded`
+
+If you want to use a different widget to submit the form, you can call the `submit` method on the form:
+
+```dart
+class UserInfoForm extends NyFormData {
+  UserInfoForm({String? name}) : super(name ?? "user_info");
+
+  @override
+  fields() => [
+        Field.text("First Name",
+            style: "compact"
+        ),
+        Field.text("Last Name",
+            style: "compact"
+        ),
+        Field.number("Phone Number",
+            style: "compact"
+        ),
+      ];
+  
+  @override
+  Widget? get submitButton => ElevatedButton(
+    onPressed: () {
+      submit(onSuccess: (data) {
+        printInfo(data);
+      });
+    },
+    child: Text("Submit"),
+  );
+}
+```
+
+Lastly, you can also add a submit button directly to the form widget:
+
+```dart
+NyForm(
+    form: form,
+    footer: Button.primary(text: "Submit", submitForm: (form, (data) {
+      printInfo(data);
+    })),
+)
+```
+
+Or with another widget:
+
+```dart
+NyForm(
+  form: form,
+  footer: MaterialButton(onPressed: () {
+    form.submit(onSuccess: (data) {
+      printInfo(data);
+    });
+  }, child: Text("Submit")),
+)
 ```
 
 <a name="form-styling"></a>

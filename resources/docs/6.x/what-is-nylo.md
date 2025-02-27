@@ -82,3 +82,4 @@ Here's a shout out to the contributors who have helped build {{ config('app.name
 - <a href="https://github.com/stensonb" target="_blank">stensonb</a>
 - <a href="https://github.com/ruwiss" target="_blank">ruwiss</a>
 - <a href="https://github.com/rytisder" target="_blank">rytisder</a>
+- <a href="https://github.com/israelins85" target="_blank">israelins85</a>

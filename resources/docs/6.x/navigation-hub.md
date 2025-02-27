@@ -8,7 +8,9 @@
   - [Bottom Navigation Bar](#bottom-navigation-bar "Bottom Navigation Bar")
   - [Top Navigation Bar](#bottom-navigation-bar "Bottom Navigation Bar")
 - [Navigating within a tab](#navigating-within-a-tab "Navigating within a tab")
-- [Adding Badges to Tabs](#adding-badges-to-tabs "Adding Badges to Tabs")
+- [Tabs](#tabs "Tabs")
+  - [Adding Badges to Tabs](#adding-badges-to-tabs "Adding Badges to Tabs")
+  - [Adding Alerts to Tabs](#adding-alerts-to-tabs "Adding Alerts to Tabs")
 - [Maintaining state](#maintaining-state "Maintaining state")
 - [State Actions](#state-actions "State Actions")
 - [Loading Style](#loading-style "Loading Style")
@@ -79,7 +81,7 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
         title: "Home",
         page: HomeTab(),
         icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home_filled),
+        activeIcon: Icon(Icons.home),
       ),
       1: NavigationTab(
          title: "Settings",
@@ -231,6 +233,45 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
+<a name="tabs"></a>
+<br>
+
+## Tabs
+
+Tabs are the main building blocks of a Navigation Hub.
+
+You can add tabs to a Navigation Hub by using the `NavigationTab` class.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    ... 
+    _MyNavigationHubState() : super(() async {
+        return {
+            0: NavigationTab(
+                title: "Home",
+                page: HomeTab(),
+                icon: Icon(Icons.home),
+                activeIcon: Icon(Icons.home),
+            ),
+            1: NavigationTab(
+                title: "Settings",
+                page: SettingsTab(),
+                icon: Icon(Icons.settings),
+                activeIcon: Icon(Icons.settings),
+            ),
+        };
+    });
+```
+
+In the above example, we've added two tabs to the Navigation Hub, Home and Settings.
+
+You can use different kinds of tabs like `NavigationTab`, `NavigationTab.badge`, and `NavigationTab.alert`.
+
+- The `NavigationTab.badge` class is used to add badges to tabs.
+- The `NavigationTab.alert` class is used to add alerts to tabs.
+- The `NavigationTab` class is used to add a normal tab.
 
 <a name="adding-badges-to-tabs"></a>
 <br>
@@ -309,6 +350,55 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
             ),
         };
     });
+```
+
+<a name="adding-alerts-to-tabs"></a>
+<br>
+
+## Adding Alerts to Tabs
+
+You can add alerts to your tabs.
+
+Sometime you might not want to show a badge count, but you want to show an alert to the user.
+
+To add an alert to a tab, you can use the `NavigationTab.alert` class.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    ... 
+    _MyNavigationHubState() : super(() async {
+        return {
+            0: NavigationTab.alert(
+                title: "Chats",
+                page: ChatTab(),
+                icon: Icon(Icons.message),
+                activeIcon: Icon(Icons.message),
+                alertColor: Colors.red,
+                alertEnabled: true,
+                rememberAlert: false,
+            ),
+            1: NavigationTab(
+                title: "Settings",
+                page: SettingsTab(),
+                icon: Icon(Icons.settings),
+                activeIcon: Icon(Icons.settings),
+            ),
+        };
+    });
+```
+
+This will add an alert to the Chat tab with a red color.
+
+You can also update the alert programmatically.
+
+``` dart
+/// Enable the alert
+BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
+
+/// Disable the alert
+BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
 <a name="maintaining-state"></a>
@@ -421,7 +511,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
           title: "Home",
           page: HomeTab(),
           icon: Icon(Icons.home),
-          activeIcon: Icon(Icons.home_filled),
+          activeIcon: Icon(Icons.home),
         ),
         1: NavigationTab(
           title: "Settings",
