@@ -215,10 +215,10 @@ In Nylo, you can send action events to your Widgets.
 
 ```
 // Send an action to the widget
-sendAction('hello_world_in_widget', state: MyWidget.state);
+stateAction('hello_world_in_widget', state: MyWidget.state);
 
 // Another example
-sendAction('reset_data', state: HighScore.state);
+stateAction('reset_data', state: HighScore.state);
 ```
 
 In your widget, you need the following code to handle the action.
@@ -274,11 +274,11 @@ get stateActions => {
 Finally, you can send the action from anywhere in your application.
 
 ``` dart
-sendAction('print_hello_world', state: MyWidget.state);
+stateAction('print_hello_world', state: MyWidget.state);
 
 // prints 'Hello from the widget'
 
-sendAction('reset_data', state: MyWidget.state);
+stateAction('reset_data', state: MyWidget.state);
 
 // Reset data in widget
 ```
@@ -319,7 +319,7 @@ get stateActions => {
 Finally, you can send the action from anywhere in your application.
 
 ``` dart
-sendAction('test_page_action', state: MyPage.state);
+stateAction('test_page_action', state: MyPage.state);
 
 // prints 'Hello from the page'
 ```
@@ -343,7 +343,7 @@ stateUpdated(dynamic data) async {
 Then you can send the action from anywhere in your application.
 
 ``` dart
-sendAction('reset_badge', state: MyPage.state);
+stateAction('reset_badge', state: MyPage.state);
 ```
 
 <a name="building-your-first-widget"></a>
