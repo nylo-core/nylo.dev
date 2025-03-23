@@ -9,6 +9,7 @@
 - [App icon filename](#app-icon-filenames "App icon filenames")
 - [App icon filetype](#app-icon-filetype "App icon filetype")
 - [Configuration](#configuration "Configuration for app icons")
+- [Badge Count](#badge-count "Badge Count")
 
 <a name="introduction"></a>
 <br>
@@ -90,3 +91,24 @@ You can also modify the settings when generating your app icons.
 Inside the `pubspec.yaml` file, look for the `flutter_icons` section, and here you can make changes to the configuration.
 
 Check out the official <a href="https://pub.dev/packages/flutter_launcher_icons" target="_BLANK">flutter_launcher_icons</a> library to see what's possible.
+
+<a name="badge-count"></a>
+<br>
+
+## Badge Count
+
+You can also add a badge count to your app icon. This is the little red circle with a number in it that appears on the app icon.
+
+To set the badge count, use the below code snippet.
+
+``` dart
+setBadgeNumber(5);
+``` 
+
+This will set the badge count to 5.
+
+To remove the badge count, use the below code snippet.
+
+``` dart
+clearBadgeNumber();
+```

@@ -437,25 +437,66 @@ appRouter() => nyRoutes((router) {
 
   // bottomToTop
   router.add(SettingsPage.path,
-    transition: PageTransitionType.bottomToTop
+    transitionType: TransitionType.bottomToTop()
   );
 
   // fade
   router.add(HomePage.path,
-    transition: PageTransitionType.fade
+    transitionType: TransitionType.fade()
   );
 
 });
 ```
 
-Available transitions:
-- PageTransitionType.fade
-- PageTransitionType.rightToLeft
-- PageTransitionType.leftToRight
-- PageTransitionType.topToBottom
-- PageTransitionType.bottomToTop
+### Available Page Transitions
 
-You can also apply a transition when navigating to a new page in your project.
+#### Basic Transitions
+- **`TransitionType.fade()`** - Fades the new page in while fading the old page out
+- **`TransitionType.theme()`** - Uses the app theme's page transitions theme
+
+#### Directional Slide Transitions
+- **`TransitionType.rightToLeft()`** - Slides from right edge of screen
+- **`TransitionType.leftToRight()`** - Slides from left edge of screen
+- **`TransitionType.topToBottom()`** - Slides from top edge of screen
+- **`TransitionType.bottomToTop()`** - Slides from bottom edge of screen
+
+#### Slide with Fade Transitions
+- **`TransitionType.rightToLeftWithFade()`** - Slides and fades from right edge
+- **`TransitionType.leftToRightWithFade()`** - Slides and fades from left edge
+
+#### Transform Transitions
+- **`TransitionType.scale(alignment: ...)`** - Scales from specified alignment point
+- **`TransitionType.rotate(alignment: ...)`** - Rotates around specified alignment point
+- **`TransitionType.size(alignment: ...)`** - Grows from specified alignment point
+
+#### Joined Transitions (Requires current widget)
+- **`TransitionType.leftToRightJoined(childCurrent: ...)`** - Current page exits right while new page enters from left
+- **`TransitionType.rightToLeftJoined(childCurrent: ...)`** - Current page exits left while new page enters from right
+- **`TransitionType.topToBottomJoined(childCurrent: ...)`** - Current page exits down while new page enters from top
+- **`TransitionType.bottomToTopJoined(childCurrent: ...)`** - Current page exits up while new page enters from bottom
+
+#### Pop Transitions (Requires current widget)
+- **`TransitionType.leftToRightPop(childCurrent: ...)`** - Current page exits to right, new page stays in place
+- **`TransitionType.rightToLeftPop(childCurrent: ...)`** - Current page exits to left, new page stays in place
+- **`TransitionType.topToBottomPop(childCurrent: ...)`** - Current page exits down, new page stays in place
+- **`TransitionType.bottomToTopPop(childCurrent: ...)`** - Current page exits up, new page stays in place
+
+#### Material Design Shared Axis Transitions
+- **`TransitionType.sharedAxisHorizontal()`** - Horizontal slide and fade transition
+- **`TransitionType.sharedAxisVertical()`** - Vertical slide and fade transition
+- **`TransitionType.sharedAxisScale()`** - Scale and fade transition
+
+#### Customization Parameters
+Each transition accepts the following optional parameters:
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `curve` | Animation curve | Platform-specific curves |
+| `duration` | Animation duration | Platform-specific durations |
+| `reverseDuration` | Reverse animation duration | Same as duration |
+| `fullscreenDialog` | Whether the route is a fullscreen dialog | `false` |
+| `opaque` | Whether the route is opaque | `false` |
+
 
 ``` dart
 // Home page widget
