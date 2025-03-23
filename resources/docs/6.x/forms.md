@@ -23,6 +23,7 @@
 - [Form Validation](#form-validation "Form Validation")
 - [Form Casts](#form-casts "Form Casts")
 - [Managing Form Data](#managing-form-data "Managing Form Data")
+  - [Initializing Data](#initializing-data "Initializing Data")
 - [Submit Button](#submit-button "Submit Button")
 - [Form Styling](#form-styling "Form Styling")
 - [Advanced Features](#advanced-features "Advanced Features")
@@ -581,16 +582,21 @@ final Map<String, dynamic> formCasts = {
 
 ## Managing Form Data
 
+In this section, we'll cover how to manage form data in Nylo. Everything from setting initial data to updating and clearing form fields.
+
+<a name="initializing-data"></a>
+<br>
+
 ### Setting Initial Data
 ```dart
 NyForm(
   form: form,
   loadData: () async {
-    // final userData = api<ApiService>
-    ;
+    final userData = await api<ApiService>((request) => request.getUserData());
+    
     return {
-      "name": "John Doe",
-      "email": "john@example.com"
+      "name": userData?.name,
+      "email": userData?.email
     };
   }
 )
@@ -603,6 +609,32 @@ NyForm(
     "email": "john@example.com"
   }
 )
+```
+
+You can also set initial data directly in the form class:
+
+```dart
+class EditAccountForm extends NyFormData {
+  EditAccountForm({String? name}) : super(name ?? "edit_account");
+
+  @override
+  get init => () async {
+    final userResource = await api<ApiService>((request) => request.getUserData());
+
+    return {
+      "first_name": userResource?.firstName,
+      "last_name": userResource?.lastName,
+      "phone_number": userResource?.phoneNumber,
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("First Name"),
+    Field.text("Last Name"),
+    Field.number("Phone Number"),
+  ];
+}
 ```
 
 ### Updating Data
