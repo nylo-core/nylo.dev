@@ -18,16 +18,24 @@ class RegisterForm extends NyFormData {
     // Add your fields here
     @override
     fields() => [
-        Field.capitalizeWords("Name",
+        Field.capitalizeWords("name",
+            label: "Name",
             validator: FormValidator.notEmpty(),
         ),
-        Field.email("Email",
+        Field.email("email_address",
+            label: "Email",
             validator: FormValidator.email()
         ),
-        Field.password("Password",
+        Field.password("password",
+            label: "Password",
             validator: FormValidator.password(),
         ),
     ];
+
+    @override
+    Widget? get submitButton => Button.primary(text: "Submit", submitForm: (this, (data) {
+     print(["formData", data]);
+   }));
 }
 </x-code-highlighter>
 
@@ -40,12 +48,19 @@ AdvertForm form = AdvertForm();
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    body: NyForm.list(form, children: [
-        Button.primary("Submit", submitForm: (form, (data) {
-            // Handle your form data here
-            printInfo(data);
-        }))
-    ])
+    body: NyForm(form: form),
+  );
+}
+
+// or like this
+AdvertForm form = AdvertForm();
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: NyForm(form: form, footer: Button.primary(text: "Submit", submitForm: (form, data) {
+      print(["formData", data]);
+    })),
   );
 }
 </x-code-highlighter>

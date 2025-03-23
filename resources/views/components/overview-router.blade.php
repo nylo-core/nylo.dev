@@ -6,7 +6,8 @@ appRouter() => nyRoutes((router) {
 
     router.add(DiscoverPage.path);
 
-    router.add(LoginPage.path);
+    router.add(LoginPage.path, 
+        transitionType: TransitionType.bottomToTop());
 
     router.add(ProfilePage.path,
         routeGuard: [
