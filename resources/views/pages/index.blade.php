@@ -221,7 +221,7 @@ metro make:stateful_widget FavouriteWidget
 class ApiService extends NyApiService {
 
     @override
-    String get baseUrl => "api.example.com/v1";
+    String get baseUrl => "https://api.example.com/v1";
 
     Future<List<Post>> posts() async {
         return await network(
