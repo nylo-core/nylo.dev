@@ -1074,7 +1074,7 @@ addPackage('firebase_core', version: '^2.4.0');
 addPackage('build_runner', dev: true);
 
 // Add multiple packages at once
-addPackages(['firebase_auth', 'firebase_storage']);
+addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
 <div id="custom-command-helper-formatting"></div>
