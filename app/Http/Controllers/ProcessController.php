@@ -16,6 +16,7 @@ class ProcessController extends Controller
      */
     public function siteUpdate(Request $request)
     {
+        $gitReset = Process::run(['git', 'reset', '--hard']);
         $processGitPull = Process::run(['git', 'pull']);
         $exitCodeMigrate = Artisan::call('migrate', ['--force' => true]);
         $exitCodeOptimize = Artisan::call('optimize');
