@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
   - [How it works](#how-it-works "How it works")
-- [Quick Start](#quick-start "Quick Start")
 - [Creating Forms](#creating-forms "Creating forms")
 - [Field Types](#field-types "Field Types")
   - [Text Fields](#text-fields "Text Fields")
@@ -33,7 +32,7 @@
 - [Pre-built Components](#pre-built-components "Pre-built Components")
 - [API Reference for NyForm](#ny-form-api-reference "API Reference for NyForm")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -47,7 +46,7 @@ Nylo's form system provides:
 - Data handling utilities
 
 
-<a name="how-it-works"></a>
+<div id="how-it-works"></div>
 <br>
 
 #### Creating a form
@@ -173,7 +172,7 @@ That's a quick overview of how to create, display and submit a form in Nylo.
 
 This is just scratching the surface, you can customize your forms even further by adding casts, validation rules, dummy data and global styles.
 
-<a name="creating-forms"></a>
+<div id="creating-forms"></div>
 <br>
 
 ## Creating Forms
@@ -209,14 +208,14 @@ class ProductForm extends NyFormData {
 }
 ```
 
-<a name="field-types"></a>
+<div id="field-types"></div>
 <br>
 
 ## Field Types
 
 Nylo provides multiple ways to define fields, with the recommended approach using static methods for cleaner syntax:
 
-<a name="text-fields"></a>
+<div id="text-fields"></div>
 <br>
 
 ### Text Fields
@@ -233,7 +232,7 @@ Field("Name", cast: FormCast.text()),
 Field("Description", cast: FormCast.textArea())
 ```
 
-<a name="numeric-fields"></a>
+<div id="numeric-fields"></div>
 <br>
 
 ### Numeric Fields
@@ -247,7 +246,7 @@ Field.decimal("Score"),
 Field("Age", cast: FormCast.number()),
 Field("Price", cast: FormCast.currency("usd"))
 ```
-<a name="selection-fields"></a>
+<div id="selection-fields"></div>
 <br>
 
 ### Selection Fields
@@ -265,7 +264,7 @@ Field("Category",
 )
 ```
 
-<a name="boolean-fields"></a>
+<div id="boolean-fields"></div>
 <br>
 
 ### Boolean Fields
@@ -279,7 +278,7 @@ Field("Accept Terms", cast: FormCast.checkbox()),
 Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
-<a name="date-and-time-fields"></a>
+<div id="date-and-time-fields"></div>
 <br>
 
 ### Date and Time Fields
@@ -300,7 +299,7 @@ Field("Birth Date",
 )
 ```
 
-<a name="password-fields"></a>
+<div id="password-fields"></div>
 <br>
 
 ### Password Fields
@@ -312,7 +311,7 @@ Field.password("Password", viewable: true)
 Field("Password", cast: FormCast.password(viewable: true))
 ```
 
-<a name="masked-input-fields"></a>
+<div id="masked-input-fields"></div>
 <br>
 
 ### Masked Input Fields
@@ -327,7 +326,7 @@ Field("Phone",
 )
 ```
 
-<a name="checkbox-fields"></a>
+<div id="checkbox-fields"></div>
 <br>
 
 ### Checkbox Fields
@@ -340,7 +339,7 @@ Field.checkbox("Accept Terms"),
 Field("Accept Terms", cast: FormCast.checkbox())
 ```
 
-<a name="picker-fields"></a>
+<div id="picker-fields"></div>
 <br>
 
 ### Picker Fields
@@ -357,7 +356,7 @@ Field("Category",
 )
 ```
 
-<a name="radio-fields"></a>
+<div id="radio-fields"></div>
 <br>
 
 ### Radio Fields
@@ -374,7 +373,7 @@ Field("Size",
 )
 ```
 
-<a name="chip-fields"></a>
+<div id="chip-fields"></div>
 <br>
 
 ### Chip Fields
@@ -391,7 +390,7 @@ Field("Tags",
 )
 ```
 
-<a name="switch-box-fields"></a>
+<div id="switch-box-fields"></div>
 <br>
 
 ### Switch Box Fields
@@ -404,7 +403,7 @@ Field.switchBox("Enable Notifications"),
 Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
-<a name="form-validation"></a>
+<div id="form-validation"></div>
 <br>
 
 ## Form Validation
@@ -538,7 +537,7 @@ Field.text("Username",
 | `dateAgeIsYounger(age)` | Age younger than specified |
 | `dateAgeIsOlder(age)` | Age older than specified |
 
-<a name="form-casts"></a>
+<div id="form-casts"></div>
 <br>
 
 ## Form Casts
@@ -577,14 +576,14 @@ final Map<String, dynamic> formCasts = {
 };
 ```
 
-<a name="managing-form-data"></a>
+<div id="managing-form-data"></div>
 <br>
 
 ## Managing Form Data
 
 In this section, we'll cover how to manage form data in Nylo. Everything from setting initial data to updating and clearing form fields.
 
-<a name="initializing-data"></a>
+<div id="initializing-data"></div>
 <br>
 
 ### Setting Initial Data
@@ -658,7 +657,7 @@ form.clear();
 form.clearField("name");
 ```
 
-<a name="submit-button"></a>
+<div id="submit-button"></div>
 <br>
 
 ## Submit Button
@@ -757,7 +756,7 @@ NyForm(
 )
 ```
 
-<a name="form-styling"></a>
+<div id="form-styling"></div>
 <br>
 
 ## Form Styling
@@ -842,12 +841,12 @@ Field.text("Name",
 )
 ```
 
-<a name="advanced-features"></a>
+<div id="advanced-features"></div>
 <br>
 
 ## Advanced Features
 
-<a name="form-layout"></a>
+<div id="form-layout"></div>
 <br>
 
 ### Form Layout
@@ -867,7 +866,7 @@ fields() => [
 ];
 ```
 
-<a name="conditional-fields"></a>
+<div id="conditional-fields"></div>
 <br>
 
 ### Conditional Fields
@@ -883,7 +882,7 @@ Field.checkbox("Has Pets",
 )
 ```
 
-<a name="form-events"></a>
+<div id="form-events"></div>
 <br>
 
 ### Form Events
@@ -897,7 +896,7 @@ NyForm(
 )
 ```
 
-<a name="pre-built-components"></a>
+<div id="pre-built-components"></div>
 <br>
 
 ## Pre-built Components
@@ -911,7 +910,7 @@ NyLoginForm loginForm = Forms.login(
 );
 ```
 
-<a name="ny-form-api-reference"></a>
+<div id="ny-form-api-reference"></div>
 <br>
 
 ## API Reference for NyForm

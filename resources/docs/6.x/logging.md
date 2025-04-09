@@ -8,7 +8,7 @@
 - [Helpers](#helpers "Helpers")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -81,7 +81,7 @@ printInfo(country); // UK
 printDebug(favouriteCountries); // Will not print
 ```
 
-<a name="log-levels"></a>
+<div id="log-levels"></div>
 <br>
 
 ## Log Levels
@@ -93,7 +93,7 @@ You can use the following log levels:
 - [error] - `printError(dynamic message)`
 
 
-<a name="helpers"></a>
+<div id="helpers"></div>
 <br>
 
 ## Helpers

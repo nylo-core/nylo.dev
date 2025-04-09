@@ -15,7 +15,7 @@ You can understand all the changes by clicking the below link.
 
 <a name="View 4.x changes" href="https://github.com/nylo-core/nylo/compare/4.x...5.x#diff" target="_BLANK">View changes</a>
 
-<a name="how-to-upgrade"></a>
+<div id="how-to-upgrade"></div>
 <br>
 ## How to upgrade
 

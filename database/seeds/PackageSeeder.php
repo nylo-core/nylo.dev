@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Package;
+use Illuminate\Database\Seeder;
 
 class PackageSeeder extends Seeder
 {
@@ -20,7 +20,7 @@ class PackageSeeder extends Seeder
                 'repository' => $repository,
                 'organization' => $organization,
                 'version' => '1.0.0',
-                'site' => 'github'
+                'site' => 'github',
             ])->create();
         }
     }

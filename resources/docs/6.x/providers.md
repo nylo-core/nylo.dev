@@ -8,7 +8,7 @@
 - [Provider object](#provider-object "Provider object")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction to Providers
@@ -48,7 +48,7 @@ void main() async {
 E.g. Backpack.instance.read('nylo'); // {{ config('app.name') }} instance
 
 
-<a name="create-a-provider"></a>
+<div id="create-a-provider"></div>
 <br>
 
 ## Create a new Provider
@@ -59,7 +59,7 @@ You can create new providers by running the below command in the terminal.
 dart run nylo_framework:main make:provider cache_provider
 ```
 
-<a name="provider-object"></a>
+<div id="provider-object"></div>
 <br>
 
 ## Provider Object

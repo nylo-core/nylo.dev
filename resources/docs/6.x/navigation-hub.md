@@ -16,7 +16,7 @@
 - [Loading Style](#loading-style "Loading Style")
 - [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -30,7 +30,7 @@ You can use a Navigation Hub to build this.
 
 Let's dive into how you can use a Navigation Hub in your app.
 
-<a name="basic-usage"></a>
+<div id="basic-usage"></div>
 <br>
 
 ## Basic Usage
@@ -115,7 +115,7 @@ routeTo(BaseNavigationHub.path);
 
 There's a lot **more** you can do with a Navigation Hub, let's dive into some of the features.
 
-<a name="bottom-navigation-bar"></a>
+<div id="bottom-navigation-bar"></div>
 <br>
 
 ### Bottom Navigation Bar
@@ -153,7 +153,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-<a name="top-navigation-bar"></a>
+<div id="top-navigation-bar"></div>
 <br>
 
 ### Top Navigation Bar
@@ -202,7 +202,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
         // overlayColorState: Colors.transparent,
     );
 ```
-<a name="navigating-within-a-tab"></a>
+<div id="navigating-within-a-tab"></div>
 <br>
 
 ## Navigating to widgets within a tab
@@ -233,7 +233,7 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
-<a name="tabs"></a>
+<div id="tabs"></div>
 <br>
 
 ## Tabs
@@ -273,7 +273,7 @@ You can use different kinds of tabs like `NavigationTab`, `NavigationTab.badge`,
 - The `NavigationTab.alert` class is used to add alerts to tabs.
 - The `NavigationTab` class is used to add a normal tab.
 
-<a name="adding-badges-to-tabs"></a>
+<div id="adding-badges-to-tabs"></div>
 <br>
 
 ## Adding Badges to Tabs
@@ -352,7 +352,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     });
 ```
 
-<a name="adding-alerts-to-tabs"></a>
+<div id="adding-alerts-to-tabs"></div>
 <br>
 
 ## Adding Alerts to Tabs
@@ -401,7 +401,7 @@ BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
-<a name="maintaining-state"></a>
+<div id="maintaining-state"></div>
 <br>
 
 ## Maintaining state
@@ -421,7 +421,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 }
 ```
 
-<a name="state-actions"></a>
+<div id="state-actions"></div>
 <br>
 
 ## State Actions
@@ -456,7 +456,7 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 MyNavigationHub.stateActions.resetTabState(tab: 0);
 ```
 
-<a name="loading-style"></a>
+<div id="loading-style"></div>
 <br>
 
 ## Loading Style
@@ -532,7 +532,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 }
 ```
 
-<a name="creating-a-navigation-hub"></a>
+<div id="creating-a-navigation-hub"></div>
 <br>
 
 ## Creating a Navigation Hub

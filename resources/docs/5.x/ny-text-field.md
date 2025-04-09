@@ -9,7 +9,7 @@
 - [Faking data](#faking-data "Faking data")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction to NyTextField
@@ -22,7 +22,7 @@ It provides the additional features:
 
 The NyTextField widget behaves like the TextField, but it features the above additional utilities to make handing text fields easier.
 
-<a name="validation"></a>
+<div id="validation"></div>
 <br>
 
 ## Validation
@@ -50,7 +50,7 @@ Widget build(BuildContext context) {
 You can pass your validation rules into the `validationRules` parameter.
 See all the available validation rules [here](/docs/5.x/validation#custom-validation-rules).
 
-<a name="validation-error-message"></a>
+<div id="validation-error-message"></div>
 <br>
 
 ### Validation Error Messages
@@ -77,7 +77,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-<a name="faking-data"></a>
+<div id="faking-data"></div>
 <br>
 
 ## Faking data

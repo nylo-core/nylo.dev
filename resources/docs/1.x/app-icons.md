@@ -11,7 +11,7 @@
 - [Configuration](#configuration "Configuration for app icons")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -23,7 +23,7 @@ If you have custom icons for different operating systems you can also just add t
 
 Nylo uses the [flutter\_launcher\_icons](https://pub.dev/packages/flutter_launcher_icons) library to build these icons, to understand the library more you can check out their documentation too.
 
-<a name="generating-app-icons"></a>
+<div id="generating-app-icons"></div>
 <br>
 
 ## Generating app icons
@@ -40,7 +40,7 @@ This command will use the app icon located in your `/public/assets/app_icon`  di
 
 ---
 
-<a name="adding-your-app-icon"></a>
+<div id="adding-your-app-icon"></div>
 <br>
 
 ## Adding your app icon
@@ -55,7 +55,7 @@ Open your pubspec.yaml file and look for **image\_path** section, this is where 
 
 ---
 
-<a name="app-icon-filenames"></a>
+<div id="app-icon-filenames"></div>
 <br>
 
 ## App icon filenames
@@ -64,7 +64,7 @@ Your filenames shouldn’t include and special characters, it’s best to keep i
 
 ---
 
-<a name="app-icon-filetype"></a>
+<div id="app-icon-filetype"></div>
 <br>
 
 ## App icon filetypes
@@ -86,7 +86,7 @@ If you are interested in learning more, you can view the official guidelines fro
 
 ---
 
-<a name="configuration"></a>
+<div id="configuration"></div>
 <br>
 
 ## Configuration

@@ -7,21 +7,15 @@ use Cache;
 
 /**
  * Class PackageService
- *
- * @package App\Http\Services\PackageService
  */
 class PackageService
 {
-
     /**
      * PackageService constructor
      *
      * @return void
      */
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     /**
      * Get the resource meta data.
@@ -40,7 +34,7 @@ class PackageService
                     'version' => $package->version,
                     'organization' => $package->organization,
                     'release_note_url' => $this->releaseNoteUrl($package),
-                    'repository_url' => $this->repositoryUrl($package)
+                    'repository_url' => $this->repositoryUrl($package),
                 ];
             }
 
@@ -50,36 +44,24 @@ class PackageService
 
     /**
      * Get the repository url
-     *
-     * @param Package $package
-     *
-     * @return string
      */
-    public function repositoryUrl(Package $package) : string
+    public function repositoryUrl(Package $package): string
     {
         return "https://github.com/{$package->organization}/{$package->repository}";
     }
 
     /**
      * Get the Pub dev url
-     *
-     * @param Package $package
-     *
-     * @return string
      */
-    public function pubDevUrl(Package $package) : string
+    public function pubDevUrl(Package $package): string
     {
         return "https://pub.dev/packages/{$package->repository}";
     }
 
     /**
      * Get the release note url
-     *
-     * @param Package $package
-     *
-     * @return string
      */
-    public function releaseNoteUrl(Package $package) : string
+    public function releaseNoteUrl(Package $package): string
     {
         return "https://github.com/{$package->organization}/{$package->repository}/releases/tag/v{$package->version}";
     }
@@ -87,18 +69,17 @@ class PackageService
     /**
      * Update the package version
      *
-     * @param string $repository
-     * @param string $version
-     *
+     * @param  string  $repository
+     * @param  string  $version
      * @return mixed
      */
     public function updateVersion($repository, $version)
     {
         $versionNumber = $this->cleanVersion($version);
         $package = Package::where('repository', $repository)
-                        ->update([
-                            'version' => $versionNumber
-                        ]);
+            ->update([
+                'version' => $versionNumber,
+            ]);
 
         // clear cache
         Cache::forget('package-resource-md');
@@ -109,12 +90,11 @@ class PackageService
     /**
      * Clean the version tag e.g. 1.0.0
      *
-     * @param string $version
-     *
+     * @param  string  $version
      * @return string
      */
     private function cleanVersion($version)
     {
-        return str_replace("v", "", $version);
+        return str_replace('v', '', $version);
     }
 }

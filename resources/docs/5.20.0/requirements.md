@@ -6,7 +6,7 @@
 - [Installing Flutter](#installing-flutter "Installing Flutter")
 - [Set up an editor](#set-up-an-editor "Set up an editor")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Installing Flutter
 
@@ -32,7 +32,7 @@ flutter upgrade
 flutter doctor -v
 ```
 
-<a name="set-up-an-editor"></a>
+<div id="set-up-an-editor"></div>
 <br>
 
 ## Set up an editor

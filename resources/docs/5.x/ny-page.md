@@ -17,7 +17,7 @@
     - [Validation](#validation "Validation")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -79,7 +79,7 @@ Here are some important things to note:
 
 Continue reading to learn more about `NyPage`
 
-<a name="creating-a-new-page"></a>
+<div id="creating-a-new-page"></div>
 <br>
 
 ## Creating a new page
@@ -123,7 +123,7 @@ class SettingsPage extends NyPage {
 }
 ```
 
-<a name="using-controllers"></a>
+<div id="using-controllers"></div>
 <br>
 
 ## Using Controllers
@@ -215,7 +215,7 @@ class DashboardPage extends NyPage<DashboardController> {
 You can learn more about controllers [here](/docs/{{$version}}/controllers)
 
 
-<a name="how-to-use-nypage"></a>
+<div id="how-to-use-nypage"></div>
 <br>
 
 ## How to use NyPage
@@ -229,7 +229,7 @@ Flutter apps often need to load data from an API, pass data from one page to ano
 When using `NyPage` we'll show how you can handle some of these scenarios.
 
 
-<a name="initializing-data"></a>
+<div id="initializing-data"></div>
 <br>
 
 ### Initializing Data
@@ -285,7 +285,7 @@ class DashboardPage extends NyPage<DashboardController> {
 }
 ```
 
-<a name="loading-data-from-an-api"></a>
+<div id="loading-data-from-an-api"></div>
 <br>
 
 ### Loading Data from an API
@@ -378,7 +378,7 @@ You can override it to customize the look for the loading state.
 Learn more about networking [here](/docs/{{$version}}/networking).
 
 
-<a name="passing-data-to-different-pages"></a>
+<div id="passing-data-to-different-pages"></div>
 <br>
 
 ## Passing Data to Different Pages
@@ -458,7 +458,7 @@ class ProfilePage extends NyPage {
 }
 ```
 
-<a name="helpers"></a>
+<div id="helpers"></div>
 <br>
 
 ## Helpers
@@ -474,7 +474,7 @@ The helpers are:
 
 You can call these helpers in your `NyPage`, let's take a look at some examples.
 
-<a name="refresh-page"></a>
+<div id="refresh-page"></div>
 <br>
 
 ### Refresh Page
@@ -563,7 +563,7 @@ class DashboardPage extends NyPage<DashboardController> {
 }
 ```
 
-<a name="showing-toast-notifications"></a>
+<div id="showing-toast-notifications"></div>
 <br>
 
 ### Showing Toast Notifications
@@ -576,7 +576,7 @@ You can show toast notifications by calling one of the following:
 
 If you want to customize the look of notifications, check out the **resources/widgets/toast_notification_widget.dart** file.
 
-<a name="change-language"></a>
+<div id="change-language"></div>
 <br>
 
 ### Change Language
@@ -589,7 +589,7 @@ changeLanguage("es"); // switch to Spanish locale
 
 Read the docs on localization [here](/docs/{{$version}}/localization) to understand more.
 
-<a name="validation"></a>
+<div id="validation"></div>
 <br>
 
 ### Validation

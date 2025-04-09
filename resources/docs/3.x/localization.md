@@ -12,7 +12,7 @@
   - [Setting a default locale](#setting-a-default-locale "Settings a default locale")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -63,7 +63,7 @@ Here's an example.
 }
 ```
 
-<a name="adding-localised-files"></a>
+<div id="adding-localised-files"></div>
 <br>
 
 ## Adding Localized files
@@ -100,7 +100,7 @@ Go to your **pubspec.yaml** file and then at the `assets` section, add the new f
 > You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
 
 
-<a name="localizing-text"></a>
+<div id="localizing-text"></div>
 <br>
 
 ## Localizing text
@@ -141,7 +141,7 @@ You can also use nested keys in the json file. Here's an example below.
 trans("intros.hello");
 ```
 
-<a name="arguments"></a>
+<div id="arguments"></div>
 <br>
 
 ### Arguments
@@ -175,7 +175,7 @@ Example to fill arguments in your JSON file.
 trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Anthony
 ```
 
-<a name="updating-the-locale"></a>
+<div id="updating-the-locale"></div>
 <br>
 
 ## Updating the locale
@@ -209,7 +209,7 @@ This is useful if you need to provide users with a menu to select a language to 
 E.g. if they navigated to a settings screen with language flags and selected Spanish. 
 
 
-<a name="setting-a-default-locale"></a>
+<div id="setting-a-default-locale"></div>
 <br>
 
 ## Setting a default locale

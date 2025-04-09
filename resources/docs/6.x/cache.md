@@ -14,8 +14,9 @@
 - API Methods
     - [Methods](#methods "Methods")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Introduction
 
 Nylo provides a flexible cache driver out the box. You can store and retrieve items on the fly.
@@ -25,7 +26,7 @@ Caching is most useful when you need to store data that is expensive to generate
 In this section we'll dive into the basics of caching in Nylo.
 
 
-<a name="save-data-with-expiration-time"></a>
+<div id="save-data-with-expiration-time"></div>
 <br>
 
 ## Save Data with Expiration Time
@@ -50,7 +51,7 @@ printInfo(val); // Hello World
 
 In the example above, the `saveRemember` method will store the value "Hello World" in the cache under the key "hello_world" for 60 seconds. If the key already exists in the cache, the method will return the value stored in the cache.
 
-<a name="save-data-forever"></a>
+<div id="save-data-forever"></div>
 <br>
 
 ## Save Data Forever
@@ -75,7 +76,7 @@ printInfo(val); // Hello World
 In the example above, the `saveForever` method will store the value "Hello World" in the cache under the key "hello_world" indefinitely. If the key already exists in the cache, the method will return the value stored in the cache.
 
 
-<a name="retrieve-data"></a>
+<div id="retrieve-data"></div>
 <br>
 
 ## Retrieve Data
@@ -95,7 +96,7 @@ printInfo(val); // Hello World
 
 In the example above, the `get` method will return the value stored in the cache under the key "hello_world".
 
-<a name="remove-data"></a>
+<div id="remove-data"></div>
 <br>
 
 ## Remove Data
@@ -113,7 +114,7 @@ await cache().forget(key);
 
 In the example above, the `forget` method will remove the item stored in the cache under the key "hello_world".
 
-<a name="caching-api-responses"></a>
+<div id="caching-api-responses"></div>
 <br>
 
 ## Caching API Responses
@@ -169,7 +170,7 @@ printInfo(githubResponse);
 
 In the example above, the `githubInfo` method will fetch the user profile of the `nylo-core` user from the GitHub API. The response will be cached for 1 hour under the key `github_nylo_info`.
 
-<a name="methods"></a>
+<div id="methods"></div>
 <br>
 
 ## API Methods and Properties
@@ -185,5 +186,3 @@ In the example above, the `githubInfo` method will fetch the user profile of the
 - `has(String key)`: Check if an item exists in the cache.
 - `put(String key, dynamic value, int seconds)`: Store an item in the cache with an expiration time.
 - `size()`: Retrieve the number of items in the cache.
-
----

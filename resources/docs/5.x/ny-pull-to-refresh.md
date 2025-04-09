@@ -9,7 +9,7 @@
 - [Updating The State](#updating-the-state "Updating The State")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -24,7 +24,7 @@ This makes it a great option for those with big data because you'll be able to p
 
 Let's dive into some code.
 
-<a name="usage"></a>
+<div id="usage"></div>
 <br>
 
 ## Usage
@@ -74,7 +74,7 @@ Let's dive into some code.
 
 When the returned data is an empty array, it will stop the pagination.
 
-<a name="parameters"></a>
+<div id="parameters"></div>
 <br>
 
 ## Parameters
@@ -89,7 +89,7 @@ Here are some important parameters you should know about before using the `NyPul
 
 If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/{{$version}}/lib/widgets/ny_pull_to_refresh.dart). 
 
-<a name="updating-the-state"></a>
+<div id="updating-the-state"></div>
 <br>
 
 ## Updating the State

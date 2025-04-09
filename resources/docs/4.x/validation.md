@@ -7,7 +7,7 @@
 - [Validation Rules](#validation-rules "Validation Rules")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -62,7 +62,7 @@ this.validator(
 
 This method is handy if you want to quickly validate the user's data and display some feedback to the user.
 
-<a name="validation-rules"></a>
+<div id="validation-rules"></div>
 <br>
 
 ## Validation Rules

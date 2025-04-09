@@ -18,14 +18,14 @@
   - [Android Specific Properties](#android-specific-properties)
   - [iOS Specific Properties](#ios-specific-properties)
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
 
 The Push Notification system in Nylo provides a powerful way to send local notifications to users. This feature allows you to send immediate or scheduled notifications with rich content and customizable behaviors for both iOS and Android platforms.
 
-<a name="basic-usage"></a>
+<div id="basic-usage"></div>
 <br>
 
 ## Basic Usage
@@ -49,7 +49,7 @@ await PushNotification.sendNotification(
 );
 ```
 
-<a name="scheduled-notifications"></a>
+<div id="scheduled-notifications"></div>
 <br>
 
 ## Scheduled Notifications
@@ -72,7 +72,7 @@ await PushNotification.sendNotification(
 );
 ```
 
-<a name="customizing-notifications"></a>
+<div id="customizing-notifications"></div>
 <br>
 
 ## Customizing Notifications
@@ -124,7 +124,7 @@ await PushNotification(
   .send();
 ```
 
-<a name="platform-specific-features"></a>
+<div id="platform-specific-features"></div>
 ## Platform Specific Features
 
 ### iOS Specific Features
@@ -154,14 +154,14 @@ await PushNotification(
   .send();
 ```
 
-<a name="managing-notifications"></a>
+<div id="managing-notifications"></div>
 <br>
 
 ## Managing Notifications
 
 You can cancel specific notifications or all notifications, as well as request permissions for notifications.
 
-<a name="canceling-notifications"></a>
+<div id="canceling-notifications"></div>
 <br>
 
 ### Canceling Notifications
@@ -173,7 +173,7 @@ await PushNotification.cancelNotification(1);
 await PushNotification.cancelAllNotifications();
 ```
 
-<a name="requesting-permissions"></a>
+<div id="requesting-permissions"></div>
 <br>
 
 ### Requesting Permissions
@@ -192,7 +192,7 @@ await PushNotification.requestPermissions(
 );
 ```
 
-<a name="platform-setup"></a>
+<div id="platform-setup"></div>
 ## Platform Setup
 
 ### iOS Setup
@@ -212,7 +212,7 @@ await PushNotification.requestPermissions(
 <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 ```
 
-<a name="available-methods"></a>
+<div id="available-methods"></div>
 ## Available Methods
 
 ### General Methods
@@ -311,12 +311,12 @@ await PushNotification.requestPermissions(
 | `addColorized` | `bool colorized` | Enables colorization |
 | `addAudioAttributesUsage` | `AudioAttributesUsage audioAttributesUsage` | Sets audio attributes |
 
-<a name="api-reference"></a>
+<div id="api-reference"></div>
 ## API Reference
 
 This section provides a reference for the properties and methods available for the `PushNotification` class.
 
-<a name="main-properties"></a>
+<div id="main-properties"></div>
 <br>
 
 ### Main Properties
@@ -330,7 +330,7 @@ This section provides a reference for the properties and methods available for t
 | subtitle | String? | Additional text shown below the title (iOS) |
 | sound | String? | Custom sound file name |
 
-<a name="android-specific-properties"></a>
+<div id="android-specific-properties"></div>
 <br>
 
 ### Android Specific Properties
@@ -343,7 +343,7 @@ This section provides a reference for the properties and methods available for t
 | priority | Priority? | The priority level of the notification |
 | ticker | String? | Text shown in the status bar when the notification arrives |
 
-<a name="ios-specific-properties"></a>
+<div id="ios-specific-properties"></div>
 <br>
 
 ### iOS Specific Properties

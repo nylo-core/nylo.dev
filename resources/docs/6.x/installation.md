@@ -9,7 +9,7 @@
   - [Installing Metro Alias MacOS](#installing-metro-alias-macos "Installing Metro Alias MacOS")
   - [Installing Metro Alias Windows](#installing-metro-alias-windows "Installing Metro Alias Windows")
 
-<a name="install"></a>
+<div id="install"></div>
 <br>
 
 ## Install
@@ -22,7 +22,7 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 
 > <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
 
-<a name="running-the-project"></a>
+<div id="running-the-project"></div>
 <br>
 
 ## Running the project
@@ -35,7 +35,7 @@ Once you have done the above steps, try running the project.
 If the build is successful, the app will display {{ config('app.name') }}'s **default** landing screen.
 
 
-<a name="metro-cli"></a>
+<div id="metro-cli"></div>
 <br>
 
 ## Metro CLI tool
@@ -56,6 +56,7 @@ It's been built, so you can run commands in the terminal to create things. With 
 - Forms
 - Configs
 - Interceptors
+- Commands
 
 E.g. Running `dart run nylo_framework:main make:model Post` will create a new '**Post**' model in your project.
 
@@ -63,7 +64,7 @@ To access the menu, you can run the below in the terminal.
 
 `dart run nylo_framework:main`
 
-<a name="installing-metro-alias-macos"></a>
+<div id="installing-metro-alias-macos"></div>
 <br>
 
 ## Installing Metro alias MacOS
@@ -95,7 +96,7 @@ If you see the Metro CLI menu, you have successfully added the alias.
 If you are unsure where to add the above, check out some guides online for where to find your <b>bash\_profile</b> file.
 The above example assumes that your bash_profile is in your `~/` location.
 
-<a name="installing-metro-alias-windows"></a>
+<div id="installing-metro-alias-windows"></div>
 <br>
 
 ## Installing Metro alias Windows
@@ -155,6 +156,7 @@ All commands:
   make:route_guard
   make:config
   make:interceptor
+  make:command
 ```
 
 Now you can type `metro` from your terminal to run commands in your {{ config('app.name') }} project.

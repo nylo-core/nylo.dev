@@ -1,283 +1,283 @@
 <?php
 
 return [
-	'versions' => [
-		'1.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements'
-			],
+    'versions' => [
+        '1.x' => [
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+            ],
 
-			'basics' => [
-				'router',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-			],
+            'basics' => [
+                'router',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+            ],
 
-			'widgets' => [
-				'themes',
-				'assets',
-			],
-		],
+            'widgets' => [
+                'themes',
+                'assets',
+            ],
+        ],
 
-		'2.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements',
-				'upgrade-guide'
-			],
+        '2.x' => [
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+                'upgrade-guide',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+            ],
 
-			'basics' => [
-				'router',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-			],
+            'basics' => [
+                'router',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+            ],
 
-			'widgets' => [
-				'themes',
-				'assets',
-			],
-		],
+            'widgets' => [
+                'themes',
+                'assets',
+            ],
+        ],
 
-		'3.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements'
-			],
+        '3.x' => [
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+            ],
 
-			'basics' => [
-				'router',
-				'networking',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-			],
+            'basics' => [
+                'router',
+                'networking',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+            ],
 
-			'widgets' => [
-				'themes',
-				'assets',
-			],
+            'widgets' => [
+                'themes',
+                'assets',
+            ],
 
-			'advanced' => [
-				'providers',
-				'decoders',
-				'events',
-			],
-		],
+            'advanced' => [
+                'providers',
+                'decoders',
+                'events',
+            ],
+        ],
 
-		'4.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements'
-			],
+        '4.x' => [
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-				'upgrade-guide'
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+                'upgrade-guide',
+            ],
 
-			'basics' => [
-				'router',
-				'networking',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-			],
+            'basics' => [
+                'router',
+                'networking',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+            ],
 
-			'widgets' => [
-				'themes',
-				'assets',
-				'ny-state',
-			],
+            'widgets' => [
+                'themes',
+                'assets',
+                'ny-state',
+            ],
 
-			'advanced' => [
-				'providers',
-				'decoders',
-				'events',
-				'slates'
-			],
-		],
+            'advanced' => [
+                'providers',
+                'decoders',
+                'events',
+                'slates',
+            ],
+        ],
 
-		'5.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements'
-			],
+        '5.x' => [
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-				'upgrade-guide'
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+                'upgrade-guide',
+            ],
 
-			'basics' => [
-				'router',
-				'networking',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-				'authentication',
-				'logging'
-			],
+            'basics' => [
+                'router',
+                'networking',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+                'authentication',
+                'logging',
+            ],
 
-			'widgets' => [
-				'themes-and-styling',
-				'assets',
-				'ny-state',
-				'ny-future-builder',
-				'ny-text-field',
+            'widgets' => [
+                'themes-and-styling',
+                'assets',
+                'ny-state',
+                'ny-future-builder',
+                'ny-text-field',
                 'ny-pull-to-refresh',
                 'ny-list-view',
                 'ny-switch',
-                'ny-page'
-			],
+                'ny-page',
+            ],
 
-			'advanced' => [
+            'advanced' => [
                 'state-management',
-				'providers',
-				'decoders',
-				'events',
-				'slates'
-			],
-		],
+                'providers',
+                'decoders',
+                'events',
+                'slates',
+            ],
+        ],
 
         '5.20.0' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements'
-			],
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-				'upgrade-guide'
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+                'upgrade-guide',
+            ],
 
-			'basics' => [
-				'router',
-				'networking',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-				'authentication',
-				'logging',
-                'forms'
-			],
+            'basics' => [
+                'router',
+                'networking',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+                'authentication',
+                'logging',
+                'forms',
+            ],
 
-			'widgets' => [
-				'themes-and-styling',
-				'assets',
-				'ny-state',
-				'ny-future-builder',
-				'ny-text-field',
+            'widgets' => [
+                'themes-and-styling',
+                'assets',
+                'ny-state',
+                'ny-future-builder',
+                'ny-text-field',
                 'ny-pull-to-refresh',
                 'ny-list-view',
                 'ny-switch',
                 'ny-language-switcher',
-			],
+            ],
 
-			'advanced' => [
+            'advanced' => [
                 'state-management',
-				'providers',
-				'decoders',
-				'events',
-				'slates',
+                'providers',
+                'decoders',
+                'events',
+                'slates',
                 'app-usage',
                 'scheduler',
-			],
-		],
+            ],
+        ],
 
         '6.x' => [
-			'introduction' => [
-				'what-is-nylo',
-				'requirements',
-				'contributions'
-			],
+            'introduction' => [
+                'what-is-nylo',
+                'requirements',
+                'contributions',
+            ],
 
-			'getting-started' => [
-				'installation',
-				'configuration',
-				'directory-structure',
-				'upgrade-guide'
-			],
+            'getting-started' => [
+                'installation',
+                'configuration',
+                'directory-structure',
+                'upgrade-guide',
+            ],
 
-			'basics' => [
-				'router',
-				'networking',
-				'metro',
-				'localization',
-				'storage',
-				'controllers',
-				'app-icons',
-				'validation',
-				'authentication',
-				'logging',
+            'basics' => [
+                'router',
+                'networking',
+                'metro',
+                'localization',
+                'storage',
+                'controllers',
+                'app-icons',
+                'validation',
+                'authentication',
+                'logging',
                 'forms',
-                'cache'
-			],
+                'cache',
+            ],
 
-			'widgets' => [
-				'themes-and-styling',
-				'assets',
+            'widgets' => [
+                'themes-and-styling',
+                'assets',
                 'navigation-hub',
-				'ny-state',
-				'ny-future-builder',
-				'ny-text-field',
+                'ny-state',
+                'ny-future-builder',
+                'ny-text-field',
                 'ny-pull-to-refresh',
                 'ny-list-view',
                 'ny-language-switcher',
-			],
+            ],
 
-			'advanced' => [
+            'advanced' => [
                 'state-management',
-				'push-notifications',
-				'providers',
-				'decoders',
-				'events',
+                'push-notifications',
+                'providers',
+                'decoders',
+                'events',
                 'app-usage',
                 'scheduler',
-			],
-		],
-	],
+            ],
+        ],
+    ],
 ];

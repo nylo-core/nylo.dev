@@ -13,7 +13,7 @@
   - [Retrieve a Storable model](#retrieve-a-storable-model "Retrieving a Storable Model")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -21,7 +21,7 @@ In Nylo you can save data to the users device using the `NyStorage` class.
 
 This uses the [flutter\_secure\_storage](https://pub.dev/packages/flutter_secure_storage) package to save and retrieve data.
 
-<a name="store-values"></a>
+<div id="store-values"></div>
 <br>
 
 ## Store values
@@ -36,7 +36,7 @@ NyStorage.store("com.company.myapp.coins", "10");
 ```
 
 
-<a name="retrieve-values"></a>
+<div id="retrieve-values"></div>
 <br>
 
 ## Retrieve values
@@ -60,7 +60,7 @@ int coins = await NyStorage.read<int>("com.company.myapp.coins"); // 10
 double coins = await NyStorage.read<double>("com.company.myapp.coins"); // 10.00
 ```
 
-<a name="introduction-to-storable-models"></a>
+<div id="introduction-to-storable-models"></div>
 <br>
 ## Introduction to storable models
 
@@ -101,7 +101,7 @@ After extending the `Storable` class, you then need to override the `toStorage()
 
 - fromStorage(dynamic data) - This will create the model from the `data` payload, the keys should match the toStorage() method.
 
-<a name="saving-a-storable-model"></a>
+<div id="saving-a-storable-model"></div>
 <br>
 
 ## Saving a Storable model
@@ -125,7 +125,7 @@ user.save(key);
 NyStorage.store(key, user);
 ```
 
-<a name="retrieve-a-storable-model"></a>
+<div id="retrieve-a-storable-model"></div>
 <br>
 
 ## Retrieve a Storable model

@@ -15,14 +15,14 @@
   - [Building appicons](#build-app-icons "Building app icons with Metro")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the Nylo framework. 
 It provides a lot of helpful actions to speed up development.
 
-<a name="install"></a>
+<div id="install"></div>
 <br>
 ## Install
 
@@ -77,7 +77,7 @@ All commands:
   appicons:build
 ```
 
-<a name="make-controller"></a>
+<div id="make-controller"></div>
 <br>
 
 ## Make controller
@@ -90,7 +90,7 @@ metro make:controller profile_controller
 
 This is will create a new controller if it doesn't exist within the `app/controllers` directory.
 
-<a name="make-model"></a>
+<div id="make-model"></div>
 <br>
 
 ## Make model
@@ -111,7 +111,7 @@ You can also make a Storable model which can be saved to the users local storage
 Learn more on Storable models [here](/docs/1.x/storage)
 
 
-<a name="make-page"></a>
+<div id="make-page"></div>
 <br>
 
 ## Make page
@@ -130,7 +130,7 @@ metro make:page product_page -c
 
 Create a page with a controller.
 
-<a name="make-stateless-widget"></a>
+<div id="make-stateless-widget"></div>
 <br>
 
 ## Make stateless widget
@@ -143,7 +143,7 @@ metro make:stateless_widget product_rating_widget
 
 This is will create a new widget if it doesn't exist within the `resources/widgets` directory.
 
-<a name="make-stateful-widget"></a>
+<div id="make-stateful-widget"></div>
 <br>
 
 ## Make stateful widget
@@ -157,7 +157,7 @@ metro make:stateful_widget product_rating_widget
 This is will create a new widget if it doesn't exist within the `resources/widgets` directory.
 
 
-<a name="build-app-icons"></a>
+<div id="build-app-icons"></div>
 <br>
 
 ## Building app icons

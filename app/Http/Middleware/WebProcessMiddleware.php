@@ -14,9 +14,9 @@ class WebProcessMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    { 
+    {
 
-    	$token = $request->bearerToken();
+        $token = $request->bearerToken();
         abort_if($token != config('project.meta.process_token'), 403);
 
         return $next($request);

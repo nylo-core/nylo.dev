@@ -9,7 +9,7 @@
   - [Variable Types](#environment-variable-types "Environment variable types")
   - [Retrieving Values](#retrieving-environment-values "Retrieving environment values")
 - [Environment flavours](#environment-flavours "Environment flavours")
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -43,7 +43,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 String appName = getEnv('APP_NAME');
 ```
 
-<a name="environment-configuration"></a>
+<div id="environment-configuration"></div>
 <br>
 
 ## Environment Configuration
@@ -78,7 +78,7 @@ Best practises:
 
 - Don't commit your `.env` file to a (public/private) repository.
 
-<a name="environment-variable-types"></a>
+<div id="environment-variable-types"></div>
 <br>
 
 ## Environment Variable Types
@@ -92,7 +92,7 @@ The values in your <b>.env</b> file are defined as `String`'s but {{ config('app
 | URL_TERMS=null | `null` |
 
 
-<a name="retrieving-environment-values"></a>
+<div id="retrieving-environment-values"></div>
 <br>
 
 ## Retrieving Environment Values
@@ -112,7 +112,7 @@ String locale = getEnv('DEFAULT_LOCALE', defaultValue: "en");
 int httpConnectionTimeout = getEnv('HTTP_CONNECTION_TIMEOUT', defaultValue: (60 * 1000));
 ```
 
-<a name="environment-flavours"></a>
+<div id="environment-flavours"></div>
 <br>
 
 ## Environment flavours

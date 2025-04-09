@@ -17,7 +17,7 @@
 - [Text Extensions](#text-extensions "Text extensions")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -29,7 +29,7 @@ Out of the box, {{ config('app.name') }} includes pre-configured themes for `Lig
 
 The theme will also update if the device enters <b>'light/dark'</b> mode.
 
-<a name="light-and-dark-themes"></a>
+<div id="light-and-dark-themes"></div>
 <br>
 
 ## Light & Dark themes
@@ -41,7 +41,7 @@ Inside these files, you'll find the ThemeData and ThemeStyle pre-defined.
 
 
 
-<a name="creating-a-theme"></a>
+<div id="creating-a-theme"></div>
 <br>
 
 ## Creating a theme
@@ -87,7 +87,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 
 You can modify the colors for your new theme in the **/resources/themes/styles/bright_theme_colors.dart** file.
 
-<a name="theme-colors"></a>
+<div id="theme-colors"></div>
 <br>
 
 ## Theme Colors
@@ -129,7 +129,7 @@ class LightThemeColors implements ColorStyles {
 }
 ```
 
-<a name="using-colors"></a>
+<div id="using-colors"></div>
 <br>
 
 ## Using colors in widgets
@@ -159,7 +159,7 @@ Text(
 ),
 ```
 
-<a name="base-styles"></a>
+<div id="base-styles"></div>
 <br>
 
 ## Base styles
@@ -204,7 +204,7 @@ abstract class ColorStyles {
 
 You can add additional styles here and then implement the colors in your theme.
 
-<a name="switching-theme"></a>
+<div id="switching-theme"></div>
 <br>
 
 ## Switching theme
@@ -241,7 +241,7 @@ TextButton(onPressed: () {
 ```
 
 
-<a name="fonts"></a>
+<div id="fonts"></div>
 <br>
 
 ## Fonts
@@ -272,7 +272,7 @@ Once you've added your font, change the variable like the below example.
 final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
 ```
 
-<a name="design"></a>
+<div id="design"></div>
 <br>
 
 ## Design
@@ -289,7 +289,7 @@ You can modify **resources/widgets/logo_widget.dart** to customize how you want 
 
 You can modify **resources/widgets/loader_widget.dart** to customize how you want to display your Loader.
 
-<a name="text-extensions"></a>
+<div id="text-extensions"></div>
 <br>
 
 ## Text Extensions
@@ -325,7 +325,7 @@ Here are the available text extensions that you can use in {{ config('app.name')
 
 ---
 
-<a name="text-extension-display-large"></a>
+<div id="text-extension-display-large"></div>
 <br>
 
 #### Display large
@@ -334,7 +334,7 @@ Here are the available text extensions that you can use in {{ config('app.name')
 Text("Hello World").displayLarge(context)
 ```
 
-<a name="text-extension-display-medium"></a>
+<div id="text-extension-display-medium"></div>
 <br>
 
 #### Display medium
@@ -343,7 +343,7 @@ Text("Hello World").displayLarge(context)
 Text("Hello World").displayMedium(context)
 ```
 
-<a name="text-extension-display-small"></a>
+<div id="text-extension-display-small"></div>
 <br>
 
 #### Display small
@@ -352,7 +352,7 @@ Text("Hello World").displayMedium(context)
 Text("Hello World").displaySmall(context)
 ```
 
-<a name="text-extension-heading-large"></a>
+<div id="text-extension-heading-large"></div>
 <br>
 
 #### Heading large
@@ -361,7 +361,7 @@ Text("Hello World").displaySmall(context)
 Text("Hello World").headingLarge(context)
 ```
 
-<a name="text-extension-heading-medium"></a>
+<div id="text-extension-heading-medium"></div>
 <br>
 
 #### Heading medium
@@ -370,7 +370,7 @@ Text("Hello World").headingLarge(context)
 Text("Hello World").headingMedium(context)
 ```
 
-<a name="text-extension-heading-small"></a>
+<div id="text-extension-heading-small"></div>
 <br>
 
 #### Heading small
@@ -379,7 +379,7 @@ Text("Hello World").headingMedium(context)
 Text("Hello World").headingSmall(context)
 ```
 
-<a name="text-extension-title-large"></a>
+<div id="text-extension-title-large"></div>
 <br>
 
 #### Title large
@@ -388,7 +388,7 @@ Text("Hello World").headingSmall(context)
 Text("Hello World").titleLarge(context)
 ```
 
-<a name="text-extension-title-medium"></a>
+<div id="text-extension-title-medium"></div>
 <br>
 
 #### Title medium
@@ -397,7 +397,7 @@ Text("Hello World").titleLarge(context)
 Text("Hello World").titleMedium(context)
 ```
 
-<a name="text-extension-title-small"></a>
+<div id="text-extension-title-small"></div>
 <br>
 
 #### Title small
@@ -406,7 +406,7 @@ Text("Hello World").titleMedium(context)
 Text("Hello World").titleSmall(context)
 ```
 
-<a name="text-extension-body-large"></a>
+<div id="text-extension-body-large"></div>
 <br>
 
 #### Body large
@@ -415,7 +415,7 @@ Text("Hello World").titleSmall(context)
 Text("Hello World").bodyLarge(context)
 ```
 
-<a name="text-extension-body-medium"></a>
+<div id="text-extension-body-medium"></div>
 <br>
 
 #### Body medium
@@ -424,7 +424,7 @@ Text("Hello World").bodyLarge(context)
 Text("Hello World").bodyMedium(context)
 ```
 
-<a name="text-extension-body-small"></a>
+<div id="text-extension-body-small"></div>
 <br>
 
 #### Body small
@@ -433,7 +433,7 @@ Text("Hello World").bodyMedium(context)
 Text("Hello World").bodySmall(context)
 ```
 
-<a name="text-extension-label-large"></a>
+<div id="text-extension-label-large"></div>
 <br>
 
 #### Label large
@@ -442,7 +442,7 @@ Text("Hello World").bodySmall(context)
 Text("Hello World").labelLarge(context)
 ```
 
-<a name="text-extension-label-medium"></a>
+<div id="text-extension-label-medium"></div>
 <br>
 
 #### Label medium
@@ -451,7 +451,7 @@ Text("Hello World").labelLarge(context)
 Text("Hello World").labelMedium(context)
 ```
 
-<a name="text-extension-label-small"></a>
+<div id="text-extension-label-small"></div>
 <br>
 
 #### Label small
@@ -460,7 +460,7 @@ Text("Hello World").labelMedium(context)
 Text("Hello World").labelSmall(context)
 ```
 
-<a name="text-extension-font-weight-bold"></a>
+<div id="text-extension-font-weight-bold"></div>
 <br>
 
 #### Font weight bold
@@ -469,7 +469,7 @@ Text("Hello World").labelSmall(context)
 Text("Hello World").fontWeightBold()
 ```
 
-<a name="text-extension-font-weight-light"></a>
+<div id="text-extension-font-weight-light"></div>
 <br>
 
 #### Font weight light
@@ -478,7 +478,7 @@ Text("Hello World").fontWeightBold()
 Text("Hello World").fontWeightLight()
 ```
 
-<a name="text-extension-set-color"></a>
+<div id="text-extension-set-color"></div>
 <br>
 
 #### Set color
@@ -488,7 +488,7 @@ Text("Hello World").setColor(context, (color) => colors.primaryAccent)
 // Color from your colorStyles
 ```
 
-<a name="text-extension-align-left"></a>
+<div id="text-extension-align-left"></div>
 <br>
 
 #### Align left
@@ -497,7 +497,7 @@ Text("Hello World").setColor(context, (color) => colors.primaryAccent)
 Text("Hello World").alignLeft()
 ```
 
-<a name="text-extension-align-right"></a>
+<div id="text-extension-align-right"></div>
 <br>
 
 #### Align right
@@ -506,7 +506,7 @@ Text("Hello World").alignLeft()
 Text("Hello World").alignRight()
 ```
 
-<a name="text-extension-align-center"></a>
+<div id="text-extension-align-center"></div>
 <br>
 
 #### Align center
@@ -515,7 +515,7 @@ Text("Hello World").alignRight()
 Text("Hello World").alignCenter()
 ```
 
-<a name="text-extension-set-max-lines"></a>
+<div id="text-extension-set-max-lines"></div>
 <br>
 
 #### Set max lines

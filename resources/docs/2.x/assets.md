@@ -12,14 +12,14 @@
   - [Pubspec.yaml](#pubspec-yaml-assets "Pubspec yaml assets")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
 In this section, we'll look into how you can manage assets throughout your widgets.
 Nylo provides a few helper methods which make it easy to fetch images, files and more from your `public/assets` directory.
 
-<a name="displaying-images"></a>
+<div id="displaying-images"></div>
 <br>
 
 ## Displaying images
@@ -39,7 +39,7 @@ Image.asset(
 )
 ```
 
-<a name="returning-files"></a>
+<div id="returning-files"></div>
 <br>
 
 ## Returning files
@@ -56,14 +56,14 @@ This could also be any file within the `public/assets` directory too
 getPublicAsset('/video/welcome.mp4');
 ```
 
-<a name="adding-new-files"></a>
+<div id="adding-new-files"></div>
 <br>
 
 ## Adding new files
 
 To add new files open the `public/assets` directory and include your files in a new folder or an existing one.
 
-<a name="pubspec-yaml-assets"></a>
+<div id="pubspec-yaml-assets"></div>
 <br>
 
 ## Pubspec yaml assets

@@ -47,18 +47,18 @@ class Kernel extends HttpKernel
         'gh_actions' => [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\AuthenticateGitHubMiddleware::class
+            \App\Http\Middleware\AuthenticateGitHubMiddleware::class,
         ],
 
         'gh_webhook' => [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\AuthenticateGitHubSignatureVerifyWebhook::class
+            \App\Http\Middleware\AuthenticateGitHubSignatureVerifyWebhook::class,
         ],
 
         'web_process' => [
             'throttle:60,1',
-            \App\Http\Middleware\WebProcessMiddleware::class
+            \App\Http\Middleware\WebProcessMiddleware::class,
         ],
     ];
 

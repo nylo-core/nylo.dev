@@ -17,7 +17,7 @@
 - [Singleton API Service](#singleton-api-service "Singleton API Service")
 - [Caching Responses](#caching-responses "Caching Responses")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -56,7 +56,7 @@ Variables you can override using the <b>NyApiService</b> class.
 
 Under the hood, the base networking class uses <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>, a powerful HTTP client.
 
-<a name="making-http-requests"></a>
+<div id="making-http-requests"></div>
 <br>
 
 ## Making HTTP requests
@@ -86,7 +86,7 @@ class ApiService extends NyApiService {
 
 The `request` argument is a <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a> instance, so you can call all the methods from that object.
 
-<a name="base-options"></a>
+<div id="base-options"></div>
 <br>
 
 ### Base Options
@@ -111,7 +111,7 @@ class ApiService extends NyApiService {
 
 Click <a href="https://pub.dev/packages/dio#request-options" target="_BLANK">here</a> to view all the base options you can set.
 
-<a name="adding-headers"></a>
+<div id="adding-headers"></div>
 <br>
 
 ### Adding Headers
@@ -157,7 +157,7 @@ Future fetchUsers() async {
 
 ```
 
-<a name="interceptors"></a>
+<div id="interceptors"></div>
 <br>
 
 ### Interceptors
@@ -265,7 +265,7 @@ class LoggingInterceptor extends Interceptor {
 }
 ```
 
-<a name="understanding-the-network-helper"></a>
+<div id="understanding-the-network-helper"></div>
 <br>
 
 ## Understanding the network helper
@@ -402,7 +402,7 @@ class ApiService extends NyApiService {
 }
 ```
 
-<a name="using-an-api-service"></a>
+<div id="using-an-api-service"></div>
 <br>
 
 ## Using an API Service
@@ -500,7 +500,7 @@ _sendFriendRequest(User user) async {
 }
 ```
 
-<a name="create-an-api-service"></a>
+<div id="create-an-api-service"></div>
 <br>
 
 ## Create an API Service
@@ -560,7 +560,7 @@ class UserApiService extends NyApiService {
 }
 ```
 
-<a name="morphing-json-payloads-to-models"></a>
+<div id="morphing-json-payloads-to-models"></div>
 <br>
 
 ## Morphing JSON payloads to models
@@ -603,7 +603,7 @@ The data argument in the decoder will contain the body payload from the API requ
 
 To get started with decoders, check out this section of the [documentation](/docs/{{$version}}/decoders#model-decoders).
 
-<a name="retrying-failed-requests"></a>
+<div id="retrying-failed-requests"></div>
 <br>
 
 ## Retrying failed requests
@@ -655,7 +655,7 @@ Future fetchUsers() async {
 }
 ```
 
-<a name="refreshing-tokens"></a>
+<div id="refreshing-tokens"></div>
 <br>
 
 ## Refreshing tokens
@@ -714,7 +714,7 @@ class ApiService extends NyApiService {
 
 Now when you call the `getUser` method, the API Service will check if the token is expired and then refresh it if needed.
 
-<a name="singleton-api-service"></a>
+<div id="singleton-api-service"></div>
 <br>
 
 ## Singleton API Service
@@ -738,7 +738,7 @@ api<ApiService>((request) => request.fetchUsers());
 
 You can switch between singleton and non-singleton API Services if you need to.
 
-<a name="caching-responses"></a>
+<div id="caching-responses"></div>
 <br>
 
 ## Caching Responses

@@ -10,13 +10,14 @@
 
 <a name="whats-changed-in-nylo-6"></a>
 <br>
+
 ## What's Changed in Nylo {{ $version }}
 
 You can understand all the changes by clicking the below link.
 
 <a name="View {{ $version }} changes" href="https://github.com/nylo-core/nylo/compare/5.x...6.x#diff" target="_BLANK">View changes</a>
 
-<a name="migration-guide"></a>
+<div id="migration-guide"></div>
 <br>
 
 ## Migration Guide
@@ -337,8 +338,9 @@ Example:
 
 This will ensure you have a clean project with all the new changes.
 
-<a name="how-to-upgrade"></a>
+<div id="how-to-upgrade"></div>
 <br>
+
 ## How to upgrade
 
 You can check the changes in {{ $version }} by clicking the above link "**View changes**" and then implement all the changes into your {{ config('app.name') }} project.

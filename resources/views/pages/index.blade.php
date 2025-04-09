@@ -117,6 +117,10 @@
                             <svg class="h-5" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M71.4,28.6C65.9,23.1,58.6,20,50.9,20c-1.7,0-3,1.3-3,3s1.3,3,3,3c6.1,0,11.9,2.4,16.3,6.7 C71.5,37.2,74,43,74,49.1c0,1.7,1.3,3,3,3s3-1.3,3-3C80,41.4,77,34.1,71.4,28.6z M50.9,32.1c-1.7,0-3,1.3-3,3s1.3,3,3,3 c2.9,0,5.7,1.1,7.8,3.2c2.1,2.1,3.2,4.8,3.2,7.8c0,1.7,1.3,3,3,3c1.7,0,3-1.3,3-3c0-4.5-1.8-8.8-5-12S55.4,32.1,50.9,32.1z M46.6,60.8l2.6-7c1.8,0.7,3.8,0.3,5.3-1.1c2-2,2-5.1,0-7.1c-2-2-5.1-2-7.1,0c-1.5,1.5-1.8,3.7-1,5.6l-6.5,2.9L28.2,42.4 c-0.8-0.8-2.2-0.8-2.9,0.1c-7.5,9-7,22.4,1.5,30.9c8.4,8.4,21.8,8.9,30.9,1.5c0.9-0.7,0.9-2.1,0.1-2.9 C57.7,71.9,46.6,60.8,46.6,60.8z"></path> </g> </g> </g></svg>
                             Events
                         </li>
+						<li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'commands'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'commands' }">
+                            <svg viewBox="0 0 24 24"  class="h-5" fill="#000000"  xmlns="http://www.w3.org/2000/svg">  <path    d="M5.0333 14.8284L6.44751 16.2426L10.6902 12L6.44751 7.75733L5.0333 9.17155L7.86172 12L5.0333 14.8284Z"    fill="currentColor"  />  <path d="M15 14H11V16H15V14Z" fill="currentColor" />  <path    fill-rule="evenodd"    clip-rule="evenodd"    d="M2 2C0.895431 2 0 2.89543 0 4V20C0 21.1046 0.89543 22 2 22H22C23.1046 22 24 21.1046 24 20V4C24 2.89543 23.1046 2 22 2H2ZM22 4H2L2 20H22V4Z"    fill="currentColor"/></svg>
+                            Commands
+                        </li>
                         <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'scheduler'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'scheduler' }">
                             <svg class="h-5" fill="#000000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M531 624l-88-1q18-44 51.5-76.5T572 500q55-18 110.5-3.5T778 554q4 5 10.5 5t11.5-4l26-24q5-5 5.5-12t-4.5-12q-53-58-127-77.5T553 433q-65 21-112.5 71.5T373 623h-93q-4 0-5 3t1 6l126 144q1 1 3 1t4-1l126-143q2-3 1-6t-5-3zm451 143L857 623q-2-2-4-2t-3 2L724 766q-3 2-1.5 5.5t4.5 3.5h88q-17 45-51 77.5T686 899q-55 18-110 3t-95-57q-5-5-11-5.5t-11 4.5l-26 23q-5 5-5.5 12t4.5 13q38 41 88.5 63.5T626 978q41 0 80-13 65-21 112.5-71T885 776h94q3 0 4.5-3.5T982 767zM70 252v447q0 14 9.5 23.5T103 732h127q6 0 11-4.5t5-11.5v-22q0-7-5-12t-11-5H125V296h568v56q0 7 4.5 12t11.5 5h21q7 0 12-5t5-12V252H70zm677-32v-55q0-13-9.5-23T714 132H613v-13q0-12-6-23t-16.5-17-22.5-6-22.5 6T529 96t-6 23v13H293v-13q0-19-13-32t-31.5-13T217 87t-13 32v13H103q-14 0-23.5 10T70 165v55h677z"></path></g></svg>
                             Scheduler
@@ -150,6 +154,10 @@
     <x-overview-events :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-events>
     </div>
 
+	<div x-show="currentTab === 'commands'">
+	<x-overview-commands :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-commands>
+	</div>
+
     <div x-show="currentTab === 'scheduler'">
     <x-overview-scheduler :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-scheduler>
     </div>
@@ -161,14 +169,13 @@
 
 			<div>
 				<div class="flex gap-4 mb-5">
-
 					<div>
 						<span class="font-semibold text-3xl text-[#484D50]">Make things from the terminal</span>
-					<p class="mt-2 text-[18px] text-[#979DA2]" style="letter-spacing: -0.02em;">We have built a cli tool called Metro, you can create almost anything on the fly.</p>
+						<p class="mt-2 text-[18px] text-[#979DA2]" style="letter-spacing: -0.02em;">We have built a cli tool called Metro, you can create almost anything on the fly.</p>
 
-                    <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'metro']) }}" class="inline-flex self-center text-[#6C7379]" target="_BLANK">
-					Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
-				    </a>
+						<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'metro']) }}" class="inline-flex self-center text-[#6C7379]" target="_BLANK">
+						Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+						</a>
 					</div>
 				</div>
 

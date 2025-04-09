@@ -12,7 +12,7 @@
 - [Locale support](#locale-support "Locale support")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -23,7 +23,7 @@ Here's an example.
 If your apps primary Locale was en (English) and you wanted to also provide users in Spain with a Spanish version, localising the app would be your best option.
 
 
-<a name="adding-localised-files"></a>
+<div id="adding-localised-files"></div>
 <br>
 ## Adding Localized files
 
@@ -53,7 +53,7 @@ Go to your **pubspec.yaml** file and then at the `assets` section, add the new f
 > You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
 
 
-<a name="localizing-text"></a>
+<div id="localizing-text"></div>
 <br>
 
 ## Localizing text
@@ -67,7 +67,7 @@ trans(context, "documentation");
 This will return the value of the key depending on the current Locale assigned.
 
 
-<a name="updating-the-locale"></a>
+<div id="updating-the-locale"></div>
 <br>
 
 ## Updating the locale
@@ -85,7 +85,7 @@ What this will do is update the locale to (Spanish which is) **es**. Any referen
 This can be extremely useful if you wanted to provide users with an options menu to select a language to use in the app. E.g. if they navigated to a settings screen with language flags and selected Spanish. 
 
 
-<a name="setting-a-default-locale"></a>
+<div id="setting-a-default-locale"></div>
 <br>
 
 ## Setting a default locale
@@ -110,7 +110,7 @@ runApp(
 );
 ```
 
-<a name="locale-support"></a>
+<div id="locale-support"></div>
 <br>
 
 ## Locale support

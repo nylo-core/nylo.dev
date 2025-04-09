@@ -11,7 +11,7 @@
   - [Fonts](#fonts "Fonts")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -19,7 +19,7 @@ Nylo includes themes for `Light mode` and `Dark mode`.
 
 Both themes come pre-configured and ready for use. The theme will also update automatically change if the device enters 'light/dark mode', on IOS you can manually set a device to 'light/dark mode' by going into settings.
 
-<a name="light-and-dark-themes"></a>
+<div id="light-and-dark-themes"></div>
 <br>
 
 ## Light & Dark themes
@@ -30,7 +30,7 @@ Both themes come pre-configured and ready for use. The theme will also update au
 Inside these files, you'll find the ThemeData and ThemeStyle pre-defined.
 Changes to the font and app colors can be managed in the next section.
 
-<a name="theme-colors"></a>
+<div id="theme-colors"></div>
 <br>
 
 ## Theme Colors
@@ -65,7 +65,7 @@ The `LightColor` variables will update the light theme and the `DarkColor` varia
 
 Add more colors here too as you'll be able to call the `AppTheme` class to get colors that you might need in other areas of your app.
 
-<a name="fonts"></a>
+<div id="fonts"></div>
 <br>
 
 ## Fonts

@@ -9,7 +9,7 @@
   - [Retrieving image assets](#retrieving-image-assets "Retrieving image assets")
   - [Retrieving public assets](#retrieving-public-assets "Retrieving public assets")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -17,7 +17,7 @@ Keeping projects organized can be difficult when there are a lot of moving parts
 
 Nylo tries to solve this with a simple project structure. 
 
-<a name="app-directories"></a>
+<div id="app-directories"></div>
 <br>
 
 ## App Directories
@@ -41,7 +41,7 @@ All the app directories are listed inside the `lib` directory where your main.da
 
 ---
 
-<a name="public-assets"></a>
+<div id="public-assets"></div>
 <br>
 
 ## Public assets
@@ -54,7 +54,7 @@ All public assets can be found in `public/assets`. This directory is commonly us
 - `images` Include any images here in this directory.
 - `fonts` Add any custom fonts here.
 
-<a name="retrieving-image-assets"></a>
+<div id="retrieving-image-assets"></div>
 <br>
 
 ## Retrieving an image asset
@@ -73,7 +73,7 @@ In this example, our `public/assets/images/` directory has one file `nylo_logo.p
 
 - public/assets/images/nylo_logo.png
 
-<a name="retrieving-public-assets"></a>
+<div id="retrieving-public-assets"></div>
 <br>
 
 ## Retrieving a public asset

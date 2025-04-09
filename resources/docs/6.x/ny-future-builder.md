@@ -7,7 +7,7 @@
 - [Customizing the NyFutureBuilder](#customizing-the-nyfuturebuilder "Customizing the NyFutureBuilder")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction to NyFutureBuilder
@@ -45,7 +45,7 @@ Widget build(BuildContext context) {
 
 > This widget will handle the loading on the UI for your users until the future completes.
 
-<a name="customizing-the-nyfuturebuilder"></a>
+<div id="customizing-the-nyfuturebuilder"></div>
 <br>
 
 ## Customizing the NyFutureBuilder

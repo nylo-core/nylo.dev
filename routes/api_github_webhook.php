@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GitHubActionsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,5 +11,5 @@ use App\Http\Controllers\GitHubActionsController;
 
 // GitHub WebHooks
 Route::post('{repo}/release', [GitHubActionsController::class, 'release'])
-		->whereIn('repo', ['nylo'])
-		->name('repo.release');
+    ->whereIn('repo', ['nylo'])
+    ->name('repo.release');

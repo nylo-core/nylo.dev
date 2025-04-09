@@ -19,7 +19,7 @@
   - [Retrieve a collection](#retrieve-a-collection "Retrieve to a collection")
   - [Delete a collection](#delete-a-collection "Delete a collection")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -28,7 +28,7 @@ In {{ config('app.name') }} you can save data to the users device using the `NyS
 
 Under the hood, {{ config('app.name') }} uses the <a href="https://pub.dev/packages/flutter_secure_storage" target="_BLANK">flutter_secure_storage</a> package to save and retrieve data.
 
-<a name="store-values"></a>
+<div id="store-values"></div>
 <br>
 
 ## Store values
@@ -44,7 +44,7 @@ NyStorage.store("com.company.myapp.coins", "10");
 
 Data will persist on the user's device using NyStorage. E.g. if they exit the app, you can retrieve the same data that was stored previously.
 
-<a name="retrieve-values"></a>
+<div id="retrieve-values"></div>
 <br>
 
 ## Retrieve values
@@ -69,7 +69,7 @@ double coins = await NyStorage.read<double>("coins"); // 10.00 (double)
 ```
 
 
-<a name="storage-keys"></a>
+<div id="storage-keys"></div>
 <br>
 
 ## Storage Keys
@@ -116,7 +116,7 @@ class _MyHomePageState extends NyState<MyHomePage> {
   }
 ```
 
-<a name="store-json"></a>
+<div id="store-json"></div>
 <br>
 
 ## Store JSON
@@ -135,7 +135,7 @@ Map<String, dynamic> user = {
 await NyStorage.storeJson("user", user);
 ```
 
-<a name="retrieve-json"></a>
+<div id="retrieve-json"></div>
 <br>
 
 ## Retrieve JSON
@@ -151,7 +151,7 @@ print(user); // {"name": "Anthony", "email": "agordon@mail.com"}
 ```
 
 
-<a name="backpack-storage"></a>
+<div id="backpack-storage"></div>
 <br>
 
 ## Backpack Storage
@@ -227,7 +227,7 @@ class ApiService extends NyApiService {
 }
 ```
 
-<a name="persist-data-with-backpack"></a>
+<div id="persist-data-with-backpack"></div>
 <br>
 
 ## Persist data with Backpack
@@ -246,7 +246,7 @@ Backpack.instance.read('user_token'); // "a token 123"
 
 > By default, NyStorge will not store data in Backpack unless the `inBackpack` parameter is set to `true`
 
-<a name="introduction-to-collections"></a>
+<div id="introduction-to-collections"></div>
 <br>
 
 ## Introduction to Collections
@@ -288,7 +288,7 @@ _removeItemFromCollection(int index) async {
 }
 ```
 
-<a name="add-to-a-collection"></a>
+<div id="add-to-a-collection"></div>
 <br>
 
 ## Add to a collection 
@@ -305,7 +305,7 @@ await NyStorage.addToCollection("a_storage_key", newItem: "3");
 await NyStorage.readCollection("a_storage_key"); // ["1", "2", "3"]
 ```
 
-<a name="retrieve-a-collection"></a>
+<div id="retrieve-a-collection"></div>
 <br>
 
 ## Retrieve a collection
@@ -321,7 +321,7 @@ await NyStorage.addToCollection("a_storage_key", newItem: "Kyle");
 await NyStorage.readCollection("a_storage_key"); // ["Anthony", "Kyle"]
 ```
 
-<a name="delete-a-collection"></a>
+<div id="delete-a-collection"></div>
 <br>
 
 ## Delete a collection

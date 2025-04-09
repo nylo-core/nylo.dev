@@ -21,14 +21,14 @@
   - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the {{ config('app.name') }} framework. 
 It provides a lot of helpful tools to speed up development.
 
-<a name="install"></a>
+<div id="install"></div>
 <br>
 ## Install
 
@@ -71,7 +71,7 @@ All commands:
   make:route_guard
 ```
 
-<a name="make-controller"></a>
+<div id="make-controller"></div>
 <br>
 
 ## Make controller
@@ -90,7 +90,7 @@ metro make:controller profile_controller
 
 This will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
-<a name="make-model"></a>
+<div id="make-model"></div>
 <br>
 
 ## Make model
@@ -120,7 +120,7 @@ metro make:model product --force
 ```
 
 
-<a name="make-page"></a>
+<div id="make-page"></div>
 <br>
 
 ## Make page
@@ -146,7 +146,7 @@ metro make:page product_page -c
 
 Create a page with a controller.
 
-<a name="make-stateless-widget"></a>
+<div id="make-stateless-widget"></div>
 <br>
 
 ## Make stateless widget
@@ -165,7 +165,7 @@ metro make:stateless_widget product_rating_widget
 
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
-<a name="make-stateful-widget"></a>
+<div id="make-stateful-widget"></div>
 <br>
 
 ## Make stateful widget
@@ -182,7 +182,7 @@ metro make:stateful_widget product_rating_widget
 
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
-<a name="make-api-service"></a>
+<div id="make-api-service"></div>
 <br>
 
 ## Make API Service
@@ -214,7 +214,7 @@ dart run nylo_framework:main make:api_service user --model="User"
 It will place the newly created API service in `lib/app/networking/`.
 
 
-<a name="make-api-service-using-postman"></a>
+<div id="make-api-service-using-postman"></div>
 <br>
 
 ### Use Postman to Make API Services
@@ -262,7 +262,7 @@ You can check if your collection has saved responses by going to your Postman co
 If your collection doesn't contain a saved response, you will need to use Postman to make an HTTP request and then save the response.
 The **name** of the saved response will be used as the name of the **Model** that {{ config('app.name') }} will create.
 
-<a name="make-event"></a>
+<div id="make-event"></div>
 <br>
 
 ## Make event
@@ -284,7 +284,7 @@ This will create a new event in `lib/app/events`.
 You will also need to add the event to your `lib/config/events.dart` map for it to be used.
 
 
-<a name="make-provider"></a>
+<div id="make-provider"></div>
 <br>
 
 ## Make provider
@@ -306,7 +306,7 @@ It will place the newly created provider in `lib/app/providers/`.
 You will also need to add the provider to your `lib/config/providers.dart` map for it to be used.
 
 
-<a name="make-theme"></a>
+<div id="make-theme"></div>
 <br>
 
 ## Make theme
@@ -323,7 +323,7 @@ Or with the alias metro
 metro make:theme bright_theme
 ```
 
-<a name="make-route-guard"></a>
+<div id="make-route-guard"></div>
 <br>
 
 ## Make Route Guard
@@ -340,7 +340,7 @@ Or with the alias metro
 metro make:route_guard premium_content
 ```
 
-<a name="build-app-icons"></a>
+<div id="build-app-icons"></div>
 <br>
 
 ## Build App Icons

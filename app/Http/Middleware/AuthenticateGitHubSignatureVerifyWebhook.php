@@ -14,7 +14,7 @@ class AuthenticateGitHubSignatureVerifyWebhook
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    { 
+    {
         $xHubSignature256 = $request->header('X-Hub-Signature-256');
         if (empty($xHubSignature256)) {
             abort(403);
@@ -22,7 +22,7 @@ class AuthenticateGitHubSignatureVerifyWebhook
 
         $verified = $this->verifySignature($xHubSignature256);
 
-        if (!$verified) {
+        if (! $verified) {
             abort(403);
         }
 
@@ -31,8 +31,9 @@ class AuthenticateGitHubSignatureVerifyWebhook
 
     private function verifySignature($xHubSignature256)
     {
-        $body = file_get_contents("php://input");
+        $body = file_get_contents('php://input');
         $secret = config('project.meta.github_webhook_secret');
-        return hash_equals('sha256='.hash_hmac('sha256', $body, $secret), $xHubSignature256); 
+
+        return hash_equals('sha256='.hash_hmac('sha256', $body, $secret), $xHubSignature256);
     }
 }

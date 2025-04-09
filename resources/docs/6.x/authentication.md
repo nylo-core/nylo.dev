@@ -11,7 +11,7 @@
 - [Checking if a user is authenticated](#checking-if-a-user-is-authenticated "Checking if a user is authenticated")
 - [Authentication page](#authentication-page "Authentication page")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -62,7 +62,7 @@ _login(String email, String password) async {
 
 Now the User will be authenticated and the data will be stored on their device.
 
-<a name="adding-an-auth-user"></a>
+<div id="adding-an-auth-user"></div>
 <br>
 
 ## Adding an auth user
@@ -77,7 +77,7 @@ _login() async {
 } 
 ```
 
-<a name="retrieve-an-auth-user"></a>
+<div id="retrieve-an-auth-user"></div>
 <br>
 
 ## Retrieve an auth user's data
@@ -92,7 +92,7 @@ _getUser() async {
 }
 ```
 
-<a name="logout-an-auth-user"></a>
+<div id="logout-an-auth-user"></div>
 <br>
 
 ## Logout an auth user
@@ -108,7 +108,7 @@ _logout() async {
 
 Now, the user is logged out of the app and the [authentication page](#authentication-page) won't show when they next visit the app.
 
-<a name="checking-if-a-user-is-authenticated"></a>
+<div id="checking-if-a-user-is-authenticated"></div>
 <br>
 
 ## Checking if a user is authenticated
@@ -123,7 +123,7 @@ _isAuthenticated() async {
 }
 ```
 
-<a name="authentication-page"></a>
+<div id="authentication-page"></div>
 <br>
 
 ## Authentication Page

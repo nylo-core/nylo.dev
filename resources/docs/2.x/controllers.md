@@ -6,7 +6,7 @@
 - [Introduction](#introduction "Introduction to controllers")
 - [Creating pages and controllers](#creating-pages-and-controllers "Creating pages and controllers")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -71,7 +71,7 @@ You can use `metro make:page mycool_page --controller` command to create a new p
 
 You should avoid overloading widgets with functional logic and move it to services for your controller. You can also consider taking advantage of a service/repository pattern if your project requires it.
 
-<a name="creating-pages-and-controllers"></a>
+<div id="creating-pages-and-controllers"></div>
 <br>
 
 ## Creating pages and controllers

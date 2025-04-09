@@ -11,9 +11,9 @@ class Download extends Model
      *
      * @var array
      */
-	protected $fillable = [
-		'project',
-		'version',
-		'ip',
-	];
+    protected $fillable = [
+        'project',
+        'version',
+        'ip',
+    ];
 }

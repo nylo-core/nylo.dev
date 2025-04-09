@@ -12,7 +12,7 @@
   - [Setting a default locale](#setting-a-default-locale "Settings a default locale")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -64,7 +64,7 @@ Here's an example.
 }
 ```
 
-<a name="adding-localised-files"></a>
+<div id="adding-localised-files"></div>
 <br>
 ## Adding Localized files
 
@@ -100,7 +100,7 @@ Go to your **pubspec.yaml** file and then at the `assets` section, add the new f
 > You can include as many locale files here but make sure you also include them within your pubspec.yaml assets.
 
 
-<a name="localizing-text"></a>
+<div id="localizing-text"></div>
 <br>
 
 ## Localizing text
@@ -143,7 +143,7 @@ trans("intros.hello");
 
 ```
 
-<a name="arguments"></a>
+<div id="arguments"></div>
 <br>
 
 ### Arguments
@@ -181,7 +181,7 @@ trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Antho
 
 ```
 
-<a name="updating-the-locale"></a>
+<div id="updating-the-locale"></div>
 <br>
 
 ## Updating the locale
@@ -199,7 +199,7 @@ What this will do is update the locale to (Spanish which is) **es**.
 This can be extremely useful if you wanted to provide users with an options menu to select a language to use in the app. E.g. if they navigated to a settings screen with language flags and selected Spanish. 
 
 
-<a name="setting-a-default-locale"></a>
+<div id="setting-a-default-locale"></div>
 <br>
 
 ## Setting a default locale

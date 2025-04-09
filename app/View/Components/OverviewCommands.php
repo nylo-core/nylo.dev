@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class OverviewAuthentication extends Component
+class OverviewCommands extends Component
 {
     public $latestVersionOfNylo;
 
@@ -23,6 +23,6 @@ class OverviewAuthentication extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.overview-authentication');
+        return view('components.overview-commands');
     }
 }

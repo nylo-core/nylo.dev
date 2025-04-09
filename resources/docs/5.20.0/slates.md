@@ -10,7 +10,7 @@
     - [Laravel Authentication Slate](#packages-laravel-auth-slate "Laravel Authentication Slate")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -30,7 +30,7 @@ metro slate:publish example_slate_package
 
 Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
 
-<a name="creating-a-slate-package"></a>
+<div id="creating-a-slate-package"></div>
 <br>
 
 ## Creating a Slate package
@@ -55,7 +55,7 @@ List<NyTemplate> run() => [
 
 Once you've built your Slate package, publish it to pub.dev as a package for the community to download.
 
-<a name="packages-auth-slate"></a>
+<div id="packages-auth-slate"></div>
 <br>
 
 ## Auth Slate
@@ -77,7 +77,7 @@ dart run nylo_framework:main slate:publish ny_auth_slate
 metro slate:publish ny_auth_slate
 ```
 
-<a name="packages-laravel-auth-slate"></a>
+<div id="packages-laravel-auth-slate"></div>
 <br>
 
 ## Laravel Authentication Slate

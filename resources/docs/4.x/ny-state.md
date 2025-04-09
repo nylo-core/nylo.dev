@@ -8,7 +8,7 @@
 - [Helpers](#helpers "Helpers")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -24,7 +24,7 @@ The `NyState` class can help you with the following:
 - Managing the state
 - Changing Language
 
-<a name="how-to-use-nystate"></a>
+<div id="how-to-use-nystate"></div>
 <br>
 
 ## How to use NyState
@@ -58,7 +58,7 @@ Or with the alias metro
 metro make:page product_page
 ```
 
-<a name="helpers"></a>
+<div id="helpers"></div>
 <br>
 ## Helpers
 
@@ -74,7 +74,7 @@ metro make:page product_page
 
 
 
-<a name="color"></a>
+<div id="color"></div>
 <br>
 ### Color
 
@@ -96,7 +96,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="boot"></a>
+<div id="boot"></div>
 <br>
 ### Boot
 
@@ -127,7 +127,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="pop"></a>
+<div id="pop"></div>
 <br>
 ### Pop
 
@@ -154,7 +154,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="showToast"></a>
+<div id="showToast"></div>
 <br>
 ### showToast
 
@@ -187,7 +187,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="validator"></a>
+<div id="validator"></div>
 <br>
 ### validator
 
@@ -218,7 +218,7 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 ```
 
 
-<a name="change-language"></a>
+<div id="change-language"></div>
 <br>
 ### changeLanguage
 
@@ -247,7 +247,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="when-env"></a>
+<div id="when-env"></div>
 <br>
 ### whenEnv
 
@@ -270,7 +270,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="lock-release"></a>
+<div id="lock-release"></div>
 <br>
 ### lockRelease
 
@@ -316,7 +316,7 @@ class _LoginPageState extends NyState<LoginPage> {
 
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
-<a name="is-locked"></a>
+<div id="is-locked"></div>
 <br>
 ### isLocked
 
@@ -342,7 +342,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="is-loading"></a>
+<div id="is-loading"></div>
 <br>
 ### isLoading
 
@@ -367,7 +367,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="after-load"></a>
+<div id="after-load"></div>
 <br>
 ### afterLoad
 
@@ -398,7 +398,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="after-not-null"></a>
+<div id="after-not-null"></div>
 <br>
 ### afterNotNull
 
@@ -429,7 +429,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="set-loading"></a>
+<div id="set-loading"></div>
 <br>
 ### setLoading
 

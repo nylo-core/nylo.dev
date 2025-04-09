@@ -6,8 +6,9 @@
 - [Installing Flutter](#installing-flutter "Installing Flutter")
 - [Set up an editor](#set-up-an-editor "Set up an editor")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Installing Flutter
 
 To use {{ config('app.name') }}, you'll need to have Flutter installed. Check out the <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter docs</a> for how to get set up.
@@ -32,7 +33,7 @@ flutter upgrade
 flutter doctor -v
 ```
 
-<a name="set-up-an-editor"></a>
+<div id="set-up-an-editor"></div>
 <br>
 
 ## Set up an editor

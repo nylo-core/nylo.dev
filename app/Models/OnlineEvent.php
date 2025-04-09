@@ -26,7 +26,7 @@ class OnlineEvent extends Model
      * The attributes that should be cast.
      *
      * @var array
-    */
+     */
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
@@ -34,8 +34,6 @@ class OnlineEvent extends Model
 
     /**
      * Check if the event is happening now.
-     *
-     * @return bool
      */
     public function isHappeningNow(): bool
     {
@@ -44,8 +42,6 @@ class OnlineEvent extends Model
 
     /**
      * Check if the event is upcoming.
-     *
-     * @return bool
      */
     public function isUpcoming(): bool
     {

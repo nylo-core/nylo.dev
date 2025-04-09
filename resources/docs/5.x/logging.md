@@ -8,7 +8,7 @@
 - [Helpers](#helpers "Helpers")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -55,7 +55,7 @@ NyLogger.debug(country); // UK
 NyLogger.debug(favouriteCountries);
 ```
 
-<a name="log-levels"></a>
+<div id="log-levels"></div>
 <br>
 
 ## Log Levels
@@ -69,7 +69,7 @@ You can use the following log levels:
 - NyLogger.json(dynamic message)
 
 
-<a name="helpers"></a>
+<div id="helpers"></div>
 <br>
 
 ## Helpers

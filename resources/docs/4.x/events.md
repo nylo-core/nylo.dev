@@ -11,7 +11,7 @@
   - [Setup Listeners](#setup-listeners "Setup Listeners")
   - [Listeners Handle Method](#listeners-handle-method "Listeners Handle Method")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -23,7 +23,7 @@ Events are powerful when you need to handle logic after something happens in you
 >
 > To register you events, add them into your `config/events.dart` map.
 
-<a name="understanding-events"></a>
+<div id="understanding-events"></div>
 <br>
 
 ## Understanding Events
@@ -47,7 +47,7 @@ If we use the last example "Successful payment", we might have to do the followi
 
 In the next section, we'll do a practical example for how to do this.
 
-<a name="practical-example"></a>
+<div id="practical-example"></div>
 <br>
 
 ## Practical Example
@@ -162,7 +162,7 @@ stripePay(List<Product> products) async {
 
 This is all we need to use our new event.
 
-<a name="dispatching-events"></a>
+<div id="dispatching-events"></div>
 <br>
 
 ## Dispatching Events
@@ -181,7 +181,7 @@ This will dispatch the `LoginEvent` event.
 
 > It's important that your `LoginEvent` class is registered in your <b>config/events.dart</b> file.
 
-<a name="setup-listeners"></a>
+<div id="setup-listeners"></div>
 <br>
 
 ## Setup listeners
@@ -217,7 +217,7 @@ class AuthUserListener extends NyListener {
 
 ```
 
-<a name="listeners-handle-method"></a>
+<div id="listeners-handle-method"></div>
 <br>
 
 ## Listener's handle method

@@ -20,7 +20,7 @@
   - [Delete a collection](#delete-a-collection "Delete a collection")
 - [Sessions](#introduction-to-sessions "Introduction to sessions")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -44,7 +44,7 @@ String coins = await storageRead('coins'); // "10"
 
 In this guide, you'll learn about NyStorage, Backpack, Collections and Sessions.
 
-<a name="save-values"></a>
+<div id="save-values"></div>
 <br>
 
 ## Save values
@@ -61,7 +61,7 @@ await NyStorage.save("coins", '10');
 
 > Data will persist on the user's device using NyStorage. E.g. if they exit the app, you can retrieve the same data that was stored previously.
 
-<a name="retrieve-values"></a>
+<div id="retrieve-values"></div>
 <br>
 
 ## Retrieve values
@@ -94,7 +94,7 @@ double coins = await NyStorage.read<double>('coins'); // 10.00 (double)
 ```
 
 
-<a name="keys"></a>
+<div id="keys"></div>
 <br>
 
 ## Keys
@@ -166,7 +166,7 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 }
 ```
 
-<a name="save-json"></a>
+<div id="save-json"></div>
 <br>
 
 ## Save JSON
@@ -187,7 +187,7 @@ await storageSave("user", user);
 await storageRead("user"); // {"name": "Anthony", "nickname": "Tone"}
 ```
 
-<a name="retrieve-json"></a>
+<div id="retrieve-json"></div>
 <br>
 
 ## Retrieve JSON
@@ -203,7 +203,7 @@ print(user); // {"name": "Anthony", "email": "agordon@mail.com"}
 ```
 
 
-<a name="backpack-storage"></a>
+<div id="backpack-storage"></div>
 <br>
 
 ## Backpack Storage
@@ -291,7 +291,7 @@ class ApiService extends NyApiService {
 }
 ```
 
-<a name="persist-data-with-backpack"></a>
+<div id="persist-data-with-backpack"></div>
 <br>
 
 ## Persist data with Backpack
@@ -310,7 +310,7 @@ Backpack.instance.read('user_token'); // "a token 123"
 
 > By default, NyStorge will not store data in Backpack unless the `inBackpack` parameter is set to `true`
 
-<a name="introduction-to-collections"></a>
+<div id="introduction-to-collections"></div>
 <br>
 
 ## Introduction to Collections
@@ -352,7 +352,7 @@ _removeItemFromCollection(int index) async {
 }
 ```
 
-<a name="add-to-a-collection"></a>
+<div id="add-to-a-collection"></div>
 <br>
 
 ## Add to a collection 
@@ -369,7 +369,7 @@ await NyStorage.addToCollection("a_storage_key", item: "3");
 await NyStorage.readCollection("a_storage_key"); // ["1", "2", "3"]
 ```
 
-<a name="retrieve-a-collection"></a>
+<div id="retrieve-a-collection"></div>
 <br>
 
 ## Retrieve a collection
@@ -385,7 +385,7 @@ await NyStorage.addToCollection("a_storage_key", item: "Tim");
 await NyStorage.readCollection("a_storage_key"); // ["Anthony", "Tim"]
 ```
 
-<a name="delete-a-collection"></a>
+<div id="delete-a-collection"></div>
 <br>
 
 ## Delete a collection
@@ -400,7 +400,7 @@ await NyStorage.readCollection("a_storage_key"); // ["Anthony", "Kyle"]
 await NyStorage.deleteFromCollection(0, key: "a_storage_key"); // ["Kyle"]
 ```
 
-<a name="introduction-to-sessions"></a>
+<div id="introduction-to-sessions"></div>
 <br>
 
 ## Introduction to Sessions
@@ -419,6 +419,9 @@ session('onboarding')
 String firstName = session('onboarding').get('first_name');
 List<String> interests = session('onboarding').get('interests');
 
+// Get all the data
+session('onboarding').data(); // {"first_name": "Anthony", "interests": ["coding", "gaming"]}
+
 // 3 - Deleting an item from a session
 session('onboarding').delete('first_name');
 
@@ -427,5 +430,3 @@ session('onboarding').clear();
 ```
 
 > Sessions are stored in memory and are not persisted. They are useful for storing data for a user's session.
-
----

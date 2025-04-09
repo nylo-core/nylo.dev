@@ -7,7 +7,7 @@
 - [Upgrading to 2.x from 1.x](#upgrading-to-2.x-from-1.x "Upgrading to 2.x from 1.x")
 
 
-<a name="changelog"></a>
+<div id="changelog"></div>
 <br>
 
 ## Changelog

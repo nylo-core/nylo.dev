@@ -6,7 +6,7 @@
 - [Introduction](#introduction "Introduction to controllers")
 - [Creating pages and controllers](#creating-pages-and-controllers "Creating pages and controllers")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -69,7 +69,7 @@ If your widget has a controller, you can use `widget.controller` to access its p
 
 You can use `flutter pub run nylo_framework:main make:page account --controller` command to create a new page and controller automatically for you.
 
-<a name="creating-pages-and-controllers"></a>
+<div id="creating-pages-and-controllers"></div>
 <br>
 
 ## Creating pages and controllers

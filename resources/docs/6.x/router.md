@@ -28,8 +28,9 @@
 
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Introduction
 
 Routes guide users to different pages in our app. 
@@ -71,7 +72,7 @@ appRouter() => nyRoutes((router) {
 You may also need to pass data from one view to another. In {{ config('app.name') }}, that’s possible using the `NyStatefulWidget`. We’ll dive deeper into this to explain how it works.
 
 
-<a name="adding-routes"></a>
+<div id="adding-routes"></div>
 <br>
 
 ## Adding routes
@@ -99,7 +100,7 @@ appRouter() => nyRoutes((router) {
 });
 ```
 
-<a name="navigating-to-pages"></a>
+<div id="navigating-to-pages"></div>
 <br>
 
 ## Navigating to pages
@@ -112,7 +113,7 @@ void _pressedSettings() {
 }
 ```
 
-<a name="add-multiple-routers"></a>
+<div id="add-multiple-routers"></div>
 <br>
 
 ## Multiple routers
@@ -154,7 +155,7 @@ class RouteProvider implements NyProvider {
 ...
 ```
 
-<a name="initial-route"></a>
+<div id="initial-route"></div>
 <br>
 
 ## Initial route
@@ -183,7 +184,7 @@ appRouter() => nyRoutes((router) {
 });
 ```
 
-<a name="route-guards"></a>
+<div id="route-guards"></div>
 <br>
 
 ## Route guards
@@ -258,7 +259,7 @@ You can create a new route guard using the <a href="/docs/6.x/metro">Metro</a> C
 dart run nylo_framework:main make:route_guard subscribed
 ```
 
-<a name="passing-data-to-another-page"></a>
+<div id="passing-data-to-another-page"></div>
 <br>
 
 ## Passing data to another page
@@ -310,7 +311,7 @@ class _ProfilePageState extends NyPage<ProfilePage> {
   };
 ```
 
-<a name="route-groups"></a>
+<div id="route-groups"></div>
 <br>
 
 ## Route Groups
@@ -341,7 +342,7 @@ appRouter() => nyRoutes((router) {
 - **prefix** - This will add the prefix to all the routes in the group. E.g. `/dashboard/chat`, `/dashboard/followers`. Now anytime you navigate to a page in the group, it will use the prefix. E.g. `routeTo(ChatPage.path)` will navigate to `/dashboard/chat`.
 
 
-<a name="route-parameters"></a>
+<div id="route-parameters"></div>
 <br>
 
 ## Using Route Parameters
@@ -375,7 +376,7 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 ```
 
 
-<a name="query-parameters"></a>
+<div id="query-parameters"></div>
 <br>
 
 ## Query Parameters
@@ -423,7 +424,7 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 
 > Query parameters must follow the HTTP protocol, E.g. /account?userId=1&tab=2
 
-<a name="page-transitions"></a>
+<div id="page-transitions"></div>
 <br>
 
 ## Page Transitions
@@ -510,7 +511,7 @@ class _HomePageState extends NyState<HomePage> {
 ...
 ```
 
-<a name="navigation-types"></a>
+<div id="navigation-types"></div>
 <br>
 
 ## Navigation Types
@@ -535,7 +536,7 @@ class _HomePageState extends NyState<HomePage> {
 ...
 ```
 
-<a name="navigating-back"></a>
+<div id="navigating-back"></div>
 <br>
 
 ## Navigating back
@@ -579,7 +580,7 @@ class _HomePageState extends NyPage<HomePage> {
 
 ```
 
-<a name="authenticated-route"></a>
+<div id="authenticated-route"></div>
 <br>
 
 ## Authenticated Route
@@ -611,7 +612,7 @@ routeToAuthenticatedRoute();
 
 Learn more about authentication [here](/docs/{{ $version }}/authentication).
 
-<a name="route-history"></a>
+<div id="route-history"></div>
 <br>
 
 ## Route History
@@ -641,62 +642,202 @@ Nylo.getCurrentRouteArguments(); // dynamic
 Nylo.getPreviousRouteArguments(); // dynamic
 ```
 
-<a name="deep-linking"></a>
+<div id="deep-linking"></div>
 <br>
 
-## Deep linking
+## Deep Linking
 
-Deep linking allows you to navigate to a specific page in your app using a URL.
+Deep linking allows users to navigate directly to specific content within your app using URLs. This is useful for:
+- Sharing direct links to specific app content
+- Marketing campaigns that target specific in-app features
+- Handling notifications that should open specific app screens
+- Seamless web-to-app transitions
 
-First, ensure you have deep linking enabled in your project.
+## Setup
 
-IOS - <a target="_BLANK" href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#2-adjust-ios-build-settings">Link</a>
+Before implementing deep linking in your app, ensure your project is properly configured:
 
-Android - <a target="_BLANK" href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml">Link</a>
+### 1. Platform Configuration
 
-Next, ensure you have some routes in your project.
+**iOS**: Configure universal links in your Xcode project
+- <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter Universal Links Configuration Guide</a>
 
-``` dart
+**Android**: Set up app links in your AndroidManifest.xml
+- <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter App Links Configuration Guide</a>
+
+### 2. Define Your Routes
+
+All routes that should be accessible via deep links must be registered in your router configuration:
+
+```dart
 // File: /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
-  ...
+  // Basic routes
   router.add(HomePage.path).initialRoute();
-
   router.add(ProfilePage.path);
-
   router.add(SettingsPage.path);
+  
+  // Route with parameters
+  router.add(HotelBookingPage.path);
 });
 ```
 
-Now you can navigate to any of the pages using a URL.
+## Using Deep Links
+
+Once configured, your app can handle incoming URLs in various formats:
+
+### Basic Deep Links
+
+Simple navigation to specific pages:
 
 ``` bash
-// Example URL
-
-https://<web domain>/profile - navigates to the profile page
-https://<web domain>/settings - navigates to the settings page
-
-// Passing parameters to the Page
-https://<web domain>/profile?user=7 - navigates to the profile page with the user ID 7
+https://yourdomain.com/profile       // Opens the profile page
+https://yourdomain.com/settings      // Opens the settings page
 ```
 
-You can also pass query parameters to the page using the URL.
+To trigger these navigations programmatically within your app:
 
-Let's imagine you have a page that displays a user's profile. You can pass the user ID to the page using the URL.
+```dart
+routeTo(ProfilePage.path);
+routeTo(SettingsPage.path);
+```
 
-`https://<web domain>/profile?user=20`
+### Path Parameters
 
-``` dart
-// Profile Page
-class _ProfilePageState extends NyPage<ProfilePage> {
+For routes that require dynamic data as part of the path:
 
+#### Route Definition
+
+```dart
+class HotelBookingPage extends NyStatefulWidget {
+  // Define a route with a parameter placeholder {id}
+  static RouteView path = ("/hotel/{id}/booking", (_) => HotelBookingPage());
+  
+  HotelBookingPage({super.key}) : super(child: () => _HotelBookingPageState());
+}
+
+class _HotelBookingPageState extends NyPage<HotelBookingPage> {
   @override
   get init => () {
-    print(queryParameters()); // {"user": 20}
+    // Access the path parameter
+    final hotelId = queryParameters()["id"]; // Returns "87" for URL ../hotel/87/booking
+    print("Loading hotel ID: $hotelId");
     
-    print(widget.queryParameters()); // or like this {"user": 20}
+    // Use the ID to fetch hotel data or perform operations
+  };
+  
+  // Rest of your page implementation
+}
+```
+
+#### URL Format
+
+``` bash
+https://yourdomain.com/hotel/87/booking
+```
+
+#### Programmatic Navigation
+
+```dart
+// Navigate with parameters
+routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
+              "bookings": "active",
+            });
+```
+
+### Query Parameters
+
+For optional parameters or when multiple dynamic values are needed:
+
+#### URL Format
+
+``` bash
+https://yourdomain.com/profile?user=20&tab=posts
+https://yourdomain.com/hotel/87/booking?checkIn=2025-04-10&nights=3
+```
+
+#### Accessing Query Parameters
+
+```dart
+class _ProfilePageState extends NyPage<ProfilePage> {
+  @override
+  get init => () {
+    // Get all query parameters
+    final params = queryParameters();
+    
+    // Access specific parameters
+    final userId = params["user"];            // "20"
+    final activeTab = params["tab"];          // "posts"
+    
+    // Alternative access method
+    final params2 = widget.queryParameters();
+    print(params2);                           // {"user": "20", "tab": "posts"}
   };
 }
 ```
 
----
+#### Programmatic Navigation with Query Parameters
+
+```dart
+// Navigate with query parameters
+routeTo(ProfilePage.path.withQueryParams({"user": "20", "tab": "posts"}));
+
+// Combine path and query parameters
+routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
+              "checkIn": "2025-04-10",
+              "nights": "3",
+            });
+```
+
+## Handling Deep Links
+
+### Testing Deep Links
+
+For development and testing, you can simulate deep link activation using ADB (Android) or xcrun (iOS):
+
+```bash
+# Android
+adb shell am start -a android.intent.action.VIEW -d "https://yourdomain.com/profile?user=20" com.yourcompany.yourapp
+
+# iOS (Simulator)
+xcrun simctl openurl booted "https://yourdomain.com/profile?user=20"
+```
+
+### Debugging Tips
+
+- Print all parameters in your init method to verify correct parsing
+- Test different URL formats to ensure your app handles them correctly
+- Remember that query parameters are always received as strings, convert them to the appropriate type as needed
+
+## Common Patterns
+
+### Parameter Type Conversion
+
+Since all URL parameters are passed as strings, you'll often need to convert them:
+
+```dart
+// Converting string parameters to appropriate types
+final hotelId = int.parse(queryParameters()["id"] ?? "0");
+final isAvailable = (queryParameters()["available"] ?? "false") == "true";
+final checkInDate = DateTime.parse(queryParameters()["checkIn"] ?? "");
+```
+
+### Optional Parameters
+
+Handle cases where parameters might be missing:
+
+```dart
+final userId = queryParameters()["user"];
+if (userId != null) {
+  // Load specific user profile
+} else {
+  // Load current user profile
+}
+
+// Or check hasQueryParameter
+if (hasQueryParameter('status')) {
+  // Do something with the status parameter
+} else {
+  // Handle absence of the parameter
+}
+```

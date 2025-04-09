@@ -14,7 +14,7 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
     /// - [NavigationHubLayout.bottomNav] Bottom navigation
     /// - [NavigationHubLayout.topNav] Top navigation
     NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-    // backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
     );
 
     /// Should the state be maintained
@@ -23,20 +23,20 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
     /// Navigation pages
     _BaseNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab(
-            title: "Home",
-            page: HomeTab(),
-            icon: Icon(Icons.home),
-            activeIcon: Icon(Icons.home),
-        ),
-        1: NavigationTab(
-            title: "Settings",
-            page: SettingsTab(),
-            icon: Icon(Icons.settings),
-            activeIcon: Icon(Icons.settings),
-        ),
-    };
+        return {
+            0: NavigationTab(
+                title: "Home",
+                page: HomeTab(),
+                icon: Icon(Icons.home),
+                activeIcon: Icon(Icons.home),
+            ),
+            1: NavigationTab(
+                title: "Settings",
+                page: SettingsTab(),
+                icon: Icon(Icons.settings),
+                activeIcon: Icon(Icons.settings),
+            ),
+        };
     });
 }
 </x-code-highlighter>

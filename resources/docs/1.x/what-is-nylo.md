@@ -12,7 +12,7 @@
 	- [Contributors](#contributors "Contributors")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -21,7 +21,7 @@ This project is open source and MIT-licenced too so you can freely build your pr
 
 New installs of Nylo contain standardized file structure and config so you can jump straight into developing your project.
 
-<a name="new-to-flutter"></a>
+<div id="new-to-flutter"></div>
 <br>
 
 ## New to Flutter?
@@ -32,7 +32,7 @@ They have tons of docs to help you understand how things work from the core.
 You can also subscribe to their YouTube channel for updates and what's happening in the community.
 
 
-<a name="maintenance-and-release-schedule"></a>
+<div id="maintenance-and-release-schedule"></div>
 <br>
 
 ## Maintenance and release schedule
@@ -40,7 +40,7 @@ You can also subscribe to their YouTube channel for updates and what's happening
 Maintenance of Nylo will be done monthly to check any bugs or weird glitches that might be causing problems.
 The Nylo framework follows [Semantic Versioning](https://semver.org).
 
-<a name="framework-dependencies"></a>
+<div id="framework-dependencies"></div>
 <br>
 
 ## Framework dependencies
@@ -62,7 +62,7 @@ Support these libraries in any way you can:
 - [nylo\_support](https://pub.dev/packages/nylo_support)
 - [flutter](https://github.com/flutter/flutter)
 
-<a name="contributors"></a>
+<div id="contributors"></div>
 <br>
 
 ## Contributors

@@ -18,6 +18,6 @@ class Package extends Model
         'organization',
         'repository',
         'version',
-        'site'
+        'site',
     ];
 }

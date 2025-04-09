@@ -12,7 +12,7 @@
 	- [Contributors](#contributors "Contributors")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -20,7 +20,7 @@
 
 New installs of {{ config('app.name') }} contain standardized file structure and config, so you can jump straight into developing your project.
 
-<a name="new-to-flutter"></a>
+<div id="new-to-flutter"></div>
 <br>
 
 ## New to Flutter?
@@ -31,7 +31,7 @@ They have tons of documentation to help you understand how things work from the 
 You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutterdev/featured" target="_BLANK">channel</a> for updates, tutorials and information on Flutter.
 
 
-<a name="maintenance-and-release-schedule"></a>
+<div id="maintenance-and-release-schedule"></div>
 <br>
 
 ## Maintenance and release schedule
@@ -40,7 +40,7 @@ The release schedule for {{ config('app.name') }} will be once or twice a year i
 
 The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
-<a name="framework-dependencies"></a>
+<div id="framework-dependencies"></div>
 <br>
 
 ## Framework dependencies
@@ -63,7 +63,7 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 | [recase](https://pub.dev/packages/recase) | [dio](https://pub.dev/packages/dio) |
 
 
-<a name="contributors"></a>
+<div id="contributors"></div>
 <br>
 
 ## Contributors

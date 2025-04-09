@@ -11,8 +11,9 @@
 - [Helpers](#helpers "Helpers")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Introduction
 
 When you create a <a href="/docs/{{$version}}/metro#make-page" target="_BLANK">page</a> in {{ config('app.name') }}, it will extend the `NyState` class. This class overrides Flutter's `State` class and provides additional features to make development easier.
@@ -21,7 +22,7 @@ You can **interact** with the state extactly like you would with a normal Flutte
 
 Let's cover how to use NyState.
 
-<a name="how-to-use-nystate"></a>
+<div id="how-to-use-nystate"></div>
 <br>
 
 ## How to use NyState
@@ -60,7 +61,7 @@ dart run nylo_framework:main make:page product_page
 metro make:page product_page
 ```
 
-<a name="loading-style"></a>
+<div id="loading-style"></div>
 <br>
 
 ## Loading Style
@@ -149,7 +150,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="state-management"></a>
+<div id="state-management"></div>
 <br>
 
 ## State Management
@@ -185,7 +186,7 @@ class _SettingsTabState extends NyState<SettingsTab> {
 Learn more about state management <a href="/docs/{{$version}}/state-management" target="_BLANK">here</a>.
 You can also watch our YouTube video on State Management <a href="https://youtu.be/X5EVh1KooFk?si=8hYQcXV9lvrSJgEL" target="_BLANK">here</a>.
 
-<a name="state-actions"></a>
+<div id="state-actions"></div>
 <br>
 
 ## State Actions
@@ -227,7 +228,7 @@ class HomeController extends Controller {
 
 You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
 
-<a name="helpers"></a>
+<div id="helpers"></div>
 <br>
 
 ## Helpers
@@ -246,7 +247,7 @@ You can use the `StateAction` class to update the state of any page/widget in yo
 | [showToastWarning](#show-toast-warning "showToastWarning") | [showToastSorry](#show-toast-sorry "showToastSorry") |
 
 
-<a name="color"></a>
+<div id="color"></div>
 <br>
 
 ### Color
@@ -269,7 +270,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="reboot"></a>
+<div id="reboot"></div>
 <br>
 
 ### Reboot
@@ -312,8 +313,9 @@ class _HomePageState extends NyState<HomePage> {
 }
 ```
 
-<a name="pop"></a>
+<div id="pop"></div>
 <br>
+
 ### Pop
 
 `pop` - Remove the current page from the stack.
@@ -339,7 +341,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="showToast"></a>
+<div id="showToast"></div>
 <br>
 
 ### showToast
@@ -373,7 +375,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="validate"></a>
+<div id="validate"></div>
 <br>
 
 ### validate
@@ -400,7 +402,7 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 ```
 
 
-<a name="change-language"></a>
+<div id="change-language"></div>
 <br>
 
 ### changeLanguage
@@ -430,7 +432,7 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 
-<a name="when-env"></a>
+<div id="when-env"></div>
 <br>
 
 ### whenEnv
@@ -453,7 +455,7 @@ class _HomePageState extends NyState<HomePage> {
   };
 ```
 
-<a name="lock-release"></a>
+<div id="lock-release"></div>
 <br>
 
 ### lockRelease
@@ -500,7 +502,7 @@ class _LoginPageState extends NyState<LoginPage> {
 
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
-<a name="is-locked"></a>
+<div id="is-locked"></div>
 <br>
 
 ### isLocked
@@ -526,7 +528,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="view"></a>
+<div id="view"></div>
 <br>
 
 ### view
@@ -548,7 +550,7 @@ class _HomePageState extends NyState<HomePage> {
 }
 ```
 
-<a name="confirm-action"></a>
+<div id="confirm-action"></div>
 <br>
 
 ### confirmAction
@@ -566,7 +568,7 @@ _logout() {
 }
 ```
 
-<a name="show-toast-success"></a>
+<div id="show-toast-success"></div>
 <br>
 
 ### showToastSuccess
@@ -583,7 +585,7 @@ _login() {
 }
 ```
 
-<a name="show-toast-oops"></a>
+<div id="show-toast-oops"></div>
 <br>
 
 ### showToastOops
@@ -600,7 +602,7 @@ _error() {
 }
 ```
 
-<a name="show-toast-danger"></a>
+<div id="show-toast-danger"></div>
 <br>
 
 ### showToastDanger
@@ -617,7 +619,7 @@ _error() {
 }
 ```
 
-<a name="show-toast-info"></a>
+<div id="show-toast-info"></div>
 <br>
 
 ### showToastInfo
@@ -634,7 +636,7 @@ _info() {
 }
 ```
 
-<a name="show-toast-warning"></a>
+<div id="show-toast-warning"></div>
 <br>
 
 ### showToastWarning
@@ -651,7 +653,7 @@ _warning() {
 }
 ```
 
-<a name="show-toast-sorry"></a>
+<div id="show-toast-sorry"></div>
 <br>
 
 ### showToastSorry
@@ -668,7 +670,7 @@ _sorry() {
 }
 ```
 
-<a name="is-loading"></a>
+<div id="is-loading"></div>
 <br>
 
 ### isLoading
@@ -694,7 +696,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="after-load"></a>
+<div id="after-load"></div>
 <br>
 
 ### afterLoad
@@ -725,7 +727,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="after-not-locked"></a>
+<div id="after-not-locked"></div>
 <br>
 
 ### afterNotLocked
@@ -764,7 +766,7 @@ class _HomePageState extends NyState<HomePage> {
 }
 ```
 
-<a name="after-not-null"></a>
+<div id="after-not-null"></div>
 <br>
 
 ### afterNotNull
@@ -796,7 +798,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 ```
 
-<a name="set-loading"></a>
+<div id="set-loading"></div>
 <br>
 
 ### setLoading

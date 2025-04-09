@@ -7,7 +7,7 @@
 - [Creating a Slate package](#creating-a-slate-package "Creating a Slate package")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -26,7 +26,7 @@ metro publish:slate example_slate_package
 
 Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
 
-<a name="creating-a-slate-package"></a>
+<div id="creating-a-slate-package"></div>
 <br>
 
 ## Creating a Slate package

@@ -12,15 +12,16 @@
 	- [Contributors](#contributors "Contributors")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Introduction
 
 {{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier. 
 
 It also comes with a ready-made file structure and setup, letting you start developing right away. Out the box, you'll have access to routing, localization, themes, local storage, push notifications, and more.
 
-<a name="new-to-flutter"></a>
+<div id="new-to-flutter"></div>
 <br>
 
 ## New to Flutter?
@@ -31,7 +32,7 @@ They have tons of documentation to help you understand how things work from the 
 You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutterdev/featured" target="_BLANK">channel</a> for updates, tutorials and information on Flutter.
 
 
-<a name="maintenance-and-release-schedule"></a>
+<div id="maintenance-and-release-schedule"></div>
 <br>
 
 ## Maintenance and release schedule
@@ -40,7 +41,7 @@ The release schedule for {{ config('app.name') }} will be once or twice a year i
 
 The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
-<a name="framework-dependencies"></a>
+<div id="framework-dependencies"></div>
 <br>
 
 ## Framework dependencies
@@ -63,7 +64,7 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 | [recase](https://pub.dev/packages/recase) | [dio](https://pub.dev/packages/dio) |
 
 
-<a name="contributors"></a>
+<div id="contributors"></div>
 <br>
 
 ## Contributors
@@ -83,3 +84,4 @@ Here's a shout out to the contributors who have helped build {{ config('app.name
 - <a href="https://github.com/ruwiss" target="_blank">ruwiss</a>
 - <a href="https://github.com/rytisder" target="_blank">rytisder</a>
 - <a href="https://github.com/israelins85" target="_blank">israelins85</a>
+- <a href="https://github.com/voytech-net" target="_blank">voytech-net</a>

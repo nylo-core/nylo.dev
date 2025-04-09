@@ -9,7 +9,7 @@
 - Setup
   - [Metro Cli tool](#setup-metro-alias "Setup Metro Cli tool alias")
 
-<a name="install"></a>
+<div id="install"></div>
 <br>
 ## Install
 
@@ -21,7 +21,7 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 
 You will need to run `flutter pub get` on the project to fetch all the packages.
 
-<a name="adding-your-env-file"></a>
+<div id="adding-your-env-file"></div>
 <br>
 
 ## Adding your .env file
@@ -43,7 +43,7 @@ flutter pub run nylo_framework:main project:init
 
 ---
 
-<a name="running-the-project"></a>
+<div id="running-the-project"></div>
 <br>
 
 ## Running the project
@@ -54,7 +54,7 @@ You should be greeted with Nylo's default landing screen for new projects.
 
 ---
 
-<a name="setup-metro-alias"></a>
+<div id="setup-metro-alias"></div>
 <br>
 
 ## Metro CLI tool

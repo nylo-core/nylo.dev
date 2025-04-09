@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Services\PackageService;
 use App\Http\Requests\GitHubVersionRequest;
+use App\Http\Services\PackageService;
+use Illuminate\Http\Request;
 
 /**
  * Class GitHubActionsController
  *
  * @property PackageService $packageService
- * @package App\Htpp\Controllers\GitHubActionsController
  */
 class GitHubActionsController extends Controller
 {
     /**
      * GitHubActionsController constructor
      *
-     * @param PackageService $packageService
      *
      * @return void
      */
-    function __construct(PackageService $packageService)
+    public function __construct(PackageService $packageService)
     {
         $this->packageService = $packageService;
     }
@@ -29,15 +27,13 @@ class GitHubActionsController extends Controller
     /**
      * GitHub Workflow http request to update the latest version of a package.
      *
-     * @param GitHubVersionRequest $request
-     * @param string $repository
-     *
+     * @param  string  $repository
      * @return \Illuminate\Http\JsonResponse
      */
     public function version(GitHubVersionRequest $request, $repository)
     {
         $didSucceed = $this->packageService->updateVersion($repository, $request->version);
-        if (!$didSucceed) {
+        if (! $didSucceed) {
             return response()->json(['status' => 'failed', 'error_code' => 539]);
         }
 
@@ -47,7 +43,6 @@ class GitHubActionsController extends Controller
     /**
      * Webhook for Release event.
      *
-     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -69,7 +64,7 @@ class GitHubActionsController extends Controller
         $repositoryName = $repositoryData['name'];
 
         $didSucceed = $this->packageService->updateVersion($repositoryName, $tagName);
-        if (!$didSucceed) {
+        if (! $didSucceed) {
             return response()->json(['status' => 'failed', 'error_code' => 539]);
         }
 

@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Process;
 
 class ProcessController extends Controller
 {
     /**
      * Process to update the project.
      *
-     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */

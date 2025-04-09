@@ -19,7 +19,7 @@ class PackageFactory extends Factory
         return [
             'organization' => $this->faker->company(),
             'repository' => $this->faker->company(),
-            'version' => $this->faker->randomDigit() . '.0.0',
+            'version' => $this->faker->randomDigit().'.0.0',
         ];
     }
 }

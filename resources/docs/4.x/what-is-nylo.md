@@ -12,7 +12,7 @@
 	- [Contributors](#contributors "Contributors")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -21,7 +21,7 @@ This project is open source and MIT-licenced too so you can freely build your pr
 
 New installs of {{ config('app.name') }} contain standardized file structure and config so you can jump straight into developing your project.
 
-<a name="new-to-flutter"></a>
+<div id="new-to-flutter"></div>
 <br>
 
 ## New to Flutter?
@@ -32,7 +32,7 @@ They have tons of documentation to help you understand how things work from the 
 You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutterdev/featured" target="_BLANK">channel</a> for updates, tutorials and information on Flutter.
 
 
-<a name="maintenance-and-release-schedule"></a>
+<div id="maintenance-and-release-schedule"></div>
 <br>
 
 ## Maintenance and release schedule
@@ -40,7 +40,7 @@ You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutt
 Major releases for {{ config('app.name') }} are scheduled annually, but any bugs or weird glitches are dealt with ad hoc. 
 The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
-<a name="framework-dependencies"></a>
+<div id="framework-dependencies"></div>
 <br>
 
 ## Framework dependencies
@@ -68,7 +68,7 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 - [flutter](https://github.com/flutter/flutter)
 - [pretty\_dio\_logger](https://pub.dev/packages/pretty_dio_logger)
 
-<a name="contributors"></a>
+<div id="contributors"></div>
 <br>
 
 ## Contributors

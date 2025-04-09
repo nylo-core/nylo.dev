@@ -12,7 +12,7 @@
 - [Updating The State](#updating-the-state "Updating The State")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -25,7 +25,7 @@ It works in the same way as the regular `ListView` widget, but it has some extra
 
 Let's take a look at some code.
 
-<a name="usage-nylistview"></a>
+<div id="usage-nylistview"></div>
 <br>
 
 ## Usage NyListView
@@ -77,7 +77,7 @@ The `NyListView` widget requires two parameters:
 - **data** - This is the data that will be displayed in the list.
 
 
-<a name="usage-nylistview-separated"></a>
+<div id="usage-nylistview-separated"></div>
 <br>
 
 ## Usage NyListView Separated
@@ -141,7 +141,7 @@ The `NyListView.separated` widget requires three parameters:
 - **data** - This is the data that will be displayed in the list.
 - **separatorBuilder** - This is the widget that will be displayed between each item in the list.
 
-<a name="usage-nylistview-grid"></a>
+<div id="usage-nylistview-grid"></div>
 <br>
 
 ## Usage NyListView Grid
@@ -209,7 +209,7 @@ The `NyListView.grid` widget also has some optional parameters:
 - **mainAxisSpacing** - The mainAxis spacing.
 - **crossAxisSpacing** - The crossAxisSpacing.
 
-<a name="parameters"></a>
+<div id="parameters"></div>
 <br>
 
 ## Parameters
@@ -225,7 +225,7 @@ Here are some important parameters you should know about before using the `NyPul
 
 If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/5.x/lib/widgets/ny_list_view.dart). 
 
-<a name="updating-the-state"></a>
+<div id="updating-the-state"></div>
 <br>
 
 ## Updating the State

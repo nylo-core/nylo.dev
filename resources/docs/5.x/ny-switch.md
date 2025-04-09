@@ -8,7 +8,7 @@
 - [Parameters](#parameters "Parameters")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -20,7 +20,7 @@ It makes it easy to switch between different widgets based on the index.
 
 Let's take a look at some code.
 
-<a name="usage"></a>
+<div id="usage"></div>
 <br>
 
 ## Usage
@@ -52,7 +52,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-<a name="parameters"></a>
+<div id="parameters"></div>
 <br>
 
 ## Parameters

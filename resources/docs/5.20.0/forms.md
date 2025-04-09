@@ -24,7 +24,7 @@
 - [Custom Form Cast](#custom-form-casts "Custom Form Cast")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction to Forms
@@ -35,7 +35,7 @@ In Nylo you can use the `NyForm` class to manage, validate and submit data all i
 
 It's extremely easy and customizable, let's take a look at how to create a form.
 
-<a name="how-it-works"></a>
+<div id="how-it-works"></div>
 <br>
 
 #### Creating a form
@@ -144,7 +144,7 @@ That's a quick overview of how to create, display and submit a form in Nylo.
 
 This is just scratching the surface, you can customize your forms even further by adding casts, validation rules, dummy data and global styles.
 
-<a name="creating-a-form"></a>
+<div id="creating-a-form"></div>
 <br>
 
 ## Creating a form
@@ -189,7 +189,7 @@ class AdvertForm extends NyFormData {
 }
 ```
 
-<a name="displaying-a-form"></a>
+<div id="displaying-a-form"></div>
 <br>
 
 ## Displaying a form
@@ -230,7 +230,7 @@ This will display the fields associated with the form.
 You'll need to provide an additional widget to submit the form using `form.submit()`.
 
 
-<a name="submitting-a-form"></a>
+<div id="submitting-a-form"></div>
 <br>
 
 ## Submitting a Form
@@ -284,7 +284,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-<a name="setting-data"></a>
+<div id="setting-data"></div>
 <br>
 
 ## Setting data
@@ -366,7 +366,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-<a name="clearing-data"></a>
+<div id="clearing-data"></div>
 <br>
 
 ## Clearing Data
@@ -400,7 +400,7 @@ If you need to clear a specific field, you can use the `clearField` method.
 form.clearField("Name");
 ```
 
-<a name="form-fields"></a>
+<div id="form-fields"></div>
 
 ## Fields
 
@@ -506,7 +506,7 @@ Behind the scenes, Nylo will create a **Row** widget to display the fields.
 You can also adjust the mainAxisSpacing and crossAxisSpacing using the `mainAxisSpacing` and `crossAxisSpacing` parameters on the `NyForm` widget.
 
 
-<a name="form-validation"></a>
+<div id="form-validation"></div>
 <br>
 
 ## Validation
@@ -595,7 +595,7 @@ class JobForm extends NyFormData {
 }
 ```
 
-<a name="form-casts"></a>
+<div id="form-casts"></div>
 
 ## Casts
 
@@ -645,7 +645,7 @@ You can use any of the above casts in your form.
 
 If you'd like to create your own custom cast, you can do so by creating a new class in `config/form_casts.dart`.
 
-<a name="all-currencies"></a>
+<div id="all-currencies"></div>
 
 ### FormCast.currency - all currencies
 
@@ -671,7 +671,7 @@ The `FormCast.currency` cast supports multiple currencies, here's a list of all 
 | `pkr` | Pakistani Rupee |
 
 
-<a name="form-dummy-data"></a>
+<div id="form-dummy-data"></div>
 <br>
 
 ## Dummy Data
@@ -713,7 +713,7 @@ In the above example, the fields `Name`, `Weight`, `Height`, and `Hash Tags` wil
 
 > **Note**: Remove to update your .env file to `APP_ENV="production"` to disable dummy data.
 
-<a name="form-style"></a>
+<div id="form-style"></div>
 
 ## Style
 
@@ -870,7 +870,7 @@ class RegisterForm extends NyFormData {
 ```
 
 
-<a name="ny-login-form"></a>
+<div id="ny-login-form"></div>
 <br>
 
 ## Pre-built Forms
@@ -906,7 +906,7 @@ Widget build(BuildContext context) {
 ```
 
 
-<a name="form-parameters"></a>
+<div id="form-parameters"></div>
 <br>
 
 ## NyForm Parameters
@@ -921,7 +921,7 @@ Widget build(BuildContext context) {
 - `locked`: Lock the form (default: false)
 
 
-<a name="listening-to-form-changes"></a>
+<div id="listening-to-form-changes"></div>
 <br>
 
 ## Listening to Form Changes
@@ -943,7 +943,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-<a name="custom-form-casts"></a>
+<div id="custom-form-casts"></div>
 <br>
 
 ## Custom Form Casts

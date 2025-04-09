@@ -9,7 +9,7 @@
 - [Submitting Changes](#submitting-changes "How to submit changes")
 - [Reporting Issues](#reporting-issues "How to report issues")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -20,7 +20,7 @@ This guide will help you understand how you can contribute to the micro-framewor
 
 Whether you're a beginner or an experienced developer, your contributions are valuable to the Nylo community.
 
-<a name="getting-started"></a>
+<div id="getting-started"></div>
 <br>
 
 ## Getting Started
@@ -57,7 +57,7 @@ Now, you should be able to run the Nylo project with your local framework and su
 
 Any changes you make to the framework or support repositories will be reflected in the Nylo project.
 
-<a name="submitting-changes"></a>
+<div id="submitting-changes"></div>
 <br>
 
 ### Submitting Changes 
@@ -86,7 +86,7 @@ git push origin feature/your-feature-name
 Finally, submit a pull request into the repository you forked from.
 
 
-<a name="development-guidelines"></a>
+<div id="development-guidelines"></div>
 <br>
 
 ## Development Guidelines
@@ -117,7 +117,7 @@ Before submitting your changes:
 - Ensure your PR addresses only one concern
 - Keep changes focused and atomic
 
-<a name="reporting-issues"></a>
+<div id="reporting-issues"></div>
 <br>
 
 ## Reporting Issues

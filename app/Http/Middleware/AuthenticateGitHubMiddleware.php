@@ -16,7 +16,7 @@ class AuthenticateGitHubMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $ghApiKey = $request->header('X-GH-API-KEY');
-        
+
         if (empty($ghApiKey) || $ghApiKey != config('project.meta.gh_auth_token')) {
             abort(403, 'API key is not valid');
         }

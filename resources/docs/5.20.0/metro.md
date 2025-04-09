@@ -23,14 +23,14 @@
   - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the {{ config('app.name') }} framework. 
 It provides a lot of helpful tools to speed up development.
 
-<a name="install"></a>
+<div id="install"></div>
 <br>
 ## Install
 
@@ -81,14 +81,14 @@ slate
   slate:install
 ```
 
-<a name="make-controller"></a>
+<div id="make-controller"></div>
 <br>
 
 ## Make controller
 
 - [Making a new controller](#making-a-new-controller "Make a new controller with Metro")
 - [Forcefully make a controller](#forcefully-make-a-controller "Forcefully make a new controller with Metro")
-<a name="making-a-new-controller"></a>
+<div id="making-a-new-controller"></div>
 <br>
 
 ### Making a new controller
@@ -103,7 +103,7 @@ metro make:controller profile_controller
 
 This will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
-<a name="forcefully-make-a-controller"></a>
+<div id="forcefully-make-a-controller"></div>
 <br>
 
 ### Forcefully make a controller
@@ -116,7 +116,7 @@ Using the `--force` or `-f` flag will overwrite an existing controller if it alr
 metro make:controller profile_controller --force
 ```
 
-<a name="make-model"></a>
+<div id="make-model"></div>
 <br>
 
 ## Make model
@@ -124,7 +124,7 @@ metro make:controller profile_controller --force
 - [Making a new model](#making-a-new-model "Make a new model with Metro")
 - [Make model from JSON](#make-model-from-json "Make a new model from JSON with Metro")
 - [Forcefully make a model](#forcefully-make-a-model "Forcefully make a new model with Metro")
-<a name="making-a-new-model"></a>
+<div id="making-a-new-model"></div>
 <br>
 
 ### Making a new model
@@ -139,7 +139,7 @@ metro make:model product
 
 It will place the newly created model in `lib/app/models/`.
 
-<a name="make-model-from-json"></a>
+<div id="make-model-from-json"></div>
 <br>
 
 ### Make a model from JSON
@@ -156,7 +156,7 @@ metro make:model product --json
 
 Then, you can paste your JSON into the terminal and it will generate a model for you.
 
-<a name="forcefully-make-a-model"></a>
+<div id="forcefully-make-a-model"></div>
 <br>
 
 ### Forcefully make a model
@@ -171,7 +171,7 @@ dart run nylo_framework:main make:model product --force
 metro make:model product --force
 ```
 
-<a name="make-page"></a>
+<div id="make-page"></div>
 <br>
 
 ## Make page
@@ -183,7 +183,7 @@ metro make:model product --force
 - [Create a bottom navigation page](#create-a-bottom-navigation-page "Make a new bottom navigation page with Metro")
 - [Forcefully make a page](#forcefully-make-a-page "Forcefully make a new page with Metro")
 
-<a name="making-a-new-page"></a>
+<div id="making-a-new-page"></div>
 <br>
 
 ### Making a new page
@@ -198,7 +198,7 @@ metro make:page product_page
 
 This will create a new page if it doesn't exist within the `lib/resources/pages/` directory.
 
-<a name="create-a-page-with-a-controller"></a>
+<div id="create-a-page-with-a-controller"></div>
 <br>
 
 ### Create a page with a controller
@@ -215,7 +215,7 @@ dart run nylo_framework:main make:page product_page --controller
 metro make:page product_page -c
 ```
 
-<a name="create-an-auth-page"></a>
+<div id="create-an-auth-page"></div>
 <br>
 
 ### Create an auth page
@@ -232,7 +232,7 @@ dart run nylo_framework:main make:page login_page --auth
 metro make:page login_page -a
 ```
 
-<a name="create-an-initial-page"></a>
+<div id="create-an-initial-page"></div>
 <br>
 
 ### Create an initial page
@@ -249,7 +249,7 @@ dart run nylo_framework:main make:page home_page --initial
 metro make:page home_page -i
 ```
 
-<a name="create-a-bottom-navigation-page"></a>
+<div id="create-a-bottom-navigation-page"></div>
 <br>
 
 ### Create a bottom navigation page
@@ -266,7 +266,7 @@ dart run nylo_framework:main make:page dashboard --bottom-nav
 metro make:page dashboard -b
 ```
 
-<a name="forcefully-make-a-page"></a>
+<div id="forcefully-make-a-page"></div>
 <br>
 
 ### Forcefully make a page
@@ -281,14 +281,14 @@ dart run nylo_framework:main make:page product_page --force
 metro make:page product_page --force
 ```
 
-<a name="make-stateless-widget"></a>
+<div id="make-stateless-widget"></div>
 <br>
 
 ## Make stateless widget
 
 - [Making a new stateless widget](#making-a-new-stateless-widget "Make a new stateless widget with Metro")
 - [Forcefully make a stateless widget](#forcefully-make-a-stateless-widget "Forcefully make a new stateless widget with Metro")
-<a name="making-a-new-stateless-widget"></a>
+<div id="making-a-new-stateless-widget"></div>
 <br>
 
 ### Making a new stateless widget
@@ -303,7 +303,7 @@ metro make:stateless_widget product_rating_widget
 
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
-<a name="forcefully-make-a-stateless-widget"></a>
+<div id="forcefully-make-a-stateless-widget"></div>
 <br>
 
 ### Forcefully make a stateless widget
@@ -318,7 +318,7 @@ dart run nylo_framework:main make:stateless_widget product_rating_widget --force
 metro make:stateless_widget product_rating_widget --force
 ```
 
-<a name="make-stateful-widget"></a>
+<div id="make-stateful-widget"></div>
 <br>
 
 ## Make stateful widget
@@ -326,7 +326,7 @@ metro make:stateless_widget product_rating_widget --force
 - [Making a new stateful widget](#making-a-new-stateful-widget "Make a new stateful widget with Metro")
 - [Forcefully make a stateful widget](#forcefully-make-a-stateful-widget "Forcefully make a new stateful widget with Metro")
 
-<a name="making-a-new-stateful-widget"></a>
+<div id="making-a-new-stateful-widget"></div>
 <br>
 
 ### Making a new stateful widget
@@ -341,7 +341,7 @@ metro make:stateful_widget product_rating_widget
 
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
-<a name="forcefully-make-a-stateful-widget"></a>
+<div id="forcefully-make-a-stateful-widget"></div>
 <br>
 
 ### Forcefully make a stateful widget
@@ -356,7 +356,7 @@ dart run nylo_framework:main make:stateful_widget product_rating_widget --force
 metro make:stateful_widget product_rating_widget --force
 ```
 
-<a name="make-api-service"></a>
+<div id="make-api-service"></div>
 <br>
 
 ## Make API Service
@@ -366,7 +366,7 @@ metro make:stateful_widget product_rating_widget --force
 - [Make API Service using Postman](#make-api-service-using-postman "Create API services with Postman")
 - [Forcefully make an API Service](#forcefully-make-an-api-service "Forcefully make a new API Service with Metro")
 
-<a name="making-a-new-api-service"></a>
+<div id="making-a-new-api-service"></div>
 <br>
 
 ### Making a new API Service
@@ -381,7 +381,7 @@ metro make:api_service user_api_service
 
 It will place the newly created API service in `lib/app/networking/`.
 
-<a name="making-a-new-api-service-with-a-model"></a>
+<div id="making-a-new-api-service-with-a-model"></div>
 <br>
 
 ### Making a new API Service with a model
@@ -400,7 +400,7 @@ metro make:api_service user --model="User"
 
 It will place the newly created API service in `lib/app/networking/`.
 
-<a name="make-api-service-using-postman"></a>
+<div id="make-api-service-using-postman"></div>
 <br>
 
 ### Use Postman to Make API Services
@@ -446,7 +446,7 @@ You can check if your collection has saved responses by going to your Postman co
 
 The saved response **name** will be used for the **Model** name that {{ config('app.name') }} will create.
 
-<a name="forcefully-make-an-api-service"></a>
+<div id="forcefully-make-an-api-service"></div>
 <br>
 
 ### Forcefully make an API Service
@@ -461,7 +461,7 @@ dart run nylo_framework:main make:api_service user --force
 metro make:api_service user --force
 ```
 
-<a name="make-event"></a>
+<div id="make-event"></div>
 <br>
 
 ## Make event
@@ -469,7 +469,7 @@ metro make:api_service user --force
 - [Making a new event](#making-a-new-event "Make a new event with Metro")
 - [Forcefully make an event](#forcefully-make-an-event "Forcefully make a new event with Metro")
 
-<a name="making-a-new-event"></a>
+<div id="making-a-new-event"></div>
 <br>
 
 ### Making a new event
@@ -484,7 +484,7 @@ metro make:event login_event
 
 This will create a new event in `lib/app/events`.
 
-<a name="forcefully-make-an-event"></a>
+<div id="forcefully-make-an-event"></div>
 <br>
 
 ### Forcefully make an event
@@ -499,7 +499,7 @@ dart run nylo_framework:main make:event login_event --force
 metro make:event login_event --force
 ```
 
-<a name="make-provider"></a>
+<div id="make-provider"></div>
 <br>
 
 ## Make provider
@@ -507,7 +507,7 @@ metro make:event login_event --force
 - [Making a new provider](#making-a-new-provider "Make a new provider with Metro")
 - [Forcefully make a provider](#forcefully-make-a-provider "Forcefully make a new provider with Metro")
 
-<a name="making-a-new-provider"></a>
+<div id="making-a-new-provider"></div>
 <br>
 
 ### Making a new provider
@@ -522,7 +522,7 @@ metro make:provider firebase_provider
 
 It will place the newly created provider in `lib/app/providers/`.
 
-<a name="forcefully-make-a-provider"></a>
+<div id="forcefully-make-a-provider"></div>
 <br>
 
 ### Forcefully make a provider
@@ -537,7 +537,7 @@ dart run nylo_framework:main make:provider firebase_provider --force
 metro make:provider firebase_provider --force
 ```
 
-<a name="make-theme"></a>
+<div id="make-theme"></div>
 <br>
 
 ## Make theme
@@ -545,7 +545,7 @@ metro make:provider firebase_provider --force
 - [Making a new theme](#making-a-new-theme "Make a new theme with Metro")
 - [Forcefully make a theme](#forcefully-make-a-theme "Forcefully make a new theme with Metro")
 
-<a name="making-a-new-theme"></a>
+<div id="making-a-new-theme"></div>
 <br>
 
 ### Making a new theme
@@ -560,7 +560,7 @@ metro make:theme bright_theme
 
 This will create a new theme in `lib/app/themes`.
 
-<a name="forcefully-make-a-theme"></a>
+<div id="forcefully-make-a-theme"></div>
 <br>
 
 ### Forcefully make a theme
@@ -575,7 +575,7 @@ dart run nylo_framework:main make:theme bright_theme --force
 metro make:theme bright_theme --force
 ```
 
-<a name="make-forms"></a>
+<div id="make-forms"></div>
 <br>
 
 ## Make Forms
@@ -583,7 +583,7 @@ metro make:theme bright_theme --force
 - [Making a new form](#making-a-new-form "Make a new form with Metro")
 - [Forcefully make a form](#forcefully-make-a-form "Forcefully make a new form with Metro")
 
-<a name="making-a-new-form"></a>
+<div id="making-a-new-form"></div>
 <br>
 
 ### Making a new form
@@ -598,7 +598,7 @@ metro make:form car_advert_form
 
 This will create a new form in `lib/app/forms`.
 
-<a name="forcefully-make-a-form"></a>
+<div id="forcefully-make-a-form"></div>
 <br>
 
 ### Forcefully make a form
@@ -613,7 +613,7 @@ dart run nylo_framework:main make:form login_form --force
 metro make:form login_form --force
 ```
 
-<a name="make-route-guard"></a>
+<div id="make-route-guard"></div>
 <br>
 
 ## Make Route Guard
@@ -621,7 +621,7 @@ metro make:form login_form --force
 - [Making a new route guard](#making-a-new-route-guard "Make a new route guard with Metro")
 - [Forcefully make a route guard](#forcefully-make-a-route-guard "Forcefully make a new route guard with Metro")
 
-<a name="making-a-new-route-guard"></a>
+<div id="making-a-new-route-guard"></div>
 <br>
 
 ### Making a new route guard
@@ -636,7 +636,7 @@ metro make:route_guard premium_content
 
 This will create a new route guard in `lib/app/route_guards`.
 
-<a name="forcefully-make-a-route-guard"></a>
+<div id="forcefully-make-a-route-guard"></div>
 <br>
 
 ### Forcefully make a route guard
@@ -651,7 +651,7 @@ dart run nylo_framework:main make:route_guard premium_content --force
 metro make:route_guard premium_content --force
 ```
 
-<a name="make-config-file"></a>
+<div id="make-config-file"></div>
 <br>
 
 ## Make Config File
@@ -659,7 +659,7 @@ metro make:route_guard premium_content --force
 - [Making a new config file](#making-a-new-config-file "Make a new config file with Metro")
 - [Forcefully make a config file](#forcefully-make-a-config-file "Forcefully make a new config file with Metro")
 
-<a name="making-a-new-config-file"></a>
+<div id="making-a-new-config-file"></div>
 <br>
 
 ### Making a new config file
@@ -674,7 +674,7 @@ metro make:config shopping_settings
 
 This will create a new config file in `lib/app/config`.
 
-<a name="forcefully-make-a-config-file"></a>
+<div id="forcefully-make-a-config-file"></div>
 <br>
 
 ### Forcefully make a config file
@@ -689,7 +689,7 @@ dart run nylo_framework:main make:config app_config --force
 metro make:config app_config --force
 ```
 
-<a name="build-app-icons"></a>
+<div id="build-app-icons"></div>
 <br>
 
 ## Build App Icons

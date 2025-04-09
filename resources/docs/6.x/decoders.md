@@ -9,8 +9,9 @@
   - [API Decoders](#api-decoders "API Decoders")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
+
 ## Introduction
 
 Decoders are a new concept introduced in {{ config('app.name') }} which allows you to decode data into objects or classes.
@@ -22,7 +23,7 @@ The decoders.dart file will contain two variables:
 - [modelDecoders](#model-decoders) - Handles all your model decoders 
 - [apiDecoders](#api-decoders) - Handles all your API decoders 
 
-<a name="model-decoders"></a>
+<div id="model-decoders"></div>
 <br>
 
 ## Model decoders
@@ -99,7 +100,7 @@ In the modelDecoders file, we need to provide the `Type` as the key and handle t
 
 The `data` argument will contain the payload from the API request.
 
-<a name="api-decoders"></a>
+<div id="api-decoders"></div>
 <br>
 
 ## API decoders

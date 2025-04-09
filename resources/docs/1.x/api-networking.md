@@ -8,7 +8,7 @@
 - [Auto-generating your models](#auto-generating-your-models "Auto-generating your models")
 - [Fetching data into your widgets](#fetching-data-into-your-widgets "Fetching data into your widgets")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 ## Introduction
 
@@ -28,7 +28,7 @@ It’s important you have a basic understanding of different API requests, some 
 
 If you are new to networking, check out this [guide](https://restfulapi.net) by **https://restfulapi.net** to learn more.
 
-<a name="api-models"></a>
+<div id="api-models"></div>
 <br>
 ## Api models
 
@@ -84,7 +84,7 @@ User({this.id, this.name, this.username, this.email, this.address, this.phone, t
 }
 ```
 
-<a name="auto-generating-your-models"></a>
+<div id="auto-generating-your-models"></div>
 <br>
 
 ## Auto generating your models
@@ -95,7 +95,7 @@ metro apispec:build
 
 You need to have defined all your APIs from within your `apispec.json` file first, we have a detailed guide [here](/docs/1.x/metro#what-is-an-apispec).
 
-<a name="fetching-data-into-your-widgets"></a>
+<div id="fetching-data-into-your-widgets"></div>
 <br>
 
 ## Fetching data into your widgets

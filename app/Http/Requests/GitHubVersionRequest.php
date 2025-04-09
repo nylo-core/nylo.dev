@@ -22,7 +22,7 @@ class GitHubVersionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'version' => 'required|regex:/^v[0-9]+.[0-9]+.[0-9]+$/'
+            'version' => 'required|regex:/^v[0-9]+.[0-9]+.[0-9]+$/',
         ];
     }
 }

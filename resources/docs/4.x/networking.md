@@ -13,7 +13,7 @@
 - [Create an API Service](#create-an-api-service "Create an API Service")
 - [Morphing JSON payloads to models](#morphing-json-payloads-to-models "Morphing JSON payloads to models")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -51,7 +51,7 @@ Variables you can override using the <b>BaseApiService</b> class.
 
 Under the hood, the base networking class uses <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>, a powerful HTTP client.
 
-<a name="making-http-requests"></a>
+<div id="making-http-requests"></div>
 <br>
 
 ## Making HTTP requests
@@ -81,7 +81,7 @@ class ApiService extends BaseApiService {
 
 The `request` argument is a <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a> instance so you can call all the methods from that object.
 
-<a name="base-options"></a>
+<div id="base-options"></div>
 <br>
 
 ### Base Options
@@ -103,7 +103,7 @@ class ApiService extends BaseApiService {
 
 Click <a href="https://pub.dev/packages/dio#request-options" target="_BLANK">here</a> to view all the base options you can set.
 
-<a name="adding-headers"></a>
+<div id="adding-headers"></div>
 <br>
 
 ### Adding Headers
@@ -149,7 +149,7 @@ Future fetchUsers() async {
 
 ```
 
-<a name="interceptors"></a>
+<div id="interceptors"></div>
 <br>
 
 ### Interceptors
@@ -247,7 +247,7 @@ class LoggingInterceptor extends Interceptor {
 }
 ```
 
-<a name="understanding-the-network-helper"></a>
+<div id="understanding-the-network-helper"></div>
 <br>
 
 ## Understanding the network helper
@@ -384,7 +384,7 @@ class ApiService extends BaseApiService {
 }
 ```
 
-<a name="using-an-api-service"></a>
+<div id="using-an-api-service"></div>
 <br>
 
 ## Using an API Service
@@ -459,7 +459,7 @@ class ApiService extends BaseApiService {
 
 `displayError` - If an error occurs with the request (e.g. 500 status code), you can instantly give your users feedback via a toast notification.
 
-<a name="create-an-api-service"></a>
+<div id="create-an-api-service"></div>
 <br>
 
 ## Create an API Service
@@ -520,7 +520,7 @@ class UserApiService extends BaseApiService {
 
 ```
 
-<a name="morphing-json-payloads-to-models"></a>
+<div id="morphing-json-payloads-to-models"></div>
 <br>
 
 ## Morphing JSON payloads to models

@@ -9,7 +9,7 @@
 - [Updating The State](#updating-the-state "Updating The State")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -22,7 +22,7 @@ It works in the same way as the regular `ListView` widget, but it has some extra
 
 Let's take a look at some code.
 
-<a name="usage"></a>
+<div id="usage"></div>
 <br>
 
 ## Usage
@@ -54,7 +54,7 @@ The `NyListView` widget requires two parameters:
 
 > Tip: You can use the `NyListView.separated` widget to add a divider between each item in the list.
 
-<a name="parameters"></a>
+<div id="parameters"></div>
 <br>
 
 ## Parameters
@@ -69,7 +69,7 @@ Here are some important parameters you should know about before using the `NyPul
 
 If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/{{$version}}/lib/widgets/ny_list_view.dart). 
 
-<a name="updating-the-state"></a>
+<div id="updating-the-state"></div>
 <br>
 
 ## Updating the State

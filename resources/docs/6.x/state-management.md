@@ -11,7 +11,7 @@
 - [State Actions](#state-actions "State Actions")
 - [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -36,7 +36,7 @@ There are a lot of reasons why this is important, but the main reason is perform
 This is where State Management comes in, it allows you to manage the state of a widget in your application.
 
 
-<a name="when-to-use-state-management"></a>
+<div id="when-to-use-state-management"></div>
 <br>
 
 ### When to Use State Management
@@ -133,7 +133,7 @@ _updateCart() async {
 }
 ```
 
-<a name="lifecycle"></a>
+<div id="lifecycle"></div>
 <br>
 
 ## Lifecycle
@@ -148,7 +148,7 @@ The lifecycle of a `NyState` widget is as follows:
 
 Once the state is first initialized, you will need to implement how you want to manage the state.
 
-<a name="updating-a-state"></a>
+<div id="updating-a-state"></div>
 <br>
 
 ## Updating a State
@@ -164,7 +164,7 @@ updateState(MyStateName.state, data: "The Data");
 
 This can be called anywhere in your application.
 
-<a name="state-actions"></a>
+<div id="state-actions"></div>
 <br>
 
 ## State Actions
@@ -206,7 +206,7 @@ class HomeController extends Controller {
 
 You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
 
-<a name="sending-state-actions"></a>
+<div id="sending-state-actions"></div>
 <br>
 
 ## Sending State Actions
@@ -346,7 +346,7 @@ Then you can send the action from anywhere in your application.
 stateAction('reset_badge', state: MyPage.state);
 ```
 
-<a name="building-your-first-widget"></a>
+<div id="building-your-first-widget"></div>
 <br>
 
 ## Building Your First Widget

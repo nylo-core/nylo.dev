@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Services\DocService;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
-use App\Http\Services\DocService;
 
 class GenerateSitemapCommand extends Command
 {

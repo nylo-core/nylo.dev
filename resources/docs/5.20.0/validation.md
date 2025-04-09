@@ -13,7 +13,7 @@
 - [Creating Custom Validation Rules](#creating-custom-validation-rules "Creating Custom Validation Rules")
 
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -24,7 +24,7 @@ It contains some useful [validation rules](#validation-rules) you can use in you
 
 If you need to add custom validation rules, you can do that too. In this section, we'll give an overview of how validation works in {{ config('app.name') }}.
 
-<a name="validating-data"></a>
+<div id="validating-data"></div>
 <br>
 
 ## Validating Data
@@ -145,7 +145,7 @@ validate(
 This method is handy if you want to quickly validate the user's data and display some feedback to the user.
 
 
-<a name="multiple-validation-rules"></a>
+<div id="multiple-validation-rules"></div>
 <br>
 
 ## Multiple Validation Rules
@@ -176,7 +176,7 @@ validate(rules: {
 });
 ```
 
-<a name="validating-text-fields"></a>
+<div id="validating-text-fields"></div>
 <br>
 
 ## Validating Text Fields
@@ -192,7 +192,7 @@ NyTextField(
 )
 ```
 
-<a name="validation-checks"></a>
+<div id="validation-checks"></div>
 <br>
 
 ## Validation checks
@@ -215,7 +215,7 @@ if (isSuccessful) {
 
 This will return a boolean value. If the validation passes, it will return `true` and `false` if it fails.
 
-<a name="validation-rules"></a>
+<div id="validation-rules"></div>
 <br>
 
 ## Validation Rules
@@ -253,7 +253,7 @@ Here are the available validation rules that you can use in {{ config('app.name'
 
 ---
 
-<a name="validation-rule-email"></a>
+<div id="validation-rule-email"></div>
 <br>
 
 ### email
@@ -273,7 +273,7 @@ validate(rules: {
 ```
 
 
-<a name="validation-rule-boolean"></a>
+<div id="validation-rule-boolean"></div>
 <br>
 
 ### boolean
@@ -292,7 +292,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-contains"></a>
+<div id="validation-rule-contains"></div>
 <br>
 
 ### contains
@@ -310,7 +310,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-url"></a>
+<div id="validation-rule-url"></div>
 <br>
 
 ### url
@@ -328,7 +328,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-min"></a>
+<div id="validation-rule-min"></div>
 <br>
 
 ### min
@@ -363,7 +363,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-max"></a>
+<div id="validation-rule-max"></div>
 <br>
 
 ### max
@@ -398,7 +398,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-not-empty"></a>
+<div id="validation-rule-not-empty"></div>
 <br>
 
 ### Not Empty
@@ -416,7 +416,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-regex"></a>
+<div id="validation-rule-regex"></div>
 <br>
 
 ### Regex
@@ -434,7 +434,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-numeric"></a>
+<div id="validation-rule-numeric"></div>
 <br>
 
 ### numeric
@@ -452,7 +452,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-date"></a>
+<div id="validation-rule-date"></div>
 <br>
 
 ### date
@@ -479,7 +479,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-capitalized"></a>
+<div id="validation-rule-capitalized"></div>
 <br>
 
 ### capitalized
@@ -497,7 +497,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-lowercase"></a>
+<div id="validation-rule-lowercase"></div>
 <br>
 
 ### lowercase
@@ -515,7 +515,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-uppercase"></a>
+<div id="validation-rule-uppercase"></div>
 <br>
 
 ### uppercase
@@ -533,7 +533,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-us-phone-number"></a>
+<div id="validation-rule-us-phone-number"></div>
 <br>
 
 ### US Phone Number
@@ -551,7 +551,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-uk-phone-number"></a>
+<div id="validation-rule-uk-phone-number"></div>
 <br>
 
 ### UK Phone Number
@@ -569,7 +569,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-us-zipcode"></a>
+<div id="validation-rule-us-zipcode"></div>
 <br>
 
 ### US Zipcode
@@ -587,7 +587,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-uk-postcode"></a>
+<div id="validation-rule-uk-postcode"></div>
 <br>
 
 ### UK Postcode
@@ -605,7 +605,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-date-age-is-younger"></a>
+<div id="validation-rule-date-age-is-younger"></div>
 <br>
 
 ### Date age is younger
@@ -638,7 +638,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-date-age-is-older"></a>
+<div id="validation-rule-date-age-is-older"></div>
 <br>
 
 ### Date age is older
@@ -671,7 +671,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-date-in-past"></a>
+<div id="validation-rule-date-in-past"></div>
 <br>
 
 ### Date in past
@@ -698,7 +698,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-date-in-future"></a>
+<div id="validation-rule-date-in-future"></div>
 <br>
 
 ### Date in future
@@ -725,7 +725,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-is-true"></a>
+<div id="validation-rule-is-true"></div>
 <br>
 
 ### Is True
@@ -743,7 +743,7 @@ validate(rules: {
 });
 ```
 
-<a name="validation-rule-is-false"></a>
+<div id="validation-rule-is-false"></div>
 <br>
 
 ### Is False
@@ -800,7 +800,7 @@ validate(rules: {
 
 ---
 
-<a name="custom-validation-rules"></a>
+<div id="custom-validation-rules"></div>
 <br>
 
 ## Custom Validation Rules

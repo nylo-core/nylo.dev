@@ -10,7 +10,7 @@
   - [Removing an auth user](#removing-an-auth-user "Removing an auth user")
 - [Authentication page](#authentication-page "Authentication page")
 
-<a name="introduction"></a>
+<div id="introduction"></div>
 <br>
 
 ## Introduction
@@ -59,7 +59,7 @@ Now the User model will be saved on the device.
 
 To retrieve the authenticated user back, use `Backpack.instance.auth()`. This will return the model that was saved previously.
 
-<a name="adding-an-auth-user"></a>
+<div id="adding-an-auth-user"></div>
 <br>
 
 ## Adding an auth user
@@ -74,7 +74,7 @@ _login() async {
 } 
 ```
 
-<a name="retrieve-an-auth-user"></a>
+<div id="retrieve-an-auth-user"></div>
 <br>
 
 ## Retrieve an auth user
@@ -89,7 +89,7 @@ _getUser() async {
 }
 ```
 
-<a name="removing-an-auth-user"></a>
+<div id="removing-an-auth-user"></div>
 <br>
 
 ## Removing an auth user
@@ -105,7 +105,7 @@ _logout() async {
 
 Now, the user is logged out of the app and the [authentication page](#authentication-page) won't show when they next visit the app.
 
-<a name="authentication-page"></a>
+<div id="authentication-page"></div>
 <br>
 
 ## Authentication Page
