@@ -5,10 +5,10 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [Setup](#setup "Setting up app usage")
-    - Monitoring
-        - [App launches](#monitoring-app-launches "Monitoring app launches")
-        - [First launch date](#monitoring-app-first-launch-date "Monitoring app first launch date")
-        - [Total days since first launch](#monitoring-app-total-days-since-first-launch "Monitoring app total days since first launch")
+- Monitoring
+    - [App launches](#monitoring-app-launches "Monitoring app launches")
+    - [First launch date](#monitoring-app-first-launch-date "Monitoring app first launch date")
+    - [Total days since first launch](#monitoring-app-total-days-since-first-launch "Monitoring app total days since first launch")
 
 <div id="introduction"></div>
 <br>
