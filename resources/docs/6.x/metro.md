@@ -46,7 +46,7 @@ It provides a lot of helpful tools to speed up development.
 
 ## Install
 
-Mac guide
+#### Mac guide
 
 **Run the below command from the terminal**
 
@@ -95,6 +95,36 @@ All commands:
 
 [Custom Commands]
   motivation:quote
+```
+
+#### Windows Guide
+
+1. Open PowerShell as an administrator.
+2. Create a PowerShell profile if you don't have one:
+
+``` bash
+if (!(Test-Path -Path $PROFILE)) {
+    New-Item -ItemType File -Path $PROFILE -Force
+}
+```
+
+3. Open the profile in a text editor:
+
+``` bash
+notepad $PROFILE
+```
+
+4. Add the following line to the profile:
+
+``` bash
+function metro { dart run nylo_framework:main @args }
+```
+
+5. Save the file and close the editor.
+6. Reload your PowerShell profile:
+
+``` bash
+. $PROFILE
 ```
 
 <div id="make-controller"></div>
