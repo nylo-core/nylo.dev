@@ -52,7 +52,7 @@ int age = 18;
 
 age.dump(); // 18
 
-dunp(city); // London
+dump(city); // London
 ```
 
 #### Why use NyLogger?
