@@ -101,7 +101,7 @@ Widget view(BuildContext context) {
     body: SafeArea(
       child: NyForm(
         form: form, 
-        footer: Button.primary(child: "Submit", submitForm: (form, (data) {
+        footer: Button.primary(text: "Submit", submitForm: (form, (data) {
               printInfo(data);
           }),
         ),
