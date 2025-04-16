@@ -415,11 +415,19 @@ session('onboarding')
     .add('first_name', 'Anthony')
     .add('interests', ['coding', 'gaming']);
 
-// 2 - Getting an item from a session
-String firstName = session('onboarding').get('first_name');
-List<String> interests = session('onboarding').get('interests');
+// or like this
 
-// Get all the data
+session('onboarding', {
+  'first_name': 'Anthony',
+  'interests': ['coding', 'gaming'],
+});
+
+// 2 - Getting data from the session
+String firstName = session('onboarding').get('first_name'); // "Anthony"
+List<String> interests = session('onboarding').get('interests'); // ["coding", "gaming"]
+
+// or all the data
+
 session('onboarding').data(); // {"first_name": "Anthony", "interests": ["coding", "gaming"]}
 
 // 3 - Deleting an item from a session

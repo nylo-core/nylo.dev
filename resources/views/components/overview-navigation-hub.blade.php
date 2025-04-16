@@ -13,6 +13,7 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
     /// Layouts:
     /// - [NavigationHubLayout.bottomNav] Bottom navigation
     /// - [NavigationHubLayout.topNav] Top navigation
+    /// - [NavigationHubLayout.journey] Journey navigation
     NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
         // backgroundColor: Colors.white,
     );
@@ -41,7 +42,9 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 }
 </x-code-highlighter>
 
-Change the layout to top navigation layout with `NavigationHubLayout.topNav`
+<div class="py-2">
+Change the layout to top navigation layout with <pre class="inline bg-gray-50 p-1 rounded-md"><code class="text-gray-600">NavigationHubLayout.topNav</code></pre>
+</div>
 
 <x-code-highlighter language="dart" title="resources/pages/base_navigation_hub.dart" class="col-span-1 mb-5">
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {

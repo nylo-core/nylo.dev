@@ -5,8 +5,12 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [Basic Usage](#basic-usage "Basic Usage")
-  - [Bottom Navigation Bar](#bottom-navigation-bar "Bottom Navigation Bar")
-  - [Top Navigation Bar](#bottom-navigation-bar "Bottom Navigation Bar")
+  - [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
+  - [Creating Navigation Tabs](#creating-navigation-tabs "Creating Navigation Tabs")
+  - [Bottom Navigation](#bottom-navigation "Bottom Navigation")
+  - [Top Navigation](#top-navigation "Top Navigation")
+  - [Journey Navigation](#journey-navigation "Journey Navigation")
+    - [JourneyState Helper Methods](#journey-state-helper-methods "JourneyState Helper Methods")
 - [Navigating within a tab](#navigating-within-a-tab "Navigating within a tab")
 - [Tabs](#tabs "Tabs")
   - [Adding Badges to Tabs](#adding-badges-to-tabs "Adding Badges to Tabs")
@@ -21,8 +25,8 @@
 
 ## Introduction
 
-Navigation Hubs are a central place where you can **manage** the navigation for all your tabs. 
-Out the box you can create bottom navigation and top navigation layouts in seconds.
+Navigation Hubs are a central place where you can **manage** the navigation for all your widgets. 
+Out the box you can create bottom, top and journey navigation layouts in seconds.
 
 Let's **imagine** you have an app and you want to add a bottom navigation bar and allow users to navigate between different tabs in your app.
 
@@ -96,9 +100,49 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
 You can see that the Navigation Hub has **two** tabs, Home and Settings.
 
-You can add more tabs by adding NavigationTab's to the Navigation Hub.
+You can create more tabs by adding NavigationTab's to the Navigation Hub.
 
-This newly created Navigation Hub will be added to your `routes/router.dart` file automatically.
+First, you need to create a new widget using Metro.
+
+``` bash
+dart run nylo_framework:main make:stateful_widget create_advert_tab
+// or with Metro
+metro make:stateful_widget create_advert_tab
+```
+
+You can also create multiple widgets at once.
+
+``` bash
+dart run nylo_framework:main make:stateful_widget news_tab,notifications_tab
+// or with Metro
+metro make:stateful_widget news_tab,notifications_tab
+```
+
+Then, you can add the new widget to the Navigation Hub.
+
+``` dart
+  _BaseNavigationHubState() : super(() async {
+    return {
+      0: NavigationTab(
+        title: "Home",
+        page: HomeTab(),
+        icon: Icon(Icons.home),
+        activeIcon: Icon(Icons.home),
+      ),
+      1: NavigationTab(
+         title: "Settings",
+         page: SettingsTab(),
+         icon: Icon(Icons.settings),
+         activeIcon: Icon(Icons.settings),
+      ),
+      2: NavigationTab(
+         title: "News",
+         page: NewsTab(),
+         icon: Icon(Icons.newspaper),
+         activeIcon: Icon(Icons.newspaper),
+      ),
+    };
+  });
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -115,10 +159,10 @@ routeTo(BaseNavigationHub.path);
 
 There's a lot **more** you can do with a Navigation Hub, let's dive into some of the features.
 
-<div id="bottom-navigation-bar"></div>
+<div id="bottom-navigation"></div>
 <br>
 
-### Bottom Navigation Bar
+### Bottom Navigation
 
 You can change the layout to a bottom navigation bar by setting the **layout** to use `NavigationHubLayout.bottomNav`.
 
@@ -153,10 +197,10 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-<div id="top-navigation-bar"></div>
+<div id="top-navigation"></div>
 <br>
 
-### Top Navigation Bar
+### Top Navigation
 
 You can change the layout to a top navigation bar by setting the **layout** to use `NavigationHubLayout.topNav`.
 
@@ -202,6 +246,529 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
         // overlayColorState: Colors.transparent,
     );
 ```
+
+<div id="journey-navigation"></div>
+<br>
+
+### Journey Navigation
+
+You can change the layout to a journey navigation by setting the **layout** to use `NavigationHubLayout.journey`.
+
+This is great for onboarding flows or multi-step forms.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey();
+```
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        // backgroundColor: Colors.white,
+        // showProgressIndicator: true,
+        // progressIndicatorPosition: ProgressIndicatorPosition.top,
+        // progressIndicatorColor: Colors.blue,
+        // progressIndicatorBackgroundColor: Colors.grey,
+        // progressIndicatorHeight: 4.0,
+        // progressIndicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        // showBackButton: false,
+        // backButtonIcon: Icons.arrow_back,
+        // backButtonText: 'Back',
+        // backButtonTextStyle: TextStyle(color: Colors.black),
+        // nextButtonText: 'Next',
+        // nextButtonTextStyle: TextStyle(color: Colors.black),
+        // nextButtonIcon: Icons.arrow_forward,
+        // completeButtonText: 'Finish',
+        // completeButtonTextStyle: TextStyle(color: Colors.black),
+        // completeButtonIcon: Icons.check,
+        // showButtonText: true,
+        // showNextButton: false,
+        // buttonLayout: JourneyButtonLayout.spaceBetween,
+        // animationDuration: Duration(milliseconds: 300),
+        // useSafeArea: true,
+        // onComplete: () {
+        //   print("Journey completed");
+        // },
+        // buttonPadding: EdgeInsets.zero,
+    );
+```
+
+If you want to use the jounrey navigation layout, your **pages** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
+
+You can create a JourneyState using the below command.
+
+``` bash
+dart run nylo_framework:main make:journey_widget welcome,phone_number_step,add_photos_step
+// or with Metro
+metro make:journey_widget welcome,phone_number_step,add_photos_step
+```
+This will create the following files in your **resources/pages/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
+
+You can then add the new widgets to the Navigation Hub.
+
+``` dart
+_MyNavigationHubState() : super(() async {
+    return {
+        0: NavigationTab.journey(
+            page: Welcome(),
+        ),
+        1: NavigationTab.journey(
+            page: PhoneNumberStep(),
+        ),
+        2: NavigationTab.journey(
+            page: AddPhotosStep(),
+        ),
+    };
+});
+```
+
+The journey navigation layout will automatically handle the back and next buttons for you if you enable the `showBackButton` and `showNextButton` properties.
+
+You can also customize the logic in your pages.
+
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/pages/onboarding_navigation_hub.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class WelcomeStep extends StatefulWidget {
+  const WelcomeStep({super.key});
+
+  @override
+  createState() => _WelcomeStepState();
+}
+
+class _WelcomeStepState extends JourneyState<WelcomeStep> {
+  _WelcomeStepState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
+
+  @override
+  get init => () {
+    // Your initialization logic here
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return buildJourneyContent(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('WelcomeStep', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 20),
+          Text('This onboarding journey will help you get started.'),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: isLastStep ? "Get Started" : "Continue",
+        onPressed: onNextPressed,
+      ),
+      backButton: isFirstStep ? null : Button.textOnly(
+        text: "Back",
+        textColor: Colors.black87,
+        onPressed: onBackPressed,
+      ),
+    );
+  }
+
+  /// Check if the journey can continue to the next step
+  /// Override this method to add validation logic
+  Future<bool> canContinue() async {
+    // Perform your validation logic here
+    // Return true if the journey can continue, false otherwise
+    return true;
+  }
+
+  /// Called when unable to continue (canContinue returns false)
+  /// Override this method to handle validation failures
+  Future<void> onCannotContinue() async {
+    showToastSorry(description: "You cannot continue");
+  }
+
+  /// Called before navigating to the next step
+  /// Override this method to perform actions before continuing
+  Future<void> onBeforeNext() async {
+    // E.g. save data here before navigating
+  }
+
+  /// Called after navigating to the next step
+  /// Override this method to perform actions after continuing
+  Future<void> onAfterNext() async {
+    // print('Navigated to the next step');
+  }
+
+  /// Called when the journey is complete (at the last step)
+  /// Override this method to perform completion actions
+  Future<void> onComplete() async {}
+}
+```
+
+You can customize and override any of the methods in the `JourneyState` class.
+
+<div id="journey-state-helper-methods"></div>
+<br>
+
+### JounreyState Helper Methods
+
+The `JourneyState` class has some helper methods that you can use to customize the behavior of your journey.
+
+| Method | Description |
+| --- | --- |
+| [`onNextPressed()`](#on-next-pressed) | Called when the next button is pressed. |
+| [`onBackPressed()`](#on-back-pressed) | Called when the back button is pressed. |
+| [`onComplete()`](#on-complete) | Called when the journey is complete (at the last step). |
+| [`onBeforeNext()`](#on-before-next) | Called before navigating to the next step. |
+| [`onAfterNext()`](#on-after-next) | Called after navigating to the next step. |
+| [`onCannotContinue()`](#on-cannot-continue) | Called when the journey cannot continue (canContinue returns false). |
+| [`canContinue()`](#can-continue) | Called when the user tries to navigate to the next step. |
+| [`isFirstStep`](#is-first-step) | Returns true if this is the first step in the journey. |
+| [`isLastStep`](#is-last-step) | Returns true if this is the last step in the journey. |
+| [`goToStep(int index)`](#go-to-step) | Navigate to the next step index. |
+| [`goToNextStep()`](#go-to-next-step) | Navigate to the next step. |
+| [`goToPreviousStep()`](#go-to-previous-step) | Navigate to the previous step. |
+| [`goToFirstStep()`](#go-to-first-step) | Navigate to the first step. |
+| [`goToLastStep()`](#go-to-last-step) | Navigate to the last step. |
+
+
+<div id="on-next-pressed"></div>
+<br>
+
+#### onNextPressed
+
+The `onNextPressed` method is called when the next button is pressed.
+
+E.g. You can use this method to trigger the next step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: isLastStep ? "Get Started" : "Continue",
+            onPressed: onNextPressed, // this will attempt to navigate to the next step
+        ),
+    );
+}
+```
+
+<div id="on-back-pressed"></div>
+<br>
+
+#### onBackPressed
+
+The `onBackPressed` method is called when the back button is pressed.
+
+E.g. You can use this method to trigger the previous step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        backButton: isFirstStep ? null : Button.textOnly(
+            text: "Back",
+            textColor: Colors.black87,
+            onPressed: onBackPressed, // this will attempt to navigate to the previous step
+        ),
+    );
+}
+```
+
+<div id="on-complete"></div>
+<br>
+
+#### onComplete
+
+The `onComplete` method is called when the journey is complete (at the last step).
+
+E.g. if the if this widget is the last step in the journey, this method will be called.
+
+``` dart
+Future<void> onComplete() async {
+    print("Journey completed");
+}
+```
+
+<div id="on-before-next"></div>
+<br>
+
+#### onBeforeNext
+
+The `onBeforeNext` method is called before navigating to the next step.
+
+E.g. if you want to save data before navigating to the next step, you can do it here.
+
+``` dart
+Future<void> onBeforeNext() async {
+    // E.g. save data here before navigating
+}
+```
+
+<div id="is-first-step"></div>
+<br>
+
+#### isFirstStep
+
+The `isFirstStep` method returns true if this is the first step in the journey.
+
+E.g. You can use this method to disable the back button if this is the first step.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        backButton: isFirstStep ? null : Button.textOnly( // Example of disabling the back button
+            text: "Back",
+            textColor: Colors.black87,
+            onPressed: onBackPressed,
+        ),
+    );
+}
+```
+
+<div id="is-last-step"></div>
+<br>
+
+#### isLastStep
+
+The `isLastStep` method returns true if this is the last step in the journey.
+
+E.g. You can use this method to disable the next button if this is the last step.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: isLastStep ? "Get Started" : "Continue", // Example updating the next button text
+            onPressed: onNextPressed,
+        ),
+    );
+}
+```
+
+<div id="go-to-step"></div>
+<br>
+
+#### goToStep
+
+The `goToStep` method is used to navigate to a specific step in the journey.
+
+E.g. You can use this method to navigate to a specific step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: "Add photos"
+            onPressed: () {
+                goToStep(2); // this will navigate to the step with index 2
+                // Note: this will not trigger the onNextPressed method
+            }, 
+        ),
+    );
+}
+```
+
+<div id="go-to-next-step"></div>
+<br>
+
+#### goToNextStep
+
+The `goToNextStep` method is used to navigate to the next step in the journey.
+
+E.g. You can use this method to navigate to the next step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: "Continue",
+            onPressed: () {
+                goToNextStep(); // this will navigate to the next step
+                // Note: this will not trigger the onNextPressed method
+            }, 
+        ),
+    );
+}
+```
+
+<div id="go-to-previous-step"></div>
+<br>
+
+#### goToPreviousStep
+
+The `goToPreviousStep` method is used to navigate to the previous step in the journey.
+
+E.g. You can use this method to navigate to the previous step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        backButton: isFirstStep ? null : Button.textOnly(
+            text: "Back",
+            textColor: Colors.black87,
+            onPressed: () {
+                goToPreviousStep(); // this will navigate to the previous step
+            }, 
+        ),
+    );
+}
+```
+
+<div id="on-after-next"></div>
+<br>
+
+#### onAfterNext
+
+The `onAfterNext` method is called after navigating to the next step.
+
+
+E.g. if you want to perform some action after navigating to the next step, you can do it here.
+
+``` dart
+Future<void> onAfterNext() async {
+    // print('Navigated to the next step');
+}
+```
+
+<div id="on-cannot-continue"></div>
+<br>
+
+#### onCannotContinue
+
+The `onCannotContinue` method is called when the journey cannot continue (canContinue returns false).
+
+E.g. if you want to show an error message when the user tries to navigate to the next step without filling in the required fields, you can do it here.
+
+``` dart
+Future<void> onCannotContinue() async {
+    showToastSorry(description: "You cannot continue");
+}
+```
+
+<div id="can-continue"></div>
+<br>
+
+#### canContinue
+
+The `canContinue` method is called when the user tries to navigate to the next step.
+
+E.g. if you want to perform some validation before navigating to the next step, you can do it here.
+
+``` dart
+Future<bool> canContinue() async {
+    // Perform your validation logic here
+    // Return true if the journey can continue, false otherwise
+    return true;
+}
+```
+
+<div id="go-to-first-step"></div>
+<br>
+
+#### goToFirstStep
+
+The `goToFirstStep` method is used to navigate to the first step in the journey.
+
+
+E.g. You can use this method to navigate to the first step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: "Continue",
+            onPressed: () {
+                goToFirstStep(); // this will navigate to the first step
+            }, 
+        ),
+    );
+}
+```
+
+<div id="go-to-last-step"></div>
+<br>
+
+#### goToLastStep
+
+The `goToLastStep` method is used to navigate to the last step in the journey.
+
+E.g. You can use this method to navigate to the last step in the journey.
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+        content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+                ...
+            ],
+        ),
+        nextButton: Button.primary(
+            text: "Continue",
+            onPressed: () {
+                goToLastStep(); // this will navigate to the last step
+            }, 
+        ),
+    );
+}
+```
+
 <div id="navigating-within-a-tab"></div>
 <br>
 

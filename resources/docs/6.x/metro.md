@@ -79,6 +79,7 @@ All commands:
   make:stateless_widget
   make:state_managed_widget
   make:navigation_hub
+  make:journey_widget
   make:form
 
 [App Commands]
@@ -94,7 +95,7 @@ All commands:
   make:command
 
 [Custom Commands]
-  motivation:quote
+  motivational:quote
 ```
 
 #### Windows Guide

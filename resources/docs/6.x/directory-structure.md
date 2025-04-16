@@ -26,6 +26,7 @@ The directory structure was inspired by <a href="https://github.com/laravel/lara
 The below app directories are listed inside the <b>lib</b> folder.
 
 - `app` This folder includes any files relating to models, controllers and networking.
+  - `commands` Include your custom commands here.
   - `controllers` Include your controllers here for your Widget pages.
   - `models` Create your model classes here.
   - `networking` Add any API services here for managing APIs or fetching data from the internet.
