@@ -191,8 +191,61 @@ You can also watch our YouTube video on State Management <a href="https://youtu.
 
 ## State Actions
 
-State actions are methods that can be called from other classes to update the state.
-Out the box, you can use the follow methods to update the state.
+In Nylo, you can define small **actions** in your Widgets that can be called from other classes. This is useful if you want to update the state of a widget from another class.
+
+First, you must **define** your actions in your widget. This works for `NyState` and `NyPage`.
+
+``` dart
+class _MyWidgetState extends NyState<MyWidget> {
+
+  @override
+  get init => () async {
+    // handle how you want to initialize the state
+  };
+
+  @override
+  get stateActions => {
+    "hello_world_in_widget": () {
+      print('Hello world');
+    },
+    "update_user_name": (User user) async {
+      // Example with data
+      _userName = user.name;
+      setState(() {});
+    },
+    "show_toast": (String message) async {
+      showToastSuccess(description: message);
+    },
+  };
+}
+```
+
+Then, you can call the action from another class using the `stateAction` method.
+
+``` dart
+stateAction('hello_world_in_widget', state: MyWidget.state);
+
+// Another example with data
+User user = User(name: "John Doe");
+stateAction('update_user_name', state: MyWidget.state, data: user);
+// Another example with data
+stateAction('show_toast', state: MyWidget.state, data: "Hello world");
+```
+
+If you are using stateActions with a `NyPage`, you must use the **path** of the page.
+
+``` dart
+stateAction('hello_world_in_widget', state: ProfilePage.path);
+
+// Another example with data
+User user = User(name: "John Doe");
+stateAction('update_user_name', state: ProfilePage.path, data: user);
+
+// Another example with data
+stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
+```
+
+There's also another class called `StateAction`, this has a few methods that you can use to update the state of your widgets.
 
 - `refreshPage` - Refresh the page.
 - `pop` - Pop the page.
@@ -210,18 +263,17 @@ Out the box, you can use the follow methods to update the state.
 Example
 
 ``` dart
-class HomeController extends Controller {
+class _UpgradeButtonState extends NyState<UpgradeButton> {
 
-  actions() {    
-    // from the controller, refresh the state of the notification icon
-    StateAction.refreshPage(NotificationIcon.state);
-
-    // from the controller, refresh the state of the pull to refresh widget
-    StateAction.refreshPage(NyPullToRefresh.state);
-
-    // from the controller, pop the current page
-    StateAction.pop(HomeController.path);
-
+  view(BuildContext context) {
+    return Button.primary(
+      onPressed: () {
+        StateAction.showToastSuccess(UpgradePage.state,
+          description: "You have successfully upgraded your account",
+        );
+      },
+      text: "Upgrade",
+    );
   }
 }
 ```

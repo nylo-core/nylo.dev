@@ -10,6 +10,9 @@
   - [Bottom Navigation](#bottom-navigation "Bottom Navigation")
   - [Top Navigation](#top-navigation "Top Navigation")
   - [Journey Navigation](#journey-navigation "Journey Navigation")
+    - [Progress Styles](#journey-progress-styles "Journey Progress Styles")
+    - [Button Styles](#journey-button-styles "Button Styles")
+    - [JourneyState](#journey-state "JourneyState")
     - [JourneyState Helper Methods](#journey-state-helper-methods "JourneyState Helper Methods")
 - [Navigating within a tab](#navigating-within-a-tab "Navigating within a tab")
 - [Tabs](#tabs "Tabs")
@@ -70,6 +73,7 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
   /// Layouts: 
   /// - [NavigationHubLayout.bottomNav] Bottom navigation
   /// - [NavigationHubLayout.topNav] Top navigation
+  /// - [NavigationHubLayout.journey] Journey navigation
   NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
     // backgroundColor: Colors.white,
   );
@@ -144,7 +148,6 @@ Then, you can add the new widget to the Navigation Hub.
     };
   });
 
-``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
 appRouter() => nyRoutes((router) {
@@ -178,22 +181,7 @@ You can customize the bottom navigation bar by setting properties like the follo
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ... 
     NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        // elevation: 10,
-        // type: BottomNavigationBarType.fixed,
-        // backgroundColor: Colors.white,
-        // iconSize: 24.0,
-        // selectedItemColor: Colors.blue,
-        // unselectedItemColor: Colors.grey,
-        // selectedFontSize: 14.0,
-        // unselectedFontSize: 12.0,
-        // selectedLabelStyle: TextStyle(color: Colors.blue),
-        // unselectedLabelStyle: TextStyle(color: Colors.grey),
-        // showSelectedLabels: true,
-        // showUnselectedLabels: true,
-        // mouseCursor: SystemMouseCursors.click,
-        // enableFeedback: true,
-        // landscapeLayout: NavigationHubLandscapeLayout.centered,
-        // useLegacyColorScheme: true,
+        // customize the bottomNav layout properties
     );
 ```
 
@@ -216,34 +204,7 @@ You can customize the top navigation bar by setting properties like the followin
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ... 
     NavigationHubLayout? layout = NavigationHubLayout.topNav(
-        // isScrollable: false,
-        // padding: EdgeInsets.all(8.0),
-        // indicatorColor: Colors.blue,
-        // automaticIndicatorColorAdjustment: true,
-        // indicatorWeight: 2.0,
-        // indicatorPadding: EdgeInsets.zero,
-        // indicator: BoxDecoration(),
-        // indicatorSize: TabBarIndicatorSize.tab,
-        // dividerColor: Colors.grey,
-        // dividerHeight: 1.0,
-        // backgroundColor: Colors.white,
-        // labelColor: Colors.black,
-        // labelStyle: TextStyle(fontSize: 14.0),
-        // labelPadding: EdgeInsets.all(8.0),
-        // unselectedLabelColor: Colors.grey,
-        // unselectedLabelStyle: TextStyle(fontSize: 12.0),
-        // showSelectedLabels: true,
-        // dragStartBehavior: DragStartBehavior.start,
-        // overlayColor: Colors.transparent,
-        // mouseCursor: SystemMouseCursors.click,
-        // enableFeedback: true,
-        // physics: BouncingScrollPhysics(),
-        // splashFactory: InkRipple.splashFactory,
-        // splashBorderRadius: BorderRadius.zero,
-        // tabAlignment: TabAlignment.center,
-        // textScaler: 1.0,
-        // animationDuration: Duration(milliseconds: 200),
-        // overlayColorState: Colors.transparent,
+        // customize the topNav layout properties
     );
 ```
 
@@ -259,43 +220,12 @@ This is great for onboarding flows or multi-step forms.
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey();
-```
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
     NavigationHubLayout? layout = NavigationHubLayout.journey(
-        // backgroundColor: Colors.white,
-        // showProgressIndicator: true,
-        // progressIndicatorPosition: ProgressIndicatorPosition.top,
-        // progressIndicatorColor: Colors.blue,
-        // progressIndicatorBackgroundColor: Colors.grey,
-        // progressIndicatorHeight: 4.0,
-        // progressIndicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        // showBackButton: false,
-        // backButtonIcon: Icons.arrow_back,
-        // backButtonText: 'Back',
-        // backButtonTextStyle: TextStyle(color: Colors.black),
-        // nextButtonText: 'Next',
-        // nextButtonTextStyle: TextStyle(color: Colors.black),
-        // nextButtonIcon: Icons.arrow_forward,
-        // completeButtonText: 'Finish',
-        // completeButtonTextStyle: TextStyle(color: Colors.black),
-        // completeButtonIcon: Icons.check,
-        // showButtonText: true,
-        // showNextButton: false,
-        // buttonLayout: JourneyButtonLayout.spaceBetween,
-        // animationDuration: Duration(milliseconds: 300),
-        // useSafeArea: true,
-        // onComplete: () {
-        //   print("Journey completed");
-        // },
-        // buttonPadding: EdgeInsets.zero,
+        // customize the journey layout properties
     );
 ```
 
-If you want to use the jounrey navigation layout, your **pages** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
+If you want to use the jounrey navigation layout, your **widgets** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
 
 You can create a JourneyState using the below command.
 
@@ -304,7 +234,7 @@ dart run nylo_framework:main make:journey_widget welcome,phone_number_step,add_p
 // or with Metro
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
-This will create the following files in your **resources/pages/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
+This will create the following files in your **resources/widgets/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
 
 You can then add the new widgets to the Navigation Hub.
 
@@ -324,9 +254,19 @@ _MyNavigationHubState() : super(() async {
 });
 ```
 
-The journey navigation layout will automatically handle the back and next buttons for you if you enable the `showBackButton` and `showNextButton` properties.
+The journey navigation layout will automatically handle the back and next buttons for you if you define a `buttonStyle`.
 
-You can also customize the logic in your pages.
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        buttonStyle: JourneyButtonStyle.standard(
+            // Customize button properties
+        ),
+    );
+```
+
+You can also customize the logic in your widgets.
 
 ``` dart
 import 'package:flutter/material.dart';
@@ -405,7 +345,192 @@ class _WelcomeStepState extends JourneyState<WelcomeStep> {
 }
 ```
 
-You can customize and override any of the methods in the `JourneyState` class.
+You can override any of the methods in the `JourneyState` class.
+
+<div id="journey-progress-styles"></div>
+<br>
+
+### Journey Progress Styles
+
+You can customize the progress indicator style by using the `JourneyProgressStyle` class.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle.linear(
+            activeColor: Colors.blue,
+            inactiveColor: Colors.grey,
+            thickness: 4.0,
+        ),
+    );
+```
+
+You can use the following progress styles:
+
+- `JourneyProgressStyle.linear`: Linear progress indicator.
+- `JourneyProgressStyle.dots`: Dots-based progress indicator.
+- `JourneyProgressStyle.numbered`: Numbered step progress indicator.
+- `JourneyProgressStyle.segments`: Segmented progress bar style.
+- `JourneyProgressStyle.circular`: Circular progress indicator.
+- `JourneyProgressStyle.timeline`: Timeline-style progress indicator.
+- `JourneyProgressStyle.custom`: Custom progress indicator using a builder function.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle.custom(
+            builder: (context, currentStep, totalSteps, percentage) {
+                return LinearProgressIndicator(
+                    value: percentage,
+                    backgroundColor: Colors.grey[200],
+                    color: Colors.blue,
+                    minHeight: 4.0,
+                );
+            },
+        ),
+    );
+```
+
+You can also customize the progress indicator position by using the `progressIndicatorPosition` property.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        progressIndicatorPosition: ProgressIndicatorPosition.top,
+    );
+```
+
+You can use the following progress indicator positions:
+
+- `ProgressIndicatorPosition.top`: Progress indicator at the top of the screen.
+- `ProgressIndicatorPosition.bottom`: Progress indicator at the bottom of the screen.
+
+You can also customize the progress indicator padding by using the `progressIndicatorPadding` property.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        progressIndicatorPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    );
+```
+
+<div id="journey-button-styles">
+<br>
+
+### Journey Button Styles
+
+If you want to build an onboarding flow, you can set the `buttonStyle` property in the `NavigationHubLayout.journey` class.
+
+Out the box, you can use the following button styles:
+
+- `JourneyButtonStyle.standard`: Standard button style with customizable properties.
+- `JourneyButtonStyle.minimal`: Minimal button style with icons only.
+- `JourneyButtonStyle.outlined`: Outlined button style.
+- `JourneyButtonStyle.contained`: Contained button style.
+- `JourneyButtonStyle.custom`: Custom button style using builder functions.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ... 
+    NavigationHubLayout? layout = NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle.linear(),
+        buttonStyle: JourneyButtonStyle.standard(
+            // Customize button properties
+        ),
+    );
+```
+
+<div id="journey-state"></div>
+<br>
+
+### JourneyState
+
+The `JourneyState` class contains a lot of helper methods to help you manage the journey.
+
+To create a new `JourneyState`, you can use the below command.
+
+``` bash
+dart run nylo_framework:main make:journey_widget onboard_user_dob
+```
+
+Or if you want to create multiple widgets at once, you can use the following command.
+
+``` bash
+dart run nylo_framework:main make:journey_widget welcome,phone_number_step,add_photos_step
+```
+
+This will create the following files in your **resources/widgets/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
+
+You can then add the new widgets to the Navigation Hub.
+
+``` dart
+_MyNavigationHubState() : super(() async {
+    return {
+        0: NavigationTab.journey(
+            page: Welcome(),
+        ),
+        1: NavigationTab.journey(
+            page: PhoneNumberStep(),
+        ),
+        2: NavigationTab.journey(
+            page: AddPhotosStep(),
+        ),
+    };
+});
+```
+
+If we look at the `WelcomeStep` class, we can see that it extends the `JourneyState` class.
+
+``` dart
+...
+class _WelcomeTabState extends JourneyState<WelcomeTab> {
+  _WelcomeTabState() : super(
+      navigationHubState: BaseNavigationHub.path.stateName());
+
+  @override
+  get init => () {
+    // Your initialization logic here
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return buildJourneyContent(
+      progressStyle: JourneyProgressStyle.dots(
+        activeColor: Colors.red
+      ),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('WelcomeTab', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 20),
+          Text('This onboarding journey will help you get started.'),
+        ],
+      ),
+    );
+  }
+```
+
+You'll notice that the **JourneyState** class will use `buildJourneyContent` to build the content of the page.
+
+Here are a list of the properties you can use in the `buildJourneyContent` method.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `content` | `Widget` | The main content of the page. |
+| `nextButton` | `Widget?` | The next button widget. |
+| `backButton` | `Widget?` | The back button widget. |
+| `progressPosition` | `ProgressIndicatorPosition` | The position of the progress indicator. |
+| `progressStyle` | `JourneyProgressStyle?` | The style of the progress indicator. |
+| `contentPadding` | `EdgeInsetsGeometry` | The padding for the content. |
+| `progressIndicatorPadding` | `EdgeInsets?` | The padding for the progress indicator. |
+| `header` | `Widget?` | The header widget. |
+| `footer` | `Widget?` | The footer widget. |
+| `crossAxisAlignment` | `CrossAxisAlignment` | The cross axis alignment of the content. |
+
 
 <div id="journey-state-helper-methods"></div>
 <br>

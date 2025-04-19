@@ -6,9 +6,10 @@
 - [Introduction](#introduction "Introduction")
 - [When to Use State Management](#when-to-use-state-management "When to Use State Management")
 - [Lifecycle](#lifecycle "Lifecycle")
-- [Updating a State](#updating-a-state "Updating a State")
-- [Sending actions](#sending-state-actions "Sending actions")
 - [State Actions](#state-actions "State Actions")
+  - [NyState - State Actions](#state-actions-nystate "NyState - State Actions")
+  - [NyPage - State Actions](#state-actions-nypage "NyPage - State Actions")
+- [Updating a State](#updating-a-state "Updating a State")
 - [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
 
 <div id="introduction"></div>
@@ -148,80 +149,26 @@ The lifecycle of a `NyState` widget is as follows:
 
 Once the state is first initialized, you will need to implement how you want to manage the state.
 
-<div id="updating-a-state"></div>
-<br>
-
-## Updating a State
-
-You can update a state by calling the `updateState()` method.
-
-``` dart
-updateState(MyStateName.state);
-
-// or with data
-updateState(MyStateName.state, data: "The Data");
-```
-
-This can be called anywhere in your application.
-
 <div id="state-actions"></div>
 <br>
 
 ## State Actions
 
-State actions are methods that can be called from other classes to update the state.
-Out the box, you can use the follow methods to update the state.
+In Nylo, you can send state actions to your Widgets.
 
-- `refreshPage` - Refresh the page.
-- `pop` - Pop the page.
-- `showToastSorry` - Display a sorry toast notification.
-- `showToastWarning` - Display a warning toast notification.
-- `showToastInfo` - Display an info toast notification.
-- `showToastDanger` - Display a danger toast notification.
-- `showToastOops` - Display an oops toast notification.
-- `showToastSuccess` - Display a success toast notification.
-- `showToastCustom` - Display a custom toast notification.
-- `validate` - Validate data from your widget.
-- `changeLanguage` - Update the language in the application.
-- `confirmAction` - Perform a confirm action.
-
-Example
+A **stateAction** is a method that can be called from other classes to update the state of a widget.
 
 ``` dart
-class HomeController extends Controller {
-
-  actions() {    
-    // from the controller, refresh the state of the notification icon
-    StateAction.refreshPage(NotificationIcon.state);
-
-    // from the controller, refresh the state of the pull to refresh widget
-    StateAction.refreshPage(NyPullToRefresh.state);
-
-    // from the controller, pop the current page
-    StateAction.pop(HomeController.path);
-
-  }
-}
-```
-
-You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
-
-<div id="sending-state-actions"></div>
-<br>
-
-## Sending State Actions
-
-In Nylo, you can send action events to your Widgets. 
-
-```
-// Send an action to the widget
+// Sending an action to the widget
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example
-stateAction('reset_data', state: HighScore.state);
+// Another example with data
+stateAction('show_high_score', state: HighScore.state, data: {
+  "high_score": 100,
+});
 ```
 
-In your widget, you need the following code to handle the action.
+In your widget, you can define the actions you want to handle.
 
 ``` dart
 ...
@@ -230,8 +177,8 @@ get stateActions => {
   "hello_world_in_widget": () {
     print('Hello world');
   },
-  "reset_data": () async {
-    // Example
+  "reset_data": (data) async {
+    // Example with data
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -239,34 +186,65 @@ get stateActions => {
 };
 ```
 
-This is useful when you want to update the state of a widget from another widget or class.
+Then, you can call `stateAction` method from anywhere in your application.
+
+``` dart
+stateAction('hello_world_in_widget', state: MyWidget.state);
+// prints 'Hello world'
+
+User user = User(name: "John Doe", age: 30);
+stateAction('update_user_info', state: MyWidget.state, data: user);
+```
+
+You can also define your state actions using the `whenStateAction` method.
+
+``` dart
+@override
+get init => () async {
+  ...
+  whenStateAction({
+    "reset_badge": () {
+      // Reset the badge count
+      _count = 0;
+    }
+  });
+}
+```
+
+<div id="state-actions-nystate"></div>
+<br>
 
 ### NyState - State Actions
 
-First, create your state managed widget.
+First, create a stateful widget.
 
 ``` bash
-metro make:state_managed_widget my_widget
+metro make:stateful_widget [widget_name]
 ```
+Example: metro make:stateful_widget user_avatar
 
-This will create a new state managed widget called `MyWidget` in the `lib/resources/widgets/` directory.
+This will create a new widget in the `lib/resources/widgets/` directory.
 
 If you open that file, you'll be able to define your state actions.
 
 ``` dart
-class _MyWidgetState extends NyState<MyWidget> {
+class _UserAvatarState extends NyState<UserAvatar> {
 ...
 
 @override
 get stateActions => {
-  "print_hello_world": () {
-    print('Hello from the widget');
-  },
-  "reset_data": () {
+  "reset_avatar": () {
     // Example
-    _textController.clear();
-    _myData = null;
+    _avatar = null;
     setState(() {});
+  },
+  "update_user_image": (User user) {
+    // Example
+    _avatar = user.image;
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showSuccessToast(description: data['message']);
   },
 };
 ```
@@ -274,14 +252,18 @@ get stateActions => {
 Finally, you can send the action from anywhere in your application.
 
 ``` dart
-stateAction('print_hello_world', state: MyWidget.state);
-
+stateAction('reset_avatar', state: MyWidget.state);
 // prints 'Hello from the widget'
 
 stateAction('reset_data', state: MyWidget.state);
-
 // Reset data in widget
+
+stateAction('show_toast', state: MyWidget.state, data: "Hello world");
+// shows a success toast with the message
 ```
+
+<div id="state-actions-nypage"></div>
+<br>
 
 ### NyPage - State Actions
 
@@ -313,6 +295,9 @@ get stateActions => {
     _myData = null;
     setState(() {});
   },
+  "show_toast": (data) {
+    showSuccessToast(description: data['message']);
+  },
 };
 ```
 
@@ -320,16 +305,22 @@ Finally, you can send the action from anywhere in your application.
 
 ``` dart
 stateAction('test_page_action', state: MyPage.state);
-
 // prints 'Hello from the page'
+
+stateAction('reset_data', state: MyPage.state);
+// Reset data in page
+
+stateAction('show_toast', state: MyPage.state, data: {
+  "message": "Hello from the page"
+});
+// shows a success toast with the message
 ```
 
 You can also define your state actions using the `whenStateAction` method.
 
 ``` dart
 @override
-stateUpdated(dynamic data) async {
-  super.stateUpdated(data);
+get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
@@ -343,8 +334,24 @@ stateUpdated(dynamic data) async {
 Then you can send the action from anywhere in your application.
 
 ``` dart
-stateAction('reset_badge', state: MyPage.state);
+stateAction('reset_badge', state: MyWidget.state);
 ```
+
+<div id="updating-a-state"></div>
+<br>
+
+## Updating a State
+
+You can update a state by calling the `updateState()` method.
+
+``` dart
+updateState(MyStateName.state);
+
+// or with data
+updateState(MyStateName.state, data: "The Data");
+```
+
+This can be called anywhere in your application.
 
 <div id="building-your-first-widget"></div>
 <br>
