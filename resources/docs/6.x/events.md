@@ -3,77 +3,80 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction")
-  - [Understanding Events](#understanding-events "Understanding Events")
-- [Practical example](#practical-example "Practical example")
-- Usage
-  - [Dispatching Events](#dispatching-events "Dispatching Events")
-  - [Setup Listeners](#setup-listeners "Setup Listeners")
-  - [Listeners Handle Method](#listeners-handle-method "Listeners Handle Method")
+- [Introduction](#introduction)
+  - [Understanding Events](#understanding-events)
+  - [Common Event Examples](#common-event-examples)
+- [Creating an Event](#creating-an-event)
+  - [Event Structure](#event-structure)
+- [Dispatching Events](#dispatching-events)
+  - [Basic Event Dispatch](#basic-event-dispatch)
+  - [Dispatching with Data](#dispatching-with-data)
+  - [Broadcasting Events](#broadcasting-events)
+- [Listening to Events](#listening-to-events)
+  - [Using the `listenOn` Helper](#using-the-listenon-helper)
+  - [Using the `listen` Helper](#using-the-listen-helper)
+  - [Unsubscribing from Events](#unsubscribing-from-events)
+- [Working with Listeners](#working-with-listeners)
+  - [Adding Multiple Listeners](#adding-multiple-listeners)
+  - [Implementing Listener Logic](#implementing-listener-logic)
+- [Global Event Broadcasting](#global-event-broadcasting)
+  - [Enabling Global Broadcasting](#enabling-global-broadcasting)
 
 <div id="introduction"></div>
 <br>
 
 ## Introduction
 
-Events are powerful when you need to handle logic after something happens in your application.
-{{ config('app.name') }} provides a simple implementation of events that allows you to call listeners registered to the event. Listeners can perform logic from the event's payload.
-
-> {{ config('app.name') }} events are managed in the `app/events/` directory.
->
-> To register your events, add them into your `config/events.dart` map.
+Events are powerful when you need to handle logic after something occurs in your application. Nylo's event system allows you to create, dispatch, and listen to events from anywhere in your application, making it easier to build responsive, event-driven Flutter applications.
 
 <div id="understanding-events"></div>
 <br>
 
-## Understanding Events
+### Understanding Events
 
-Events, also known as 'Event-driven programming' is a programming paradigm in which the flow of the program is determined by events such as user actions, sensor outputs, or messages passing from other programs or threads.
+Event-driven programming is a paradigm where the flow of your application is determined by events such as user actions, sensor outputs, or messages from other programs or threads. This approach helps decouple different parts of your application, making your code more maintainable and easier to reason about.
 
-### Examples of events
-
-Here are some examples of events your application might have:
-- User Registers
-- User login
-- Product added to cart
-- Successful payment
-
-In {{ config('app.name') }}, after creating an Event, you can add your listeners to that event that should handle your desired needs.
-
-If we use the last example "Successful payment", we might have to do the following things:
-
-1. Clear the user's cart & any checkout sessions stored locally
-2. Use a service like <a href="https://pub.dev/packages/google_tag_manager" target="_BLANK">Google Tag Manager</a> to log the purchase for analytics
-
-In the next section, we'll show a real world example.
-
-<div id="practical-example"></div>
+<div id="common-event-examples"></div>
 <br>
 
-## Practical Example
+### Common Event Examples
 
-In this practical example, we'll imagine we own an e-commerce app selling t-shirts. 
+Here are some typical events your application might use:
+- User registration completed
+- User logged in/out
+- Product added to cart
+- Payment processed successfully
+- Data synchronization completed
+- Push notification received
 
-When user's make a successful payment, we want to dispatch an event to handle the following things:
+<div id="creating-an-event"></div>
+<br>
 
-- Clear the user's cart
-- Use Google Tag Manager to log the event for analytics
+## Creating an Event
 
-#### First, create an event
+You can create a new event using either the Nylo framework CLI or Metro:
 
-```dart
-dart run nylo_framework:main make:event payment_successful_event
+```bash
+# Using Nylo framework CLI
+dart run nylo_framework:main make:event PaymentSuccessfulEvent
+
+# Using Metro
+metro make:event PaymentSuccessfulEvent
 ```
 
-After the event is created, you'll be able to view it in your `lib/app/events/` directory.
+After running the command, a new event file will be created in the `app/events/` directory.
 
-If we open the file we just created <b>lib/app/events/payment_successful_event.dart</b> you should see the below class.
+<div id="event-structure"></div>
+<br>
 
-``` dart 
+### Event Structure
+
+Here's the structure of a newly created event file (e.g., `app/events/payment_successful_event.dart`):
+
+```dart
 import 'package:nylo_framework/nylo_framework.dart';
 
 class PaymentSuccessfulEvent implements NyEvent {
-
   final listeners = {
     DefaultListener: DefaultListener(),
   };
@@ -81,170 +84,223 @@ class PaymentSuccessfulEvent implements NyEvent {
 
 class DefaultListener extends NyListener {
   handle(dynamic event) async {
-    // handle the payload from event
+    // Handle the payload from event
   }
 }
 ```
-
-In this file, we'll add two new listeners, `SanitizeCheckoutListener` and `GTMPurchaseListener`.
-
-Here's the implementation for that in our event.
-
-``` dart 
-import 'package:nylo_framework/nylo_framework.dart';
-import 'package:google_tag_manager/google_tag_manager.dart' as gtm;
-
-class PaymentSuccessfulEvent implements NyEvent {
-
-  final listeners = {
-    SanitizeCheckoutListener: SanitizeCheckoutListener(),
-    GTMPurchaseListener: GTMPurchaseListener(),
-  };
-}
-
-class SanitizeCheckoutListener extends NyListener {
-  handle(dynamic event) async {
-    // clear the cart in storage
-    await NyStorage.store('cart', null); // clear the cart in storage
-  }
-}
-
-class GTMPurchaseListener extends NyListener {
-  handle(dynamic event) async {
-    // Get payload from event
-    Order order = event['order'];
-
-    // Push event to gtm (Google tag manager).
-    gtm.push({
-      'ecommerce': {
-        'purchase': {
-          'actionField': {
-            'id': order.id, // Transaction ID. Required for purchases and refunds.
-            'revenue': order.revenue, // Total transaction value (incl. tax and shipping)
-            'tax': order.tax,
-            'shipping': order.shipping
-          },
-          'products': order.line_items
-        }
-      }
-    });
-  }
-}
-```
-
-Next, open your <b>config/events.dart</b> file and register the `PaymentSuccessfulEvent` class.
-
-```dart 
-import 'package:flutter_app/app/events/payment_successful_event.dart';
-
-final Map<Type, NyEvent> events = {
-  LoginEvent: LoginEvent(),
-  LogoutEvent: LogoutEvent(),
-  PaymentSuccessfulEvent: PaymentSuccessfulEvent()
-};
-```
-
-Now we can dispatch the event from our application when a user makes a purchase.
-
-```dart
-stripePay(List<Product> products) async {
-
-  // create the order
-  Order? order = await api<OrderApiService>((api) => api.createOrder(products));
-  if (order == null) {
-    return;
-  }
-
-  // send event
-  await event<PaymentSuccessfulEvent>(data: {'order': order});
-...
-```
-
-This is all we need to use our new event.
 
 <div id="dispatching-events"></div>
 <br>
 
 ## Dispatching Events
 
-You can dispatch events by calling the below method:
+Events can be dispatched from anywhere in your application using the `event` helper method.
+
+<div id="basic-event-dispatch"></div>
+<br>
+
+### Basic Event Dispatch
+
+To dispatch an event without any data:
 
 ```dart
-loginUser() async {
-    User user = await _apiService.loginUser('email': '...', 'password': '...');
+event<PaymentSuccessfulEvent>();
+```
 
-    event<LoginEvent>(data: {'user': user});
+<div id="dispatching-with-data"></div>
+<br>
+
+### Dispatching with Data
+
+To pass data along with your event:
+
+```dart
+event<PaymentSuccessfulEvent>(data: {
+  'user': user,
+  'amount': amount,
+  'transactionId': 'txn_123456'
+});
+```
+
+<div id="broadcasting-events"></div>
+<br>
+
+### Broadcasting Events
+
+By default, Nylo events are only handled by the listeners defined in the event class. To broadcast an event (making it available to external listeners), use the `broadcast` parameter:
+
+```dart
+event<PaymentSuccessfulEvent>(
+  data: {'user': user, 'amount': amount},
+  broadcast: true
+);
+```
+
+<div id="listening-to-events"></div>
+<br>
+
+## Listening to Events
+
+Nylo provides multiple ways to listen for and respond to events.
+
+<div id="using-the-listenon-helper"></div>
+<br>
+
+### Using the `listenOn` Helper
+
+The `listenOn` helper can be used anywhere in your application to listen for broadcasted events:
+
+```dart
+NyEventSubscription subscription = listenOn<PaymentSuccessfulEvent>((data) {
+  // Access event data
+  final user = data['user'];
+  final amount = data['amount'];
+  
+  // Handle the event
+  showSuccessMessage("Payment of $amount received");
+});
+```
+
+<div id="using-the-listen-helper"></div>
+<br>
+
+### Using the `listen` Helper
+
+The `listen` helper is available in `NyPage` and `NyState` classes. It automatically manages subscriptions, unsubscribing when the widget is disposed:
+
+```dart
+class _CheckoutPageState extends NyPage<CheckoutPage> {
+  @override
+  get init => () {
+    listen<PaymentSuccessfulEvent>((data) {
+      // Handle payment success
+      routeTo(OrderConfirmationPage.path);
+    });
+    
+    listen<PaymentFailedEvent>((data) {
+      // Handle payment failure
+      displayErrorMessage(data['error']);
+    });
+  };
+  
+  // Rest of your page implementation
 }
 ```
 
-This will dispatch the `LoginEvent` event.
-
-> It's important that your `LoginEvent` class is registered in your <b>config/events.dart</b> file.
-
-<div id="setup-listeners"></div>
+<div id="unsubscribing-from-events"></div>
 <br>
 
-## Setup listeners
+### Unsubscribing from Events
 
-Listeners are added to events. Your listener must extend the NyListener class and have a `handle` method to work.
-
-<!-- You can add/remove listeners from events. -->
-
-Here's an example.
+When using `listenOn`, you must manually unsubscribe to prevent memory leaks:
 
 ```dart
-import 'package:nylo_framework/nylo_framework.dart';
+// Store the subscription
+final subscription = listenOn<PaymentSuccessfulEvent>((data) {
+  // Handle event
+});
 
-class LoginEvent implements NyEvent {
+// Later, when no longer needed
+subscription.cancel();
+```
 
+The `listen` helper automatically handles unsubscription when the widget is disposed.
+
+<div id="working-with-listeners"></div>
+<br>
+
+## Working with Listeners
+
+Listeners are classes that respond to events. Each event can have multiple listeners to handle different aspects of the event.
+
+<div id="adding-multiple-listeners"></div>
+<br>
+
+### Adding Multiple Listeners
+
+You can add multiple listeners to your event by updating the `listeners` property:
+
+```dart
+class PaymentSuccessfulEvent implements NyEvent {
   final listeners = {
-    DefaultListener: DefaultListener(),
-    AuthUserListener: AuthUserListener(),
+    NotificationListener: NotificationListener(),
+    AnalyticsListener: AnalyticsListener(),
+    OrderProcessingListener: OrderProcessingListener(),
   };
 }
+```
 
-class DefaultListener extends NyListener {
+<div id="implementing-listener-logic"></div>
+<br>
+
+### Implementing Listener Logic
+
+Each listener should implement the `handle` method to process the event:
+
+```dart
+class NotificationListener extends NyListener {
   handle(dynamic event) async {
-    // handle the payload from event
+    // Send notification to user
+    final user = event['user'];
+    await NotificationService.sendNotification(
+      userId: user.id,
+      title: "Payment Successful",
+      body: "Your payment of ${event['amount']} was processed successfully."
+    );
   }
 }
 
-class AuthUserListener extends NyListener {
+class AnalyticsListener extends NyListener {
   handle(dynamic event) async {
-    // handle the payload from event
+    // Log analytics event
+    await AnalyticsService.logEvent(
+      "payment_successful",
+      parameters: {
+        'amount': event['amount'],
+        'userId': event['user'].id,
+      }
+    );
   }
 }
 ```
 
-<div id="listeners-handle-method"></div>
+<div id="global-event-broadcasting"></div>
 <br>
 
-## Listener's handle method
+## Global Event Broadcasting
 
-The `handle(dynamic event)` method is where you can add all your logic for the listener.
+If you want all events to be broadcasted automatically without specifying `broadcast: true` each time, you can enable global broadcasting.
 
-The `event` argument in the `handle` will contain any data from the event, below is an example.
+<div id="enabling-global-broadcasting"></div>
+<br>
+
+### Enabling Global Broadcasting
+
+Edit your `app/providers/app_provider.dart` file and add the `broadcastEvents()` method to your Nylo instance:
 
 ```dart
-// From your widget
-loginUser() async {
-    User user = await _apiService.loginUser('email': '...', 'password': '...');
-
-    event<LoginEvent>({'user': user});
-}
-
-// Login event file
-...
-class LoginEvent implements NyEvent {
-
-  final listeners = {
-    DefaultListener: DefaultListener(),
-  };
-}
-
-class DefaultListener extends NyListener {
-  handle(dynamic event) async {
-    print(event['user']); // instance of User
+class AppProvider implements NyProvider {
+  @override
+  boot(Nylo nylo) async {
+    // Other configuration
+    
+    // Enable broadcasting for all events
+    nylo.broadcastEvents();
   }
 }
+```
+
+With global broadcasting enabled, you can dispatch and listen to events more concisely:
+
+```dart
+// Dispatch event (no need for broadcast: true)
+event<PaymentSuccessfulEvent>(data: {
+  'user': user,
+  'amount': amount,
+});
+
+// Listen for the event anywhere
+listen<PaymentSuccessfulEvent>((data) {
+  // Handle event data
+});
 ```

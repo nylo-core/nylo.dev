@@ -11,6 +11,7 @@
   - [Make page](#make-page "Make a new page with Metro")
   - [Make stateless widget](#make-stateless-widget "Make a new stateless widget with Metro")
   - [Make stateful widget](#make-stateful-widget "Make a new stateful widget with Metro")
+  - [Make journey widget](#make-journey-widget "Make a new journey widget with Metro")
   - [Make API Service](#make-api-service "Make a new API Service with Metro")
     - [Using Postman](#make-api-service-using-postman "Create API services with Postman")
   - [Make Event](#make-event "Make a new Event with Metro")
@@ -19,6 +20,7 @@
   - [Make Forms](#make-forms "Make a new form with Metro")
   - [Make Route Guard](#make-route-guard "Make a new route guard with Metro")
   - [Make Config File](#make-config-file "Make a new config file with Metro")
+  - [Make Command](#make-command "Make a new command with Metro")
 - App Icons
   - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 - Slate
@@ -403,6 +405,62 @@ dart run nylo_framework:main make:stateful_widget product_rating_widget --force
 metro make:stateful_widget product_rating_widget --force
 ```
 
+<div id="make-journey-widget"></div>
+<br>
+
+## Make journey widget
+
+- [Making a new journey widget](#making-a-new-journey-widget "Make a new journey widget with Metro")
+- [Forcefully make a journey widget](#forcefully-make-a-journey-widget "Forcefully make a new journey widget with Metro")
+
+<div id="making-a-new-journey-widget"></div>
+<br>
+
+### Making a new journey widget
+
+You can make a new journey widget by running the below in the terminal.
+
+``` bash
+dart run nylo_framework:main make:journey_widget product_journey --parent="[NAVIGATION_HUB]"
+
+# or with the alias metro
+metro make:journey_widget product_journey --parent="[NAVIGATION_HUB]"
+
+# Full example if you have a BaseNavigationHub
+dart run nylo_framework:main make:journey_widget welcome,user_dob,user_photos --parent="Base"
+```
+
+The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
+
+The `--parent` argument is used to specify the parent widget that the new journey widget will be added to.
+
+Example
+
+``` bash
+metro make:navigation_hub onboarding
+```
+
+Next, add the new journey widgets.
+``` bash
+dart run nylo_framework:main make:journey_widget welcome,user_dob,user_photos --parent="onboarding"
+
+# or with the alias metro
+metro make:journey_widget welcome,user_dob,user_photos --parent="onboarding"
+```
+
+<div id="forcefully-make-a-journey-widget"></div>
+<br>
+
+### Forcefully make a journey widget
+**Arguments:**
+Using the `--force` or `-f` flag will overwrite an existing widget if it already exists.
+
+``` bash
+dart run nylo_framework:main make:journey_widget product_journey --force -- parent="[YOUR_NAVIGATION_HUB]"
+# or with the alias metro
+metro make:journey_widget product_journey --force -- parent="[YOUR_NAVIGATION_HUB]"
+```
+
 <div id="make-api-service"></div>
 <br>
 
@@ -735,6 +793,45 @@ dart run nylo_framework:main make:config app_config --force
 # or with the alias metro
 metro make:config app_config --force
 ```
+
+
+<div id="make-command"></div>
+<br>
+
+## Make Command
+
+- [Making a new command](#making-a-new-command "Make a new command with Metro")
+- [Forcefully make a command](#forcefully-make-a-command "Forcefully make a new command with Metro")
+
+<div id="making-a-new-command"></div>
+<br>
+
+### Making a new command
+
+You can make a new command by running the below in the terminal.
+
+``` bash
+dart run nylo_framework:main make:command my_command
+# or with the alias metro
+metro make:command my_command
+```
+
+This will create a new command in `lib/app/commands`.
+
+<div id="forcefully-make-a-command"></div>
+<br>
+
+### Forcefully make a command
+
+**Arguments:**
+Using the `--force` or `-f` flag will overwrite an existing command if it already exists.
+
+``` bash
+dart run nylo_framework:main make:command my_command --force
+# or with the alias metro
+metro make:command my_command --force
+```
+
 
 <div id="build-app-icons"></div>
 <br>
