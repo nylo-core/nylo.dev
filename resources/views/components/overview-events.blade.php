@@ -53,8 +53,8 @@ MaterialButton(child: Text("Logout"),
                                     'link' => 'dispatching-events'
                                 ],
                                 [
-                                    'title' => 'Setup listeners',
-                                    'link' => 'setup-listeners'
+                                    'title' => 'Listening to Events',
+                                    'link' => 'listening-to-events'
                                 ],
                                 ] as $item)
                                 <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'events']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
