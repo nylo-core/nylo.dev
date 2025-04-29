@@ -225,7 +225,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-If you want to use the jounrey navigation layout, your **widgets** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
+If you want to use the journey navigation layout, your **widgets** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
 
 You can create a JourneyState using the below command.
 
@@ -535,7 +535,7 @@ Here are a list of the properties you can use in the `buildJourneyContent` metho
 <div id="journey-state-helper-methods"></div>
 <br>
 
-### JounreyState Helper Methods
+### JourneyState Helper Methods
 
 The `JourneyState` class has some helper methods that you can use to customize the behavior of your journey.
 
