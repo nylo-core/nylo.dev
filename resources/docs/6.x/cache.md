@@ -101,7 +101,7 @@ In the example above, the `get` method will return the value stored in the cache
 
 ## Remove Data
 
-To remove an item from the cache, you can use the `forget` method. The method accepts the **key** of the item to remove.
+To remove an item from the cache, you can use the `clear` method. The method accepts the **key** of the item to remove.
 
 ```dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -109,10 +109,10 @@ import 'package:nylo_framework/nylo_framework.dart';
 
 String key = "hello_world"; // Cache key
 
-await cache().forget(key);
+await cache().clear(key);
 ```
 
-In the example above, the `forget` method will remove the item stored in the cache under the key "hello_world".
+In the example above, the `clear` method will remove the item stored in the cache under the key "hello_world".
 
 <div id="caching-api-responses"></div>
 <br>
