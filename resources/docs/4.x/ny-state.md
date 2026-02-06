@@ -9,7 +9,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 When you create a <a href="/docs/4.x/metro#make-page" target="_BLANK">page</a> in {{ config('app.name') }}, it will extend the `NyState` class. This class provides useful utilities to make development easier. 
@@ -25,7 +24,6 @@ The `NyState` class can help you with the following:
 - Changing Language
 
 <div id="how-to-use-nystate"></div>
-<br>
 
 ## How to use NyState
 
@@ -59,7 +57,6 @@ metro make:page product_page
 ```
 
 <div id="helpers"></div>
-<br>
 ## Helpers
 
 |  |  |
@@ -75,7 +72,6 @@ metro make:page product_page
 
 
 <div id="color"></div>
-<br>
 ### Color
 
 Returns a color from your current <a href="/docs/4.x/themes#theme-colors" target="_BLANK">theme</a>.
@@ -97,7 +93,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="boot"></div>
-<br>
 ### Boot
 
 The `boot` method is used in conjunction with `afterLoad` to make async calls easier. You can call **await** on Future methods inside `boot` and while waiting, the afterLoad method will display a loader (from your **config/design.dart** file). After the boot method has finished, it will display the **child** Widget of your choice.
@@ -128,7 +123,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="pop"></div>
-<br>
 ### Pop
 
 `pop` - Remove the current page from the stack.
@@ -155,7 +149,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="showToast"></div>
-<br>
 ### showToast
 
 Show a toast notification on the context.
@@ -188,7 +181,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="validator"></div>
-<br>
 ### validator
 
 The `validator` helper performs validation on data. 
@@ -219,7 +211,6 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 
 
 <div id="change-language"></div>
-<br>
 ### changeLanguage
 
 You can call `changeLanguage` to change the json **/lang** file used on the device.
@@ -248,7 +239,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="when-env"></div>
-<br>
 ### whenEnv
 
 You can use `whenEnv` to run a function when your application is in a certain state. 
@@ -271,7 +261,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="lock-release"></div>
-<br>
 ### lockRelease
 
 This method will lock the state after a function is called, only until the method has finished will it allow the user to make subsequent requests. This method will also update the state, use `isLocked` to check.
@@ -317,7 +306,6 @@ class _LoginPageState extends NyState<LoginPage> {
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
 <div id="is-locked"></div>
-<br>
 ### isLocked
 
 This method will check if the state is locked using the `lockRelease` helper.
@@ -343,7 +331,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="is-loading"></div>
-<br>
 ### isLoading
 
 The `isLoading` method will check if the state is loading.
@@ -368,7 +355,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-load"></div>
-<br>
 ### afterLoad
 
 The `afterLoad` method can be used to display a loader until the state has finished 'loading'.
@@ -399,7 +385,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-not-null"></div>
-<br>
 ### afterNotNull
 
 You can use `afterNotNull` to show a loading widget until a variable has been set.
@@ -430,7 +415,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="set-loading"></div>
-<br>
 ### setLoading
 
 You can change to a 'loading' state by using `setLoading`. 

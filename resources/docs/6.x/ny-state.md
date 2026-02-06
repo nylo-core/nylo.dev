@@ -12,7 +12,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -23,7 +22,6 @@ You can **interact** with the state extactly like you would with a normal Flutte
 Let's cover how to use NyState.
 
 <div id="how-to-use-nystate"></div>
-<br>
 
 ## How to use NyState
 
@@ -62,7 +60,6 @@ metro make:page product_page
 ```
 
 <div id="loading-style"></div>
-<br>
 
 ## Loading Style
 
@@ -151,7 +148,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="state-management"></div>
-<br>
 
 ## State Management
 
@@ -187,7 +183,6 @@ Learn more about state management <a href="/docs/{{$version}}/state-management" 
 You can also watch our YouTube video on State Management <a href="https://youtu.be/X5EVh1KooFk?si=8hYQcXV9lvrSJgEL" target="_BLANK">here</a>.
 
 <div id="state-actions"></div>
-<br>
 
 ## State Actions
 
@@ -281,7 +276,6 @@ class _UpgradeButtonState extends NyState<UpgradeButton> {
 You can use the `StateAction` class to update the state of any page/widget in your application as long as the widget is state managed.
 
 <div id="helpers"></div>
-<br>
 
 ## Helpers
 
@@ -300,7 +294,6 @@ You can use the `StateAction` class to update the state of any page/widget in yo
 
 
 <div id="color"></div>
-<br>
 
 ### Color
 
@@ -323,7 +316,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="reboot"></div>
-<br>
 
 ### Reboot
 
@@ -366,7 +358,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="pop"></div>
-<br>
 
 ### Pop
 
@@ -394,7 +385,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="showToast"></div>
-<br>
 
 ### showToast
 
@@ -428,7 +418,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="validate"></div>
-<br>
 
 ### validate
 
@@ -455,7 +444,6 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 
 
 <div id="change-language"></div>
-<br>
 
 ### changeLanguage
 
@@ -485,7 +473,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="when-env"></div>
-<br>
 
 ### whenEnv
 
@@ -508,7 +495,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="lock-release"></div>
-<br>
 
 ### lockRelease
 
@@ -555,7 +541,6 @@ class _LoginPageState extends NyState<LoginPage> {
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
 <div id="is-locked"></div>
-<br>
 
 ### isLocked
 
@@ -581,7 +566,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="view"></div>
-<br>
 
 ### view
 
@@ -603,7 +587,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="confirm-action"></div>
-<br>
 
 ### confirmAction
 
@@ -621,7 +604,6 @@ _logout() {
 ```
 
 <div id="show-toast-success"></div>
-<br>
 
 ### showToastSuccess
 
@@ -638,7 +620,6 @@ _login() {
 ```
 
 <div id="show-toast-oops"></div>
-<br>
 
 ### showToastOops
 
@@ -655,7 +636,6 @@ _error() {
 ```
 
 <div id="show-toast-danger"></div>
-<br>
 
 ### showToastDanger
 
@@ -672,7 +652,6 @@ _error() {
 ```
 
 <div id="show-toast-info"></div>
-<br>
 
 ### showToastInfo
 
@@ -689,7 +668,6 @@ _info() {
 ```
 
 <div id="show-toast-warning"></div>
-<br>
 
 ### showToastWarning
 
@@ -706,7 +684,6 @@ _warning() {
 ```
 
 <div id="show-toast-sorry"></div>
-<br>
 
 ### showToastSorry
 
@@ -723,7 +700,6 @@ _sorry() {
 ```
 
 <div id="is-loading"></div>
-<br>
 
 ### isLoading
 
@@ -749,7 +725,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-load"></div>
-<br>
 
 ### afterLoad
 
@@ -780,7 +755,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-not-locked"></div>
-<br>
 
 ### afterNotLocked
 
@@ -819,7 +793,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-not-null"></div>
-<br>
 
 ### afterNotNull
 
@@ -851,7 +824,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="set-loading"></div>
-<br>
 
 ### setLoading
 

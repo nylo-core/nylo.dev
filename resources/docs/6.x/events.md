@@ -23,21 +23,18 @@
   - [Enabling Global Broadcasting](#enabling-global-broadcasting)
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
 Events are powerful when you need to handle logic after something occurs in your application. Nylo's event system allows you to create, dispatch, and listen to events from anywhere in your application, making it easier to build responsive, event-driven Flutter applications.
 
 <div id="understanding-events"></div>
-<br>
 
 ### Understanding Events
 
 Event-driven programming is a paradigm where the flow of your application is determined by events such as user actions, sensor outputs, or messages from other programs or threads. This approach helps decouple different parts of your application, making your code more maintainable and easier to reason about.
 
 <div id="common-event-examples"></div>
-<br>
 
 ### Common Event Examples
 
@@ -50,7 +47,6 @@ Here are some typical events your application might use:
 - Push notification received
 
 <div id="creating-an-event"></div>
-<br>
 
 ## Creating an Event
 
@@ -67,7 +63,6 @@ metro make:event PaymentSuccessfulEvent
 After running the command, a new event file will be created in the `app/events/` directory.
 
 <div id="event-structure"></div>
-<br>
 
 ### Event Structure
 
@@ -90,14 +85,12 @@ class DefaultListener extends NyListener {
 ```
 
 <div id="dispatching-events"></div>
-<br>
 
 ## Dispatching Events
 
 Events can be dispatched from anywhere in your application using the `event` helper method.
 
 <div id="basic-event-dispatch"></div>
-<br>
 
 ### Basic Event Dispatch
 
@@ -108,7 +101,6 @@ event<PaymentSuccessfulEvent>();
 ```
 
 <div id="dispatching-with-data"></div>
-<br>
 
 ### Dispatching with Data
 
@@ -123,7 +115,6 @@ event<PaymentSuccessfulEvent>(data: {
 ```
 
 <div id="broadcasting-events"></div>
-<br>
 
 ### Broadcasting Events
 
@@ -137,14 +128,12 @@ event<PaymentSuccessfulEvent>(
 ```
 
 <div id="listening-to-events"></div>
-<br>
 
 ## Listening to Events
 
 Nylo provides multiple ways to listen for and respond to events.
 
 <div id="using-the-listenon-helper"></div>
-<br>
 
 ### Using the `listenOn` Helper
 
@@ -162,7 +151,6 @@ NyEventSubscription subscription = listenOn<PaymentSuccessfulEvent>((data) {
 ```
 
 <div id="using-the-listen-helper"></div>
-<br>
 
 ### Using the `listen` Helper
 
@@ -188,7 +176,6 @@ class _CheckoutPageState extends NyPage<CheckoutPage> {
 ```
 
 <div id="unsubscribing-from-events"></div>
-<br>
 
 ### Unsubscribing from Events
 
@@ -207,14 +194,12 @@ subscription.cancel();
 The `listen` helper automatically handles unsubscription when the widget is disposed.
 
 <div id="working-with-listeners"></div>
-<br>
 
 ## Working with Listeners
 
 Listeners are classes that respond to events. Each event can have multiple listeners to handle different aspects of the event.
 
 <div id="adding-multiple-listeners"></div>
-<br>
 
 ### Adding Multiple Listeners
 
@@ -231,7 +216,6 @@ class PaymentSuccessfulEvent implements NyEvent {
 ```
 
 <div id="implementing-listener-logic"></div>
-<br>
 
 ### Implementing Listener Logic
 
@@ -265,14 +249,12 @@ class AnalyticsListener extends NyListener {
 ```
 
 <div id="global-event-broadcasting"></div>
-<br>
 
 ## Global Event Broadcasting
 
 If you want all events to be broadcasted automatically without specifying `broadcast: true` each time, you can enable global broadcasting.
 
 <div id="enabling-global-broadcasting"></div>
-<br>
 
 ### Enabling Global Broadcasting
 

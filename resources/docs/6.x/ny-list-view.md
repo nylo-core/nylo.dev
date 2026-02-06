@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -26,7 +25,6 @@ It works in the same way as the regular `ListView` widget, but it has some extra
 Let's take a look at some code.
 
 <div id="usage-nylistview"></div>
-<br>
 
 ## Usage NyListView
 
@@ -78,7 +76,6 @@ The `NyListView` widget requires two parameters:
 
 
 <div id="usage-nylistview-separated"></div>
-<br>
 
 ## Usage NyListView Separated
 
@@ -142,7 +139,6 @@ The `NyListView.separated` widget requires three parameters:
 - **separatorBuilder** - This is the widget that will be displayed between each item in the list.
 
 <div id="usage-nylistview-grid"></div>
-<br>
 
 ## Usage NyListView Grid
 
@@ -210,7 +206,6 @@ The `NyListView.grid` widget also has some optional parameters:
 - **crossAxisSpacing** - The crossAxisSpacing.
 
 <div id="parameters"></div>
-<br>
 
 ## Parameters
 
@@ -226,7 +221,6 @@ Here are some important parameters you should know about before using the `NyPul
 If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/5.x/lib/widgets/ny_list_view.dart). 
 
 <div id="updating-the-state"></div>
-<br>
 
 ## Updating the State
 

@@ -25,7 +25,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction to Forms
 
@@ -36,7 +35,6 @@ In Nylo you can use the `NyForm` class to manage, validate and submit data all i
 It's extremely easy and customizable, let's take a look at how to create a form.
 
 <div id="how-it-works"></div>
-<br>
 
 #### Creating a form
 
@@ -145,7 +143,6 @@ That's a quick overview of how to create, display and submit a form in Nylo.
 This is just scratching the surface, you can customize your forms even further by adding casts, validation rules, dummy data and global styles.
 
 <div id="creating-a-form"></div>
-<br>
 
 ## Creating a form
 
@@ -190,7 +187,6 @@ class AdvertForm extends NyFormData {
 ```
 
 <div id="displaying-a-form"></div>
-<br>
 
 ## Displaying a form
 
@@ -231,7 +227,6 @@ You'll need to provide an additional widget to submit the form using `form.submi
 
 
 <div id="submitting-a-form"></div>
-<br>
 
 ## Submitting a Form
 
@@ -285,7 +280,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="setting-data"></div>
-<br>
 
 ## Setting data
 
@@ -367,7 +361,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="clearing-data"></div>
-<br>
 
 ## Clearing Data
 
@@ -507,7 +500,6 @@ You can also adjust the mainAxisSpacing and crossAxisSpacing using the `mainAxis
 
 
 <div id="form-validation"></div>
-<br>
 
 ## Validation
 
@@ -672,7 +664,6 @@ The `FormCast.currency` cast supports multiple currencies, here's a list of all 
 
 
 <div id="form-dummy-data"></div>
-<br>
 
 ## Dummy Data
 
@@ -871,7 +862,6 @@ class RegisterForm extends NyFormData {
 
 
 <div id="ny-login-form"></div>
-<br>
 
 ## Pre-built Forms
 
@@ -907,7 +897,6 @@ Widget build(BuildContext context) {
 
 
 <div id="form-parameters"></div>
-<br>
 
 ## NyForm Parameters
 
@@ -922,7 +911,6 @@ Widget build(BuildContext context) {
 
 
 <div id="listening-to-form-changes"></div>
-<br>
 
 ## Listening to Form Changes
 
@@ -944,7 +932,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="custom-form-casts"></div>
-<br>
 
 ## Custom Form Casts
 

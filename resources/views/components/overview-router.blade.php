@@ -16,30 +16,30 @@ appRouter() => nyRoutes((router) {
     );
 });
 </x-code-highlighter>
-    <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">Build complex routes, interfaces and UI pages for your Flutter application.</p>
-    <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'router']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
-        Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+    <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">{{ __('Build complex routes, interfaces and UI pages for your Flutter application.') }}</p>
+    <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'router']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+        {{ __('Learn more') }} <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
     </a>
 
         <div class="grid grid-cols-2 gap-5 mt-5">
             @foreach([
                 [
-                    'title' => 'Adding Routes',
+                    'title' => __('Adding Routes'),
                     'link' => 'adding-routes'
                 ],
                 [
-                    'title' => 'Navigating to pages',
+                    'title' => __('Navigating to pages'),
                     'link' => 'navigating-to-pages'
                 ],
                 [
-                    'title' => 'Route Guards',
+                    'title' => __('Route Guards'),
                     'link' => 'route-guards'
                 ],
                 [
-                    'title' => 'Deep linking',
+                    'title' => __('Deep linking'),
                     'link' => 'deep-linking'
                 ],
                 ] as $item)
-                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'router']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
+                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'router']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
             @endforeach
     </div>

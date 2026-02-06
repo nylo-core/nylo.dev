@@ -36,7 +36,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -44,7 +43,6 @@ Metro is a CLI tool that works under the hood of the {{ config('app.name') }} fr
 It provides a lot of helpful tools to speed up development.
 
 <div id="install"></div>
-<br>
 
 ## Install
 
@@ -131,14 +129,12 @@ function metro { dart run nylo_framework:main @args }
 ```
 
 <div id="make-controller"></div>
-<br>
 
 ## Make controller
 
 - [Making a new controller](#making-a-new-controller "Make a new controller with Metro")
 - [Forcefully make a controller](#forcefully-make-a-controller "Forcefully make a new controller with Metro")
 <div id="making-a-new-controller"></div>
-<br>
 
 ### Making a new controller
 
@@ -153,7 +149,6 @@ metro make:controller profile_controller
 This will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
 <div id="forcefully-make-a-controller"></div>
-<br>
 
 ### Forcefully make a controller
 
@@ -166,7 +161,6 @@ metro make:controller profile_controller --force
 ```
 
 <div id="make-model"></div>
-<br>
 
 ## Make model
 
@@ -174,7 +168,6 @@ metro make:controller profile_controller --force
 - [Make model from JSON](#make-model-from-json "Make a new model from JSON with Metro")
 - [Forcefully make a model](#forcefully-make-a-model "Forcefully make a new model with Metro")
 <div id="making-a-new-model"></div>
-<br>
 
 ### Making a new model
 
@@ -189,7 +182,6 @@ metro make:model product
 It will place the newly created model in `lib/app/models/`.
 
 <div id="make-model-from-json"></div>
-<br>
 
 ### Make a model from JSON
 
@@ -206,7 +198,6 @@ metro make:model product --json
 Then, you can paste your JSON into the terminal and it will generate a model for you.
 
 <div id="forcefully-make-a-model"></div>
-<br>
 
 ### Forcefully make a model
 
@@ -221,7 +212,6 @@ metro make:model product --force
 ```
 
 <div id="make-page"></div>
-<br>
 
 ## Make page
 
@@ -233,7 +223,6 @@ metro make:model product --force
 - [Forcefully make a page](#forcefully-make-a-page "Forcefully make a new page with Metro")
 
 <div id="making-a-new-page"></div>
-<br>
 
 ### Making a new page
 
@@ -248,7 +237,6 @@ metro make:page product_page
 This will create a new page if it doesn't exist within the `lib/resources/pages/` directory.
 
 <div id="create-a-page-with-a-controller"></div>
-<br>
 
 ### Create a page with a controller
 
@@ -265,7 +253,6 @@ metro make:page product_page -c
 ```
 
 <div id="create-an-auth-page"></div>
-<br>
 
 ### Create an auth page
 
@@ -282,7 +269,6 @@ metro make:page login_page -a
 ```
 
 <div id="create-an-initial-page"></div>
-<br>
 
 ### Create an initial page
 
@@ -299,7 +285,6 @@ metro make:page home_page -i
 ```
 
 <div id="create-a-bottom-navigation-page"></div>
-<br>
 
 ### Create a bottom navigation page
 
@@ -316,7 +301,6 @@ metro make:page dashboard -b
 ```
 
 <div id="forcefully-make-a-page"></div>
-<br>
 
 ### Forcefully make a page
 
@@ -331,14 +315,12 @@ metro make:page product_page --force
 ```
 
 <div id="make-stateless-widget"></div>
-<br>
 
 ## Make stateless widget
 
 - [Making a new stateless widget](#making-a-new-stateless-widget "Make a new stateless widget with Metro")
 - [Forcefully make a stateless widget](#forcefully-make-a-stateless-widget "Forcefully make a new stateless widget with Metro")
 <div id="making-a-new-stateless-widget"></div>
-<br>
 
 ### Making a new stateless widget
 
@@ -353,7 +335,6 @@ metro make:stateless_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="forcefully-make-a-stateless-widget"></div>
-<br>
 
 ### Forcefully make a stateless widget
 
@@ -368,7 +349,6 @@ metro make:stateless_widget product_rating_widget --force
 ```
 
 <div id="make-stateful-widget"></div>
-<br>
 
 ## Make stateful widget
 
@@ -376,7 +356,6 @@ metro make:stateless_widget product_rating_widget --force
 - [Forcefully make a stateful widget](#forcefully-make-a-stateful-widget "Forcefully make a new stateful widget with Metro")
 
 <div id="making-a-new-stateful-widget"></div>
-<br>
 
 ### Making a new stateful widget
 
@@ -391,7 +370,6 @@ metro make:stateful_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="forcefully-make-a-stateful-widget"></div>
-<br>
 
 ### Forcefully make a stateful widget
 
@@ -406,7 +384,6 @@ metro make:stateful_widget product_rating_widget --force
 ```
 
 <div id="make-journey-widget"></div>
-<br>
 
 ## Make journey widget
 
@@ -414,7 +391,6 @@ metro make:stateful_widget product_rating_widget --force
 - [Forcefully make a journey widget](#forcefully-make-a-journey-widget "Forcefully make a new journey widget with Metro")
 
 <div id="making-a-new-journey-widget"></div>
-<br>
 
 ### Making a new journey widget
 
@@ -449,7 +425,6 @@ metro make:journey_widget welcome,user_dob,user_photos --parent="onboarding"
 ```
 
 <div id="forcefully-make-a-journey-widget"></div>
-<br>
 
 ### Forcefully make a journey widget
 **Arguments:**
@@ -462,7 +437,6 @@ metro make:journey_widget product_journey --force -- parent="[YOUR_NAVIGATION_HU
 ```
 
 <div id="make-api-service"></div>
-<br>
 
 ## Make API Service
 
@@ -472,7 +446,6 @@ metro make:journey_widget product_journey --force -- parent="[YOUR_NAVIGATION_HU
 - [Forcefully make an API Service](#forcefully-make-an-api-service "Forcefully make a new API Service with Metro")
 
 <div id="making-a-new-api-service"></div>
-<br>
 
 ### Making a new API Service
 
@@ -487,7 +460,6 @@ metro make:api_service user_api_service
 It will place the newly created API service in `lib/app/networking/`.
 
 <div id="making-a-new-api-service-with-a-model"></div>
-<br>
 
 ### Making a new API Service with a model
 
@@ -506,7 +478,6 @@ metro make:api_service user --model="User"
 It will place the newly created API service in `lib/app/networking/`.
 
 <div id="make-api-service-using-postman"></div>
-<br>
 
 ### Use Postman to Make API Services
 
@@ -552,7 +523,6 @@ You can check if your collection has saved responses by going to your Postman co
 The saved response **name** will be used for the **Model** name that {{ config('app.name') }} will create.
 
 <div id="forcefully-make-an-api-service"></div>
-<br>
 
 ### Forcefully make an API Service
 
@@ -567,7 +537,6 @@ metro make:api_service user --force
 ```
 
 <div id="make-event"></div>
-<br>
 
 ## Make event
 
@@ -575,7 +544,6 @@ metro make:api_service user --force
 - [Forcefully make an event](#forcefully-make-an-event "Forcefully make a new event with Metro")
 
 <div id="making-a-new-event"></div>
-<br>
 
 ### Making a new event
 
@@ -590,7 +558,6 @@ metro make:event login_event
 This will create a new event in `lib/app/events`.
 
 <div id="forcefully-make-an-event"></div>
-<br>
 
 ### Forcefully make an event
 
@@ -605,7 +572,6 @@ metro make:event login_event --force
 ```
 
 <div id="make-provider"></div>
-<br>
 
 ## Make provider
 
@@ -613,7 +579,6 @@ metro make:event login_event --force
 - [Forcefully make a provider](#forcefully-make-a-provider "Forcefully make a new provider with Metro")
 
 <div id="making-a-new-provider"></div>
-<br>
 
 ### Making a new provider
 
@@ -628,7 +593,6 @@ metro make:provider firebase_provider
 It will place the newly created provider in `lib/app/providers/`.
 
 <div id="forcefully-make-a-provider"></div>
-<br>
 
 ### Forcefully make a provider
 
@@ -643,7 +607,6 @@ metro make:provider firebase_provider --force
 ```
 
 <div id="make-theme"></div>
-<br>
 
 ## Make theme
 
@@ -651,7 +614,6 @@ metro make:provider firebase_provider --force
 - [Forcefully make a theme](#forcefully-make-a-theme "Forcefully make a new theme with Metro")
 
 <div id="making-a-new-theme"></div>
-<br>
 
 ### Making a new theme
 
@@ -666,7 +628,6 @@ metro make:theme bright_theme
 This will create a new theme in `lib/app/themes`.
 
 <div id="forcefully-make-a-theme"></div>
-<br>
 
 ### Forcefully make a theme
 
@@ -681,7 +642,6 @@ metro make:theme bright_theme --force
 ```
 
 <div id="make-forms"></div>
-<br>
 
 ## Make Forms
 
@@ -689,7 +649,6 @@ metro make:theme bright_theme --force
 - [Forcefully make a form](#forcefully-make-a-form "Forcefully make a new form with Metro")
 
 <div id="making-a-new-form"></div>
-<br>
 
 ### Making a new form
 
@@ -704,7 +663,6 @@ metro make:form car_advert_form
 This will create a new form in `lib/app/forms`.
 
 <div id="forcefully-make-a-form"></div>
-<br>
 
 ### Forcefully make a form
 
@@ -719,7 +677,6 @@ metro make:form login_form --force
 ```
 
 <div id="make-route-guard"></div>
-<br>
 
 ## Make Route Guard
 
@@ -727,7 +684,6 @@ metro make:form login_form --force
 - [Forcefully make a route guard](#forcefully-make-a-route-guard "Forcefully make a new route guard with Metro")
 
 <div id="making-a-new-route-guard"></div>
-<br>
 
 ### Making a new route guard
 
@@ -742,7 +698,6 @@ metro make:route_guard premium_content
 This will create a new route guard in `lib/app/route_guards`.
 
 <div id="forcefully-make-a-route-guard"></div>
-<br>
 
 ### Forcefully make a route guard
 
@@ -757,7 +712,6 @@ metro make:route_guard premium_content --force
 ```
 
 <div id="make-config-file"></div>
-<br>
 
 ## Make Config File
 
@@ -765,7 +719,6 @@ metro make:route_guard premium_content --force
 - [Forcefully make a config file](#forcefully-make-a-config-file "Forcefully make a new config file with Metro")
 
 <div id="making-a-new-config-file"></div>
-<br>
 
 ### Making a new config file
 
@@ -780,7 +733,6 @@ metro make:config shopping_settings
 This will create a new config file in `lib/app/config`.
 
 <div id="forcefully-make-a-config-file"></div>
-<br>
 
 ### Forcefully make a config file
 
@@ -796,7 +748,6 @@ metro make:config app_config --force
 
 
 <div id="make-command"></div>
-<br>
 
 ## Make Command
 
@@ -804,7 +755,6 @@ metro make:config app_config --force
 - [Forcefully make a command](#forcefully-make-a-command "Forcefully make a new command with Metro")
 
 <div id="making-a-new-command"></div>
-<br>
 
 ### Making a new command
 
@@ -819,7 +769,6 @@ metro make:command my_command
 This will create a new command in `lib/app/commands`.
 
 <div id="forcefully-make-a-command"></div>
-<br>
 
 ### Forcefully make a command
 
@@ -834,7 +783,6 @@ metro make:command my_command --force
 
 
 <div id="build-app-icons"></div>
-<br>
 
 ## Build App Icons
 
@@ -847,7 +795,6 @@ dart run flutter_launcher_icons:main
 This uses the <b>flutter_icons</b> configuration in your `pubspec.yaml` file.
 
 <div id="slate-publish"></div>
-<br>
 
 ## Publishing files with Slate
 
@@ -857,7 +804,6 @@ If you are new to Slate packages, you can read more about them [here](/docs/6.x/
 - [Forcefully publish files with Slate](#forcefully-publish-files-with-slate "Forcefully publish files with Slate")
 
 <div id="publishing-files-with-slate"></div>
-<br>
 
 ### Publishing files with Slate
 
@@ -872,7 +818,6 @@ metro slate:publish my_slate_package
 This will publish all the files in your project.
 
 <div id="forcefully-publish-files-with-slate"></div>
-<br>
 
 ### Forcefully publish files with Slate
 
@@ -888,7 +833,6 @@ metro slate:publish --force
 
 
 <div id="slate-install"></div>
-<br>
 
 ## Install and publish with Slate
 
@@ -903,7 +847,6 @@ metro slate:install my_slate_package
 This will install the Slate package and publish all the files in your project.
 
 <div id="custom-commands"></div>
-<br>
 
 ## Custom Commands
 
@@ -918,7 +861,6 @@ Custom commands allow you to extend Nylo's CLI with your own project-specific co
 > **Note:** You currently cannot import nylo_framework.dart in your custom commands, please use ny_cli.dart instead.
 
 <div id="creating-custom-commands"></div>
-<br>
 
 ## Creating Custom Commands
 
@@ -993,7 +935,6 @@ The command will automatically be registered in the `lib/app/commands/custom_com
 ```
 
 <div id="running-custom-commands"></div>
-<br>
 
 ## Running Custom Commands
 
@@ -1024,7 +965,6 @@ metro project:install_firebase --help
 ```
 
 <div id="adding-options-to-custom-commands"></div>
-<br>
 
 ## Adding Options to Commands
 
@@ -1068,7 +1008,6 @@ metro project:deploy -e production
 ```
 
 <div id="adding-flags-to-custom-commands"></div>
-<br>
 
 ## Adding Flags to Commands
 
@@ -1114,7 +1053,6 @@ metro project:deploy -v
 ```
 
 <div id="custom-command-helper-methods"></div>
-<br>
 
 ## Helper Methods
 
@@ -1192,7 +1130,6 @@ await runProcess('git pull', workingDirectory: './my-project');
 
 <div id="custom-command-helper-add-package"></div>
 <div id="custom-command-helper-add-packages"></div>
-<br>
 
 ```dart
 // Add a package to pubspec.yaml
@@ -1206,7 +1143,6 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
 <div id="custom-command-helper-formatting"></div>
-<br>
 
 ### Output Formatting
 
@@ -1219,14 +1155,12 @@ warning('Outdated package');    // Yellow text
 ```
 
 <div id="interactive-input-methods"></div>
-<br>
 
 ## Interactive Input Methods
 
 The `NyCustomCommand` base class provides several methods for collecting user input in the terminal. These methods make it easy to create interactive command-line interfaces for your custom commands.
 
 <div id="custom-command-helper-prompt"></div>
-<br>
 
 ### Text Input
 
@@ -1249,7 +1183,6 @@ final description = prompt('Enter a project description:');
 ```
 
 <div id="custom-command-helper-confirm"></div>
-<br>
 
 ### Confirmation
 
@@ -1277,7 +1210,6 @@ if (confirm('Would you like to continue?', defaultValue: true)) {
 ```
 
 <div id="custom-command-helper-select"></div>
-<br>
 
 ### Single Selection
 
@@ -1306,7 +1238,6 @@ info('Deploying to $environment environment...');
 ```
 
 <div id="custom-command-helper-multi-select"></div>
-<br>
 
 ### Multiple Selection
 
@@ -1337,7 +1268,6 @@ if (packages.isNotEmpty) {
 ```
 
 <div id="custom-command-helper-api"></div>
-<br>
 
 ## API Helper Method
 
@@ -1426,7 +1356,6 @@ final data = await withSpinner(
 
 
 <div id="using-spinners"></div>
-<br>
 
 ## Spinner Functionality
 
@@ -1437,7 +1366,6 @@ Spinners provide visual feedback during long-running operations in your custom c
 - [Examples](#spinner-examples)
 
 <div id="using-with-spinner"></div>
-<br>
 
 ## Using with spinner
 
@@ -1482,7 +1410,6 @@ Future<void> handle(CommandResult result) async {
 ```
 
 <div id="manual-spinner-control"></div>
-<br>
 
 ## Manual Spinner Control
 
@@ -1528,7 +1455,6 @@ Future<void> handle(CommandResult result) async {
 ```
 
 <div id="spinner-examples"></div>
-<br>
 
 ## Examples
 
@@ -1621,7 +1547,6 @@ Future<void> handle(CommandResult result) async {
 Using spinners in your custom commands provides clear visual feedback to users during long-running operations, creating a more polished and professional command-line experience.
 
 <div id="custom-command-helper-get-string"></div>
-<br>
 
 ### Get a string value from options
 
@@ -1651,7 +1576,6 @@ Future<void> handle(CommandResult result) async {
 ```
 
 <div id="custom-command-helper-get-bool"></div>
-<br>
 
 ### Get a bool value from options
 
@@ -1685,7 +1609,6 @@ Future<void> handle(CommandResult result) async {
 ```
 
 <div id="custom-command-helper-get-int"></div>
-<br>
 
 ### Get an int value from options
 
@@ -1714,7 +1637,6 @@ Future<void> handle(CommandResult result) async {
 ```
 
 <div id="custom-command-helper-sleep"></div>
-<br>
 
 ### Sleep for a specified duration
 

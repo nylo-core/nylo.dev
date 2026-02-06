@@ -10,7 +10,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -120,7 +119,6 @@ validate(
 This method is handy if you want to quickly validate the user's data and display some feedback to the user.
 
 <div id="validating-text-fields"></div>
-<br>
 
 ## Validating Text Fields
 
@@ -130,7 +128,6 @@ You can validate Text Fields by using the `NyTextField` widget. You can pass val
 
 
 <div id="validation-rules"></div>
-<br>
 
 ## Validation Rules
 
@@ -161,7 +158,6 @@ Here are the available validation rules that you can use in {{ config('app.name'
 ---
 
 <div id="validation-rule-email"></div>
-<br>
 
 ### email
 
@@ -171,7 +167,6 @@ Usage: `email`
 
 
 <div id="validation-rule-boolean"></div>
-<br>
 
 ### boolean
 
@@ -181,7 +176,6 @@ Usage: `boolean`
 
 
 <div id="validation-rule-contains"></div>
-<br>
 
 ### contains
 
@@ -191,7 +185,6 @@ Usage: `contains:dog,cat`
 
 
 <div id="validation-rule-url"></div>
-<br>
 
 ### url
 
@@ -201,7 +194,6 @@ Usage: `url`
 
 
 <div id="validation-rule-min"></div>
-<br>
 
 ### min
 
@@ -211,7 +203,6 @@ Usage: `min:7` - will fail if the user's input is less than 7 characters.
 
 
 <div id="validation-rule-max"></div>
-<br>
 
 ### max
 
@@ -221,7 +212,6 @@ Usage: `max:10` - will fail if the user's input is more than 10 characters.
 
 
 <div id="validation-rule-not-empty"></div>
-<br>
 
 ### Not Empty
 
@@ -231,7 +221,6 @@ Usage: `not_empty` - will fail if the user's input is empty.
 
 
 <div id="validation-rule-regex"></div>
-<br>
 
 ### Regex
 
@@ -241,7 +230,6 @@ Usage: `r'regex:([0-9]+)'` - will fail if the user's input does not match the re
 
 
 <div id="validation-rule-numeric"></div>
-<br>
 
 ### numeric
 
@@ -251,7 +239,6 @@ Usage: `numeric` - will fail if the user's input is not numeric.
 
 
 <div id="validation-rule-date"></div>
-<br>
 
 ### date
 
@@ -261,7 +248,6 @@ Usage: `date` - will fail if the user's input is not date.
 
 
 <div id="validation-rule-capitalized"></div>
-<br>
 
 ### capitalized
 
@@ -271,7 +257,6 @@ Usage: `capitalized` - will fail if the user's input is not capitalized.
 
 
 <div id="validation-rule-lowercase"></div>
-<br>
 
 ### lowercase
 
@@ -281,7 +266,6 @@ Usage: `lowercase` - will fail if the user's input is not lowercased.
 
 
 <div id="validation-rule-uppercase"></div>
-<br>
 
 ### uppercase
 
@@ -290,7 +274,6 @@ Check if the input is uppercase, e.g. "HELLO WORLD".
 Usage: `uppercase` - will fail if the user's input is not uppercase.
 
 <div id="validation-rule-us-phone-number"></div>
-<br>
 
 ### US Phone Number
 
@@ -299,7 +282,6 @@ Check if the input is a valid US Phone Number, e.g. "123-456-7890".
 Usage: `phone_number_us` - will fail if the user's input is not a US phone number.
 
 <div id="validation-rule-uk-phone-number"></div>
-<br>
 
 ### UK Phone Number
 
@@ -308,7 +290,6 @@ Check if the input is a valid UK Phone Number, e.g. "07123456789".
 Usage: `phone_number_uk` - will fail if the user's input is not a UK phone number.
 
 <div id="validation-rule-us-zipcode"></div>
-<br>
 
 ### US Zipcode
 
@@ -317,7 +298,6 @@ Check if the input is a valid US Zipcode, e.g. "33125".
 Usage: `zipcode_us` - will fail if the user's input is not a US Zipcode.
 
 <div id="validation-rule-uk-postcode"></div>
-<br>
 
 ### UK Postcode
 
@@ -327,7 +307,6 @@ Usage: `postcode_uk` - will fail if the user's input is not a UK Postcode.
 
 
 <div id="custom-validation-rules"></div>
-<br>
 
 ## Custom Validation Rules
 

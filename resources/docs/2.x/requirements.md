@@ -8,7 +8,6 @@
 - [Set up an editor](#set-up-an-editor "Set up an editor")
 
 <div id="introduction"></div>
-<br>
 ## Installing Flutter
 
 To use Nylo you'll need to already have Flutter installed. You can check out the [Flutter docs](https://flutter.dev/docs/get-started/install) for how to get set up.
@@ -34,7 +33,6 @@ flutter doctor -v
 ```
 
 <div id="set-up-an-editor"></div>
-<br>
 
 ## Set up an editor
 

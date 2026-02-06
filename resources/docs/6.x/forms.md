@@ -33,7 +33,6 @@
 - [API Reference for NyForm](#ny-form-api-reference "API Reference for NyForm")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -47,7 +46,6 @@ Nylo's form system provides:
 
 
 <div id="how-it-works"></div>
-<br>
 
 #### Creating a form
 
@@ -173,7 +171,6 @@ That's a quick overview of how to create, display and submit a form in Nylo.
 This is just scratching the surface, you can customize your forms even further by adding casts, validation rules, dummy data and global styles.
 
 <div id="creating-forms"></div>
-<br>
 
 ## Creating Forms
 
@@ -209,14 +206,12 @@ class ProductForm extends NyFormData {
 ```
 
 <div id="field-types"></div>
-<br>
 
 ## Field Types
 
 Nylo provides multiple ways to define fields, with the recommended approach using static methods for cleaner syntax:
 
 <div id="text-fields"></div>
-<br>
 
 ### Text Fields
 ```dart
@@ -233,7 +228,6 @@ Field("Description", cast: FormCast.textArea())
 ```
 
 <div id="numeric-fields"></div>
-<br>
 
 ### Numeric Fields
 ```dart
@@ -247,7 +241,6 @@ Field("Age", cast: FormCast.number()),
 Field("Price", cast: FormCast.currency("usd"))
 ```
 <div id="selection-fields"></div>
-<br>
 
 ### Selection Fields
 ```dart
@@ -265,7 +258,6 @@ Field("Category",
 ```
 
 <div id="boolean-fields"></div>
-<br>
 
 ### Boolean Fields
 ```dart
@@ -279,7 +271,6 @@ Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
 <div id="date-and-time-fields"></div>
-<br>
 
 ### Date and Time Fields
 ```dart
@@ -300,7 +291,6 @@ Field("Birth Date",
 ```
 
 <div id="password-fields"></div>
-<br>
 
 ### Password Fields
 ```dart
@@ -312,7 +302,6 @@ Field("Password", cast: FormCast.password(viewable: true))
 ```
 
 <div id="masked-input-fields"></div>
-<br>
 
 ### Masked Input Fields
 ```dart
@@ -327,7 +316,6 @@ Field("Phone",
 ```
 
 <div id="checkbox-fields"></div>
-<br>
 
 ### Checkbox Fields
 
@@ -340,7 +328,6 @@ Field("Accept Terms", cast: FormCast.checkbox())
 ```
 
 <div id="picker-fields"></div>
-<br>
 
 ### Picker Fields
 
@@ -357,7 +344,6 @@ Field("Category",
 ```
 
 <div id="radio-fields"></div>
-<br>
 
 ### Radio Fields
 
@@ -374,7 +360,6 @@ Field("Size",
 ```
 
 <div id="chip-fields"></div>
-<br>
 
 ### Chip Fields
 
@@ -391,7 +376,6 @@ Field("Tags",
 ```
 
 <div id="switch-box-fields"></div>
-<br>
 
 ### Switch Box Fields
 
@@ -404,7 +388,6 @@ Field("Enable Notifications", cast: FormCast.switchBox())
 ```
 
 <div id="form-validation"></div>
-<br>
 
 ## Form Validation
 
@@ -538,7 +521,6 @@ Field.text("Username",
 | `dateAgeIsOlder(age)` | Age older than specified |
 
 <div id="form-casts"></div>
-<br>
 
 ## Form Casts
 
@@ -577,14 +559,12 @@ final Map<String, dynamic> formCasts = {
 ```
 
 <div id="managing-form-data"></div>
-<br>
 
 ## Managing Form Data
 
 In this section, we'll cover how to manage form data in Nylo. Everything from setting initial data to updating and clearing form fields.
 
 <div id="initializing-data"></div>
-<br>
 
 ### Setting Initial Data
 ```dart
@@ -658,7 +638,6 @@ form.clearField("name");
 ```
 
 <div id="submit-button"></div>
-<br>
 
 ## Submit Button
 
@@ -757,7 +736,6 @@ NyForm(
 ```
 
 <div id="form-styling"></div>
-<br>
 
 ## Form Styling
 
@@ -842,12 +820,10 @@ Field.text("Name",
 ```
 
 <div id="advanced-features"></div>
-<br>
 
 ## Advanced Features
 
 <div id="form-layout"></div>
-<br>
 
 ### Form Layout
 ```dart
@@ -867,7 +843,6 @@ fields() => [
 ```
 
 <div id="conditional-fields"></div>
-<br>
 
 ### Conditional Fields
 ```dart
@@ -883,7 +858,6 @@ Field.checkbox("Has Pets",
 ```
 
 <div id="form-events"></div>
-<br>
 
 ### Form Events
 ```dart
@@ -897,7 +871,6 @@ NyForm(
 ```
 
 <div id="pre-built-components"></div>
-<br>
 
 ## Pre-built Components
 
@@ -911,7 +884,6 @@ NyLoginForm loginForm = Forms.login(
 ```
 
 <div id="ny-form-api-reference"></div>
-<br>
 
 ## API Reference for NyForm
 

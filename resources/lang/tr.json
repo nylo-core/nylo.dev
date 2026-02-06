@@ -1,0 +1,197 @@
+{
+    "Select language": "Dil seçin",
+
+    "Nylo v7 is here!": "Nylo v7 burada!",
+    "See what's new": "Yeniliklere göz atın",
+
+    "Docs": "Dokümanlar",
+    "Framework": "Framework",
+    "Resources": "Kaynaklar",
+    "Packages": "Paketler",
+    "Menu": "Menü",
+    "Get Started": "Başlayın",
+    "Star on GitHub": "GitHub'da yıldız verin",
+
+    "Nylo Framework": "Nylo Framework",
+    "Nylo v7 Framework": "Nylo v7 Framework",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "Nylo ile Flutter uygulamanızı hızla başlatmak için şablon.",
+    "Get started: Nylo installer": "Başlayın: Nylo yükleyici",
+
+    "Developers": "Geliştiriciler",
+    "Documentation": "Dokümantasyon",
+    "Comprehensive guides to help you get started with Nylo.": "Nylo'ya başlamanıza yardımcı olacak kapsamlı rehberler.",
+    "Release Notes": "Sürüm Notları",
+    "Stay updated with the latest Nylo releases and updates.": "En son Nylo sürümleri ve güncellemeleri hakkında bilgi sahibi olun.",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Nylo framework için video eğitimleri ve rehberler.",
+    "Forum": "Forum",
+    "Join the community discussions and get help.": "Topluluk tartışmalarına katılın ve yardım alın.",
+    "Become a sponsor": "Sponsor olun",
+    "Support Nylo development by becoming a sponsor.": "Sponsor olarak Nylo geliştirmesini destekleyin.",
+    "Become a Sponsor": "Sponsor Olun",
+
+    "Live now": "Şimdi yayında",
+
+    "The Flutter": "Flutter",
+    "Micro-framework": "Mikro-framework",
+    "For Modern Apps": "Modern Uygulamalar İçin",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "Flutter uygulamaları oluşturmak için sağlam bir temel. Yönlendirme, durum yönetimi, ağ işlemleri ve daha fazlası — hepsi zarif bir pakette.",
+
+    "Explore": "Keşfet",
+
+    "Features": "Özellikler",
+    "Everything you need to build": "İnşa etmek için ihtiyacınız olan her şey",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo, güvenle üretime hazır Flutter uygulamaları oluşturmak için ihtiyacınız olan tüm araçları sağlar.",
+
+    "Routing": "Yönlendirme",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "Rota koruyucuları, parametreler ve derin bağlantı desteği ile basit, bildirimsel yönlendirme.",
+
+    "State Management": "Durum Yönetimi",
+    "Built-in reactive state management with controllers and easy state persistence.": "Kontrolörler ve kolay durum kalıcılığı ile yerleşik reaktif durum yönetimi.",
+
+    "Networking": "Ağ İşlemleri",
+    "Elegant API service classes with automatic model serialization and interceptors.": "Otomatik model serileştirme ve interceptor'lar ile zarif API hizmet sınıfları.",
+
+    "Forms": "Formlar",
+    "Powerful form handling with validation, casting, and automatic data binding.": "Doğrulama, dönüştürme ve otomatik veri bağlama ile güçlü form işleme.",
+
+    "Authentication": "Kimlik Doğrulama",
+    "Secure authentication with route guards, token storage, and session management.": "Rota koruyucuları, token depolama ve oturum yönetimi ile güvenli kimlik doğrulama.",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "Güçlü CLI komutları ile sayfalar, modeller, kontrolörler ve daha fazlasını oluşturun.",
+
+    "Explore all features": "Tüm özellikleri keşfedin",
+
+    "Create anything from the terminal": "Terminalden her şeyi oluşturun",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro, tek bir komutla sayfalar, modeller, kontrolörler, widget'lar ve daha fazlasını iskeletlemenize yardımcı olan Nylo'nun CLI aracıdır.",
+    "Learn more about Metro": "Metro hakkında daha fazla bilgi edinin",
+
+    "Effortless API integration": "Zahmetsiz API entegrasyonu",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "Otomatik JSON ayrıştırma, hata işleme ve istek interceptor'ları ile temiz, bakımı kolay API hizmetleri yazın.",
+    "Learn more about Networking": "Ağ İşlemleri hakkında daha fazla bilgi edinin",
+
+    "Powerful tools for creating": "Oluşturmak için güçlü araçlar",
+    "Everything you need to build your next Flutter app": "Bir sonraki Flutter uygulamanızı oluşturmak için ihtiyacınız olan her şey",
+
+    "Auth": "Kimlik",
+    "State": "Durum",
+    "Events": "Olaylar",
+    "Scheduler": "Zamanlayıcı",
+
+    "Loved by the community": "Topluluk tarafından seviliyor",
+    "What developers are saying about": "Geliştiriciler ne diyor",
+    "Join the discussion": "Tartışmaya katılın",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "uygulama geliştirmeyi basitleştirmeye yardımcı olmak için tasarlanmış Flutter için bir mikro-framework'tür.",
+
+    "Installation": "Kurulum",
+    "Requirements": "Gereksinimler",
+    "Router": "Yönlendirici",
+    "Themes & Styling": "Temalar ve Stil",
+
+    "Flutter Packages": "Flutter Paketleri",
+    "Contributions": "Katkılar",
+    "Privacy Policy": "Gizlilik Politikası",
+    "Terms & Conditions": "Şartlar ve Koşullar",
+
+    "Community": "Topluluk",
+    "Discussions": "Tartışmalar",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "Tüm Hakları Saklıdır",
+
+    "Privacy policy": "Gizlilik politikası",
+    "Terms and conditions": "Şartlar ve koşullar",
+    "Updated:": "Güncellendi:",
+    "operates the": "işletmektedir",
+    "website, which provides the SERVICE.": "HİZMET sağlayan web sitesini.",
+
+    "Run:": "Çalıştırın:",
+    "in your terminal.": "terminalinizde.",
+    "Next: Run": "Sonraki: Çalıştırın",
+
+    "Step 1": "Adım 1",
+    "Step 2": "Adım 2",
+    "Step 3": "Adım 3",
+    "Create a Form": "Form Oluştur",
+    "Modify your form": "Formunuzu değiştirin",
+    "Use your form in a widget": "Formunuzu bir widget'ta kullanın",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "Nylo Forms ile verileri tek bir yerde yönetin, doğrulayın ve gönderin.",
+    "Validation": "Doğrulama",
+    "Casts": "Dönüşümler",
+    "Styling": "Stil",
+    "Dummy Data": "Örnek Veri",
+
+    "Create a state managed widget": "Durum yönetimli widget oluştur",
+    "Now, you can update this widget from anywhere in your application": "Artık bu widget'ı uygulamanızın herhangi bir yerinden güncelleyebilirsiniz",
+    "Use the updateState method like in the below code snippet": "Aşağıdaki kod parçacığındaki gibi updateState yöntemini kullanın",
+    "You can pass any object to the widget": "Widget'a herhangi bir nesne aktarabilirsiniz",
+    "Powerful state management for widgets in your Flutter application.": "Flutter uygulamanızdaki widget'lar için güçlü durum yönetimi.",
+    "Lifecycle": "Yaşam Döngüsü",
+    "State Actions": "Durum Eylemleri",
+
+    "Create your event": "Etkinliğinizi oluşturun",
+    "Dispatch the event": "Etkinliği gönderin",
+    "Dispatch events and listen for them in your application.": "Uygulamanızda etkinlikleri gönderin ve dinleyin.",
+    "Dispatching Events": "Etkinlik Gönderme",
+    "Listening to Events": "Etkinlikleri Dinleme",
+
+    "Schedule a task to run once": "Bir görevi bir kez çalıştırmak için zamanla",
+    "Schedule a task to run once after a specific date": "Belirli bir tarihten sonra bir kez çalıştırmak için görevi zamanla",
+    "Schedule a task to run once daily": "Günde bir kez çalıştırmak için görevi zamanla",
+    "Schedule tasks to run once or daily in your Flutter application.": "Flutter uygulamanızda görevleri bir kez veya günlük çalıştırmak için zamanlayın.",
+    "Schedule Once After Date": "Tarihten Sonra Bir Kez Zamanla",
+    "Scheduling Once Daily": "Günlük Bir Kez Zamanlama",
+
+    "Learn more": "Daha fazla bilgi",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "Flutter uygulamanız için karmaşık rotalar, arayüzler ve UI sayfaları oluşturun.",
+    "Adding Routes": "Rota Ekleme",
+    "Navigating to pages": "Sayfalara gitme",
+    "Route Guards": "Rota Koruyucuları",
+    "Deep linking": "Derin bağlantı",
+
+    "Authenticate a user": "Kullanıcı kimliğini doğrula",
+    "Now, when your user opens the app they will be authenticated.": "Artık kullanıcınız uygulamayı açtığında kimliği doğrulanmış olacak.",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "Router'ınızda authenticatedRoute ayarladıysanız, kullanıcı uygulamayı tekrar açtığında bu sayfa gösterilecektir.",
+    "Logout the user": "Kullanıcıyı çıkış yaptır",
+    "Authenticate users in your Flutter application.": "Flutter uygulamanızda kullanıcıları doğrulayın.",
+    "Authentication Page": "Kimlik Doğrulama Sayfası",
+    "Adding an auth user": "Auth kullanıcısı ekleme",
+    "Retrieve an auth user": "Auth kullanıcısı alma",
+    "Logout": "Çıkış",
+
+    "Create an API Service": "API Servisi Oluşturun",
+    "Call the API from your page": "Sayfanızdan API'yi çağırın",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "Otomatik JSON ayrıştırma, önbellekleme ve interceptor'lar ile zarif API servisleri.",
+    "GET Requests": "GET İstekleri",
+    "Interceptors": "Interceptor'lar",
+    "Morphing JSON": "Morphing JSON",
+    "Caching": "Önbellekleme",
+
+    "Save data securely": "Verileri güvenle kaydedin",
+    "Read with type casting": "Tip dönüşümü ile okuyun",
+    "Secure local storage with type casting, TTL expiry, and collections.": "Tip dönüşümü, TTL süresi ve koleksiyonlar ile güvenli yerel depolama.",
+    "Save Data": "Veri Kaydet",
+    "Read Data": "Veri Oku",
+    "Collections": "Koleksiyonlar",
+    "Backpack": "Sırt Çantası",
+
+    "Add your language files": "Dil dosyalarınızı ekleyin",
+    "Translate text in your widgets": "Widget'larınızdaki metni çevirin",
+    "Multi-language support with JSON files, arguments, and RTL.": "JSON dosyaları, argümanlar ve RTL ile çoklu dil desteği.",
+    "Translations": "Çeviriler",
+    "Arguments": "Argümanlar",
+    "Locale Switching": "Dil Değiştirme",
+    "RTL Support": "RTL Desteği",
+
+    "Create a Navigation Hub": "Navigasyon Hub'ı Oluşturun",
+    "Switch layouts easily": "Düzenleri kolayca değiştirin",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "Durum koruması ile alt navigasyon, üst navigasyon veya yolculuk akışları oluşturun.",
+    "Bottom Nav": "Alt Navigasyon",
+    "Top Nav": "Üst Navigasyon",
+    "Journey Flow": "Yolculuk Akışı",
+    "Badges": "Rozetler"
+}

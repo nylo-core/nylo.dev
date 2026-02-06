@@ -10,7 +10,6 @@
   - [Installing Metro Alias Windows](#installing-metro-alias-windows "Installing Metro Alias Windows")
 
 <div id="install"></div>
-<br>
 
 ## Install
 
@@ -23,7 +22,6 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 > <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
 
 <div id="running-the-project"></div>
-<br>
 
 ## Running the project
 
@@ -36,7 +34,6 @@ If the build is successful, the app will display {{ config('app.name') }}'s **de
 
 
 <div id="metro-cli"></div>
-<br>
 
 ## Metro CLI tool
 
@@ -65,7 +62,6 @@ To access the menu, you can run the below in the terminal.
 `dart run nylo_framework:main`
 
 <div id="installing-metro-alias-macos"></div>
-<br>
 
 ## Installing Metro alias MacOS
 
@@ -97,7 +93,6 @@ If you are unsure where to add the above, check out some guides online for where
 The above example assumes that your bash_profile is in your `~/` location.
 
 <div id="installing-metro-alias-windows"></div>
-<br>
 
 ## Installing Metro alias Windows
 

@@ -11,7 +11,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -31,7 +30,6 @@ metro slate:publish example_slate_package
 Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
 
 <div id="creating-a-slate-package"></div>
-<br>
 
 ## Creating a Slate package
 
@@ -56,7 +54,6 @@ List<NyTemplate> run() => [
 Once you've built your Slate package, publish it to pub.dev as a package for the community to download.
 
 <div id="packages-auth-slate"></div>
-<br>
 
 ## Auth Slate
 
@@ -78,7 +75,6 @@ metro slate:publish ny_auth_slate
 ```
 
 <div id="packages-laravel-auth-slate"></div>
-<br>
 
 ## Laravel Authentication Slate
 

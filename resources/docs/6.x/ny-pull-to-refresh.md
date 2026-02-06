@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -28,7 +27,6 @@ This makes it a great option for those with big data because you'll be able to p
 Let's dive into some code.
 
 <div id="usage-nypulltorefresh"></div>
-<br>
 
 ## Usage NyPullToRefresh
 
@@ -81,7 +79,6 @@ Widget build(BuildContext context) {
 When the returned data is an empty array, it will stop the pagination.
 
 <div id="usage-nypulltorefresh-separated"></div>
-<br>
 
 ## Usage NyPullToRefresh Separated
 
@@ -145,7 +142,6 @@ The `NyPullToRefresh.separated` widget requires three parameters:
 - **separatorBuilder** - This is the widget that will be displayed between each item in the list.
 
 <div id="usage-nypulltorefresh-grid"></div>
-<br>
 
 ## Usage NyPullToRefresh Grid
 
@@ -213,7 +209,6 @@ The `NyPullToRefresh.grid` widget also has some optional parameters:
 - **crossAxisSpacing** - The crossAxisSpacing.
 
 <div id="parameters"></div>
-<br>
 
 ## Parameters
 
@@ -229,7 +224,6 @@ Here are some important parameters you should know about before using the `NyPul
 If you would like to know all the parameters available, visit this link [here](https://github.com/nylo-core/support/blob/5.x/lib/widgets/ny_pull_to_refresh.dart). 
 
 <div id="updating-the-state"></div>
-<br>
 
 ## Updating the State
 

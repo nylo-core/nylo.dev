@@ -9,7 +9,6 @@
   - [Installing Metro Alias (Mac)](#installing-metro-alias "Installing Metro Alias (Mac)")
 
 <div id="install"></div>
-<br>
 
 ## Install
 
@@ -22,7 +21,6 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 > <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
 
 <div id="running-the-project"></div>
-<br>
 
 ## Running the project
 
@@ -35,7 +33,6 @@ If the build is successful, the app will display {{ config('app.name') }}'s **de
 
 
 <div id="metro-cli"></div>
-<br>
 
 ## Metro CLI tool
 
@@ -62,7 +59,6 @@ To access the menu, you can run the below in the terminal.
 `dart run nylo_framework:main`
 
 <div id="installing-metro-alias"></div>
-<br>
 
 ## Installing Metro alias (Mac)
 

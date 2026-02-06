@@ -10,3 +10,10 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+CLAUDE.md
+.claude
+boost.json
+.vscode/
+.github/copilot-instructions.md
+.mcp.json

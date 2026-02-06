@@ -12,7 +12,6 @@
 - [Badge Count](#badge-count "Badge Count")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -26,7 +25,6 @@ If you have custom icons for different operating systems you can also just add t
 {{ config('app.name') }} uses the <a href="https://pub.dev/packages/flutter_launcher_icons" target="_BLANK">flutter_launcher_icons</a> library to build icons, to understand the library more you can check out their documentation too.
 
 <div id="generating-app-icons"></div>
-<br>
 
 ## Generating app icons
 
@@ -40,7 +38,6 @@ This command will use the app icon located in your `/public/assets/app_icon`  di
 
 
 <div id="adding-your-app-icon"></div>
-<br>
 
 ## Adding your app icon
 
@@ -54,7 +51,6 @@ Open your pubspec.yaml file and look for **image\_path** section, this is where 
 
 
 <div id="app-icon-filenames"></div>
-<br>
 
 ## App icon filenames
 
@@ -62,7 +58,6 @@ Your filenames shouldn’t include special characters. It’s best to keep it si
 
 
 <div id="app-icon-filetype"></div>
-<br>
 
 ## App icon file types
 
@@ -83,7 +78,6 @@ If you are interested in learning more, you can view the official guidelines fro
 
 
 <div id="configuration"></div>
-<br>
 
 ## Configuration
 
@@ -93,7 +87,6 @@ Inside the `pubspec.yaml` file, look for the `flutter_icons` section, and here y
 Check out the official <a href="https://pub.dev/packages/flutter_launcher_icons" target="_BLANK">flutter_launcher_icons</a> library to see what's possible.
 
 <div id="badge-count"></div>
-<br>
 
 ## Badge Count
 

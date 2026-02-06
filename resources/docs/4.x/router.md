@@ -17,7 +17,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Routes help us navigate users around our apps. They provide a journey usually from the (`/`) index page.
@@ -40,7 +39,6 @@ You may also need to pass data from one view to another. In {{ config('app.name'
 
 
 <div id="adding-routes"></div>
-<br>
 
 ## Adding routes
 
@@ -60,7 +58,6 @@ appRouter() => nyRoutes((router) {
 ```
 
 <div id="navigating-to-pages"></div>
-<br>
 
 ## Navigating to pages
 
@@ -91,7 +88,6 @@ class _SettingsPageState extends NyState<SettingsPage> {
 ```
 
 <div id="add-multiple-routers"></div>
-<br>
 
 ## Multiple routers
 
@@ -133,7 +129,6 @@ class RouteProvider implements NyProvider {
 ```
 
 <div id="passing-data-to-another-page"></div>
-<br>
 
 ## Passing data to another page
 
@@ -184,7 +179,6 @@ class _ProfilePageState extends NyState<ProfilePage> {
 ```
 
 <div id="query-parameters"></div>
-<br>
 
 ## Query Parameters
 
@@ -225,7 +219,6 @@ class _MyHomePageState extends NyState<MyHomePage> {
 > Query parameters must follow the HTTP protocol E.g. /account?userId=1&tab=2
 
 <div id="page-transitions"></div>
-<br>
 
 ## Page Transitions
 
@@ -283,7 +276,6 @@ class _HomePageState extends NyState<HomePage> {
 {{ config('app.name') }} uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
 
 <div id="navigation-types"></div>
-<br>
 
 ## Navgiation Types
 
@@ -308,7 +300,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="navigating-back"></div>
-<br>
 
 ## Navigating back
 

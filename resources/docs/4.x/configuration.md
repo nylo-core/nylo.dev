@@ -10,7 +10,6 @@
   - [Retrieving Values](#retrieving-environment-values "Retrieving environment values")
 - [Environment flavours](#environment-flavours "Environment flavours")
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 {{ config('app.name') }} provides a `.env` file which contains global configuration variables like the app name, default locale and your App's environment.
@@ -44,7 +43,6 @@ String appName = getEnv('APP_NAME');
 ```
 
 <div id="environment-configuration"></div>
-<br>
 
 ## Environment Configuration
 
@@ -79,7 +77,6 @@ Best practises:
 - Don't commit your `.env` file to a (public/private) repository.
 
 <div id="environment-variable-types"></div>
-<br>
 
 ## Environment Variable Types
 
@@ -93,7 +90,6 @@ The values in your <b>.env</b> file are defined as `String`'s but {{ config('app
 
 
 <div id="retrieving-environment-values"></div>
-<br>
 
 ## Retrieving Environment Values
 
@@ -113,7 +109,6 @@ int httpConnectionTimeout = getEnv('HTTP_CONNECTION_TIMEOUT', defaultValue: (60 
 ```
 
 <div id="environment-flavours"></div>
-<br>
 
 ## Environment flavours
 

@@ -9,7 +9,6 @@
 - [Singleton Controller](#singleton-controller "Singleton Controller")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -67,7 +66,6 @@ If your widget has a controller, you can use `widget.controller` to access its p
 You can use `dart run nylo_framework:main make:page account --controller` command to create a new page and controller automatically for you.
 
 <div id="creating-pages-and-controllers"></div>
-<br>
 
 ## Creating pages and controllers
 
@@ -117,7 +115,6 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 The `routeTo(String routeName, data: dynamic)` **data** parameter accepts dynamic types so you can cast the object after it’s returned.
 
 <div id="using-controllers"></div>
-<br>
 
 ## Using controllers
 
@@ -189,7 +186,6 @@ final Map<Type, BaseController> controllers = {
 ```
 
 <div id="singleton-controller"></div>
-<br>
 
 ## Singleton controller
 

@@ -1,0 +1,197 @@
+{
+    "Select language": "Seleziona lingua",
+
+    "Nylo v7 is here!": "Nylo v7 è qui!",
+    "See what's new": "Scopri le novità",
+
+    "Docs": "Documentazione",
+    "Framework": "Framework",
+    "Resources": "Risorse",
+    "Packages": "Pacchetti",
+    "Menu": "Menu",
+    "Get Started": "Inizia",
+    "Star on GitHub": "Stella su GitHub",
+
+    "Nylo Framework": "Nylo Framework",
+    "Nylo v7 Framework": "Nylo v7 Framework",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "Il boilerplate per avviare la tua app Flutter con Nylo.",
+    "Get started: Nylo installer": "Inizia: Installer Nylo",
+
+    "Developers": "Sviluppatori",
+    "Documentation": "Documentazione",
+    "Comprehensive guides to help you get started with Nylo.": "Guide complete per aiutarti a iniziare con Nylo.",
+    "Release Notes": "Note di rilascio",
+    "Stay updated with the latest Nylo releases and updates.": "Rimani aggiornato con le ultime versioni e aggiornamenti di Nylo.",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Tutorial video e guide per il framework Nylo.",
+    "Forum": "Forum",
+    "Join the community discussions and get help.": "Partecipa alle discussioni della community e ricevi aiuto.",
+    "Become a sponsor": "Diventa sponsor",
+    "Support Nylo development by becoming a sponsor.": "Supporta lo sviluppo di Nylo diventando uno sponsor.",
+    "Become a Sponsor": "Diventa Sponsor",
+
+    "Live now": "Disponibile ora",
+
+    "The Flutter": "Il Flutter",
+    "Micro-framework": "Micro-framework",
+    "For Modern Apps": "Per App Moderne",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "Una solida base per costruire app Flutter. Routing, gestione dello stato, networking e altro — tutto in un elegante pacchetto.",
+
+    "Explore": "Esplora",
+
+    "Features": "Funzionalità",
+    "Everything you need to build": "Tutto ciò di cui hai bisogno per costruire",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo fornisce tutti gli strumenti necessari per creare applicazioni Flutter pronte per la produzione con fiducia.",
+
+    "Routing": "Routing",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "Routing semplice e dichiarativo con route guard, parametri e supporto deep linking.",
+
+    "State Management": "Gestione dello Stato",
+    "Built-in reactive state management with controllers and easy state persistence.": "Gestione dello stato reattiva integrata con controller e facile persistenza dello stato.",
+
+    "Networking": "Networking",
+    "Elegant API service classes with automatic model serialization and interceptors.": "Eleganti classi di servizio API con serializzazione automatica dei modelli e interceptor.",
+
+    "Forms": "Form",
+    "Powerful form handling with validation, casting, and automatic data binding.": "Gestione potente dei form con validazione, casting e binding automatico dei dati.",
+
+    "Authentication": "Autenticazione",
+    "Secure authentication with route guards, token storage, and session management.": "Autenticazione sicura con route guard, memorizzazione token e gestione sessioni.",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "Genera pagine, modelli, controller e altro con potenti comandi CLI.",
+
+    "Explore all features": "Esplora tutte le funzionalità",
+
+    "Create anything from the terminal": "Crea qualsiasi cosa dal terminale",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro è lo strumento CLI di Nylo che ti aiuta a creare scaffold di pagine, modelli, controller, widget e altro con un singolo comando.",
+    "Learn more about Metro": "Scopri di più su Metro",
+
+    "Effortless API integration": "Integrazione API senza sforzo",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "Scrivi servizi API puliti e mantenibili con parsing JSON automatico, gestione errori e interceptor delle richieste.",
+    "Learn more about Networking": "Scopri di più sul Networking",
+
+    "Powerful tools for creating": "Strumenti potenti per creare",
+    "Everything you need to build your next Flutter app": "Tutto ciò di cui hai bisogno per costruire la tua prossima app Flutter",
+
+    "Auth": "Auth",
+    "State": "Stato",
+    "Events": "Eventi",
+    "Scheduler": "Scheduler",
+
+    "Loved by the community": "Amato dalla community",
+    "What developers are saying about": "Cosa dicono gli sviluppatori su",
+    "Join the discussion": "Unisciti alla discussione",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "è un micro-framework per Flutter progettato per aiutare a semplificare lo sviluppo di app.",
+
+    "Installation": "Installazione",
+    "Requirements": "Requisiti",
+    "Router": "Router",
+    "Themes & Styling": "Temi e Stili",
+
+    "Flutter Packages": "Pacchetti Flutter",
+    "Contributions": "Contributi",
+    "Privacy Policy": "Informativa sulla Privacy",
+    "Terms & Conditions": "Termini e Condizioni",
+
+    "Community": "Community",
+    "Discussions": "Discussioni",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "Tutti i Diritti Riservati",
+
+    "Privacy policy": "Informativa sulla privacy",
+    "Terms and conditions": "Termini e condizioni",
+    "Updated:": "Aggiornato:",
+    "operates the": "gestisce il",
+    "website, which provides the SERVICE.": "sito web, che fornisce il SERVIZIO.",
+
+    "Run:": "Esegui:",
+    "in your terminal.": "nel tuo terminale.",
+    "Next: Run": "Avanti: Esegui",
+
+    "Step 1": "Passo 1",
+    "Step 2": "Passo 2",
+    "Step 3": "Passo 3",
+    "Create a Form": "Crea un modulo",
+    "Modify your form": "Modifica il tuo modulo",
+    "Use your form in a widget": "Usa il tuo modulo in un widget",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "Gestisci, valida e invia dati in un unico posto con Nylo Forms.",
+    "Validation": "Validazione",
+    "Casts": "Casts",
+    "Styling": "Stile",
+    "Dummy Data": "Dati fittizi",
+
+    "Create a state managed widget": "Crea un widget gestito dallo stato",
+    "Now, you can update this widget from anywhere in your application": "Ora puoi aggiornare questo widget da qualsiasi parte della tua applicazione",
+    "Use the updateState method like in the below code snippet": "Usa il metodo updateState come nello snippet di codice qui sotto",
+    "You can pass any object to the widget": "Puoi passare qualsiasi oggetto al widget",
+    "Powerful state management for widgets in your Flutter application.": "Gestione dello stato potente per i widget nella tua applicazione Flutter.",
+    "Lifecycle": "Ciclo di vita",
+    "State Actions": "Azioni di stato",
+
+    "Create your event": "Crea il tuo evento",
+    "Dispatch the event": "Invia l'evento",
+    "Dispatch events and listen for them in your application.": "Invia eventi e ascoltali nella tua applicazione.",
+    "Dispatching Events": "Invio di eventi",
+    "Listening to Events": "Ascolto di eventi",
+
+    "Schedule a task to run once": "Pianifica un'attività da eseguire una volta",
+    "Schedule a task to run once after a specific date": "Pianifica un'attività da eseguire una volta dopo una data specifica",
+    "Schedule a task to run once daily": "Pianifica un'attività da eseguire una volta al giorno",
+    "Schedule tasks to run once or daily in your Flutter application.": "Pianifica attività da eseguire una volta o quotidianamente nella tua applicazione Flutter.",
+    "Schedule Once After Date": "Pianifica una volta dopo la data",
+    "Scheduling Once Daily": "Pianificazione giornaliera",
+
+    "Learn more": "Scopri di più",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "Crea percorsi complessi, interfacce e pagine UI per la tua applicazione Flutter.",
+    "Adding Routes": "Aggiunta di route",
+    "Navigating to pages": "Navigazione alle pagine",
+    "Route Guards": "Route Guard",
+    "Deep linking": "Deep linking",
+
+    "Authenticate a user": "Autenticare un utente",
+    "Now, when your user opens the app they will be authenticated.": "Ora, quando l'utente apre l'app sarà autenticato.",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "Se hai impostato un authenticatedRoute nel tuo router, questa pagina verrà presentata quando l'utente aprirà di nuovo l'app.",
+    "Logout the user": "Disconnetti l'utente",
+    "Authenticate users in your Flutter application.": "Autentica gli utenti nella tua applicazione Flutter.",
+    "Authentication Page": "Pagina di autenticazione",
+    "Adding an auth user": "Aggiunta di un utente auth",
+    "Retrieve an auth user": "Recupera un utente auth",
+    "Logout": "Disconnetti",
+
+    "Create an API Service": "Crea un servizio API",
+    "Call the API from your page": "Chiama l'API dalla tua pagina",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "Servizi API eleganti con parsing JSON automatico, caching e interceptor.",
+    "GET Requests": "Richieste GET",
+    "Interceptors": "Interceptor",
+    "Morphing JSON": "Morphing JSON",
+    "Caching": "Caching",
+
+    "Save data securely": "Salva i dati in modo sicuro",
+    "Read with type casting": "Leggi con conversione di tipo",
+    "Secure local storage with type casting, TTL expiry, and collections.": "Archiviazione locale sicura con conversione di tipo, scadenza TTL e collezioni.",
+    "Save Data": "Salva dati",
+    "Read Data": "Leggi dati",
+    "Collections": "Collezioni",
+    "Backpack": "Zaino",
+
+    "Add your language files": "Aggiungi i tuoi file di lingua",
+    "Translate text in your widgets": "Traduci il testo nei tuoi widget",
+    "Multi-language support with JSON files, arguments, and RTL.": "Supporto multilingue con file JSON, argomenti e RTL.",
+    "Translations": "Traduzioni",
+    "Arguments": "Argomenti",
+    "Locale Switching": "Cambio lingua",
+    "RTL Support": "Supporto RTL",
+
+    "Create a Navigation Hub": "Crea un hub di navigazione",
+    "Switch layouts easily": "Cambia layout facilmente",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "Crea navigazione inferiore, superiore o flussi di percorso con mantenimento dello stato.",
+    "Bottom Nav": "Navigazione inferiore",
+    "Top Nav": "Navigazione superiore",
+    "Journey Flow": "Flusso di percorso",
+    "Badges": "Badge"
+}

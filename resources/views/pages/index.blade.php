@@ -2,184 +2,241 @@
 
 @section('content')
 
-<section class="relative bg-center bg-repeat-x" style="background-image: url('{{ asset("/images/hero_fade.png") }}')">
-	<div class="container lg:px-32 md:px-32 mx-auto px-14 pt-40 pb-20 xl:px-32">
+{{-- ===== HERO SECTION ===== --}}
+<section class="relative min-h-[90vh] flex items-center overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300 mt-5 rounded-3xl mx-4">
+    {{-- Background Layers --}}
+    <div class="absolute inset-0"></div>
+    <div class="absolute inset-0 dot-grid-pattern opacity-50"></div>
 
-		@if (!empty($event))
-        <div class="text-center mb-5">
-			@if($event->isHappeningNow())
-            <div class="block text-xs text-gray-500 mb-2">
-                <span class="">{{ $event->start_date->format('jS F, Y H:i') }}</span> <span class="border-l pl-1 border-gray-100">ICT</span>
-            </div>
-			<a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b> - Our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded rounded-2xl text-green-800 text-xs font-semibold">Happening now | Join</span></a>
-			@elseif($event->isUpcoming())
-            <div class="block text-xs text-gray-500 mb-2">
-                <span class="">{{ $event->start_date->format('jS F, Y H:i') }}</span> <span class="border-l pl-1 border-gray-100">ICT</span>
-            </div>
-			<a href="{{ $event->link }}" target="_BLANK" class="text-gray-600"><b class="text-primary-blue"">{{ $event->title }}</b> - Our next online meet up <span class="bg-green-50 border-2 border-green-100 font-mono px-3 py-1 rounded text-gray-600 text-xs font-semibold">Join via Google Meet 🗓️</span></a>
-			@endif
+    {{-- Animated gradient orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+    </div>
+
+    {{-- Geometric Accents --}}
+    <div class="geometric-accent top-20 right-[10%] opacity-30"></div>
+    <div class="geometric-accent bottom-20 left-[5%] opacity-20" style="width: 150px; height: 150px;"></div>
+
+    <div class="relative container mx-auto px-6 lg:px-32 pt-20 pb-24">
+        {{-- Event Banner (if exists) --}}
+        @if (!empty($event))
+        <div class="text-center mb-10 animate-fade-in-up">
+            @if($event->isHappeningNow())
+            <a href="{{ $event->link }}" target="_BLANK" class="floating-badge hover:scale-105 transition-transform">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-gray-700 dark:text-slate-300"><span class="text-primary-blue font-semibold">{{ $event->title }}</span> &mdash; Live now</span>
+            </a>
+            @elseif($event->isUpcoming())
+            <a href="{{ $event->link }}" target="_BLANK" class="floating-badge hover:scale-105 transition-transform">
+                <span class="text-gray-700 dark:text-slate-300"><span class="text-primary-blue font-semibold">{{ $event->title }}</span> &mdash; {{ $event->start_date->format('jS F, H:i') }} ICT</span>
+            </a>
+            @endif
         </div>
-		@endif
+        @endif
 
-		<h1 class="font-medium lg:max-w-3xl lg:text-7xl m-auto mb-8 md:text-5xl mx-auto text-5xl text-center w-full">The Flutter <br><span class="text-h1-gradient font-semibold clear-both">Micro-framework</span><br> For Modern Apps</h1>
-		<h2 class="mb-7 text-center text-lg text-primary-gray">A solid foundation for building Flutter apps.</h2>
+        {{-- Main Hero Content --}}
+        <div class="text-center max-w-4xl mx-auto">
 
-		<div class="w-max mx-auto self-center flex mt-8">
-			<a href="{{ route('landing.download') }}" class="bg-white inline-flex justify-center border mx-auto px-4 py-2 mr-[12px] rounded w-max hover:border-gray-600 transition-all shadow-sm">
-				<i class="ri-github-fill mr-2 text-gray-400 hover:text-gray-500 transition-all"></i>
-				<span>Download</span>
-			</a>
+            <h1 class="animate-fade-in-up stagger-2 text-5xl md:text-6xl lg:text-7xl font-medium mb-6 text-gray-900 dark:text-white leading-[1.1]" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                {{ __('The Flutter') }}<br>
+                <span class="text-h1-gradient font-bold">{{ __('Micro-framework') }}</span><br>
+                <span class="text-gray-600 dark:text-slate-400 text-4xl md:text-5xl lg:text-6xl font-normal">{{ __('For Modern Apps') }}</span>
+            </h1>
 
-			<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="bg-primary-blue-deep block transition-all px-4 py-2 rounded text-white hover:bg-[#1E74C1]" target="_BLANK">Get Started</a>
-		</div>
-	</div>
+            <p class="animate-fade-in-up stagger-3 text-lg md:text-xl text-gray-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                {{ __('A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.') }}
+            </p>
 
+            {{-- CTA Buttons --}}
+            <div class="animate-fade-in-up stagger-4 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-16 px-4 sm:px-0">
+                <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'installation']) }}" class="bg-neutral-700 btn-shine duration-300 font-medium gap-2 h-[48px] hover:from-primary-blue hover:scale-[1.02] hover:shadow-lg hover:to-primary-blue-deep inline-flex items-center px-8 rounded-xl shadow-lg text-white to-primary-blue transition-all dark:from-primary-blue dark:bg-slate-500 w-full sm:w-auto justify-center">
+                    {{ __('Get Started') }}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+
+                <button type="button" onclick="copyCommand(this)" class="group w-full sm:w-auto" data-command="dart pub global activate nylo">
+                    <div class="flex flex-col items-center sm:items-start rounded-lg transition-colors">
+                        <div class="text-sm mb-1 text-gray-500">{{ __('Get started: Nylo installer') }}</div>
+                        <div class="bg-gradient-to-r border-l border-neutral-300 border-r flex flex-col from-gray-50 items-center rounded-lg transition-colors w-full sm:w-auto dark:from-slate-700 dark:border-slate-600">
+                            <div class="dark:bg-slate-700/50 flex font-medium gap-2 hover:bg-gray-50 items-center px-3 py-2 rounded-lg justify-center sm:justify-start">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="#54a9d6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19h8M4 17l6-6l-6-6"></path></svg>
+                                </div>
+                                <div class="text-xs sm:text-sm font-mono text-gray-700 dark:text-gray-300 select-none relative flex items-center group">
+                                    dart pub global activate nylo</div>
+                                <div class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600">
+                                    <svg class="copy-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.2474 6.25033V2.91699H17.0807V13.7503H13.7474M13.7474 6.25033V17.0837H2.91406V6.25033H13.7474Z" stroke="currentColor" stroke-linecap="round"></path>
+                                    </svg>
+                                    <svg class="check-icon hidden" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="copy-instructions hidden text-center sm:text-left mt-3">
+                            <span>Run: </span><span class="font-medium text-gray-500">dart pub global activate nylo</span><span> in your terminal.</span>
+                            <div class="block">
+                                <span>Next: Run </span><span class="font-medium text-blue-500">nylo new example_project</span>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+
+            </div>
+
+            {{-- Scroll Indicator --}}
+            <div class="animate-fade-in-up stagger-5">
+                <div class="animate-scroll-bounce inline-flex flex-col items-center text-gray-400 dark:text-slate-500">
+                    <span class="text-xs uppercase tracking-widest mb-2">{{ __('Explore') }}</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="relative max-w-screen-xl w-full mx-auto px-5">
-	<div class="gap-20 grid grid-cols-1 md:grid-cols-2 mx-auto">
+{{-- ===== FEATURES GRID ===== --}}
+<section class="relative py-28 bg-white dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
+    {{-- Subtle background pattern --}}
+    <div class="absolute inset-0 dot-grid-pattern opacity-30"></div>
 
-		<div class="self-center px-4 md:px-0">
-			<h3 class="text-4xl mb-2 font-medium">Get Started!</h3>
-			<h4 class="font-semibold mb-7 text-4xl text-primary-blue font-[sora]">Develop your next Flutter app with Nylo</h4>
+    <div class="relative container mx-auto px-6 lg:px-32">
+        <div class="text-center mb-20">
+            <span class="inline-block text-primary-blue text-sm font-semibold uppercase tracking-widest mb-4">{{ __('Features') }}</span>
+            <h2 class="text-4xl md:text-5xl font-medium text-gray-900 dark:text-white mb-5" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                {{ __('Everything you need to build') }} <span class="text-h1-gradient font-bold"></span>
+            </h2>
+            <p class="text-lg text-gray-500 dark:text-slate-400 max-w-2xl mx-auto">
+                {{ __('Nylo provides all the tools you need to create production-ready Flutter applications with confidence.') }}
+            </p>
+        </div>
 
-			<div class="flex flex-wrap mb-5 text-primary-blue">
-				@foreach(['Router', 'Storage', 'Networking', 'Themes and Styling', 'Configuration', 'Metro', 'Forms'] as $docSection)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{-- Feature Card: Routing --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'router']) }}" class="feature-card-enhanced group">
+                <div class="icr mb-5">
+                    <svg class="w-6 h-6 text-primary-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-primary-blue transition-colors">{{ __('Routing') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Simple, declarative routing with route guards, parameters, and deep linking support.') }}</p>
+            </a>
 
-				<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => strtolower(\Str::slug($docSection))]) }}" target="_BLANK">
-				<div class="border px-3 py-1 rounded-2xl mr-3 mb-2">
-					<span class="">{{ $docSection }}</span>
+            {{-- Feature Card: State Management --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'state-management']) }}" class="feature-card-enhanced group">
+                <div class="purple mb-5">
+                    <svg class="w-6 h-6 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 transition-colors">{{ __('State Management') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Built-in reactive state management with controllers and easy state persistence.') }}</p>
+            </a>
 
-						<span class="ml-2 inline-flex justify-center">
-							<svg width="10" height="10" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M12.9199 0.62C12.8185 0.375651 12.6243 0.181475 12.3799 0.0799999C12.2597 0.028759 12.1306 0.00157999 11.9999 0H1.99994C1.73472 0 1.48037 0.105357 1.29283 0.292893C1.1053 0.48043 0.999939 0.734784 0.999939 1C0.999939 1.26522 1.1053 1.51957 1.29283 1.70711C1.48037 1.89464 1.73472 2 1.99994 2H9.58994L1.28994 10.29C1.19621 10.383 1.12182 10.4936 1.07105 10.6154C1.02028 10.7373 0.994141 10.868 0.994141 11C0.994141 11.132 1.02028 11.2627 1.07105 11.3846C1.12182 11.5064 1.19621 11.617 1.28994 11.71C1.3829 11.8037 1.4935 11.8781 1.61536 11.9289C1.73722 11.9797 1.86793 12.0058 1.99994 12.0058C2.13195 12.0058 2.26266 11.9797 2.38452 11.9289C2.50638 11.8781 2.61698 11.8037 2.70994 11.71L10.9999 3.41V11C10.9999 11.2652 11.1053 11.5196 11.2928 11.7071C11.4804 11.8946 11.7347 12 11.9999 12C12.2652 12 12.5195 11.8946 12.707 11.7071C12.8946 11.5196 12.9999 11.2652 12.9999 11V1C12.9984 0.869323 12.9712 0.740222 12.9199 0.62Z" fill="#328DDF"/>
-</svg>
+            {{-- Feature Card: Networking --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'networking']) }}" class="feature-card-enhanced group">
+                <div class="green mb-5">
+                    <svg class="w-6 h-6 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-green-600 transition-colors">{{ __('Networking') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Elegant API service classes with automatic model serialization and interceptors.') }}</p>
+            </a>
 
-						</span>
-				</div>
-			</a>
-				@endforeach
-			</div>
+            {{-- Feature Card: Forms --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'forms']) }}" class="feature-card-enhanced group">
+                <div class="orange mb-5">
+                    <svg class="w-6 h-6 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-orange-600 transition-colors">{{ __('Forms') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Powerful form handling with validation, casting, and automatic data binding.') }}</p>
+            </a>
 
-			<p class="mb-8 text-[#484D50]"><span class="font-bold">{{ config('app.name') }}</span> is a powerful framework for developing mobile apps in Flutter. Out the box it comes with a router, secure storage, networking and more.</p>
+            {{-- Feature Card: Authentication --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'authentication']) }}" class="feature-card-enhanced group">
+                <div class="red mb-5">
+                    <svg class="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-red-500 transition-colors">{{ __('Authentication') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Secure authentication with route guards, token storage, and session management.') }}</p>
+            </a>
 
-			<a class="bg-white inline-flex justify-center border font-medium mx-auto px-6 py-3 rounded-lg w-max hover:border-gray-400 transition-all shadow-sm" href="{{ route('landing.download') }}">
+            {{-- Feature Card: Metro CLI --}}
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'metro']) }}" class="feature-card-enhanced group">
+                <div class="cyan mb-5">
+                    <svg class="w-6 h-6 text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-cyan-600 transition-colors">{{ __('Metro CLI') }}</h3>
+                <p class="text-gray-500 dark:text-slate-400 leading-relaxed">{{ __('Generate pages, models, controllers, and more with powerful CLI commands.') }}</p>
+            </a>
+        </div>
 
-				<i class="ri-github-fill mr-2"></i>
-
-				<span>Download</span>
-			</a>
-
-		</div>
-
-		<div>
-			<img class="mx-auto" src="{{ asset('images/showcase.png') }}" alt="Showcase projects built using Nylo">
-		</div>
-
-	</div>
+        {{-- View All Features Link --}}
+        <div class="text-center mt-14">
+            <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo]) }}" class="hover-arrow text-primary-blue hover:text-primary-blue-deep font-medium transition-colors">
+                {{ __('Explore all features') }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+    </div>
 </section>
 
-<section class="relative max-w-screen-xl w-full mx-auto px-5 pt-12 pb-16 md:pt-24 lg:pt-48">
+{{-- Section Divider --}}
+<div class="section-divider"></div>
 
-		<h3 class="px-5 md:px-0 text-4xl mb-3 font-medium">Powerful tools for <span class="text-primary-blue font-semibold font-[sora]">creating</span></h3>
-		<p class="pb-5 px-5 md:px-0 block border-b-4 border-gray-50 font-semibold mb-8 text-2xl text-gray-300">Everything you need to build your next Flutter app</p>
+{{-- ===== CODE SHOWCASE SECTION ===== --}}
+<section class="relative py-28 bg-gray-50 dark:bg-slate-800/50 transition-colors duration-300 overflow-hidden">
+    {{-- Background decoration --}}
+    <div class="absolute top-0 right-0 w-1/2 h-full dot-grid-pattern opacity-20"></div>
 
-	<div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-		<div class="border-b pb-10 col-span-1 md:col-span-4 gap-10 justify-center inline-flex flex-col md:flex-auto mb-10 md:flex-row" x-data="{
-            currentTab: 'routing',
-        }">
-
-                <div class="w-full lg:w-[500px]">
-                    <ul class="text-sm lg:text-base font-medium flex flex-col gap-3 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto lg:overscroll-y-contain">
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'routing'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'routing' }">
-                            <svg class="h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.96 4.13a.75.75 0 0 1 .369-1.264l4.767-1.045a.75.75 0 0 1 .893.893l-1.046 4.767a.75.75 0 0 1-1.262.37L6.959 4.129zm6.737 18.465a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zM7.407 7.403a1 1 0 0 0-1.414 0L3.69 9.705a4.246 4.246 0 0 0 0 6.005l.004.003a4.253 4.253 0 0 0 6.01-.003l6.005-6.005c.88-.88 2.305-.88 3.185-.002.878.876.879 2.298.003 3.176l-.002.001-1.77 1.77a1 1 0 0 0 1.414 1.415l1.77-1.77.004-.004a4.246 4.246 0 0 0-.007-6.004 4.253 4.253 0 0 0-6.01.003L8.29 14.295c-.879.88-2.304.88-3.185 0a2.246 2.246 0 0 1 0-3.175l2.302-2.303a1 1 0 0 0 0-1.414z" fill="#000000"></path></g></svg>
-                            Routing
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'authentication'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'authentication' }">
-                            <svg class="h-5" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="m 8.074219 0 c -1.203125 -0.0117188 -2.40625 0.285156 -3.492188 0.890625 c -0.480469 0.269531 -0.652343 0.878906 -0.382812 1.359375 c 0.269531 0.484375 0.878906 0.65625 1.359375 0.386719 c 1.550781 -0.867188 3.4375 -0.847657 4.972656 0.050781 c 1.53125 0.898438 2.46875 2.535156 2.46875 4.3125 v 1 c 0 0.550781 0.449219 1 1 1 s 1 -0.449219 1 -1 v -1 c 0 -0.019531 0 -0.039062 -0.003906 -0.054688 c -0.019532 -2.460937 -1.332032 -4.738281 -3.457032 -5.984374 c -1.070312 -0.628907 -2.265624 -0.9492192 -3.46875 -0.960938 z m -5.199219 2.832031 c -0.066406 0 -0.132812 0.007813 -0.195312 0.023438 c -0.257813 0.058593 -0.484376 0.21875 -0.625 0.445312 c -0.6875 1.109375 -1.054688 2.390625 -1.054688 3.699219 v 5.0625 c 0 0.550781 0.449219 1 1 1 s 1 -0.449219 1 -1 v -5.0625 c 0 -0.933594 0.261719 -1.851562 0.753906 -2.644531 c 0.292969 -0.46875 0.148438 -1.082031 -0.320312 -1.375 c -0.167969 -0.105469 -0.363282 -0.15625 -0.558594 -0.148438 z m 5.125 0.167969 c -2.199219 0 -4 1.800781 -4 4 v 1 c 0 0.550781 0.449219 1 1 1 s 1 -0.449219 1 -1 v -1 c 0 -1.117188 0.882812 -2 2 -2 s 2 0.882812 2 2 v 5 s 0.007812 0.441406 0.175781 0.941406 s 0.5 1.148438 1.117188 1.765625 c 0.390625 0.390625 1.023437 0.390625 1.414062 0 s 0.390625 -1.023437 0 -1.414062 c -0.382812 -0.382813 -0.550781 -0.734375 -0.632812 -0.984375 s -0.074219 -0.308594 -0.074219 -0.308594 v -5 c 0 -2.199219 -1.800781 -4 -4 -4 z m 0 3 c -0.550781 0 -1 0.449219 -1 1 v 5 s 0 0.59375 0.144531 1.320312 c 0.144531 0.726563 0.414063 1.652344 1.148438 2.386719 c 0.390625 0.390625 1.023437 0.390625 1.414062 0 s 0.390625 -1.023437 0 -1.414062 c -0.265625 -0.265625 -0.496093 -0.839844 -0.601562 -1.363281 c -0.105469 -0.523438 -0.105469 -0.929688 -0.105469 -0.929688 v -5 c 0 -0.550781 -0.449219 -1 -1 -1 z m -3 4 c -0.550781 0 -1 0.449219 -1 1 v 3 c 0 0.550781 0.449219 1 1 1 s 1 -0.449219 1 -1 v -3 c 0 -0.550781 -0.449219 -1 -1 -1 z m 9 0 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m 0 0" fill="#2e3434"></path> </g></svg>
-                            Authentication
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'forms'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'forms' }">
-                            <svg class="h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M5.5 8.557A2.08 2.08 0 0 1 7 8v1c-.74 0-.948.417-1 .571v5.86c.048.143.251.569 1 .569v1a2.08 2.08 0 0 1-1.5-.557A2.08 2.08 0 0 1 4 17v-1c.74 0 .948-.417 1-.571v-5.86C4.952 9.426 4.749 9 4 9V8a2.08 2.08 0 0 1 1.5.557zM23 6.5v12a1.502 1.502 0 0 1-1.5 1.5h-19A1.502 1.502 0 0 1 1 18.5v-12A1.502 1.502 0 0 1 2.5 5h19A1.502 1.502 0 0 1 23 6.5zm-1 0a.5.5 0 0 0-.5-.5h-19a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h19a.5.5 0 0 0 .5-.5zM12 17h1v-1h-1zm-2 0h1v-1h-1zm-2 0h1v-1H8zm6 0h1v-1h-1zm4 0h1v-1h-1zm-2 0h1v-1h-1z"></path><path fill="none" d="M0 0h24v24H0z"></path></g></svg>
-                            Forms
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'navigation-hub'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'navigation-hub' }">
-                            <svg class="h-5" width="24" xmlns="http://www.w3.org/2000/svg" fill="#000000" width="800px" height="800px" viewBox="0 0 24 24">
-                                <path d="M20,15 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L5.5,4 C4.67157288,4 4,4.67157288 4,5.5 L4,15 L20,15 Z M20,16 L4,16 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L18.5,20 C19.3284271,20 20,19.3284271 20,18.5 L20,16 Z M3,5.5 C3,4.11928813 4.11928813,3 5.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,18.5 C21,19.8807119 19.8807119,21 18.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,5.5 Z"/>
-                              </svg>
-                            Navigation Hub
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'state-management'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'state-management' }">
-                            <svg class="h-5" version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .stone_een{fill:#0B1719;} .st0{fill:#0B1719;} </style> <path class="stone_een" d="M19,20.5c0,1.933-1.567,3.5-3.5,3.5S12,22.433,12,20.5s1.567-3.5,3.5-3.5S19,18.567,19,20.5z M16,16.051 V5.5C16,5.224,15.776,5,15.5,5S15,5.224,15,5.5v10.551C15.166,16.032,15.329,16,15.5,16S15.834,16.032,16,16.051z M15,24.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-1.551C15.834,24.968,15.671,25,15.5,25S15.166,24.968,15,24.949z M24,18.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-7.551C24.834,18.968,24.671,19,24.5,19S24.166,18.968,24,18.949z M25,10.051V5.5 C25,5.224,24.776,5,24.5,5S24,5.224,24,5.5v4.551C24.166,10.032,24.329,10,24.5,10S24.834,10.032,25,10.051z M7,7.051V5.5 C7,5.224,6.776,5,6.5,5S6,5.224,6,5.5v1.551C6.166,7.032,6.329,7,6.5,7S6.834,7.032,7,7.051z M6,15.949V26.5 C6,26.776,6.224,27,6.5,27S7,26.776,7,26.5V15.949C6.834,15.968,6.671,16,6.5,16S6.166,15.968,6,15.949z M6.5,8 C4.567,8,3,9.567,3,11.5S4.567,15,6.5,15s3.5-1.567,3.5-3.5S8.433,8,6.5,8z M24.5,11c-1.933,0-3.5,1.567-3.5,3.5s1.567,3.5,3.5,3.5 s3.5-1.567,3.5-3.5S26.433,11,24.5,11z"></path> </g></svg>
-                            State Management
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'events'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'events' }">
-                            <svg class="h-5" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M71.4,28.6C65.9,23.1,58.6,20,50.9,20c-1.7,0-3,1.3-3,3s1.3,3,3,3c6.1,0,11.9,2.4,16.3,6.7 C71.5,37.2,74,43,74,49.1c0,1.7,1.3,3,3,3s3-1.3,3-3C80,41.4,77,34.1,71.4,28.6z M50.9,32.1c-1.7,0-3,1.3-3,3s1.3,3,3,3 c2.9,0,5.7,1.1,7.8,3.2c2.1,2.1,3.2,4.8,3.2,7.8c0,1.7,1.3,3,3,3c1.7,0,3-1.3,3-3c0-4.5-1.8-8.8-5-12S55.4,32.1,50.9,32.1z M46.6,60.8l2.6-7c1.8,0.7,3.8,0.3,5.3-1.1c2-2,2-5.1,0-7.1c-2-2-5.1-2-7.1,0c-1.5,1.5-1.8,3.7-1,5.6l-6.5,2.9L28.2,42.4 c-0.8-0.8-2.2-0.8-2.9,0.1c-7.5,9-7,22.4,1.5,30.9c8.4,8.4,21.8,8.9,30.9,1.5c0.9-0.7,0.9-2.1,0.1-2.9 C57.7,71.9,46.6,60.8,46.6,60.8z"></path> </g> </g> </g></svg>
-                            Events
-                        </li>
-						<li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'commands'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'commands' }">
-                            <svg viewBox="0 0 24 24"  class="h-5" fill="#000000"  xmlns="http://www.w3.org/2000/svg">  <path    d="M5.0333 14.8284L6.44751 16.2426L10.6902 12L6.44751 7.75733L5.0333 9.17155L7.86172 12L5.0333 14.8284Z"    fill="currentColor"  />  <path d="M15 14H11V16H15V14Z" fill="currentColor" />  <path    fill-rule="evenodd"    clip-rule="evenodd"    d="M2 2C0.895431 2 0 2.89543 0 4V20C0 21.1046 0.89543 22 2 22H22C23.1046 22 24 21.1046 24 20V4C24 2.89543 23.1046 2 22 2H2ZM22 4H2L2 20H22V4Z"    fill="currentColor"/></svg>
-                            Commands
-                        </li>
-                        <li class="cursor-pointer hover:shadow py-2 text-left p-4 lg:py-6 flex items-center gap-3 transition-all bg-gray-50 text-gray-700 hover:bg-white" x-on:click="currentTab = 'scheduler'" :class="{ 'gradient-boarder-selected shadow bg-white': currentTab === 'scheduler' }">
-                            <svg class="h-5" fill="#000000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M531 624l-88-1q18-44 51.5-76.5T572 500q55-18 110.5-3.5T778 554q4 5 10.5 5t11.5-4l26-24q5-5 5.5-12t-4.5-12q-53-58-127-77.5T553 433q-65 21-112.5 71.5T373 623h-93q-4 0-5 3t1 6l126 144q1 1 3 1t4-1l126-143q2-3 1-6t-5-3zm451 143L857 623q-2-2-4-2t-3 2L724 766q-3 2-1.5 5.5t4.5 3.5h88q-17 45-51 77.5T686 899q-55 18-110 3t-95-57q-5-5-11-5.5t-11 4.5l-26 23q-5 5-5.5 12t4.5 13q38 41 88.5 63.5T626 978q41 0 80-13 65-21 112.5-71T885 776h94q3 0 4.5-3.5T982 767zM70 252v447q0 14 9.5 23.5T103 732h127q6 0 11-4.5t5-11.5v-22q0-7-5-12t-11-5H125V296h568v56q0 7 4.5 12t11.5 5h21q7 0 12-5t5-12V252H70zm677-32v-55q0-13-9.5-23T714 132H613v-13q0-12-6-23t-16.5-17-22.5-6-22.5 6T529 96t-6 23v13H293v-13q0-19-13-32t-31.5-13T217 87t-13 32v13H103q-14 0-23.5 10T70 165v55h677z"></path></g></svg>
-                            Scheduler
-                        </li>
-                    </ul>
+    <div class="relative container mx-auto px-6 lg:px-32">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {{-- Left: Metro CLI --}}
+            <div>
+                <div class="inline-flex items-center gap-2 mb-6">
+                    <span class="relative inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold bg-gradient-to-r dark:from-blue-950/50 dark:to-cyan-950/50 dark:text-blue-300 uppercase tracking-wider border border-gray-200 dark:border-blue-800/50">
+                        <span class="absolute -left-px top-1/2 -translate-y-1/2 w-0.5 h-3 bg-black rounded-full dark:bg-white"></span>
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>{{ __('Metro CLI') }}</span>
+                    </span>
                 </div>
 
-<div class="w-full">
-
-    <div x-show="currentTab === 'routing'">
-    <x-overview-router :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-router>
-    </div>
-
-    <div x-show="currentTab === 'authentication'">
-<x-overview-authentication :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-authentication>
-    </div>
-
-    <div x-show="currentTab === 'forms'">
-    <x-overview-forms :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-forms>
-    </div>
-
-    <div x-show="currentTab === 'state-management'">
-    <x-overview-state-management :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-state-management>
-    </div>
-
-    <div x-show="currentTab === 'navigation-hub'">
-    <x-overview-navigation-hub :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-navigation-hub>
-    </div>
-
-    <div x-show="currentTab === 'events'">
-    <x-overview-events :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-events>
-    </div>
-
-	<div x-show="currentTab === 'commands'">
-	<x-overview-commands :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-commands>
-	</div>
-
-    <div x-show="currentTab === 'scheduler'">
-    <x-overview-scheduler :latestVersionOfNylo="$latestVersionOfNylo"></x-overview-scheduler>
-    </div>
-
-</div>
-		</div>
-
-		<div class="md:col-span-2">
-
-			<div>
-				<div class="flex gap-4 mb-5">
-					<div>
-						<span class="font-semibold text-3xl text-[#484D50]">Make things from the terminal</span>
-						<p class="mt-2 text-[18px] text-[#979DA2]" style="letter-spacing: -0.02em;">We have built a cli tool called Metro, you can create almost anything on the fly.</p>
-
-						<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'metro']) }}" class="inline-flex self-center text-[#6C7379]" target="_BLANK">
-						Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
-						</a>
-					</div>
-				</div>
-
-<x-code-highlighter language="bash" header="false" title="routes/router.dart" class="max-w-4xl">
+                <h3 class="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-5" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                    {{ __('Create anything from the terminal') }}
+                </h3>
+                <p class="text-lg text-gray-500 dark:text-slate-400 mb-8 leading-relaxed">
+                    {{ __("Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.") }}
+                </p>
+                <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'metro']) }}" class="hover-arrow hover:text-primary-blue-deep font-medium transition-colors dark:text-white">
+                    {{ __('Learn more about Metro') }}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="animate-float-subtle">
+                <x-code-highlighter language="bash" header="false" title="Terminal" class="shadow-2xl">
 metro make:page HomePage
 # Creates a new page called HomePage
 
@@ -191,216 +248,213 @@ metro make:model User
 
 metro make:stateful_widget FavouriteWidget
 # Creates a new stateful widget called FavouriteWidget
-</x-code-highlighter>
+                </x-code-highlighter>
+            </div>
+        </div>
 
-			</div>
-
-			<div class="hidden md:block mt-5">
-				<div class="flex gap-4">
-					<div>
-						<h5 class="font-semibold text-2xl">Learn {{ config('app.name') }}</h5>
-						<p class="mt-2 text-[18px] text-[#979DA2]" style="letter-spacing: -0.02em;">Gain more knowledge about {{ config('app.name') }} through our extensive documentation.</p>
-						<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo]) }}" class="mt-2 bg-primary-blue-deep inline-block transition-all px-4 py-2 rounded text-white hover:bg-[#1E74C1]" target="_BLANK">Documentation</a>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="md:col-span-2">
-
-			<div class="mb-5">
-				<h4 class="font-semibold text-2xl text-[#484D50]">Effortless API Networking</h4>
-				<p class="mt-2 text-[18px] text-[#979DA2]" style="letter-spacing: -0.02em;">Networking class that makes writing API Services a breeze.</p>
-
-				<a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'networking']) }}" class="inline-flex self-center text-[#6C7379]">
-					Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
-				</a>
-			</div>
-
-<x-code-highlighter language="dart" header="false" title="app/networking/api_service.dart" class="max-w-4xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-32">
+            {{-- Right: API Networking (reversed order) --}}
+            <div class="order-2 lg:order-1 animate-float-subtle" style="animation-delay: 0.5s;">
+                <x-code-highlighter language="dart" header="false" title="app/networking/api_service.dart" class="shadow-2xl">
 class ApiService extends NyApiService {
+  @override
+  String get baseUrl => "https://api.example.com/v1";
 
-    @override
-    String get baseUrl => "https://api.example.com/v1";
-
-    Future<List<Post>> posts() async {
-        return await network(
-            request: (request) => request.get("/posts"),
-        );
-    }
+  Future<List<Post>> posts() async {
+    return await network(
+      request: (request) => request.get("/posts"),
+    );
+  }
 }
 
-...
+// Usage in your page
+final posts = await api<ApiService>((request) => request.posts());
+                </x-code-highlighter>
+            </div>
+            <div class="order-1 lg:order-2">
+        
+                <div class="inline-flex items-center gap-2 mb-6">
+                    <span class="relative inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-semibold bg-gradient-to-r dark:from-blue-950/50 dark:to-cyan-950/50 dark:text-blue-300 uppercase tracking-wider border border-gray-200 dark:border-blue-800/50">
+                        <span class="absolute -left-px top-1/2 -translate-y-1/2 w-0.5 h-3 bg-black rounded-full dark:bg-white"></span>
 
-class _HomePageState extends NyState<HomePage> {
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                        </svg>
 
-@override
-get init => () async {
-    final posts = await api<ApiService>((request) => request.posts());
-};
-</x-code-highlighter>
+                        <span>{{ __('Networking') }}</span>
+                    </span>
+                </div>
 
-		</div>
-
-	</div>
+                <h3 class="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-5" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                    {{ __('Effortless API integration') }}
+                </h3>
+                <p class="text-lg text-gray-500 dark:text-slate-400 mb-8 leading-relaxed">
+                    {{ __('Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.') }}
+                </p>
+                <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'networking']) }}" class="hover-arrow hover:text-primary-blue-deep font-medium transition-colors dark:text-white">
+                    {{ __('Learn more about Networking') }}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>
 
-<div style="background-image: url('{{ asset("/images/bg_hero.png") }}')" class="pt-40">
+{{-- ===== INTERACTIVE FEATURES TABS ===== --}}
+<section class="relative py-28 bg-white dark:bg-slate-900 transition-colors duration-300">
+    <div class="container mx-auto px-6 lg:px-32">
+        <div class="text-center mb-14">
+            <span class="inline-block text-primary-blue text-sm font-semibold uppercase tracking-widest mb-4">{{ __('Explore') }}</span>
+            <h2 class="text-4xl md:text-5xl font-medium text-gray-900 dark:text-white mb-5" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                {{ __('Powerful tools for creating') }}
+            </h2>
+            <p class="text-lg text-gray-500 dark:text-slate-400">{{ __('Everything you need to build your next Flutter app') }}</p>
+        </div>
 
-<section class="relative max-w-screen-xl w-full mx-auto px-5">
+        <div x-data="{ currentTab: 'routing' }" class="max-w-6xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-6">
+                {{-- Tab Sidebar --}}
+                <div class="lg:w-48 flex-shrink-0">
+                    <div class="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap gap-2">
+                        @php
 
-	<div class="backdrop-blur-[1px] bg-white/50 py-3" style="border-radius: 200px;">
-		<div class="backdrop-blur-2xl">
+                        $tabs = [
+                            'routing' => ['label' => __('Routing'), 'icon' => 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7'],
+                            'authentication' => ['label' => __('Auth'), 'icon' => 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'],
+                            'forms' => ['label' => __('Forms'), 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                            'state-management' => ['label' => __('State'), 'icon' => 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'],
+                            'events' => ['label' => __('Events'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
+                            'scheduler' => ['label' => __('Scheduler'), 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+                            'networking' => ['label' => __('Networking'), 'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'],
+                            'storage' => ['label' => __('Storage'), 'icon' => 'M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4'],
+                            'localization' => ['label' => __('Localization'), 'icon' => 'M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'],
+                            'navigation-hub' => ['label' => __('Nav Hub'), 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
+                        ];
+                        @endphp
 
-			<h4 class="text-center text-4xl mb-2 font-medium">{{ config('app.name') }}'s <span class="font-semibold text-primary-blue">Community</span></h4>
-			<p class="font-light mb-4 text-center text-gray-600 text-[20px]">Together, we can build better Flutter apps.</p>
-	</div>
-
-	<div class="text-center">
-		<a href="https://github.com/nylo-core/nylo/discussions" target="_BLANK" class="bg-white inline-flex justify-center border font-medium mx-auto px-6 py-3 rounded-lg w-max hover:border-gray-400 transition-all shadow-sm">Join the discussion
-
-		<span class="ml-3 self-center">
-			<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M12.9199 0.62C12.8185 0.375651 12.6243 0.181475 12.3799 0.0799999C12.2597 0.028759 12.1306 0.00157999 11.9999 0H1.99994C1.73472 0 1.48037 0.105357 1.29283 0.292893C1.1053 0.48043 0.999939 0.734784 0.999939 1C0.999939 1.26522 1.1053 1.51957 1.29283 1.70711C1.48037 1.89464 1.73472 2 1.99994 2H9.58994L1.28994 10.29C1.19621 10.383 1.12182 10.4936 1.07105 10.6154C1.02028 10.7373 0.994141 10.868 0.994141 11C0.994141 11.132 1.02028 11.2627 1.07105 11.3846C1.12182 11.5064 1.19621 11.617 1.28994 11.71C1.3829 11.8037 1.4935 11.8781 1.61536 11.9289C1.73722 11.9797 1.86793 12.0058 1.99994 12.0058C2.13195 12.0058 2.26266 11.9797 2.38452 11.9289C2.50638 11.8781 2.61698 11.8037 2.70994 11.71L10.9999 3.41V11C10.9999 11.2652 11.1053 11.5196 11.2928 11.7071C11.4804 11.8946 11.7347 12 11.9999 12C12.2652 12 12.5195 11.8946 12.707 11.7071C12.8946 11.5196 12.9999 11.2652 12.9999 11V1C12.9984 0.869323 12.9712 0.740222 12.9199 0.62Z" fill="#9ca3af"/>
-</svg>
-		</span>
-
-	</a>
-	</div>
-
-	<div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-16">
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“I’m new to Dart and new to your framework <span class="text-primary-blue">(which I love)</span>”</p>
-			<div>
-				<span class="clear-both text-gray-400">Peter</span><br>
-			<span class="text-gray-400">Senior Director of <span class="text-primary-blue font-medium">Heroku Global</span></span>
-			</div>
-		</blockquote>
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“I wanted to thank you guys for the great job you are doing.”</p>
-			<span class="clear-both text-gray-400">@youssefKadaouiAbbassi</span>
-		</blockquote>
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“Just to say that I am in love with <span class="text-primary-blue">@nylo_dev</span>'s website!! I mean, look at this: <span class="text-primary-blue">https://nylo.dev</span> Definitely gonna explore it!”</p>
-			<span class="clear-both text-gray-400">@esfoliante_txt</span>
-		</blockquote>
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“Really <span class="text-primary-blue">love the concept</span> of this framework”</p>
-			<span class="clear-both text-gray-400 mt-5">@Chrisvidal</span>
-		</blockquote>
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“Just discovered <span class="text-primary-blue">http://nylo.dev</span> and looking forward using in production.”</p>
-			<span class="clear-both text-gray-400 mt-5">@medilox</span>
-		</blockquote>
-
-		<blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">“Nice Framework”</p>
-			<span class="clear-both text-gray-400">@ChadereNyore</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">"Nylo" is the best framework for flutter, which make it <span class="text-primary-blue">developing</span> easy such as, file-structure, routing, state, color theme and so on.</p>
-			<span class="clear-both text-gray-400">@higakijin</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">This is <span class="text-primary-blue">incredible</span>. Very well done!</p>
-			<span class="clear-both text-gray-400">FireflyDaniel</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">Big <span class="text-primary-blue">support</span> and love from morocco <3</p>
-			<span class="clear-both text-gray-400">@imlian</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">Very nice Framework! <span class="text-primary-blue">Thank you so much!</span></p>
-			<span class="clear-both text-gray-400">@ChaoChao2509</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">I just discover this framework and <span class="text-primary-blue">i'm verry impressed</span>. Thank you</p>
-			<span class="clear-both text-gray-400">@lepresk</span>
-		</blockquote>
-
-        <blockquote class="border border-gray-200 rounded bg-white/50 backdrop-blur-[2.5px] px-5 py-5 flex justify-between flex-col">
-			<p class="font-medium text-[#2F3234]">Great work on Nylo</p>
-			<span class="clear-both text-gray-400">@dylandamsma</span>
-		</blockquote>
-
-	</div>
-	</div>
-</section>
-
-
-<footer>
-	<div>
-		<div class="md:py-12 md:px-32 backdrop-blur-[3px] py-5 border-t">
-
-		<div class="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-10 px-3 md:p-0 md:gap-20 container mx-auto">
-			<div class="my-auto col-span-2 md:col-span-1">
-				<img src="{{ asset('images/nylo_logo_filled.png') }}" alt="{{ config('app.name') }} logo" class="h-10 mb-3">
-				<p class="mb-3 text-gray-600">{{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify developing apps. #nylo #flutter</p>
-			</div>
-
-			<div class="my-auto col-span-1 sm:col-span-1">
-				<h5 class="mb-3 text-gray-400 text-sm">Documentation</h5>
-				<ul class="list-unstyled gap-2 flex flex-col">
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'installation']) }}">Installation</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'requirements']) }}">Requirements</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'router']) }}">Router</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'themes-and-styling']) }}" target="_BLANK">Themes & Styling</a></li>
-                </ul>
-			</div>
-
-			<div class="my-auto col-span-1 sm:col-span-1">
-				<h5 class="mb-3 text-gray-400 text-sm">Resources</h5>
-
-				<ul class="list-unstyled gap-2 flex flex-col">
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK">Flutter Packages</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="https://github.com/nylo-core/nylo">Contributions</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.privacy-policy') }}">Privacy Policy</a></li>
-                    <li><a class="text-gray-600 hover:text-gray-500 transition-all" href="{{ route('landing.terms-and-conditions') }}">Terms &amp; Conditions</a></li>
-                </ul>
-			</div>
-		</div>
-	</div>
-
-		<div class="bg-gray-50/90 md:px-32 px-4">
-		<div class="grid grid-cols-2 container mx-auto py-7">
-			<div class="my-auto">
-				<span class="text-gray-400">&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved</span>
-			</div>
-
-			<div class="my-auto flex flex-col justify-end">
-				<div class="flex gap-4 justify-end">
-                    <div class="list-inline-item">
-                    	<a href="https://twitter.com/nylo_dev" target="_BLANK">
-                    		<i class="ri-twitter-fill hover:text-gray-500 transition-all text-2xl text-gray-400"></i>
-                    	</a>
-                    </div>
-
-                    <div class="list-inline-item">
-                    	<a href="https://github.com/nylo-core/nylo" target="_BLANK">
-                    		<i class="ri-github-fill hover:text-gray-500 transition-all text-2xl text-gray-400"></i>
-                    	</a>
-                    </div>
-
-                    <div class="list-inline-item">
-                    	<a href="https://www.youtube.com/@nylo_dev" target="_BLANK">
-                    		<i class="ri-youtube-fill hover:text-gray-500 transition-all text-2xl text-gray-400"></i>
-                    	</a>
+                        @foreach($tabs as $key => $tab)
+                        <button
+                            @click="currentTab = '{{ $key }}'"
+                            :class="{
+                                'tab-btn-active text-white': currentTab === '{{ $key }}',
+                                'text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white': currentTab !== '{{ $key }}'
+                            }"
+                            class="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 w-full text-left"
+                        >
+                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $tab['icon'] }}"/>
+                            </svg>
+                            <span>{{ $tab['label'] }}</span>
+                        </button>
+                        @endforeach
                     </div>
                 </div>
-			</div>
-		</div>
-		</div>
-	</div>
-</footer>
-</div>
+
+                {{-- Tab Content --}}
+                <div class="flex-1 bg-gray-50 dark:bg-slate-800/50 rounded-2xl p-8 border border-gray-100 dark:border-slate-700/50">
+                    <div x-show="currentTab === 'routing'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-router :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'authentication'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-authentication :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'forms'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-forms :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'state-management'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-state-management :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'events'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-events :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'scheduler'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-scheduler :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'networking'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-networking :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'storage'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-storage :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'localization'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-localization :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                    <div x-show="currentTab === 'navigation-hub'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform translate-x-2" x-transition:enter-end="opacity-100 transform translate-x-0">
+                        <x-overview-navigation-hub :latestVersionOfNylo="$latestVersionOfNylo" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- Section Divider --}}
+<div class="section-divider"></div>
+
+{{-- ===== COMMUNITY / TESTIMONIALS SECTION ===== --}}
+<section class="relative py-28 bg-gradient-to-b from-gray-50 to-white dark:from-slate-800/50 dark:to-slate-900 transition-colors duration-300 overflow-hidden">
+    {{-- Background decoration --}}
+    <div class="absolute inset-0 dot-grid-pattern opacity-20"></div>
+
+    <div class="relative container mx-auto px-6 lg:px-32">
+        <div class="text-center mb-16">
+
+            <h2 class="text-4xl md:text-5xl font-medium text-gray-900 dark:text-white mb-5" style="font-family: 'Sora', sans-serif; letter-spacing: -0.02em;">
+                {{ __('Loved by the community') }}
+            </h2>
+            <p class="text-lg text-gray-500 dark:text-slate-400 mb-10">
+                {{ __('What developers are saying about') }} {{ config('app.name') }}
+            </p>
+            <a href="https://github.com/nylo-core/nylo/discussions" target="_BLANK" class="group inline-flex items-center gap-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 hover:border-primary-blue/50 dark:hover:border-primary-blue/50 text-gray-700 dark:text-slate-300 font-medium px-6 h-[48px] rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg">
+                {{ __('Join the discussion') }}
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </a>
+        </div>
+
+        {{-- Testimonials Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @php
+            $testimonials = [
+                ['quote' => "I'm new to Dart and new to your framework (which I love)", 'author' => 'Peter', 'role' => 'Senior Director of Heroku Global'],
+                ['quote' => "I wanted to thank you guys for the great job you are doing.", 'author' => '@youssefKadaouiAbbassi', 'role' => null],
+                ['quote' => "Just to say that I am in love with @nylo_dev's website!! Definitely gonna explore it!", 'author' => '@esfoliante_txt', 'role' => null],
+                ['quote' => "Really love the concept of this framework", 'author' => '@Chrisvidal', 'role' => null],
+                ['quote' => "Nylo is the best framework for flutter, which makes developing easy", 'author' => '@higakijin', 'role' => null],
+                ['quote' => "This is incredible. Very well done!", 'author' => 'FireflyDaniel', 'role' => null],
+                ['quote' => "Very nice Framework! Thank you so much!", 'author' => '@ChaoChao2509', 'role' => null],
+                ['quote' => "I just discovered this framework and I'm very impressed. Thank you", 'author' => '@lepresk', 'role' => null],
+                ['quote' => "Great work on Nylo", 'author' => '@dylandamsma', 'role' => null],
+                ['quote' => 'This is by far the best framework out there. Amazing quality and features. Thanks so much.', 'author' => '@2kulfi', 'role' => null],
+                ['quote' => 'It\'s interesting and very amazing. It makes the work more easier and less time consuming. Great work. Thank you', 'author' => 'darkreader01', 'role' => null],
+                ['quote' => 'Salut. Je viens juste de découvrir votre outils et je le trouve vraiment super. Une belle découverte pour moi 👌🤌', 'author' => 'ojean-01', 'role' => null],
+
+            ];
+            @endphp
+
+            @foreach($testimonials as $index => $testimonial)
+            <blockquote class="testimonial-card flex flex-col justify-between {{ $index === 0 ? 'md:col-span-2 lg:col-span-1' : '' }}">
+                <div class="section-divider"></div>
+                <div class="p-4">
+                    <p class="text-gray-700 dark:text-slate-300 mb-5 leading-relaxed relative z-10 pt-4">{{ $testimonial['quote'] }}</p>
+                    <div class="flex items-center gap-3">
+                        <div>
+                            <span class="block font-semibold text-gray-900 dark:text-white">{{ $testimonial['author'] }}</span>
+                            @if($testimonial['role'])
+                            <span class="block text-sm text-gray-500 dark:text-slate-500">{{ $testimonial['role'] }}</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
+
 @endsection

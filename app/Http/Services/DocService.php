@@ -12,13 +12,6 @@ use Request;
 class DocService
 {
     /**
-     * DocService constructor
-     *
-     * @return void
-     */
-    public function __construct() {}
-
-    /**
      * Get latest version for Nylo.
      *
      * @param  string  $page
@@ -93,12 +86,29 @@ class DocService
      * @param  string  $version
      * @param  string  $page
      */
-    public function checkIfDocExists($version, $page): string
+    public function checkIfDocExists($version, $page, ?string $locale = null): string
     {
-        $mdDocPage = base_path().'/resources/docs/'.$version.'/'.$page.'.md';
-        abort_if(file_exists($mdDocPage) == false, 404);
+        // Try locale-specific path first (e.g. resources/docs/7.x/en/installation.md)
+        if ($locale) {
+            $localePath = base_path().'/resources/docs/'.$version.'/'.$locale.'/'.$page.'.md';
+            if (file_exists($localePath)) {
+                return $localePath;
+            }
 
-        return $mdDocPage;
+            // Fall back to English locale
+            if ($locale !== 'en') {
+                $enPath = base_path().'/resources/docs/'.$version.'/en/'.$page.'.md';
+                if (file_exists($enPath)) {
+                    return $enPath;
+                }
+            }
+        }
+
+        // Fall back to legacy non-locale path (for 6.x and older docs)
+        $legacyPath = base_path().'/resources/docs/'.$version.'/'.$page.'.md';
+        abort_if(! file_exists($legacyPath), 404);
+
+        return $legacyPath;
     }
 
     /**
@@ -169,5 +179,126 @@ class DocService
         $docValues = collect($versionArray)->flatten()->toArray();
 
         return in_array($page, $docValues);
+    }
+
+    /**
+     * Generates the doc page contents and on-this-page array.
+     *
+     * @param  string  $mdDocPage
+     * @param  string  $version
+     * @return array{title: string, on-this-page: array, contents: string}
+     */
+    public function generateDocPage($mdDocPage, $version)
+    {
+        $bladeContents = \Blade::render(file_get_contents($mdDocPage), ['version' => $version]);
+
+        $onThisPage = [];
+
+        // Extract the title from the first H1 heading (e.g., "# Configuration")
+        $title = '';
+        if (preg_match('/^#\s+(.+)$/m', $bladeContents, $titleMatch)) {
+            $title = trim($titleMatch[1]);
+            $bladeContents = preg_replace('/^#\s+.+\R*/m', '', $bladeContents, 1);
+        }
+
+        // Extract the TOC after the first --- marker until we hit a <div id= tag
+        // Pattern: --- followed by newlines, then content, until we find <div id=
+        if (preg_match('/---\s*\R+(.*?)(?=<div id=)/s', $bladeContents, $matches)) {
+            $tocContent = $matches[1];
+
+            // Parse the TOC content into a nested array
+            $onThisPage = $this->parseTocToArray($tocContent);
+
+            // Remove the TOC section (the --- and everything until <div id=)
+            $bladeContents = preg_replace('/---\s*\R+.*?(?=<div id=)/s', '', $bladeContents, 1);
+        }
+
+        return [
+            'title' => $title,
+            'on-this-page' => $onThisPage,
+            'contents' => $bladeContents,
+            'rawMarkdown' => '# '.$title."\n\n".$bladeContents,
+        ];
+    }
+
+    /**
+     * Parse the table of contents markdown into a nested array structure.
+     *
+     * @param  string  $tocContent
+     */
+    private function parseTocToArray($tocContent): array
+    {
+        $lines = explode("\n", $tocContent);
+        $result = [];
+        $stack = [&$result];
+        $lastIndent = -1;
+
+        foreach ($lines as $line) {
+            // Skip empty lines and the <a name="section-1"></a> anchor
+            if (trim($line) === '' || str_contains($line, '<a name=')) {
+                continue;
+            }
+
+            // Detect indentation level (count leading spaces, 2 spaces = 1 level)
+            preg_match('/^(\s*)/', $line, $indentMatch);
+            $indentStr = $indentMatch[1] ?? '';
+
+            // Count tabs or convert spaces to indent levels (2 spaces = 1 level)
+            if (str_contains($indentStr, "\t")) {
+                $indent = substr_count($indentStr, "\t");
+            } else {
+                $indent = (int) (strlen($indentStr) / 2);
+            }
+
+            // Extract the line content
+            $content = trim($line);
+
+            // Check if it's a link or plain text
+            if (preg_match('/^-\s*\[([^\]]+)\]\(#([^\s\)"]+)(?:\s+"([^"]*)")?\)/', $content, $match)) {
+                // It's a link: - [Text](#anchor "title")
+                $item = [
+                    'text' => $match[1],
+                    'anchor' => $match[2],
+                    'title' => $match[3] ?? $match[1],
+                    'children' => [],
+                ];
+            } elseif (preg_match('/^-\s*(.+)$/', $content, $match)) {
+                // It's a section header without link: - Section Name
+                $item = [
+                    'text' => trim($match[1]),
+                    'anchor' => null,
+                    'title' => null,
+                    'children' => [],
+                ];
+            } else {
+                continue;
+            }
+
+            // Adjust stack based on indentation
+            if ($indent > $lastIndent) {
+                // Moving deeper - add to the last item's children
+                if (! empty($result) || count($stack) > 1) {
+                    $lastItem = &$stack[count($stack) - 1];
+                    if (! empty($lastItem)) {
+                        $lastKey = array_key_last($lastItem);
+                        $stack[] = &$lastItem[$lastKey]['children'];
+                    }
+                }
+            } elseif ($indent < $lastIndent) {
+                // Moving back up - pop from stack
+                $diff = $lastIndent - $indent;
+                for ($i = 0; $i < $diff; $i++) {
+                    if (count($stack) > 1) {
+                        array_pop($stack);
+                    }
+                }
+            }
+
+            // Add item to current level
+            $stack[count($stack) - 1][] = $item;
+            $lastIndent = $indent;
+        }
+
+        return $result;
     }
 }

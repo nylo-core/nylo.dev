@@ -9,7 +9,6 @@
 - [Schedule Once Daily](#schedule-once-daily "Schedule a task to run once daily")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -18,7 +17,6 @@ Nylo allows you to schedule tasks in your app to happen once, daily, or after a 
 After reading this documentation, you will learn how to schedule tasks in your app.
 
 <div id="schedule-once"></div>
-<br>
 
 ## Schedule Once
 
@@ -33,7 +31,6 @@ Nylo.scheduleOnce('onboarding_info', () {
 ```
 
 <div id="schedule-once-after-date"></div>
-<br>
 
 ## Schedule Once After Date
 
@@ -48,7 +45,6 @@ Nylo.scheduleOnceAfterDate('app_review_rating', () {
 ```
 
 <div id="schedule-once-daily"></div>
-<br>
 
 ## Schedule Once Daily
 

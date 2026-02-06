@@ -16,14 +16,12 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the Nylo framework. 
 It provides a lot of helpful actions to speed up development.
 
 <div id="install"></div>
-<br>
 ## Install
 
 Mac guide
@@ -78,7 +76,6 @@ All commands:
 ```
 
 <div id="make-controller"></div>
-<br>
 
 ## Make controller
 
@@ -91,7 +88,6 @@ metro make:controller profile_controller
 This is will create a new controller if it doesn't exist within the `app/controllers` directory.
 
 <div id="make-model"></div>
-<br>
 
 ## Make model
 
@@ -112,7 +108,6 @@ Learn more on Storable models [here](/docs/1.x/storage)
 
 
 <div id="make-page"></div>
-<br>
 
 ## Make page
 
@@ -131,7 +126,6 @@ metro make:page product_page -c
 Create a page with a controller.
 
 <div id="make-stateless-widget"></div>
-<br>
 
 ## Make stateless widget
 
@@ -144,7 +138,6 @@ metro make:stateless_widget product_rating_widget
 This is will create a new widget if it doesn't exist within the `resources/widgets` directory.
 
 <div id="make-stateful-widget"></div>
-<br>
 
 ## Make stateful widget
 
@@ -158,7 +151,6 @@ This is will create a new widget if it doesn't exist within the `resources/widge
 
 
 <div id="build-app-icons"></div>
-<br>
 
 ## Building app icons
 

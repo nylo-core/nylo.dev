@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Routes helps us navigate users around our apps. They provide a simple journey usually from the (`/`) index page. You can add routes in Nylo with the `lib/routers/router.dart` file. In this file, you’ll be able to assign the `name` of the route e.g. `“/settings”` and also the widget view you want to show.
@@ -21,7 +20,6 @@ Routes helps us navigate users around our apps. They provide a simple journey us
 You may also need to pass data from one view to the other and that’s also possible when navigating from a widget. We’ll dive deeper into how all this works in Nylo. 
 
 <div id="adding-routes"></div>
-<br>
 
 ## Adding routes
 
@@ -41,7 +39,6 @@ buildRouter() => nyCreateRoutes((router) {
 > Inside the `router.dart` file you'll find the `buildRouter` function, this is called when initializing the app.
 
 <div id="navigating-to-pages"></div>
-<br>
 
 ## Navigating to pages
 
@@ -102,7 +99,6 @@ class _SettingsPageState extends NyState<SettingsPage> {
 ```
 
 <div id="passing-data-to-routes"></div>
-<br>
 
 ## Passing data to routes
 

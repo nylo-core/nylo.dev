@@ -2,23 +2,33 @@
 
 return [
     [
-        'label' => 'Permission Policy',
-        'link' => 'permission-policy',
-    ],
-    [
-        'label' => 'Media Pro',
-        'link' => 'media-pro',
+        'label' => 'Error Stack',
+        'link' => 'error-stack',
+        'description' => 'Error tracking and logging for Flutter apps.',
     ],
     [
         'label' => 'Device Meta',
         'link' => 'device-meta',
+        'description' => 'Get device metadata in your Flutter apps.',
     ],
     [
-        'label' => 'Error Stack',
-        'link' => 'error-stack',
+        'label' => 'Service Runner',
+        'link' => 'service-runner',
+        'description' => 'Run background services in Flutter apps.',
+    ],
+    [
+        'label' => 'Firebase Kit',
+        'link' => 'firebase_kit',
+        'description' => 'Simplified Firebase integration for Flutter.',
     ],
     [
         'label' => 'Scaffold UI',
         'link' => 'scaffold-ui',
+        'description' => 'UI scaffolding for Flutter apps.',
+    ],
+    [
+        'label' => 'Permission Policy',
+        'link' => 'permission-policy',
+        'description' => 'Manage permissions in Flutter apps.',
     ],
 ];

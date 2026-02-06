@@ -11,7 +11,6 @@
     - [Total days since first launch](#monitoring-app-total-days-since-first-launch "Monitoring app total days since first launch")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -25,7 +24,6 @@ Currently, Nylo can monitor the following:
 After reading this documentation, you will learn how to monitor your app usage.
 
 <div id="setup"></div>
-<br>
 
 ## Setup
 
@@ -45,7 +43,6 @@ class AppProvider implements NyProvider {
 This will enable app usage monitoring in your app. If you ever need to check if app usage monitoring is enabled, you can use the `Nylo.instance.shouldMonitorAppUsage()` method.
 
 <div id="monitoring-app-launches"></div>
-<br>
 
 ## Monitoring App Launches
 
@@ -62,7 +59,6 @@ print('App has been launched $launchCount times');
 ```
 
 <div id="monitoring-app-first-launch-date"></div>
-<br>
 
 ## Monitoring App First Launch Date
 
@@ -77,7 +73,6 @@ print("App was first launched on $firstLaunchDate");
 ```
 
 <div id="monitoring-app-total-days-since-first-launch"></div>
-<br>
 
 ## Monitoring App Total Days Since First Launch
 

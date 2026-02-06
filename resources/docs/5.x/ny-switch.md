@@ -9,7 +9,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -21,7 +20,6 @@ It makes it easy to switch between different widgets based on the index.
 Let's take a look at some code.
 
 <div id="usage"></div>
-<br>
 
 ## Usage
 
@@ -53,7 +51,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="parameters"></div>
-<br>
 
 ## Parameters
 

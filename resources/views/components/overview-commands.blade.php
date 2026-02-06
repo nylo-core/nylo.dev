@@ -40,7 +40,7 @@ class _CurrentTimeCommand extends NyCustomCommand {
 metro app:current_time
 </x-code-highlighter>
                         <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">Create custom commands within your project</p> 
-                        <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'metro#creating-custom-commands']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+                        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'metro#creating-custom-commands']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
                             Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
                         </a>
 
@@ -55,7 +55,7 @@ metro app:current_time
                                     'link' => 'adding-flags-to-custom-commands'
                                 ],
                                 [
-                                    'title' => 'Neworking commands',
+                                    'title' => 'Networking commands',
                                     'link' => 'custom-command-helper-api'
                                 ],
                                 [
@@ -63,6 +63,6 @@ metro app:current_time
                                     'link' => 'custom-command-helper-methods'
                                 ]
                                 ] as $item)
-                                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'metro']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
+                                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'metro']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
                             @endforeach
                         </div>

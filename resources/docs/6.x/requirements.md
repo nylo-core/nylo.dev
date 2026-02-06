@@ -7,7 +7,6 @@
 - [Set up an editor](#set-up-an-editor "Set up an editor")
 
 <div id="introduction"></div>
-<br>
 
 ## Installing Flutter
 
@@ -34,7 +33,6 @@ flutter doctor -v
 ```
 
 <div id="set-up-an-editor"></div>
-<br>
 
 ## Set up an editor
 

@@ -10,7 +10,6 @@
   - [Retrieving public assets](#retrieving-public-assets "Retrieving public assets")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -19,7 +18,6 @@ Every {{ config('app.name') }} project comes with a simple boilerplate for manag
 The directory structure was inspired by <a href="https://github.com/laravel/laravel" target="_BLANK">Laravel</a>.
 
 <div id="app-directories"></div>
-<br>
 
 ## App Directories
 
@@ -55,7 +53,6 @@ The below app directories are listed inside the <b>lib</b> folder.
   - `router.dart` You can add your page routes in this file.
 
 <div id="public-assets"></div>
-<br>
 
 ## Public assets
 
@@ -69,7 +66,6 @@ Public assets can be found in the `public/`. This directory is used for images, 
     - `environments` Add your postman environments here.
 
 <div id="retrieving-image-assets"></div>
-<br>
 
 ## Retrieving an image asset
 
@@ -107,7 +103,6 @@ In this example, our <b>public/images/</b> directory has one file `nylo_logo.png
 - public/images/nylo_logo.png
 
 <div id="retrieving-public-assets"></div>
-<br>
 
 ## Retrieving a public asset
 

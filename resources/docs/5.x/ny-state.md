@@ -10,7 +10,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 When you create a <a href="/docs/{{$version}}/metro#make-page" target="_BLANK">page</a> in {{ config('app.name') }}, it will extend the `NyState` class. This class provides useful utilities to make development easier. 
@@ -26,7 +25,6 @@ The `NyState` class can help you with the following:
 - Changing Language
 
 <div id="how-to-use-nystate"></div>
-<br>
 
 ## How to use NyState
 
@@ -60,7 +58,6 @@ metro make:page product_page
 ```
 
 <div id="state-management"></div>
-<br>
 
 ## State Management
 
@@ -94,7 +91,6 @@ class _SettingsTabState extends NyState<SettingsTab> {
 
 
 <div id="helpers"></div>
-<br>
 
 ## Helpers
 
@@ -111,7 +107,6 @@ class _SettingsTabState extends NyState<SettingsTab> {
 
 
 <div id="color"></div>
-<br>
 
 ### Color
 
@@ -134,7 +129,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="boot"></div>
-<br>
 
 ### Boot
 
@@ -164,7 +158,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="reboot"></div>
-<br>
 
 ### Reboot
 
@@ -207,7 +200,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="pop"></div>
-<br>
 ### Pop
 
 `pop` - Remove the current page from the stack.
@@ -234,7 +226,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="showToast"></div>
-<br>
 
 ### showToast
 
@@ -268,7 +259,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="validate"></div>
-<br>
 
 ### validate
 
@@ -297,7 +287,6 @@ TextEditingController _textFieldControllerEmail = TextEditingController();
 
 
 <div id="change-language"></div>
-<br>
 
 ### changeLanguage
 
@@ -327,7 +316,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="when-env"></div>
-<br>
 
 ### whenEnv
 
@@ -351,7 +339,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="lock-release"></div>
-<br>
 
 ### lockRelease
 
@@ -398,7 +385,6 @@ class _LoginPageState extends NyState<LoginPage> {
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
 <div id="is-locked"></div>
-<br>
 
 ### isLocked
 
@@ -425,7 +411,6 @@ class _HomePageState extends NyState<HomePage> {
 
 
 <div id="is-loading"></div>
-<br>
 
 ### isLoading
 
@@ -451,7 +436,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-load"></div>
-<br>
 
 ### afterLoad
 
@@ -484,7 +468,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-not-locked"></div>
-<br>
 
 ### afterNotLocked
 
@@ -523,7 +506,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="after-not-null"></div>
-<br>
 
 ### afterNotNull
 
@@ -556,7 +538,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="set-loading"></div>
-<br>
 
 ### setLoading
 

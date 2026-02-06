@@ -15,7 +15,6 @@
     - [Methods](#methods "Methods")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -27,7 +26,6 @@ In this section we'll dive into the basics of caching in Nylo.
 
 
 <div id="save-data-with-expiration-time"></div>
-<br>
 
 ## Save Data with Expiration Time
 
@@ -52,7 +50,6 @@ printInfo(val); // Hello World
 In the example above, the `saveRemember` method will store the value "Hello World" in the cache under the key "hello_world" for 60 seconds. If the key already exists in the cache, the method will return the value stored in the cache.
 
 <div id="save-data-forever"></div>
-<br>
 
 ## Save Data Forever
 
@@ -77,7 +74,6 @@ In the example above, the `saveForever` method will store the value "Hello World
 
 
 <div id="retrieve-data"></div>
-<br>
 
 ## Retrieve Data
 
@@ -97,7 +93,6 @@ printInfo(val); // Hello World
 In the example above, the `get` method will return the value stored in the cache under the key "hello_world".
 
 <div id="remove-data"></div>
-<br>
 
 ## Remove Data
 
@@ -115,7 +110,6 @@ await cache().forget(key);
 In the example above, the `forget` method will remove the item stored in the cache under the key "hello_world".
 
 <div id="caching-api-responses"></div>
-<br>
 
 ## Caching API Responses
 
@@ -171,7 +165,6 @@ printInfo(githubResponse);
 In the example above, the `githubInfo` method will fetch the user profile of the `nylo-core` user from the GitHub API. The response will be cached for 1 hour under the key `github_nylo_info`.
 
 <div id="methods"></div>
-<br>
 
 ## API Methods and Properties
 

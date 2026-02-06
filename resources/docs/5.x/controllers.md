@@ -8,7 +8,6 @@
 - [Using controllers with NyPage](#using-controllers-with-ny-page "Using controllers with NyPage")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -79,7 +78,6 @@ If your widget has a controller, you can use `widget.controller` to access its p
 You can use `dart run nylo_framework:main make:page account --controller` command to create a new page and controller automatically for you.
 
 <div id="creating-pages-and-controllers"></div>
-<br>
 
 ## Creating pages and controllers
 
@@ -149,7 +147,6 @@ class _ProfilePageState extends NyState<ProfilePage> {
 The `routeTo(String routeName, data: dynamic)` **data** parameter accepts dynamic types so you can cast the object after it’s returned.
 
 <div id="using-controllers-with-ny-page"></div>
-<br>
 
 ## Using controllers with NyPage
 

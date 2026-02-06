@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 {{ config('app.name') }} is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier. {{ config('app.name') }} is an open source and MIT-licenced too, so you can freely build your projects.
@@ -21,7 +20,6 @@
 New installs of {{ config('app.name') }} contain standardized file structure and config, so you can jump straight into developing your project.
 
 <div id="new-to-flutter"></div>
-<br>
 
 ## New to Flutter?
 
@@ -32,7 +30,6 @@ You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutt
 
 
 <div id="maintenance-and-release-schedule"></div>
-<br>
 
 ## Maintenance and release schedule
 
@@ -41,7 +38,6 @@ The release schedule for {{ config('app.name') }} will be once or twice a year i
 The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
 <div id="framework-dependencies"></div>
-<br>
 
 ## Framework dependencies
 
@@ -71,7 +67,6 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 - [pretty\_dio\_logger](https://pub.dev/packages/pretty_dio_logger)
 
 <div id="contributors"></div>
-<br>
 
 ## Contributors
 

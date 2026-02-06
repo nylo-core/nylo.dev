@@ -17,7 +17,6 @@
 - [Singleton API Service](#singleton-api-service "Singleton API Service")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -56,7 +55,6 @@ Variables you can override using the <b>NyApiService</b> class.
 Under the hood, the base networking class uses <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>, a powerful HTTP client.
 
 <div id="making-http-requests"></div>
-<br>
 
 ## Making HTTP requests
 
@@ -86,7 +84,6 @@ class ApiService extends NyApiService {
 The `request` argument is a <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a> instance, so you can call all the methods from that object.
 
 <div id="base-options"></div>
-<br>
 
 ### Base Options
 
@@ -111,7 +108,6 @@ class ApiService extends NyApiService {
 Click <a href="https://pub.dev/packages/dio#request-options" target="_BLANK">here</a> to view all the base options you can set.
 
 <div id="adding-headers"></div>
-<br>
 
 ### Adding Headers
 
@@ -157,7 +153,6 @@ Future fetchUsers() async {
 ```
 
 <div id="interceptors"></div>
-<br>
 
 ### Interceptors
 
@@ -265,7 +260,6 @@ class LoggingInterceptor extends Interceptor {
 ```
 
 <div id="understanding-the-network-helper"></div>
-<br>
 
 ## Understanding the network helper
 
@@ -402,7 +396,6 @@ class ApiService extends NyApiService {
 ```
 
 <div id="using-an-api-service"></div>
-<br>
 
 ## Using an API Service
 
@@ -478,7 +471,6 @@ class ApiService extends NyApiService {
 `displayError` - If an error occurs with the request (e.g. 500 status code), you can instantly give your users feedback via a toast notification.
 
 <div id="create-an-api-service"></div>
-<br>
 
 ## Create an API Service
 
@@ -538,7 +530,6 @@ class UserApiService extends NyApiService {
 ```
 
 <div id="morphing-json-payloads-to-models"></div>
-<br>
 
 ## Morphing JSON payloads to models
 
@@ -581,7 +572,6 @@ The data argument in the decoder will contain the body payload from the API requ
 To get started with decoders, check out this section of the [documentation](/docs/{{$version}}/decoders#model-decoders).
 
 <div id="retrying-failed-requests"></div>
-<br>
 
 ## Retrying failed requests
 
@@ -633,7 +623,6 @@ Future fetchUsers() async {
 ```
 
 <div id="refreshing-tokens"></div>
-<br>
 
 ## Refreshing tokens
 
@@ -692,7 +681,6 @@ class ApiService extends NyApiService {
 Now when you call the `getUser` method, the API Service will check if the token is expired and then refresh it if needed.
 
 <div id="singleton-api-service"></div>
-<br>
 
 ## Singleton API Service
 

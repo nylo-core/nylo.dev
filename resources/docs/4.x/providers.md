@@ -9,7 +9,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction to Providers
 
@@ -49,7 +48,6 @@ E.g. Backpack.instance.read('nylo'); // {{ config('app.name') }} instance
 
 
 <div id="create-a-provider"></div>
-<br>
 
 ## Create a new Provider
 
@@ -60,7 +58,6 @@ flutter pub run nylo_framework:main make:provider cache_provider
 ```
 
 <div id="provider-object"></div>
-<br>
 
 ## Provider Object
 

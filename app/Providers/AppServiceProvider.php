@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\GitHubService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
             $latestVersionOfNylo = array_key_last(config('project.doc-index')['versions']);
 
             $view->with('latestVersionOfNylo', $latestVersionOfNylo);
+        });
+
+        view()->composer('includes.header', function ($view) {
+            $githubService = app(GitHubService::class);
+            $view->with('githubStars', $githubService->getFormattedStars('nylo'));
         });
     }
 }

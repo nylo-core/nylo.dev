@@ -4,6 +4,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
   <meta name="author" content="{{ config('app.name') }}" />
   {!! SEO::generate(true) !!}
+
+  {{-- Hreflang tags for localized pages --}}
+  @if(Route::currentRouteName() && str_starts_with(Route::currentRouteName(), 'landing.'))
+    @foreach(config('localization.supported_locales') as $code => $locale)
+      <link rel="alternate" hreflang="{{ $code }}" href="{{ route(Route::currentRouteName(), array_merge(Route::current()->parameters(), ['locale' => $code])) }}" />
+    @endforeach
+    <link rel="alternate" hreflang="x-default" href="{{ route(Route::currentRouteName(), array_merge(Route::current()->parameters(), ['locale' => 'en'])) }}" />
+  @endif
   <meta name="twitter:image:src" content="{{ asset('images/nylo_logo.png') }}">
   <meta name="twitter:image" content="{{ asset('images/nylo_logo.png') }}">
   <link href="{{ asset('css/remixicon' . (config('app.env') == 'production' ? '.min' : '') . '.css') }}" rel="stylesheet">
@@ -16,6 +24,9 @@
   <meta name="theme-color" content="#ffffff">
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+  {{-- DocSearch CSS --}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
   @env('production')
   <!-- Global site tag (gtag.js) - Google Analytics -->

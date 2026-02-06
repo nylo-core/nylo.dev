@@ -19,14 +19,12 @@
   - [iOS Specific Properties](#ios-specific-properties)
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
 The Push Notification system in Nylo provides a powerful way to send local notifications to users. This feature allows you to send immediate or scheduled notifications with rich content and customizable behaviors for both iOS and Android platforms.
 
 <div id="basic-usage"></div>
-<br>
 
 ## Basic Usage
 
@@ -50,7 +48,6 @@ await PushNotification.sendNotification(
 ```
 
 <div id="scheduled-notifications"></div>
-<br>
 
 ## Scheduled Notifications
 
@@ -73,7 +70,6 @@ await PushNotification.sendNotification(
 ```
 
 <div id="customizing-notifications"></div>
-<br>
 
 ## Customizing Notifications
 
@@ -155,14 +151,12 @@ await PushNotification(
 ```
 
 <div id="managing-notifications"></div>
-<br>
 
 ## Managing Notifications
 
 You can cancel specific notifications or all notifications, as well as request permissions for notifications.
 
 <div id="canceling-notifications"></div>
-<br>
 
 ### Canceling Notifications
 ```dart
@@ -174,7 +168,6 @@ await PushNotification.cancelAllNotifications();
 ```
 
 <div id="requesting-permissions"></div>
-<br>
 
 ### Requesting Permissions
 ```dart
@@ -317,7 +310,6 @@ await PushNotification.requestPermissions(
 This section provides a reference for the properties and methods available for the `PushNotification` class.
 
 <div id="main-properties"></div>
-<br>
 
 ### Main Properties
 
@@ -331,7 +323,6 @@ This section provides a reference for the properties and methods available for t
 | sound | String? | Custom sound file name |
 
 <div id="android-specific-properties"></div>
-<br>
 
 ### Android Specific Properties
 
@@ -344,7 +335,6 @@ This section provides a reference for the properties and methods available for t
 | ticker | String? | Text shown in the status bar when the notification arrives |
 
 <div id="ios-specific-properties"></div>
-<br>
 
 ### iOS Specific Properties
 

@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Nylo is a micro-framework for Flutter which is designed to help simplify app development. Every project provides a simple boilerplate to help you build apps easier.
@@ -22,7 +21,6 @@ This project is open source and MIT-licenced too so you can freely build your pr
 New installs of Nylo contain standardized file structure and config so you can jump straight into developing your project.
 
 <div id="new-to-flutter"></div>
-<br>
 
 ## New to Flutter?
 
@@ -33,7 +31,6 @@ You can also subscribe to their YouTube channel for updates and what's happening
 
 
 <div id="maintenance-and-release-schedule"></div>
-<br>
 
 ## Maintenance and release schedule
 
@@ -41,7 +38,6 @@ Maintenance of Nylo will be done monthly to check any bugs or weird glitches tha
 The Nylo framework follows [Semantic Versioning](https://semver.org).
 
 <div id="framework-dependencies"></div>
-<br>
 
 ## Framework dependencies
 
@@ -63,7 +59,6 @@ Support these libraries in any way you can:
 - [flutter](https://github.com/flutter/flutter)
 
 <div id="contributors"></div>
-<br>
 
 ## Contributors
 

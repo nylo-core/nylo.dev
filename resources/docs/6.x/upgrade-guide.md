@@ -18,7 +18,6 @@ You can understand all the changes by clicking the below link.
 <a name="View {{ $version }} changes" href="https://github.com/nylo-core/nylo/compare/5.x...6.x#diff" target="_BLANK">View changes</a>
 
 <div id="migration-guide"></div>
-<br>
 
 ## Migration Guide
 
@@ -339,7 +338,6 @@ Example:
 This will ensure you have a clean project with all the new changes.
 
 <div id="how-to-upgrade"></div>
-<br>
 
 ## How to upgrade
 

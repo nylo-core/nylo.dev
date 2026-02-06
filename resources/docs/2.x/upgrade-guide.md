@@ -8,7 +8,6 @@
 
 
 <div id="changelog"></div>
-<br>
 
 ## Changelog
 

@@ -1,0 +1,197 @@
+{
+    "Select language": "भाषा चुनें",
+
+    "Nylo v7 is here!": "Nylo v7 आ गया है!",
+    "See what's new": "नया क्या है देखें",
+
+    "Docs": "दस्तावेज़",
+    "Framework": "फ्रेमवर्क",
+    "Resources": "संसाधन",
+    "Packages": "पैकेज",
+    "Menu": "मेन्यू",
+    "Get Started": "शुरू करें",
+    "Star on GitHub": "GitHub पर स्टार दें",
+
+    "Nylo Framework": "Nylo फ्रेमवर्क",
+    "Nylo v7 Framework": "Nylo v7 फ्रेमवर्क",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "Nylo के साथ अपने Flutter ऐप को शुरू करने के लिए बॉयलरप्लेट।",
+    "Get started: Nylo installer": "शुरू करें: Nylo इंस्टॉलर",
+
+    "Developers": "डेवलपर्स",
+    "Documentation": "प्रलेखन",
+    "Comprehensive guides to help you get started with Nylo.": "Nylo के साथ शुरू करने में आपकी मदद के लिए व्यापक गाइड।",
+    "Release Notes": "रिलीज़ नोट्स",
+    "Stay updated with the latest Nylo releases and updates.": "नवीनतम Nylo रिलीज़ और अपडेट से अपडेट रहें।",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Nylo फ्रेमवर्क के लिए वीडियो ट्यूटोरियल और गाइड।",
+    "Forum": "फोरम",
+    "Join the community discussions and get help.": "समुदाय चर्चाओं में शामिल हों और मदद पाएं।",
+    "Become a sponsor": "प्रायोजक बनें",
+    "Support Nylo development by becoming a sponsor.": "प्रायोजक बनकर Nylo विकास का समर्थन करें।",
+    "Become a Sponsor": "प्रायोजक बनें",
+
+    "Live now": "अभी लाइव",
+
+    "The Flutter": "Flutter",
+    "Micro-framework": "माइक्रो-फ्रेमवर्क",
+    "For Modern Apps": "आधुनिक ऐप्स के लिए",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "Flutter ऐप्स बनाने के लिए एक मजबूत आधार। राउटिंग, स्टेट मैनेजमेंट, नेटवर्किंग, और बहुत कुछ — सब एक सुंदर पैकेज में।",
+
+    "Explore": "खोजें",
+
+    "Features": "सुविधाएं",
+    "Everything you need to build": "बनाने के लिए आपको जो कुछ भी चाहिए",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo आपको आत्मविश्वास के साथ प्रोडक्शन-रेडी Flutter एप्लिकेशन बनाने के लिए सभी टूल प्रदान करता है।",
+
+    "Routing": "राउटिंग",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "रूट गार्ड्स, पैरामीटर्स और डीप लिंकिंग सपोर्ट के साथ सरल, घोषणात्मक राउटिंग।",
+
+    "State Management": "स्टेट मैनेजमेंट",
+    "Built-in reactive state management with controllers and easy state persistence.": "कंट्रोलर्स और आसान स्टेट पर्सिस्टेंस के साथ बिल्ट-इन रिएक्टिव स्टेट मैनेजमेंट।",
+
+    "Networking": "नेटवर्किंग",
+    "Elegant API service classes with automatic model serialization and interceptors.": "ऑटोमैटिक मॉडल सीरियलाइज़ेशन और इंटरसेप्टर्स के साथ सुंदर API सर्विस क्लासेस।",
+
+    "Forms": "फॉर्म्स",
+    "Powerful form handling with validation, casting, and automatic data binding.": "वैलिडेशन, कास्टिंग और ऑटोमैटिक डेटा बाइंडिंग के साथ शक्तिशाली फॉर्म हैंडलिंग।",
+
+    "Authentication": "प्रमाणीकरण",
+    "Secure authentication with route guards, token storage, and session management.": "रूट गार्ड्स, टोकन स्टोरेज और सेशन मैनेजमेंट के साथ सुरक्षित प्रमाणीकरण।",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "शक्तिशाली CLI कमांड्स के साथ पेज, मॉडल, कंट्रोलर और बहुत कुछ जनरेट करें।",
+
+    "Explore all features": "सभी सुविधाएं खोजें",
+
+    "Create anything from the terminal": "टर्मिनल से कुछ भी बनाएं",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro Nylo का CLI टूल है जो एक कमांड से पेज, मॉडल, कंट्रोलर, विजेट और बहुत कुछ स्कैफोल्ड करने में मदद करता है।",
+    "Learn more about Metro": "Metro के बारे में और जानें",
+
+    "Effortless API integration": "आसान API इंटीग्रेशन",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "ऑटोमैटिक JSON पार्सिंग, एरर हैंडलिंग और रिक्वेस्ट इंटरसेप्टर्स के साथ साफ, मेंटेन करने योग्य API सर्विसेज लिखें।",
+    "Learn more about Networking": "नेटवर्किंग के बारे में और जानें",
+
+    "Powerful tools for creating": "बनाने के लिए शक्तिशाली टूल्स",
+    "Everything you need to build your next Flutter app": "अपना अगला Flutter ऐप बनाने के लिए आपको जो कुछ भी चाहिए",
+
+    "Auth": "ऑथ",
+    "State": "स्टेट",
+    "Events": "इवेंट्स",
+    "Scheduler": "शेड्यूलर",
+
+    "Loved by the community": "समुदाय द्वारा पसंद किया गया",
+    "What developers are saying about": "डेवलपर्स क्या कह रहे हैं",
+    "Join the discussion": "चर्चा में शामिल हों",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "Flutter के लिए एक माइक्रो-फ्रेमवर्क है जो ऐप विकास को सरल बनाने में मदद के लिए डिज़ाइन किया गया है।",
+
+    "Installation": "इंस्टॉलेशन",
+    "Requirements": "आवश्यकताएं",
+    "Router": "राउटर",
+    "Themes & Styling": "थीम्स और स्टाइलिंग",
+
+    "Flutter Packages": "Flutter पैकेज",
+    "Contributions": "योगदान",
+    "Privacy Policy": "गोपनीयता नीति",
+    "Terms & Conditions": "नियम और शर्तें",
+
+    "Community": "समुदाय",
+    "Discussions": "चर्चाएं",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "सर्वाधिकार सुरक्षित",
+
+    "Privacy policy": "गोपनीयता नीति",
+    "Terms and conditions": "नियम और शर्तें",
+    "Updated:": "अपडेट किया गया:",
+    "operates the": "संचालित करता है",
+    "website, which provides the SERVICE.": "वेबसाइट, जो सेवा प्रदान करती है।",
+
+    "Run:": "चलाएं:",
+    "in your terminal.": "अपने टर्मिनल में।",
+    "Next: Run": "अगला: चलाएं",
+
+    "Step 1": "चरण 1",
+    "Step 2": "चरण 2",
+    "Step 3": "चरण 3",
+    "Create a Form": "फॉर्म बनाएं",
+    "Modify your form": "अपना फॉर्म संशोधित करें",
+    "Use your form in a widget": "विजेट में अपना फॉर्म उपयोग करें",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "Nylo Forms के साथ एक ही स्थान पर डेटा प्रबंधित, मान्य और सबमिट करें।",
+    "Validation": "सत्यापन",
+    "Casts": "कास्ट्स",
+    "Styling": "स्टाइलिंग",
+    "Dummy Data": "डमी डेटा",
+
+    "Create a state managed widget": "स्टेट मैनेज्ड विजेट बनाएं",
+    "Now, you can update this widget from anywhere in your application": "अब आप अपने एप्लिकेशन में कहीं से भी इस विजेट को अपडेट कर सकते हैं",
+    "Use the updateState method like in the below code snippet": "नीचे दिए गए कोड स्निपेट की तरह updateState मेथड का उपयोग करें",
+    "You can pass any object to the widget": "आप विजेट में कोई भी ऑब्जेक्ट पास कर सकते हैं",
+    "Powerful state management for widgets in your Flutter application.": "आपके Flutter एप्लिकेशन में विजेट्स के लिए शक्तिशाली स्टेट मैनेजमेंट।",
+    "Lifecycle": "जीवनचक्र",
+    "State Actions": "स्टेट एक्शन",
+
+    "Create your event": "अपना इवेंट बनाएं",
+    "Dispatch the event": "इवेंट डिस्पैच करें",
+    "Dispatch events and listen for them in your application.": "अपने एप्लिकेशन में इवेंट डिस्पैच करें और उन्हें सुनें।",
+    "Dispatching Events": "इवेंट डिस्पैचिंग",
+    "Listening to Events": "इवेंट सुनना",
+
+    "Schedule a task to run once": "एक बार चलाने के लिए टास्क शेड्यूल करें",
+    "Schedule a task to run once after a specific date": "किसी विशेष तारीख के बाद एक बार चलाने के लिए टास्क शेड्यूल करें",
+    "Schedule a task to run once daily": "दैनिक एक बार चलाने के लिए टास्क शेड्यूल करें",
+    "Schedule tasks to run once or daily in your Flutter application.": "अपने Flutter एप्लिकेशन में एक बार या दैनिक चलाने के लिए टास्क शेड्यूल करें।",
+    "Schedule Once After Date": "तारीख के बाद एक बार शेड्यूल करें",
+    "Scheduling Once Daily": "दैनिक एक बार शेड्यूलिंग",
+
+    "Learn more": "अधिक जानें",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "अपने Flutter एप्लिकेशन के लिए जटिल रूट, इंटरफेस और UI पेज बनाएं।",
+    "Adding Routes": "रूट जोड़ना",
+    "Navigating to pages": "पेजों पर नेविगेट करना",
+    "Route Guards": "रूट गार्ड्स",
+    "Deep linking": "डीप लिंकिंग",
+
+    "Authenticate a user": "उपयोगकर्ता को प्रमाणित करें",
+    "Now, when your user opens the app they will be authenticated.": "अब, जब आपका उपयोगकर्ता ऐप खोलेगा तो वे प्रमाणित होंगे।",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "यदि आपने अपने राउटर में authenticatedRoute सेट किया है, तो जब उपयोगकर्ता फिर से ऐप खोलेगा तो यह पेज प्रस्तुत होगा।",
+    "Logout the user": "उपयोगकर्ता को लॉगआउट करें",
+    "Authenticate users in your Flutter application.": "अपने Flutter एप्लिकेशन में उपयोगकर्ताओं को प्रमाणित करें।",
+    "Authentication Page": "प्रमाणीकरण पेज",
+    "Adding an auth user": "Auth उपयोगकर्ता जोड़ना",
+    "Retrieve an auth user": "Auth उपयोगकर्ता प्राप्त करें",
+    "Logout": "लॉगआउट",
+
+    "Create an API Service": "API सर्विस बनाएं",
+    "Call the API from your page": "अपने पेज से API कॉल करें",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "ऑटोमैटिक JSON पार्सिंग, कैशिंग और इंटरसेप्टर्स के साथ सुंदर API सर्विसेज।",
+    "GET Requests": "GET रिक्वेस्ट्स",
+    "Interceptors": "इंटरसेप्टर्स",
+    "Morphing JSON": "मॉर्फिंग JSON",
+    "Caching": "कैशिंग",
+
+    "Save data securely": "डेटा सुरक्षित रूप से सेव करें",
+    "Read with type casting": "टाइप कास्टिंग के साथ पढ़ें",
+    "Secure local storage with type casting, TTL expiry, and collections.": "टाइप कास्टिंग, TTL एक्सपायरी और कलेक्शन के साथ सुरक्षित लोकल स्टोरेज।",
+    "Save Data": "डेटा सेव करें",
+    "Read Data": "डेटा पढ़ें",
+    "Collections": "कलेक्शन",
+    "Backpack": "बैकपैक",
+
+    "Add your language files": "अपनी भाषा फाइलें जोड़ें",
+    "Translate text in your widgets": "अपने विजेट्स में टेक्स्ट का अनुवाद करें",
+    "Multi-language support with JSON files, arguments, and RTL.": "JSON फाइलों, आर्गुमेंट्स और RTL के साथ बहु-भाषा समर्थन।",
+    "Translations": "अनुवाद",
+    "Arguments": "आर्गुमेंट्स",
+    "Locale Switching": "भाषा बदलना",
+    "RTL Support": "RTL समर्थन",
+
+    "Create a Navigation Hub": "नेविगेशन हब बनाएं",
+    "Switch layouts easily": "लेआउट आसानी से बदलें",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "स्टेट मेंटेनेंस के साथ बॉटम नेव, टॉप नेव या जर्नी फ्लो बनाएं।",
+    "Bottom Nav": "बॉटम नेव",
+    "Top Nav": "टॉप नेव",
+    "Journey Flow": "जर्नी फ्लो",
+    "Badges": "बैजेस"
+}

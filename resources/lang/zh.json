@@ -1,0 +1,197 @@
+{
+    "Select language": "选择语言",
+
+    "Nylo v7 is here!": "Nylo v7 来了！",
+    "See what's new": "查看新功能",
+
+    "Docs": "文档",
+    "Framework": "框架",
+    "Resources": "资源",
+    "Packages": "包",
+    "Menu": "菜单",
+    "Get Started": "开始使用",
+    "Star on GitHub": "在 GitHub 上加星",
+
+    "Nylo Framework": "Nylo 框架",
+    "Nylo v7 Framework": "Nylo v7 框架",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "使用 Nylo 快速启动您的 Flutter 应用的样板项目。",
+    "Get started: Nylo installer": "开始使用：Nylo 安装器",
+
+    "Developers": "开发者",
+    "Documentation": "文档",
+    "Comprehensive guides to help you get started with Nylo.": "帮助您开始使用 Nylo 的全面指南。",
+    "Release Notes": "发布说明",
+    "Stay updated with the latest Nylo releases and updates.": "了解 Nylo 的最新版本和更新。",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Nylo 框架的视频教程和指南。",
+    "Forum": "论坛",
+    "Join the community discussions and get help.": "加入社区讨论并获取帮助。",
+    "Become a sponsor": "成为赞助商",
+    "Support Nylo development by becoming a sponsor.": "通过成为赞助商支持 Nylo 的开发。",
+    "Become a Sponsor": "成为赞助商",
+
+    "Live now": "现已上线",
+
+    "The Flutter": "Flutter",
+    "Micro-framework": "微框架",
+    "For Modern Apps": "用于现代应用",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "构建 Flutter 应用的坚实基础。路由、状态管理、网络请求等——全部集成在一个优雅的包中。",
+
+    "Explore": "探索",
+
+    "Features": "功能特性",
+    "Everything you need to build": "构建所需的一切",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo 提供您创建生产级 Flutter 应用所需的所有工具。",
+
+    "Routing": "路由",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "简单的声明式路由，支持路由守卫、参数和深度链接。",
+
+    "State Management": "状态管理",
+    "Built-in reactive state management with controllers and easy state persistence.": "内置响应式状态管理，配有控制器和简单的状态持久化。",
+
+    "Networking": "网络请求",
+    "Elegant API service classes with automatic model serialization and interceptors.": "优雅的 API 服务类，支持自动模型序列化和拦截器。",
+
+    "Forms": "表单",
+    "Powerful form handling with validation, casting, and automatic data binding.": "强大的表单处理，支持验证、类型转换和自动数据绑定。",
+
+    "Authentication": "身份验证",
+    "Secure authentication with route guards, token storage, and session management.": "安全的身份验证，配有路由守卫、令牌存储和会话管理。",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "使用强大的 CLI 命令生成页面、模型、控制器等。",
+
+    "Explore all features": "探索所有功能",
+
+    "Create anything from the terminal": "从终端创建任何内容",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro 是 Nylo 的 CLI 工具，帮助您通过单个命令快速搭建页面、模型、控制器、组件等。",
+    "Learn more about Metro": "了解更多关于 Metro",
+
+    "Effortless API integration": "轻松的 API 集成",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "编写简洁、可维护的 API 服务，支持自动 JSON 解析、错误处理和请求拦截器。",
+    "Learn more about Networking": "了解更多关于网络请求",
+
+    "Powerful tools for creating": "强大的创建工具",
+    "Everything you need to build your next Flutter app": "构建您下一个 Flutter 应用所需的一切",
+
+    "Auth": "认证",
+    "State": "状态",
+    "Events": "事件",
+    "Scheduler": "调度器",
+
+    "Loved by the community": "深受社区喜爱",
+    "What developers are saying about": "开发者对此的评价",
+    "Join the discussion": "加入讨论",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "是一个为 Flutter 设计的微框架，旨在帮助简化应用开发。",
+
+    "Installation": "安装",
+    "Requirements": "要求",
+    "Router": "路由器",
+    "Themes & Styling": "主题与样式",
+
+    "Flutter Packages": "Flutter 包",
+    "Contributions": "贡献",
+    "Privacy Policy": "隐私政策",
+    "Terms & Conditions": "条款与条件",
+
+    "Community": "社区",
+    "Discussions": "讨论",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "保留所有权利",
+
+    "Privacy policy": "隐私政策",
+    "Terms and conditions": "条款与条件",
+    "Updated:": "更新时间：",
+    "operates the": "运营",
+    "website, which provides the SERVICE.": "网站，提供本服务。",
+
+    "Run:": "运行：",
+    "in your terminal.": "在您的终端中。",
+    "Next: Run": "下一步：运行",
+
+    "Step 1": "步骤 1",
+    "Step 2": "步骤 2",
+    "Step 3": "步骤 3",
+    "Create a Form": "创建表单",
+    "Modify your form": "修改您的表单",
+    "Use your form in a widget": "在小部件中使用表单",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "使用 Nylo Forms 在一个地方管理、验证和提交数据。",
+    "Validation": "验证",
+    "Casts": "类型转换",
+    "Styling": "样式",
+    "Dummy Data": "测试数据",
+
+    "Create a state managed widget": "创建状态管理小部件",
+    "Now, you can update this widget from anywhere in your application": "现在，您可以从应用程序的任何位置更新此小部件",
+    "Use the updateState method like in the below code snippet": "像下面的代码片段一样使用 updateState 方法",
+    "You can pass any object to the widget": "您可以将任何对象传递给小部件",
+    "Powerful state management for widgets in your Flutter application.": "为您的 Flutter 应用程序中的小部件提供强大的状态管理。",
+    "Lifecycle": "生命周期",
+    "State Actions": "状态操作",
+
+    "Create your event": "创建您的事件",
+    "Dispatch the event": "分发事件",
+    "Dispatch events and listen for them in your application.": "在您的应用程序中分发事件并监听它们。",
+    "Dispatching Events": "分发事件",
+    "Listening to Events": "监听事件",
+
+    "Schedule a task to run once": "安排任务运行一次",
+    "Schedule a task to run once after a specific date": "在特定日期后安排任务运行一次",
+    "Schedule a task to run once daily": "安排任务每天运行一次",
+    "Schedule tasks to run once or daily in your Flutter application.": "在您的 Flutter 应用程序中安排任务运行一次或每天运行。",
+    "Schedule Once After Date": "在日期后安排一次",
+    "Scheduling Once Daily": "每日一次安排",
+
+    "Learn more": "了解更多",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "为您的 Flutter 应用构建复杂的路由、界面和 UI 页面。",
+    "Adding Routes": "添加路由",
+    "Navigating to pages": "页面导航",
+    "Route Guards": "路由守卫",
+    "Deep linking": "深度链接",
+
+    "Authenticate a user": "认证用户",
+    "Now, when your user opens the app they will be authenticated.": "现在，当您的用户打开应用时，他们将被认证。",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "如果您在路由器中设置了 authenticatedRoute，那么当用户再次打开应用时，将显示此页面。",
+    "Logout the user": "用户登出",
+    "Authenticate users in your Flutter application.": "在您的 Flutter 应用中认证用户。",
+    "Authentication Page": "认证页面",
+    "Adding an auth user": "添加认证用户",
+    "Retrieve an auth user": "获取认证用户",
+    "Logout": "登出",
+
+    "Create an API Service": "创建 API 服务",
+    "Call the API from your page": "从页面调用 API",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "优雅的 API 服务，支持自动 JSON 解析、缓存和拦截器。",
+    "GET Requests": "GET 请求",
+    "Interceptors": "拦截器",
+    "Morphing JSON": "JSON 转换",
+    "Caching": "缓存",
+
+    "Save data securely": "安全保存数据",
+    "Read with type casting": "带类型转换读取",
+    "Secure local storage with type casting, TTL expiry, and collections.": "安全的本地存储，支持类型转换、TTL 过期和集合。",
+    "Save Data": "保存数据",
+    "Read Data": "读取数据",
+    "Collections": "集合",
+    "Backpack": "背包",
+
+    "Add your language files": "添加您的语言文件",
+    "Translate text in your widgets": "在小部件中翻译文本",
+    "Multi-language support with JSON files, arguments, and RTL.": "通过 JSON 文件、参数和 RTL 支持多语言。",
+    "Translations": "翻译",
+    "Arguments": "参数",
+    "Locale Switching": "语言切换",
+    "RTL Support": "RTL 支持",
+
+    "Create a Navigation Hub": "创建导航中心",
+    "Switch layouts easily": "轻松切换布局",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "构建底部导航、顶部导航或旅程流程，支持状态维护。",
+    "Bottom Nav": "底部导航",
+    "Top Nav": "顶部导航",
+    "Journey Flow": "旅程流程",
+    "Badges": "徽章"
+}

@@ -18,7 +18,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -80,7 +79,6 @@ Here are some important things to note:
 Continue reading to learn more about `NyPage`
 
 <div id="creating-a-new-page"></div>
-<br>
 
 ## Creating a new page
 
@@ -124,7 +122,6 @@ class SettingsPage extends NyPage {
 ```
 
 <div id="using-controllers"></div>
-<br>
 
 ## Using Controllers
 
@@ -216,7 +213,6 @@ You can learn more about controllers [here](/docs/{{$version}}/controllers)
 
 
 <div id="how-to-use-nypage"></div>
-<br>
 
 ## How to use NyPage
 
@@ -230,7 +226,6 @@ When using `NyPage` we'll show how you can handle some of these scenarios.
 
 
 <div id="initializing-data"></div>
-<br>
 
 ### Initializing Data
 
@@ -286,7 +281,6 @@ class DashboardPage extends NyPage<DashboardController> {
 ```
 
 <div id="loading-data-from-an-api"></div>
-<br>
 
 ### Loading Data from an API
 
@@ -379,7 +373,6 @@ Learn more about networking [here](/docs/{{$version}}/networking).
 
 
 <div id="passing-data-to-different-pages"></div>
-<br>
 
 ## Passing Data to Different Pages
 
@@ -459,7 +452,6 @@ class ProfilePage extends NyPage {
 ```
 
 <div id="helpers"></div>
-<br>
 
 ## Helpers
 
@@ -475,7 +467,6 @@ The helpers are:
 You can call these helpers in your `NyPage`, let's take a look at some examples.
 
 <div id="refresh-page"></div>
-<br>
 
 ### Refresh Page
 
@@ -564,7 +555,6 @@ class DashboardPage extends NyPage<DashboardController> {
 ```
 
 <div id="showing-toast-notifications"></div>
-<br>
 
 ### Showing Toast Notifications
 
@@ -577,7 +567,6 @@ You can show toast notifications by calling one of the following:
 If you want to customize the look of notifications, check out the **resources/widgets/toast_notification_widget.dart** file.
 
 <div id="change-language"></div>
-<br>
 
 ### Change Language
 
@@ -590,7 +579,6 @@ changeLanguage("es"); // switch to Spanish locale
 Read the docs on localization [here](/docs/{{$version}}/localization) to understand more.
 
 <div id="validation"></div>
-<br>
 
 ### Validation
 

@@ -13,7 +13,6 @@
 - [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -38,7 +37,6 @@ This is where State Management comes in, it allows you to manage the state of a 
 
 
 <div id="when-to-use-state-management"></div>
-<br>
 
 ### When to Use State Management
 
@@ -135,7 +133,6 @@ _updateCart() async {
 ```
 
 <div id="lifecycle"></div>
-<br>
 
 ## Lifecycle
 
@@ -150,7 +147,6 @@ The lifecycle of a `NyState` widget is as follows:
 Once the state is first initialized, you will need to implement how you want to manage the state.
 
 <div id="state-actions"></div>
-<br>
 
 ## State Actions
 
@@ -212,7 +208,6 @@ get init => () async {
 ```
 
 <div id="state-actions-nystate"></div>
-<br>
 
 ### NyState - State Actions
 
@@ -263,7 +258,6 @@ stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
 <div id="state-actions-nypage"></div>
-<br>
 
 ### NyPage - State Actions
 
@@ -338,7 +332,6 @@ stateAction('reset_badge', state: MyWidget.state);
 ```
 
 <div id="updating-a-state"></div>
-<br>
 
 ## Updating a State
 
@@ -354,7 +347,6 @@ updateState(MyStateName.state, data: "The Data");
 This can be called anywhere in your application.
 
 <div id="building-your-first-widget"></div>
-<br>
 
 ## Building Your First Widget
 

@@ -1,0 +1,197 @@
+{
+    "Select language": "Select language",
+
+    "Nylo v7 is here!": "Nylo v7 is here!",
+    "See what's new": "See what's new",
+
+    "Docs": "Docs",
+    "Framework": "Framework",
+    "Resources": "Resources",
+    "Packages": "Packages",
+    "Menu": "Menu",
+    "Get Started": "Get Started",
+    "Star on GitHub": "Star on GitHub",
+
+    "Nylo Framework": "Nylo Framework",
+    "Nylo v7 Framework": "Nylo v7 Framework",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "The boilerplate to kickstart your Flutter app with Nylo.",
+    "Get started: Nylo installer": "Get started: Nylo installer",
+
+    "Developers": "Developers",
+    "Documentation": "Documentation",
+    "Comprehensive guides to help you get started with Nylo.": "Comprehensive guides to help you get started with Nylo.",
+    "Release Notes": "Release Notes",
+    "Stay updated with the latest Nylo releases and updates.": "Stay updated with the latest Nylo releases and updates.",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Video tutorials and guides for Nylo framework.",
+    "Forum": "Forum",
+    "Join the community discussions and get help.": "Join the community discussions and get help.",
+    "Become a sponsor": "Become a sponsor",
+    "Support Nylo development by becoming a sponsor.": "Support Nylo development by becoming a sponsor.",
+    "Become a Sponsor": "Become a Sponsor",
+
+    "Live now": "Live now",
+
+    "The Flutter": "The Flutter",
+    "Micro-framework": "Micro-framework",
+    "For Modern Apps": "For Modern Apps",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.",
+
+    "Explore": "Explore",
+
+    "Features": "Features",
+    "Everything you need to build": "Everything you need to build",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.",
+
+    "Routing": "Routing",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "Simple, declarative routing with route guards, parameters, and deep linking support.",
+
+    "State Management": "State Management",
+    "Built-in reactive state management with controllers and easy state persistence.": "Built-in reactive state management with controllers and easy state persistence.",
+
+    "Networking": "Networking",
+    "Elegant API service classes with automatic model serialization and interceptors.": "Elegant API service classes with automatic model serialization and interceptors.",
+
+    "Forms": "Forms",
+    "Powerful form handling with validation, casting, and automatic data binding.": "Powerful form handling with validation, casting, and automatic data binding.",
+
+    "Authentication": "Authentication",
+    "Secure authentication with route guards, token storage, and session management.": "Secure authentication with route guards, token storage, and session management.",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "Generate pages, models, controllers, and more with powerful CLI commands.",
+
+    "Explore all features": "Explore all features",
+
+    "Create anything from the terminal": "Create anything from the terminal",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.",
+    "Learn more about Metro": "Learn more about Metro",
+
+    "Effortless API integration": "Effortless API integration",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.",
+    "Learn more about Networking": "Learn more about Networking",
+
+    "Powerful tools for creating": "Powerful tools for creating",
+    "Everything you need to build your next Flutter app": "Everything you need to build your next Flutter app",
+
+    "Auth": "Auth",
+    "State": "State",
+    "Events": "Events",
+    "Scheduler": "Scheduler",
+
+    "Loved by the community": "Loved by the community",
+    "What developers are saying about": "What developers are saying about",
+    "Join the discussion": "Join the discussion",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "is a micro-framework for Flutter designed to help simplify developing apps.",
+
+    "Installation": "Installation",
+    "Requirements": "Requirements",
+    "Router": "Router",
+    "Themes & Styling": "Themes & Styling",
+
+    "Flutter Packages": "Flutter Packages",
+    "Contributions": "Contributions",
+    "Privacy Policy": "Privacy Policy",
+    "Terms & Conditions": "Terms & Conditions",
+
+    "Community": "Community",
+    "Discussions": "Discussions",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "All Rights Reserved",
+
+    "Privacy policy": "Privacy policy",
+    "Terms and conditions": "Terms and conditions",
+    "Updated:": "Updated:",
+    "operates the": "operates the",
+    "website, which provides the SERVICE.": "website, which provides the SERVICE.",
+
+    "Run:": "Run:",
+    "in your terminal.": "in your terminal.",
+    "Next: Run": "Next: Run",
+
+    "Learn more": "Learn more",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "Build complex routes, interfaces and UI pages for your Flutter application.",
+    "Adding Routes": "Adding Routes",
+    "Navigating to pages": "Navigating to pages",
+    "Route Guards": "Route Guards",
+    "Deep linking": "Deep linking",
+
+    "Authenticate a user": "Authenticate a user",
+    "Now, when your user opens the app they will be authenticated.": "Now, when your user opens the app they will be authenticated.",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.",
+    "Logout the user": "Logout the user",
+    "Authenticate users in your Flutter application.": "Authenticate users in your Flutter application.",
+    "Authentication Page": "Authentication Page",
+    "Adding an auth user": "Adding an auth user",
+    "Retrieve an auth user": "Retrieve an auth user",
+    "Logout": "Logout",
+
+    "Step 1": "Step 1",
+    "Step 2": "Step 2",
+    "Step 3": "Step 3",
+    "Create a Form": "Create a Form",
+    "Modify your form": "Modify your form",
+    "Use your form in a widget": "Use your form in a widget",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "Manage, validate and submit data all in one place with Nylo Forms.",
+    "Validation": "Validation",
+    "Casts": "Casts",
+    "Styling": "Styling",
+    "Dummy Data": "Dummy Data",
+
+    "Create a state managed widget": "Create a state managed widget",
+    "Now, you can update this widget from anywhere in your application": "Now, you can update this widget from anywhere in your application",
+    "Use the updateState method like in the below code snippet": "Use the updateState method like in the below code snippet",
+    "You can pass any object to the widget": "You can pass any object to the widget",
+    "Powerful state management for widgets in your Flutter application.": "Powerful state management for widgets in your Flutter application.",
+    "Lifecycle": "Lifecycle",
+    "State Actions": "State Actions",
+
+    "Create your event": "Create your event",
+    "Dispatch the event": "Dispatch the event",
+    "Dispatch events and listen for them in your application.": "Dispatch events and listen for them in your application.",
+    "Dispatching Events": "Dispatching Events",
+    "Listening to Events": "Listening to Events",
+
+    "Schedule a task to run once": "Schedule a task to run once",
+    "Schedule a task to run once after a specific date": "Schedule a task to run once after a specific date",
+    "Schedule a task to run once daily": "Schedule a task to run once daily",
+    "Schedule tasks to run once or daily in your Flutter application.": "Schedule tasks to run once or daily in your Flutter application.",
+    "Schedule Once After Date": "Schedule Once After Date",
+    "Scheduling Once Daily": "Scheduling Once Daily",
+
+    "Create an API Service": "Create an API Service",
+    "Call the API from your page": "Call the API from your page",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "Elegant API services with automatic JSON parsing, caching, and interceptors.",
+    "GET Requests": "GET Requests",
+    "Interceptors": "Interceptors",
+    "Morphing JSON": "Morphing JSON",
+    "Caching": "Caching",
+
+    "Save data securely": "Save data securely",
+    "Read with type casting": "Read with type casting",
+    "Secure local storage with type casting, TTL expiry, and collections.": "Secure local storage with type casting, TTL expiry, and collections.",
+    "Save Data": "Save Data",
+    "Read Data": "Read Data",
+    "Collections": "Collections",
+    "Backpack": "Backpack",
+
+    "Add your language files": "Add your language files",
+    "Translate text in your widgets": "Translate text in your widgets",
+    "Multi-language support with JSON files, arguments, and RTL.": "Multi-language support with JSON files, arguments, and RTL.",
+    "Translations": "Translations",
+    "Arguments": "Arguments",
+    "Locale Switching": "Locale Switching",
+    "RTL Support": "RTL Support",
+
+    "Create a Navigation Hub": "Create a Navigation Hub",
+    "Switch layouts easily": "Switch layouts easily",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "Build bottom nav, top nav, or journey flows with state maintenance.",
+    "Bottom Nav": "Bottom Nav",
+    "Top Nav": "Top Nav",
+    "Journey Flow": "Journey Flow",
+    "Badges": "Badges"
+}

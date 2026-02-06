@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Localizing our projects provides us with an easy way to change the language or experience for users in different countries. 
@@ -65,7 +64,6 @@ Here's an example.
 ```
 
 <div id="adding-localised-files"></div>
-<br>
 ## Adding Localized files
 
 We include a `lang` directory in the project that can be found at the root of the project. Inside here, you'll be able to include `.json` files for each locale. E.g. es.json for Spanish or pt.json for Portuguese.
@@ -101,7 +99,6 @@ Go to your **pubspec.yaml** file and then at the `assets` section, add the new f
 
 
 <div id="localizing-text"></div>
-<br>
 
 ## Localizing text
 
@@ -144,7 +141,6 @@ trans("intros.hello");
 ```
 
 <div id="arguments"></div>
-<br>
 
 ### Arguments
 
@@ -182,7 +178,6 @@ trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Antho
 ```
 
 <div id="updating-the-locale"></div>
-<br>
 
 ## Updating the locale
 
@@ -200,7 +195,6 @@ This can be extremely useful if you wanted to provide users with an options menu
 
 
 <div id="setting-a-default-locale"></div>
-<br>
 
 ## Setting a default locale
 

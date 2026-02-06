@@ -24,7 +24,6 @@
 - [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -38,7 +37,6 @@ You can use a Navigation Hub to build this.
 Let's dive into how you can use a Navigation Hub in your app.
 
 <div id="basic-usage"></div>
-<br>
 
 ## Basic Usage
 
@@ -163,7 +161,6 @@ routeTo(BaseNavigationHub.path);
 There's a lot **more** you can do with a Navigation Hub, let's dive into some of the features.
 
 <div id="bottom-navigation"></div>
-<br>
 
 ### Bottom Navigation
 
@@ -186,7 +183,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="top-navigation"></div>
-<br>
 
 ### Top Navigation
 
@@ -209,7 +205,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="journey-navigation"></div>
-<br>
 
 ### Journey Navigation
 
@@ -348,7 +343,6 @@ class _WelcomeStepState extends JourneyState<WelcomeStep> {
 You can override any of the methods in the `JourneyState` class.
 
 <div id="journey-progress-styles"></div>
-<br>
 
 ### Journey Progress Styles
 
@@ -445,7 +439,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="journey-state"></div>
-<br>
 
 ### JourneyState
 
@@ -533,7 +526,6 @@ Here are a list of the properties you can use in the `buildJourneyContent` metho
 
 
 <div id="journey-state-helper-methods"></div>
-<br>
 
 ### JourneyState Helper Methods
 
@@ -558,7 +550,6 @@ The `JourneyState` class has some helper methods that you can use to customize t
 
 
 <div id="on-next-pressed"></div>
-<br>
 
 #### onNextPressed
 
@@ -585,7 +576,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="on-back-pressed"></div>
-<br>
 
 #### onBackPressed
 
@@ -613,7 +603,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="on-complete"></div>
-<br>
 
 #### onComplete
 
@@ -628,7 +617,6 @@ Future<void> onComplete() async {
 ```
 
 <div id="on-before-next"></div>
-<br>
 
 #### onBeforeNext
 
@@ -643,7 +631,6 @@ Future<void> onBeforeNext() async {
 ```
 
 <div id="is-first-step"></div>
-<br>
 
 #### isFirstStep
 
@@ -671,7 +658,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="is-last-step"></div>
-<br>
 
 #### isLastStep
 
@@ -698,7 +684,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="go-to-step"></div>
-<br>
 
 #### goToStep
 
@@ -728,7 +713,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="go-to-next-step"></div>
-<br>
 
 #### goToNextStep
 
@@ -758,7 +742,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="go-to-previous-step"></div>
-<br>
 
 #### goToPreviousStep
 
@@ -788,7 +771,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="on-after-next"></div>
-<br>
 
 #### onAfterNext
 
@@ -804,7 +786,6 @@ Future<void> onAfterNext() async {
 ```
 
 <div id="on-cannot-continue"></div>
-<br>
 
 #### onCannotContinue
 
@@ -819,7 +800,6 @@ Future<void> onCannotContinue() async {
 ```
 
 <div id="can-continue"></div>
-<br>
 
 #### canContinue
 
@@ -836,7 +816,6 @@ Future<bool> canContinue() async {
 ```
 
 <div id="go-to-first-step"></div>
-<br>
 
 #### goToFirstStep
 
@@ -866,7 +845,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="go-to-last-step"></div>
-<br>
 
 #### goToLastStep
 
@@ -895,7 +873,6 @@ Widget view(BuildContext context) {
 ```
 
 <div id="navigating-within-a-tab"></div>
-<br>
 
 ## Navigating to widgets within a tab
 
@@ -926,7 +903,6 @@ _HomeTabState extends State<HomeTab> {
 ```
 
 <div id="tabs"></div>
-<br>
 
 ## Tabs
 
@@ -966,7 +942,6 @@ You can use different kinds of tabs like `NavigationTab`, `NavigationTab.badge`,
 - The `NavigationTab` class is used to add a normal tab.
 
 <div id="adding-badges-to-tabs"></div>
-<br>
 
 ## Adding Badges to Tabs
 
@@ -1045,7 +1020,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="adding-alerts-to-tabs"></div>
-<br>
 
 ## Adding Alerts to Tabs
 
@@ -1094,7 +1068,6 @@ BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
 <div id="maintaining-state"></div>
-<br>
 
 ## Maintaining state
 
@@ -1114,7 +1087,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="state-actions"></div>
-<br>
 
 ## State Actions
 
@@ -1149,7 +1121,6 @@ MyNavigationHub.stateActions.resetTabState(tab: 0);
 ```
 
 <div id="loading-style"></div>
-<br>
 
 ## Loading Style
 
@@ -1225,7 +1196,6 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ```
 
 <div id="creating-a-navigation-hub"></div>
-<br>
 
 ## Creating a Navigation Hub
 

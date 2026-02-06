@@ -9,7 +9,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -82,7 +81,6 @@ printDebug(favouriteCountries); // Will not print
 ```
 
 <div id="log-levels"></div>
-<br>
 
 ## Log Levels
 
@@ -94,7 +92,6 @@ You can use the following log levels:
 
 
 <div id="helpers"></div>
-<br>
 
 ## Helpers
 

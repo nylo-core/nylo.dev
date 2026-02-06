@@ -8,7 +8,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 In Nylo, we provide a simple way to can start validating your users input and show them feedback through an alert.
@@ -62,7 +61,6 @@ this.validator(
 This method is handy if you want to quickly validate the users data and display some feedback to the user.
 
 <div id="validation-rules"></div>
-<br>
 
 ## Validation Rules
 

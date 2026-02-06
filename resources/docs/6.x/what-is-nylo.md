@@ -11,9 +11,9 @@
 	- [Framework Dependencies](#framework-dependencies "Framework Dependencies")
 	- [Contributors](#contributors "Contributors")
 
+---
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -22,7 +22,6 @@
 It also comes with a ready-made file structure and setup, letting you start developing right away. Out the box, you'll have access to routing, localization, themes, local storage, push notifications, and more.
 
 <div id="new-to-flutter"></div>
-<br>
 
 ## New to Flutter?
 
@@ -33,7 +32,6 @@ You can also subscribe to their YouTube <a href="https://www.youtube.com/c/flutt
 
 
 <div id="maintenance-and-release-schedule"></div>
-<br>
 
 ## Maintenance and release schedule
 
@@ -42,7 +40,6 @@ The release schedule for {{ config('app.name') }} will be once or twice a year i
 The {{ config('app.name') }} framework and support repository follow <a href="https://semver.org" target="_BLANK">Semantic Versioning</a>.
 
 <div id="framework-dependencies"></div>
-<br>
 
 ## Framework dependencies
 
@@ -65,7 +62,6 @@ The {{ config('app.name') }} framework and support repository follow <a href="ht
 
 
 <div id="contributors"></div>
-<br>
 
 ## Contributors
 

@@ -12,14 +12,12 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 In this section, we'll look into how you can manage assets throughout your widgets.
 {{ config('app.name') }} provides a few helper methods which make it easy to fetch images, files and more from your `public/assets` directory.
 
 <div id="displaying-images"></div>
-<br>
 
 ## Displaying images
 You can return images by calling the below helper method.
@@ -39,7 +37,6 @@ Image.asset(
 ```
 
 <div id="returning-files"></div>
-<br>
 
 ## Returning files
 
@@ -56,7 +53,6 @@ getPublicAsset('/video/welcome.mp4');
 ```
 
 <div id="adding-new-files"></div>
-<br>
 
 ## Adding new files
 

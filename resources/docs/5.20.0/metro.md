@@ -24,14 +24,12 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the {{ config('app.name') }} framework. 
 It provides a lot of helpful tools to speed up development.
 
 <div id="install"></div>
-<br>
 ## Install
 
 Mac guide
@@ -82,14 +80,12 @@ slate
 ```
 
 <div id="make-controller"></div>
-<br>
 
 ## Make controller
 
 - [Making a new controller](#making-a-new-controller "Make a new controller with Metro")
 - [Forcefully make a controller](#forcefully-make-a-controller "Forcefully make a new controller with Metro")
 <div id="making-a-new-controller"></div>
-<br>
 
 ### Making a new controller
 
@@ -104,7 +100,6 @@ metro make:controller profile_controller
 This will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
 <div id="forcefully-make-a-controller"></div>
-<br>
 
 ### Forcefully make a controller
 
@@ -117,7 +112,6 @@ metro make:controller profile_controller --force
 ```
 
 <div id="make-model"></div>
-<br>
 
 ## Make model
 
@@ -125,7 +119,6 @@ metro make:controller profile_controller --force
 - [Make model from JSON](#make-model-from-json "Make a new model from JSON with Metro")
 - [Forcefully make a model](#forcefully-make-a-model "Forcefully make a new model with Metro")
 <div id="making-a-new-model"></div>
-<br>
 
 ### Making a new model
 
@@ -140,7 +133,6 @@ metro make:model product
 It will place the newly created model in `lib/app/models/`.
 
 <div id="make-model-from-json"></div>
-<br>
 
 ### Make a model from JSON
 
@@ -157,7 +149,6 @@ metro make:model product --json
 Then, you can paste your JSON into the terminal and it will generate a model for you.
 
 <div id="forcefully-make-a-model"></div>
-<br>
 
 ### Forcefully make a model
 
@@ -172,7 +163,6 @@ metro make:model product --force
 ```
 
 <div id="make-page"></div>
-<br>
 
 ## Make page
 
@@ -184,7 +174,6 @@ metro make:model product --force
 - [Forcefully make a page](#forcefully-make-a-page "Forcefully make a new page with Metro")
 
 <div id="making-a-new-page"></div>
-<br>
 
 ### Making a new page
 
@@ -199,7 +188,6 @@ metro make:page product_page
 This will create a new page if it doesn't exist within the `lib/resources/pages/` directory.
 
 <div id="create-a-page-with-a-controller"></div>
-<br>
 
 ### Create a page with a controller
 
@@ -216,7 +204,6 @@ metro make:page product_page -c
 ```
 
 <div id="create-an-auth-page"></div>
-<br>
 
 ### Create an auth page
 
@@ -233,7 +220,6 @@ metro make:page login_page -a
 ```
 
 <div id="create-an-initial-page"></div>
-<br>
 
 ### Create an initial page
 
@@ -250,7 +236,6 @@ metro make:page home_page -i
 ```
 
 <div id="create-a-bottom-navigation-page"></div>
-<br>
 
 ### Create a bottom navigation page
 
@@ -267,7 +252,6 @@ metro make:page dashboard -b
 ```
 
 <div id="forcefully-make-a-page"></div>
-<br>
 
 ### Forcefully make a page
 
@@ -282,14 +266,12 @@ metro make:page product_page --force
 ```
 
 <div id="make-stateless-widget"></div>
-<br>
 
 ## Make stateless widget
 
 - [Making a new stateless widget](#making-a-new-stateless-widget "Make a new stateless widget with Metro")
 - [Forcefully make a stateless widget](#forcefully-make-a-stateless-widget "Forcefully make a new stateless widget with Metro")
 <div id="making-a-new-stateless-widget"></div>
-<br>
 
 ### Making a new stateless widget
 
@@ -304,7 +286,6 @@ metro make:stateless_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="forcefully-make-a-stateless-widget"></div>
-<br>
 
 ### Forcefully make a stateless widget
 
@@ -319,7 +300,6 @@ metro make:stateless_widget product_rating_widget --force
 ```
 
 <div id="make-stateful-widget"></div>
-<br>
 
 ## Make stateful widget
 
@@ -327,7 +307,6 @@ metro make:stateless_widget product_rating_widget --force
 - [Forcefully make a stateful widget](#forcefully-make-a-stateful-widget "Forcefully make a new stateful widget with Metro")
 
 <div id="making-a-new-stateful-widget"></div>
-<br>
 
 ### Making a new stateful widget
 
@@ -342,7 +321,6 @@ metro make:stateful_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="forcefully-make-a-stateful-widget"></div>
-<br>
 
 ### Forcefully make a stateful widget
 
@@ -357,7 +335,6 @@ metro make:stateful_widget product_rating_widget --force
 ```
 
 <div id="make-api-service"></div>
-<br>
 
 ## Make API Service
 
@@ -367,7 +344,6 @@ metro make:stateful_widget product_rating_widget --force
 - [Forcefully make an API Service](#forcefully-make-an-api-service "Forcefully make a new API Service with Metro")
 
 <div id="making-a-new-api-service"></div>
-<br>
 
 ### Making a new API Service
 
@@ -382,7 +358,6 @@ metro make:api_service user_api_service
 It will place the newly created API service in `lib/app/networking/`.
 
 <div id="making-a-new-api-service-with-a-model"></div>
-<br>
 
 ### Making a new API Service with a model
 
@@ -401,7 +376,6 @@ metro make:api_service user --model="User"
 It will place the newly created API service in `lib/app/networking/`.
 
 <div id="make-api-service-using-postman"></div>
-<br>
 
 ### Use Postman to Make API Services
 
@@ -447,7 +421,6 @@ You can check if your collection has saved responses by going to your Postman co
 The saved response **name** will be used for the **Model** name that {{ config('app.name') }} will create.
 
 <div id="forcefully-make-an-api-service"></div>
-<br>
 
 ### Forcefully make an API Service
 
@@ -462,7 +435,6 @@ metro make:api_service user --force
 ```
 
 <div id="make-event"></div>
-<br>
 
 ## Make event
 
@@ -470,7 +442,6 @@ metro make:api_service user --force
 - [Forcefully make an event](#forcefully-make-an-event "Forcefully make a new event with Metro")
 
 <div id="making-a-new-event"></div>
-<br>
 
 ### Making a new event
 
@@ -485,7 +456,6 @@ metro make:event login_event
 This will create a new event in `lib/app/events`.
 
 <div id="forcefully-make-an-event"></div>
-<br>
 
 ### Forcefully make an event
 
@@ -500,7 +470,6 @@ metro make:event login_event --force
 ```
 
 <div id="make-provider"></div>
-<br>
 
 ## Make provider
 
@@ -508,7 +477,6 @@ metro make:event login_event --force
 - [Forcefully make a provider](#forcefully-make-a-provider "Forcefully make a new provider with Metro")
 
 <div id="making-a-new-provider"></div>
-<br>
 
 ### Making a new provider
 
@@ -523,7 +491,6 @@ metro make:provider firebase_provider
 It will place the newly created provider in `lib/app/providers/`.
 
 <div id="forcefully-make-a-provider"></div>
-<br>
 
 ### Forcefully make a provider
 
@@ -538,7 +505,6 @@ metro make:provider firebase_provider --force
 ```
 
 <div id="make-theme"></div>
-<br>
 
 ## Make theme
 
@@ -546,7 +512,6 @@ metro make:provider firebase_provider --force
 - [Forcefully make a theme](#forcefully-make-a-theme "Forcefully make a new theme with Metro")
 
 <div id="making-a-new-theme"></div>
-<br>
 
 ### Making a new theme
 
@@ -561,7 +526,6 @@ metro make:theme bright_theme
 This will create a new theme in `lib/app/themes`.
 
 <div id="forcefully-make-a-theme"></div>
-<br>
 
 ### Forcefully make a theme
 
@@ -576,7 +540,6 @@ metro make:theme bright_theme --force
 ```
 
 <div id="make-forms"></div>
-<br>
 
 ## Make Forms
 
@@ -584,7 +547,6 @@ metro make:theme bright_theme --force
 - [Forcefully make a form](#forcefully-make-a-form "Forcefully make a new form with Metro")
 
 <div id="making-a-new-form"></div>
-<br>
 
 ### Making a new form
 
@@ -599,7 +561,6 @@ metro make:form car_advert_form
 This will create a new form in `lib/app/forms`.
 
 <div id="forcefully-make-a-form"></div>
-<br>
 
 ### Forcefully make a form
 
@@ -614,7 +575,6 @@ metro make:form login_form --force
 ```
 
 <div id="make-route-guard"></div>
-<br>
 
 ## Make Route Guard
 
@@ -622,7 +582,6 @@ metro make:form login_form --force
 - [Forcefully make a route guard](#forcefully-make-a-route-guard "Forcefully make a new route guard with Metro")
 
 <div id="making-a-new-route-guard"></div>
-<br>
 
 ### Making a new route guard
 
@@ -637,7 +596,6 @@ metro make:route_guard premium_content
 This will create a new route guard in `lib/app/route_guards`.
 
 <div id="forcefully-make-a-route-guard"></div>
-<br>
 
 ### Forcefully make a route guard
 
@@ -652,7 +610,6 @@ metro make:route_guard premium_content --force
 ```
 
 <div id="make-config-file"></div>
-<br>
 
 ## Make Config File
 
@@ -660,7 +617,6 @@ metro make:route_guard premium_content --force
 - [Forcefully make a config file](#forcefully-make-a-config-file "Forcefully make a new config file with Metro")
 
 <div id="making-a-new-config-file"></div>
-<br>
 
 ### Making a new config file
 
@@ -675,7 +631,6 @@ metro make:config shopping_settings
 This will create a new config file in `lib/app/config`.
 
 <div id="forcefully-make-a-config-file"></div>
-<br>
 
 ### Forcefully make a config file
 
@@ -690,7 +645,6 @@ metro make:config app_config --force
 ```
 
 <div id="build-app-icons"></div>
-<br>
 
 ## Build App Icons
 

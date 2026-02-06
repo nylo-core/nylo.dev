@@ -1,0 +1,197 @@
+{
+    "Select language": "Pilih bahasa",
+
+    "Nylo v7 is here!": "Nylo v7 telah hadir!",
+    "See what's new": "Lihat yang baru",
+
+    "Docs": "Dokumen",
+    "Framework": "Framework",
+    "Resources": "Sumber Daya",
+    "Packages": "Paket",
+    "Menu": "Menu",
+    "Get Started": "Mulai",
+    "Star on GitHub": "Beri bintang di GitHub",
+
+    "Nylo Framework": "Framework Nylo",
+    "Nylo v7 Framework": "Framework Nylo v7",
+    "The boilerplate to kickstart your Flutter app with Nylo.": "Boilerplate untuk memulai aplikasi Flutter Anda dengan Nylo.",
+    "Get started: Nylo installer": "Mulai: Installer Nylo",
+
+    "Developers": "Pengembang",
+    "Documentation": "Dokumentasi",
+    "Comprehensive guides to help you get started with Nylo.": "Panduan lengkap untuk membantu Anda memulai dengan Nylo.",
+    "Release Notes": "Catatan Rilis",
+    "Stay updated with the latest Nylo releases and updates.": "Tetap terupdate dengan rilis dan pembaruan Nylo terbaru.",
+
+    "YouTube": "YouTube",
+    "Video tutorials and guides for Nylo framework.": "Tutorial video dan panduan untuk framework Nylo.",
+    "Forum": "Forum",
+    "Join the community discussions and get help.": "Bergabunglah dalam diskusi komunitas dan dapatkan bantuan.",
+    "Become a sponsor": "Menjadi sponsor",
+    "Support Nylo development by becoming a sponsor.": "Dukung pengembangan Nylo dengan menjadi sponsor.",
+    "Become a Sponsor": "Menjadi Sponsor",
+
+    "Live now": "Tersedia sekarang",
+
+    "The Flutter": "Flutter",
+    "Micro-framework": "Micro-framework",
+    "For Modern Apps": "Untuk Aplikasi Modern",
+    "A solid foundation for building Flutter apps. Routing, state management, networking, and more — all in one elegant package.": "Fondasi yang kokoh untuk membangun aplikasi Flutter. Routing, manajemen state, networking, dan lainnya — semua dalam satu paket yang elegan.",
+
+    "Explore": "Jelajahi",
+
+    "Features": "Fitur",
+    "Everything you need to build": "Semua yang Anda butuhkan untuk membangun",
+    "Nylo provides all the tools you need to create production-ready Flutter applications with confidence.": "Nylo menyediakan semua alat yang Anda butuhkan untuk membuat aplikasi Flutter siap produksi dengan percaya diri.",
+
+    "Routing": "Routing",
+    "Simple, declarative routing with route guards, parameters, and deep linking support.": "Routing deklaratif yang sederhana dengan route guards, parameter, dan dukungan deep linking.",
+
+    "State Management": "Manajemen State",
+    "Built-in reactive state management with controllers and easy state persistence.": "Manajemen state reaktif bawaan dengan controller dan persistensi state yang mudah.",
+
+    "Networking": "Networking",
+    "Elegant API service classes with automatic model serialization and interceptors.": "Kelas layanan API yang elegan dengan serialisasi model otomatis dan interceptor.",
+
+    "Forms": "Formulir",
+    "Powerful form handling with validation, casting, and automatic data binding.": "Penanganan formulir yang kuat dengan validasi, casting, dan pengikatan data otomatis.",
+
+    "Authentication": "Autentikasi",
+    "Secure authentication with route guards, token storage, and session management.": "Autentikasi yang aman dengan route guards, penyimpanan token, dan manajemen sesi.",
+
+    "Metro CLI": "Metro CLI",
+    "Generate pages, models, controllers, and more with powerful CLI commands.": "Buat halaman, model, controller, dan lainnya dengan perintah CLI yang kuat.",
+
+    "Explore all features": "Jelajahi semua fitur",
+
+    "Create anything from the terminal": "Buat apa saja dari terminal",
+    "Metro is Nylo's CLI tool that helps you scaffold pages, models, controllers, widgets, and more with a single command.": "Metro adalah alat CLI Nylo yang membantu Anda membuat scaffold halaman, model, controller, widget, dan lainnya dengan satu perintah.",
+    "Learn more about Metro": "Pelajari lebih lanjut tentang Metro",
+
+    "Effortless API integration": "Integrasi API yang mudah",
+    "Write clean, maintainable API services with automatic JSON parsing, error handling, and request interceptors.": "Tulis layanan API yang bersih dan mudah dipelihara dengan parsing JSON otomatis, penanganan error, dan interceptor permintaan.",
+    "Learn more about Networking": "Pelajari lebih lanjut tentang Networking",
+
+    "Powerful tools for creating": "Alat yang kuat untuk membuat",
+    "Everything you need to build your next Flutter app": "Semua yang Anda butuhkan untuk membangun aplikasi Flutter berikutnya",
+
+    "Auth": "Auth",
+    "State": "State",
+    "Events": "Event",
+    "Scheduler": "Scheduler",
+
+    "Loved by the community": "Dicintai oleh komunitas",
+    "What developers are saying about": "Apa kata pengembang tentang",
+    "Join the discussion": "Bergabung dalam diskusi",
+
+    "is a micro-framework for Flutter designed to help simplify developing apps.": "adalah micro-framework untuk Flutter yang dirancang untuk membantu menyederhanakan pengembangan aplikasi.",
+
+    "Installation": "Instalasi",
+    "Requirements": "Persyaratan",
+    "Router": "Router",
+    "Themes & Styling": "Tema & Styling",
+
+    "Flutter Packages": "Paket Flutter",
+    "Contributions": "Kontribusi",
+    "Privacy Policy": "Kebijakan Privasi",
+    "Terms & Conditions": "Syarat & Ketentuan",
+
+    "Community": "Komunitas",
+    "Discussions": "Diskusi",
+    "Twitter": "Twitter",
+
+    "All Rights Reserved": "Hak Cipta Dilindungi",
+
+    "Privacy policy": "Kebijakan privasi",
+    "Terms and conditions": "Syarat dan ketentuan",
+    "Updated:": "Diperbarui:",
+    "operates the": "mengoperasikan",
+    "website, which provides the SERVICE.": "situs web, yang menyediakan LAYANAN.",
+
+    "Run:": "Jalankan:",
+    "in your terminal.": "di terminal Anda.",
+    "Next: Run": "Selanjutnya: Jalankan",
+
+    "Step 1": "Langkah 1",
+    "Step 2": "Langkah 2",
+    "Step 3": "Langkah 3",
+    "Create a Form": "Buat Formulir",
+    "Modify your form": "Modifikasi formulir Anda",
+    "Use your form in a widget": "Gunakan formulir Anda di widget",
+    "Manage, validate and submit data all in one place with Nylo Forms.": "Kelola, validasi, dan kirim data di satu tempat dengan Nylo Forms.",
+    "Validation": "Validasi",
+    "Casts": "Casts",
+    "Styling": "Styling",
+    "Dummy Data": "Data Dummy",
+
+    "Create a state managed widget": "Buat widget yang dikelola state",
+    "Now, you can update this widget from anywhere in your application": "Sekarang, Anda dapat memperbarui widget ini dari mana saja di aplikasi Anda",
+    "Use the updateState method like in the below code snippet": "Gunakan metode updateState seperti pada cuplikan kode di bawah",
+    "You can pass any object to the widget": "Anda dapat meneruskan objek apa pun ke widget",
+    "Powerful state management for widgets in your Flutter application.": "Manajemen state yang kuat untuk widget di aplikasi Flutter Anda.",
+    "Lifecycle": "Siklus Hidup",
+    "State Actions": "Aksi State",
+
+    "Create your event": "Buat event Anda",
+    "Dispatch the event": "Kirim event",
+    "Dispatch events and listen for them in your application.": "Kirim event dan dengarkan di aplikasi Anda.",
+    "Dispatching Events": "Mengirim Event",
+    "Listening to Events": "Mendengarkan Event",
+
+    "Schedule a task to run once": "Jadwalkan tugas untuk dijalankan sekali",
+    "Schedule a task to run once after a specific date": "Jadwalkan tugas untuk dijalankan sekali setelah tanggal tertentu",
+    "Schedule a task to run once daily": "Jadwalkan tugas untuk dijalankan sekali sehari",
+    "Schedule tasks to run once or daily in your Flutter application.": "Jadwalkan tugas untuk dijalankan sekali atau harian di aplikasi Flutter Anda.",
+    "Schedule Once After Date": "Jadwalkan Sekali Setelah Tanggal",
+    "Scheduling Once Daily": "Penjadwalan Sekali Sehari",
+
+    "Learn more": "Pelajari lebih lanjut",
+
+    "Build complex routes, interfaces and UI pages for your Flutter application.": "Bangun rute kompleks, antarmuka, dan halaman UI untuk aplikasi Flutter Anda.",
+    "Adding Routes": "Menambahkan Rute",
+    "Navigating to pages": "Menavigasi ke halaman",
+    "Route Guards": "Route Guards",
+    "Deep linking": "Deep linking",
+
+    "Authenticate a user": "Autentikasi pengguna",
+    "Now, when your user opens the app they will be authenticated.": "Sekarang, ketika pengguna Anda membuka aplikasi, mereka akan terautentikasi.",
+    "If you've set an authenticatedRoute in your router, then it will present this page when the user opens the app again.": "Jika Anda telah menetapkan authenticatedRoute di router Anda, maka halaman ini akan ditampilkan ketika pengguna membuka aplikasi lagi.",
+    "Logout the user": "Logout pengguna",
+    "Authenticate users in your Flutter application.": "Autentikasi pengguna di aplikasi Flutter Anda.",
+    "Authentication Page": "Halaman Autentikasi",
+    "Adding an auth user": "Menambahkan pengguna auth",
+    "Retrieve an auth user": "Mengambil pengguna auth",
+    "Logout": "Logout",
+
+    "Create an API Service": "Buat Layanan API",
+    "Call the API from your page": "Panggil API dari halaman Anda",
+    "Elegant API services with automatic JSON parsing, caching, and interceptors.": "Layanan API yang elegan dengan parsing JSON otomatis, caching, dan interceptor.",
+    "GET Requests": "Permintaan GET",
+    "Interceptors": "Interceptor",
+    "Morphing JSON": "Morphing JSON",
+    "Caching": "Caching",
+
+    "Save data securely": "Simpan data dengan aman",
+    "Read with type casting": "Baca dengan konversi tipe",
+    "Secure local storage with type casting, TTL expiry, and collections.": "Penyimpanan lokal yang aman dengan konversi tipe, kedaluwarsa TTL, dan koleksi.",
+    "Save Data": "Simpan Data",
+    "Read Data": "Baca Data",
+    "Collections": "Koleksi",
+    "Backpack": "Ransel",
+
+    "Add your language files": "Tambahkan file bahasa Anda",
+    "Translate text in your widgets": "Terjemahkan teks di widget Anda",
+    "Multi-language support with JSON files, arguments, and RTL.": "Dukungan multi-bahasa dengan file JSON, argumen, dan RTL.",
+    "Translations": "Terjemahan",
+    "Arguments": "Argumen",
+    "Locale Switching": "Pergantian Bahasa",
+    "RTL Support": "Dukungan RTL",
+
+    "Create a Navigation Hub": "Buat Hub Navigasi",
+    "Switch layouts easily": "Ganti tata letak dengan mudah",
+    "Build bottom nav, top nav, or journey flows with state maintenance.": "Bangun navigasi bawah, navigasi atas, atau alur perjalanan dengan pemeliharaan state.",
+    "Bottom Nav": "Navigasi Bawah",
+    "Top Nav": "Navigasi Atas",
+    "Journey Flow": "Alur Perjalanan",
+    "Badges": "Lencana"
+}

@@ -14,7 +14,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction to NyTextField
 
@@ -27,7 +26,6 @@ It provides the additional features:
 The NyTextField widget behaves like the TextField, but it features the above additional utilities to make handing text fields easier.
 
 <div id="validation"></div>
-<br>
 
 ## Validation
 
@@ -55,7 +53,6 @@ You can pass your validation rules into the `validationRules` parameter.
 See all the available validation rules [here](/docs/6.x/validation#custom-validation-rules).
 
 <div id="validation-error-message"></div>
-<br>
 
 ### Validation Error Messages
 
@@ -82,7 +79,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="faking-data"></div>
-<br>
 
 ## Faking data
 
@@ -120,7 +116,6 @@ Widget build(BuildContext context) {
 If you need to dynamically set **dummyData**, try a package like <a target="_BLANK" href="https://pub.dev/packages/faker">faker</a>.
 
 <div id="usage-nytextfield-compact"></div>
-<br>
 
 ## Usage NyTextField Compact
 
@@ -150,7 +145,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="usage-nytextfield-email-address"></div>
-<br>
 
 ## Usage NyTextField Email Address
 
@@ -178,7 +172,6 @@ Widget build(BuildContext context) {
 ```
 
 <div id="usage-nytextfield-password"></div>
-<br>
 
 ## Usage NyTextField Password
 

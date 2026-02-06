@@ -15,6 +15,17 @@
     color: #969faf !important;
 }
 
+@media (prefers-color-scheme: dark) {
+    .DocSearch-Button {
+        background: #101829 !important;
+    }
+}
+
+.dark .DocSearch-Button {
+    background: #101829 !important;
+    border: 1px solid #1b2639 !important;
+}
+
 .DocSearch-Search-Icon {
     margin-right: 14px;
     width: 15px;

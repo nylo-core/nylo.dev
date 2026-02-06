@@ -10,7 +10,6 @@
   - [Set up an alias for Metro CLI (Mac)](#set-up-metro-alias-for-mac "Set up an alias for Metro CLI (Mac)")
 
 <div id="install"></div>
-<br>
 ## Install
 
 You can either download Nylo <a href="/download">here</a> or clone the git repository using the below command.
@@ -22,7 +21,6 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
 
 <div id="adding-your-env-file"></div>
-<br>
 
 ## Adding your .env file
 
@@ -41,7 +39,6 @@ flutter build --dart-define ENV_FILE_PATH=.env.staging
 ```
 
 <div id="running-the-project"></div>
-<br>
 
 ## Running the project
 
@@ -54,7 +51,6 @@ If the build is successful, the app will display Nylo's default landing screen.
 
 
 <div id="metro-cli"></div>
-<br>
 
 ## Metro CLI tool
 
@@ -76,7 +72,6 @@ To access the menu, you can run the below in the terminal.
   - `flutter pub run nylo_framework:main`
 
 <div id="set-up-metro-alias-for-mac"></div>
-<br>
 
 ## Creating an alias for Metro (Mac guide)
 

@@ -23,7 +23,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Routes help us navigate users to pages in our app. 
@@ -62,7 +61,6 @@ You may also need to pass data from one view to another. In {{ config('app.name'
 
 
 <div id="adding-routes"></div>
-<br>
 
 ## Adding routes
 
@@ -90,7 +88,6 @@ appRouter() => nyRoutes((router) {
 ```
 
 <div id="navigating-to-pages"></div>
-<br>
 
 ## Navigating to pages
 
@@ -103,7 +100,6 @@ void _pressedSettings() {
 ```
 
 <div id="add-multiple-routers"></div>
-<br>
 
 ## Multiple routers
 
@@ -145,7 +141,6 @@ class RouteProvider implements NyProvider {
 ```
 
 <div id="initial-route"></div>
-<br>
 
 ## Initial route
 
@@ -174,7 +169,6 @@ appRouter() => nyRoutes((router) {
 ```
 
 <div id="route-guards"></div>
-<br>
 
 ## Route guards
 
@@ -258,7 +252,6 @@ dart run nylo_framework:main make:route_guard subscription
 ```
 
 <div id="passing-data-to-another-page"></div>
-<br>
 
 ## Passing data to another page
 
@@ -308,7 +301,6 @@ class _ProfilePageState extends NyState<ProfilePage> {
 ```
 
 <div id="route-groups"></div>
-<br>
 
 ## Route Groups
 
@@ -339,7 +331,6 @@ appRouter() => nyRoutes((router) {
 
 
 <div id="query-parameters"></div>
-<br>
 
 ## Query Parameters
 
@@ -387,7 +378,6 @@ class _MyHomePageState extends NyState<MyHomePage> {
 > Query parameters must follow the HTTP protocol, E.g. /account?userId=1&tab=2
 
 <div id="page-transitions"></div>
-<br>
 
 ## Page Transitions
 
@@ -442,7 +432,6 @@ class _HomePageState extends NyState<HomePage> {
 {{ config('app.name') }} uses the <a href="https://pub.dev/packages/page_transition" target="_BLANK">page_transition</a> under the hood to make this possible.
 
 <div id="navigation-types"></div>
-<br>
 
 ## Navigation Types
 
@@ -467,7 +456,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="navigating-back"></div>
-<br>
 
 ## Navigating back
 
@@ -511,7 +499,6 @@ class _HomePageState extends NyState<HomePage> {
 ```
 
 <div id="auth-page"></div>
-<br>
 
 ## Auth page
 
@@ -533,7 +520,6 @@ appRouter() => nyRoutes((router) {
 Learn more about authentication [here](/docs/{{ $version }}/authentication).
 
 <div id="route-history"></div>
-<br>
 
 ## Route History
 
@@ -563,7 +549,6 @@ Nylo.getPreviousRouteArguments(); // dynamic
 ```
 
 <div id="deep-linking"></div>
-<br>
 
 ## Deep linking
 

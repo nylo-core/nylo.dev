@@ -17,7 +17,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Nylo includes themes for `Light mode` and `Dark mode`.
@@ -25,7 +24,6 @@ Nylo includes themes for `Light mode` and `Dark mode`.
 Both themes come pre-configured and ready for use. The theme will also update automatically change if the device enters 'light/dark mode', on IOS you can manually set a device to 'light/dark mode' by going into settings.
 
 <div id="light-and-dark-themes"></div>
-<br>
 
 ## Light & Dark themes
 
@@ -38,7 +36,6 @@ Changes to the font and app colors can be managed in the next section.
 
 
 <div id="creating-a-new-theme"></div>
-<br>
 
 ## Creating a new theme
 
@@ -105,7 +102,6 @@ That's it. Now, trying running the app and see the changes.
 
 
 <div id="theme-colors"></div>
-<br>
 
 ## Theme Colors
 
@@ -147,7 +143,6 @@ class LightThemeColors implements BaseStyles {
 ```
 
 <div id="using-colors"></div>
-<br>
 
 ## Using colors in widgets
 
@@ -177,7 +172,6 @@ Text(
 ```
 
 <div id="base-styles"></div>
-<br>
 
 ## Base styles
 
@@ -222,7 +216,6 @@ abstract class BaseStyles {
 You can add additional styles here and then implement the colours in your theme.
 
 <div id="switching-theme"></div>
-<br>
 
 ## Switching theme
 
@@ -259,7 +252,6 @@ TextButton(onPressed: () {
 
 
 <div id="defining-themes"></div>
-<br>
 
 ## Defining Themes
 
@@ -278,7 +270,6 @@ final appThemes = [
 ```
 
 <div id="fonts"></div>
-<br>
 
 ## Fonts
 

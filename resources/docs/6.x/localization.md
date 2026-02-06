@@ -13,7 +13,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -64,7 +63,6 @@ Here's an example.
 ```
 
 <div id="adding-localized-files"></div>
-<br>
 
 ## Adding Localized files
 
@@ -101,7 +99,6 @@ Go to your **pubspec.yaml** file and then at the `assets` section, add the new f
 
 
 <div id="localizing-text"></div>
-<br>
 
 ## Localizing text
 
@@ -142,7 +139,6 @@ trans("intros.hello");
 ```
 
 <div id="arguments"></div>
-<br>
 
 ### Arguments
 
@@ -176,7 +172,6 @@ trans("intros.hello_name", arguments: {"first_name": "Anthony"}); // Hello Antho
 ```
 
 <div id="updating-the-locale"></div>
-<br>
 
 ## Updating the locale
 
@@ -210,7 +205,6 @@ E.g. if they navigated to a settings screen with language flags and selected Spa
 
 
 <div id="setting-a-default-locale"></div>
-<br>
 
 ## Setting a default locale
 

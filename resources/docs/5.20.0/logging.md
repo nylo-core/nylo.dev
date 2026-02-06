@@ -9,7 +9,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -59,7 +58,6 @@ NyLogger.debug(favouriteCountries);
 ```
 
 <div id="log-levels"></div>
-<br>
 
 ## Log Levels
 
@@ -73,7 +71,6 @@ You can use the following log levels:
 
 
 <div id="helpers"></div>
-<br>
 
 ## Helpers
 

@@ -9,7 +9,6 @@
 - [Fetching data into your widgets](#fetching-data-into-your-widgets "Fetching data into your widgets")
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 API networking is used to fetch data from the internet. A common data format is `.json`, it provides a representation of an object from a backend system. You’ll find many apps rely on having a backend API to return and store data.
@@ -29,7 +28,6 @@ It’s important you have a basic understanding of different API requests, some 
 If you are new to networking, check out this [guide](https://restfulapi.net) by **https://restfulapi.net** to learn more.
 
 <div id="api-models"></div>
-<br>
 ## Api models
 
 Models help us interact with the data from an API request in our widgets. You can think of a Model like a blueprint of how the data is structured.
@@ -85,7 +83,6 @@ User({this.id, this.name, this.username, this.email, this.address, this.phone, t
 ```
 
 <div id="auto-generating-your-models"></div>
-<br>
 
 ## Auto generating your models
 
@@ -96,7 +93,6 @@ metro apispec:build
 You need to have defined all your APIs from within your `apispec.json` file first, we have a detailed guide [here](/docs/1.x/metro#what-is-an-apispec).
 
 <div id="fetching-data-into-your-widgets"></div>
-<br>
 
 ## Fetching data into your widgets
 

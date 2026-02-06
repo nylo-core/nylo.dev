@@ -6,6 +6,7 @@ use App\Http\Services\DocService;
 use App\Http\Services\PackageService;
 use App\Http\Services\SeoService;
 use App\Models\OnlineEvent;
+use Illuminate\Support\Str;
 
 /**
  * Class LandingController
@@ -67,9 +68,11 @@ class LandingController extends Controller
      */
     public function privacyPolicy()
     {
-        $this->seoService->setTitle('Privacy policy');
+        $this->seoService->setTitle(__('Privacy policy'));
 
-        return view('pages.privacy-policy');
+        $content = $this->loadLegalMarkdown('privacy-policy');
+
+        return view('pages.privacy-policy', compact('content'));
     }
 
     /**
@@ -79,35 +82,26 @@ class LandingController extends Controller
      */
     public function termsAndConditions()
     {
-        $this->seoService->setTitle('Terms and conditions');
+        $this->seoService->setTitle(__('Terms and conditions'));
 
-        return view('pages.terms-and-conditions');
+        $content = $this->loadLegalMarkdown('terms-and-conditions');
+
+        return view('pages.terms-and-conditions', compact('content'));
     }
 
     /**
-     * Resources page for Nylo.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * Load a legal markdown document based on current locale.
      */
-    public function resources()
+    protected function loadLegalMarkdown(string $document): string
     {
-        $this->seoService->setTitle('Resources');
-        $resourceData = $this->packageService->getResourceMetaData();
+        $locale = app()->getLocale();
+        $path = resource_path("legal/{$locale}/{$document}.md");
 
-        return view('pages.resources', compact('resourceData'));
-    }
+        if (! file_exists($path)) {
+            $path = resource_path("legal/en/{$document}.md");
+        }
 
-    /**
-     * Ecosystem page for Nylo.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function ecosystem()
-    {
-        $this->seoService->setTitle('Ecosystem');
-        $resourceData = $this->packageService->getResourceMetaData();
-
-        return view('pages.ecosystem', compact('resourceData'));
+        return Str::markdown(file_get_contents($path));
     }
 
     /**
@@ -140,33 +134,88 @@ class LandingController extends Controller
      * @param  string  $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function docs($version = null, $page = 'installation')
+    public function docs(?string $locale = null, $version = null, $page = 'installation')
     {
-        $this->seoService->setSeoViewingDocs($page);
         $latestVersionOfNylo = $this->docService->getLastestVersionNylo();
 
         if ($version == null) {
             $version = $latestVersionOfNylo;
         }
 
-        $mdDocPage = $this->docService->checkIfDocExists($version, $page);
+        $resolvedLocale = app()->getLocale();
+        $mdDocPage = $this->docService->checkIfDocExists($version, $page, $resolvedLocale);
 
         $section = $this->docService->findDocSection($version, $page);
         $viewingOldDocs = $this->docService->isViewingOldDocs($version);
         $docsContainPage = $this->docService->checkDocsContainPage($version, $page);
 
-        return view('docs.template', compact('page', 'version', 'mdDocPage', 'section', 'latestVersionOfNylo', 'viewingOldDocs', 'docsContainPage'));
+        // Set SEO for viewing docs
+        $this->seoService->setSeoViewingDocs($page, $version, $section);
+
+        // Generate the doc contents and on-this-page array
+        $docContents = $this->docService->generateDocPage($mdDocPage, $version);
+
+        return view('docs.template', compact(
+            'page',
+            'version',
+            'mdDocPage',
+            'section',
+            'latestVersionOfNylo',
+            'viewingOldDocs',
+            'docsContainPage',
+            'docContents'
+        ));
     }
 
     /**
-     * Learn more page for Nylo.
+     * API Documentation page for Nylo.
+     *
+     * @param  string  $version
+     * @param  string  $page
+     */
+    public function apiDocs($version = null, $page = 'introduction'): string
+    {
+        $latestVersionOfNylo = $this->docService->getLastestVersionNylo();
+
+        if ($version == null) {
+            $version = $latestVersionOfNylo;
+        }
+
+        $mdDocPage = $this->docService->checkIfDocExists($version, $page, 'en');
+
+        // Generate the doc contents and on-this-page array
+        $docContents = $this->docService->generateDocPage($mdDocPage, $version);
+
+        $mdContents = $docContents['contents'];
+
+        return Str::markdown($mdContents, [
+            'html_input' => 'strip',
+        ]);
+    }
+
+    /**
+     * Learn more page for Nylo v7.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function learnMoreV6()
+    public function learnMoreV7()
     {
-        $this->seoService->setTitle('Learn more - Nylo v6');
+        $this->seoService->setTitle('Learn more - Nylo v7');
 
-        return view('pages.learn-more-v6');
+        return view('pages.learn-more-v7');
+    }
+
+    /**
+     * Resources page for Nylo.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function resources()
+    {
+        $this->seoService->setTitle('Resources - Nylo');
+
+        $latestVersionOfNylo = $this->docService->getLastestVersionNylo();
+
+        return view('pages.resources', compact('latestVersionOfNylo'));
     }
 }

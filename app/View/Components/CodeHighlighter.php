@@ -58,6 +58,11 @@ class CodeHighlighter extends Component
                 'variable' => '/\$\w+/',
                 'function' => '/\b(\w+)(?=\(\))/',
             ],
+            'json' => [
+                'string' => '/(&quot;.*?&quot;)/',
+                'number' => '/\b\d+(?:\.\d+)?\b/',
+                'boolean' => '/\b(true|false|null)\b/',
+            ],
         ];
 
         // Priority map: lower number = higher priority

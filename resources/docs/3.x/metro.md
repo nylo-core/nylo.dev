@@ -20,14 +20,12 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Metro is a CLI tool that works under the hood of the Nylo framework. 
 It provides a lot of helpful tools to speed up development.
 
 <div id="install"></div>
-<br>
 ## Install
 
 Mac guide
@@ -83,7 +81,6 @@ All commands:
 ```
 
 <div id="make-controller"></div>
-<br>
 
 ## Make controller
 
@@ -102,7 +99,6 @@ metro make:controller profile_controller
 This is will create a new controller if it doesn't exist within the `lib/app/controllers/` directory.
 
 <div id="make-model"></div>
-<br>
 
 ## Make model
 
@@ -140,7 +136,6 @@ Learn more on Storable models <a href="/docs/3.x/storage#introduction-to-storabl
 
 
 <div id="make-page"></div>
-<br>
 
 ## Make page
 
@@ -166,7 +161,6 @@ metro make:page product_page -c
 Create a page with a controller.
 
 <div id="make-stateless-widget"></div>
-<br>
 
 ## Make stateless widget
 
@@ -185,7 +179,6 @@ metro make:stateless_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="make-stateful-widget"></div>
-<br>
 
 ## Make stateful widget
 
@@ -202,7 +195,6 @@ metro make:stateful_widget product_rating_widget
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
 <div id="make-api-service"></div>
-<br>
 
 ## Make API Service
 
@@ -233,7 +225,6 @@ flutter pub run nylo_framework:main make:api_service user --model="User"
 It will place the newly created API service in `lib/app/networking/`.
 
 <div id="make-event"></div>
-<br>
 
 ## Make event
 
@@ -255,7 +246,6 @@ You will also need to add the event to your `lib/config/events.dart` map for it 
 
 
 <div id="make-provider"></div>
-<br>
 
 ## Make provider
 
@@ -277,7 +267,6 @@ You will also need to add the provider to your `lib/config/providers.dart` map f
 
 
 <div id="make-theme"></div>
-<br>
 
 ## Make theme
 
@@ -294,7 +283,6 @@ metro make:theme bright_theme
 ```
 
 <div id="build-app-icons"></div>
-<br>
 
 ## Build App Icons
 

@@ -21,7 +21,6 @@
 - [Sessions](#introduction-to-sessions "Introduction to sessions")
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -45,7 +44,6 @@ String coins = await storageRead('coins'); // "10"
 In this guide, you'll learn about NyStorage, Backpack, Collections and Sessions.
 
 <div id="save-values"></div>
-<br>
 
 ## Save values
 
@@ -62,7 +60,6 @@ await NyStorage.save("coins", '10');
 > Data will persist on the user's device using NyStorage. E.g. if they exit the app, you can retrieve the same data that was stored previously.
 
 <div id="retrieve-values"></div>
-<br>
 
 ## Retrieve values
 
@@ -95,7 +92,6 @@ double coins = await NyStorage.read<double>('coins'); // 10.00 (double)
 
 
 <div id="keys"></div>
-<br>
 
 ## Keys
 
@@ -167,7 +163,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 ```
 
 <div id="save-json"></div>
-<br>
 
 ## Save JSON
 
@@ -188,7 +183,6 @@ await storageRead("user"); // {"name": "Anthony", "nickname": "Tone"}
 ```
 
 <div id="retrieve-json"></div>
-<br>
 
 ## Retrieve JSON
 
@@ -204,7 +198,6 @@ print(user); // {"name": "Anthony", "email": "agordon@mail.com"}
 
 
 <div id="backpack-storage"></div>
-<br>
 
 ## Backpack Storage
 
@@ -292,7 +285,6 @@ class ApiService extends NyApiService {
 ```
 
 <div id="persist-data-with-backpack"></div>
-<br>
 
 ## Persist data with Backpack
 
@@ -311,7 +303,6 @@ Backpack.instance.read('user_token'); // "a token 123"
 > By default, NyStorge will not store data in Backpack unless the `inBackpack` parameter is set to `true`
 
 <div id="introduction-to-collections"></div>
-<br>
 
 ## Introduction to Collections
 
@@ -353,7 +344,6 @@ _removeItemFromCollection(int index) async {
 ```
 
 <div id="add-to-a-collection"></div>
-<br>
 
 ## Add to a collection 
 
@@ -370,7 +360,6 @@ await NyStorage.readCollection("a_storage_key"); // ["1", "2", "3"]
 ```
 
 <div id="retrieve-a-collection"></div>
-<br>
 
 ## Retrieve a collection
 
@@ -386,7 +375,6 @@ await NyStorage.readCollection("a_storage_key"); // ["Anthony", "Tim"]
 ```
 
 <div id="delete-a-collection"></div>
-<br>
 
 ## Delete a collection
 
@@ -401,7 +389,6 @@ await NyStorage.deleteFromCollection(0, key: "a_storage_key"); // ["Kyle"]
 ```
 
 <div id="introduction-to-sessions"></div>
-<br>
 
 ## Introduction to Sessions
 

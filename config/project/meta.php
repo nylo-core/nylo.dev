@@ -16,4 +16,6 @@ return [
     'algolia_app_key' => env('ALGOLIA_APP_KEY'),
 
     'algolia_index_name' => env('ALGOLIA_INDEX_NAME'),
+
+    'github_stars_cache_minutes' => env('GITHUB_STARS_CACHE_MINUTES', 60),
 ];

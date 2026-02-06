@@ -18,7 +18,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 You can manage your application's UI styles using themes. Themes allow us to change i.e the font size of text, how buttons appear and the general appearance of our application.
@@ -30,7 +29,6 @@ Out of the box, {{ config('app.name') }} includes pre-configured themes for `Lig
 The theme will also update if the device enters <b>'light/dark'</b> mode.
 
 <div id="light-and-dark-themes"></div>
-<br>
 
 ## Light & Dark themes
 
@@ -42,7 +40,6 @@ Inside these files, you'll find the ThemeData and ThemeStyle pre-defined.
 
 
 <div id="creating-a-theme"></div>
-<br>
 
 ## Creating a theme
 
@@ -114,7 +111,6 @@ That's it. Try running the app to see the changes.
 
 
 <div id="theme-colors"></div>
-<br>
 
 ## Theme Colors
 
@@ -156,7 +152,6 @@ class LightThemeColors implements ColorStyles {
 ```
 
 <div id="using-colors"></div>
-<br>
 
 ## Using colors in widgets
 
@@ -186,7 +181,6 @@ Text(
 ```
 
 <div id="base-styles"></div>
-<br>
 
 ## Base styles
 
@@ -231,7 +225,6 @@ abstract class ColorStyles {
 You can add additional styles here and then implement the colours in your theme.
 
 <div id="switching-theme"></div>
-<br>
 
 ## Switching theme
 
@@ -268,7 +261,6 @@ TextButton(onPressed: () {
 
 
 <div id="defining-themes"></div>
-<br>
 
 ## Defining Themes
 
@@ -287,7 +279,6 @@ final appThemes = [
 ```
 
 <div id="fonts"></div>
-<br>
 
 ## Fonts
 
@@ -318,7 +309,6 @@ final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyo
 ```
 
 <div id="design"></div>
-<br>
 
 ## Design
 

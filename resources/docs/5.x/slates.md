@@ -8,7 +8,6 @@
 
 
 <div id="introduction"></div>
-<br>
 ## Introduction
 
 Slates are packages you can download from [pub.dev](https://:pub.dev) to quickly scaffold your app.
@@ -27,7 +26,6 @@ metro publish:slate example_slate_package
 Download a fresh copy of {{ config('app.name') }} and try it in your project [ny_auth_slate](https://pub.dev/packages/ny_auth_slate)
 
 <div id="creating-a-slate-package"></div>
-<br>
 
 ## Creating a Slate package
 

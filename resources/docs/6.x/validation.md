@@ -14,7 +14,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -25,7 +24,6 @@ It contains some useful [validation rules](#validation-rules) you can use in you
 If you need to add custom validation rules, you can do that too. In this section, we'll give an overview of how validation works in {{ config('app.name') }}.
 
 <div id="validating-data"></div>
-<br>
 
 ## Validating Data
 
@@ -146,7 +144,6 @@ This method is handy if you want to quickly validate the user's data and display
 
 
 <div id="multiple-validation-rules"></div>
-<br>
 
 ## Multiple Validation Rules
 
@@ -177,7 +174,6 @@ validate(rules: {
 ```
 
 <div id="validating-text-fields"></div>
-<br>
 
 ## Validating Text Fields
 
@@ -193,7 +189,6 @@ NyTextField(
 ```
 
 <div id="validation-checks"></div>
-<br>
 
 ## Validation checks
 
@@ -216,7 +211,6 @@ if (isSuccessful) {
 This will return a boolean value. If the validation passes, it will return `true` and `false` if it fails.
 
 <div id="validation-rules"></div>
-<br>
 
 ## Validation Rules
 
@@ -254,7 +248,6 @@ Here are the available validation rules that you can use in {{ config('app.name'
 ---
 
 <div id="validation-rule-email"></div>
-<br>
 
 ### email
 
@@ -274,7 +267,6 @@ validate(rules: {
 
 
 <div id="validation-rule-boolean"></div>
-<br>
 
 ### boolean
 
@@ -293,7 +285,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-contains"></div>
-<br>
 
 ### contains
 
@@ -311,7 +302,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-url"></div>
-<br>
 
 ### url
 
@@ -329,7 +319,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-min"></div>
-<br>
 
 ### min
 
@@ -364,7 +353,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-max"></div>
-<br>
 
 ### max
 
@@ -399,7 +387,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-not-empty"></div>
-<br>
 
 ### Not Empty
 
@@ -417,7 +404,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-regex"></div>
-<br>
 
 ### Regex
 
@@ -435,7 +421,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-numeric"></div>
-<br>
 
 ### numeric
 
@@ -453,7 +438,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-date"></div>
-<br>
 
 ### date
 
@@ -480,7 +464,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-capitalized"></div>
-<br>
 
 ### capitalized
 
@@ -498,7 +481,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-lowercase"></div>
-<br>
 
 ### lowercase
 
@@ -516,7 +498,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-uppercase"></div>
-<br>
 
 ### uppercase
 
@@ -534,7 +515,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-us-phone-number"></div>
-<br>
 
 ### US Phone Number
 
@@ -552,7 +532,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-uk-phone-number"></div>
-<br>
 
 ### UK Phone Number
 
@@ -570,7 +549,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-us-zipcode"></div>
-<br>
 
 ### US Zipcode
 
@@ -588,7 +566,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-uk-postcode"></div>
-<br>
 
 ### UK Postcode
 
@@ -606,7 +583,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-date-age-is-younger"></div>
-<br>
 
 ### Date age is younger
 
@@ -639,7 +615,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-date-age-is-older"></div>
-<br>
 
 ### Date age is older
 
@@ -672,7 +647,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-date-in-past"></div>
-<br>
 
 ### Date in past
 
@@ -699,7 +673,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-date-in-future"></div>
-<br>
 
 ### Date in future
 
@@ -726,7 +699,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-is-true"></div>
-<br>
 
 ### Is True
 
@@ -744,7 +716,6 @@ validate(rules: {
 ```
 
 <div id="validation-rule-is-false"></div>
-<br>
 
 ### Is False
 
@@ -801,7 +772,6 @@ validate(rules: {
 ---
 
 <div id="custom-validation-rules"></div>
-<br>
 
 ## Custom Validation Rules
 

@@ -1,7 +1,7 @@
 @props(['latestVersionOfNylo'])
 
-<small>Step 1</small>
-<p class="mb-1 font-medium">Create your event</p>
+<small class="font-[sora] text-gray-500">{{ __('Step 1') }}</small>
+<p class="mb-1 font-medium dark:text-white">{{ __('Create your event') }}</p>
 
 <x-code-highlighter language="bash" title="terminal" class="col-span-1 mb-5">
 metro make:event Logout
@@ -30,8 +30,8 @@ class DefaultListener extends NyListener {
 }
 </x-code-highlighter>
 
-<small>Step 2</small>
-<p class="mb-1 font-medium">Dispatch the event</p>
+<small class="font-[sora] text-gray-500">{{ __('Step 2') }}</small>
+<p class="mb-1 font-medium dark:text-white">{{ __('Dispatch the event') }}</p>
 
 <x-code-highlighter language="dart" header="false" class="col-span-1">
 MaterialButton(child: Text("Logout"),
@@ -41,22 +41,22 @@ MaterialButton(child: Text("Logout"),
 )
 </x-code-highlighter>
 
-                        <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">Dispatch events and listen for them in your application.</p>
-                        <a href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'events']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
-                            Learn more <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+                        <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">{{ __('Dispatch events and listen for them in your application.') }}</p>
+                        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'events']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
+                            {{ __('Learn more') }} <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
                         </a>
 
                         <div class="grid grid-cols-2 gap-5 mt-5">
                             @foreach([
                                 [
-                                    'title' => 'Dispatching Events',
+                                    'title' => __('Dispatching Events'),
                                     'link' => 'dispatching-events'
                                 ],
                                 [
-                                    'title' => 'Listening to Events',
+                                    'title' => __('Listening to Events'),
                                     'link' => 'listening-to-events'
                                 ],
                                 ] as $item)
-                                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['version' => $latestVersionOfNylo, 'page' => 'events']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
+                                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'events']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
                             @endforeach
                         </div>

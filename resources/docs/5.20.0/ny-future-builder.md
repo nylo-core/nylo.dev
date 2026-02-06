@@ -8,7 +8,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction to NyFutureBuilder
 
@@ -46,7 +45,6 @@ Widget build(BuildContext context) {
 > This widget will handle the loading on the UI for your users until the future completes.
 
 <div id="customizing-the-nyfuturebuilder"></div>
-<br>
 
 ## Customizing the NyFutureBuilder
 

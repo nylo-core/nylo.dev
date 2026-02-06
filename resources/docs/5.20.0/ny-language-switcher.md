@@ -12,7 +12,6 @@
 
 
 <div id="introduction"></div>
-<br>
 
 ## Introduction
 
@@ -31,7 +30,6 @@ When the user opens the app again, it will remember the language they selected a
 Let's take a look at some code.
 
 <div id="usage-nylanguageswitcher"></div>
-<br>
 
 ## Usage NyLanguageSwitcher
 
@@ -59,7 +57,6 @@ After the user selects a language, the app will automatically switch to that lan
 
 
 <div id="usage-nylanguageswitcher-show-bottom-modal"></div>
-<br>
 
 ## Usage NyLanguageSwitcher Show Bottom Modal
 
@@ -84,7 +81,6 @@ Here's how you can start using the `NyLanguageSwitcher.showBottomModal` widget.
 When the user taps the `NyLanguageSwitcher.showBottomModal` widget, a bottom modal will appear with the languages available in your `/lang` directory.
 
 <div id="parameters"></div>
-<br>
 
 ## Parameters
 
@@ -110,7 +106,6 @@ Here are some parameters you should know about before using the `NyLanguageSwitc
 | textStyle | TextStyle | The text style for the `DropdownButton`. |
 
 <div id="methods"></div>
-<br>
 
 ## Methods
 
