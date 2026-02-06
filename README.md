@@ -16,6 +16,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 - [defro](https://github.com/defro)
 - [davidjbeaver](https://github.com/davidjbeaver)
 - [jeremyhalin](https://github.com/jeremyhalin)
+- [Im-PJ](https://github.com/Im-PJ)
 
 ## License
 -   The web application falls under the [MIT License](LICENSE.md)
