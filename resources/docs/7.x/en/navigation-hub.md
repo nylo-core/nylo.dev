@@ -8,28 +8,29 @@
   - [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
   - [Creating Navigation Tabs](#creating-navigation-tabs "Creating Navigation Tabs")
   - [Bottom Navigation](#bottom-navigation "Bottom Navigation")
-    - [Bottom Nav Styles](#bottom-nav-styles "Bottom Nav Styles")
     - [Custom Nav Bar Builder](#custom-nav-bar-builder "Custom Nav Bar Builder")
   - [Top Navigation](#top-navigation "Top Navigation")
   - [Journey Navigation](#journey-navigation "Journey Navigation")
     - [Progress Styles](#journey-progress-styles "Journey Progress Styles")
-    - [Button Styles](#journey-button-styles "Button Styles")
     - [JourneyState](#journey-state "JourneyState")
     - [JourneyState Helper Methods](#journey-state-helper-methods "JourneyState Helper Methods")
+    - [onJourneyComplete](#on-journey-complete "onJourneyComplete")
+    - [buildJourneyPage](#build-journey-page "buildJourneyPage")
 - [Navigating within a tab](#navigating-within-a-tab "Navigating within a tab")
 - [Tabs](#tabs "Tabs")
   - [Adding Badges to Tabs](#adding-badges-to-tabs "Adding Badges to Tabs")
   - [Adding Alerts to Tabs](#adding-alerts-to-tabs "Adding Alerts to Tabs")
+- [Initial Index](#initial-index "Initial Index")
 - [Maintaining state](#maintaining-state "Maintaining state")
+- [onTap](#on-tap "onTap")
 - [State Actions](#state-actions "State Actions")
 - [Loading Style](#loading-style "Loading Style")
-- [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
 
 <div id="introduction"></div>
 
 ## Introduction
 
-Navigation Hubs are a central place where you can **manage** the navigation for all your widgets. 
+Navigation Hubs are a central place where you can **manage** the navigation for all your widgets.
 Out the box you can create bottom, top and journey navigation layouts in seconds.
 
 Let's **imagine** you have an app and you want to add a bottom navigation bar and allow users to navigate between different tabs in your app.
@@ -48,15 +49,26 @@ You can create a Navigation Hub using the below command.
 metro make:navigation_hub base
 ```
 
-This will create a **base_navigation_hub.dart** file in your `resources/pages/` directory.
+The command will walk you through an interactive setup:
+
+1. **Choose a layout type** - Select between `navigation_tabs` (bottom navigation) or `journey_states` (sequential flow).
+2. **Enter tab/state names** - Provide comma-separated names for your tabs or journey states.
+
+This will create files under your `resources/pages/navigation_hubs/base/` directory:
+- `base_navigation_hub.dart` - The main hub widget
+- `tabs/` or `states/` - Contains the child widgets for each tab or journey state
+
+Here's what a generated Navigation Hub looks like:
 
 ``` dart
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/pages/navigation_hubs/base/tabs/home_tab_widget.dart';
+import '/resources/pages/navigation_hubs/base/tabs/settings_tab_widget.dart';
 
 class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
   static RouteView path = ("/base", (_) => BaseNavigationHub());
-  
+
   BaseNavigationHub()
       : super(
             child: () => _BaseNavigationHubState(),
@@ -68,46 +80,42 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layouts: 
-  /// - [NavigationHubLayout.bottomNav] Bottom navigation
-  /// - [NavigationHubLayout.topNav] Top navigation
-  /// - [NavigationHubLayout.journey] Journey navigation
-  NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-    // backgroundColor: Colors.white,
-  );
+  /// Layout builder
+  @override
+  NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
   /// Should the state be maintained
   @override
   bool get maintainState => true;
 
+  /// The initial index
+  @override
+  int get initialIndex => 0;
+
   /// Navigation pages
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-    };
+  _BaseNavigationHubState() : super(() => {
+      0: NavigationTab.tab(title: "Home", page: HomeTab()),
+      1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
+
+  /// Handle the tap event
+  @override
+  onTap(int index) {
+    super.onTap(index);
+  }
 }
 ```
 
 You can see that the Navigation Hub has **two** tabs, Home and Settings.
 
-You can create more tabs by adding NavigationTab's to the Navigation Hub.
+The `layout` method returns the layout type for the hub. It receives a `BuildContext` so you can access theme data and media queries when configuring your layout.
+
+You can create more tabs by adding `NavigationTab`'s to the Navigation Hub.
 
 First, you need to create a new widget using Metro.
 
 ``` bash
-metro make:stateful_widget create_advert_tab
+metro make:stateful_widget news_tab
 ```
 
 You can also create multiple widgets at once.
@@ -119,34 +127,21 @@ metro make:stateful_widget news_tab,notifications_tab
 Then, you can add the new widget to the Navigation Hub.
 
 ``` dart
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-      2: NavigationTab(
-         title: "News",
-         page: NewsTab(),
-         icon: Icon(Icons.newspaper),
-         activeIcon: Icon(Icons.newspaper),
-      ),
-    };
-  });
+_BaseNavigationHubState() : super(() => {
+    0: NavigationTab.tab(title: "Home", page: HomeTab()),
+    1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+    2: NavigationTab.tab(title: "News", page: NewsTab()),
+});
+```
 
+To use the Navigation Hub, add it to your router as the initial route:
+
+``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
 appRouter() => nyRoutes((router) {
     ...
-    router.add(BaseNavigationHub.path).initalRoute();
+    router.add(BaseNavigationHub.path).initialRoute();
 });
 
 // or navigate to the Navigation Hub from anywhere in your app
@@ -160,12 +155,13 @@ There's a lot **more** you can do with a Navigation Hub, let's dive into some of
 
 ### Bottom Navigation
 
-You can change the layout to a bottom navigation bar by setting the **layout** to use `NavigationHubLayout.bottomNav`.
+You can set the layout to a bottom navigation bar by returning `NavigationHubLayout.bottomNav` from the `layout` method.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 ```
 
 You can customize the bottom navigation bar by setting properties like the following:
@@ -173,75 +169,28 @@ You can customize the bottom navigation bar by setting properties like the follo
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        // customize the bottomNav layout properties
-    );
-```
-
-<div id="bottom-nav-styles"></div>
-
-### Bottom Nav Styles
-
-You can apply preset styles to your bottom navigation bar using the `style` parameter.
-
-Nylo provides several built-in styles:
-
-- `BottomNavStyle.material()` - Default Flutter material style
-- `BottomNavStyle.glass()` - iOS 26-style frosted glass effect with blur
-- `BottomNavStyle.floating()` - Floating pill-style nav bar with rounded corners
-
-#### Glass Style
-
-The glass style creates a beautiful frosted glass effect, perfect for modern iOS 26-inspired designs.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.glass(),
-    );
-```
-
-You can customize the glass effect:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.glass(
-        blur: 15.0,                              // Blur intensity
-        opacity: 0.7,                            // Background opacity
-        borderRadius: BorderRadius.circular(20), // Rounded corners
-        margin: EdgeInsets.all(16),              // Float above the edge
-        backgroundColor: Colors.white.withValues(alpha: 0.8),
-    ),
-)
-```
-
-#### Floating Style
-
-The floating style creates a pill-shaped nav bar that floats above the bottom edge.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.floating(),
-    );
-```
-
-You can customize the floating style:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.floating(
-        borderRadius: BorderRadius.circular(30),
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shadow: BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-        ),
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
         backgroundColor: Colors.white,
-    ),
-)
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        elevation: 8.0,
+        iconSize: 24.0,
+        selectedFontSize: 14.0,
+        unselectedFontSize: 12.0,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+    );
+```
+
+You can apply a preset style to your bottom navigation bar using the `style` parameter.
+
+``` dart
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
+    style: BottomNavStyle.material(), // Default Flutter material style
+);
 ```
 
 <div id="custom-nav-bar-builder"></div>
@@ -255,7 +204,8 @@ This allows you to build any custom widget while still receiving the navigation 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
         navBarBuilder: (context, data) {
             return MyCustomNavBar(
                 items: data.items,
@@ -311,21 +261,29 @@ NavigationHubLayout.bottomNav(
 
 ### Top Navigation
 
-You can change the layout to a top navigation bar by setting the **layout** to use `NavigationHubLayout.topNav`.
+You can change the layout to a top navigation bar by returning `NavigationHubLayout.topNav` from the `layout` method.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.topNav();
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav();
 ```
 
 You can customize the top navigation bar by setting properties like the following:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.topNav(
-        // customize the topNav layout properties
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav(
+        backgroundColor: Colors.white,
+        labelColor: Colors.blue,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: Colors.blue,
+        indicatorWeight: 3.0,
+        isScrollable: false,
+        hideAppBarTitle: true,
     );
 ```
 
@@ -333,137 +291,72 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ### Journey Navigation
 
-You can change the layout to a journey navigation by setting the **layout** to use `NavigationHubLayout.journey`.
+You can change the layout to a journey navigation by returning `NavigationHubLayout.journey` from the `layout` method.
 
 This is great for onboarding flows or multi-step forms.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        // customize the journey layout properties
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+          indicator: JourneyProgressIndicator.segments(),
+        ),
     );
 ```
 
-If you want to use the journey navigation layout, your **widgets** should use `JourenyState` as it contains a lot of helper methods to help you manage the journey.
+You can also set a `backgroundGradient` for the journey layout:
 
-You can create a JourneyState using the below command.
+``` dart
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    backgroundGradient: LinearGradient(
+        colors: [Colors.blue, Colors.purple],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+    ),
+    progressStyle: JourneyProgressStyle(
+      indicator: JourneyProgressIndicator.linear(),
+    ),
+);
+```
+
+> **Note:** When `backgroundGradient` is set, it takes precedence over `backgroundColor`.
+
+If you want to use the journey navigation layout, your **widgets** should use `JourneyState` as it contains a lot of helper methods to help you manage the journey.
+
+You can create the whole journey using the `make:navigation_hub` command with the `journey_states` layout:
+
+``` bash
+metro make:navigation_hub onboarding
+# Select: journey_states
+# Enter: welcome, personal_info, add_photos
+```
+
+This will create the hub and all journey state widgets under `resources/pages/navigation_hubs/onboarding/states/`.
+
+Or you can create individual journey widgets using:
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
-This will create the following files in your **resources/widgets/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
 
 You can then add the new widgets to the Navigation Hub.
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
 ```
-
-The journey navigation layout will automatically handle the back and next buttons for you if you define a `buttonStyle`.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        buttonStyle: JourneyButtonStyle.standard(
-            // Customize button properties
-        ),
-    );
-```
-
-You can also customize the logic in your widgets.
-
-``` dart
-import 'package:flutter/material.dart';
-import '/resources/pages/onboarding_navigation_hub.dart';
-import '/resources/widgets/buttons/buttons.dart';
-import 'package:nylo_framework/nylo_framework.dart';
-
-class WelcomeStep extends StatefulWidget {
-  const WelcomeStep({super.key});
-
-  @override
-  createState() => _WelcomeStepState();
-}
-
-class _WelcomeStepState extends JourneyState<WelcomeStep> {
-  _WelcomeStepState() : super(
-      navigationHubState: OnboardingNavigationHub.path.stateName());
-
-  @override
-  get init => () {
-    // Your initialization logic here
-  };
-
-  @override
-  Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('WelcomeStep', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
-        ],
-      ),
-      nextButton: Button.primary(
-        text: isLastStep ? "Get Started" : "Continue",
-        onPressed: onNextPressed,
-      ),
-      backButton: isFirstStep ? null : Button.textOnly(
-        text: "Back",
-        textColor: Colors.black87,
-        onPressed: onBackPressed,
-      ),
-    );
-  }
-
-  /// Check if the journey can continue to the next step
-  /// Override this method to add validation logic
-  Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
-    return true;
-  }
-
-  /// Called when unable to continue (canContinue returns false)
-  /// Override this method to handle validation failures
-  Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
-  }
-
-  /// Called before navigating to the next step
-  /// Override this method to perform actions before continuing
-  Future<void> onBeforeNext() async {
-    // E.g. save data here before navigating
-  }
-
-  /// Called after navigating to the next step
-  /// Override this method to perform actions after continuing
-  Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
-  }
-
-  /// Called when the journey is complete (at the last step)
-  /// Override this method to perform completion actions
-  Future<void> onComplete() async {}
-}
-```
-
-You can override any of the methods in the `JourneyState` class.
 
 <div id="journey-progress-styles"></div>
 
@@ -473,32 +366,35 @@ You can customize the progress indicator style by using the `JourneyProgressStyl
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(
-            activeColor: Colors.blue,
-            inactiveColor: Colors.grey,
-            thickness: 4.0,
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+            indicator: JourneyProgressIndicator.linear(
+                activeColor: Colors.blue,
+                inactiveColor: Colors.grey,
+                thickness: 4.0,
+            ),
         ),
     );
 ```
 
-You can use the following progress styles:
+You can use the following progress indicators:
 
-- `JourneyProgressIndicator.none`: Renders nothing — useful for hiding the indicator on a specific tab.
-- `JourneyProgressIndicator.linear`: Linear progress indicator.
-- `JourneyProgressIndicator.dots`: Dots-based progress indicator.
-- `JourneyProgressIndicator.numbered`: Numbered step progress indicator.
-- `JourneyProgressIndicator.segments`: Segmented progress bar style.
-- `JourneyProgressIndicator.circular`: Circular progress indicator.
-- `JourneyProgressIndicator.timeline`: Timeline-style progress indicator.
-- `JourneyProgressIndicator.custom`: Custom progress indicator using a builder function.
+- `JourneyProgressIndicator.none()`: Renders nothing - useful for hiding the indicator on a specific tab.
+- `JourneyProgressIndicator.linear()`: Linear progress bar.
+- `JourneyProgressIndicator.dots()`: Dots-based progress indicator.
+- `JourneyProgressIndicator.numbered()`: Numbered step progress indicator.
+- `JourneyProgressIndicator.segments()`: Segmented progress bar style.
+- `JourneyProgressIndicator.circular()`: Circular progress indicator.
+- `JourneyProgressIndicator.timeline()`: Timeline-style progress indicator.
+- `JourneyProgressIndicator.custom()`: Custom progress indicator using a builder function.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.custom(
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.custom(
             builder: (context, currentStep, totalSteps, percentage) {
                 return LinearProgressIndicator(
                     value: percentage,
@@ -508,21 +404,21 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
                 );
             },
         ),
-    );
+    ),
+);
 ```
 
 You can customize the progress indicator position and padding within the `JourneyProgressStyle`:
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle(
-            indicator: JourneyProgressIndicator.dots(),
-            position: ProgressIndicatorPosition.bottom,
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        ),
-    );
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.dots(),
+        position: ProgressIndicatorPosition.bottom,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    ),
+);
 ```
 
 You can use the following progress indicator positions:
@@ -535,55 +431,27 @@ You can use the following progress indicator positions:
 You can override the layout-level `progressStyle` on individual tabs using `NavigationTab.journey(progressStyle: ...)`. Tabs without their own `progressStyle` inherit the layout default. Tabs with no layout default and no per-tab style will not show a progress indicator.
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-            progressStyle: JourneyProgressStyle(
-                indicator: JourneyProgressIndicator.numbered(),
-            ), // overrides the layout default for this tab only
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
+        progressStyle: JourneyProgressStyle(
+            indicator: JourneyProgressIndicator.numbered(),
+        ), // overrides the layout default for this tab only
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
-```
-
-<div id="journey-button-styles">
-<br>
-
-### Journey Button Styles
-
-If you want to build an onboarding flow, you can set the `buttonStyle` property in the `NavigationHubLayout.journey` class.
-
-Out the box, you can use the following button styles:
-
-- `JourneyButtonStyle.standard`: Standard button style with customizable properties.
-- `JourneyButtonStyle.minimal`: Minimal button style with icons only.
-- `JourneyButtonStyle.outlined`: Outlined button style.
-- `JourneyButtonStyle.contained`: Contained button style.
-- `JourneyButtonStyle.custom`: Custom button style using builder functions.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(),
-        buttonStyle: JourneyButtonStyle.standard(
-            // Customize button properties
-        ),
-    );
 ```
 
 <div id="journey-state"></div>
 
 ### JourneyState
 
-The `JourneyState` class contains a lot of helper methods to help you manage the journey.
+The `JourneyState` class extends `NyState` with journey-specific functionality to make it easier to create onboarding flows and multi-step journeys.
 
 To create a new `JourneyState`, you can use the below command.
 
@@ -597,33 +465,24 @@ Or if you want to create multiple widgets at once, you can use the following com
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
 
-This will create the following files in your **resources/widgets/** directory `welcome.dart`, `phone_number_step.dart` and `add_photos_step.dart`.
-
-You can then add the new widgets to the Navigation Hub.
+Here's what a generated JourneyState widget looks like:
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
-});
-```
+import 'package:flutter/material.dart';
+import '/resources/pages/navigation_hubs/onboarding/onboarding_navigation_hub.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 
-If we look at the `WelcomeStep` class, we can see that it extends the `JourneyState` class.
+class Welcome extends StatefulWidget {
+  const Welcome({super.key});
 
-``` dart
-...
-class _WelcomeTabState extends JourneyState<WelcomeTab> {
-  _WelcomeTabState() : super(
-      navigationHubState: BaseNavigationHub.path.stateName());
+  @override
+  createState() => _WelcomeState();
+}
+
+class _WelcomeState extends JourneyState<Welcome> {
+  _WelcomeState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
 
   @override
   get init => () {
@@ -632,22 +491,100 @@ class _WelcomeTabState extends JourneyState<WelcomeTab> {
 
   @override
   Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          Text('WelcomeTab', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 20),
+                  Text('This onboarding journey will help you get started.'),
+                ],
+              ),
+            ),
+          ),
+
+          // Navigation buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (!isFirstStep)
+                Flexible(
+                  child: Button.textOnly(
+                    text: "Back",
+                    textColor: Colors.black87,
+                    onPressed: onBackPressed,
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+              Flexible(
+                child: Button.primary(
+                  text: "Continue",
+                  onPressed: nextStep,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
+  /// Check if the journey can continue to the next step
+  @override
+  Future<bool> canContinue() async {
+    return true;
+  }
+
+  /// Called before navigating to the next step
+  @override
+  Future<void> onBeforeNext() async {
+    // E.g. save data to session
+  }
+
+  /// Called when the journey is complete (at the last step)
+  @override
+  Future<void> onComplete() async {}
+}
 ```
 
-You'll notice that the **JourneyState** class will use `buildJourneyContent` to build the content of the page.
+You'll notice that the **JourneyState** class uses `nextStep` to navigate forward and `onBackPressed` to go back.
 
-Here are a list of the properties you can use in the `buildJourneyContent` method.
+The `nextStep` method runs through the full validation lifecycle: `canContinue()` -> `onBeforeNext()` -> navigate (or `onComplete()` if at last step) -> `onAfterNext()`.
+
+You can also use `buildJourneyContent` to build a structured layout with optional navigation buttons:
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 20),
+          Text('This onboarding journey will help you get started.'),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: isLastStep ? "Get Started" : "Continue",
+        onPressed: nextStep,
+      ),
+      backButton: isFirstStep ? null : Button.textOnly(
+        text: "Back",
+        textColor: Colors.black87,
+        onPressed: onBackPressed,
+      ),
+    );
+}
+```
+
+Here are the properties you can use in the `buildJourneyContent` method.
 
 | Property | Type | Description |
 | --- | --- | --- |
@@ -659,38 +596,44 @@ Here are a list of the properties you can use in the `buildJourneyContent` metho
 | `footer` | `Widget?` | The footer widget. |
 | `crossAxisAlignment` | `CrossAxisAlignment` | The cross axis alignment of the content. |
 
-
 <div id="journey-state-helper-methods"></div>
 
 ### JourneyState Helper Methods
 
-The `JourneyState` class has some helper methods that you can use to customize the behavior of your journey.
+The `JourneyState` class has helper methods and properties that you can use to customize the behavior of your journey.
 
-| Method | Description |
+| Method / Property | Description |
 | --- | --- |
-| [`onNextPressed()`](#on-next-pressed) | Called when the next button is pressed. |
-| [`onBackPressed()`](#on-back-pressed) | Called when the back button is pressed. |
+| [`nextStep()`](#next-step) | Navigate to the next step with validation. Returns `Future<bool>`. |
+| [`previousStep()`](#previous-step) | Navigate to the previous step. Returns `Future<bool>`. |
+| [`onBackPressed()`](#on-back-pressed) | Simple helper for navigating to the previous step. |
 | [`onComplete()`](#on-complete) | Called when the journey is complete (at the last step). |
 | [`onBeforeNext()`](#on-before-next) | Called before navigating to the next step. |
 | [`onAfterNext()`](#on-after-next) | Called after navigating to the next step. |
-| [`onCannotContinue()`](#on-cannot-continue) | Called when the journey cannot continue (canContinue returns false). |
-| [`canContinue()`](#can-continue) | Called when the user tries to navigate to the next step. |
+| [`canContinue()`](#can-continue) | Validation check before navigating to the next step. |
 | [`isFirstStep`](#is-first-step) | Returns true if this is the first step in the journey. |
 | [`isLastStep`](#is-last-step) | Returns true if this is the last step in the journey. |
-| [`goToStep(int index)`](#go-to-step) | Navigate to the next step index. |
-| [`goToNextStep()`](#go-to-next-step) | Navigate to the next step. |
-| [`goToPreviousStep()`](#go-to-previous-step) | Navigate to the previous step. |
-| [`goToFirstStep()`](#go-to-first-step) | Navigate to the first step. |
-| [`goToLastStep()`](#go-to-last-step) | Navigate to the last step. |
+| [`currentStep`](#current-step) | Returns the current step index (0-based). |
+| [`totalSteps`](#total-steps) | Returns the total number of steps. |
+| [`completionPercentage`](#completion-percentage) | Returns the completion percentage (0.0 to 1.0). |
+| [`goToStep(int index)`](#go-to-step) | Jump to a specific step by index. |
+| [`goToNextStep()`](#go-to-next-step) | Jump to the next step (no validation). |
+| [`goToPreviousStep()`](#go-to-previous-step) | Jump to the previous step (no validation). |
+| [`goToFirstStep()`](#go-to-first-step) | Jump to the first step. |
+| [`goToLastStep()`](#go-to-last-step) | Jump to the last step. |
+| [`exitJourney()`](#exit-journey) | Exit the journey by popping the root navigator. |
+| [`resetCurrentStep()`](#reset-current-step) | Reset the current step's state. |
+| [`onJourneyComplete`](#on-journey-complete) | Callback when the journey completes (override in last step). |
+| [`buildJourneyPage()`](#build-journey-page) | Build a full-screen journey page with Scaffold. |
 
 
-<div id="on-next-pressed"></div>
+<div id="next-step"></div>
 
-#### onNextPressed
+#### nextStep
 
-The `onNextPressed` method is called when the next button is pressed.
+The `nextStep` method navigates to the next step with full validation. It runs through the lifecycle: `canContinue()` -> `onBeforeNext()` -> navigate or `onComplete()` -> `onAfterNext()`.
 
-E.g. You can use this method to trigger the next step in the journey.
+You can pass `force: true` to bypass validation and directly navigate.
 
 ``` dart
 @override
@@ -704,19 +647,38 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: onNextPressed, // this will attempt to navigate to the next step
+            onPressed: nextStep, // runs validation then navigates
         ),
     );
 }
+```
+
+To skip validation:
+
+``` dart
+onPressed: () => nextStep(force: true),
+```
+
+<div id="previous-step"></div>
+
+#### previousStep
+
+The `previousStep` method navigates to the previous step. Returns `true` if successful, `false` if already at the first step.
+
+``` dart
+onPressed: () async {
+    bool success = await previousStep();
+    if (!success) {
+      // Already at first step
+    }
+},
 ```
 
 <div id="on-back-pressed"></div>
 
 #### onBackPressed
 
-The `onBackPressed` method is called when the back button is pressed.
-
-E.g. You can use this method to trigger the previous step in the journey.
+The `onBackPressed` method is a simple helper that calls `previousStep()` internally.
 
 ``` dart
 @override
@@ -731,7 +693,7 @@ Widget view(BuildContext context) {
         backButton: isFirstStep ? null : Button.textOnly(
             text: "Back",
             textColor: Colors.black87,
-            onPressed: onBackPressed, // this will attempt to navigate to the previous step
+            onPressed: onBackPressed,
         ),
     );
 }
@@ -741,11 +703,10 @@ Widget view(BuildContext context) {
 
 #### onComplete
 
-The `onComplete` method is called when the journey is complete (at the last step).
-
-E.g. if the if this widget is the last step in the journey, this method will be called.
+The `onComplete` method is called when `nextStep()` is triggered on the last step (after validation passes).
 
 ``` dart
+@override
 Future<void> onComplete() async {
     print("Journey completed");
 }
@@ -760,148 +721,13 @@ The `onBeforeNext` method is called before navigating to the next step.
 E.g. if you want to save data before navigating to the next step, you can do it here.
 
 ``` dart
+@override
 Future<void> onBeforeNext() async {
-    // E.g. save data here before navigating
-}
-```
-
-<div id="is-first-step"></div>
-
-#### isFirstStep
-
-The `isFirstStep` method returns true if this is the first step in the journey.
-
-E.g. You can use this method to disable the back button if this is the first step.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly( // Example of disabling the back button
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: onBackPressed,
-        ),
-    );
-}
-```
-
-<div id="is-last-step"></div>
-
-#### isLastStep
-
-The `isLastStep` method returns true if this is the last step in the journey.
-
-E.g. You can use this method to disable the next button if this is the last step.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: isLastStep ? "Get Started" : "Continue", // Example updating the next button text
-            onPressed: onNextPressed,
-        ),
-    );
-}
-```
-
-<div id="go-to-step"></div>
-
-#### goToStep
-
-The `goToStep` method is used to navigate to a specific step in the journey.
-
-E.g. You can use this method to navigate to a specific step in the journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Add photos"
-            onPressed: () {
-                goToStep(2); // this will navigate to the step with index 2
-                // Note: this will not trigger the onNextPressed method
-            }, 
-        ),
-    );
-}
-```
-
-<div id="go-to-next-step"></div>
-
-#### goToNextStep
-
-The `goToNextStep` method is used to navigate to the next step in the journey.
-
-E.g. You can use this method to navigate to the next step in the journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToNextStep(); // this will navigate to the next step
-                // Note: this will not trigger the onNextPressed method
-            }, 
-        ),
-    );
-}
-```
-
-<div id="go-to-previous-step"></div>
-
-#### goToPreviousStep
-
-The `goToPreviousStep` method is used to navigate to the previous step in the journey.
-
-E.g. You can use this method to navigate to the previous step in the journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly(
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: () {
-                goToPreviousStep(); // this will navigate to the previous step
-            }, 
-        ),
-    );
+    // E.g. save data to session
+    // session('onboarding', {
+    //   'name': 'Anthony Gordon',
+    //   'occupation': 'Software Engineer',
+    // });
 }
 ```
 
@@ -911,26 +737,10 @@ Widget view(BuildContext context) {
 
 The `onAfterNext` method is called after navigating to the next step.
 
-
-E.g. if you want to perform some action after navigating to the next step, you can do it here.
-
 ``` dart
+@override
 Future<void> onAfterNext() async {
     // print('Navigated to the next step');
-}
-```
-
-<div id="on-cannot-continue"></div>
-
-#### onCannotContinue
-
-The `onCannotContinue` method is called when the journey cannot continue (canContinue returns false).
-
-E.g. if you want to show an error message when the user tries to navigate to the next step without filling in the required fields, you can do it here.
-
-``` dart
-Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
 }
 ```
 
@@ -938,74 +748,233 @@ Future<void> onCannotContinue() async {
 
 #### canContinue
 
-The `canContinue` method is called when the user tries to navigate to the next step.
-
-E.g. if you want to perform some validation before navigating to the next step, you can do it here.
+The `canContinue` method is called when `nextStep()` is triggered. Return `false` to prevent navigation.
 
 ``` dart
+@override
 Future<bool> canContinue() async {
     // Perform your validation logic here
     // Return true if the journey can continue, false otherwise
+    if (nameController.text.isEmpty) {
+        showToastSorry(description: "Please enter your name");
+        return false;
+    }
     return true;
 }
+```
+
+<div id="is-first-step"></div>
+
+#### isFirstStep
+
+The `isFirstStep` property returns true if this is the first step in the journey.
+
+``` dart
+backButton: isFirstStep ? null : Button.textOnly(
+    text: "Back",
+    textColor: Colors.black87,
+    onPressed: onBackPressed,
+),
+```
+
+<div id="is-last-step"></div>
+
+#### isLastStep
+
+The `isLastStep` property returns true if this is the last step in the journey.
+
+``` dart
+nextButton: Button.primary(
+    text: isLastStep ? "Get Started" : "Continue",
+    onPressed: nextStep,
+),
+```
+
+<div id="current-step"></div>
+
+#### currentStep
+
+The `currentStep` property returns the current step index (0-based).
+
+``` dart
+Text("Step ${currentStep + 1} of $totalSteps"),
+```
+
+<div id="total-steps"></div>
+
+#### totalSteps
+
+The `totalSteps` property returns the total number of steps in the journey.
+
+<div id="completion-percentage"></div>
+
+#### completionPercentage
+
+The `completionPercentage` property returns the completion percentage as a value from 0.0 to 1.0.
+
+``` dart
+LinearProgressIndicator(value: completionPercentage),
+```
+
+<div id="go-to-step"></div>
+
+#### goToStep
+
+The `goToStep` method jumps directly to a specific step by index. This does **not** trigger validation.
+
+``` dart
+nextButton: Button.primary(
+    text: "Skip to photos",
+    onPressed: () {
+        goToStep(2); // jump to step index 2
+    },
+),
+```
+
+<div id="go-to-next-step"></div>
+
+#### goToNextStep
+
+The `goToNextStep` method jumps to the next step without validation. If already at the last step, it does nothing.
+
+``` dart
+onPressed: () {
+    goToNextStep(); // skip validation and go to next step
+},
+```
+
+<div id="go-to-previous-step"></div>
+
+#### goToPreviousStep
+
+The `goToPreviousStep` method jumps to the previous step without validation. If already at the first step, it does nothing.
+
+``` dart
+onPressed: () {
+    goToPreviousStep();
+},
 ```
 
 <div id="go-to-first-step"></div>
 
 #### goToFirstStep
 
-The `goToFirstStep` method is used to navigate to the first step in the journey.
-
-
-E.g. You can use this method to navigate to the first step in the journey.
+The `goToFirstStep` method jumps to the first step.
 
 ``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToFirstStep(); // this will navigate to the first step
-            }, 
-        ),
-    );
-}
+onPressed: () {
+    goToFirstStep();
+},
 ```
 
 <div id="go-to-last-step"></div>
 
 #### goToLastStep
 
-The `goToLastStep` method is used to navigate to the last step in the journey.
+The `goToLastStep` method jumps to the last step.
 
-E.g. You can use this method to navigate to the last step in the journey.
+``` dart
+onPressed: () {
+    goToLastStep();
+},
+```
+
+<div id="exit-journey"></div>
+
+#### exitJourney
+
+The `exitJourney` method exits the journey by popping the root navigator.
+
+``` dart
+onPressed: () {
+    exitJourney(); // pop the root navigator
+},
+```
+
+<div id="reset-current-step"></div>
+
+#### resetCurrentStep
+
+The `resetCurrentStep` method resets the current step's state.
+
+``` dart
+onPressed: () {
+    resetCurrentStep();
+},
+```
+
+<div id="on-journey-complete"></div>
+
+### onJourneyComplete
+
+The `onJourneyComplete` getter can be overridden in the **last step** of your journey to define what happens when the user completes the flow.
+
+``` dart
+class _CompleteStepState extends JourneyState<CompleteStep> {
+  _CompleteStepState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
+
+  /// Callback when journey completes
+  @override
+  void Function()? get onJourneyComplete => () {
+    // Navigate to your home page or next destination
+    routeTo(HomePage.path);
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          ...
+          Button.primary(
+            text: "Get Started",
+            onPressed: onJourneyComplete, // triggers the completion callback
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+<div id="build-journey-page"></div>
+
+### buildJourneyPage
+
+The `buildJourneyPage` method builds a full-screen journey page wrapped in a `Scaffold` with `SafeArea`.
 
 ``` dart
 @override
 Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
+    return buildJourneyPage(
+      content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToLastStep(); // this will navigate to the last step
-            }, 
-        ),
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: "Continue",
+        onPressed: nextStep,
+      ),
+      backgroundColor: Colors.white,
     );
 }
 ```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `content` | `Widget` | The main content of the page. |
+| `nextButton` | `Widget?` | The next button widget. |
+| `backButton` | `Widget?` | The back button widget. |
+| `contentPadding` | `EdgeInsetsGeometry` | The padding for the content. |
+| `header` | `Widget?` | The header widget. |
+| `footer` | `Widget?` | The footer widget. |
+| `backgroundColor` | `Color?` | The background color of the Scaffold. |
+| `appBar` | `Widget?` | An optional AppBar widget. |
+| `crossAxisAlignment` | `CrossAxisAlignment` | The cross axis alignment of the content. |
 
 <div id="navigating-within-a-tab"></div>
 
@@ -1043,38 +1012,38 @@ _HomeTabState extends State<HomeTab> {
 
 Tabs are the main building blocks of a Navigation Hub.
 
-You can add tabs to a Navigation Hub by using the `NavigationTab` class.
+You can add tabs to a Navigation Hub using the `NavigationTab` class and its named constructors.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ... 
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab(
-                title: "Home",
-                page: HomeTab(),
-                icon: Icon(Icons.home),
-                activeIcon: Icon(Icons.home),
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
+    ...
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.tab(
+            title: "Home",
+            page: HomeTab(),
+            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home),
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
 In the above example, we've added two tabs to the Navigation Hub, Home and Settings.
 
-You can use different kinds of tabs like `NavigationTab`, `NavigationTab.badge`, and `NavigationTab.alert`.
+You can use different kinds of tabs:
 
-- The `NavigationTab.badge` class is used to add badges to tabs.
-- The `NavigationTab.alert` class is used to add alerts to tabs.
-- The `NavigationTab` class is used to add a normal tab.
+- `NavigationTab.tab()` - A standard navigation tab.
+- `NavigationTab.badge()` - A tab with a badge count.
+- `NavigationTab.alert()` - A tab with an alert indicator.
+- `NavigationTab.journey()` - A tab for journey navigation layouts.
 
 <div id="adding-badges-to-tabs"></div>
 
@@ -1086,29 +1055,28 @@ Badges are a great way to show users that there's something new in a tab.
 
 Example, if you have a chat app, you can show the number of unread messages in the chat tab.
 
-To add a badge to a tab, you can use the `NavigationTab.badge` class.
+To add a badge to a tab, you can use the `NavigationTab.badge` constructor.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ... 
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
+    ...
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.badge(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            initialCount: 10,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
@@ -1130,28 +1098,14 @@ BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 By default, the badge count will be remembered. If you want to **clear** the badge count each session, you can set `rememberCount` to `false`.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ... 
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-                rememberCount: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
-    });
+0: NavigationTab.badge(
+    title: "Chats",
+    page: ChatTab(),
+    icon: Icon(Icons.message),
+    activeIcon: Icon(Icons.message),
+    initialCount: 10,
+    rememberCount: false,
+),
 ```
 
 <div id="adding-alerts-to-tabs"></div>
@@ -1160,33 +1114,32 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 You can add alerts to your tabs.
 
-Sometime you might not want to show a badge count, but you want to show an alert to the user.
+Sometimes you might not want to show a badge count, but you want to show an alert indicator to the user.
 
-To add an alert to a tab, you can use the `NavigationTab.alert` class.
+To add an alert to a tab, you can use the `NavigationTab.alert` constructor.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ... 
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.alert(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                alertColor: Colors.red,
-                alertEnabled: true,
-                rememberAlert: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    ...
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
+    ...
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.alert(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            alertColor: Colors.red,
+            alertEnabled: true,
+            rememberAlert: false,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
@@ -1202,6 +1155,21 @@ BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
+<div id="initial-index"></div>
+
+## Initial Index
+
+By default, the Navigation Hub starts on the first tab (index 0). You can change this by overriding the `initialIndex` getter.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    int get initialIndex => 1; // Start on the second tab
+    ...
+}
+```
+
 <div id="maintaining-state"></div>
 
 ## Maintaining state
@@ -1214,10 +1182,28 @@ If you want to clear the state of the tab each time you navigate to it, you can 
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
+    ...
     @override
     bool get maintainState => false;
-    ... 
+    ...
+}
+```
+
+<div id="on-tap"></div>
+
+## onTap
+
+You can override the `onTap` method to add custom logic when a tab is tapped.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    onTap(int index) {
+        // Add custom logic here
+        // E.g. track analytics, show confirmation, etc.
+        super.onTap(index); // Always call super to handle the tab switch
+    }
 }
 ```
 
@@ -1227,32 +1213,56 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 State actions are a way to interact with the Navigation Hub from anywhere in your app.
 
-Here are some of the state actions you can use:
+Here are the state actions you can use:
 
 ``` dart
-  /// Reset the tab
-  /// E.g. MyNavigationHub.stateActions.resetTabState(tab: 0);
-  resetTabState({required tab});
+/// Reset the tab at a given index
+/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+resetTabIndex(int tabIndex);
 
-  /// Update the badge count
-  /// E.g. MyNavigationHub.updateBadgeCount(tab: 0, count: 2);
-  updateBadgeCount({required int tab, required int count});
+/// Change the current tab programmatically
+/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+currentTabIndex(int tabIndex);
 
-  /// Increment the badge count
-  /// E.g. MyNavigationHub.incrementBadgeCount(tab: 0);
-  incrementBadgeCount({required int tab});
+/// Update the badge count
+/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+updateBadgeCount({required int tab, required int count});
 
-  /// Clear the badge count
-  /// E.g. MyNavigationHub.clearBadgeCount(tab: 0);
-  clearBadgeCount({required int tab});
+/// Increment the badge count
+/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+incrementBadgeCount({required int tab});
+
+/// Clear the badge count
+/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+clearBadgeCount({required int tab});
+
+/// Enable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+alertEnableTab({required int tab});
+
+/// Disable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+alertDisableTab({required int tab});
+
+/// Navigate to the next page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.nextPage();
+Future<bool> nextPage();
+
+/// Navigate to the previous page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.previousPage();
+Future<bool> previousPage();
 ```
 
 To use a state action, you can do the following:
 
 ``` dart
 MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
-// or
-MyNavigationHub.stateActions.resetTabState(tab: 0);
+
+MyNavigationHub.stateActions.resetTabIndex(0);
+
+MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+
+await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
 ```
 
 <div id="loading-style"></div>
@@ -1262,9 +1272,6 @@ MyNavigationHub.stateActions.resetTabState(tab: 0);
 Out the box, the Navigation Hub will show your **default** loading Widget (resources/widgets/loader_widget.dart) when the tab is loading.
 
 You can customize the `loadingStyle` to update the loading style.
-
-Here's a table for the different loading styles you can use:
-// normal, skeletonizer, none
 
 | Style | Description |
 | --- | --- |
@@ -1299,23 +1306,19 @@ Example below:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ... 
-     _BaseNavigationHubState() : super(() async {
-      
+    ...
+    _MyNavigationHubState() : super(() async {
+
       await sleep(3); // simulate loading for 3 seconds
 
       return {
-        0: NavigationTab(
+        0: NavigationTab.tab(
           title: "Home",
           page: HomeTab(),
-          icon: Icon(Icons.home),
-          activeIcon: Icon(Icons.home),
         ),
-        1: NavigationTab(
+        1: NavigationTab.tab(
           title: "Settings",
           page: SettingsTab(),
-          icon: Icon(Icons.settings),
-          activeIcon: Icon(Icons.settings),
         ),
       };
     });
@@ -1326,7 +1329,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
             child: Text("Loading..."),
         ),
     );
-    ... 
+    ...
 }
 ```
 
@@ -1340,4 +1343,6 @@ To create a Navigation Hub, you can use [Metro](/docs/{{$version}}/metro), use t
 metro make:navigation_hub base
 ```
 
-This will create a base_navigation_hub.dart file in your `resources/pages/` directory and add the Navigation Hub to your `routes/router.dart` file.
+The command will guide you through an interactive setup where you can choose the layout type and define your tabs or journey states.
+
+This will create a `base_navigation_hub.dart` file in your `resources/pages/navigation_hubs/base/` directory with child widgets organized in `tabs/` or `states/` subfolders.

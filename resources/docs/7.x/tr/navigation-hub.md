@@ -3,56 +3,68 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Giriş")
-- [Temel Kullanım](#basic-usage "Temel kullanım")
-  - [Navigation Hub Oluşturma](#creating-a-navigation-hub "Navigation Hub oluşturma")
-  - [Navigasyon Sekmeleri Oluşturma](#creating-navigation-tabs "Navigasyon sekmeleri oluşturma")
-  - [Alt Navigasyon](#bottom-navigation "Alt navigasyon")
-    - [Alt Navigasyon Stilleri](#bottom-nav-styles "Alt navigasyon stilleri")
-    - [Özel Nav Bar Builder](#custom-nav-bar-builder "Özel Nav Bar Builder")
-  - [Üst Navigasyon](#top-navigation "Üst navigasyon")
-  - [Yolculuk Navigasyonu](#journey-navigation "Yolculuk navigasyonu")
-    - [İlerleme Stilleri](#journey-progress-styles "İlerleme stilleri")
-    - [Düğme Stilleri](#journey-button-styles "Düğme stilleri")
+- [Giris](#introduction "Giris")
+- [Temel Kullanim](#basic-usage "Temel Kullanim")
+  - [Navigation Hub Olusturma](#creating-a-navigation-hub "Navigation Hub Olusturma")
+  - [Navigasyon Sekmeleri Olusturma](#creating-navigation-tabs "Navigasyon Sekmeleri Olusturma")
+  - [Alt Navigasyon](#bottom-navigation "Alt Navigasyon")
+    - [Ozel Nav Bar Builder](#custom-nav-bar-builder "Ozel Nav Bar Builder")
+  - [Ust Navigasyon](#top-navigation "Ust Navigasyon")
+  - [Journey Navigasyonu](#journey-navigation "Journey Navigasyonu")
+    - [Ilerleme Stilleri](#journey-progress-styles "Ilerleme Stilleri")
     - [JourneyState](#journey-state "JourneyState")
-    - [JourneyState Yardımcı Metotları](#journey-state-helper-methods "JourneyState yardımcı metotları")
-- [Sekme İçinde Gezinme](#navigating-within-a-tab "Sekme içinde gezinme")
+    - [JourneyState Yardimci Metotlari](#journey-state-helper-methods "JourneyState Yardimci Metotlari")
+    - [onJourneyComplete](#on-journey-complete "onJourneyComplete")
+    - [buildJourneyPage](#build-journey-page "buildJourneyPage")
+- [Sekme Icinde Gezinme](#navigating-within-a-tab "Sekme Icinde Gezinme")
 - [Sekmeler](#tabs "Sekmeler")
-  - [Sekmelere Rozet Ekleme](#adding-badges-to-tabs "Sekmelere rozet ekleme")
-  - [Sekmelere Uyarı Ekleme](#adding-alerts-to-tabs "Sekmelere uyarı ekleme")
-- [Durumu Koruma](#maintaining-state "Durumu koruma")
-- [Durum Eylemleri](#state-actions "Durum eylemleri")
-- [Yükleme Stili](#loading-style "Yükleme stili")
-- [Navigation Hub Oluşturma](#creating-a-navigation-hub "Navigation Hub oluşturma")
+  - [Sekmelere Rozet Ekleme](#adding-badges-to-tabs "Sekmelere Rozet Ekleme")
+  - [Sekmelere Uyari Ekleme](#adding-alerts-to-tabs "Sekmelere Uyari Ekleme")
+- [Baslangic Indeksi](#initial-index "Baslangic Indeksi")
+- [Durumu Koruma](#maintaining-state "Durumu Koruma")
+- [onTap](#on-tap "onTap")
+- [Durum Eylemleri](#state-actions "Durum Eylemleri")
+- [Yukleme Stili](#loading-style "Yukleme Stili")
 
 <div id="introduction"></div>
 
-## Giriş
+## Giris
 
-Navigation Hub'lar, tüm widget'larınız için navigasyonu **yönetebileceğiniz** merkezi bir yerdir.
-Kutudan çıktığı haliyle saniyeler içinde alt, üst ve yolculuk navigasyon düzenleri oluşturabilirsiniz.
+Navigation Hub'lar, tum widget'lariniz icin navigasyonu **yonetebileceginiz** merkezi bir yerdir.
+Kutudan ciktigi haliyle saniyeler icinde alt, ust ve journey navigasyon duzenleri olusturabilirsiniz.
 
-Bir uygulamanız olduğunu ve alt navigasyon çubuğu ekleyerek kullanıcıların uygulamanızdaki farklı sekmeler arasında gezinmesini istediğinizi **hayal edelim**.
+Bir uygulamaniz oldugunu ve alt navigasyon cubugu ekleyerek kullanicilarin uygulamanizdaki farkli sekmeler arasinda gezinmesini istediginizi **hayal edelim**.
 
-Bunu oluşturmak için bir Navigation Hub kullanabilirsiniz.
+Bunu olusturmak icin bir Navigation Hub kullanabilirsiniz.
 
-Uygulamanızda Navigation Hub'ı nasıl kullanabileceğinize bakalım.
+Uygulamanizda Navigation Hub'i nasil kullanabileceginize bakalim.
 
 <div id="basic-usage"></div>
 
-## Temel Kullanım
+## Temel Kullanim
 
-Aşağıdaki komutu kullanarak bir Navigation Hub oluşturabilirsiniz.
+Asagidaki komutu kullanarak bir Navigation Hub olusturabilirsiniz.
 
 ``` bash
 metro make:navigation_hub base
 ```
 
-Bu, `resources/pages/` dizininizde bir **base_navigation_hub.dart** dosyası oluşturacaktır.
+Komut sizi interaktif bir kurulum surecinden gecirecektir:
+
+1. **Bir duzen turu secin** - `navigation_tabs` (alt navigasyon) veya `journey_states` (sirali akis) arasinda secim yapin.
+2. **Sekme/durum adlarini girin** - Sekmeleriniz veya journey durumlari icin virgullerle ayrilmis adlar girin.
+
+Bu, `resources/pages/navigation_hubs/base/` dizininiz altinda dosyalar olusturacaktir:
+- `base_navigation_hub.dart` - Ana hub widget'i
+- `tabs/` veya `states/` - Her sekme veya journey durumu icin alt widget'lari icerir
+
+Olusturulan bir Navigation Hub su sekilde gorunur:
 
 ``` dart
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/pages/navigation_hubs/base/tabs/home_tab_widget.dart';
+import '/resources/pages/navigation_hubs/base/tabs/settings_tab_widget.dart';
 
 class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
   static RouteView path = ("/base", (_) => BaseNavigationHub());
@@ -68,85 +80,68 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layouts:
-  /// - [NavigationHubLayout.bottomNav] Bottom navigation
-  /// - [NavigationHubLayout.topNav] Top navigation
-  /// - [NavigationHubLayout.journey] Journey navigation
-  NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-    // backgroundColor: Colors.white,
-  );
+  /// Layout builder
+  @override
+  NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
   /// Should the state be maintained
   @override
   bool get maintainState => true;
 
+  /// The initial index
+  @override
+  int get initialIndex => 0;
+
   /// Navigation pages
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-    };
+  _BaseNavigationHubState() : super(() => {
+      0: NavigationTab.tab(title: "Home", page: HomeTab()),
+      1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
+
+  /// Handle the tap event
+  @override
+  onTap(int index) {
+    super.onTap(index);
+  }
 }
 ```
 
-Navigation Hub'ın **iki** sekmesi olduğunu görebilirsiniz: Home ve Settings.
+Navigation Hub'in **iki** sekmesi oldugunu gorebilirsiniz: Home ve Settings.
 
-Navigation Hub'a NavigationTab'lar ekleyerek daha fazla sekme oluşturabilirsiniz.
+`layout` metodu hub'in duzen turunu dondurur. Duzeninizi yapilandirirken tema verilerine ve medya sorgularina erisebilmeniz icin bir `BuildContext` alir.
 
-Öncelikle, Metro kullanarak yeni bir widget oluşturmanız gerekir.
+Navigation Hub'a `NavigationTab`'lar ekleyerek daha fazla sekme olusturabilirsiniz.
+
+Oncelikle, Metro kullanarak yeni bir widget olusturmaniz gerekir.
 
 ``` bash
-metro make:stateful_widget create_advert_tab
+metro make:stateful_widget news_tab
 ```
 
-Aynı anda birden fazla widget de oluşturabilirsiniz.
+Ayni anda birden fazla widget de olusturabilirsiniz.
 
 ``` bash
 metro make:stateful_widget news_tab,notifications_tab
 ```
 
-Ardından, yeni widget'ı Navigation Hub'a ekleyebilirsiniz.
+Ardindan, yeni widget'i Navigation Hub'a ekleyebilirsiniz.
 
 ``` dart
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-      2: NavigationTab(
-         title: "News",
-         page: NewsTab(),
-         icon: Icon(Icons.newspaper),
-         activeIcon: Icon(Icons.newspaper),
-      ),
-    };
-  });
+_BaseNavigationHubState() : super(() => {
+    0: NavigationTab.tab(title: "Home", page: HomeTab()),
+    1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+    2: NavigationTab.tab(title: "News", page: NewsTab()),
+});
+```
 
+Navigation Hub'i kullanmak icin, router'iniza baslangic rotasi olarak ekleyin:
+
+``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
 appRouter() => nyRoutes((router) {
     ...
-    router.add(BaseNavigationHub.path).initalRoute();
+    router.add(BaseNavigationHub.path).initialRoute();
 });
 
 // or navigate to the Navigation Hub from anywhere in your app
@@ -154,108 +149,63 @@ appRouter() => nyRoutes((router) {
 routeTo(BaseNavigationHub.path);
 ```
 
-Navigation Hub ile yapabileceğiniz çok **daha fazla** şey var, bazı özelliklerine bakalım.
+Navigation Hub ile yapabileceginiz cok **daha fazla** sey var, bazi ozelliklerine bakalim.
 
 <div id="bottom-navigation"></div>
 
 ### Alt Navigasyon
 
-**layout**'u `NavigationHubLayout.bottomNav` kullanacak şekilde ayarlayarak düzeni alt navigasyon çubuğuna değiştirebilirsiniz.
+`layout` metodundan `NavigationHubLayout.bottomNav` dondurerek duzeni alt navigasyon cubuguna ayarlayabilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 ```
 
-Alt navigasyon çubuğunu aşağıdaki gibi özellikler ayarlayarak özelleştirebilirsiniz:
+Alt navigasyon cubugunu asagidaki gibi ozellikler ayarlayarak ozellestebilirsiniz:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        // customize the bottomNav layout properties
-    );
-```
-
-<div id="bottom-nav-styles"></div>
-
-### Alt Navigasyon Stilleri
-
-`style` parametresini kullanarak alt navigasyon çubuğunuza hazır stiller uygulayabilirsiniz.
-
-Nylo birkaç yerleşik stil sunar:
-
-- `BottomNavStyle.material()` - Varsayılan Flutter material stili
-- `BottomNavStyle.glass()` - iOS 26 tarzı bulanık cam efekti
-- `BottomNavStyle.floating()` - Yuvarlak köşeli yüzen hap şeklinde navigasyon çubuğu
-
-#### Glass Stili
-
-Glass stili, modern iOS 26 ilhamli tasarımlar için mükemmel olan güzel bir buzlu cam efekti oluşturur.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.glass(),
-    );
-```
-
-Glass efektini özelleştirebilirsiniz:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.glass(
-        blur: 15.0,                              // Blur intensity
-        opacity: 0.7,                            // Background opacity
-        borderRadius: BorderRadius.circular(20), // Rounded corners
-        margin: EdgeInsets.all(16),              // Float above the edge
-        backgroundColor: Colors.white.withValues(alpha: 0.8),
-    ),
-)
-```
-
-#### Floating Stili
-
-Floating stili, alt kenarın üzerinde yüzen hap şeklinde bir navigasyon çubuğu oluşturur.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.floating(),
-    );
-```
-
-Floating stilini özelleştirebilirsiniz:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.floating(
-        borderRadius: BorderRadius.circular(30),
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shadow: BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-        ),
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
         backgroundColor: Colors.white,
-    ),
-)
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        elevation: 8.0,
+        iconSize: 24.0,
+        selectedFontSize: 14.0,
+        unselectedFontSize: 12.0,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+    );
+```
+
+`style` parametresini kullanarak alt navigasyon cubuguna hazir bir stil uygulayabilirsiniz.
+
+``` dart
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
+    style: BottomNavStyle.material(), // Default Flutter material style
+);
 ```
 
 <div id="custom-nav-bar-builder"></div>
 
-### Özel Nav Bar Builder
+### Ozel Nav Bar Builder
 
-Navigasyon çubuğunuz üzerinde tam kontrol için `navBarBuilder` parametresini kullanabilirsiniz.
+Navigasyon cubugunuz uzerinde tam kontrol icin `navBarBuilder` parametresini kullanabilirsiniz.
 
-Bu, navigasyon verilerini alırken herhangi bir özel widget oluşturmanızı sağlar.
+Bu, navigasyon verilerini almaya devam ederken herhangi bir ozel widget olusturmanizi saglar.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
         navBarBuilder: (context, data) {
             return MyCustomNavBar(
                 items: data.items,
@@ -266,15 +216,15 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-`NavBarData` nesnesi şunları içerir:
+`NavBarData` nesnesi sunlari icerir:
 
-| Özellik | Tür | Açıklama |
+| Ozellik | Tur | Aciklama |
 | --- | --- | --- |
-| `items` | `List<BottomNavigationBarItem>` | Navigasyon çubuğu öğeleri |
-| `currentIndex` | `int` | Şu anda seçili olan indeks |
-| `onTap` | `ValueChanged<int>` | Bir sekmeye dokunulduğunda çağrılan callback |
+| `items` | `List<BottomNavigationBarItem>` | Navigasyon cubugu ogeleri |
+| `currentIndex` | `int` | Su anda secili olan indeks |
+| `onTap` | `ValueChanged<int>` | Bir sekmeye dokunuldugunda cagirilan callback |
 
-İşte tamamen özel bir glass navigasyon çubuğu örneği:
+Iste tamamen ozel bir glass navigasyon cubugu ornegi:
 
 ``` dart
 NavigationHubLayout.bottomNav(
@@ -305,200 +255,146 @@ NavigationHubLayout.bottomNav(
 )
 ```
 
-> **Not:** `navBarBuilder` kullanıldığında `style` parametresi yok sayılır.
+> **Not:** `navBarBuilder` kullanildiginda `style` parametresi yok sayilir.
 
 <div id="top-navigation"></div>
 
-### Üst Navigasyon
+### Ust Navigasyon
 
-**layout**'u `NavigationHubLayout.topNav` kullanacak şekilde ayarlayarak düzeni üst navigasyon çubuğuna değiştirebilirsiniz.
+`layout` metodundan `NavigationHubLayout.topNav` dondurerek duzeni ust navigasyon cubuguna degistirebilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.topNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav();
 ```
 
-Üst navigasyon çubuğunu aşağıdaki gibi özellikler ayarlayarak özelleştirebilirsiniz:
+Ust navigasyon cubugunu asagidaki gibi ozellikler ayarlayarak ozellestebilirsiniz:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.topNav(
-        // customize the topNav layout properties
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav(
+        backgroundColor: Colors.white,
+        labelColor: Colors.blue,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: Colors.blue,
+        indicatorWeight: 3.0,
+        isScrollable: false,
+        hideAppBarTitle: true,
     );
 ```
 
 <div id="journey-navigation"></div>
 
-### Yolculuk Navigasyonu
+### Journey Navigasyonu
 
-**layout**'u `NavigationHubLayout.journey` kullanacak şekilde ayarlayarak düzeni yolculuk navigasyonuna değiştirebilirsiniz.
+`layout` metodundan `NavigationHubLayout.journey` dondurerek duzeni journey navigasyonuna degistirebilirsiniz.
 
-Bu, başlangıç akışları veya çok adımlı formlar için harikadır.
+Bu, baslangic akislari veya cok adimli formlar icin harikadir.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        // customize the journey layout properties
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+          indicator: JourneyProgressIndicator.segments(),
+        ),
     );
 ```
 
-Yolculuk navigasyon düzenini kullanmak istiyorsanız, **widget'larınız** `JourneyState` kullanmalıdır çünkü yolculuğu yönetmenize yardımcı olacak birçok yardımcı metot içerir.
+Journey duzeni icin bir `backgroundGradient` de ayarlayabilirsiniz:
 
-Aşağıdaki komutu kullanarak bir JourneyState oluşturabilirsiniz.
+``` dart
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    backgroundGradient: LinearGradient(
+        colors: [Colors.blue, Colors.purple],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+    ),
+    progressStyle: JourneyProgressStyle(
+      indicator: JourneyProgressIndicator.linear(),
+    ),
+);
+```
+
+> **Not:** `backgroundGradient` ayarlandiginda, `backgroundColor`'dan onceliklidir.
+
+Journey navigasyon duzenini kullanmak istiyorsaniz, **widget'lariniz** `JourneyState` kullanmalidir cunku yolculugu yonetmenize yardimci olacak bircok yardimci metot icerir.
+
+`make:navigation_hub` komutunu `journey_states` duzeni ile kullanarak tum yolculugu olusturabilirsiniz:
+
+``` bash
+metro make:navigation_hub onboarding
+# Select: journey_states
+# Enter: welcome, personal_info, add_photos
+```
+
+Bu, hub'i ve tum journey state widget'larini `resources/pages/navigation_hubs/onboarding/states/` altinda olusturacaktir.
+
+Veya tek tek journey widget'lari olusturmak icin su komutu kullanabilirsiniz:
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
-Bu, **resources/widgets/** dizininizde `welcome.dart`, `phone_number_step.dart` ve `add_photos_step.dart` dosyalarını oluşturacaktır.
 
-Ardından yeni widget'ları Navigation Hub'a ekleyebilirsiniz.
+Ardindan yeni widget'lari Navigation Hub'a ekleyebilirsiniz.
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
 ```
 
-Bir `buttonStyle` tanımlarsanız, yolculuk navigasyon düzeni geri ve ileri düğmelerini sizin için otomatik olarak yönetecektir.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        buttonStyle: JourneyButtonStyle.standard(
-            // Customize button properties
-        ),
-    );
-```
-
-Widget'larınızdaki mantığı da özelleştirebilirsiniz.
-
-``` dart
-import 'package:flutter/material.dart';
-import '/resources/pages/onboarding_navigation_hub.dart';
-import '/resources/widgets/buttons/buttons.dart';
-import 'package:nylo_framework/nylo_framework.dart';
-
-class WelcomeStep extends StatefulWidget {
-  const WelcomeStep({super.key});
-
-  @override
-  createState() => _WelcomeStepState();
-}
-
-class _WelcomeStepState extends JourneyState<WelcomeStep> {
-  _WelcomeStepState() : super(
-      navigationHubState: OnboardingNavigationHub.path.stateName());
-
-  @override
-  get init => () {
-    // Your initialization logic here
-  };
-
-  @override
-  Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('WelcomeStep', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
-        ],
-      ),
-      nextButton: Button.primary(
-        text: isLastStep ? "Get Started" : "Continue",
-        onPressed: onNextPressed,
-      ),
-      backButton: isFirstStep ? null : Button.textOnly(
-        text: "Back",
-        textColor: Colors.black87,
-        onPressed: onBackPressed,
-      ),
-    );
-  }
-
-  /// Check if the journey can continue to the next step
-  /// Override this method to add validation logic
-  Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
-    return true;
-  }
-
-  /// Called when unable to continue (canContinue returns false)
-  /// Override this method to handle validation failures
-  Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
-  }
-
-  /// Called before navigating to the next step
-  /// Override this method to perform actions before continuing
-  Future<void> onBeforeNext() async {
-    // E.g. save data here before navigating
-  }
-
-  /// Called after navigating to the next step
-  /// Override this method to perform actions after continuing
-  Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
-  }
-
-  /// Called when the journey is complete (at the last step)
-  /// Override this method to perform completion actions
-  Future<void> onComplete() async {}
-}
-```
-
-`JourneyState` sınıfındaki herhangi bir metodu geçersiz kılabilirsiniz.
-
 <div id="journey-progress-styles"></div>
 
-### Yolculuk İlerleme Stilleri
+### Ilerleme Stilleri
 
-İlerleme göstergesi stilini `JourneyProgressStyle` sınıfını kullanarak özelleştirebilirsiniz.
+Ilerleme gostergesi stilini `JourneyProgressStyle` sinifini kullanarak ozellestirebilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(
-            activeColor: Colors.blue,
-            inactiveColor: Colors.grey,
-            thickness: 4.0,
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+            indicator: JourneyProgressIndicator.linear(
+                activeColor: Colors.blue,
+                inactiveColor: Colors.grey,
+                thickness: 4.0,
+            ),
         ),
     );
 ```
 
-Aşağıdaki ilerleme stillerini kullanabilirsiniz:
+Asagidaki ilerleme gostergelerini kullanabilirsiniz:
 
-- `JourneyProgressIndicator.none`: Hiçbir şey render etmez — belirli bir sekmede göstergeyi gizlemek için kullanışlıdır.
-- `JourneyProgressIndicator.linear`: Doğrusal ilerleme göstergesi.
-- `JourneyProgressIndicator.dots`: Nokta tabanlı ilerleme göstergesi.
-- `JourneyProgressIndicator.numbered`: Numaralı adım ilerleme göstergesi.
-- `JourneyProgressIndicator.segments`: Bölümlü ilerleme çubuğu stili.
-- `JourneyProgressIndicator.circular`: Dairesel ilerleme göstergesi.
-- `JourneyProgressIndicator.timeline`: Zaman çizelgesi stili ilerleme göstergesi.
-- `JourneyProgressIndicator.custom`: Bir oluşturucu fonksiyon kullanan özel ilerleme göstergesi.
+- `JourneyProgressIndicator.none()`: Hicbir sey render etmez - belirli bir sekmede gostergeyi gizlemek icin kullanislidir.
+- `JourneyProgressIndicator.linear()`: Dogrusal ilerleme cubugu.
+- `JourneyProgressIndicator.dots()`: Nokta tabanli ilerleme gostergesi.
+- `JourneyProgressIndicator.numbered()`: Numarali adim ilerleme gostergesi.
+- `JourneyProgressIndicator.segments()`: Bolumlu ilerleme cubugu stili.
+- `JourneyProgressIndicator.circular()`: Dairesel ilerleme gostergesi.
+- `JourneyProgressIndicator.timeline()`: Zaman cizelgesi stili ilerleme gostergesi.
+- `JourneyProgressIndicator.custom()`: Bir builder fonksiyonu kullanan ozel ilerleme gostergesi.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.custom(
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.custom(
             builder: (context, currentStep, totalSteps, percentage) {
                 return LinearProgressIndicator(
                     value: percentage,
@@ -508,122 +404,85 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
                 );
             },
         ),
-    );
+    ),
+);
 ```
 
-İlerleme göstergesi konumunu ve dolgusunu `JourneyProgressStyle` içinde özelleştirebilirsiniz:
+Ilerleme gostergesi konumunu ve dolgusunu `JourneyProgressStyle` icinde ozellestirebilirsiniz:
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.dots(),
+        position: ProgressIndicatorPosition.bottom,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    ),
+);
+```
+
+Asagidaki ilerleme gostergesi konumlarini kullanabilirsiniz:
+
+- `ProgressIndicatorPosition.top`: Ekranin ustunde ilerleme gostergesi.
+- `ProgressIndicatorPosition.bottom`: Ekranin altinda ilerleme gostergesi.
+
+#### Sekme Bazinda Ilerleme Stili Gecersiz Kilma
+
+`NavigationTab.journey(progressStyle: ...)` kullanarak layout duzeyindeki `progressStyle`'i tek tek sekmeler icin gecersiz kilabilirsiniz. Kendi `progressStyle`'i olmayan sekmeler layout varsayilanini devralir. Layout varsayilani ve sekme bazinda stil olmayan sekmeler ilerleme gostergesi gostermez.
+
+``` dart
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
         progressStyle: JourneyProgressStyle(
-            indicator: JourneyProgressIndicator.dots(),
-            position: ProgressIndicatorPosition.bottom,
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        ),
-    );
-```
-
-Aşağıdaki ilerleme göstergesi konumlarını kullanabilirsiniz:
-
-- `ProgressIndicatorPosition.top`: Ekranın üstünde ilerleme göstergesi.
-- `ProgressIndicatorPosition.bottom`: Ekranın altında ilerleme göstergesi.
-
-#### Sekme Bazında İlerleme Stili Geçersiz Kılma
-
-`NavigationTab.journey(progressStyle: ...)` kullanarak layout düzeyindeki `progressStyle`'ı tek tek sekmeler için geçersiz kılabilirsiniz. Kendi `progressStyle`'ı olmayan sekmeler layout varsayılanını devralır. Layout varsayılanı ve sekme bazında stil olmayan sekmeler ilerleme göstergesi göstermez.
-
-``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-            progressStyle: JourneyProgressStyle(
-                indicator: JourneyProgressIndicator.numbered(),
-            ), // overrides the layout default for this tab only
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+            indicator: JourneyProgressIndicator.numbered(),
+        ), // overrides the layout default for this tab only
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
-```
-
-<div id="journey-button-styles">
-<br>
-
-### Yolculuk Düğme Stilleri
-
-Bir başlangıç akışı oluşturmak istiyorsanız, `NavigationHubLayout.journey` sınıfında `buttonStyle` özelliğini ayarlayabilirsiniz.
-
-Kutudan çıktığı haliyle aşağıdaki düğme stillerini kullanabilirsiniz:
-
-- `JourneyButtonStyle.standard`: Özelleştirilebilir özelliklere sahip standart düğme stili.
-- `JourneyButtonStyle.minimal`: Yalnızca simgeli minimal düğme stili.
-- `JourneyButtonStyle.outlined`: Çerçeveli düğme stili.
-- `JourneyButtonStyle.contained`: Dolu düğme stili.
-- `JourneyButtonStyle.custom`: Oluşturucu fonksiyonlar kullanan özel düğme stili.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(),
-        buttonStyle: JourneyButtonStyle.standard(
-            // Customize button properties
-        ),
-    );
 ```
 
 <div id="journey-state"></div>
 
 ### JourneyState
 
-`JourneyState` sınıfı, yolculuğu yönetmenize yardımcı olacak birçok yardımcı metot içerir.
+`JourneyState` sinifi, baslangic akislari ve cok adimli yolculuklar olusturmayi kolaylastirmak icin journey'e ozel islevlerle `NyState`'i genisletir.
 
-Yeni bir `JourneyState` oluşturmak için aşağıdaki komutu kullanabilirsiniz.
+Yeni bir `JourneyState` olusturmak icin asagidaki komutu kullanabilirsiniz.
 
 ``` bash
 metro make:journey_widget onboard_user_dob
 ```
 
-Veya aynı anda birden fazla widget oluşturmak istiyorsanız, aşağıdaki komutu kullanabilirsiniz.
+Veya ayni anda birden fazla widget olusturmak istiyorsaniz, asagidaki komutu kullanabilirsiniz.
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
 
-Bu, **resources/widgets/** dizininizde `welcome.dart`, `phone_number_step.dart` ve `add_photos_step.dart` dosyalarını oluşturacaktır.
-
-Ardından yeni widget'ları Navigation Hub'a ekleyebilirsiniz.
+Olusturulan bir JourneyState widget'i su sekilde gorunur:
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
-});
-```
+import 'package:flutter/material.dart';
+import '/resources/pages/navigation_hubs/onboarding/onboarding_navigation_hub.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 
-`WelcomeStep` sınıfına bakarsak, `JourneyState` sınıfını genişlettiğini görebiliriz.
+class Welcome extends StatefulWidget {
+  const Welcome({super.key});
 
-``` dart
-...
-class _WelcomeTabState extends JourneyState<WelcomeTab> {
-  _WelcomeTabState() : super(
-      navigationHubState: BaseNavigationHub.path.stateName());
+  @override
+  createState() => _WelcomeState();
+}
+
+class _WelcomeState extends JourneyState<Welcome> {
+  _WelcomeState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
 
   @override
   get init => () {
@@ -632,65 +491,149 @@ class _WelcomeTabState extends JourneyState<WelcomeTab> {
 
   @override
   Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          Text('WelcomeTab', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 20),
+                  Text('This onboarding journey will help you get started.'),
+                ],
+              ),
+            ),
+          ),
+
+          // Navigation buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (!isFirstStep)
+                Flexible(
+                  child: Button.textOnly(
+                    text: "Back",
+                    textColor: Colors.black87,
+                    onPressed: onBackPressed,
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+              Flexible(
+                child: Button.primary(
+                  text: "Continue",
+                  onPressed: nextStep,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
+  /// Check if the journey can continue to the next step
+  @override
+  Future<bool> canContinue() async {
+    return true;
+  }
+
+  /// Called before navigating to the next step
+  @override
+  Future<void> onBeforeNext() async {
+    // E.g. save data to session
+  }
+
+  /// Called when the journey is complete (at the last step)
+  @override
+  Future<void> onComplete() async {}
+}
 ```
 
-**JourneyState** sınıfının sayfanın içeriğini oluşturmak için `buildJourneyContent` kullanacağını fark edeceksiniz.
+**JourneyState** sinifinin ileri gitmek icin `nextStep`, geri gitmek icin `onBackPressed` kullandigini fark edeceksiniz.
 
-İşte `buildJourneyContent` metodunda kullanabileceğiniz özelliklerin listesi.
+`nextStep` metodu tam dogrulama yasam dongusu boyunca calisir: `canContinue()` -> `onBeforeNext()` -> navigasyon (veya son adimda ise `onComplete()`) -> `onAfterNext()`.
 
-| Özellik | Tür | Açıklama |
+Ayrica istege bagli navigasyon dugmeleriyle yapilandirilmis bir duzen olusturmak icin `buildJourneyContent` kullanabilirsiniz:
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 20),
+          Text('This onboarding journey will help you get started.'),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: isLastStep ? "Get Started" : "Continue",
+        onPressed: nextStep,
+      ),
+      backButton: isFirstStep ? null : Button.textOnly(
+        text: "Back",
+        textColor: Colors.black87,
+        onPressed: onBackPressed,
+      ),
+    );
+}
+```
+
+`buildJourneyContent` metodunda kullanabileceginiz ozellikler sunlardir.
+
+| Ozellik | Tur | Aciklama |
 | --- | --- | --- |
-| `content` | `Widget` | Sayfanın ana içeriği. |
-| `nextButton` | `Widget?` | İleri düğmesi widget'ı. |
-| `backButton` | `Widget?` | Geri düğmesi widget'ı. |
-| `contentPadding` | `EdgeInsetsGeometry` | İçerik için dolgu. |
-| `header` | `Widget?` | Üst bilgi widget'ı. |
-| `footer` | `Widget?` | Alt bilgi widget'ı. |
-| `crossAxisAlignment` | `CrossAxisAlignment` | İçeriğin çapraz eksen hizalaması. |
-
+| `content` | `Widget` | Sayfanin ana icerigi. |
+| `nextButton` | `Widget?` | Ileri dugmesi widget'i. |
+| `backButton` | `Widget?` | Geri dugmesi widget'i. |
+| `contentPadding` | `EdgeInsetsGeometry` | Icerik icin dolgu. |
+| `header` | `Widget?` | Ust bilgi widget'i. |
+| `footer` | `Widget?` | Alt bilgi widget'i. |
+| `crossAxisAlignment` | `CrossAxisAlignment` | Icerigin capraz eksen hizalamasi. |
 
 <div id="journey-state-helper-methods"></div>
 
-### JourneyState Yardımcı Metotları
+### JourneyState Yardimci Metotlari
 
-`JourneyState` sınıfı, yolculuğunuzun davranışını özelleştirmek için kullanabileceğiniz bazı yardımcı metotlara sahiptir.
+`JourneyState` sinifi, yolculugunuzun davranisini ozellestirmek icin kullanabileceginiz yardimci metotlara ve ozelliklere sahiptir.
 
-| Metot | Açıklama |
+| Metot / Ozellik | Aciklama |
 | --- | --- |
-| [`onNextPressed()`](#on-next-pressed) | İleri düğmesine basıldığında çağrılır. |
-| [`onBackPressed()`](#on-back-pressed) | Geri düğmesine basıldığında çağrılır. |
-| [`onComplete()`](#on-complete) | Yolculuk tamamlandığında (son adımda) çağrılır. |
-| [`onBeforeNext()`](#on-before-next) | Sonraki adıma geçmeden önce çağrılır. |
-| [`onAfterNext()`](#on-after-next) | Sonraki adıma geçtikten sonra çağrılır. |
-| [`onCannotContinue()`](#on-cannot-continue) | Yolculuk devam edemediğinde (canContinue false döndürdüğünde) çağrılır. |
-| [`canContinue()`](#can-continue) | Kullanıcı sonraki adıma geçmeye çalıştığında çağrılır. |
-| [`isFirstStep`](#is-first-step) | Yolculuktaki ilk adım ise true döndürür. |
-| [`isLastStep`](#is-last-step) | Yolculuktaki son adım ise true döndürür. |
-| [`goToStep(int index)`](#go-to-step) | Belirtilen adım indeksine git. |
-| [`goToNextStep()`](#go-to-next-step) | Sonraki adıma git. |
-| [`goToPreviousStep()`](#go-to-previous-step) | Önceki adıma git. |
-| [`goToFirstStep()`](#go-to-first-step) | İlk adıma git. |
-| [`goToLastStep()`](#go-to-last-step) | Son adıma git. |
+| [`nextStep()`](#next-step) | Dogrulama ile sonraki adima gider. `Future<bool>` dondurur. |
+| [`previousStep()`](#previous-step) | Onceki adima gider. `Future<bool>` dondurur. |
+| [`onBackPressed()`](#on-back-pressed) | Onceki adima gitmek icin basit yardimci. |
+| [`onComplete()`](#on-complete) | Yolculuk tamamlandiginda (son adimda) cagrilir. |
+| [`onBeforeNext()`](#on-before-next) | Sonraki adima gecmeden once cagrilir. |
+| [`onAfterNext()`](#on-after-next) | Sonraki adima gectikten sonra cagrilir. |
+| [`canContinue()`](#can-continue) | Sonraki adima gecmeden once dogrulama kontrolu. |
+| [`isFirstStep`](#is-first-step) | Yolculuktaki ilk adim ise true dondurur. |
+| [`isLastStep`](#is-last-step) | Yolculuktaki son adim ise true dondurur. |
+| [`currentStep`](#current-step) | Mevcut adim indeksini dondurur (0 tabanli). |
+| [`totalSteps`](#total-steps) | Toplam adim sayisini dondurur. |
+| [`completionPercentage`](#completion-percentage) | Tamamlanma yuzdesi dondurur (0.0 ile 1.0 arasi). |
+| [`goToStep(int index)`](#go-to-step) | Indeksle belirli bir adima atlar. |
+| [`goToNextStep()`](#go-to-next-step) | Sonraki adima atlar (dogrulama yok). |
+| [`goToPreviousStep()`](#go-to-previous-step) | Onceki adima atlar (dogrulama yok). |
+| [`goToFirstStep()`](#go-to-first-step) | Ilk adima atlar. |
+| [`goToLastStep()`](#go-to-last-step) | Son adima atlar. |
+| [`exitJourney()`](#exit-journey) | Root navigator'i kapatarak yolculuktan cikar. |
+| [`resetCurrentStep()`](#reset-current-step) | Mevcut adimin durumunu sifirlar. |
+| [`onJourneyComplete`](#on-journey-complete) | Yolculuk tamamlandiginda cagirilan callback (son adimda override edin). |
+| [`buildJourneyPage()`](#build-journey-page) | Scaffold ile tam ekran journey sayfasi olusturur. |
 
 
-<div id="on-next-pressed"></div>
+<div id="next-step"></div>
 
-#### onNextPressed
+#### nextStep
 
-`onNextPressed` metodu, ileri düğmesine basıldığında çağrılır.
+`nextStep` metodu tam dogrulama ile sonraki adima gider. Yasam dongusunu takip eder: `canContinue()` -> `onBeforeNext()` -> navigasyon veya `onComplete()` -> `onAfterNext()`.
 
-Örneğin, bu metodu yolculuktaki sonraki adımı tetiklemek için kullanabilirsiniz.
+Dogrulamayi atlamak icin `force: true` gecebilirsiniz.
 
 ``` dart
 @override
@@ -704,19 +647,38 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: onNextPressed, // this will attempt to navigate to the next step
+            onPressed: nextStep, // runs validation then navigates
         ),
     );
 }
+```
+
+Dogrulamayi atlamak icin:
+
+``` dart
+onPressed: () => nextStep(force: true),
+```
+
+<div id="previous-step"></div>
+
+#### previousStep
+
+`previousStep` metodu onceki adima gider. Basarili olursa `true`, zaten ilk adimdaysa `false` dondurur.
+
+``` dart
+onPressed: () async {
+    bool success = await previousStep();
+    if (!success) {
+      // Already at first step
+    }
+},
 ```
 
 <div id="on-back-pressed"></div>
 
 #### onBackPressed
 
-`onBackPressed` metodu, geri düğmesine basıldığında çağrılır.
-
-Örneğin, bu metodu yolculuktaki önceki adımı tetiklemek için kullanabilirsiniz.
+`onBackPressed` metodu dahili olarak `previousStep()` cagiran basit bir yardimcidir.
 
 ``` dart
 @override
@@ -731,7 +693,7 @@ Widget view(BuildContext context) {
         backButton: isFirstStep ? null : Button.textOnly(
             text: "Back",
             textColor: Colors.black87,
-            onPressed: onBackPressed, // this will attempt to navigate to the previous step
+            onPressed: onBackPressed,
         ),
     );
 }
@@ -741,11 +703,10 @@ Widget view(BuildContext context) {
 
 #### onComplete
 
-`onComplete` metodu, yolculuk tamamlandığında (son adımda) çağrılır.
-
-Örneğin, bu widget yolculuktaki son adım ise bu metot çağrılacaktır.
+`onComplete` metodu, son adimda `nextStep()` tetiklendiginde (dogrulama gecildikten sonra) cagrilir.
 
 ``` dart
+@override
 Future<void> onComplete() async {
     print("Journey completed");
 }
@@ -755,153 +716,18 @@ Future<void> onComplete() async {
 
 #### onBeforeNext
 
-`onBeforeNext` metodu, sonraki adıma geçmeden önce çağrılır.
+`onBeforeNext` metodu, sonraki adima gecmeden once cagrilir.
 
-Örneğin, sonraki adıma geçmeden önce veri kaydetmek istiyorsanız bunu burada yapabilirsiniz.
+Ornegin, sonraki adima gecmeden once veri kaydetmek istiyorsaniz burada yapabilirsiniz.
 
 ``` dart
+@override
 Future<void> onBeforeNext() async {
-    // E.g. save data here before navigating
-}
-```
-
-<div id="is-first-step"></div>
-
-#### isFirstStep
-
-`isFirstStep` metodu, yolculuktaki ilk adım ise true döndürür.
-
-Örneğin, bu ilk adımsa geri düğmesini devre dışı bırakmak için bu metodu kullanabilirsiniz.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly( // Example of disabling the back button
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: onBackPressed,
-        ),
-    );
-}
-```
-
-<div id="is-last-step"></div>
-
-#### isLastStep
-
-`isLastStep` metodu, yolculuktaki son adım ise true döndürür.
-
-Örneğin, bu son adımsa ileri düğmesini devre dışı bırakmak için bu metodu kullanabilirsiniz.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: isLastStep ? "Get Started" : "Continue", // Example updating the next button text
-            onPressed: onNextPressed,
-        ),
-    );
-}
-```
-
-<div id="go-to-step"></div>
-
-#### goToStep
-
-`goToStep` metodu, yolculukta belirli bir adıma gitmek için kullanılır.
-
-Örneğin, yolculukta belirli bir adıma gitmek için bu metodu kullanabilirsiniz.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Add photos"
-            onPressed: () {
-                goToStep(2); // this will navigate to the step with index 2
-                // Note: this will not trigger the onNextPressed method
-            },
-        ),
-    );
-}
-```
-
-<div id="go-to-next-step"></div>
-
-#### goToNextStep
-
-`goToNextStep` metodu, yolculuktaki sonraki adıma gitmek için kullanılır.
-
-Örneğin, yolculuktaki sonraki adıma gitmek için bu metodu kullanabilirsiniz.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToNextStep(); // this will navigate to the next step
-                // Note: this will not trigger the onNextPressed method
-            },
-        ),
-    );
-}
-```
-
-<div id="go-to-previous-step"></div>
-
-#### goToPreviousStep
-
-`goToPreviousStep` metodu, yolculuktaki önceki adıma gitmek için kullanılır.
-
-Örneğin, yolculuktaki önceki adıma gitmek için bu metodu kullanabilirsiniz.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly(
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: () {
-                goToPreviousStep(); // this will navigate to the previous step
-            },
-        ),
-    );
+    // E.g. save data to session
+    // session('onboarding', {
+    //   'name': 'Anthony Gordon',
+    //   'occupation': 'Software Engineer',
+    // });
 }
 ```
 
@@ -909,28 +735,12 @@ Widget view(BuildContext context) {
 
 #### onAfterNext
 
-`onAfterNext` metodu, sonraki adıma geçtikten sonra çağrılır.
-
-
-Örneğin, sonraki adıma geçtikten sonra bir eylem gerçekleştirmek istiyorsanız bunu burada yapabilirsiniz.
+`onAfterNext` metodu, sonraki adima gectikten sonra cagrilir.
 
 ``` dart
+@override
 Future<void> onAfterNext() async {
     // print('Navigated to the next step');
-}
-```
-
-<div id="on-cannot-continue"></div>
-
-#### onCannotContinue
-
-`onCannotContinue` metodu, yolculuk devam edemediğinde (canContinue false döndürdüğünde) çağrılır.
-
-Örneğin, kullanıcı gerekli alanları doldurmadan sonraki adıma geçmeye çalıştığında bir hata mesajı göstermek istiyorsanız bunu burada yapabilirsiniz.
-
-``` dart
-Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
 }
 ```
 
@@ -938,82 +748,241 @@ Future<void> onCannotContinue() async {
 
 #### canContinue
 
-`canContinue` metodu, kullanıcı sonraki adıma geçmeye çalıştığında çağrılır.
-
-Örneğin, sonraki adıma geçmeden önce doğrulama yapmak istiyorsanız bunu burada yapabilirsiniz.
+`canContinue` metodu, `nextStep()` tetiklendiginde cagrilir. Navigasyonu engellemek icin `false` dondurun.
 
 ``` dart
+@override
 Future<bool> canContinue() async {
     // Perform your validation logic here
     // Return true if the journey can continue, false otherwise
+    if (nameController.text.isEmpty) {
+        showToastSorry(description: "Please enter your name");
+        return false;
+    }
     return true;
 }
+```
+
+<div id="is-first-step"></div>
+
+#### isFirstStep
+
+`isFirstStep` ozelligi, yolculuktaki ilk adim ise true dondurur.
+
+``` dart
+backButton: isFirstStep ? null : Button.textOnly(
+    text: "Back",
+    textColor: Colors.black87,
+    onPressed: onBackPressed,
+),
+```
+
+<div id="is-last-step"></div>
+
+#### isLastStep
+
+`isLastStep` ozelligi, yolculuktaki son adim ise true dondurur.
+
+``` dart
+nextButton: Button.primary(
+    text: isLastStep ? "Get Started" : "Continue",
+    onPressed: nextStep,
+),
+```
+
+<div id="current-step"></div>
+
+#### currentStep
+
+`currentStep` ozelligi mevcut adim indeksini dondurur (0 tabanli).
+
+``` dart
+Text("Step ${currentStep + 1} of $totalSteps"),
+```
+
+<div id="total-steps"></div>
+
+#### totalSteps
+
+`totalSteps` ozelligi yolculuktaki toplam adim sayisini dondurur.
+
+<div id="completion-percentage"></div>
+
+#### completionPercentage
+
+`completionPercentage` ozelligi tamamlanma yuzdesi olarak 0.0 ile 1.0 arasinda bir deger dondurur.
+
+``` dart
+LinearProgressIndicator(value: completionPercentage),
+```
+
+<div id="go-to-step"></div>
+
+#### goToStep
+
+`goToStep` metodu indeksle dogrudan belirli bir adima atlar. Bu islem dogrulama **tetiklemez**.
+
+``` dart
+nextButton: Button.primary(
+    text: "Skip to photos",
+    onPressed: () {
+        goToStep(2); // jump to step index 2
+    },
+),
+```
+
+<div id="go-to-next-step"></div>
+
+#### goToNextStep
+
+`goToNextStep` metodu dogrulama olmadan sonraki adima atlar. Zaten son adimdaysa hicbir sey yapmaz.
+
+``` dart
+onPressed: () {
+    goToNextStep(); // skip validation and go to next step
+},
+```
+
+<div id="go-to-previous-step"></div>
+
+#### goToPreviousStep
+
+`goToPreviousStep` metodu dogrulama olmadan onceki adima atlar. Zaten ilk adimdaysa hicbir sey yapmaz.
+
+``` dart
+onPressed: () {
+    goToPreviousStep();
+},
 ```
 
 <div id="go-to-first-step"></div>
 
 #### goToFirstStep
 
-`goToFirstStep` metodu, yolculuktaki ilk adıma gitmek için kullanılır.
-
-
-Örneğin, yolculuktaki ilk adıma gitmek için bu metodu kullanabilirsiniz.
+`goToFirstStep` metodu ilk adima atlar.
 
 ``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToFirstStep(); // this will navigate to the first step
-            },
-        ),
-    );
-}
+onPressed: () {
+    goToFirstStep();
+},
 ```
 
 <div id="go-to-last-step"></div>
 
 #### goToLastStep
 
-`goToLastStep` metodu, yolculuktaki son adıma gitmek için kullanılır.
+`goToLastStep` metodu son adima atlar.
 
-Örneğin, yolculuktaki son adıma gitmek için bu metodu kullanabilirsiniz.
+``` dart
+onPressed: () {
+    goToLastStep();
+},
+```
+
+<div id="exit-journey"></div>
+
+#### exitJourney
+
+`exitJourney` metodu root navigator'i kapatarak yolculuktan cikar.
+
+``` dart
+onPressed: () {
+    exitJourney(); // pop the root navigator
+},
+```
+
+<div id="reset-current-step"></div>
+
+#### resetCurrentStep
+
+`resetCurrentStep` metodu mevcut adimin durumunu sifirlar.
+
+``` dart
+onPressed: () {
+    resetCurrentStep();
+},
+```
+
+<div id="on-journey-complete"></div>
+
+### onJourneyComplete
+
+`onJourneyComplete` getter'i, kullanicinin akisi tamamladiginda ne olacagini tanimlamak icin yolculugunuzun **son adiminda** override edilebilir.
+
+``` dart
+class _CompleteStepState extends JourneyState<CompleteStep> {
+  _CompleteStepState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
+
+  /// Callback when journey completes
+  @override
+  void Function()? get onJourneyComplete => () {
+    // Navigate to your home page or next destination
+    routeTo(HomePage.path);
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          ...
+          Button.primary(
+            text: "Get Started",
+            onPressed: onJourneyComplete, // triggers the completion callback
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+<div id="build-journey-page"></div>
+
+### buildJourneyPage
+
+`buildJourneyPage` metodu `Scaffold` ve `SafeArea` ile sarilmis tam ekran bir journey sayfasi olusturur.
 
 ``` dart
 @override
 Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
+    return buildJourneyPage(
+      content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToLastStep(); // this will navigate to the last step
-            },
-        ),
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: "Continue",
+        onPressed: nextStep,
+      ),
+      backgroundColor: Colors.white,
     );
 }
 ```
 
+| Ozellik | Tur | Aciklama |
+| --- | --- | --- |
+| `content` | `Widget` | Sayfanin ana icerigi. |
+| `nextButton` | `Widget?` | Ileri dugmesi widget'i. |
+| `backButton` | `Widget?` | Geri dugmesi widget'i. |
+| `contentPadding` | `EdgeInsetsGeometry` | Icerik icin dolgu. |
+| `header` | `Widget?` | Ust bilgi widget'i. |
+| `footer` | `Widget?` | Alt bilgi widget'i. |
+| `backgroundColor` | `Color?` | Scaffold'un arka plan rengi. |
+| `appBar` | `Widget?` | Istege bagli bir AppBar widget'i. |
+| `crossAxisAlignment` | `CrossAxisAlignment` | Icerigin capraz eksen hizalamasi. |
+
 <div id="navigating-within-a-tab"></div>
 
-## Sekme İçindeki Widget'lara Gezinme
+## Sekme Icindeki Widget'lara Gezinme
 
-`pushTo` yardımcısını kullanarak bir sekme içindeki widget'lara gezinebilirsiniz.
+`pushTo` yardimcisini kullanarak bir sekme icindeki widget'lara gezinebilirsiniz.
 
-Sekmenizin içinde, başka bir widget'a gitmek için `pushTo` yardımcısını kullanabilirsiniz.
+Sekmenizin icinde, baska bir widget'a gitmek icin `pushTo` yardimcisini kullanabilirsiniz.
 
 ``` dart
 _HomeTabState extends State<HomeTab> {
@@ -1025,7 +994,7 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
-Gezindiğiniz widget'a veri de geçirebilirsiniz.
+Gezindiginiz widget'a veri de gecebilirsiniz.
 
 ``` dart
 _HomeTabState extends State<HomeTab> {
@@ -1041,80 +1010,79 @@ _HomeTabState extends State<HomeTab> {
 
 ## Sekmeler
 
-Sekmeler, Navigation Hub'ın ana yapı taşlarıdır.
+Sekmeler, Navigation Hub'in ana yapi taslaridir.
 
-`NavigationTab` sınıfını kullanarak Navigation Hub'a sekmeler ekleyebilirsiniz.
+`NavigationTab` sinifini ve adlandirilmis constructor'larini kullanarak Navigation Hub'a sekmeler ekleyebilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab(
-                title: "Home",
-                page: HomeTab(),
-                icon: Icon(Icons.home),
-                activeIcon: Icon(Icons.home),
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.tab(
+            title: "Home",
+            page: HomeTab(),
+            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home),
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
-Yukarıdaki örnekte, Navigation Hub'a Home ve Settings olmak üzere iki sekme ekledik.
+Yukaridaki ornekte, Navigation Hub'a Home ve Settings olmak uzere iki sekme ekledik.
 
-`NavigationTab`, `NavigationTab.badge` ve `NavigationTab.alert` gibi farklı sekme türlerini kullanabilirsiniz.
+Farkli sekme turlerini kullanabilirsiniz:
 
-- `NavigationTab.badge` sınıfı, sekmelere rozet eklemek için kullanılır.
-- `NavigationTab.alert` sınıfı, sekmelere uyarı eklemek için kullanılır.
-- `NavigationTab` sınıfı, normal bir sekme eklemek için kullanılır.
+- `NavigationTab.tab()` - Standart navigasyon sekmesi.
+- `NavigationTab.badge()` - Rozet sayili sekme.
+- `NavigationTab.alert()` - Uyari gostergeli sekme.
+- `NavigationTab.journey()` - Journey navigasyon duzenleri icin sekme.
 
 <div id="adding-badges-to-tabs"></div>
 
 ## Sekmelere Rozet Ekleme
 
-Sekmelerinize rozet eklemeyi kolaylaştırdık.
+Sekmelerinize rozet eklemeyi kolaylastirdik.
 
-Rozetler, kullanıcılara bir sekmede yeni bir şey olduğunu göstermenin harika bir yoludur.
+Rozetler, kullanicilara bir sekmede yeni bir sey oldugunu gostermenin harika bir yoludur.
 
-Örneğin, bir sohbet uygulamanız varsa, sohbet sekmesinde okunmamış mesaj sayısını gösterebilirsiniz.
+Ornegin, bir sohbet uygulamaniz varsa, sohbet sekmesinde okunmamis mesaj sayisini gosterebilirsiniz.
 
-Bir sekmeye rozet eklemek için `NavigationTab.badge` sınıfını kullanabilirsiniz.
+Bir sekmeye rozet eklemek icin `NavigationTab.badge` constructor'ini kullanabilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.badge(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            initialCount: 10,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
-Yukarıdaki örnekte, Chat sekmesine başlangıç sayısı 10 olan bir rozet ekledik.
+Yukaridaki ornekte, Chat sekmesine baslangic sayisi 10 olan bir rozet ekledik.
 
-Rozet sayısını programatik olarak da güncelleyebilirsiniz.
+Rozet sayisini programatik olarak da guncelleyebilirsiniz.
 
 ``` dart
 /// Increment the badge count
@@ -1127,72 +1095,57 @@ BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
-Varsayılan olarak, rozet sayısı hatırlanacaktır. Her oturumda rozet sayısını **temizlemek** istiyorsanız, `rememberCount`'u `false` olarak ayarlayabilirsiniz.
+Varsayilan olarak rozet sayisi hatirlanir. Her oturumda rozet sayisini **temizlemek** istiyorsaniz, `rememberCount`'u `false` olarak ayarlayabilirsiniz.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-                rememberCount: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
-    });
+0: NavigationTab.badge(
+    title: "Chats",
+    page: ChatTab(),
+    icon: Icon(Icons.message),
+    activeIcon: Icon(Icons.message),
+    initialCount: 10,
+    rememberCount: false,
+),
 ```
 
 <div id="adding-alerts-to-tabs"></div>
 
-## Sekmelere Uyarı Ekleme
+## Sekmelere Uyari Ekleme
 
-Sekmelerinize uyarı ekleyebilirsiniz.
+Sekmelerinize uyari ekleyebilirsiniz.
 
-Bazen rozet sayısı göstermek istemezsiniz, ancak kullanıcıya bir uyarı göstermek istersiniz.
+Bazen rozet sayisi gostermek istemeyebilirsiniz, ancak kullaniciya bir uyari gostergesi gostermek isteyebilirsiniz.
 
-Bir sekmeye uyarı eklemek için `NavigationTab.alert` sınıfını kullanabilirsiniz.
+Bir sekmeye uyari eklemek icin `NavigationTab.alert` constructor'ini kullanabilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.alert(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                alertColor: Colors.red,
-                alertEnabled: true,
-                rememberAlert: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.alert(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            alertColor: Colors.red,
+            alertEnabled: true,
+            rememberAlert: false,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
-Bu, Chat sekmesine kırmızı renkte bir uyarı ekleyecektir.
+Bu, Chat sekmesine kirmizi renkte bir uyari ekleyecektir.
 
-Uyarıyı programatik olarak da güncelleyebilirsiniz.
+Uyariyi programatik olarak da guncelleyebilirsiniz.
 
 ``` dart
 /// Enable the alert
@@ -1202,15 +1155,30 @@ BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
+<div id="initial-index"></div>
+
+## Baslangic Indeksi
+
+Varsayilan olarak, Navigation Hub ilk sekmede (indeks 0) baslar. Bunu `initialIndex` getter'ini override ederek degistirebilirsiniz.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    int get initialIndex => 1; // Start on the second tab
+    ...
+}
+```
+
 <div id="maintaining-state"></div>
 
 ## Durumu Koruma
 
-Varsayılan olarak, Navigation Hub'ın durumu korunur.
+Varsayilan olarak, Navigation Hub'in durumu korunur.
 
-Bu, bir sekmeye gittiğinizde sekmenin durumunun saklandığı anlamına gelir.
+Bu, bir sekmeye gittiginizde sekmenin durumunun saklanacagi anlamina gelir.
 
-Her gittiğinizde sekmenin durumunu temizlemek istiyorsanız, `maintainState`'i `false` olarak ayarlayabilirsiniz.
+Her gittiginizde sekmenin durumunu temizlemek istiyorsaniz, `maintainState`'i `false` olarak ayarlayabilirsiniz.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1221,58 +1189,97 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 }
 ```
 
+<div id="on-tap"></div>
+
+## onTap
+
+Bir sekmeye dokunuldugunda ozel mantik eklemek icin `onTap` metodunu override edebilirsiniz.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    onTap(int index) {
+        // Add custom logic here
+        // E.g. track analytics, show confirmation, etc.
+        super.onTap(index); // Always call super to handle the tab switch
+    }
+}
+```
+
 <div id="state-actions"></div>
 
 ## Durum Eylemleri
 
-Durum eylemleri, uygulamanızın herhangi bir yerinden Navigation Hub ile etkileşim kurmanın bir yoludur.
+Durum eylemleri, uygulamanizin herhangi bir yerinden Navigation Hub ile etkilesim kurmanin bir yoludur.
 
-İşte kullanabileceğiniz bazı durum eylemleri:
+Kullanabileceginiz durum eylemleri sunlardir:
 
 ``` dart
-  /// Reset the tab
-  /// E.g. MyNavigationHub.stateActions.resetTabState(tab: 0);
-  resetTabState({required tab});
+/// Reset the tab at a given index
+/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+resetTabIndex(int tabIndex);
 
-  /// Update the badge count
-  /// E.g. MyNavigationHub.updateBadgeCount(tab: 0, count: 2);
-  updateBadgeCount({required int tab, required int count});
+/// Change the current tab programmatically
+/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+currentTabIndex(int tabIndex);
 
-  /// Increment the badge count
-  /// E.g. MyNavigationHub.incrementBadgeCount(tab: 0);
-  incrementBadgeCount({required int tab});
+/// Update the badge count
+/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+updateBadgeCount({required int tab, required int count});
 
-  /// Clear the badge count
-  /// E.g. MyNavigationHub.clearBadgeCount(tab: 0);
-  clearBadgeCount({required int tab});
+/// Increment the badge count
+/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+incrementBadgeCount({required int tab});
+
+/// Clear the badge count
+/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+clearBadgeCount({required int tab});
+
+/// Enable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+alertEnableTab({required int tab});
+
+/// Disable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+alertDisableTab({required int tab});
+
+/// Navigate to the next page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.nextPage();
+Future<bool> nextPage();
+
+/// Navigate to the previous page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.previousPage();
+Future<bool> previousPage();
 ```
 
-Bir durum eylemi kullanmak için aşağıdakileri yapabilirsiniz:
+Bir durum eylemi kullanmak icin asagidakileri yapabilirsiniz:
 
 ``` dart
 MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
-// or
-MyNavigationHub.stateActions.resetTabState(tab: 0);
+
+MyNavigationHub.stateActions.resetTabIndex(0);
+
+MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+
+await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
 ```
 
 <div id="loading-style"></div>
 
-## Yükleme Stili
+## Yukleme Stili
 
-Kutudan çıktığı haliyle, Navigation Hub sekme yüklenirken **varsayılan** yükleme Widget'ınızı (resources/widgets/loader_widget.dart) gösterecektir.
+Kutudan ciktigi haliyle, Navigation Hub sekme yuklenirken **varsayilan** yukleme Widget'inizi (resources/widgets/loader_widget.dart) gosterecektir.
 
-Yükleme stilini güncellemek için `loadingStyle`'ı özelleştirebilirsiniz.
+Yukleme stilini guncellemek icin `loadingStyle`'i ozellestirebilirsiniz.
 
-İşte kullanabileceğiniz farklı yükleme stillerinin tablosu:
-// normal, skeletonizer, none
-
-| Stil | Açıklama |
+| Stil | Aciklama |
 | --- | --- |
-| normal | Varsayılan yükleme stili |
-| skeletonizer | İskelet yükleme stili |
-| none | Yükleme stili yok |
+| normal | Varsayilan yukleme stili |
+| skeletonizer | Iskelet yukleme stili |
+| none | Yukleme stili yok |
 
-Yükleme stilini şu şekilde değiştirebilirsiniz:
+Yukleme stilini su sekilde degistirebilirsiniz:
 
 ``` dart
 @override
@@ -1282,7 +1289,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal();
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
 
-Stillerden birindeki yükleme Widget'ını güncellemek istiyorsanız, `LoadingStyle`'a bir `child` geçirebilirsiniz.
+Stillerden birindeki yukleme Widget'ini guncellemek istiyorsaniz, `LoadingStyle`'a bir `child` gecebilirsiniz.
 
 ``` dart
 @override
@@ -1293,29 +1300,25 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
 );
 ```
 
-Şimdi, sekme yüklenirken "Loading..." metni görüntülenecektir.
+Simdi, sekme yuklenirken "Loading..." metni goruntulecektir.
 
-Aşağıdaki örnek:
+Asagida ornek:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-     _BaseNavigationHubState() : super(() async {
+    _MyNavigationHubState() : super(() async {
 
       await sleep(3); // simulate loading for 3 seconds
 
       return {
-        0: NavigationTab(
+        0: NavigationTab.tab(
           title: "Home",
           page: HomeTab(),
-          icon: Icon(Icons.home),
-          activeIcon: Icon(Icons.home),
         ),
-        1: NavigationTab(
+        1: NavigationTab.tab(
           title: "Settings",
           page: SettingsTab(),
-          icon: Icon(Icons.settings),
-          activeIcon: Icon(Icons.settings),
         ),
       };
     });
@@ -1332,12 +1335,14 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 <div id="creating-a-navigation-hub"></div>
 
-## Navigation Hub Oluşturma
+## Navigation Hub Olusturma
 
-Bir Navigation Hub oluşturmak için [Metro](/docs/{{$version}}/metro) kullanabilirsiniz, aşağıdaki komutu kullanın.
+Bir Navigation Hub olusturmak icin [Metro](/docs/{{$version}}/metro) kullanabilirsiniz, asagidaki komutu calistirin.
 
 ``` bash
 metro make:navigation_hub base
 ```
 
-Bu, `resources/pages/` dizininizde bir base_navigation_hub.dart dosyası oluşturacak ve Navigation Hub'ı `routes/router.dart` dosyanıza ekleyecektir.
+Komut, duzen turunu secebileceginiz ve sekmelerinizi veya journey durumlarinizi tanimlayabileceginiz interaktif bir kurulum surecinde size rehberlik edecektir.
+
+Bu, `resources/pages/navigation_hubs/base/` dizininizde alt widget'larin `tabs/` veya `states/` alt klasorlerinde duzenlendirilmis bir `base_navigation_hub.dart` dosyasi olusturacaktir.

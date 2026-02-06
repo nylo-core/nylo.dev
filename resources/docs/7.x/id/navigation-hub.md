@@ -8,35 +8,36 @@
   - [Membuat Navigation Hub](#creating-a-navigation-hub "Membuat Navigation Hub")
   - [Membuat Tab Navigasi](#creating-navigation-tabs "Membuat Tab Navigasi")
   - [Navigasi Bawah](#bottom-navigation "Navigasi Bawah")
-    - [Gaya Navigasi Bawah](#bottom-nav-styles "Gaya Navigasi Bawah")
     - [Nav Bar Builder Kustom](#custom-nav-bar-builder "Nav Bar Builder Kustom")
   - [Navigasi Atas](#top-navigation "Navigasi Atas")
   - [Navigasi Journey](#journey-navigation "Navigasi Journey")
     - [Gaya Progress](#journey-progress-styles "Gaya Progress Journey")
-    - [Gaya Tombol](#journey-button-styles "Gaya Tombol")
     - [JourneyState](#journey-state "JourneyState")
     - [Method Helper JourneyState](#journey-state-helper-methods "Method Helper JourneyState")
+    - [onJourneyComplete](#on-journey-complete "onJourneyComplete")
+    - [buildJourneyPage](#build-journey-page "buildJourneyPage")
 - [Navigasi di dalam tab](#navigating-within-a-tab "Navigasi di dalam tab")
 - [Tab](#tabs "Tab")
   - [Menambahkan Badge ke Tab](#adding-badges-to-tabs "Menambahkan Badge ke Tab")
   - [Menambahkan Alert ke Tab](#adding-alerts-to-tabs "Menambahkan Alert ke Tab")
-- [Mempertahankan state](#maintaining-state "Mempertahankan state")
+- [Indeks Awal](#initial-index "Indeks Awal")
+- [Mempertahankan State](#maintaining-state "Mempertahankan State")
+- [onTap](#on-tap "onTap")
 - [Aksi State](#state-actions "Aksi State")
 - [Gaya Loading](#loading-style "Gaya Loading")
-- [Membuat Navigation Hub](#creating-a-navigation-hub "Membuat Navigation Hub")
 
 <div id="introduction"></div>
 
 ## Pengantar
 
 Navigation Hub adalah tempat sentral di mana Anda dapat **mengelola** navigasi untuk semua widget Anda.
-Secara langsung Anda dapat membuat tata letak navigasi bawah, atas, dan journey dalam hitungan detik.
+Secara langsung, Anda dapat membuat tata letak navigasi bawah, atas, dan journey dalam hitungan detik.
 
 Mari **bayangkan** Anda memiliki aplikasi dan ingin menambahkan navigasi bar bawah serta memungkinkan pengguna berpindah antar tab di aplikasi Anda.
 
 Anda dapat menggunakan Navigation Hub untuk membangun ini.
 
-Mari kita lihat bagaimana Anda dapat menggunakan Navigation Hub di aplikasi Anda.
+Mari kita lihat bagaimana cara menggunakan Navigation Hub di aplikasi Anda.
 
 <div id="basic-usage"></div>
 
@@ -48,11 +49,22 @@ Anda dapat membuat Navigation Hub menggunakan perintah di bawah ini.
 metro make:navigation_hub base
 ```
 
-Ini akan membuat file **base_navigation_hub.dart** di direktori `resources/pages/` Anda.
+Perintah ini akan memandu Anda melalui pengaturan interaktif:
+
+1. **Pilih tipe layout** - Pilih antara `navigation_tabs` (navigasi bawah) atau `journey_states` (alur berurutan).
+2. **Masukkan nama tab/state** - Berikan nama-nama yang dipisahkan koma untuk tab atau journey state Anda.
+
+Ini akan membuat file di direktori `resources/pages/navigation_hubs/base/` Anda:
+- `base_navigation_hub.dart` - Widget hub utama
+- `tabs/` atau `states/` - Berisi widget anak untuk setiap tab atau journey state
+
+Berikut tampilan Navigation Hub yang dihasilkan:
 
 ``` dart
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/pages/navigation_hubs/base/tabs/home_tab_widget.dart';
+import '/resources/pages/navigation_hubs/base/tabs/settings_tab_widget.dart';
 
 class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
   static RouteView path = ("/base", (_) => BaseNavigationHub());
@@ -68,46 +80,42 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layouts:
-  /// - [NavigationHubLayout.bottomNav] Bottom navigation
-  /// - [NavigationHubLayout.topNav] Top navigation
-  /// - [NavigationHubLayout.journey] Journey navigation
-  NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-    // backgroundColor: Colors.white,
-  );
+  /// Layout builder
+  @override
+  NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
   /// Should the state be maintained
   @override
   bool get maintainState => true;
 
+  /// The initial index
+  @override
+  int get initialIndex => 0;
+
   /// Navigation pages
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-    };
+  _BaseNavigationHubState() : super(() => {
+      0: NavigationTab.tab(title: "Home", page: HomeTab()),
+      1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
+
+  /// Handle the tap event
+  @override
+  onTap(int index) {
+    super.onTap(index);
+  }
 }
 ```
 
 Anda dapat melihat bahwa Navigation Hub memiliki **dua** tab, Home dan Settings.
 
-Anda dapat membuat lebih banyak tab dengan menambahkan NavigationTab ke Navigation Hub.
+Method `layout` mengembalikan tipe layout untuk hub. Method ini menerima `BuildContext` sehingga Anda dapat mengakses data tema dan media query saat mengonfigurasi layout Anda.
+
+Anda dapat membuat lebih banyak tab dengan menambahkan `NavigationTab` ke Navigation Hub.
 
 Pertama, Anda perlu membuat widget baru menggunakan Metro.
 
 ``` bash
-metro make:stateful_widget create_advert_tab
+metro make:stateful_widget news_tab
 ```
 
 Anda juga dapat membuat beberapa widget sekaligus.
@@ -119,34 +127,21 @@ metro make:stateful_widget news_tab,notifications_tab
 Kemudian, Anda dapat menambahkan widget baru ke Navigation Hub.
 
 ``` dart
-  _BaseNavigationHubState() : super(() async {
-    return {
-      0: NavigationTab(
-        title: "Home",
-        page: HomeTab(),
-        icon: Icon(Icons.home),
-        activeIcon: Icon(Icons.home),
-      ),
-      1: NavigationTab(
-         title: "Settings",
-         page: SettingsTab(),
-         icon: Icon(Icons.settings),
-         activeIcon: Icon(Icons.settings),
-      ),
-      2: NavigationTab(
-         title: "News",
-         page: NewsTab(),
-         icon: Icon(Icons.newspaper),
-         activeIcon: Icon(Icons.newspaper),
-      ),
-    };
-  });
+_BaseNavigationHubState() : super(() => {
+    0: NavigationTab.tab(title: "Home", page: HomeTab()),
+    1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+    2: NavigationTab.tab(title: "News", page: NewsTab()),
+});
+```
 
+Untuk menggunakan Navigation Hub, tambahkan ke router Anda sebagai rute awal:
+
+``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
 appRouter() => nyRoutes((router) {
     ...
-    router.add(BaseNavigationHub.path).initalRoute();
+    router.add(BaseNavigationHub.path).initialRoute();
 });
 
 // or navigate to the Navigation Hub from anywhere in your app
@@ -160,12 +155,13 @@ Masih **banyak** lagi yang dapat Anda lakukan dengan Navigation Hub, mari kita b
 
 ### Navigasi Bawah
 
-Anda dapat mengubah tata letak menjadi navigasi bar bawah dengan mengatur **layout** menggunakan `NavigationHubLayout.bottomNav`.
+Anda dapat mengatur layout menjadi navigasi bar bawah dengan mengembalikan `NavigationHubLayout.bottomNav` dari method `layout`.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 ```
 
 Anda dapat menyesuaikan navigasi bar bawah dengan mengatur properti seperti berikut:
@@ -173,75 +169,28 @@ Anda dapat menyesuaikan navigasi bar bawah dengan mengatur properti seperti beri
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        // sesuaikan properti tata letak bottomNav
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        elevation: 8.0,
+        iconSize: 24.0,
+        selectedFontSize: 14.0,
+        unselectedFontSize: 12.0,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
     );
 ```
-
-<div id="bottom-nav-styles"></div>
-
-### Gaya Navigasi Bawah
 
 Anda dapat menerapkan gaya preset ke navigasi bar bawah Anda menggunakan parameter `style`.
 
-Nylo menyediakan beberapa gaya bawaan:
-
-- `BottomNavStyle.material()` - Gaya material Flutter default
-- `BottomNavStyle.glass()` - Efek kaca buram bergaya iOS 26 dengan blur
-- `BottomNavStyle.floating()` - Navigasi bar mengambang berbentuk pil dengan sudut membulat
-
-#### Gaya Glass
-
-Gaya glass menciptakan efek kaca buram yang indah, sempurna untuk desain modern terinspirasi iOS 26.
-
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.glass(),
-    );
-```
-
-Anda dapat menyesuaikan efek glass:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.glass(
-        blur: 15.0,                              // Blur intensity
-        opacity: 0.7,                            // Background opacity
-        borderRadius: BorderRadius.circular(20), // Rounded corners
-        margin: EdgeInsets.all(16),              // Float above the edge
-        backgroundColor: Colors.white.withValues(alpha: 0.8),
-    ),
-)
-```
-
-#### Gaya Floating
-
-Gaya floating menciptakan navigasi bar berbentuk pil yang mengambang di atas tepi bawah.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
-        style: BottomNavStyle.floating(),
-    );
-```
-
-Anda dapat menyesuaikan gaya floating:
-
-``` dart
-NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.floating(
-        borderRadius: BorderRadius.circular(30),
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shadow: BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-        ),
-        backgroundColor: Colors.white,
-    ),
-)
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
+    style: BottomNavStyle.material(), // Default Flutter material style
+);
 ```
 
 <div id="custom-nav-bar-builder"></div>
@@ -255,7 +204,8 @@ Ini memungkinkan Anda membangun widget kustom apa pun sambil tetap menerima data
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav(
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
         navBarBuilder: (context, data) {
             return MyCustomNavBar(
                 items: data.items,
@@ -311,12 +261,13 @@ NavigationHubLayout.bottomNav(
 
 ### Navigasi Atas
 
-Anda dapat mengubah tata letak menjadi navigasi bar atas dengan mengatur **layout** menggunakan `NavigationHubLayout.topNav`.
+Anda dapat mengubah layout menjadi navigasi bar atas dengan mengembalikan `NavigationHubLayout.topNav` dari method `layout`.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.topNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav();
 ```
 
 Anda dapat menyesuaikan navigasi bar atas dengan mengatur properti seperti berikut:
@@ -324,8 +275,15 @@ Anda dapat menyesuaikan navigasi bar atas dengan mengatur properti seperti berik
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.topNav(
-        // sesuaikan properti tata letak topNav
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav(
+        backgroundColor: Colors.white,
+        labelColor: Colors.blue,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: Colors.blue,
+        indicatorWeight: 3.0,
+        isScrollable: false,
+        hideAppBarTitle: true,
     );
 ```
 
@@ -333,137 +291,72 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ### Navigasi Journey
 
-Anda dapat mengubah tata letak menjadi navigasi journey dengan mengatur **layout** menggunakan `NavigationHubLayout.journey`.
+Anda dapat mengubah layout menjadi navigasi journey dengan mengembalikan `NavigationHubLayout.journey` dari method `layout`.
 
 Ini sangat cocok untuk alur onboarding atau form multi-langkah.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        // sesuaikan properti tata letak journey
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+          indicator: JourneyProgressIndicator.segments(),
+        ),
     );
 ```
 
-Jika Anda ingin menggunakan tata letak navigasi journey, **widget** Anda harus menggunakan `JourneyState` karena berisi banyak method helper untuk membantu Anda mengelola journey.
+Anda juga dapat mengatur `backgroundGradient` untuk layout journey:
 
-Anda dapat membuat JourneyState menggunakan perintah di bawah ini.
+``` dart
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    backgroundGradient: LinearGradient(
+        colors: [Colors.blue, Colors.purple],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+    ),
+    progressStyle: JourneyProgressStyle(
+      indicator: JourneyProgressIndicator.linear(),
+    ),
+);
+```
+
+> **Catatan:** Ketika `backgroundGradient` diatur, ia akan lebih diprioritaskan daripada `backgroundColor`.
+
+Jika Anda ingin menggunakan layout navigasi journey, **widget** Anda sebaiknya menggunakan `JourneyState` karena berisi banyak method helper untuk membantu Anda mengelola journey.
+
+Anda dapat membuat seluruh journey menggunakan perintah `make:navigation_hub` dengan layout `journey_states`:
+
+``` bash
+metro make:navigation_hub onboarding
+# Select: journey_states
+# Enter: welcome, personal_info, add_photos
+```
+
+Ini akan membuat hub dan semua widget journey state di `resources/pages/navigation_hubs/onboarding/states/`.
+
+Atau Anda dapat membuat widget journey individual menggunakan:
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
-Ini akan membuat file berikut di direktori **resources/widgets/** Anda: `welcome.dart`, `phone_number_step.dart` dan `add_photos_step.dart`.
 
 Anda kemudian dapat menambahkan widget baru ke Navigation Hub.
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
 ```
-
-Tata letak navigasi journey akan secara otomatis menangani tombol kembali dan lanjut untuk Anda jika Anda mendefinisikan `buttonStyle`.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        buttonStyle: JourneyButtonStyle.standard(
-            // Sesuaikan properti tombol
-        ),
-    );
-```
-
-Anda juga dapat menyesuaikan logika di widget Anda.
-
-``` dart
-import 'package:flutter/material.dart';
-import '/resources/pages/onboarding_navigation_hub.dart';
-import '/resources/widgets/buttons/buttons.dart';
-import 'package:nylo_framework/nylo_framework.dart';
-
-class WelcomeStep extends StatefulWidget {
-  const WelcomeStep({super.key});
-
-  @override
-  createState() => _WelcomeStepState();
-}
-
-class _WelcomeStepState extends JourneyState<WelcomeStep> {
-  _WelcomeStepState() : super(
-      navigationHubState: OnboardingNavigationHub.path.stateName());
-
-  @override
-  get init => () {
-    // Logika inisialisasi Anda di sini
-  };
-
-  @override
-  Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('WelcomeStep', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
-        ],
-      ),
-      nextButton: Button.primary(
-        text: isLastStep ? "Get Started" : "Continue",
-        onPressed: onNextPressed,
-      ),
-      backButton: isFirstStep ? null : Button.textOnly(
-        text: "Back",
-        textColor: Colors.black87,
-        onPressed: onBackPressed,
-      ),
-    );
-  }
-
-  /// Periksa apakah journey dapat melanjutkan ke langkah berikutnya
-  /// Override method ini untuk menambahkan logika validasi
-  Future<bool> canContinue() async {
-    // Lakukan logika validasi Anda di sini
-    // Kembalikan true jika journey dapat melanjutkan, false jika tidak
-    return true;
-  }
-
-  /// Dipanggil saat tidak dapat melanjutkan (canContinue mengembalikan false)
-  /// Override method ini untuk menangani kegagalan validasi
-  Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
-  }
-
-  /// Dipanggil sebelum berpindah ke langkah berikutnya
-  /// Override method ini untuk melakukan aksi sebelum melanjutkan
-  Future<void> onBeforeNext() async {
-    // Contoh: simpan data di sini sebelum berpindah
-  }
-
-  /// Dipanggil setelah berpindah ke langkah berikutnya
-  /// Override method ini untuk melakukan aksi setelah melanjutkan
-  Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
-  }
-
-  /// Dipanggil saat journey selesai (di langkah terakhir)
-  /// Override method ini untuk melakukan aksi penyelesaian
-  Future<void> onComplete() async {}
-}
-```
-
-Anda dapat meng-override method apa pun di kelas `JourneyState`.
 
 <div id="journey-progress-styles"></div>
 
@@ -474,31 +367,34 @@ Anda dapat menyesuaikan gaya indikator progress menggunakan kelas `JourneyProgre
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(
-            activeColor: Colors.blue,
-            inactiveColor: Colors.grey,
-            thickness: 4.0,
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+        progressStyle: JourneyProgressStyle(
+            indicator: JourneyProgressIndicator.linear(
+                activeColor: Colors.blue,
+                inactiveColor: Colors.grey,
+                thickness: 4.0,
+            ),
         ),
     );
 ```
 
-Anda dapat menggunakan gaya progress berikut:
+Anda dapat menggunakan indikator progress berikut:
 
-- `JourneyProgressIndicator.none`: Tidak merender apa pun — berguna untuk menyembunyikan indikator pada tab tertentu.
-- `JourneyProgressIndicator.linear`: Indikator progress linear.
-- `JourneyProgressIndicator.dots`: Indikator progress berbasis titik.
-- `JourneyProgressIndicator.numbered`: Indikator progress langkah bernomor.
-- `JourneyProgressIndicator.segments`: Gaya progress bar tersegmentasi.
-- `JourneyProgressIndicator.circular`: Indikator progress melingkar.
-- `JourneyProgressIndicator.timeline`: Indikator progress gaya timeline.
-- `JourneyProgressIndicator.custom`: Indikator progress kustom menggunakan fungsi builder.
+- `JourneyProgressIndicator.none()`: Tidak merender apa pun - berguna untuk menyembunyikan indikator pada tab tertentu.
+- `JourneyProgressIndicator.linear()`: Indikator progress linear.
+- `JourneyProgressIndicator.dots()`: Indikator progress berbasis titik.
+- `JourneyProgressIndicator.numbered()`: Indikator progress langkah bernomor.
+- `JourneyProgressIndicator.segments()`: Gaya progress bar tersegmentasi.
+- `JourneyProgressIndicator.circular()`: Indikator progress melingkar.
+- `JourneyProgressIndicator.timeline()`: Indikator progress gaya timeline.
+- `JourneyProgressIndicator.custom()`: Indikator progress kustom menggunakan fungsi builder.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.custom(
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.custom(
             builder: (context, currentStep, totalSteps, percentage) {
                 return LinearProgressIndicator(
                     value: percentage,
@@ -508,21 +404,21 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
                 );
             },
         ),
-    );
+    ),
+);
 ```
 
 Anda dapat menyesuaikan posisi dan padding indikator progress di dalam `JourneyProgressStyle`:
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle(
-            indicator: JourneyProgressIndicator.dots(),
-            position: ProgressIndicatorPosition.bottom,
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        ),
-    );
+@override
+NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey(
+    progressStyle: JourneyProgressStyle(
+        indicator: JourneyProgressIndicator.dots(),
+        position: ProgressIndicatorPosition.bottom,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    ),
+);
 ```
 
 Anda dapat menggunakan posisi indikator progress berikut:
@@ -535,55 +431,27 @@ Anda dapat menggunakan posisi indikator progress berikut:
 Anda dapat meng-override `progressStyle` pada level layout untuk tab individual menggunakan `NavigationTab.journey(progressStyle: ...)`. Tab tanpa `progressStyle` sendiri akan mewarisi default layout. Tab tanpa default layout dan tanpa gaya per-tab tidak akan menampilkan indikator progress.
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-            progressStyle: JourneyProgressStyle(
-                indicator: JourneyProgressIndicator.numbered(),
-            ), // overrides the layout default for this tab only
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
+_MyNavigationHubState() : super(() => {
+    0: NavigationTab.journey(
+        page: Welcome(),
+    ),
+    1: NavigationTab.journey(
+        page: PhoneNumberStep(),
+        progressStyle: JourneyProgressStyle(
+            indicator: JourneyProgressIndicator.numbered(),
+        ), // overrides the layout default for this tab only
+    ),
+    2: NavigationTab.journey(
+        page: AddPhotosStep(),
+    ),
 });
-```
-
-<div id="journey-button-styles">
-<br>
-
-### Gaya Tombol Journey
-
-Jika Anda ingin membangun alur onboarding, Anda dapat mengatur properti `buttonStyle` di kelas `NavigationHubLayout.journey`.
-
-Secara langsung, Anda dapat menggunakan gaya tombol berikut:
-
-- `JourneyButtonStyle.standard`: Gaya tombol standar dengan properti yang dapat disesuaikan.
-- `JourneyButtonStyle.minimal`: Gaya tombol minimal hanya dengan ikon.
-- `JourneyButtonStyle.outlined`: Gaya tombol outlined.
-- `JourneyButtonStyle.contained`: Gaya tombol contained.
-- `JourneyButtonStyle.custom`: Gaya tombol kustom menggunakan fungsi builder.
-
-``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.journey(
-        progressStyle: JourneyProgressStyle.linear(),
-        buttonStyle: JourneyButtonStyle.standard(
-            // Sesuaikan properti tombol
-        ),
-    );
 ```
 
 <div id="journey-state"></div>
 
 ### JourneyState
 
-Kelas `JourneyState` berisi banyak method helper untuk membantu Anda mengelola journey.
+Kelas `JourneyState` meng-extend `NyState` dengan fungsionalitas khusus journey untuk mempermudah pembuatan alur onboarding dan journey multi-langkah.
 
 Untuk membuat `JourneyState` baru, Anda dapat menggunakan perintah di bawah ini.
 
@@ -597,33 +465,24 @@ Atau jika Anda ingin membuat beberapa widget sekaligus, Anda dapat menggunakan p
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
 
-Ini akan membuat file berikut di direktori **resources/widgets/** Anda: `welcome.dart`, `phone_number_step.dart` dan `add_photos_step.dart`.
-
-Anda kemudian dapat menambahkan widget baru ke Navigation Hub.
+Berikut tampilan widget JourneyState yang dihasilkan:
 
 ``` dart
-_MyNavigationHubState() : super(() async {
-    return {
-        0: NavigationTab.journey(
-            page: Welcome(),
-        ),
-        1: NavigationTab.journey(
-            page: PhoneNumberStep(),
-        ),
-        2: NavigationTab.journey(
-            page: AddPhotosStep(),
-        ),
-    };
-});
-```
+import 'package:flutter/material.dart';
+import '/resources/pages/navigation_hubs/onboarding/onboarding_navigation_hub.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 
-Jika kita melihat kelas `WelcomeStep`, kita dapat melihat bahwa ia meng-extend kelas `JourneyState`.
+class Welcome extends StatefulWidget {
+  const Welcome({super.key});
 
-``` dart
-...
-class _WelcomeTabState extends JourneyState<WelcomeTab> {
-  _WelcomeTabState() : super(
-      navigationHubState: BaseNavigationHub.path.stateName());
+  @override
+  createState() => _WelcomeState();
+}
+
+class _WelcomeState extends JourneyState<Welcome> {
+  _WelcomeState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
 
   @override
   get init => () {
@@ -632,22 +491,100 @@ class _WelcomeTabState extends JourneyState<WelcomeTab> {
 
   @override
   Widget view(BuildContext context) {
-    return buildJourneyContent(
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          Text('WelcomeTab', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 20),
-          Text('This onboarding journey will help you get started.'),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 20),
+                  Text('This onboarding journey will help you get started.'),
+                ],
+              ),
+            ),
+          ),
+
+          // Navigation buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (!isFirstStep)
+                Flexible(
+                  child: Button.textOnly(
+                    text: "Back",
+                    textColor: Colors.black87,
+                    onPressed: onBackPressed,
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+              Flexible(
+                child: Button.primary(
+                  text: "Continue",
+                  onPressed: nextStep,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
+  /// Check if the journey can continue to the next step
+  @override
+  Future<bool> canContinue() async {
+    return true;
+  }
+
+  /// Called before navigating to the next step
+  @override
+  Future<void> onBeforeNext() async {
+    // E.g. save data to session
+  }
+
+  /// Called when the journey is complete (at the last step)
+  @override
+  Future<void> onComplete() async {}
+}
 ```
 
-Anda akan melihat bahwa kelas **JourneyState** menggunakan `buildJourneyContent` untuk membangun konten halaman.
+Anda akan melihat bahwa kelas **JourneyState** menggunakan `nextStep` untuk berpindah maju dan `onBackPressed` untuk kembali.
 
-Berikut daftar properti yang dapat Anda gunakan di method `buildJourneyContent`.
+Method `nextStep` menjalankan seluruh siklus validasi: `canContinue()` -> `onBeforeNext()` -> navigasi (atau `onComplete()` jika di langkah terakhir) -> `onAfterNext()`.
+
+Anda juga dapat menggunakan `buildJourneyContent` untuk membangun layout terstruktur dengan tombol navigasi opsional:
+
+``` dart
+@override
+Widget view(BuildContext context) {
+    return buildJourneyContent(
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 20),
+          Text('This onboarding journey will help you get started.'),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: isLastStep ? "Get Started" : "Continue",
+        onPressed: nextStep,
+      ),
+      backButton: isFirstStep ? null : Button.textOnly(
+        text: "Back",
+        textColor: Colors.black87,
+        onPressed: onBackPressed,
+      ),
+    );
+}
+```
+
+Berikut properti yang dapat Anda gunakan di method `buildJourneyContent`.
 
 | Properti | Tipe | Deskripsi |
 | --- | --- | --- |
@@ -659,38 +596,44 @@ Berikut daftar properti yang dapat Anda gunakan di method `buildJourneyContent`.
 | `footer` | `Widget?` | Widget footer. |
 | `crossAxisAlignment` | `CrossAxisAlignment` | Alignment sumbu silang konten. |
 
-
 <div id="journey-state-helper-methods"></div>
 
 ### Method Helper JourneyState
 
-Kelas `JourneyState` memiliki beberapa method helper yang dapat Anda gunakan untuk menyesuaikan perilaku journey Anda.
+Kelas `JourneyState` memiliki method helper dan properti yang dapat Anda gunakan untuk menyesuaikan perilaku journey Anda.
 
-| Method | Deskripsi |
+| Method / Properti | Deskripsi |
 | --- | --- |
-| [`onNextPressed()`](#on-next-pressed) | Dipanggil saat tombol lanjut ditekan. |
-| [`onBackPressed()`](#on-back-pressed) | Dipanggil saat tombol kembali ditekan. |
+| [`nextStep()`](#next-step) | Berpindah ke langkah berikutnya dengan validasi. Mengembalikan `Future<bool>`. |
+| [`previousStep()`](#previous-step) | Berpindah ke langkah sebelumnya. Mengembalikan `Future<bool>`. |
+| [`onBackPressed()`](#on-back-pressed) | Helper sederhana untuk berpindah ke langkah sebelumnya. |
 | [`onComplete()`](#on-complete) | Dipanggil saat journey selesai (di langkah terakhir). |
 | [`onBeforeNext()`](#on-before-next) | Dipanggil sebelum berpindah ke langkah berikutnya. |
 | [`onAfterNext()`](#on-after-next) | Dipanggil setelah berpindah ke langkah berikutnya. |
-| [`onCannotContinue()`](#on-cannot-continue) | Dipanggil saat journey tidak dapat melanjutkan (canContinue mengembalikan false). |
-| [`canContinue()`](#can-continue) | Dipanggil saat pengguna mencoba berpindah ke langkah berikutnya. |
+| [`canContinue()`](#can-continue) | Pengecekan validasi sebelum berpindah ke langkah berikutnya. |
 | [`isFirstStep`](#is-first-step) | Mengembalikan true jika ini adalah langkah pertama dalam journey. |
 | [`isLastStep`](#is-last-step) | Mengembalikan true jika ini adalah langkah terakhir dalam journey. |
-| [`goToStep(int index)`](#go-to-step) | Navigasi ke indeks langkah berikutnya. |
-| [`goToNextStep()`](#go-to-next-step) | Navigasi ke langkah berikutnya. |
-| [`goToPreviousStep()`](#go-to-previous-step) | Navigasi ke langkah sebelumnya. |
-| [`goToFirstStep()`](#go-to-first-step) | Navigasi ke langkah pertama. |
-| [`goToLastStep()`](#go-to-last-step) | Navigasi ke langkah terakhir. |
+| [`currentStep`](#current-step) | Mengembalikan indeks langkah saat ini (berbasis 0). |
+| [`totalSteps`](#total-steps) | Mengembalikan jumlah total langkah. |
+| [`completionPercentage`](#completion-percentage) | Mengembalikan persentase penyelesaian (0.0 hingga 1.0). |
+| [`goToStep(int index)`](#go-to-step) | Langsung menuju langkah tertentu berdasarkan indeks. |
+| [`goToNextStep()`](#go-to-next-step) | Langsung menuju langkah berikutnya (tanpa validasi). |
+| [`goToPreviousStep()`](#go-to-previous-step) | Langsung menuju langkah sebelumnya (tanpa validasi). |
+| [`goToFirstStep()`](#go-to-first-step) | Langsung menuju langkah pertama. |
+| [`goToLastStep()`](#go-to-last-step) | Langsung menuju langkah terakhir. |
+| [`exitJourney()`](#exit-journey) | Keluar dari journey dengan melakukan pop pada root navigator. |
+| [`resetCurrentStep()`](#reset-current-step) | Mereset state langkah saat ini. |
+| [`onJourneyComplete`](#on-journey-complete) | Callback saat journey selesai (override di langkah terakhir). |
+| [`buildJourneyPage()`](#build-journey-page) | Membangun halaman journey layar penuh dengan Scaffold. |
 
 
-<div id="on-next-pressed"></div>
+<div id="next-step"></div>
 
-#### onNextPressed
+#### nextStep
 
-Method `onNextPressed` dipanggil saat tombol lanjut ditekan.
+Method `nextStep` berpindah ke langkah berikutnya dengan validasi penuh. Method ini menjalankan siklus: `canContinue()` -> `onBeforeNext()` -> navigasi atau `onComplete()` -> `onAfterNext()`.
 
-Contoh: Anda dapat menggunakan method ini untuk memicu langkah berikutnya dalam journey.
+Anda dapat memasukkan `force: true` untuk melewati validasi dan langsung berpindah.
 
 ``` dart
 @override
@@ -704,19 +647,38 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: onNextPressed, // ini akan mencoba berpindah ke langkah berikutnya
+            onPressed: nextStep, // runs validation then navigates
         ),
     );
 }
+```
+
+Untuk melewati validasi:
+
+``` dart
+onPressed: () => nextStep(force: true),
+```
+
+<div id="previous-step"></div>
+
+#### previousStep
+
+Method `previousStep` berpindah ke langkah sebelumnya. Mengembalikan `true` jika berhasil, `false` jika sudah di langkah pertama.
+
+``` dart
+onPressed: () async {
+    bool success = await previousStep();
+    if (!success) {
+      // Already at first step
+    }
+},
 ```
 
 <div id="on-back-pressed"></div>
 
 #### onBackPressed
 
-Method `onBackPressed` dipanggil saat tombol kembali ditekan.
-
-Contoh: Anda dapat menggunakan method ini untuk memicu langkah sebelumnya dalam journey.
+Method `onBackPressed` adalah helper sederhana yang memanggil `previousStep()` secara internal.
 
 ``` dart
 @override
@@ -731,7 +693,7 @@ Widget view(BuildContext context) {
         backButton: isFirstStep ? null : Button.textOnly(
             text: "Back",
             textColor: Colors.black87,
-            onPressed: onBackPressed, // ini akan mencoba berpindah ke langkah sebelumnya
+            onPressed: onBackPressed,
         ),
     );
 }
@@ -741,11 +703,10 @@ Widget view(BuildContext context) {
 
 #### onComplete
 
-Method `onComplete` dipanggil saat journey selesai (di langkah terakhir).
-
-Contoh: jika widget ini adalah langkah terakhir dalam journey, method ini akan dipanggil.
+Method `onComplete` dipanggil saat `nextStep()` dipicu di langkah terakhir (setelah validasi berhasil).
 
 ``` dart
+@override
 Future<void> onComplete() async {
     print("Journey completed");
 }
@@ -760,148 +721,13 @@ Method `onBeforeNext` dipanggil sebelum berpindah ke langkah berikutnya.
 Contoh: jika Anda ingin menyimpan data sebelum berpindah ke langkah berikutnya, Anda dapat melakukannya di sini.
 
 ``` dart
+@override
 Future<void> onBeforeNext() async {
-    // Contoh: simpan data di sini sebelum berpindah
-}
-```
-
-<div id="is-first-step"></div>
-
-#### isFirstStep
-
-Method `isFirstStep` mengembalikan true jika ini adalah langkah pertama dalam journey.
-
-Contoh: Anda dapat menggunakan method ini untuk menonaktifkan tombol kembali jika ini adalah langkah pertama.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly( // Contoh menonaktifkan tombol kembali
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: onBackPressed,
-        ),
-    );
-}
-```
-
-<div id="is-last-step"></div>
-
-#### isLastStep
-
-Method `isLastStep` mengembalikan true jika ini adalah langkah terakhir dalam journey.
-
-Contoh: Anda dapat menggunakan method ini untuk menonaktifkan tombol lanjut jika ini adalah langkah terakhir.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: isLastStep ? "Get Started" : "Continue", // Contoh memperbarui teks tombol lanjut
-            onPressed: onNextPressed,
-        ),
-    );
-}
-```
-
-<div id="go-to-step"></div>
-
-#### goToStep
-
-Method `goToStep` digunakan untuk berpindah ke langkah tertentu dalam journey.
-
-Contoh: Anda dapat menggunakan method ini untuk berpindah ke langkah tertentu dalam journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Add photos"
-            onPressed: () {
-                goToStep(2); // ini akan berpindah ke langkah dengan indeks 2
-                // Catatan: ini tidak akan memicu method onNextPressed
-            },
-        ),
-    );
-}
-```
-
-<div id="go-to-next-step"></div>
-
-#### goToNextStep
-
-Method `goToNextStep` digunakan untuk berpindah ke langkah berikutnya dalam journey.
-
-Contoh: Anda dapat menggunakan method ini untuk berpindah ke langkah berikutnya dalam journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToNextStep(); // ini akan berpindah ke langkah berikutnya
-                // Catatan: ini tidak akan memicu method onNextPressed
-            },
-        ),
-    );
-}
-```
-
-<div id="go-to-previous-step"></div>
-
-#### goToPreviousStep
-
-Method `goToPreviousStep` digunakan untuk berpindah ke langkah sebelumnya dalam journey.
-
-Contoh: Anda dapat menggunakan method ini untuk berpindah ke langkah sebelumnya dalam journey.
-
-``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        backButton: isFirstStep ? null : Button.textOnly(
-            text: "Back",
-            textColor: Colors.black87,
-            onPressed: () {
-                goToPreviousStep(); // ini akan berpindah ke langkah sebelumnya
-            },
-        ),
-    );
+    // E.g. save data to session
+    // session('onboarding', {
+    //   'name': 'Anthony Gordon',
+    //   'occupation': 'Software Engineer',
+    // });
 }
 ```
 
@@ -911,26 +737,10 @@ Widget view(BuildContext context) {
 
 Method `onAfterNext` dipanggil setelah berpindah ke langkah berikutnya.
 
-
-Contoh: jika Anda ingin melakukan aksi setelah berpindah ke langkah berikutnya, Anda dapat melakukannya di sini.
-
 ``` dart
+@override
 Future<void> onAfterNext() async {
     // print('Navigated to the next step');
-}
-```
-
-<div id="on-cannot-continue"></div>
-
-#### onCannotContinue
-
-Method `onCannotContinue` dipanggil saat journey tidak dapat melanjutkan (canContinue mengembalikan false).
-
-Contoh: jika Anda ingin menampilkan pesan error saat pengguna mencoba berpindah ke langkah berikutnya tanpa mengisi field yang diperlukan, Anda dapat melakukannya di sini.
-
-``` dart
-Future<void> onCannotContinue() async {
-    showToastSorry(description: "You cannot continue");
 }
 ```
 
@@ -938,74 +748,233 @@ Future<void> onCannotContinue() async {
 
 #### canContinue
 
-Method `canContinue` dipanggil saat pengguna mencoba berpindah ke langkah berikutnya.
-
-Contoh: jika Anda ingin melakukan validasi sebelum berpindah ke langkah berikutnya, Anda dapat melakukannya di sini.
+Method `canContinue` dipanggil saat `nextStep()` dipicu. Kembalikan `false` untuk mencegah navigasi.
 
 ``` dart
+@override
 Future<bool> canContinue() async {
-    // Lakukan logika validasi Anda di sini
-    // Kembalikan true jika journey dapat melanjutkan, false jika tidak
+    // Perform your validation logic here
+    // Return true if the journey can continue, false otherwise
+    if (nameController.text.isEmpty) {
+        showToastSorry(description: "Please enter your name");
+        return false;
+    }
     return true;
 }
+```
+
+<div id="is-first-step"></div>
+
+#### isFirstStep
+
+Properti `isFirstStep` mengembalikan true jika ini adalah langkah pertama dalam journey.
+
+``` dart
+backButton: isFirstStep ? null : Button.textOnly(
+    text: "Back",
+    textColor: Colors.black87,
+    onPressed: onBackPressed,
+),
+```
+
+<div id="is-last-step"></div>
+
+#### isLastStep
+
+Properti `isLastStep` mengembalikan true jika ini adalah langkah terakhir dalam journey.
+
+``` dart
+nextButton: Button.primary(
+    text: isLastStep ? "Get Started" : "Continue",
+    onPressed: nextStep,
+),
+```
+
+<div id="current-step"></div>
+
+#### currentStep
+
+Properti `currentStep` mengembalikan indeks langkah saat ini (berbasis 0).
+
+``` dart
+Text("Step ${currentStep + 1} of $totalSteps"),
+```
+
+<div id="total-steps"></div>
+
+#### totalSteps
+
+Properti `totalSteps` mengembalikan jumlah total langkah dalam journey.
+
+<div id="completion-percentage"></div>
+
+#### completionPercentage
+
+Properti `completionPercentage` mengembalikan persentase penyelesaian sebagai nilai dari 0.0 hingga 1.0.
+
+``` dart
+LinearProgressIndicator(value: completionPercentage),
+```
+
+<div id="go-to-step"></div>
+
+#### goToStep
+
+Method `goToStep` langsung menuju langkah tertentu berdasarkan indeks. Method ini **tidak** memicu validasi.
+
+``` dart
+nextButton: Button.primary(
+    text: "Skip to photos",
+    onPressed: () {
+        goToStep(2); // jump to step index 2
+    },
+),
+```
+
+<div id="go-to-next-step"></div>
+
+#### goToNextStep
+
+Method `goToNextStep` langsung menuju langkah berikutnya tanpa validasi. Jika sudah di langkah terakhir, method ini tidak melakukan apa-apa.
+
+``` dart
+onPressed: () {
+    goToNextStep(); // skip validation and go to next step
+},
+```
+
+<div id="go-to-previous-step"></div>
+
+#### goToPreviousStep
+
+Method `goToPreviousStep` langsung menuju langkah sebelumnya tanpa validasi. Jika sudah di langkah pertama, method ini tidak melakukan apa-apa.
+
+``` dart
+onPressed: () {
+    goToPreviousStep();
+},
 ```
 
 <div id="go-to-first-step"></div>
 
 #### goToFirstStep
 
-Method `goToFirstStep` digunakan untuk berpindah ke langkah pertama dalam journey.
-
-
-Contoh: Anda dapat menggunakan method ini untuk berpindah ke langkah pertama dalam journey.
+Method `goToFirstStep` langsung menuju langkah pertama.
 
 ``` dart
-@override
-Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToFirstStep(); // ini akan berpindah ke langkah pertama
-            },
-        ),
-    );
-}
+onPressed: () {
+    goToFirstStep();
+},
 ```
 
 <div id="go-to-last-step"></div>
 
 #### goToLastStep
 
-Method `goToLastStep` digunakan untuk berpindah ke langkah terakhir dalam journey.
+Method `goToLastStep` langsung menuju langkah terakhir.
 
-Contoh: Anda dapat menggunakan method ini untuk berpindah ke langkah terakhir dalam journey.
+``` dart
+onPressed: () {
+    goToLastStep();
+},
+```
+
+<div id="exit-journey"></div>
+
+#### exitJourney
+
+Method `exitJourney` keluar dari journey dengan melakukan pop pada root navigator.
+
+``` dart
+onPressed: () {
+    exitJourney(); // pop the root navigator
+},
+```
+
+<div id="reset-current-step"></div>
+
+#### resetCurrentStep
+
+Method `resetCurrentStep` mereset state langkah saat ini.
+
+``` dart
+onPressed: () {
+    resetCurrentStep();
+},
+```
+
+<div id="on-journey-complete"></div>
+
+### onJourneyComplete
+
+Getter `onJourneyComplete` dapat di-override di **langkah terakhir** journey Anda untuk menentukan apa yang terjadi saat pengguna menyelesaikan alur tersebut.
+
+``` dart
+class _CompleteStepState extends JourneyState<CompleteStep> {
+  _CompleteStepState() : super(
+      navigationHubState: OnboardingNavigationHub.path.stateName());
+
+  /// Callback when journey completes
+  @override
+  void Function()? get onJourneyComplete => () {
+    // Navigate to your home page or next destination
+    routeTo(HomePage.path);
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          ...
+          Button.primary(
+            text: "Get Started",
+            onPressed: onJourneyComplete, // triggers the completion callback
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+<div id="build-journey-page"></div>
+
+### buildJourneyPage
+
+Method `buildJourneyPage` membangun halaman journey layar penuh yang dibungkus dalam `Scaffold` dengan `SafeArea`.
 
 ``` dart
 @override
 Widget view(BuildContext context) {
-    return buildJourneyContent(
-        content: Column(
+    return buildJourneyPage(
+      content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-                ...
-            ],
-        ),
-        nextButton: Button.primary(
-            text: "Continue",
-            onPressed: () {
-                goToLastStep(); // ini akan berpindah ke langkah terakhir
-            },
-        ),
+          Text('Welcome', style: Theme.of(context).textTheme.headlineMedium),
+        ],
+      ),
+      nextButton: Button.primary(
+        text: "Continue",
+        onPressed: nextStep,
+      ),
+      backgroundColor: Colors.white,
     );
 }
 ```
+
+| Properti | Tipe | Deskripsi |
+| --- | --- | --- |
+| `content` | `Widget` | Konten utama halaman. |
+| `nextButton` | `Widget?` | Widget tombol lanjut. |
+| `backButton` | `Widget?` | Widget tombol kembali. |
+| `contentPadding` | `EdgeInsetsGeometry` | Padding untuk konten. |
+| `header` | `Widget?` | Widget header. |
+| `footer` | `Widget?` | Widget footer. |
+| `backgroundColor` | `Color?` | Warna latar belakang Scaffold. |
+| `appBar` | `Widget?` | Widget AppBar opsional. |
+| `crossAxisAlignment` | `CrossAxisAlignment` | Alignment sumbu silang konten. |
 
 <div id="navigating-within-a-tab"></div>
 
@@ -1043,38 +1012,38 @@ _HomeTabState extends State<HomeTab> {
 
 Tab adalah blok bangunan utama dari Navigation Hub.
 
-Anda dapat menambahkan tab ke Navigation Hub menggunakan kelas `NavigationTab`.
+Anda dapat menambahkan tab ke Navigation Hub menggunakan kelas `NavigationTab` dan named constructor-nya.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab(
-                title: "Home",
-                page: HomeTab(),
-                icon: Icon(Icons.home),
-                activeIcon: Icon(Icons.home),
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.tab(
+            title: "Home",
+            page: HomeTab(),
+            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home),
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
-Pada contoh di atas, kami telah menambahkan dua tab ke Navigation Hub, Home dan Settings.
+Pada contoh di atas, kita menambahkan dua tab ke Navigation Hub, Home dan Settings.
 
-Anda dapat menggunakan berbagai jenis tab seperti `NavigationTab`, `NavigationTab.badge`, dan `NavigationTab.alert`.
+Anda dapat menggunakan berbagai jenis tab:
 
-- Kelas `NavigationTab.badge` digunakan untuk menambahkan badge ke tab.
-- Kelas `NavigationTab.alert` digunakan untuk menambahkan alert ke tab.
-- Kelas `NavigationTab` digunakan untuk menambahkan tab normal.
+- `NavigationTab.tab()` - Tab navigasi standar.
+- `NavigationTab.badge()` - Tab dengan jumlah badge.
+- `NavigationTab.alert()` - Tab dengan indikator alert.
+- `NavigationTab.journey()` - Tab untuk layout navigasi journey.
 
 <div id="adding-badges-to-tabs"></div>
 
@@ -1082,76 +1051,61 @@ Anda dapat menggunakan berbagai jenis tab seperti `NavigationTab`, `NavigationTa
 
 Kami telah memudahkan untuk menambahkan badge ke tab Anda.
 
-Badge adalah cara yang bagus untuk menunjukkan kepada pengguna bahwa ada sesuatu yang baru di tab.
+Badge adalah cara yang bagus untuk menunjukkan kepada pengguna bahwa ada sesuatu yang baru di suatu tab.
 
-Contoh, jika Anda memiliki aplikasi chat, Anda dapat menampilkan jumlah pesan yang belum dibaca di tab chat.
+Contohnya, jika Anda memiliki aplikasi chat, Anda dapat menampilkan jumlah pesan yang belum dibaca di tab chat.
 
-Untuk menambahkan badge ke tab, Anda dapat menggunakan kelas `NavigationTab.badge`.
+Untuk menambahkan badge ke tab, Anda dapat menggunakan constructor `NavigationTab.badge`.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.badge(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            initialCount: 10,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
-Pada contoh di atas, kami telah menambahkan badge ke tab Chat dengan jumlah awal 10.
+Pada contoh di atas, kita menambahkan badge ke tab Chat dengan jumlah awal 10.
 
 Anda juga dapat memperbarui jumlah badge secara programatis.
 
 ``` dart
-/// Tambahkan jumlah badge
+/// Increment the badge count
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Perbarui jumlah badge
+/// Update the badge count
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Hapus jumlah badge
+/// Clear the badge count
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
 Secara default, jumlah badge akan diingat. Jika Anda ingin **menghapus** jumlah badge setiap sesi, Anda dapat mengatur `rememberCount` ke `false`.
 
 ``` dart
-class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
-    ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
-    ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.badge(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                initialCount: 10,
-                rememberCount: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
-    });
+0: NavigationTab.badge(
+    title: "Chats",
+    page: ChatTab(),
+    icon: Icon(Icons.message),
+    activeIcon: Icon(Icons.message),
+    initialCount: 10,
+    rememberCount: false,
+),
 ```
 
 <div id="adding-alerts-to-tabs"></div>
@@ -1160,33 +1114,32 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 Anda dapat menambahkan alert ke tab Anda.
 
-Terkadang Anda mungkin tidak ingin menampilkan jumlah badge, tetapi ingin menampilkan alert kepada pengguna.
+Terkadang Anda mungkin tidak ingin menampilkan jumlah badge, tetapi ingin menampilkan indikator alert kepada pengguna.
 
-Untuk menambahkan alert ke tab, Anda dapat menggunakan kelas `NavigationTab.alert`.
+Untuk menambahkan alert ke tab, Anda dapat menggunakan constructor `NavigationTab.alert`.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-    NavigationHubLayout? layout = NavigationHubLayout.bottomNav();
+    @override
+    NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
     ...
-    _MyNavigationHubState() : super(() async {
-        return {
-            0: NavigationTab.alert(
-                title: "Chats",
-                page: ChatTab(),
-                icon: Icon(Icons.message),
-                activeIcon: Icon(Icons.message),
-                alertColor: Colors.red,
-                alertEnabled: true,
-                rememberAlert: false,
-            ),
-            1: NavigationTab(
-                title: "Settings",
-                page: SettingsTab(),
-                icon: Icon(Icons.settings),
-                activeIcon: Icon(Icons.settings),
-            ),
-        };
+    _MyNavigationHubState() : super(() => {
+        0: NavigationTab.alert(
+            title: "Chats",
+            page: ChatTab(),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message),
+            alertColor: Colors.red,
+            alertEnabled: true,
+            rememberAlert: false,
+        ),
+        1: NavigationTab.tab(
+            title: "Settings",
+            page: SettingsTab(),
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings),
+        ),
     });
 ```
 
@@ -1195,22 +1148,37 @@ Ini akan menambahkan alert ke tab Chat dengan warna merah.
 Anda juga dapat memperbarui alert secara programatis.
 
 ``` dart
-/// Aktifkan alert
+/// Enable the alert
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Nonaktifkan alert
+/// Disable the alert
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
+```
+
+<div id="initial-index"></div>
+
+## Indeks Awal
+
+Secara default, Navigation Hub dimulai dari tab pertama (indeks 0). Anda dapat mengubahnya dengan meng-override getter `initialIndex`.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    int get initialIndex => 1; // Start on the second tab
+    ...
+}
 ```
 
 <div id="maintaining-state"></div>
 
-## Mempertahankan state
+## Mempertahankan State
 
 Secara default, state Navigation Hub dipertahankan.
 
-Ini berarti saat Anda berpindah ke tab, state tab tersebut dipertahankan.
+Ini berarti saat Anda berpindah ke tab, state tab tersebut akan dipertahankan.
 
-Jika Anda ingin menghapus state tab setiap kali Anda berpindah ke sana, Anda dapat mengatur `maintainState` ke `false`.
+Jika Anda ingin menghapus state tab setiap kali berpindah ke sana, Anda dapat mengatur `maintainState` ke `false`.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1221,50 +1189,89 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 }
 ```
 
+<div id="on-tap"></div>
+
+## onTap
+
+Anda dapat meng-override method `onTap` untuk menambahkan logika kustom saat sebuah tab diketuk.
+
+``` dart
+class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
+    ...
+    @override
+    onTap(int index) {
+        // Add custom logic here
+        // E.g. track analytics, show confirmation, etc.
+        super.onTap(index); // Always call super to handle the tab switch
+    }
+}
+```
+
 <div id="state-actions"></div>
 
 ## Aksi State
 
 Aksi state adalah cara untuk berinteraksi dengan Navigation Hub dari mana saja di aplikasi Anda.
 
-Berikut beberapa aksi state yang dapat Anda gunakan:
+Berikut aksi state yang dapat Anda gunakan:
 
 ``` dart
-  /// Reset tab
-  /// Contoh: MyNavigationHub.stateActions.resetTabState(tab: 0);
-  resetTabState({required tab});
+/// Reset the tab at a given index
+/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+resetTabIndex(int tabIndex);
 
-  /// Perbarui jumlah badge
-  /// Contoh: MyNavigationHub.updateBadgeCount(tab: 0, count: 2);
-  updateBadgeCount({required int tab, required int count});
+/// Change the current tab programmatically
+/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+currentTabIndex(int tabIndex);
 
-  /// Tambahkan jumlah badge
-  /// Contoh: MyNavigationHub.incrementBadgeCount(tab: 0);
-  incrementBadgeCount({required int tab});
+/// Update the badge count
+/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+updateBadgeCount({required int tab, required int count});
 
-  /// Hapus jumlah badge
-  /// Contoh: MyNavigationHub.clearBadgeCount(tab: 0);
-  clearBadgeCount({required int tab});
+/// Increment the badge count
+/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+incrementBadgeCount({required int tab});
+
+/// Clear the badge count
+/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+clearBadgeCount({required int tab});
+
+/// Enable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+alertEnableTab({required int tab});
+
+/// Disable the alert for a tab
+/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+alertDisableTab({required int tab});
+
+/// Navigate to the next page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.nextPage();
+Future<bool> nextPage();
+
+/// Navigate to the previous page in a journey layout
+/// E.g. await MyNavigationHub.stateActions.previousPage();
+Future<bool> previousPage();
 ```
 
 Untuk menggunakan aksi state, Anda dapat melakukan hal berikut:
 
 ``` dart
 MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
-// atau
-MyNavigationHub.stateActions.resetTabState(tab: 0);
+
+MyNavigationHub.stateActions.resetTabIndex(0);
+
+MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+
+await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
 ```
 
 <div id="loading-style"></div>
 
 ## Gaya Loading
 
-Secara langsung, Navigation Hub akan menampilkan Widget loading **default** Anda (resources/widgets/loader_widget.dart) saat tab sedang loading.
+Secara default, Navigation Hub akan menampilkan Widget loading **default** Anda (resources/widgets/loader_widget.dart) saat tab sedang loading.
 
 Anda dapat menyesuaikan `loadingStyle` untuk memperbarui gaya loading.
-
-Berikut tabel untuk berbagai gaya loading yang dapat Anda gunakan:
-// normal, skeletonizer, none
 
 | Gaya | Deskripsi |
 | --- | --- |
@@ -1277,7 +1284,7 @@ Anda dapat mengubah gaya loading seperti ini:
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// atau
+// or
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -1300,22 +1307,18 @@ Contoh di bawah ini:
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
-     _BaseNavigationHubState() : super(() async {
+    _MyNavigationHubState() : super(() async {
 
-      await sleep(3); // simulasi loading selama 3 detik
+      await sleep(3); // simulate loading for 3 seconds
 
       return {
-        0: NavigationTab(
+        0: NavigationTab.tab(
           title: "Home",
           page: HomeTab(),
-          icon: Icon(Icons.home),
-          activeIcon: Icon(Icons.home),
         ),
-        1: NavigationTab(
+        1: NavigationTab.tab(
           title: "Settings",
           page: SettingsTab(),
-          icon: Icon(Icons.settings),
-          activeIcon: Icon(Icons.settings),
         ),
       };
     });
@@ -1340,4 +1343,6 @@ Untuk membuat Navigation Hub, Anda dapat menggunakan [Metro](/docs/{{$version}}/
 metro make:navigation_hub base
 ```
 
-Ini akan membuat file base_navigation_hub.dart di direktori `resources/pages/` Anda dan menambahkan Navigation Hub ke file `routes/router.dart` Anda.
+Perintah ini akan memandu Anda melalui pengaturan interaktif di mana Anda dapat memilih tipe layout dan menentukan tab atau journey state Anda.
+
+Ini akan membuat file `base_navigation_hub.dart` di direktori `resources/pages/navigation_hubs/base/` Anda dengan widget anak yang terorganisir di subfolder `tabs/` atau `states/`.
