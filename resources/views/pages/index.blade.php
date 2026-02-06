@@ -60,7 +60,7 @@
                     </svg>
                 </a>
 
-                <button type="button" onclick="copyCommand(this)" class="group w-full sm:w-auto" data-command="dart pub global activate nylo">
+                <button type="button" onclick="copyCommand(this)" class="group w-full sm:w-auto" data-command="dart pub global activate nylo_installer">
                     <div class="flex flex-col items-center sm:items-start rounded-lg transition-colors">
                         <div class="text-sm mb-1 text-gray-500">{{ __('Get started: Nylo installer') }}</div>
                         <div class="bg-gradient-to-r border-l border-neutral-300 border-r flex flex-col from-gray-50 items-center rounded-lg transition-colors w-full sm:w-auto dark:from-slate-700 dark:border-slate-600">
@@ -69,7 +69,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="#54a9d6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19h8M4 17l6-6l-6-6"></path></svg>
                                 </div>
                                 <div class="text-xs sm:text-sm font-mono text-gray-700 dark:text-gray-300 select-none relative flex items-center group">
-                                    dart pub global activate nylo</div>
+                                    dart pub global activate nylo_installer</div>
                                 <div class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600">
                                     <svg class="copy-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.2474 6.25033V2.91699H17.0807V13.7503H13.7474M13.7474 6.25033V17.0837H2.91406V6.25033H13.7474Z" stroke="currentColor" stroke-linecap="round"></path>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="copy-instructions hidden text-center sm:text-left mt-3">
-                            <span>Run: </span><span class="font-medium text-gray-500">dart pub global activate nylo</span><span> in your terminal.</span>
+                            <span>Run: </span><span class="font-medium text-gray-500">dart pub global activate nylo_installer</span><span> in your terminal.</span>
                             <div class="block">
                                 <span>Next: Run </span><span class="font-medium text-blue-500">nylo new example_project</span>
                             </div>
