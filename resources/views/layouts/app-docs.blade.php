@@ -143,7 +143,7 @@
                 <div class="flex gap-8">
                     <!-- Left Sidebar Navigation -->
                     <div id="nav-controller"
-                        class="hidden lg:block fixed z-20 w-[19.5rem] h-[calc(100vh-3.8125rem)] pb-10 px-8 overflow-y-auto bg-gray-50 dark:bg-slate-400/10">
+                        class="hidden lg:block fixed z-20 w-[19.5rem] h-[calc(100vh-3.8125rem)] pb-10 px-8 overflow-y-auto bg-gray-50 dark:bg-gray-900">
                         <nav id="nav" class="lg:text-sm lg:leading-6 relative">
 
                             <div class="sticky top-0 -ml-0.5 pointer-events-none hidden sm:block h-10">
