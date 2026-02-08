@@ -421,64 +421,60 @@ a, button {
     background-origin: padding-box, border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-    .prose-blockquote\:bg-slate-400\/10 :is(:where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
-        background-color: #070b15 !important;
-    }
-
-    .prose :where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *)) p {
-        color: #c8c8c8 !important;
-    }
-
-    .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
-        background-color: #384148 !important;
-        margin: 0 4px;
-    }
-
-    .prose :where(pre):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
-        color: var(--tw-prose-pre-code);
-        background-color: rgb(56 65 72) !important;
-        overflow-x: auto;
-        font-weight: 400;
-        font-size: 0.875em;
-        line-height: 1.7142857;
-        margin-top: 1.7142857em;
-        margin-bottom: 1.7142857em;
-        border-radius: 0.375rem;
-        padding-top: 0.8571429em;
-        padding-inline-end: 1.1428571em;
-        padding-bottom: 0.8571429em;
-        padding-inline-start: 1.1428571em;
-    }
-
-    .hljs-quote, .hljs-selector-class, .hljs-selector-id, .hljs-string, .hljs-template-tag, .hljs-type {
-        color: #03d995 !important;
-    }
-
-    .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
-        color: #ededed !important;
-    }
-
-    .DocSearch-Button {
-        background: #1c263ac4 !important;
-        height: 0 !important;
-        width: 100% !important;
-    }
-
-    .DocSearch-Button:active, .DocSearch-Button:focus, .DocSearch-Button:hover {
-        color: #c7c7c7 !important;
-        outline: none;
-    }
-
-    .hljs-comment {
-        color: #8a9696 !important;
-    }
+.dark .prose-blockquote\:bg-slate-400\/10 :is(:where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
+    background-color: #070b15 !important;
 }
 
-@media (prefers-color-scheme: light) {
-    .DocSearch-Button {
-        background: #f5f6f8 !important;
-    }
+.dark .prose :where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *)) p {
+    color: #c8c8c8 !important;
+}
+
+.dark .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    background-color: #384148 !important;
+    margin: 0 4px;
+}
+
+.dark .prose :where(pre):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    color: var(--tw-prose-pre-code);
+    background-color: rgb(56 65 72) !important;
+    overflow-x: auto;
+    font-weight: 400;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    margin-top: 1.7142857em;
+    margin-bottom: 1.7142857em;
+    border-radius: 0.375rem;
+    padding-top: 0.8571429em;
+    padding-inline-end: 1.1428571em;
+    padding-bottom: 0.8571429em;
+    padding-inline-start: 1.1428571em;
+}
+
+.dark .hljs-quote, .dark .hljs-selector-class, .dark .hljs-selector-id, .dark .hljs-string, .dark .hljs-template-tag, .dark .hljs-type {
+    color: #03d995 !important;
+}
+
+.dark .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    color: #ededed !important;
+}
+
+.dark .DocSearch-Button {
+    background: #1c263ac4 !important;
+    height: 0 !important;
+    width: 100% !important;
+}
+
+.dark .DocSearch-Button:active, .dark .DocSearch-Button:focus, .dark .DocSearch-Button:hover {
+    color: #c7c7c7 !important;
+    outline: none;
+}
+
+.dark .hljs-comment {
+    color: #8a9696 !important;
+}
+
+:not(.dark) .DocSearch-Button {
+    background: #f5f6f8 !important;
 }
 
 .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {

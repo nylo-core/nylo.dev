@@ -74,8 +74,8 @@
                             <span class="sr-only">{{ config('app.name') }} home page</span>
 
                             <img src="{{ asset('images/nylo_logo_filled.png') }}"
-                                class="hidden md:block lg:block h-10">
-                            <img src="{{ asset('images/nylo_logo.png') }}" class="block md:hidden lg:hidden">
+                                class="hidden md:block lg:block h-10 dark:brightness-0 dark:invert">
+                            <img src="{{ asset('images/nylo_logo.png') }}" class="block md:hidden lg:hidden dark:brightness-0 dark:invert">
                         </a>
 
                         <div class="relative" style="margin-right: 82px;">
@@ -164,7 +164,7 @@
                             <div id="reading-progress" class="h-full bg-gradient-to-r from-[#4f9edd] to-[#07becc] transition-all duration-150 ease-out" style="width: 0%"></div>
                         </div>
 
-                        <main class="relative z-20 pt-12 pb-20 bg-white px-6 sm:px-8 lg:px-16 dark:bg-slate-900">
+                        <main class="relative z-20 pt-12 pb-20 bg-white px-6 sm:px-8 lg:px-16 dark:bg-[#0b111f]">
 
                             <div class="relative max-w-3xl mx-auto">
 
@@ -305,7 +305,7 @@
                     </div>
 
                     <!-- Right Sidebar - On This Page -->
-                    <aside class="hidden lg:block fixed h-[calc(100vh-3.8125rem)] overflow-y-auto right-0 top-[3.8125rem] w-[17rem] z-40 bg-gradient-to-b from-white via-white to-slate-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/50">
+                    <aside class="hidden lg:block fixed h-[calc(100vh-3.8125rem)] overflow-y-auto right-0 top-[3.8125rem] w-[17rem] z-40 bg-gradient-to-b from-white via-white to-slate-50/50 dark:from-[#0b111f] dark:via-[#0b111f] dark:to-[#0b111f]">
 
                         <div class="sticky top-0 -ml-0.5 pointer-events-none hidden sm:block h-10">
                                 <div class="h-10"></div>

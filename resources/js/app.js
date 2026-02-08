@@ -28,8 +28,15 @@ Alpine.store('darkMode', {
         (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches),
 
     init() {
-        // Apply dark mode class on page load
         document.documentElement.classList.toggle('dark', this.on);
+
+        // Follow system appearance changes when user hasn't explicitly chosen
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (localStorage.getItem('darkMode') === null) {
+                this.on = e.matches;
+                document.documentElement.classList.toggle('dark', e.matches);
+            }
+        });
     },
 
     toggle() {
