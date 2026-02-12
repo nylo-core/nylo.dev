@@ -9,6 +9,7 @@
 - Fondamenti
   - [Localizzare il Testo](#localizing-text "Localizzare il testo")
     - [Argomenti](#arguments "Argomenti")
+    - [Segnaposto StyledText](#styled-text-placeholders "Segnaposto StyledText")
   - [Aggiornare la Lingua](#updating-the-locale "Aggiornare la lingua")
   - [Impostare una Lingua Predefinita](#setting-a-default-locale "Impostare una lingua predefinita")
 - Avanzato
@@ -186,6 +187,56 @@ Passa valori dinamici nelle tue traduzioni utilizzando la sintassi `@{{key}}`:
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### Segnaposto StyledText
+
+Quando utilizzi `StyledText.template` con stringhe localizzate, puoi usare la sintassi `{{key:text}}`. Questo mantiene il **key** stabile in tutte le lingue (in modo che i tuoi stili e gestori di tap corrispondano sempre), mentre il **text** viene tradotto per ogni lingua.
+
+**lang/it.json**
+``` json
+{
+  "learn_skills": "Impara {{lang:Lingue}}, {{read:Lettura}} e {{speak:Parlato}}",
+  "already_have_account": "Hai già un account? {{login:Accedi}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**Nel tuo widget:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Le chiavi `lang`, `read` e `speak` sono le stesse in ogni file di lingua, quindi la mappa degli stili funziona per tutte le lingue. Il testo visualizzato dopo i `:` è ciò che l'utente vede — "Lingue" in italiano, "Idiomas" in spagnolo, ecc.
+
+Puoi anche usare questo con `onTap`:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Nota:** La sintassi `@{{key}}` (con prefisso `@`) è per gli argomenti sostituiti da `.tr(arguments:)` al momento della traduzione. La sintassi `{{key:text}}` (senza `@`) è per i segnaposto `StyledText` analizzati al momento del rendering. Non confonderli — usa `@{{}}` per valori dinamici e `{{}}` per gli span stilizzati.
 
 <div id="updating-the-locale"></div>
 

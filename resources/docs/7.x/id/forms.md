@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-Membuka date picker. Tipe gaya: `FieldStyleDateTimePicker`
+Membuka date picker. Secara default, field menampilkan tombol hapus yang memungkinkan pengguna mereset nilai. Atur `canClear: false` untuk menyembunyikannya, atau gunakan `clearIconData` untuk mengubah ikon. Tipe gaya: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Membuka date picker. Tipe gaya: `FieldStyleDateTimePicker`
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-Membuka picker tanggal dan waktu. Tipe gaya: `FieldStyleDateTimePicker`
+Membuka picker tanggal dan waktu. Anda dapat mengatur `firstDate`, `lastDate`, `dateFormat`, dan `initialPickerDateTime` langsung sebagai parameter tingkat atas. Tipe gaya: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 Parameter `options` memerlukan `FormCollection` (bukan list mentah). Lihat [FormCollection](#form-collection) untuk detail. Tipe gaya: `FieldStylePicker`
+
+#### Gaya List Tile
+
+Anda dapat menyesuaikan tampilan item di bottom sheet picker menggunakan `PickerListTileStyle`. Secara default, bottom sheet menampilkan tile teks polos. Gunakan preset bawaan untuk menambahkan indikator pemilihan, atau sediakan builder kustom sepenuhnya.
+
+**Gaya radio** — menampilkan ikon tombol radio sebagai widget utama:
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**Gaya centang** — menampilkan ikon centang sebagai widget trailing saat dipilih:
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**Builder kustom** — kontrol penuh atas widget setiap tile:
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+Kedua gaya preset juga mendukung `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor`, dan `selectedTileColor`:
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 Getter `init` dapat mengembalikan `Map` sinkron atau `Future<Map>` async. Kunci dicocokkan dengan nama field menggunakan normalisasi snake_case, jadi `"First Name"` dipetakan ke field dengan kunci `"First Name"`.
+
+#### Menggunakan `define()` di init
+
+Gunakan helper `define()` ketika Anda perlu mengatur **options** (atau nilai dan options sekaligus) untuk sebuah field di `init`. Ini berguna untuk field picker, chip, dan radio di mana options berasal dari API atau sumber async lainnya.
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` menerima dua parameter bernama:
+
+| Parameter | Deskripsi |
+|-----------|-------------|
+| `value` | Nilai awal untuk field |
+| `options` | Options untuk field picker, chip, atau radio |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+Options yang dikirim ke `define()` dapat berupa `List`, `Map`, atau `FormCollection`. Mereka secara otomatis dikonversi menjadi `FormCollection` saat diterapkan.
 
 **Opsi 2: Kirim `initialData` ke widget form**
 
@@ -1038,7 +1175,7 @@ Method yang dapat Anda override di subkelas `NyFormWidget` Anda:
 | `Field.url()` | -- | Input URL dengan tipe keyboard |
 | `Field.mask()` | `mask` (wajib), `match`, `maskReturnValue` | Input teks masked |
 | `Field.date()` | -- | Date picker |
-| `Field.datetime()` | -- | Picker tanggal dan waktu |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Picker tanggal dan waktu |
 | `Field.checkbox()` | -- | Checkbox boolean |
 | `Field.switchBox()` | -- | Toggle switch boolean |
 | `Field.picker()` | `options` (wajib `FormCollection`) | Seleksi tunggal dari daftar |

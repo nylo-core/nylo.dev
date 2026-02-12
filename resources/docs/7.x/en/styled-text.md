@@ -10,6 +10,7 @@
   - [Styling Placeholders](#styling-placeholders "Styling Placeholders")
   - [Tap Callbacks](#tap-callbacks "Tap Callbacks")
   - [Pipe-Separated Keys](#pipe-keys "Pipe-Separated Keys")
+  - [Localization Keys](#localization-keys "Localization Keys")
 - [Parameters](#parameters "Parameters")
 - [Text Extensions](#text-extensions "Text Extensions")
   - [Typography Styles](#typography-styles "Typography Styles")
@@ -171,6 +172,38 @@ StyledText.template(
 ```
 
 This maps the same style and callback to all three placeholders.
+
+<div id="localization-keys"></div>
+
+### Localization Keys
+
+Use `@{{key:text}}` syntax to separate the **lookup key** from the **display text**. This is useful for localization — the key stays the same across all locales while the display text changes per language.
+
+``` dart
+// In your locale files:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN renders: "Learn Languages, Reading and Speaking in AppName"
+// ES renders: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+The part before `:` is the **key** used to look up styles and tap callbacks. The part after `:` is the **display text** that renders on screen. Without `:`, the placeholder behaves exactly as before — fully backward compatible.
+
+This works with all existing features including [pipe-separated keys](#pipe-keys) and [tap callbacks](#tap-callbacks).
 
 <div id="parameters"></div>
 

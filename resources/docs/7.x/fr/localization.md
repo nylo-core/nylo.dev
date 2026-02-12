@@ -9,6 +9,7 @@
 - Les bases
   - [Localiser du texte](#localizing-text "Localiser du texte")
     - [Arguments](#arguments "Arguments")
+    - [Espaces réservés StyledText](#styled-text-placeholders "Espaces réservés StyledText")
   - [Mettre a jour la locale](#updating-the-locale "Mettre a jour la locale")
   - [Definir une locale par defaut](#setting-a-default-locale "Definir une locale par defaut")
 - Avance
@@ -186,6 +187,56 @@ Passez des valeurs dynamiques dans vos traductions en utilisant la syntaxe `@{{k
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### Espaces réservés StyledText
+
+Lorsque vous utilisez `StyledText.template` avec des chaînes localisées, vous pouvez utiliser la syntaxe `{{key:text}}`. Cela maintient le **key** stable dans toutes les locales (afin que vos styles et gestionnaires de tap correspondent toujours), tandis que le **text** est traduit par locale.
+
+**lang/fr.json**
+``` json
+{
+  "learn_skills": "Apprendre {{lang:Langues}}, {{read:Lecture}} et {{speak:Expression orale}}",
+  "already_have_account": "Vous avez déjà un compte ? {{login:Se connecter}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**Dans votre widget :**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Les clés `lang`, `read` et `speak` sont identiques dans chaque fichier de locale, de sorte que la map de styles fonctionne pour toutes les langues. Le texte affiché après le `:` est ce que l'utilisateur voit — "Langues" en français, "Idiomas" en espagnol, etc.
+
+Vous pouvez également utiliser ceci avec `onTap` :
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Note :** La syntaxe `@{{key}}` (avec le préfixe `@`) est pour les arguments remplacés par `.tr(arguments:)` au moment de la traduction. La syntaxe `{{key:text}}` (sans `@`) est pour les espaces réservés `StyledText` analysés au moment du rendu. Ne les confondez pas — utilisez `@{{}}` pour les valeurs dynamiques et `{{}}` pour les segments stylisés.
 
 <div id="updating-the-locale"></div>
 

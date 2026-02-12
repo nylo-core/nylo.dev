@@ -9,6 +9,7 @@
 - Basics
   - [Localizing Text](#localizing-text "Localizing text")
     - [Arguments](#arguments "Arguments")
+    - [StyledText Placeholders](#styled-text-placeholders "StyledText placeholders")
   - [Updating the Locale](#updating-the-locale "Updating the locale")
   - [Setting a Default Locale](#setting-a-default-locale "Setting a default locale")
 - Advanced
@@ -186,6 +187,56 @@ Pass dynamic values into your translations using the `@{{key}}` syntax:
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### StyledText Placeholders
+
+When using `StyledText.template` with localized strings, you can use the `{{key:text}}` syntax. This keeps the **key** stable across all locales (so your styles and tap handlers always match), while the **text** is translated per locale.
+
+**lang/en.json**
+``` json
+{
+  "learn_skills": "Learn {{lang:Languages}}, {{read:Reading}} and {{speak:Speaking}} skills",
+  "already_have_account": "Already have an account? {{login:Login}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**In your widget:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+The keys `lang`, `read`, and `speak` are the same in every locale file, so the style map works for all languages. The display text after the `:` is what the user sees — "Languages" in English, "Idiomas" in Spanish, etc.
+
+You can also use this with `onTap`:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Note:** The `@{{key}}` syntax (with `@` prefix) is for arguments replaced by `.tr(arguments:)` at translation time. The `{{key:text}}` syntax (without `@`) is for `StyledText` placeholders parsed at render time. Don't mix them up — use `@{{}}` for dynamic values and `{{}}` for styled spans.
 
 <div id="updating-the-locale"></div>
 

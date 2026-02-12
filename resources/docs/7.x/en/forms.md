@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-Opens a date picker. Style type: `FieldStyleDateTimePicker`
+Opens a date picker. By default, the field shows a clear button that lets users reset the value. Set `canClear: false` to hide it, or use `clearIconData` to change the icon. Style type: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Opens a date picker. Style type: `FieldStyleDateTimePicker`
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-Opens a date and time picker. Style type: `FieldStyleDateTimePicker`
+Opens a date and time picker. You can set `firstDate`, `lastDate`, `dateFormat`, and `initialPickerDateTime` directly as top-level parameters. Style type: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 The `options` parameter requires a `FormCollection` (not a raw list). See [FormCollection](#form-collection) for details. Style type: `FieldStylePicker`
+
+#### List Tile Styles
+
+You can customize how items appear in the picker's bottom sheet using `PickerListTileStyle`. By default, the bottom sheet shows plain text tiles. Use the built-in presets to add selection indicators, or provide a fully custom builder.
+
+**Radio style** — shows a radio button icon as the leading widget:
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**Checkmark style** — shows a check icon as the trailing widget when selected:
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**Custom builder** — full control over each tile's widget:
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+Both preset styles also support `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor`, and `selectedTileColor`:
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 The `init` getter can return either a synchronous `Map` or an async `Future<Map>`. Keys are matched to field names using snake_case normalization, so `"First Name"` maps to a field with key `"First Name"`.
+
+#### Using `define()` in init
+
+Use the `define()` helper when you need to set **options** (or both a value and options) for a field in `init`. This is useful for picker, chip, and radio fields where the options come from an API or other async source.
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` accepts two named parameters:
+
+| Parameter | Description |
+|-----------|-------------|
+| `value` | The initial value for the field |
+| `options` | The options for picker, chip, or radio fields |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+Options passed to `define()` can be a `List`, `Map`, or `FormCollection`. They are automatically converted to a `FormCollection` when applied.
 
 **Option 2: Pass `initialData` to the form widget**
 
@@ -1038,7 +1175,7 @@ Methods you can override in your `NyFormWidget` subclass:
 | `Field.url()` | — | URL input with keyboard type |
 | `Field.mask()` | `mask` (required), `match`, `maskReturnValue` | Masked text input |
 | `Field.date()` | — | Date picker |
-| `Field.datetime()` | — | Date and time picker |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Date and time picker |
 | `Field.checkbox()` | — | Boolean checkbox |
 | `Field.switchBox()` | — | Boolean toggle switch |
 | `Field.picker()` | `options` (required `FormCollection`) | Single selection from list |

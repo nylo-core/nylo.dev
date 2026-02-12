@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-Bir tarih secici acar. Stil turu: `FieldStyleDateTimePicker`
+Bir tarih secici acar. Varsayilan olarak, alan kullanicilarin degeri sifirlamasina izin veren bir temizleme dugmesi gosterir. Gizlemek icin `canClear: false` ayarlayin veya simgeyi degistirmek icin `clearIconData` kullanin. Stil turu: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Bir tarih secici acar. Stil turu: `FieldStyleDateTimePicker`
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-Bir tarih ve saat secici acar. Stil turu: `FieldStyleDateTimePicker`
+Bir tarih ve saat secici acar. `firstDate`, `lastDate`, `dateFormat` ve `initialPickerDateTime` degerlerini dogrudan ust duzey parametreler olarak ayarlayabilirsiniz. Stil turu: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 `options` parametresi bir `FormCollection` gerektirir (ham liste degil). Ayrintilar icin [FormCollection](#form-collection) bolumune bakin. Stil turu: `FieldStylePicker`
+
+#### Liste Kutucugu Stilleri
+
+`PickerListTileStyle` kullanarak picker'in alt sayfasinda ogelerin gorunumunu ozellestirebilirsiniz. Varsayilan olarak, alt sayfa duz metin kutucukleri gosterir. Secim gostergelerini eklemek icin yerlesik sablonlari kullanin veya tamamen ozel bir builder saglayin.
+
+**Radyo stili** — basta widget olarak bir radyo dugmesi simgesi gosterir:
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**Onay isareti stili** — secildiginde sonda widget olarak bir onay simgesi gosterir:
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**Ozel builder** — her kutucugun widget'i uzerinde tam kontrol:
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+Her iki onayarli stil ayrica `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` ve `selectedTileColor` destekler:
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 `init` getter'i senkron bir `Map` veya asenkron bir `Future<Map>` dondurebilir. Anahtarlar, snake_case normalizasyonu kullanilarak alan adlariyla eslestirilir, bu nedenle `"First Name"` anahtari `"First Name"` adli bir alanla eslesir.
+
+#### init icinde `define()` kullanimi
+
+`init` icerisinde bir alan icin **secenekler** (veya hem bir deger hem de secenekler) ayarlamaniz gerektiginde `define()` yardimcisini kullanin. Bu, seceneklerin bir API veya baska bir asenkron kaynaktan geldigi picker, chip ve radio alanlari icin kullanislidir.
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` iki adlandirilmis parametre kabul eder:
+
+| Parametre | Aciklama |
+|-----------|-------------|
+| `value` | Alan icin baslangic degeri |
+| `options` | Picker, chip veya radio alanlari icin secenekler |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+`define()`'a gonderilen secenekler bir `List`, `Map` veya `FormCollection` olabilir. Uygulandiginda otomatik olarak bir `FormCollection`'a donusturulur.
 
 **Secenek 2: Form widget'ina `initialData` gecirin**
 
@@ -1038,7 +1175,7 @@ LoginForm.actions.submit(
 | `Field.url()` | -- | Klavye turlu URL girisi |
 | `Field.mask()` | `mask` (zorunlu), `match`, `maskReturnValue` | Maskeli metin girisi |
 | `Field.date()` | -- | Tarih secici |
-| `Field.datetime()` | -- | Tarih ve saat secici |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Tarih ve saat secici |
 | `Field.checkbox()` | -- | Boolean onay kutusu |
 | `Field.switchBox()` | -- | Boolean gecis anahtari |
 | `Field.picker()` | `options` (zorunlu `FormCollection`) | Listeden tekli secim |

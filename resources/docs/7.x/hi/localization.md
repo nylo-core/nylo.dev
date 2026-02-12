@@ -9,6 +9,7 @@
 - बेसिक्स
   - [टेक्स्ट लोकलाइज़ करना](#localizing-text "टेक्स्ट लोकलाइज़ करना")
     - [आर्ग्युमेंट्स](#arguments "आर्ग्युमेंट्स")
+    - [StyledText प्लेसहोल्डर](#styled-text-placeholders "StyledText प्लेसहोल्डर")
   - [लोकेल अपडेट करना](#updating-the-locale "लोकेल अपडेट करना")
   - [डिफ़ॉल्ट लोकेल सेट करना](#setting-a-default-locale "डिफ़ॉल्ट लोकेल सेट करना")
 - एडवांस्ड
@@ -186,6 +187,56 @@ trans("navigation.profile")  // "Profile"
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### StyledText प्लेसहोल्डर
+
+जब आप लोकलाइज़्ड स्ट्रिंग्स के साथ `StyledText.template` का उपयोग करते हैं, तो आप `{{key:text}}` सिंटैक्स का उपयोग कर सकते हैं। यह **key** को सभी लोकेल्स में स्थिर रखता है (ताकि आपकी स्टाइल्स और टैप हैंडलर्स हमेशा मैच करें), जबकि **text** प्रति लोकेल अनुवादित होता है।
+
+**lang/hi.json**
+``` json
+{
+  "learn_skills": "{{lang:भाषाएँ}}, {{read:पठन}} और {{speak:बोलना}} सीखें",
+  "already_have_account": "पहले से खाता है? {{login:लॉग इन करें}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**आपके विजेट में:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+कीज़ `lang`, `read` और `speak` हर लोकेल फ़ाइल में समान हैं, इसलिए स्टाइल मैप सभी भाषाओं के लिए काम करता है। `:` के बाद प्रदर्शित टेक्स्ट वह है जो उपयोगकर्ता देखता है — हिंदी में "भाषाएँ", स्पैनिश में "Idiomas", आदि।
+
+आप इसे `onTap` के साथ भी उपयोग कर सकते हैं:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **नोट:** `@{{key}}` सिंटैक्स (`@` प्रीफ़िक्स के साथ) ट्रांसलेशन समय पर `.tr(arguments:)` द्वारा प्रतिस्थापित आर्ग्युमेंट्स के लिए है। `{{key:text}}` सिंटैक्स (`@` के बिना) रेंडर समय पर पार्स किए जाने वाले `StyledText` प्लेसहोल्डर्स के लिए है। इन्हें मिलाएँ नहीं — डायनामिक वैल्यूज़ के लिए `@{{}}` और स्टाइल्ड स्पैन्स के लिए `{{}}` का उपयोग करें।
 
 <div id="updating-the-locale"></div>
 

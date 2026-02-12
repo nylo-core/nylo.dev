@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-Öffnet einen Datumswähler. Stiltyp: `FieldStyleDateTimePicker`
+Öffnet einen Datumswähler. Standardmäßig zeigt das Feld einen Löschen-Button, mit dem Benutzer den Wert zurücksetzen können. Setzen Sie `canClear: false`, um ihn auszublenden, oder verwenden Sie `clearIconData`, um das Symbol zu ändern. Stiltyp: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Field.date("Birthday",
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-Öffnet einen Datum- und Zeitwähler. Stiltyp: `FieldStyleDateTimePicker`
+Öffnet einen Datum- und Zeitwähler. Sie können `firstDate`, `lastDate`, `dateFormat` und `initialPickerDateTime` direkt als Parameter der obersten Ebene setzen. Stiltyp: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 Der Parameter `options` erfordert eine `FormCollection` (keine rohe Liste). Siehe [FormCollection](#form-collection) für Details. Stiltyp: `FieldStylePicker`
+
+#### Listenkachel-Stile
+
+Sie können das Erscheinungsbild von Elementen im Bottom Sheet des Pickers mit `PickerListTileStyle` anpassen. Standardmäßig zeigt das Bottom Sheet einfache Text-Kacheln an. Verwenden Sie die integrierten Vorlagen, um Auswahlmarkierungen hinzuzufügen, oder stellen Sie einen vollständig benutzerdefinierten Builder bereit.
+
+**Radio-Stil** — zeigt ein Radio-Button-Symbol als führendes Widget:
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**Häkchen-Stil** — zeigt ein Häkchen-Symbol als nachfolgendes Widget bei Auswahl:
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**Benutzerdefinierter Builder** — volle Kontrolle über das Widget jeder Kachel:
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+Beide vordefinierten Stile unterstützen auch `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` und `selectedTileColor`:
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 Der `init`-Getter kann entweder eine synchrone `Map` oder eine asynchrone `Future<Map>` zurückgeben. Schlüssel werden über snake_case-Normalisierung den Feldnamen zugeordnet, sodass `"First Name"` einem Feld mit dem Schlüssel `"First Name"` zugeordnet wird.
+
+#### Verwendung von `define()` in init
+
+Verwenden Sie den `define()`-Helfer, wenn Sie **Optionen** (oder sowohl einen Wert als auch Optionen) für ein Feld in `init` setzen müssen. Dies ist nützlich für Picker-, Chip- und Radio-Felder, bei denen die Optionen von einer API oder einer anderen asynchronen Quelle stammen.
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` akzeptiert zwei benannte Parameter:
+
+| Parameter | Beschreibung |
+|-----------|-------------|
+| `value` | Der Anfangswert für das Feld |
+| `options` | Die Optionen für Picker-, Chip- oder Radio-Felder |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+An `define()` übergebene Optionen können eine `List`, `Map` oder `FormCollection` sein. Sie werden automatisch in eine `FormCollection` umgewandelt, wenn sie angewendet werden.
 
 **Option 2: `initialData` an das Formular-Widget übergeben**
 
@@ -1038,7 +1175,7 @@ Methoden, die Sie in Ihrer `NyFormWidget`-Unterklasse überschreiben können:
 | `Field.url()` | -- | URL-Eingabe mit Tastaturtyp |
 | `Field.mask()` | `mask` (erforderlich), `match`, `maskReturnValue` | Maskierte Texteingabe |
 | `Field.date()` | -- | Datumswähler |
-| `Field.datetime()` | -- | Datum- und Zeitwähler |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Datum- und Zeitwähler |
 | `Field.checkbox()` | -- | Boolesche Checkbox |
 | `Field.switchBox()` | -- | Boolescher Kippschalter |
 | `Field.picker()` | `options` (erforderlich `FormCollection`) | Einzelauswahl aus Liste |

@@ -9,6 +9,7 @@
 - Grundlagen
   - [Text lokalisieren](#localizing-text "Text lokalisieren")
     - [Argumente](#arguments "Argumente")
+    - [StyledText-Platzhalter](#styled-text-placeholders "StyledText-Platzhalter")
   - [Locale aktualisieren](#updating-the-locale "Locale aktualisieren")
   - [Standard-Locale festlegen](#setting-a-default-locale "Standard-Locale festlegen")
 - Fortgeschritten
@@ -186,6 +187,56 @@ trans("navigation.profile")  // "Profile"
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### StyledText-Platzhalter
+
+Wenn Sie `StyledText.template` mit lokalisierten Strings verwenden, können Sie die `{{key:text}}`-Syntax nutzen. Dadurch bleibt der **key** über alle Locales hinweg stabil (sodass Ihre Styles und Tap-Handler immer übereinstimmen), während der **text** pro Locale übersetzt wird.
+
+**lang/de.json**
+``` json
+{
+  "learn_skills": "Lerne {{lang:Sprachen}}, {{read:Lesen}} und {{speak:Sprechen}}",
+  "already_have_account": "Bereits ein Konto? {{login:Anmelden}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**In Ihrem Widget:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Die Schlüssel `lang`, `read` und `speak` sind in jeder Locale-Datei identisch, sodass die Style-Map für alle Sprachen funktioniert. Der angezeigte Text nach dem `:` ist das, was der Benutzer sieht — "Sprachen" auf Deutsch, "Idiomas" auf Spanisch, usw.
+
+Sie können dies auch mit `onTap` verwenden:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Hinweis:** Die `@{{key}}`-Syntax (mit `@`-Präfix) ist für Argumente, die zur Übersetzungszeit durch `.tr(arguments:)` ersetzt werden. Die `{{key:text}}`-Syntax (ohne `@`) ist für `StyledText`-Platzhalter, die zur Renderzeit geparst werden. Verwechseln Sie sie nicht — verwenden Sie `@{{}}` für dynamische Werte und `{{}}` für gestylte Bereiche.
 
 <div id="updating-the-locale"></div>
 

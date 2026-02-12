@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-打开日期选择器。样式类型：`FieldStyleDateTimePicker`
+打开日期选择器。默认情况下，字段显示一个清除按钮，允许用户重置值。设置 `canClear: false` 隐藏它，或使用 `clearIconData` 更改图标。样式类型：`FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Field.date("Birthday",
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-打开日期和时间选择器。样式类型：`FieldStyleDateTimePicker`
+打开日期和时间选择器。您可以直接将 `firstDate`、`lastDate`、`dateFormat` 和 `initialPickerDateTime` 设置为顶级参数。样式类型：`FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 `options` 参数需要一个 `FormCollection`（不是原始列表）。查看 [FormCollection](#form-collection) 了解详情。样式类型：`FieldStylePicker`
+
+#### 列表磁贴样式
+
+您可以使用 `PickerListTileStyle` 自定义选择器底部弹窗中项目的显示方式。默认情况下，底部弹窗显示纯文本磁贴。使用内置预设添加选择指示器，或提供完全自定义的构建器。
+
+**单选样式** — 显示单选按钮图标作为前导组件：
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**勾选样式** — 选中时显示勾选图标作为尾随组件：
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**自定义构建器** — 完全控制每个磁贴的组件：
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+两种预设样式还支持 `textStyle`、`selectedTextStyle`、`contentPadding`、`tileColor` 和 `selectedTileColor`：
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 `init` getter 可以返回同步的 `Map` 或异步的 `Future<Map>`。键使用 snake_case 标准化与字段名匹配，因此 `"First Name"` 映射到键为 `"First Name"` 的字段。
+
+#### 在 init 中使用 `define()`
+
+当您需要在 `init` 中为字段设置**选项**（或同时设置值和选项）时，使用 `define()` 辅助方法。这对于选项来自 API 或其他异步源的选择器、芯片和单选字段非常有用。
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` 接受两个命名参数：
+
+| 参数 | 描述 |
+|-----------|-------------|
+| `value` | 字段的初始值 |
+| `options` | 选择器、芯片或单选字段的选项 |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+传递给 `define()` 的选项可以是 `List`、`Map` 或 `FormCollection`。应用时会自动转换为 `FormCollection`。
 
 **选项 2：将 `initialData` 传递给表单组件**
 
@@ -1038,7 +1175,7 @@ LoginForm.actions.submit(
 | `Field.url()` | -- | 带键盘类型的 URL 输入 |
 | `Field.mask()` | `mask`（必需）、`match`、`maskReturnValue` | 掩码文本输入 |
 | `Field.date()` | -- | 日期选择器 |
-| `Field.datetime()` | -- | 日期和时间选择器 |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | 日期和时间选择器 |
 | `Field.checkbox()` | -- | 布尔复选框 |
 | `Field.switchBox()` | -- | 布尔开关 |
 | `Field.picker()` | `options`（必需 `FormCollection`） | 从列表中单选 |

@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-Ouvre un selecteur de date. Type de style : `FieldStyleDateTimePicker`
+Ouvre un selecteur de date. Par defaut, le champ affiche un bouton d'effacement qui permet aux utilisateurs de reinitialiser la valeur. Definissez `canClear: false` pour le masquer, ou utilisez `clearIconData` pour changer l'icone. Type de style : `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Ouvre un selecteur de date. Type de style : `FieldStyleDateTimePicker`
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-Ouvre un selecteur de date et d'heure. Type de style : `FieldStyleDateTimePicker`
+Ouvre un selecteur de date et d'heure. Vous pouvez definir `firstDate`, `lastDate`, `dateFormat` et `initialPickerDateTime` directement comme parametres de premier niveau. Type de style : `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 Le parametre `options` necessite un `FormCollection` (pas une liste brute). Voir [FormCollection](#form-collection) pour plus de details. Type de style : `FieldStylePicker`
+
+#### Styles de tuile de liste
+
+Vous pouvez personnaliser l'apparence des elements dans la feuille inferieure du selecteur en utilisant `PickerListTileStyle`. Par defaut, la feuille inferieure affiche des tuiles de texte simple. Utilisez les presets integres pour ajouter des indicateurs de selection, ou fournissez un constructeur entierement personnalise.
+
+**Style radio** — affiche une icone de bouton radio comme widget principal :
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**Style coche** — affiche une icone de coche comme widget secondaire lorsque selectionne :
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**Constructeur personnalise** — controle total sur le widget de chaque tuile :
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+Les deux styles predefinis supportent egalement `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` et `selectedTileColor` :
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 Le getter `init` peut retourner soit un `Map` synchrone, soit un `Future<Map>` asynchrone. Les cles sont associees aux noms de champs en utilisant la normalisation snake_case, donc `"First Name"` correspond a un champ avec la cle `"First Name"`.
+
+#### Utilisation de `define()` dans init
+
+Utilisez le helper `define()` lorsque vous devez definir des **options** (ou a la fois une valeur et des options) pour un champ dans `init`. Ceci est utile pour les champs picker, chip et radio dont les options proviennent d'une API ou d'une autre source asynchrone.
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` accepte deux parametres nommes :
+
+| Parametre | Description |
+|-----------|-------------|
+| `value` | La valeur initiale du champ |
+| `options` | Les options pour les champs picker, chip ou radio |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+Les options passees a `define()` peuvent etre une `List`, `Map` ou `FormCollection`. Elles sont automatiquement converties en `FormCollection` lors de l'application.
 
 **Option 2 : Passer `initialData` au widget du formulaire**
 
@@ -1038,7 +1175,7 @@ Methodes que vous pouvez surcharger dans votre sous-classe `NyFormWidget` :
 | `Field.url()` | -- | Saisie URL avec type de clavier |
 | `Field.mask()` | `mask` (requis), `match`, `maskReturnValue` | Saisie de texte masquee |
 | `Field.date()` | -- | Selecteur de date |
-| `Field.datetime()` | -- | Selecteur de date et heure |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Selecteur de date et heure |
 | `Field.checkbox()` | -- | Case a cocher booleenne |
 | `Field.switchBox()` | -- | Interrupteur a bascule booleen |
 | `Field.picker()` | `options` (`FormCollection` requis) | Selection unique dans une liste |

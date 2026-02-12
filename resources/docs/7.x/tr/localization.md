@@ -9,6 +9,7 @@
 - Temel Bilgiler
   - [Metni Yerelleştirme](#localizing-text "Metni yerelleştirme")
     - [Argümanlar](#arguments "Argümanlar")
+    - [StyledText Yer Tutucuları](#styled-text-placeholders "StyledText yer tutucuları")
   - [Yerel Ayarı Güncelleme](#updating-the-locale "Yerel ayarı güncelleme")
   - [Varsayılan Yerel Ayar Belirleme](#setting-a-default-locale "Varsayılan yerel ayar belirleme")
 - Gelişmiş
@@ -186,6 +187,56 @@ trans("navigation.profile")  // "Profile"
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### StyledText Yer Tutucuları
+
+Yerelleştirilmiş dizelerle `StyledText.template` kullanırken `{{key:text}}` sözdizimini kullanabilirsiniz. Bu, **key**'i tüm yerel ayarlarda sabit tutar (böylece stilleriniz ve dokunma işleyicileriniz her zaman eşleşir), **text** ise yerel ayara göre çevrilir.
+
+**lang/tr.json**
+``` json
+{
+  "learn_skills": "{{lang:Diller}}, {{read:Okuma}} ve {{speak:Konuşma}} öğren",
+  "already_have_account": "Zaten bir hesabınız var mı? {{login:Giriş yap}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**Widget'ınızda:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`lang`, `read` ve `speak` anahtarları her yerel ayar dosyasında aynıdır, bu nedenle stil haritası tüm diller için çalışır. `:` sonrasındaki görüntülenen metin kullanıcının gördüğüdür — Türkçe'de "Diller", İspanyolca'da "Idiomas", vb.
+
+Bunu `onTap` ile de kullanabilirsiniz:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Not:** `@{{key}}` sözdizimi (`@` öneki ile) çeviri zamanında `.tr(arguments:)` tarafından değiştirilen argümanlar içindir. `{{key:text}}` sözdizimi (`@` olmadan) render zamanında ayrıştırılan `StyledText` yer tutucuları içindir. Bunları karıştırmayın — dinamik değerler için `@{{}}` ve stillendirilmiş alanlar için `{{}}` kullanın.
 
 <div id="updating-the-locale"></div>
 

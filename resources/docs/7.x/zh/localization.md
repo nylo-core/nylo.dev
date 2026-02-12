@@ -9,6 +9,7 @@
 - 基础
   - [文本本地化](#localizing-text "文本本地化")
     - [参数](#arguments "参数")
+    - [StyledText 占位符](#styled-text-placeholders "StyledText 占位符")
   - [更新区域设置](#updating-the-locale "更新区域设置")
   - [设置默认区域设置](#setting-a-default-locale "设置默认区域设置")
 - 高级
@@ -186,6 +187,56 @@ trans("navigation.profile")  // "Profile"
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### StyledText 占位符
+
+当您将 `StyledText.template` 与本地化字符串一起使用时，可以使用 `{{key:text}}` 语法。这使 **key** 在所有区域设置中保持稳定（因此您的样式和点击处理程序始终匹配），而 **text** 则按区域设置进行翻译。
+
+**lang/zh.json**
+``` json
+{
+  "learn_skills": "学习 {{lang:语言}}、{{read:阅读}} 和 {{speak:口语}} 技能",
+  "already_have_account": "已有账户？{{login:登录}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**在您的组件中：**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+键 `lang`、`read` 和 `speak` 在每个区域文件中都相同，因此样式映射适用于所有语言。`:` 后面显示的文本是用户看到的内容 — 中文中是"语言"，西班牙语中是"Idiomas"，等等。
+
+您还可以将此与 `onTap` 一起使用：
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **注意：** `@{{key}}` 语法（带 `@` 前缀）用于在翻译时由 `.tr(arguments:)` 替换的参数。`{{key:text}}` 语法（不带 `@`）用于在渲染时解析的 `StyledText` 占位符。不要混淆它们 — 使用 `@{{}}` 表示动态值，使用 `{{}}` 表示样式化区间。
 
 <div id="updating-the-locale"></div>
 

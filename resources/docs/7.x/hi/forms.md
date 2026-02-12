@@ -332,9 +332,23 @@ Field.date("Birthday",
     lastDate: DateTime.now(),
   ),
 )
+
+// Disable the clear button
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    canClear: false,
+  ),
+)
+
+// Custom clear icon
+Field.date("Birthday",
+  style: FieldStyleDateTimePicker(
+    clearIconData: Icons.close,
+  ),
+)
 ```
 
-डेट पिकर खोलता है। स्टाइल प्रकार: `FieldStyleDateTimePicker`
+डेट पिकर खोलता है। डिफ़ॉल्ट रूप से, फ़ील्ड एक क्लियर बटन दिखाता है जो उपयोगकर्ताओं को मान रीसेट करने देता है। इसे छिपाने के लिए `canClear: false` सेट करें, या आइकन बदलने के लिए `clearIconData` का उपयोग करें। स्टाइल प्रकार: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
@@ -343,10 +357,15 @@ Field.date("Birthday",
 ``` dart
 Field.datetime("Check in Date")
 
-Field.datetime("Appointment", dummyData: "2025-01-01 10:00")
+Field.datetime("Appointment",
+  firstDate: DateTime(2025),
+  lastDate: DateTime(2030),
+  dateFormat: DateFormat('yyyy-MM-dd HH:mm'),
+  initialPickerDateTime: DateTime.now(),
+)
 ```
 
-डेट और टाइम पिकर खोलता है। स्टाइल प्रकार: `FieldStyleDateTimePicker`
+डेट और टाइम पिकर खोलता है। आप `firstDate`, `lastDate`, `dateFormat` और `initialPickerDateTime` को सीधे टॉप-लेवल पैरामीटर के रूप में सेट कर सकते हैं। स्टाइल प्रकार: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
@@ -422,6 +441,73 @@ Field.picker("Country",
 ```
 
 `options` पैरामीटर के लिए `FormCollection` आवश्यक है (रॉ लिस्ट नहीं)। विवरण के लिए [FormCollection](#form-collection) देखें। स्टाइल प्रकार: `FieldStylePicker`
+
+#### लिस्ट टाइल स्टाइल
+
+आप `PickerListTileStyle` का उपयोग करके पिकर के बॉटम शीट में आइटम्स की दिखावट को कस्टमाइज़ कर सकते हैं। डिफ़ॉल्ट रूप से, बॉटम शीट सादे टेक्स्ट टाइल्स दिखाता है। सिलेक्शन इंडिकेटर जोड़ने के लिए बिल्ट-इन प्रीसेट्स का उपयोग करें, या पूरी तरह से कस्टम बिल्डर प्रदान करें।
+
+**रेडियो स्टाइल** — लीडिंग विजेट के रूप में रेडियो बटन आइकन दिखाता है:
+
+``` dart
+Field.picker("Country",
+  options: FormCollection.from(["United States", "Canada", "United Kingdom"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.radio(),
+  ),
+)
+
+// With a custom active color
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
+)
+```
+
+**चेकमार्क स्टाइल** — सिलेक्ट होने पर ट्रेलिंग विजेट के रूप में चेक आइकन दिखाता है:
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.checkmark(activeColor: Colors.green),
+  ),
+)
+```
+
+**कस्टम बिल्डर** — प्रत्येक टाइल के विजेट पर पूर्ण नियंत्रण:
+
+``` dart
+Field.picker("Color",
+  options: FormCollection.from(["Red", "Green", "Blue"]),
+  style: FieldStylePicker(
+    listTileStyle: PickerListTileStyle.custom(
+      builder: (option, isSelected, onTap) {
+        return ListTile(
+          title: Text(option.label,
+            style: TextStyle(
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          trailing: isSelected ? Icon(Icons.check_circle) : null,
+          onTap: onTap,
+        );
+      },
+    ),
+  ),
+)
+```
+
+दोनों प्रीसेट स्टाइल `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` और `selectedTileColor` को भी सपोर्ट करते हैं:
+
+``` dart
+FieldStylePicker(
+  listTileStyle: PickerListTileStyle.radio(
+    activeColor: Colors.blue,
+    textStyle: TextStyle(fontSize: 16),
+    selectedTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    selectedTileColor: Colors.blue.shade50,
+  ),
+)
+```
 
 <div id="radio-fields"></div>
 
@@ -662,6 +748,57 @@ class EditAccountForm extends NyFormWidget {
 ```
 
 `init` गेटर सिंक्रोनस `Map` या एसिंक `Future<Map>` रिटर्न कर सकता है। कीज़ को snake_case नॉर्मलाइज़ेशन का उपयोग करके फ़ील्ड नामों से मैच किया जाता है, इसलिए `"First Name"` कुंजी `"First Name"` वाले फ़ील्ड से मैप होती है।
+
+#### init में `define()` का उपयोग
+
+`define()` हेल्पर का उपयोग तब करें जब आपको `init` में किसी फ़ील्ड के लिए **ऑप्शंस** (या वैल्यू और ऑप्शंस दोनों) सेट करने की आवश्यकता हो। यह पिकर, चिप और रेडियो फ़ील्ड्स के लिए उपयोगी है जहां ऑप्शंस API या अन्य एसिंक्रोनस स्रोत से आते हैं।
+
+``` dart
+class CreatePostForm extends NyFormWidget {
+  CreatePostForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
+
+  @override
+  Function()? get init => () async {
+    final categories = await api<ApiService>((request) => request.getCategories());
+
+    return {
+      "Title": "My Post",
+      "Category": define(options: categories),
+    };
+  };
+
+  @override
+  fields() => [
+    Field.text("Title"),
+    Field.picker("Category", options: FormCollection.from([])),
+  ];
+
+  static NyFormActions get actions => const NyFormActions('CreatePostForm');
+}
+```
+
+`define()` दो नामित पैरामीटर स्वीकार करता है:
+
+| पैरामीटर | विवरण |
+|-----------|-------------|
+| `value` | फ़ील्ड का प्रारंभिक मान |
+| `options` | पिकर, चिप या रेडियो फ़ील्ड्स के लिए ऑप्शंस |
+
+``` dart
+// Set only options (no initial value)
+"Category": define(options: categories),
+
+// Set only an initial value
+"Price": define(value: "100"),
+
+// Set both a value and options
+"Country": define(value: "us", options: countries),
+
+// Plain values still work for simple fields
+"Name": "John",
+```
+
+`define()` को पास किए गए ऑप्शंस `List`, `Map` या `FormCollection` हो सकते हैं। अप्लाई करते समय ये स्वचालित रूप से `FormCollection` में परिवर्तित हो जाते हैं।
 
 **ऑप्शन 2: फ़ॉर्म विजेट में `initialData` पास करें**
 
@@ -1038,7 +1175,7 @@ LoginForm.actions.submit(
 | `Field.url()` | -- | कीबोर्ड प्रकार के साथ URL इनपुट |
 | `Field.mask()` | `mask` (आवश्यक), `match`, `maskReturnValue` | मास्क्ड टेक्स्ट इनपुट |
 | `Field.date()` | -- | डेट पिकर |
-| `Field.datetime()` | -- | डेट और टाइम पिकर |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | डेट और टाइम पिकर |
 | `Field.checkbox()` | -- | बूलियन चेकबॉक्स |
 | `Field.switchBox()` | -- | बूलियन टॉगल स्विच |
 | `Field.picker()` | `options` (आवश्यक `FormCollection`) | सूची से सिंगल सिलेक्शन |

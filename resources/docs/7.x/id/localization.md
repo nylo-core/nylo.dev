@@ -9,6 +9,7 @@
 - Dasar
   - [Melokalkan Teks](#localizing-text "Melokalkan teks")
     - [Argumen](#arguments "Argumen")
+    - [Placeholder StyledText](#styled-text-placeholders "Placeholder StyledText")
   - [Memperbarui Locale](#updating-the-locale "Memperbarui locale")
   - [Mengatur Locale Default](#setting-a-default-locale "Mengatur locale default")
 - Lanjutan
@@ -186,6 +187,56 @@ Sisipkan nilai dinamis ke dalam terjemahan Anda menggunakan sintaks `@{{key}}`:
 trans("items_count", arguments: {"count": "5"})
 // "You have 5 items"
 ```
+
+<div id="styled-text-placeholders"></div>
+
+### Placeholder StyledText
+
+Saat menggunakan `StyledText.template` dengan string yang dilokalkan, Anda dapat menggunakan sintaks `{{key:text}}`. Ini menjaga **key** tetap stabil di semua locale (sehingga style dan tap handler Anda selalu cocok), sementara **text** diterjemahkan per locale.
+
+**lang/id.json**
+``` json
+{
+  "learn_skills": "Pelajari {{lang:Bahasa}}, {{read:Membaca}} dan {{speak:Berbicara}}",
+  "already_have_account": "Sudah punya akun? {{login:Masuk}}"
+}
+```
+
+**lang/es.json**
+``` json
+{
+  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+}
+```
+
+**Di widget Anda:**
+``` dart
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Key `lang`, `read`, dan `speak` sama di setiap file locale, sehingga style map berfungsi untuk semua bahasa. Teks tampilan setelah `:` adalah yang dilihat pengguna — "Bahasa" dalam bahasa Indonesia, "Idiomas" dalam bahasa Spanyol, dll.
+
+Anda juga dapat menggunakan ini dengan `onTap`:
+
+``` dart
+StyledText.template(
+  "already_have_account".tr(),
+  styles: {
+    "login": TextStyle(fontWeight: FontWeight.bold),
+  },
+  onTap: {
+    "login": () => routeTo(LoginPage.path),
+  },
+)
+```
+
+> **Catatan:** Sintaks `@{{key}}` (dengan awalan `@`) digunakan untuk argumen yang diganti oleh `.tr(arguments:)` pada waktu terjemahan. Sintaks `{{key:text}}` (tanpa `@`) digunakan untuk placeholder `StyledText` yang diurai pada waktu render. Jangan mencampurnya — gunakan `@{{}}` untuk nilai dinamis dan `{{}}` untuk span bergaya.
 
 <div id="updating-the-locale"></div>
 
