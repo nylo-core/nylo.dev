@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "表单简介")
+- [简介](#introduction "简介")
 - 入门
   - [创建表单](#creating-forms "创建表单")
   - [显示表单](#displaying-a-form "显示表单")
@@ -16,8 +16,8 @@
   - [URL 字段](#url-fields "URL 字段")
   - [文本区域字段](#text-area-fields "文本区域字段")
   - [电话号码字段](#phone-number-fields "电话号码字段")
-  - [单词首字母大写](#capitalize-words-fields "单词首字母大写字段")
-  - [句首字母大写](#capitalize-sentences-fields "句首字母大写字段")
+  - [单词首字母大写](#capitalize-words-fields "单词首字母大写")
+  - [句首字母大写](#capitalize-sentences-fields "句首字母大写")
   - [日期字段](#date-fields "日期字段")
   - [日期时间字段](#datetime-fields "日期时间字段")
   - [掩码输入字段](#masked-input-fields "掩码输入字段")

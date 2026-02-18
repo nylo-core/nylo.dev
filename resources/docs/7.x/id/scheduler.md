@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Jadwalkan Sekali](#schedule-once "Jadwalkan tugas untuk berjalan sekali")
-- [Jadwalkan Sekali Setelah Tanggal](#schedule-once-after-date "Jadwalkan tugas untuk berjalan sekali setelah tanggal tertentu")
-- [Jadwalkan Sekali Harian](#schedule-once-daily "Jadwalkan tugas untuk berjalan sekali setiap hari")
+- [Jadwalkan Sekali](#schedule-once "Jadwalkan Sekali")
+- [Jadwalkan Sekali Setelah Tanggal](#schedule-once-after-date "Jadwalkan Sekali Setelah Tanggal")
+- [Jadwalkan Sekali Harian](#schedule-once-daily "Jadwalkan Sekali Harian")
 
 <div id="introduction"></div>
 

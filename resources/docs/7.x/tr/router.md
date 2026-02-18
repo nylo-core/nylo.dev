@@ -22,10 +22,10 @@
   - [Rota Gecmisi](#route-history "Rota Gecmisi")
   - [Rota Yiginini Guncelleme](#update-route-stack "Rota Yiginini Guncelleme")
 - Rota parametreleri
-  - [Rota Parametrelerini Kullanma](#route-parameters "Rota Parametreleri")
+  - [Rota Parametrelerini Kullanma](#route-parameters "Rota Parametrelerini Kullanma")
   - [Sorgu Parametreleri](#query-parameters "Sorgu Parametreleri")
 - Rota Koruyuculari
-  - [Rota Koruyuculari Olusturma](#route-guards "Rota Koruyuculari")
+  - [Rota Koruyuculari Olusturma](#route-guards "Rota Koruyuculari Olusturma")
   - [NyRouteGuard Yasam Dongusu](#nyroute-guard-lifecycle "NyRouteGuard Yasam Dongusu")
   - [Koruyucu Yardimci Metotlari](#guard-helper-methods "Koruyucu Yardimci Metotlari")
   - [Parametreli Koruyucular](#parameterized-guards "Parametreli Koruyucular")

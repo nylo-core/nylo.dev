@@ -3,15 +3,15 @@
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Yap&#305;land&#305;rmaya giri&#351;")
+- [Giri&#351;](#introduction "Giri&#351;")
 - Ortam
-  - [.env Dosyas&#305;](#env-file ".env dosyas&#305;")
-  - [Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma](#generating-env "Ortam yap&#305;land&#305;rmas&#305; olu&#351;turma")
-  - [De&#287;erleri Alma](#retrieving-values "Ortam de&#287;erlerini alma")
-  - [Config S&#305;n&#305;flar&#305; Olu&#351;turma](#creating-config-classes "Config s&#305;n&#305;flar&#305; olu&#351;turma")
-  - [De&#287;i&#351;ken T&#252;rleri](#variable-types "Ortam de&#287;i&#351;ken t&#252;rleri")
-- [Ortam &#199;e&#351;itleri](#environment-flavours "Ortam &#231;e&#351;itleri")
-- [Derleme Zamanl&#305; Enjeksiyon](#build-time-injection "Derleme zamanl&#305; enjeksiyon")
+  - [.env Dosyas&#305;](#env-file ".env Dosyas&#305;")
+  - [Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma](#generating-env "Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma")
+  - [De&#287;erleri Alma](#retrieving-values "De&#287;erleri Alma")
+  - [Config S&#305;n&#305;flar&#305; Olu&#351;turma](#creating-config-classes "Config S&#305;n&#305;flar&#305; Olu&#351;turma")
+  - [De&#287;i&#351;ken T&#252;rleri](#variable-types "De&#287;i&#351;ken T&#252;rleri")
+- [Ortam &#199;e&#351;itleri](#environment-flavours "Ortam &#199;e&#351;itleri")
+- [Derleme Zamanl&#305; Enjeksiyon](#build-time-injection "Derleme Zamanl&#305; Enjeksiyon")
 
 
 <div id="introduction"></div>

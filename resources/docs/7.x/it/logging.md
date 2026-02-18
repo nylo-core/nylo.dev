@@ -4,12 +4,12 @@
 
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
-- [Livelli di Log](#log-levels "Livelli di log")
-- [Metodi di Log](#log-methods "Metodi di log")
+- [Livelli di Log](#log-levels "Livelli di Log")
+- [Metodi di Log](#log-methods "Metodi di Log")
 - [Log JSON](#json-logging "Log JSON")
-- [Output Colorato](#colored-output "Output colorato")
-- [Listener dei Log](#log-listeners "Listener dei log")
-- [Estensioni Helper](#helper-extensions "Estensioni helper")
+- [Output Colorato](#colored-output "Output Colorato")
+- [Listener dei Log](#log-listeners "Listener dei Log")
+- [Estensioni Helper](#helper-extensions "Estensioni Helper")
 - [Configurazione](#configuration "Configurazione")
 
 <div id="introduction"></div>

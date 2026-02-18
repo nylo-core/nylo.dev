@@ -3,16 +3,16 @@
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Dizin yap&#305;s&#305;na giri&#351;")
-- [K&#246;k Dizin](#root-directory "K&#246;k dizin")
-- [lib Dizini](#lib-directory "lib dizini")
-  - [app](#app-directory "App dizini")
-  - [bootstrap](#bootstrap-directory "Bootstrap dizini")
-  - [config](#config-directory "Config dizini")
-  - [resources](#resources-directory "Resources dizini")
-  - [routes](#routes-directory "Routes dizini")
-- [Assets Dizini](#assets-directory "Assets dizini")
-- [Asset Yard&#305;mc&#305;lar&#305;](#asset-helpers "Asset yard&#305;mc&#305;lar&#305;")
+- [Giri&#351;](#introduction "Giri&#351;")
+- [K&#246;k Dizin](#root-directory "K&#246;k Dizin")
+- [lib Dizini](#lib-directory "lib Dizini")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
+- [Assets Dizini](#assets-directory "Assets Dizini")
+- [Asset Yard&#305;mc&#305;lar&#305;](#asset-helpers "Asset Yard&#305;mc&#305;lar&#305;")
 
 
 <div id="introduction"></div>

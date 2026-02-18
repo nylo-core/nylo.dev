@@ -14,7 +14,7 @@
 - [Extension Text](#text-extensions "Extension Text")
   - [Gaya Tipografi](#typography-styles "Gaya Tipografi")
   - [Metode Utilitas](#utility-methods "Metode Utilitas")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

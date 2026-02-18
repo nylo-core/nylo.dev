@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang autentikasi")
+- [Pengantar](#introduction "Pengantar")
 - Dasar
-  - [Mengautentikasi Pengguna](#authenticating-users "Mengautentikasi pengguna")
-  - [Mengambil Data Auth](#retrieving-auth-data "Mengambil data auth")
-  - [Memperbarui Data Auth](#updating-auth-data "Memperbarui data auth")
+  - [Mengautentikasi Pengguna](#authenticating-users "Mengautentikasi Pengguna")
+  - [Mengambil Data Auth](#retrieving-auth-data "Mengambil Data Auth")
+  - [Memperbarui Data Auth](#updating-auth-data "Memperbarui Data Auth")
   - [Logout](#logging-out "Logout")
-  - [Memeriksa Autentikasi](#checking-authentication "Memeriksa autentikasi")
+  - [Memeriksa Autentikasi](#checking-authentication "Memeriksa Autentikasi")
 - Lanjutan
-  - [Sesi Ganda](#multiple-sessions "Sesi ganda")
-  - [ID Perangkat](#device-id "ID perangkat")
+  - [Sesi Ganda](#multiple-sessions "Sesi Ganda")
+  - [ID Perangkat](#device-id "ID Perangkat")
   - [Sinkronisasi ke Backpack](#syncing-to-backpack "Sinkronisasi ke Backpack")
 - Konfigurasi Rute
-  - [Rute Awal](#initial-route "Rute awal")
-  - [Rute Terautentikasi](#authenticated-route "Rute terautentikasi")
-  - [Rute Preview](#preview-route "Rute preview")
-  - [Rute Tidak Dikenal](#unknown-route "Rute tidak dikenal")
-- [Fungsi Helper](#helper-functions "Fungsi helper")
+  - [Rute Awal](#initial-route "Rute Awal")
+  - [Rute Terautentikasi](#authenticated-route "Rute Terautentikasi")
+  - [Rute Preview](#preview-route "Rute Preview")
+  - [Rute Tidak Dikenal](#unknown-route "Rute Tidak Dikenal")
+- [Fungsi Helper](#helper-functions "Fungsi Helper")
 
 <div id="introduction"></div>
 

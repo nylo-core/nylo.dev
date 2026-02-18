@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zur Verzeichnisstruktur")
+- [Einleitung](#introduction "Einleitung")
 - [Stammverzeichnis](#root-directory "Stammverzeichnis")
 - [Das lib-Verzeichnis](#lib-directory "Das lib-Verzeichnis")
-  - [app](#app-directory "App-Verzeichnis")
-  - [bootstrap](#bootstrap-directory "Bootstrap-Verzeichnis")
-  - [config](#config-directory "Config-Verzeichnis")
-  - [resources](#resources-directory "Resources-Verzeichnis")
-  - [routes](#routes-directory "Routes-Verzeichnis")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
 - [Assets-Verzeichnis](#assets-directory "Assets-Verzeichnis")
 - [Asset-Helfer](#asset-helpers "Asset-Helfer")
 

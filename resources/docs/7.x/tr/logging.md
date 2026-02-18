@@ -4,12 +4,12 @@
 
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
-- [Günlük Seviyeleri](#log-levels "Günlük seviyeleri")
-- [Günlük Metotları](#log-methods "Günlük metotları")
-- [JSON Günlükleme](#json-logging "JSON günlükleme")
-- [Renkli Çıktı](#colored-output "Renkli çıktı")
-- [Günlük Dinleyicileri](#log-listeners "Günlük dinleyicileri")
-- [Yardımcı Uzantılar](#helper-extensions "Yardımcı uzantılar")
+- [Günlük Seviyeleri](#log-levels "Günlük Seviyeleri")
+- [Günlük Metotları](#log-methods "Günlük Metotları")
+- [JSON Günlükleme](#json-logging "JSON Günlükleme")
+- [Renkli Çıktı](#colored-output "Renkli Çıktı")
+- [Günlük Dinleyicileri](#log-listeners "Günlük Dinleyicileri")
+- [Yardımcı Uzantılar](#helper-extensions "Yardımcı Uzantılar")
 - [Yapılandırma](#configuration "Yapılandırma")
 
 <div id="introduction"></div>

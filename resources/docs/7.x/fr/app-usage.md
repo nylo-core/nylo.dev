@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [Configuration](#setup "Configuration de l'utilisation de l'application")
+- [Configuration](#setup "Configuration")
 - Surveillance
-    - [Lancements de l'application](#monitoring-app-launches "Surveillance des lancements de l'application")
-    - [Date du premier lancement](#monitoring-app-first-launch-date "Surveillance de la date du premier lancement")
-    - [Nombre total de jours depuis le premier lancement](#monitoring-app-total-days-since-first-launch "Surveillance du nombre total de jours depuis le premier lancement")
+    - [Lancements de l'application](#monitoring-app-launches "Lancements de l'application")
+    - [Date du premier lancement](#monitoring-app-first-launch-date "Date du premier lancement")
+    - [Nombre total de jours depuis le premier lancement](#monitoring-app-total-days-since-first-launch "Nombre total de jours depuis le premier lancement")
 
 <div id="introduction"></div>
 

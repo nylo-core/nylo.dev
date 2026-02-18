@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "主题简介")
+- [简介](#introduction "简介")
 - 主题
   - [明暗主题](#light-and-dark-themes "明暗主题")
   - [创建主题](#creating-a-theme "创建主题")

@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "目录结构简介")
+- [简介](#introduction "简介")
 - [根目录](#root-directory "根目录")
 - [lib 目录](#lib-directory "lib 目录")
-  - [app](#app-directory "app 目录")
-  - [bootstrap](#bootstrap-directory "bootstrap 目录")
-  - [config](#config-directory "config 目录")
-  - [resources](#resources-directory "resources 目录")
-  - [routes](#routes-directory "routes 目录")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
 - [资源目录](#assets-directory "资源目录")
 - [资源辅助函数](#asset-helpers "资源辅助函数")
 

@@ -12,7 +12,7 @@
 - [Nylo Örneğine Erişim](#nylo-instance "Nylo Örneğine Erişim")
 - [Yardımcı Fonksiyonlar](#helper-functions "Yardımcı Fonksiyonlar")
 - [NyStorage ile Entegrasyon](#integration-with-nystorage "NyStorage ile Entegrasyon")
-- [Örnekler](#examples "Pratik Örnekler")
+- [Örnekler](#examples "Örnekler")
 
 <div id="introduction"></div>
 

@@ -21,7 +21,7 @@
   - [GuardStack](#guard-stack "GuardStack")
   - [ConditionalGuard](#conditional-guard "ConditionalGuard")
   - [ParameterizedGuard](#parameterized-guard "ParameterizedGuard")
-- [Esempi](#examples "Esempi Pratici")
+- [Esempi](#examples "Esempi")
 
 <div id="introduction"></div>
 

@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Installa](#install "Installa")
-- [Esecuzione del Progetto](#running-the-project "Esecuzione del progetto")
+- [Esecuzione del Progetto](#running-the-project "Esecuzione del Progetto")
 - [Metro CLI](#metro-cli "Metro CLI")
 
 

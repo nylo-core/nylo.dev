@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar penyimpanan")
+- [Pengantar](#introduction "Pengantar")
 - NyStorage
-  - [Menyimpan Nilai](#save-values "Menyimpan nilai")
-  - [Membaca Nilai](#read-values "Mengambil nilai")
-  - [Menghapus Nilai](#delete-values "Menghapus nilai")
+  - [Menyimpan Nilai](#save-values "Menyimpan Nilai")
+  - [Membaca Nilai](#read-values "Membaca Nilai")
+  - [Menghapus Nilai](#delete-values "Menghapus Nilai")
   - [Kunci Penyimpanan](#storage-keys "Kunci Penyimpanan")
-  - [Simpan/Baca JSON](#save-json "Simpan dan Baca JSON")
-  - [TTL (Time-to-Live)](#ttl-storage "TTL Storage")
-  - [Operasi Batch](#batch-operations "Operasi batch")
+  - [Simpan/Baca JSON](#save-json "Simpan/Baca JSON")
+  - [TTL (Time-to-Live)](#ttl-storage "TTL (Time-to-Live)")
+  - [Operasi Batch](#batch-operations "Operasi Batch")
 - Koleksi
-  - [Pengantar](#introduction-to-collections "Pengantar koleksi")
-  - [Menambah ke Koleksi](#add-to-a-collection "Menambah ke koleksi")
-  - [Membaca Koleksi](#read-a-collection "Membaca koleksi")
-  - [Memperbarui Koleksi](#update-collection "Memperbarui koleksi")
-  - [Menghapus dari Koleksi](#delete-from-collection "Menghapus dari koleksi")
+  - [Pengantar](#introduction-to-collections "Pengantar")
+  - [Menambah ke Koleksi](#add-to-a-collection "Menambah ke Koleksi")
+  - [Membaca Koleksi](#read-a-collection "Membaca Koleksi")
+  - [Memperbarui Koleksi](#update-collection "Memperbarui Koleksi")
+  - [Menghapus dari Koleksi](#delete-from-collection "Menghapus dari Koleksi")
 - Backpack
-  - [Pengantar](#backpack-storage "Penyimpanan Backpack")
-  - [Persist dengan Backpack](#persist-data-with-backpack "Persist Data dengan Backpack")
+  - [Pengantar](#backpack-storage "Pengantar")
+  - [Persist dengan Backpack](#persist-data-with-backpack "Persist dengan Backpack")
 - [Sesi](#introduction-to-sessions "Sesi")
 - Penyimpanan Model
   - [Simpan Model](#model-save "Simpan Model")

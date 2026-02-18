@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang aset")
+- [Pengantar](#introduction "Pengantar")
 - File
-  - [Menampilkan Gambar](#displaying-images "Menampilkan gambar")
-  - [Path Aset Kustom](#custom-asset-paths "Path aset kustom")
-  - [Mengembalikan Path Aset](#returning-asset-paths "Mengembalikan path aset")
+  - [Menampilkan Gambar](#displaying-images "Menampilkan Gambar")
+  - [Path Aset Kustom](#custom-asset-paths "Path Aset Kustom")
+  - [Mengembalikan Path Aset](#returning-asset-paths "Mengembalikan Path Aset")
 - Mengelola Aset
-  - [Menambahkan File Baru](#adding-new-files "Menambahkan file baru")
-  - [Konfigurasi Aset](#asset-configuration "Konfigurasi aset")
+  - [Menambahkan File Baru](#adding-new-files "Menambahkan File Baru")
+  - [Konfigurasi Aset](#asset-configuration "Konfigurasi Aset")
 
 <div id="introduction"></div>
 

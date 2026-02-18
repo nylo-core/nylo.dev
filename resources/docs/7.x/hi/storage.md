@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "स्टोरेज का परिचय")
+- [परिचय](#introduction "परिचय")
 - NyStorage
   - [वैल्यू सेव करना](#save-values "वैल्यू सेव करना")
-  - [वैल्यू पढ़ना](#read-values "वैल्यू प्राप्त करना")
+  - [वैल्यू पढ़ना](#read-values "वैल्यू पढ़ना")
   - [वैल्यू डिलीट करना](#delete-values "वैल्यू डिलीट करना")
   - [स्टोरेज कीज़](#storage-keys "स्टोरेज कीज़")
-  - [JSON सेव/पढ़ना](#save-json "JSON सेव और पढ़ना")
-  - [TTL (टाइम-टू-लिव)](#ttl-storage "TTL स्टोरेज")
+  - [JSON सेव/पढ़ना](#save-json "JSON सेव/पढ़ना")
+  - [TTL (टाइम-टू-लिव)](#ttl-storage "TTL (टाइम-टू-लिव)")
   - [बैच ऑपरेशन्स](#batch-operations "बैच ऑपरेशन्स")
 - कलेक्शन्स
-  - [परिचय](#introduction-to-collections "कलेक्शन्स का परिचय")
+  - [परिचय](#introduction-to-collections "परिचय")
   - [कलेक्शन में जोड़ना](#add-to-a-collection "कलेक्शन में जोड़ना")
   - [कलेक्शन पढ़ना](#read-a-collection "कलेक्शन पढ़ना")
   - [कलेक्शन अपडेट करना](#update-collection "कलेक्शन अपडेट करना")
   - [कलेक्शन से डिलीट करना](#delete-from-collection "कलेक्शन से डिलीट करना")
 - Backpack
-  - [परिचय](#backpack-storage "Backpack स्टोरेज")
-  - [Backpack के साथ पर्सिस्ट करना](#persist-data-with-backpack "Backpack के साथ डेटा पर्सिस्ट करना")
+  - [परिचय](#backpack-storage "परिचय")
+  - [Backpack के साथ पर्सिस्ट करना](#persist-data-with-backpack "Backpack के साथ पर्सिस्ट करना")
 - [सेशन्स](#introduction-to-sessions "सेशन्स")
 - मॉडल स्टोरेज
   - [मॉडल सेव](#model-save "मॉडल सेव")

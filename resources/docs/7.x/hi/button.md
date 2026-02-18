@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [बुनियादी उपयोग](#basic-usage "Basic Usage")
-- [उपलब्ध बटन प्रकार](#button-types "Available Button Types")
+- [परिचय](#introduction "परिचय")
+- [बुनियादी उपयोग](#basic-usage "बुनियादी उपयोग")
+- [उपलब्ध बटन प्रकार](#button-types "उपलब्ध बटन प्रकार")
     - [Primary](#primary "Primary")
     - [Secondary](#secondary "Secondary")
     - [Outlined](#outlined "Outlined")
@@ -14,8 +14,8 @@
     - [Gradient](#gradient "Gradient")
     - [Rounded](#rounded "Rounded")
     - [Transparency](#transparency "Transparency")
-- [एसिंक लोडिंग स्टेट](#async-loading "Async Loading State")
-- [एनिमेशन स्टाइल](#animation-styles "Animation Styles")
+- [एसिंक लोडिंग स्टेट](#async-loading "एसिंक लोडिंग स्टेट")
+- [एनिमेशन स्टाइल](#animation-styles "एनिमेशन स्टाइल")
     - [Clickable](#anim-clickable "Clickable")
     - [Bounce](#anim-bounce "Bounce")
     - [Pulse](#anim-pulse "Pulse")
@@ -25,11 +25,11 @@
     - [Ripple](#anim-ripple "Ripple")
     - [Morph](#anim-morph "Morph")
     - [Shake](#anim-shake "Shake")
-- [स्प्लैश स्टाइल](#splash-styles "Splash Styles")
-- [लोडिंग स्टाइल](#loading-styles "Loading Styles")
-- [फॉर्म सबमिशन](#form-submission "Form Submission")
-- [बटन कस्टमाइज़ करना](#customizing-buttons "Customizing Buttons")
-- [पैरामीटर रेफरेंस](#parameters "Parameters Reference")
+- [स्प्लैश स्टाइल](#splash-styles "स्प्लैश स्टाइल")
+- [लोडिंग स्टाइल](#loading-styles "लोडिंग स्टाइल")
+- [फॉर्म सबमिशन](#form-submission "फॉर्म सबमिशन")
+- [बटन कस्टमाइज़ करना](#customizing-buttons "बटन कस्टमाइज़ करना")
+- [पैरामीटर रेफरेंस](#parameters "पैरामीटर रेफरेंस")
 
 
 <div id="introduction"></div>

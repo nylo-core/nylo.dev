@@ -3,12 +3,12 @@
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Katk&#305;da bulunmaya giri&#351;")
-- [Ba&#351;lang&#305;&#231;](#getting-started "Katk&#305;lara ba&#351;lang&#305;&#231;")
-- [Geli&#351;tirme Ortam&#305;](#development-environment "Geli&#351;tirme ortam&#305;n&#305; kurma")
-- [Geli&#351;tirme K&#305;lavuzlar&#305;](#development-guidelines "Geli&#351;tirme k&#305;lavuzlar&#305;")
-- [De&#287;i&#351;iklikleri G&#246;nderme](#submitting-changes "De&#287;i&#351;iklikleri nas&#305;l g&#246;nderilir")
-- [Sorun Bildirme](#reporting-issues "Sorunlar&#305; nas&#305;l bildirilir")
+- [Giri&#351;](#introduction "Giri&#351;")
+- [Ba&#351;lang&#305;&#231;](#getting-started "Ba&#351;lang&#305;&#231;")
+- [Geli&#351;tirme Ortam&#305;](#development-environment "Geli&#351;tirme Ortam&#305;")
+- [Geli&#351;tirme K&#305;lavuzlar&#305;](#development-guidelines "Geli&#351;tirme K&#305;lavuzlar&#305;")
+- [De&#287;i&#351;iklikleri G&#246;nderme](#submitting-changes "De&#287;i&#351;iklikleri G&#246;nderme")
+- [Sorun Bildirme](#reporting-issues "Sorun Bildirme")
 
 
 <div id="introduction"></div>

@@ -14,7 +14,7 @@
 - [Text Extension'ları](#text-extensions "Text Extension'ları")
   - [Tipografi Stilleri](#typography-styles "Tipografi Stilleri")
   - [Yardımcı Metotlar](#utility-methods "Yardımcı Metotlar")
-- [Örnekler](#examples "Pratik Örnekler")
+- [Örnekler](#examples "Örnekler")
 
 <div id="introduction"></div>
 

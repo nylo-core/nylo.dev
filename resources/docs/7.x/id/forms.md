@@ -3,11 +3,11 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang form")
+- [Pengantar](#introduction "Pengantar")
 - Memulai
-  - [Membuat Form](#creating-forms "Membuat form")
-  - [Menampilkan Form](#displaying-a-form "Menampilkan form")
-  - [Mengirim Form](#submitting-a-form "Mengirim form")
+  - [Membuat Form](#creating-forms "Membuat Form")
+  - [Menampilkan Form](#displaying-a-form "Menampilkan Form")
+  - [Mengirim Form](#submitting-a-form "Mengirim Form")
 - Tipe Field
   - [Field Teks](#text-fields "Field Teks")
   - [Field Angka](#number-fields "Field Angka")
@@ -16,8 +16,8 @@
   - [Field URL](#url-fields "Field URL")
   - [Field Area Teks](#text-area-fields "Field Area Teks")
   - [Field Nomor Telepon](#phone-number-fields "Field Nomor Telepon")
-  - [Kapitalisasi Kata](#capitalize-words-fields "Field Kapitalisasi Kata")
-  - [Kapitalisasi Kalimat](#capitalize-sentences-fields "Field Kapitalisasi Kalimat")
+  - [Kapitalisasi Kata](#capitalize-words-fields "Kapitalisasi Kata")
+  - [Kapitalisasi Kalimat](#capitalize-sentences-fields "Kapitalisasi Kalimat")
   - [Field Tanggal](#date-fields "Field Tanggal")
   - [Field Tanggal Waktu](#datetime-fields "Field Tanggal Waktu")
   - [Field Input Masked](#masked-input-fields "Field Input Masked")

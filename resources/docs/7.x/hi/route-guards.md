@@ -3,25 +3,25 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [रूट गार्ड बनाना](#creating-a-route-guard "Creating a Route Guard")
-- [गार्ड जीवनचक्र](#guard-lifecycle "Guard Lifecycle")
+- [परिचय](#introduction "परिचय")
+- [रूट गार्ड बनाना](#creating-a-route-guard "रूट गार्ड बनाना")
+- [गार्ड जीवनचक्र](#guard-lifecycle "गार्ड जीवनचक्र")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
   - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
-- [गार्ड एक्शन](#guard-actions "Guard Actions")
+- [गार्ड एक्शन](#guard-actions "गार्ड एक्शन")
   - [next](#next "next")
   - [redirect](#redirect "redirect")
   - [abort](#abort "abort")
   - [setData](#set-data "setData")
-- [रूट पर गार्ड लागू करना](#applying-guards "Applying Guards to Routes")
-- [समूह गार्ड](#group-guards "Group Guards")
-- [गार्ड कम्पोज़िशन](#guard-composition "Guard Composition")
+- [रूट पर गार्ड लागू करना](#applying-guards "रूट पर गार्ड लागू करना")
+- [समूह गार्ड](#group-guards "समूह गार्ड")
+- [गार्ड कम्पोज़िशन](#guard-composition "गार्ड कम्पोज़िशन")
   - [GuardStack](#guard-stack "GuardStack")
   - [ConditionalGuard](#conditional-guard "ConditionalGuard")
   - [ParameterizedGuard](#parameterized-guard "ParameterizedGuard")
-- [उदाहरण](#examples "Practical Examples")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 

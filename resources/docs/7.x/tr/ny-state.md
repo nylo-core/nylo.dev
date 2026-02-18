@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
-- [NyState Nasıl Kullanılır](#how-to-use-nystate "NyState nasıl kullanılır")
-- [Yükleme Stili](#loading-style "Yükleme stili")
-- [Durum Eylemleri](#state-actions "Durum eylemleri")
+- [NyState Nasıl Kullanılır](#how-to-use-nystate "NyState Nasıl Kullanılır")
+- [Yükleme Stili](#loading-style "Yükleme Stili")
+- [Durum Eylemleri](#state-actions "Durum Eylemleri")
 - [Yardımcılar](#helpers "Yardımcılar")
 
 

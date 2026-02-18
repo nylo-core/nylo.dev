@@ -22,10 +22,10 @@
   - [Historique des routes](#route-history "Historique des routes")
   - [Mettre a jour la pile de routes](#update-route-stack "Mettre a jour la pile de routes")
 - Parametres de route
-  - [Utiliser les parametres de route](#route-parameters "Parametres de route")
+  - [Utiliser les parametres de route](#route-parameters "Utiliser les parametres de route")
   - [Parametres de requete](#query-parameters "Parametres de requete")
 - Gardes de route
-  - [Creer des gardes de route](#route-guards "Gardes de route")
+  - [Creer des gardes de route](#route-guards "Creer des gardes de route")
   - [Cycle de vie NyRouteGuard](#nyroute-guard-lifecycle "Cycle de vie NyRouteGuard")
   - [Methodes d'aide des gardes](#guard-helper-methods "Methodes d'aide des gardes")
   - [Gardes parameterises](#parameterized-guards "Gardes parameterises")

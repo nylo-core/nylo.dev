@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "控制器简介")
+- [简介](#introduction "简介")
 - [创建控制器](#creating-controllers "创建控制器")
 - [使用控制器](#using-controllers "使用控制器")
 - 控制器功能

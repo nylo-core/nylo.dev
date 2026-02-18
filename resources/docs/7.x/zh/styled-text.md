@@ -3,18 +3,18 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "Introduction")
-- [基本用法](#basic-usage "Basic Usage")
-- [子组件模式](#children-mode "Children Mode")
-- [模板模式](#template-mode "Template Mode")
-  - [样式占位符](#styling-placeholders "Styling Placeholders")
-  - [点击回调](#tap-callbacks "Tap Callbacks")
-  - [管道分隔键](#pipe-keys "Pipe-Separated Keys")
-- [参数](#parameters "Parameters")
-- [文本扩展](#text-extensions "Text Extensions")
-  - [排版样式](#typography-styles "Typography Styles")
-  - [实用方法](#utility-methods "Utility Methods")
-- [示例](#examples "Practical Examples")
+- [简介](#introduction "简介")
+- [基本用法](#basic-usage "基本用法")
+- [子组件模式](#children-mode "子组件模式")
+- [模板模式](#template-mode "模板模式")
+  - [样式占位符](#styling-placeholders "样式占位符")
+  - [点击回调](#tap-callbacks "点击回调")
+  - [管道分隔键](#pipe-keys "管道分隔键")
+- [参数](#parameters "参数")
+- [文本扩展](#text-extensions "文本扩展")
+  - [排版样式](#typography-styles "排版样式")
+  - [实用方法](#utility-methods "实用方法")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

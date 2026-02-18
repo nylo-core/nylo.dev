@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zur Authentifizierung")
+- [Einleitung](#introduction "Einleitung")
 - Grundlagen
   - [Benutzer authentifizieren](#authenticating-users "Benutzer authentifizieren")
   - [Auth-Daten abrufen](#retrieving-auth-data "Auth-Daten abrufen")

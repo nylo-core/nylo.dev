@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zur Validierung")
+- [Einleitung](#introduction "Einleitung")
 - Grundlagen
-  - [Daten mit check() validieren](#validating-data "Daten mit check validieren")
+  - [Daten mit check() validieren](#validating-data "Daten mit check() validieren")
   - [Validierungsergebnisse](#validation-results "Validierungsergebnisse")
 - FormValidator
   - [FormValidator verwenden](#using-form-validator "FormValidator verwenden")
@@ -13,7 +13,7 @@
   - [Validierungsregeln verketten](#chaining-validation-rules "Validierungsregeln verketten")
   - [Benutzerdefinierte Validierung](#custom-validation "Benutzerdefinierte Validierung")
   - [FormValidator mit Feldern verwenden](#form-validator-with-fields "FormValidator mit Feldern verwenden")
-- [Verfuegbare Validierungsregeln](#validation-rules "Validierungsregeln")
+- [Verfuegbare Validierungsregeln](#validation-rules "Verfuegbare Validierungsregeln")
 - [Benutzerdefinierte Validierungsregeln erstellen](#creating-custom-validation-rules "Benutzerdefinierte Validierungsregeln erstellen")
 
 <div id="introduction"></div>

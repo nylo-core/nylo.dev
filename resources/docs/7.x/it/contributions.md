@@ -3,12 +3,12 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione ai contributi")
-- [Per Iniziare](#getting-started "Per iniziare con i contributi")
-- [Ambiente di Sviluppo](#development-environment "Configurazione dell'ambiente di sviluppo")
-- [Linee Guida per lo Sviluppo](#development-guidelines "Linee guida per lo sviluppo")
-- [Inviare Modifiche](#submitting-changes "Come inviare modifiche")
-- [Segnalare Problemi](#reporting-issues "Come segnalare problemi")
+- [Introduzione](#introduction "Introduzione")
+- [Per Iniziare](#getting-started "Per Iniziare")
+- [Ambiente di Sviluppo](#development-environment "Ambiente di Sviluppo")
+- [Linee Guida per lo Sviluppo](#development-guidelines "Linee Guida per lo Sviluppo")
+- [Inviare Modifiche](#submitting-changes "Inviare Modifiche")
+- [Segnalare Problemi](#reporting-issues "Segnalare Problemi")
 
 
 <div id="introduction"></div>

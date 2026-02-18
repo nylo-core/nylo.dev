@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction aux formulaires")
+- [Introduction](#introduction "Introduction")
 - Premiers pas
-  - [Creer un formulaire](#creating-forms "Creer des formulaires")
+  - [Creer un formulaire](#creating-forms "Creer un formulaire")
   - [Afficher un formulaire](#displaying-a-form "Afficher un formulaire")
   - [Soumettre un formulaire](#submitting-a-form "Soumettre un formulaire")
 - Types de champs

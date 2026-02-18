@@ -14,7 +14,7 @@
   - [Bouton de fermeture](#close-button "Bouton de fermeture")
   - [Decoration personnalisee](#custom-decoration "Decoration personnalisee")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [Exemples](#examples "Exemples pratiques")
+- [Exemples](#examples "Exemples")
 
 <div id="introduction"></div>
 

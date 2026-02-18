@@ -30,7 +30,7 @@
 - [Matchers personnalises](#custom-matchers "Matchers personnalises")
 - [Test d'etat](#state-testing "Test d'etat")
 - [Debogage](#debugging "Debogage")
-- [Exemples](#examples "Exemples pratiques")
+- [Exemples](#examples "Exemples")
 
 <div id="introduction"></div>
 

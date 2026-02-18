@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zu Formularen")
+- [Einleitung](#introduction "Einleitung")
 - Erste Schritte
-  - [Ein Formular erstellen](#creating-forms "Formulare erstellen")
+  - [Ein Formular erstellen](#creating-forms "Ein Formular erstellen")
   - [Ein Formular anzeigen](#displaying-a-form "Ein Formular anzeigen")
   - [Ein Formular absenden](#submitting-a-form "Ein Formular absenden")
 - Feldtypen

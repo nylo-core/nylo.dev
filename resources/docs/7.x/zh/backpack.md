@@ -3,16 +3,16 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "Introduction")
-- [基本用法](#basic-usage "Basic Usage")
-- [读取数据](#reading-data "Reading Data")
-- [保存数据](#saving-data "Saving Data")
-- [删除数据](#deleting-data "Deleting Data")
-- [会话](#sessions "Sessions")
-- [访问 Nylo 实例](#nylo-instance "Accessing the Nylo Instance")
-- [辅助函数](#helper-functions "Helper Functions")
-- [与 NyStorage 集成](#integration-with-nystorage "Integration with NyStorage")
-- [示例](#examples "Practical Examples")
+- [简介](#introduction "简介")
+- [基本用法](#basic-usage "基本用法")
+- [读取数据](#reading-data "读取数据")
+- [保存数据](#saving-data "保存数据")
+- [删除数据](#deleting-data "删除数据")
+- [会话](#sessions "会话")
+- [访问 Nylo 实例](#nylo-instance "访问 Nylo 实例")
+- [辅助函数](#helper-functions "辅助函数")
+- [与 NyStorage 集成](#integration-with-nystorage "与 NyStorage 集成")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

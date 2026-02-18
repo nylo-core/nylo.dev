@@ -22,10 +22,10 @@
   - [Cronologia delle Rotte](#route-history "Cronologia delle Rotte")
   - [Aggiornare lo Stack delle Rotte](#update-route-stack "Aggiornare lo Stack delle Rotte")
 - Parametri delle rotte
-  - [Utilizzo dei Parametri delle Rotte](#route-parameters "Parametri delle Rotte")
+  - [Utilizzo dei Parametri delle Rotte](#route-parameters "Utilizzo dei Parametri delle Rotte")
   - [Parametri Query](#query-parameters "Parametri Query")
 - Route Guard
-  - [Creazione di Route Guard](#route-guards "Route Guard")
+  - [Creazione di Route Guard](#route-guards "Creazione di Route Guard")
   - [Ciclo di Vita NyRouteGuard](#nyroute-guard-lifecycle "Ciclo di Vita NyRouteGuard")
   - [Metodi Helper dei Guard](#guard-helper-methods "Metodi Helper dei Guard")
   - [Guard Parametrizzati](#parameterized-guards "Guard Parametrizzati")

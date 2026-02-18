@@ -3,19 +3,19 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "Introduction")
-- [基本用法](#basic-usage "Basic Usage")
-- [内置样式](#built-in-styles "Built-in Styles")
-- [从页面显示提示](#from-pages "Showing Alerts from Pages")
-- [从控制器显示提示](#from-controllers "Showing Alerts from Controllers")
+- [简介](#introduction "简介")
+- [基本用法](#basic-usage "基本用法")
+- [内置样式](#built-in-styles "内置样式")
+- [从页面显示提示](#from-pages "从页面显示提示")
+- [从控制器显示提示](#from-controllers "从控制器显示提示")
 - [showToastNotification](#show-toast-notification "showToastNotification")
 - [ToastMeta](#toast-meta "ToastMeta")
-- [定位](#positioning "Positioning")
-- [自定义 Toast 样式](#custom-styles "Custom Toast Styles")
-  - [注册样式](#registering-styles "Registering Styles")
-  - [创建样式工厂](#creating-a-style-factory "Creating a Style Factory")
+- [定位](#positioning "定位")
+- [自定义 Toast 样式](#custom-styles "自定义 Toast 样式")
+  - [注册样式](#registering-styles "注册样式")
+  - [创建样式工厂](#creating-a-style-factory "创建样式工厂")
 - [AlertTab](#alert-tab "AlertTab")
-- [示例](#examples "Practical Examples")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

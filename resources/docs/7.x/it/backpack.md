@@ -12,7 +12,7 @@
 - [Accesso all'Istanza Nylo](#nylo-instance "Accesso all'Istanza Nylo")
 - [Funzioni Helper](#helper-functions "Funzioni Helper")
 - [Integrazione con NyStorage](#integration-with-nystorage "Integrazione con NyStorage")
-- [Esempi](#examples "Esempi Pratici")
+- [Esempi](#examples "Esempi")
 
 <div id="introduction"></div>
 

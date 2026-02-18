@@ -5,32 +5,32 @@
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
 - HTTP İstekleri Yapma
-  - [Kısa Yol Metotları](#convenience-methods "Kısa yol metotları")
-  - [Network Yardımcısı](#network-helper "Network yardımcısı")
-  - [networkResponse Yardımcısı](#network-response-helper "networkResponse yardımcısı")
+  - [Kısa Yol Metotları](#convenience-methods "Kısa Yol Metotları")
+  - [Network Yardımcısı](#network-helper "Network Yardımcısı")
+  - [networkResponse Yardımcısı](#network-response-helper "networkResponse Yardımcısı")
   - [NyResponse](#ny-response "NyResponse")
-  - [Temel Seçenekler](#base-options "Temel seçenekler")
-  - [Başlık Ekleme](#adding-headers "Başlık ekleme")
+  - [Temel Seçenekler](#base-options "Temel Seçenekler")
+  - [Başlık Ekleme](#adding-headers "Başlık Ekleme")
 - Dosya İşlemleri
-  - [Dosya Yükleme](#uploading-files "Dosya yükleme")
-  - [Dosya İndirme](#downloading-files "Dosya indirme")
+  - [Dosya Yükleme](#uploading-files "Dosya Yükleme")
+  - [Dosya İndirme](#downloading-files "Dosya İndirme")
 - [Interceptor'lar](#interceptors "Interceptor'lar")
-  - [Ağ Günlükçüsü](#network-logger "Ağ günlükçüsü")
-- [API Servisi Kullanma](#using-an-api-service "API servisi kullanma")
-- [API Servisi Oluşturma](#create-an-api-service "API servisi oluşturma")
-- [JSON'u Modellere Dönüştürme](#morphing-json-payloads-to-models "JSON'u modellere dönüştürme")
+  - [Ağ Günlükçüsü](#network-logger "Ağ Günlükçüsü")
+- [API Servisi Kullanma](#using-an-api-service "API Servisi Kullanma")
+- [API Servisi Oluşturma](#create-an-api-service "API Servisi Oluşturma")
+- [JSON'u Modellere Dönüştürme](#morphing-json-payloads-to-models "JSON'u Modellere Dönüştürme")
 - Önbellekleme
-  - [Yanıtları Önbellekleme](#caching-responses "Yanıtları önbellekleme")
-  - [Önbellek Politikaları](#cache-policies "Önbellek politikaları")
+  - [Yanıtları Önbellekleme](#caching-responses "Yanıtları Önbellekleme")
+  - [Önbellek Politikaları](#cache-policies "Önbellek Politikaları")
 - Hata Yönetimi
-  - [Başarısız İstekleri Yeniden Deneme](#retrying-failed-requests "Başarısız istekleri yeniden deneme")
-  - [Bağlantı Kontrolleri](#connectivity-checks "Bağlantı kontrolleri")
-  - [İptal Token'ları](#cancel-tokens "İptal token'ları")
+  - [Başarısız İstekleri Yeniden Deneme](#retrying-failed-requests "Başarısız İstekleri Yeniden Deneme")
+  - [Bağlantı Kontrolleri](#connectivity-checks "Bağlantı Kontrolleri")
+  - [İptal Token'ları](#cancel-tokens "İptal Token'ları")
 - Kimlik Doğrulama
-  - [Kimlik Doğrulama Başlıkları Ayarlama](#setting-auth-headers "Kimlik doğrulama başlıkları ayarlama")
-  - [Token Yenileme](#refreshing-tokens "Token yenileme")
-- [Singleton API Servisi](#singleton-api-service "Singleton API servisi")
-- [Gelişmiş Yapılandırma](#advanced-configuration "Gelişmiş yapılandırma")
+  - [Kimlik Doğrulama Başlıkları Ayarlama](#setting-auth-headers "Kimlik Doğrulama Başlıkları Ayarlama")
+  - [Token Yenileme](#refreshing-tokens "Token Yenileme")
+- [Singleton API Servisi](#singleton-api-service "Singleton API Servisi")
+- [Gelişmiş Yapılandırma](#advanced-configuration "Gelişmiş Yapılandırma")
 
 <div id="introduction"></div>
 

@@ -14,7 +14,7 @@
   - [Tombol Tutup](#close-button "Tombol Tutup")
   - [Dekorasi Kustom](#custom-decoration "Dekorasi Kustom")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

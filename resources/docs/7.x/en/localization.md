@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### StyledText Placeholders
 
-When using `StyledText.template` with localized strings, you can use the `{{key:text}}` syntax. This keeps the **key** stable across all locales (so your styles and tap handlers always match), while the **text** is translated per locale.
+When using `StyledText.template` with localized strings, you can use the `@{{key:text}}` syntax. This keeps the **key** stable across all locales (so your styles and tap handlers always match), while the **text** is translated per locale.
 
 **lang/en.json**
 ``` json
 {
-  "learn_skills": "Learn {{lang:Languages}}, {{read:Reading}} and {{speak:Speaking}} skills",
-  "already_have_account": "Already have an account? {{login:Login}}"
+  "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} skills",
+  "already_have_account": "Already have an account? @{{login:Login}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Note:** The `@{{key}}` syntax (with `@` prefix) is for arguments replaced by `.tr(arguments:)` at translation time. The `{{key:text}}` syntax (without `@`) is for `StyledText` placeholders parsed at render time. Don't mix them up — use `@{{}}` for dynamic values and `{{}}` for styled spans.
+> **Note:** The `@{{key}}` syntax (with `@` prefix) is for arguments replaced by `.tr(arguments:)` at translation time. The `@{{key:text}}` syntax (without `@`) is for `StyledText` placeholders parsed at render time. Don't mix them up — use `@{{}}` for dynamic values and `@{{}}` for styled spans.
 
 <div id="updating-the-locale"></div>
 

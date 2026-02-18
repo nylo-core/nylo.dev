@@ -3,17 +3,17 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [बुनियादी उपयोग](#basic-usage "Basic Usage")
-- [कंस्ट्रक्टर](#constructors "Constructors")
+- [परिचय](#introduction "परिचय")
+- [बुनियादी उपयोग](#basic-usage "बुनियादी उपयोग")
+- [कंस्ट्रक्टर](#constructors "कंस्ट्रक्टर")
 - [PullableConfig](#pullable-config "PullableConfig")
-- [हेडर स्टाइल](#header-styles "Header Styles")
-- [और लोड करने के लिए ऊपर खींचें](#pull-up "Pull-Up to Load More")
-- [कस्टम हेडर और फ़ुटर](#custom-headers "Custom Headers and Footers")
-- [कंट्रोलर](#controller "Controller")
-- [एक्सटेंशन मेथड](#extension-method "Extension Method")
-- [CollectionView एकीकरण](#collection-view "CollectionView Integration")
-- [उदाहरण](#examples "Practical Examples")
+- [हेडर स्टाइल](#header-styles "हेडर स्टाइल")
+- [और लोड करने के लिए ऊपर खींचें](#pull-up "और लोड करने के लिए ऊपर खींचें")
+- [कस्टम हेडर और फ़ुटर](#custom-headers "कस्टम हेडर और फ़ुटर")
+- [कंट्रोलर](#controller "कंट्रोलर")
+- [एक्सटेंशन मेथड](#extension-method "एक्सटेंशन मेथड")
+- [CollectionView एकीकरण](#collection-view "CollectionView एकीकरण")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 

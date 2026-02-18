@@ -14,7 +14,7 @@
   - [关闭按钮](#close-button "关闭按钮")
   - [自定义装饰](#custom-decoration "自定义装饰")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [示例](#examples "实用示例")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

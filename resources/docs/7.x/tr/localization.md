@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Yerelleştirmeye giriş")
+- [Giriş](#introduction "Giriş")
 - [Yapılandırma](#configuration "Yapılandırma")
-- [Yerelleştirilmiş Dosyalar Ekleme](#adding-localized-files "Yerelleştirilmiş dosyalar ekleme")
+- [Yerelleştirilmiş Dosyalar Ekleme](#adding-localized-files "Yerelleştirilmiş Dosyalar Ekleme")
 - Temel Bilgiler
-  - [Metni Yerelleştirme](#localizing-text "Metni yerelleştirme")
+  - [Metni Yerelleştirme](#localizing-text "Metni Yerelleştirme")
     - [Argümanlar](#arguments "Argümanlar")
-    - [StyledText Yer Tutucuları](#styled-text-placeholders "StyledText yer tutucuları")
-  - [Yerel Ayarı Güncelleme](#updating-the-locale "Yerel ayarı güncelleme")
-  - [Varsayılan Yerel Ayar Belirleme](#setting-a-default-locale "Varsayılan yerel ayar belirleme")
+    - [StyledText Yer Tutucuları](#styled-text-placeholders "StyledText Yer Tutucuları")
+  - [Yerel Ayarı Güncelleme](#updating-the-locale "Yerel Ayarı Güncelleme")
+  - [Varsayılan Yerel Ayar Belirleme](#setting-a-default-locale "Varsayılan Yerel Ayar Belirleme")
 - Gelişmiş
-  - [Desteklenen Yerel Ayarlar](#supported-locales "Desteklenen yerel ayarlar")
-  - [Yedek Dil](#fallback-language "Yedek dil")
-  - [RTL Desteği](#rtl-support "RTL desteği")
-  - [Eksik Anahtarları Hata Ayıklama](#debug-missing-keys "Eksik anahtarları hata ayıklama")
+  - [Desteklenen Yerel Ayarlar](#supported-locales "Desteklenen Yerel Ayarlar")
+  - [Yedek Dil](#fallback-language "Yedek Dil")
+  - [RTL Desteği](#rtl-support "RTL Desteği")
+  - [Eksik Anahtarları Hata Ayıklama](#debug-missing-keys "Eksik Anahtarları Hata Ayıklama")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
-  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper yardımcı sınıfı")
-  - [Controller'dan Dil Değiştirme](#changing-language-from-controller "Controller'dan dil değiştirme")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
+  - [Controller'dan Dil Değiştirme](#changing-language-from-controller "Controller'dan Dil Değiştirme")
 
 
 <div id="introduction"></div>
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### StyledText Yer Tutucuları
 
-Yerelleştirilmiş dizelerle `StyledText.template` kullanırken `{{key:text}}` sözdizimini kullanabilirsiniz. Bu, **key**'i tüm yerel ayarlarda sabit tutar (böylece stilleriniz ve dokunma işleyicileriniz her zaman eşleşir), **text** ise yerel ayara göre çevrilir.
+Yerelleştirilmiş dizelerle `StyledText.template` kullanırken `@{{key:text}}` sözdizimini kullanabilirsiniz. Bu, **key**'i tüm yerel ayarlarda sabit tutar (böylece stilleriniz ve dokunma işleyicileriniz her zaman eşleşir), **text** ise yerel ayara göre çevrilir.
 
 **lang/tr.json**
 ``` json
 {
-  "learn_skills": "{{lang:Diller}}, {{read:Okuma}} ve {{speak:Konuşma}} öğren",
-  "already_have_account": "Zaten bir hesabınız var mı? {{login:Giriş yap}}"
+  "learn_skills": "@{{lang:Diller}}, @{{read:Okuma}} ve @{{speak:Konuşma}} öğren",
+  "already_have_account": "Zaten bir hesabınız var mı? @{{login:Giriş yap}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Not:** `@{{key}}` sözdizimi (`@` öneki ile) çeviri zamanında `.tr(arguments:)` tarafından değiştirilen argümanlar içindir. `{{key:text}}` sözdizimi (`@` olmadan) render zamanında ayrıştırılan `StyledText` yer tutucuları içindir. Bunları karıştırmayın — dinamik değerler için `@{{}}` ve stillendirilmiş alanlar için `{{}}` kullanın.
+> **Not:** `@{{key}}` sözdizimi (`@` öneki ile) çeviri zamanında `.tr(arguments:)` tarafından değiştirilen argümanlar içindir. `@{{key:text}}` sözdizimi (`@` olmadan) render zamanında ayrıştırılan `StyledText` yer tutucuları içindir. Bunları karıştırmayın — dinamik değerler için `@{{}}` ve stillendirilmiş alanlar için `@{{}}` kullanın.
 
 <div id="updating-the-locale"></div>
 

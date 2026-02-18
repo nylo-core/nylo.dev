@@ -3,13 +3,13 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction a la configuration")
+- [Introduction](#introduction "Introduction")
 - Environnement
   - [Le fichier .env](#env-file "Le fichier .env")
   - [Generer la configuration d'environnement](#generating-env "Generer la configuration d'environnement")
-  - [Recuperer les valeurs](#retrieving-values "Recuperer les valeurs d'environnement")
+  - [Recuperer les valeurs](#retrieving-values "Recuperer les valeurs")
   - [Creer des classes de configuration](#creating-config-classes "Creer des classes de configuration")
-  - [Types de variables](#variable-types "Types de variables d'environnement")
+  - [Types de variables](#variable-types "Types de variables")
 - [Variantes d'environnement](#environment-flavours "Variantes d'environnement")
 - [Injection au moment de la compilation](#build-time-injection "Injection au moment de la compilation")
 

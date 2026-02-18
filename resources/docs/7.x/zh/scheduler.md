@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [简介](#introduction "简介")
-- [一次性调度](#schedule-once "调度任务只运行一次")
-- [指定日期后一次性调度](#schedule-once-after-date "调度任务在特定日期后运行一次")
-- [每日一次调度](#schedule-once-daily "调度任务每天运行一次")
+- [一次性调度](#schedule-once "一次性调度")
+- [指定日期后一次性调度](#schedule-once-after-date "指定日期后一次性调度")
+- [每日一次调度](#schedule-once-daily "每日一次调度")
 
 <div id="introduction"></div>
 

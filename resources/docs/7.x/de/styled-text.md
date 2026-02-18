@@ -14,7 +14,7 @@
 - [Text-Erweiterungen](#text-extensions "Text-Erweiterungen")
   - [Typografie-Stile](#typography-styles "Typografie-Stile")
   - [Hilfsmethoden](#utility-methods "Hilfsmethoden")
-- [Beispiele](#examples "Praktische Beispiele")
+- [Beispiele](#examples "Beispiele")
 
 <div id="introduction"></div>
 

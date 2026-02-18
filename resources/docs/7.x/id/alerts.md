@@ -15,7 +15,7 @@
   - [Mendaftarkan Gaya](#registering-styles "Mendaftarkan Gaya")
   - [Membuat Style Factory](#creating-a-style-factory "Membuat Style Factory")
 - [AlertTab](#alert-tab "AlertTab")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

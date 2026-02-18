@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Temalara giriş")
+- [Giriş](#introduction "Giriş")
 - Temalar
-  - [Açık ve Koyu temalar](#light-and-dark-themes "Açık ve koyu temalar")
+  - [Açık ve Koyu temalar](#light-and-dark-themes "Açık ve Koyu temalar")
   - [Tema oluşturma](#creating-a-theme "Tema oluşturma")
 - Yapılandırma
   - [Tema renkleri](#theme-colors "Tema renkleri")
@@ -14,7 +14,7 @@
   - [Tema değiştirme](#switching-theme "Tema değiştirme")
   - [Yazı tipleri](#fonts "Yazı tipleri")
   - [Tasarım](#design "Tasarım")
-- [Metin Uzantıları](#text-extensions "Metin uzantıları")
+- [Metin Uzantıları](#text-extensions "Metin Uzantıları")
 
 
 <div id="introduction"></div>

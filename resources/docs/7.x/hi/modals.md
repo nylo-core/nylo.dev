@@ -14,7 +14,7 @@
   - [बंद करने का बटन](#close-button "बंद करने का बटन")
   - [कस्टम डेकोरेशन](#custom-decoration "कस्टम डेकोरेशन")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [उदाहरण](#examples "व्यावहारिक उदाहरण")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 

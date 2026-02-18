@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [简介](#introduction "简介")
-- [设置](#setup "设置应用使用监控")
+- [设置](#setup "设置")
 - 监控
-    - [应用启动次数](#monitoring-app-launches "监控应用启动次数")
-    - [首次启动日期](#monitoring-app-first-launch-date "监控应用首次启动日期")
-    - [自首次启动以来的总天数](#monitoring-app-total-days-since-first-launch "监控自首次启动以来的总天数")
+    - [应用启动次数](#monitoring-app-launches "应用启动次数")
+    - [首次启动日期](#monitoring-app-first-launch-date "首次启动日期")
+    - [自首次启动以来的总天数](#monitoring-app-total-days-since-first-launch "自首次启动以来的总天数")
 
 <div id="introduction"></div>
 

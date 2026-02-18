@@ -145,15 +145,22 @@ class LandingController extends Controller
         $resolvedLocale = app()->getLocale();
         $mdDocPage = $this->docService->checkIfDocExists($version, $page, $resolvedLocale);
 
+        // Generate the doc contents and on-this-page array
+        $docContents = $this->docService->generateDocPage($mdDocPage, $version);
+
+        // Return raw markdown for LLM requests
+        if (request()->attributes->get('wants_markdown')) {
+            return response($docContents['rawMarkdown'], 200, [
+                'Content-Type' => 'text/markdown; charset=UTF-8',
+            ]);
+        }
+
         $section = $this->docService->findDocSection($version, $page);
         $viewingOldDocs = $this->docService->isViewingOldDocs($version);
         $docsContainPage = $this->docService->checkDocsContainPage($version, $page);
 
         // Set SEO for viewing docs
         $this->seoService->setSeoViewingDocs($page, $version, $section);
-
-        // Generate the doc contents and on-this-page array
-        $docContents = $this->docService->generateDocPage($mdDocPage, $version);
 
         return view('docs.template', compact(
             'page',

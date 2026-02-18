@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction au stockage")
+- [Introduction](#introduction "Introduction")
 - NyStorage
   - [Enregistrer des valeurs](#save-values "Enregistrer des valeurs")
   - [Lire des valeurs](#read-values "Lire des valeurs")
   - [Supprimer des valeurs](#delete-values "Supprimer des valeurs")
   - [Cles de stockage](#storage-keys "Cles de stockage")
-  - [Enregistrer/Lire du JSON](#save-json "Enregistrer et lire du JSON")
-  - [TTL (Duree de vie)](#ttl-storage "Stockage TTL")
+  - [Enregistrer/Lire du JSON](#save-json "Enregistrer/Lire du JSON")
+  - [TTL (Duree de vie)](#ttl-storage "TTL (Duree de vie)")
   - [Operations par lots](#batch-operations "Operations par lots")
 - Collections
-  - [Introduction](#introduction-to-collections "Introduction aux collections")
+  - [Introduction](#introduction-to-collections "Introduction")
   - [Ajouter a une collection](#add-to-a-collection "Ajouter a une collection")
   - [Lire une collection](#read-a-collection "Lire une collection")
   - [Mettre a jour une collection](#update-collection "Mettre a jour une collection")
   - [Supprimer d'une collection](#delete-from-collection "Supprimer d'une collection")
 - Backpack
-  - [Introduction](#backpack-storage "Stockage Backpack")
-  - [Persister avec Backpack](#persist-data-with-backpack "Persister les donnees avec Backpack")
+  - [Introduction](#backpack-storage "Introduction")
+  - [Persister avec Backpack](#persist-data-with-backpack "Persister avec Backpack")
 - [Sessions](#introduction-to-sessions "Sessions")
 - Stockage de modeles
   - [Enregistrer un modele](#model-save "Enregistrer un modele")

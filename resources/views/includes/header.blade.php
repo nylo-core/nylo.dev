@@ -94,9 +94,9 @@
                                                         </div>
 
                                                         <div class="copy-instructions hidden text-xs text-left mt-3">
-                                                            <span>Run: </span><span class="font-medium text-gray-500">dart pub global activate nylo_installer</span><span> in your terminal.</span>
+                                                            <span>{{ __('Run:') }} </span><span class="font-medium text-gray-500">dart pub global activate nylo_installer</span><span> {{ __('in your terminal.') }}</span>
                                                             <div class="block">
-                                                                <span class="text-xs">Next: Run </span><span class="font-medium text-blue-500">nylo new example_project</span>
+                                                                <span class="text-xs">{{ __('Next: Run') }} </span><span class="font-medium text-blue-500">nylo new example_project</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -122,7 +122,7 @@
                                                     <div class="flex flex-col p-3">
                                                         <span class="font-semibold dark:text-slate-100">{{ $package['label'] }}</span>
                                                         <span class="text-slate-500 dark:text-slate-400 text-sm">
-                                                            {{ $package['description'] }}
+                                                            {{ __($package['description']) }}
                                                         </span>
                                                     </div>
                                                 </div>

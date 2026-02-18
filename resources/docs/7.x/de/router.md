@@ -22,10 +22,10 @@
   - [Routen-Verlauf](#route-history "Routen-Verlauf")
   - [Routen-Stack aktualisieren](#update-route-stack "Routen-Stack aktualisieren")
 - Routen-Parameter
-  - [Routen-Parameter verwenden](#route-parameters "Routen-Parameter")
+  - [Routen-Parameter verwenden](#route-parameters "Routen-Parameter verwenden")
   - [Query-Parameter](#query-parameters "Query-Parameter")
 - Route Guards
-  - [Route Guards erstellen](#route-guards "Route Guards")
+  - [Route Guards erstellen](#route-guards "Route Guards erstellen")
   - [NyRouteGuard-Lebenszyklus](#nyroute-guard-lifecycle "NyRouteGuard-Lebenszyklus")
   - [Guard-Hilfsmethoden](#guard-helper-methods "Guard-Hilfsmethoden")
   - [Parametrisierte Guards](#parameterized-guards "Parametrisierte Guards")

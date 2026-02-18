@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "本地化简介")
+- [简介](#introduction "简介")
 - [配置](#configuration "配置")
 - [添加本地化文件](#adding-localized-files "添加本地化文件")
 - 基础
@@ -18,7 +18,7 @@
   - [RTL 支持](#rtl-support "RTL 支持")
   - [调试缺失键](#debug-missing-keys "调试缺失键")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
-  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper 工具类")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
   - [从控制器更改语言](#changing-language-from-controller "从控制器更改语言")
 
 
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### StyledText 占位符
 
-当您将 `StyledText.template` 与本地化字符串一起使用时，可以使用 `{{key:text}}` 语法。这使 **key** 在所有区域设置中保持稳定（因此您的样式和点击处理程序始终匹配），而 **text** 则按区域设置进行翻译。
+当您将 `StyledText.template` 与本地化字符串一起使用时，可以使用 `@{{key:text}}` 语法。这使 **key** 在所有区域设置中保持稳定（因此您的样式和点击处理程序始终匹配），而 **text** 则按区域设置进行翻译。
 
 **lang/zh.json**
 ``` json
 {
-  "learn_skills": "学习 {{lang:语言}}、{{read:阅读}} 和 {{speak:口语}} 技能",
-  "already_have_account": "已有账户？{{login:登录}}"
+  "learn_skills": "学习 @{{lang:语言}}、@{{read:阅读}} 和 @{{speak:口语}} 技能",
+  "already_have_account": "已有账户？@{{login:登录}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **注意：** `@{{key}}` 语法（带 `@` 前缀）用于在翻译时由 `.tr(arguments:)` 替换的参数。`{{key:text}}` 语法（不带 `@`）用于在渲染时解析的 `StyledText` 占位符。不要混淆它们 — 使用 `@{{}}` 表示动态值，使用 `{{}}` 表示样式化区间。
+> **注意：** `@{{key}}` 语法（带 `@` 前缀）用于在翻译时由 `.tr(arguments:)` 替换的参数。`@{{key:text}}` 语法（不带 `@`）用于在渲染时解析的 `StyledText` 占位符。不要混淆它们 — 使用 `@{{}}` 表示动态值，使用 `@{{}}` 表示样式化区间。
 
 <div id="updating-the-locale"></div>
 

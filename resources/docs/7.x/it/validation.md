@@ -3,18 +3,18 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione alla validazione")
+- [Introduzione](#introduction "Introduzione")
 - Fondamenti
-  - [Validare i Dati con check()](#validating-data "Validare i dati con check")
-  - [Risultati della Validazione](#validation-results "Risultati della validazione")
+  - [Validare i Dati con check()](#validating-data "Validare i Dati con check()")
+  - [Risultati della Validazione](#validation-results "Risultati della Validazione")
 - FormValidator
   - [Utilizzare FormValidator](#using-form-validator "Utilizzare FormValidator")
-  - [Costruttori Nominati di FormValidator](#form-validator-named-constructors "Costruttori nominati di FormValidator")
-  - [Concatenare Regole di Validazione](#chaining-validation-rules "Concatenare regole di validazione")
-  - [Validazione Personalizzata](#custom-validation "Validazione personalizzata")
-  - [Utilizzare FormValidator con i Campi](#form-validator-with-fields "Utilizzare FormValidator con i campi")
-- [Regole di Validazione Disponibili](#validation-rules "Regole di validazione")
-- [Creare Regole di Validazione Personalizzate](#creating-custom-validation-rules "Creare regole di validazione personalizzate")
+  - [Costruttori Nominati di FormValidator](#form-validator-named-constructors "Costruttori Nominati di FormValidator")
+  - [Concatenare Regole di Validazione](#chaining-validation-rules "Concatenare Regole di Validazione")
+  - [Validazione Personalizzata](#custom-validation "Validazione Personalizzata")
+  - [Utilizzare FormValidator con i Campi](#form-validator-with-fields "Utilizzare FormValidator con i Campi")
+- [Regole di Validazione Disponibili](#validation-rules "Regole di Validazione Disponibili")
+- [Creare Regole di Validazione Personalizzate](#creating-custom-validation-rules "Creare Regole di Validazione Personalizzate")
 
 <div id="introduction"></div>
 

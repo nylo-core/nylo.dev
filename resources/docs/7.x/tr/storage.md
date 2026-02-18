@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Depolamaya giriş")
+- [Giriş](#introduction "Giriş")
 - NyStorage
-  - [Değerleri Kaydetme](#save-values "Değerleri kaydetme")
-  - [Değerleri Okuma](#read-values "Değerleri alma")
-  - [Değerleri Silme](#delete-values "Değerleri silme")
+  - [Değerleri Kaydetme](#save-values "Değerleri Kaydetme")
+  - [Değerleri Okuma](#read-values "Değerleri Okuma")
+  - [Değerleri Silme](#delete-values "Değerleri Silme")
   - [Depolama Anahtarları](#storage-keys "Depolama Anahtarları")
-  - [JSON Kaydetme/Okuma](#save-json "JSON Kaydetme ve Okuma")
-  - [TTL (Yaşam Süresi)](#ttl-storage "TTL Depolama")
-  - [Toplu İşlemler](#batch-operations "Toplu işlemler")
+  - [JSON Kaydetme/Okuma](#save-json "JSON Kaydetme/Okuma")
+  - [TTL (Yaşam Süresi)](#ttl-storage "TTL (Yaşam Süresi)")
+  - [Toplu İşlemler](#batch-operations "Toplu İşlemler")
 - Koleksiyonlar
-  - [Giriş](#introduction-to-collections "Koleksiyonlara giriş")
-  - [Koleksiyona Ekleme](#add-to-a-collection "Koleksiyona ekleme")
-  - [Koleksiyonu Okuma](#read-a-collection "Koleksiyonu okuma")
-  - [Koleksiyonu Güncelleme](#update-collection "Koleksiyonu güncelleme")
-  - [Koleksiyondan Silme](#delete-from-collection "Koleksiyondan silme")
+  - [Giriş](#introduction-to-collections "Giriş")
+  - [Koleksiyona Ekleme](#add-to-a-collection "Koleksiyona Ekleme")
+  - [Koleksiyonu Okuma](#read-a-collection "Koleksiyonu Okuma")
+  - [Koleksiyonu Güncelleme](#update-collection "Koleksiyonu Güncelleme")
+  - [Koleksiyondan Silme](#delete-from-collection "Koleksiyondan Silme")
 - Backpack
-  - [Giriş](#backpack-storage "Backpack Depolama")
-  - [Backpack ile Kalıcı Depolama](#persist-data-with-backpack "Backpack ile Kalıcı Veri Depolama")
+  - [Giriş](#backpack-storage "Giriş")
+  - [Backpack ile Kalıcı Depolama](#persist-data-with-backpack "Backpack ile Kalıcı Depolama")
 - [Oturumlar](#introduction-to-sessions "Oturumlar")
 - Model Depolama
   - [Model Kaydetme](#model-save "Model Kaydetme")

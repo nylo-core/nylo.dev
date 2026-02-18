@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Cara Menggunakan NyState](#how-to-use-nystate "Cara menggunakan NyState")
+- [Cara Menggunakan NyState](#how-to-use-nystate "Cara Menggunakan NyState")
 - [Gaya Loading](#loading-style "Gaya Loading")
 - [Aksi State](#state-actions "Aksi State")
 - [Helper](#helpers "Helper")

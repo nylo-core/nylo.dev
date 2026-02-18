@@ -3,16 +3,16 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione alla struttura delle directory")
-- [Directory Radice](#root-directory "Directory radice")
-- [La Directory lib](#lib-directory "La directory lib")
-  - [app](#app-directory "Directory app")
-  - [bootstrap](#bootstrap-directory "Directory bootstrap")
-  - [config](#config-directory "Directory config")
-  - [resources](#resources-directory "Directory resources")
-  - [routes](#routes-directory "Directory routes")
-- [Directory Assets](#assets-directory "Directory assets")
-- [Helper per gli Asset](#asset-helpers "Helper per gli asset")
+- [Introduzione](#introduction "Introduzione")
+- [Directory Radice](#root-directory "Directory Radice")
+- [La Directory lib](#lib-directory "La Directory lib")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
+- [Directory Assets](#assets-directory "Directory Assets")
+- [Helper per gli Asset](#asset-helpers "Helper per gli Asset")
 
 
 <div id="introduction"></div>

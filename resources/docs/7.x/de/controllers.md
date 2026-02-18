@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zu Controllern")
+- [Einleitung](#introduction "Einleitung")
 - [Controller erstellen](#creating-controllers "Controller erstellen")
 - [Controller verwenden](#using-controllers "Controller verwenden")
 - Controller-Funktionen

@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "存储简介")
+- [简介](#introduction "简介")
 - NyStorage
   - [保存值](#save-values "保存值")
   - [读取值](#read-values "读取值")
   - [删除值](#delete-values "删除值")
   - [存储键](#storage-keys "存储键")
-  - [保存/读取 JSON](#save-json "保存和读取 JSON")
-  - [TTL（生存时间）](#ttl-storage "TTL 存储")
+  - [保存/读取 JSON](#save-json "保存/读取 JSON")
+  - [TTL（生存时间）](#ttl-storage "TTL（生存时间）")
   - [批量操作](#batch-operations "批量操作")
 - 集合
-  - [简介](#introduction-to-collections "集合简介")
+  - [简介](#introduction-to-collections "简介")
   - [添加到集合](#add-to-a-collection "添加到集合")
   - [读取集合](#read-a-collection "读取集合")
   - [更新集合](#update-collection "更新集合")
   - [从集合中删除](#delete-from-collection "从集合中删除")
 - Backpack
-  - [简介](#backpack-storage "Backpack 存储")
-  - [使用 Backpack 持久化](#persist-data-with-backpack "使用 Backpack 持久化数据")
+  - [简介](#backpack-storage "简介")
+  - [使用 Backpack 持久化](#persist-data-with-backpack "使用 Backpack 持久化")
 - [会话](#introduction-to-sessions "会话")
 - Model 存储
   - [Model 保存](#model-save "Model 保存")

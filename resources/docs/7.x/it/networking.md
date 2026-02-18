@@ -5,32 +5,32 @@
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
 - Effettuare Richieste HTTP
-  - [Metodi di Convenienza](#convenience-methods "Metodi di convenienza")
-  - [Helper Network](#network-helper "Helper network")
+  - [Metodi di Convenienza](#convenience-methods "Metodi di Convenienza")
+  - [Helper Network](#network-helper "Helper Network")
   - [Helper networkResponse](#network-response-helper "Helper networkResponse")
   - [NyResponse](#ny-response "NyResponse")
-  - [Opzioni Base](#base-options "Opzioni base")
-  - [Aggiungere Header](#adding-headers "Aggiungere header")
+  - [Opzioni Base](#base-options "Opzioni Base")
+  - [Aggiungere Header](#adding-headers "Aggiungere Header")
 - Operazioni sui File
-  - [Caricamento File](#uploading-files "Caricamento file")
-  - [Download File](#downloading-files "Download file")
+  - [Caricamento File](#uploading-files "Caricamento File")
+  - [Download File](#downloading-files "Download File")
 - [Interceptor](#interceptors "Interceptor")
-  - [Logger di Rete](#network-logger "Logger di rete")
+  - [Logger di Rete](#network-logger "Logger di Rete")
 - [Utilizzare un API Service](#using-an-api-service "Utilizzare un API Service")
 - [Creare un API Service](#create-an-api-service "Creare un API Service")
-- [Conversione JSON in Modelli](#morphing-json-payloads-to-models "Conversione JSON in modelli")
+- [Conversione JSON in Modelli](#morphing-json-payloads-to-models "Conversione JSON in Modelli")
 - Caching
-  - [Cache delle Risposte](#caching-responses "Cache delle risposte")
-  - [Politiche di Cache](#cache-policies "Politiche di cache")
+  - [Cache delle Risposte](#caching-responses "Cache delle Risposte")
+  - [Politiche di Cache](#cache-policies "Politiche di Cache")
 - Gestione degli Errori
-  - [Ripetizione delle Richieste Fallite](#retrying-failed-requests "Ripetizione delle richieste fallite")
-  - [Controlli di Connettivit&agrave;](#connectivity-checks "Controlli di connettivit&agrave;")
-  - [Token di Cancellazione](#cancel-tokens "Token di cancellazione")
+  - [Ripetizione delle Richieste Fallite](#retrying-failed-requests "Ripetizione delle Richieste Fallite")
+  - [Controlli di Connettivit&agrave;](#connectivity-checks "Controlli di Connettivit&agrave;")
+  - [Token di Cancellazione](#cancel-tokens "Token di Cancellazione")
 - Autenticazione
-  - [Impostare Header di Autenticazione](#setting-auth-headers "Impostare header di autenticazione")
-  - [Aggiornamento dei Token](#refreshing-tokens "Aggiornamento dei token")
+  - [Impostare Header di Autenticazione](#setting-auth-headers "Impostare Header di Autenticazione")
+  - [Aggiornamento dei Token](#refreshing-tokens "Aggiornamento dei Token")
 - [API Service Singleton](#singleton-api-service "API Service Singleton")
-- [Configurazione Avanzata](#advanced-configuration "Configurazione avanzata")
+- [Configurazione Avanzata](#advanced-configuration "Configurazione Avanzata")
 
 <div id="introduction"></div>
 

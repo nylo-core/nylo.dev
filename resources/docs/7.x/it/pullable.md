@@ -13,7 +13,7 @@
 - [Controller](#controller "Controller")
 - [Metodo di Estensione](#extension-method "Metodo di Estensione")
 - [Integrazione con CollectionView](#collection-view "Integrazione con CollectionView")
-- [Esempi](#examples "Esempi Pratici")
+- [Esempi](#examples "Esempi")
 
 <div id="introduction"></div>
 

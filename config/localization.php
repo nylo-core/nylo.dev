@@ -19,6 +19,14 @@ return [
         'de' => ['name' => 'German', 'native' => 'Deutsch'],
         'it' => ['name' => 'Italian', 'native' => 'Italiano'],
         'fr' => ['name' => 'French', 'native' => 'Français'],
+        'ko' => ['name' => 'Korean', 'native' => '한국어'],
+        'ja' => ['name' => 'Japanese', 'native' => '日本語'],
+        'pt' => ['name' => 'Portuguese', 'native' => 'Português'],
+        'es' => ['name' => 'Spanish', 'native' => 'Español'],
+        'ru' => ['name' => 'Russian', 'native' => 'Русский'],
+        'vi' => ['name' => 'Vietnamese', 'native' => 'Tiếng Việt'],
+        'th' => ['name' => 'Thai', 'native' => 'ไทย'],
+        'pl' => ['name' => 'Polish', 'native' => 'Polski'],
     ],
 
     /*

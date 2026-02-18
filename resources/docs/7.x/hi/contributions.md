@@ -3,12 +3,12 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "योगदान का परिचय")
-- [शुरुआत करना](#getting-started "योगदान के साथ शुरुआत करना")
-- [डेवलपमेंट एनवायरनमेंट](#development-environment "डेवलपमेंट एनवायरनमेंट सेटअप करना")
+- [परिचय](#introduction "परिचय")
+- [शुरुआत करना](#getting-started "शुरुआत करना")
+- [डेवलपमेंट एनवायरनमेंट](#development-environment "डेवलपमेंट एनवायरनमेंट")
 - [डेवलपमेंट दिशानिर्देश](#development-guidelines "डेवलपमेंट दिशानिर्देश")
-- [बदलाव सबमिट करना](#submitting-changes "बदलाव कैसे सबमिट करें")
-- [समस्याएँ रिपोर्ट करना](#reporting-issues "समस्याएँ कैसे रिपोर्ट करें")
+- [बदलाव सबमिट करना](#submitting-changes "बदलाव सबमिट करना")
+- [समस्याएँ रिपोर्ट करना](#reporting-issues "समस्याएँ रिपोर्ट करना")
 
 
 <div id="introduction"></div>

@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Varlıklara giriş")
+- [Giriş](#introduction "Giriş")
 - Dosyalar
-  - [Görselleri Görüntüleme](#displaying-images "Görselleri görüntüleme")
-  - [Özel Asset Yolları](#custom-asset-paths "Özel asset yolları")
-  - [Asset Yollarını Döndürme](#returning-asset-paths "Asset yollarını döndürme")
+  - [Görselleri Görüntüleme](#displaying-images "Görselleri Görüntüleme")
+  - [Özel Asset Yolları](#custom-asset-paths "Özel Asset Yolları")
+  - [Asset Yollarını Döndürme](#returning-asset-paths "Asset Yollarını Döndürme")
 - Varlıkları Yönetme
-  - [Yeni Dosya Ekleme](#adding-new-files "Yeni dosya ekleme")
-  - [Asset Yapılandırması](#asset-configuration "Asset yapılandırması")
+  - [Yeni Dosya Ekleme](#adding-new-files "Yeni Dosya Ekleme")
+  - [Asset Yapılandırması](#asset-configuration "Asset Yapılandırması")
 
 <div id="introduction"></div>
 

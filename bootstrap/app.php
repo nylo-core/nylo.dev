@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\Authenticate::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
             'locale' => \App\Http\Middleware\SetLocaleMiddleware::class,
+            'llm_markdown' => \App\Http\Middleware\ServeMarkdownForLlmMiddleware::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {

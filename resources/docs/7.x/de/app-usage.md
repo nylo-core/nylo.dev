@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
-- [Einrichtung](#setup "Einrichtung der App-Nutzung")
+- [Einrichtung](#setup "Einrichtung")
 - Überwachung
-    - [App-Starts](#monitoring-app-launches "App-Starts überwachen")
-    - [Datum des ersten Starts](#monitoring-app-first-launch-date "Datum des ersten App-Starts überwachen")
-    - [Gesamttage seit dem ersten Start](#monitoring-app-total-days-since-first-launch "Gesamttage seit dem ersten App-Start überwachen")
+    - [App-Starts](#monitoring-app-launches "App-Starts")
+    - [Datum des ersten Starts](#monitoring-app-first-launch-date "Datum des ersten Starts")
+    - [Gesamttage seit dem ersten Start](#monitoring-app-total-days-since-first-launch "Gesamttage seit dem ersten Start")
 
 <div id="introduction"></div>
 

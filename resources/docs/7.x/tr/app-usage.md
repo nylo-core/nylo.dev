@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Giri&#351;](#introduction "Giri&#351;")
-- [Kurulum](#setup "Uygulama kullan&#305;m&#305;n&#305; kurma")
+- [Kurulum](#setup "Kurulum")
 - &#304;zleme
-    - [Uygulama a&#231;&#305;l&#305;&#351;lar&#305;](#monitoring-app-launches "Uygulama a&#231;&#305;l&#305;&#351;lar&#305;n&#305; izleme")
-    - [&#304;lk a&#231;&#305;l&#305;&#351; tarihi](#monitoring-app-first-launch-date "Uygulaman&#305;n ilk a&#231;&#305;l&#305;&#351; tarihini izleme")
-    - [&#304;lk a&#231;&#305;l&#305;&#351;tan bu yana toplam g&#252;n](#monitoring-app-total-days-since-first-launch "&#304;lk a&#231;&#305;l&#305;&#351;tan bu yana toplam g&#252;nleri izleme")
+    - [Uygulama a&#231;&#305;l&#305;&#351;lar&#305;](#monitoring-app-launches "Uygulama a&#231;&#305;l&#305;&#351;lar&#305;")
+    - [&#304;lk a&#231;&#305;l&#305;&#351; tarihi](#monitoring-app-first-launch-date "&#304;lk a&#231;&#305;l&#305;&#351; tarihi")
+    - [&#304;lk a&#231;&#305;l&#305;&#351;tan bu yana toplam g&#252;n](#monitoring-app-total-days-since-first-launch "&#304;lk a&#231;&#305;l&#305;&#351;tan bu yana toplam g&#252;n")
 
 <div id="introduction"></div>
 

@@ -15,7 +15,7 @@
   - [Enregistrer des styles](#registering-styles "Enregistrer des styles")
   - [Creer une fabrique de styles](#creating-a-style-factory "Creer une fabrique de styles")
 - [AlertTab](#alert-tab "AlertTab")
-- [Exemples](#examples "Exemples pratiques")
+- [Exemples](#examples "Exemples")
 
 <div id="introduction"></div>
 

@@ -3,12 +3,12 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "贡献简介")
-- [开始使用](#getting-started "开始贡献")
-- [开发环境](#development-environment "设置开发环境")
+- [简介](#introduction "简介")
+- [开始使用](#getting-started "开始使用")
+- [开发环境](#development-environment "开发环境")
 - [开发指南](#development-guidelines "开发指南")
-- [提交更改](#submitting-changes "如何提交更改")
-- [报告问题](#reporting-issues "如何报告问题")
+- [提交更改](#submitting-changes "提交更改")
+- [报告问题](#reporting-issues "报告问题")
 
 
 <div id="introduction"></div>

@@ -22,10 +22,10 @@
   - [Riwayat Rute](#route-history "Riwayat Rute")
   - [Memperbarui Route Stack](#update-route-stack "Memperbarui Route Stack")
 - Parameter rute
-  - [Menggunakan Parameter Rute](#route-parameters "Parameter Rute")
+  - [Menggunakan Parameter Rute](#route-parameters "Menggunakan Parameter Rute")
   - [Query Parameters](#query-parameters "Query Parameters")
 - Route Guards
-  - [Membuat Route Guards](#route-guards "Route Guards")
+  - [Membuat Route Guards](#route-guards "Membuat Route Guards")
   - [Siklus Hidup NyRouteGuard](#nyroute-guard-lifecycle "Siklus Hidup NyRouteGuard")
   - [Metode Bantuan Guard](#guard-helper-methods "Metode Bantuan Guard")
   - [Guard Berparameter](#parameterized-guards "Guard Berparameter")

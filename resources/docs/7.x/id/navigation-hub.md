@@ -11,7 +11,7 @@
     - [Nav Bar Builder Kustom](#custom-nav-bar-builder "Nav Bar Builder Kustom")
   - [Navigasi Atas](#top-navigation "Navigasi Atas")
   - [Navigasi Journey](#journey-navigation "Navigasi Journey")
-    - [Gaya Progress](#journey-progress-styles "Gaya Progress Journey")
+    - [Gaya Progress](#journey-progress-styles "Gaya Progress")
     - [JourneyState](#journey-state "JourneyState")
     - [Method Helper JourneyState](#journey-state-helper-methods "Method Helper JourneyState")
     - [onJourneyComplete](#on-journey-complete "onJourneyComplete")

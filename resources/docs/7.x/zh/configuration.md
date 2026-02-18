@@ -3,13 +3,13 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "配置简介")
+- [简介](#introduction "简介")
 - 环境
   - [.env 文件](#env-file ".env 文件")
   - [生成环境配置](#generating-env "生成环境配置")
-  - [获取值](#retrieving-values "获取环境变量值")
+  - [获取值](#retrieving-values "获取值")
   - [创建配置类](#creating-config-classes "创建配置类")
-  - [变量类型](#variable-types "环境变量类型")
+  - [变量类型](#variable-types "变量类型")
 - [环境风味](#environment-flavours "环境风味")
 - [构建时注入](#build-time-injection "构建时注入")
 

@@ -3,18 +3,18 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar validasi")
+- [Pengantar](#introduction "Pengantar")
 - Dasar-Dasar
-  - [Memvalidasi Data dengan check()](#validating-data "Memvalidasi data dengan check")
-  - [Hasil Validasi](#validation-results "Hasil validasi")
+  - [Memvalidasi Data dengan check()](#validating-data "Memvalidasi Data dengan check()")
+  - [Hasil Validasi](#validation-results "Hasil Validasi")
 - FormValidator
   - [Menggunakan FormValidator](#using-form-validator "Menggunakan FormValidator")
-  - [Konstruktor Bernama FormValidator](#form-validator-named-constructors "Konstruktor bernama FormValidator")
-  - [Merangkai Aturan Validasi](#chaining-validation-rules "Merangkai aturan validasi")
-  - [Validasi Kustom](#custom-validation "Validasi kustom")
+  - [Konstruktor Bernama FormValidator](#form-validator-named-constructors "Konstruktor Bernama FormValidator")
+  - [Merangkai Aturan Validasi](#chaining-validation-rules "Merangkai Aturan Validasi")
+  - [Validasi Kustom](#custom-validation "Validasi Kustom")
   - [Menggunakan FormValidator dengan Field](#form-validator-with-fields "Menggunakan FormValidator dengan Field")
-- [Aturan Validasi yang Tersedia](#validation-rules "Aturan validasi")
-- [Membuat Aturan Validasi Kustom](#creating-custom-validation-rules "Membuat aturan validasi kustom")
+- [Aturan Validasi yang Tersedia](#validation-rules "Aturan Validasi yang Tersedia")
+- [Membuat Aturan Validasi Kustom](#creating-custom-validation-rules "Membuat Aturan Validasi Kustom")
 
 <div id="introduction"></div>
 

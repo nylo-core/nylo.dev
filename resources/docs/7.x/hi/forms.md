@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "फ़ॉर्म्स का परिचय")
+- [परिचय](#introduction "परिचय")
 - शुरुआत करना
   - [फ़ॉर्म बनाना](#creating-forms "फ़ॉर्म बनाना")
   - [फ़ॉर्म प्रदर्शित करना](#displaying-a-form "फ़ॉर्म प्रदर्शित करना")
@@ -16,8 +16,8 @@
   - [URL फ़ील्ड्स](#url-fields "URL फ़ील्ड्स")
   - [टेक्स्ट एरिया फ़ील्ड्स](#text-area-fields "टेक्स्ट एरिया फ़ील्ड्स")
   - [फ़ोन नंबर फ़ील्ड्स](#phone-number-fields "फ़ोन नंबर फ़ील्ड्स")
-  - [शब्द कैपिटलाइज़](#capitalize-words-fields "शब्द कैपिटलाइज़ फ़ील्ड्स")
-  - [वाक्य कैपिटलाइज़](#capitalize-sentences-fields "वाक्य कैपिटलाइज़ फ़ील्ड्स")
+  - [शब्द कैपिटलाइज़](#capitalize-words-fields "शब्द कैपिटलाइज़")
+  - [वाक्य कैपिटलाइज़](#capitalize-sentences-fields "वाक्य कैपिटलाइज़")
   - [डेट फ़ील्ड्स](#date-fields "डेट फ़ील्ड्स")
   - [DateTime फ़ील्ड्स](#datetime-fields "DateTime फ़ील्ड्स")
   - [मास्क्ड इनपुट फ़ील्ड्स](#masked-input-fields "मास्क्ड इनपुट फ़ील्ड्स")

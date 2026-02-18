@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction a la localisation")
+- [Introduction](#introduction "Introduction")
 - [Configuration](#configuration "Configuration")
 - [Ajouter des fichiers localises](#adding-localized-files "Ajouter des fichiers localises")
 - Les bases
@@ -18,7 +18,7 @@
   - [Support RTL](#rtl-support "Support RTL")
   - [Debugger les cles manquantes](#debug-missing-keys "Debugger les cles manquantes")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
-  - [NyLocaleHelper](#nylocalehelper "Classe utilitaire NyLocaleHelper")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
   - [Changer la langue depuis un controleur](#changing-language-from-controller "Changer la langue depuis un controleur")
 
 
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### Espaces réservés StyledText
 
-Lorsque vous utilisez `StyledText.template` avec des chaînes localisées, vous pouvez utiliser la syntaxe `{{key:text}}`. Cela maintient le **key** stable dans toutes les locales (afin que vos styles et gestionnaires de tap correspondent toujours), tandis que le **text** est traduit par locale.
+Lorsque vous utilisez `StyledText.template` avec des chaînes localisées, vous pouvez utiliser la syntaxe `@{{key:text}}`. Cela maintient le **key** stable dans toutes les locales (afin que vos styles et gestionnaires de tap correspondent toujours), tandis que le **text** est traduit par locale.
 
 **lang/fr.json**
 ``` json
 {
-  "learn_skills": "Apprendre {{lang:Langues}}, {{read:Lecture}} et {{speak:Expression orale}}",
-  "already_have_account": "Vous avez déjà un compte ? {{login:Se connecter}}"
+  "learn_skills": "Apprendre @{{lang:Langues}}, @{{read:Lecture}} et @{{speak:Expression orale}}",
+  "already_have_account": "Vous avez déjà un compte ? @{{login:Se connecter}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Note :** La syntaxe `@{{key}}` (avec le préfixe `@`) est pour les arguments remplacés par `.tr(arguments:)` au moment de la traduction. La syntaxe `{{key:text}}` (sans `@`) est pour les espaces réservés `StyledText` analysés au moment du rendu. Ne les confondez pas — utilisez `@{{}}` pour les valeurs dynamiques et `{{}}` pour les segments stylisés.
+> **Note :** La syntaxe `@{{key}}` (avec le préfixe `@`) est pour les arguments remplacés par `.tr(arguments:)` au moment de la traduction. La syntaxe `@{{key:text}}` (sans `@`) est pour les espaces réservés `StyledText` analysés au moment du rendu. Ne les confondez pas — utilisez `@{{}}` pour les valeurs dynamiques et `@{{}}` pour les segments stylisés.
 
 <div id="updating-the-locale"></div>
 

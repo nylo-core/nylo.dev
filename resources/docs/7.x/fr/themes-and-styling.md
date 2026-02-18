@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction aux themes")
+- [Introduction](#introduction "Introduction")
 - Themes
   - [Themes clair et sombre](#light-and-dark-themes "Themes clair et sombre")
   - [Creer un theme](#creating-a-theme "Creer un theme")

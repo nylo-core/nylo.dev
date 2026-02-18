@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione alle risorse")
+- [Introduzione](#introduction "Introduzione")
 - File
-  - [Visualizzare Immagini](#displaying-images "Visualizzare immagini")
-  - [Percorsi Risorse Personalizzati](#custom-asset-paths "Percorsi risorse personalizzati")
-  - [Restituire Percorsi delle Risorse](#returning-asset-paths "Restituire percorsi delle risorse")
+  - [Visualizzare Immagini](#displaying-images "Visualizzare Immagini")
+  - [Percorsi Risorse Personalizzati](#custom-asset-paths "Percorsi Risorse Personalizzati")
+  - [Restituire Percorsi delle Risorse](#returning-asset-paths "Restituire Percorsi delle Risorse")
 - Gestione Risorse
-  - [Aggiungere Nuovi File](#adding-new-files "Aggiungere nuovi file")
-  - [Configurazione delle Risorse](#asset-configuration "Configurazione delle risorse")
+  - [Aggiungere Nuovi File](#adding-new-files "Aggiungere Nuovi File")
+  - [Configurazione delle Risorse](#asset-configuration "Configurazione delle Risorse")
 
 <div id="introduction"></div>
 

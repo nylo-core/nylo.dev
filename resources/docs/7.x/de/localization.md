@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zur Lokalisierung")
+- [Einleitung](#introduction "Einleitung")
 - [Konfiguration](#configuration "Konfiguration")
 - [Lokalisierte Dateien hinzufügen](#adding-localized-files "Lokalisierte Dateien hinzufügen")
 - Grundlagen
@@ -18,7 +18,7 @@
   - [RTL-Unterstützung](#rtl-support "RTL-Unterstützung")
   - [Fehlende Schlüssel debuggen](#debug-missing-keys "Fehlende Schlüssel debuggen")
   - [NyLocalization-API](#nylocalization-api "NyLocalization-API")
-  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper-Hilfsklasse")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
   - [Sprache über einen Controller ändern](#changing-language-from-controller "Sprache über einen Controller ändern")
 
 
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### StyledText-Platzhalter
 
-Wenn Sie `StyledText.template` mit lokalisierten Strings verwenden, können Sie die `{{key:text}}`-Syntax nutzen. Dadurch bleibt der **key** über alle Locales hinweg stabil (sodass Ihre Styles und Tap-Handler immer übereinstimmen), während der **text** pro Locale übersetzt wird.
+Wenn Sie `StyledText.template` mit lokalisierten Strings verwenden, können Sie die `@{{key:text}}`-Syntax nutzen. Dadurch bleibt der **key** über alle Locales hinweg stabil (sodass Ihre Styles und Tap-Handler immer übereinstimmen), während der **text** pro Locale übersetzt wird.
 
 **lang/de.json**
 ``` json
 {
-  "learn_skills": "Lerne {{lang:Sprachen}}, {{read:Lesen}} und {{speak:Sprechen}}",
-  "already_have_account": "Bereits ein Konto? {{login:Anmelden}}"
+  "learn_skills": "Lerne @{{lang:Sprachen}}, @{{read:Lesen}} und @{{speak:Sprechen}}",
+  "already_have_account": "Bereits ein Konto? @{{login:Anmelden}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Hinweis:** Die `@{{key}}`-Syntax (mit `@`-Präfix) ist für Argumente, die zur Übersetzungszeit durch `.tr(arguments:)` ersetzt werden. Die `{{key:text}}`-Syntax (ohne `@`) ist für `StyledText`-Platzhalter, die zur Renderzeit geparst werden. Verwechseln Sie sie nicht — verwenden Sie `@{{}}` für dynamische Werte und `{{}}` für gestylte Bereiche.
+> **Hinweis:** Die `@{{key}}`-Syntax (mit `@`-Präfix) ist für Argumente, die zur Übersetzungszeit durch `.tr(arguments:)` ersetzt werden. Die `@{{key:text}}`-Syntax (ohne `@`) ist für `StyledText`-Platzhalter, die zur Renderzeit geparst werden. Verwechseln Sie sie nicht — verwenden Sie `@{{}}` für dynamische Werte und `@{{}}` für gestylte Bereiche.
 
 <div id="updating-the-locale"></div>
 

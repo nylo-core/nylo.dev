@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
-- [Pianifica una volta](#schedule-once "Pianifica un'attivita' da eseguire una volta")
-- [Pianifica una volta dopo una data](#schedule-once-after-date "Pianifica un'attivita' da eseguire una volta dopo una data specifica")
-- [Pianifica una volta al giorno](#schedule-once-daily "Pianifica un'attivita' da eseguire una volta al giorno")
+- [Pianifica una volta](#schedule-once "Pianifica una volta")
+- [Pianifica una volta dopo una data](#schedule-once-after-date "Pianifica una volta dopo una data")
+- [Pianifica una volta al giorno](#schedule-once-daily "Pianifica una volta al giorno")
 
 <div id="introduction"></div>
 

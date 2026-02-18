@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zum Speicher")
+- [Einleitung](#introduction "Einleitung")
 - NyStorage
   - [Werte speichern](#save-values "Werte speichern")
-  - [Werte lesen](#read-values "Werte abrufen")
+  - [Werte lesen](#read-values "Werte lesen")
   - [Werte loeschen](#delete-values "Werte loeschen")
   - [Storage Keys](#storage-keys "Storage Keys")
-  - [JSON speichern/lesen](#save-json "JSON speichern und lesen")
-  - [TTL (Time-to-Live)](#ttl-storage "TTL-Speicher")
+  - [JSON speichern/lesen](#save-json "JSON speichern/lesen")
+  - [TTL (Time-to-Live)](#ttl-storage "TTL (Time-to-Live)")
   - [Batch-Operationen](#batch-operations "Batch-Operationen")
 - Collections
-  - [Einleitung](#introduction-to-collections "Einleitung zu Collections")
+  - [Einleitung](#introduction-to-collections "Einleitung")
   - [Zu einer Collection hinzufuegen](#add-to-a-collection "Zu einer Collection hinzufuegen")
-  - [Collection lesen](#read-a-collection "Eine Collection lesen")
-  - [Collection aktualisieren](#update-collection "Eine Collection aktualisieren")
+  - [Collection lesen](#read-a-collection "Collection lesen")
+  - [Collection aktualisieren](#update-collection "Collection aktualisieren")
   - [Aus Collection loeschen](#delete-from-collection "Aus Collection loeschen")
 - Backpack
-  - [Einleitung](#backpack-storage "Backpack-Speicher")
+  - [Einleitung](#backpack-storage "Einleitung")
   - [Daten mit Backpack persistieren](#persist-data-with-backpack "Daten mit Backpack persistieren")
 - [Sessions](#introduction-to-sessions "Sessions")
 - Model-Speicher

@@ -3,21 +3,21 @@
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Controller'lara giri&#351;")
-- [Controller Olu&#351;turma](#creating-controllers "Controller olu&#351;turma")
-- [Controller Kullanma](#using-controllers "Controller kullanma")
+- [Giri&#351;](#introduction "Giri&#351;")
+- [Controller Olu&#351;turma](#creating-controllers "Controller Olu&#351;turma")
+- [Controller Kullanma](#using-controllers "Controller Kullanma")
 - Controller &#214;zellikleri
-  - [Rota Verilerine Eri&#351;im](#accessing-route-data "Rota verilerine eri&#351;im")
-  - [Sorgu Parametreleri](#query-parameters "Sorgu parametreleri")
-  - [Sayfa Durum Y&#246;netimi](#page-state-management "Sayfa durum y&#246;netimi")
-  - [Toast Bildirimleri](#toast-notifications "Toast bildirimleri")
-  - [Form Do&#287;rulama](#form-validation "Form do&#287;rulama")
-  - [Dil De&#287;i&#351;tirme](#language-switching "Dil de&#287;i&#351;tirme")
-  - [Kilit Serbest B&#305;rakma](#lock-release "Kilit serbest b&#305;rakma")
-  - [&#304;&#351;lem Onay&#305;](#confirm-actions "&#304;&#351;lem onay&#305;")
-- [Singleton Controller'lar](#singleton-controllers "Singleton controller'lar")
-- [Controller Kod &#199;&#246;z&#252;c&#252;ler](#controller-decoders "Controller kod &#231;&#246;z&#252;c&#252;ler")
-- [Rota Korumalar&#305;](#route-guards "Rota korumalar&#305;")
+  - [Rota Verilerine Eri&#351;im](#accessing-route-data "Rota Verilerine Eri&#351;im")
+  - [Sorgu Parametreleri](#query-parameters "Sorgu Parametreleri")
+  - [Sayfa Durum Y&#246;netimi](#page-state-management "Sayfa Durum Y&#246;netimi")
+  - [Toast Bildirimleri](#toast-notifications "Toast Bildirimleri")
+  - [Form Do&#287;rulama](#form-validation "Form Do&#287;rulama")
+  - [Dil De&#287;i&#351;tirme](#language-switching "Dil De&#287;i&#351;tirme")
+  - [Kilit Serbest B&#305;rakma](#lock-release "Kilit Serbest B&#305;rakma")
+  - [&#304;&#351;lem Onay&#305;](#confirm-actions "&#304;&#351;lem Onay&#305;")
+- [Singleton Controller'lar](#singleton-controllers "Singleton Controller'lar")
+- [Controller Kod &#199;&#246;z&#252;c&#252;ler](#controller-decoders "Controller Kod &#199;&#246;z&#252;c&#252;ler")
+- [Rota Korumalar&#305;](#route-guards "Rota Korumalar&#305;")
 
 <div id="introduction"></div>
 

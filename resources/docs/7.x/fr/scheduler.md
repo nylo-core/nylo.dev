@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [Executer une fois](#schedule-once "Planifier une tache a executer une fois")
-- [Executer une fois apres une date](#schedule-once-after-date "Planifier une tache a executer une fois apres une date specifique")
-- [Executer une fois par jour](#schedule-once-daily "Planifier une tache a executer une fois par jour")
+- [Executer une fois](#schedule-once "Executer une fois")
+- [Executer une fois apres une date](#schedule-once-after-date "Executer une fois apres une date")
+- [Executer une fois par jour](#schedule-once-daily "Executer une fois par jour")
 
 <div id="introduction"></div>
 

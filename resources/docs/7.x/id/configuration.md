@@ -3,15 +3,15 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang konfigurasi")
+- [Pengantar](#introduction "Pengantar")
 - Environment
   - [File .env](#env-file "File .env")
-  - [Membuat Konfigurasi Environment](#generating-env "Membuat konfigurasi environment")
-  - [Mengambil Nilai](#retrieving-values "Mengambil nilai environment")
-  - [Membuat Kelas Config](#creating-config-classes "Membuat kelas config")
-  - [Tipe Variabel](#variable-types "Tipe variabel environment")
-- [Varian Environment](#environment-flavours "Varian environment")
-- [Injeksi Waktu Build](#build-time-injection "Injeksi waktu build")
+  - [Membuat Konfigurasi Environment](#generating-env "Membuat Konfigurasi Environment")
+  - [Mengambil Nilai](#retrieving-values "Mengambil Nilai")
+  - [Membuat Kelas Config](#creating-config-classes "Membuat Kelas Config")
+  - [Tipe Variabel](#variable-types "Tipe Variabel")
+- [Varian Environment](#environment-flavours "Varian Environment")
+- [Injeksi Waktu Build](#build-time-injection "Injeksi Waktu Build")
 
 
 <div id="introduction"></div>

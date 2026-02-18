@@ -4,12 +4,12 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Level Log](#log-levels "Level log")
-- [Method Log](#log-methods "Method log")
+- [Level Log](#log-levels "Level Log")
+- [Method Log](#log-methods "Method Log")
 - [Logging JSON](#json-logging "Logging JSON")
-- [Output Berwarna](#colored-output "Output berwarna")
-- [Listener Log](#log-listeners "Listener log")
-- [Extension Helper](#helper-extensions "Extension helper")
+- [Output Berwarna](#colored-output "Output Berwarna")
+- [Listener Log](#log-listeners "Listener Log")
+- [Extension Helper](#helper-extensions "Extension Helper")
 - [Konfigurasi](#configuration "Konfigurasi")
 
 <div id="introduction"></div>

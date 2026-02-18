@@ -100,6 +100,14 @@ class GenerateSitemapCommand extends Command
             $locales = array_keys(config('localization.supported_locales', ['en' => []]));
             $links = collect($versionLinks)->flatten()->toArray();
 
+            // Add non-localized doc URLs (/docs/{version}/{page}) as canonical English entry points
+            foreach ($links as $link) {
+                $urlLink = route('landing.docs.default', ['version' => $version, 'page' => $link]);
+                $sitemap->add(Url::create($urlLink)->setPriority(0.85));
+                $added = true;
+            }
+
+            // Add localized doc URLs (/{locale}/docs/{version}/{page})
             foreach ($locales as $locale) {
                 foreach ($links as $link) {
                     $urlLink = route('landing.docs', ['locale' => $locale, 'version' => $version, 'page' => $link]);

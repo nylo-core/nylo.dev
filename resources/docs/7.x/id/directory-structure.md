@@ -3,16 +3,16 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang struktur direktori")
-- [Direktori Root](#root-directory "Direktori root")
+- [Pengantar](#introduction "Pengantar")
+- [Direktori Root](#root-directory "Direktori Root")
 - [Direktori lib](#lib-directory "Direktori lib")
-  - [app](#app-directory "Direktori app")
-  - [bootstrap](#bootstrap-directory "Direktori bootstrap")
-  - [config](#config-directory "Direktori config")
-  - [resources](#resources-directory "Direktori resources")
-  - [routes](#routes-directory "Direktori routes")
-- [Direktori Assets](#assets-directory "Direktori assets")
-- [Helper Aset](#asset-helpers "Helper aset")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
+- [Direktori Assets](#assets-directory "Direktori Assets")
+- [Helper Aset](#asset-helpers "Helper Aset")
 
 
 <div id="introduction"></div>

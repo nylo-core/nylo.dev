@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione all'autenticazione")
+- [Introduzione](#introduction "Introduzione")
 - Fondamenti
-  - [Autenticazione degli Utenti](#authenticating-users "Autenticazione degli utenti")
-  - [Recupero dei Dati di Autenticazione](#retrieving-auth-data "Recupero dei dati di autenticazione")
-  - [Aggiornamento dei Dati di Autenticazione](#updating-auth-data "Aggiornamento dei dati di autenticazione")
+  - [Autenticazione degli Utenti](#authenticating-users "Autenticazione degli Utenti")
+  - [Recupero dei Dati di Autenticazione](#retrieving-auth-data "Recupero dei Dati di Autenticazione")
+  - [Aggiornamento dei Dati di Autenticazione](#updating-auth-data "Aggiornamento dei Dati di Autenticazione")
   - [Logout](#logging-out "Logout")
-  - [Verifica dell'Autenticazione](#checking-authentication "Verifica dell'autenticazione")
+  - [Verifica dell'Autenticazione](#checking-authentication "Verifica dell'Autenticazione")
 - Avanzato
-  - [Sessioni Multiple](#multiple-sessions "Sessioni multiple")
+  - [Sessioni Multiple](#multiple-sessions "Sessioni Multiple")
   - [ID Dispositivo](#device-id "ID Dispositivo")
   - [Sincronizzazione con Backpack](#syncing-to-backpack "Sincronizzazione con Backpack")
 - Configurazione delle Rotte
-  - [Rotta Iniziale](#initial-route "Rotta iniziale")
-  - [Rotta Autenticata](#authenticated-route "Rotta autenticata")
-  - [Rotta di Anteprima](#preview-route "Rotta di anteprima")
-  - [Rotta Sconosciuta](#unknown-route "Rotta sconosciuta")
-- [Funzioni Helper](#helper-functions "Funzioni helper")
+  - [Rotta Iniziale](#initial-route "Rotta Iniziale")
+  - [Rotta Autenticata](#authenticated-route "Rotta Autenticata")
+  - [Rotta di Anteprima](#preview-route "Rotta di Anteprima")
+  - [Rotta Sconosciuta](#unknown-route "Rotta Sconosciuta")
+- [Funzioni Helper](#helper-functions "Funzioni Helper")
 
 <div id="introduction"></div>
 

@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
-- [Einmalig planen](#schedule-once "Eine Aufgabe einmalig planen")
-- [Einmalig nach Datum planen](#schedule-once-after-date "Eine Aufgabe einmalig nach einem bestimmten Datum planen")
-- [Einmalig taeglich planen](#schedule-once-daily "Eine Aufgabe einmalig taeglich planen")
+- [Einmalig planen](#schedule-once "Einmalig planen")
+- [Einmalig nach Datum planen](#schedule-once-after-date "Einmalig nach Datum planen")
+- [Einmalig taeglich planen](#schedule-once-daily "Einmalig taeglich planen")
 
 <div id="introduction"></div>
 

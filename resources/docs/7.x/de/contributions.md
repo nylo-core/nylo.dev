@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zum Beitragen")
-- [Erste Schritte](#getting-started "Erste Schritte mit Beiträgen")
-- [Entwicklungsumgebung](#development-environment "Entwicklungsumgebung einrichten")
+- [Einleitung](#introduction "Einleitung")
+- [Erste Schritte](#getting-started "Erste Schritte")
+- [Entwicklungsumgebung](#development-environment "Entwicklungsumgebung")
 - [Entwicklungsrichtlinien](#development-guidelines "Entwicklungsrichtlinien")
 - [Änderungen einreichen](#submitting-changes "Änderungen einreichen")
 - [Probleme melden](#reporting-issues "Probleme melden")

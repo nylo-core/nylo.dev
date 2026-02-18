@@ -3,18 +3,18 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [बुनियादी उपयोग](#basic-usage "Basic Usage")
-- [चिल्ड्रन मोड](#children-mode "Children Mode")
-- [टेम्पलेट मोड](#template-mode "Template Mode")
-  - [प्लेसहोल्डर स्टाइलिंग](#styling-placeholders "Styling Placeholders")
-  - [टैप कॉलबैक](#tap-callbacks "Tap Callbacks")
-  - [पाइप-सेपरेटेड कीज़](#pipe-keys "Pipe-Separated Keys")
-- [पैरामीटर](#parameters "Parameters")
-- [टेक्स्ट एक्सटेंशन](#text-extensions "Text Extensions")
-  - [टाइपोग्राफी स्टाइल](#typography-styles "Typography Styles")
-  - [यूटिलिटी मेथड](#utility-methods "Utility Methods")
-- [उदाहरण](#examples "Practical Examples")
+- [परिचय](#introduction "परिचय")
+- [बुनियादी उपयोग](#basic-usage "बुनियादी उपयोग")
+- [चिल्ड्रन मोड](#children-mode "चिल्ड्रन मोड")
+- [टेम्पलेट मोड](#template-mode "टेम्पलेट मोड")
+  - [प्लेसहोल्डर स्टाइलिंग](#styling-placeholders "प्लेसहोल्डर स्टाइलिंग")
+  - [टैप कॉलबैक](#tap-callbacks "टैप कॉलबैक")
+  - [पाइप-सेपरेटेड कीज़](#pipe-keys "पाइप-सेपरेटेड कीज़")
+- [पैरामीटर](#parameters "पैरामीटर")
+- [टेक्स्ट एक्सटेंशन](#text-extensions "टेक्स्ट एक्सटेंशन")
+  - [टाइपोग्राफी स्टाइल](#typography-styles "टाइपोग्राफी स्टाइल")
+  - [यूटिलिटी मेथड](#utility-methods "यूटिलिटी मेथड")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 

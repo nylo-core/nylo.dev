@@ -3,15 +3,15 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione alla configurazione")
+- [Introduzione](#introduction "Introduzione")
 - Ambiente
-  - [Il File .env](#env-file "Il file .env")
-  - [Generazione della Configurazione Ambiente](#generating-env "Generazione della configurazione ambiente")
-  - [Recupero dei Valori](#retrieving-values "Recupero dei valori dell'ambiente")
-  - [Creazione di Classi di Configurazione](#creating-config-classes "Creazione di classi di configurazione")
-  - [Tipi di Variabili](#variable-types "Tipi di variabili d'ambiente")
-- [Varianti d'Ambiente](#environment-flavours "Varianti d'ambiente")
-- [Iniezione al Build-Time](#build-time-injection "Iniezione al build-time")
+  - [Il File .env](#env-file "Il File .env")
+  - [Generazione della Configurazione Ambiente](#generating-env "Generazione della Configurazione Ambiente")
+  - [Recupero dei Valori](#retrieving-values "Recupero dei Valori")
+  - [Creazione di Classi di Configurazione](#creating-config-classes "Creazione di Classi di Configurazione")
+  - [Tipi di Variabili](#variable-types "Tipi di Variabili")
+- [Varianti d'Ambiente](#environment-flavours "Varianti d'Ambiente")
+- [Iniezione al Build-Time](#build-time-injection "Iniezione al Build-Time")
 
 
 <div id="introduction"></div>

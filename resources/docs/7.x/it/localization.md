@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione alla localizzazione")
+- [Introduzione](#introduction "Introduzione")
 - [Configurazione](#configuration "Configurazione")
-- [Aggiungere File Localizzati](#adding-localized-files "Aggiungere file localizzati")
+- [Aggiungere File Localizzati](#adding-localized-files "Aggiungere File Localizzati")
 - Fondamenti
-  - [Localizzare il Testo](#localizing-text "Localizzare il testo")
+  - [Localizzare il Testo](#localizing-text "Localizzare il Testo")
     - [Argomenti](#arguments "Argomenti")
     - [Segnaposto StyledText](#styled-text-placeholders "Segnaposto StyledText")
-  - [Aggiornare la Lingua](#updating-the-locale "Aggiornare la lingua")
-  - [Impostare una Lingua Predefinita](#setting-a-default-locale "Impostare una lingua predefinita")
+  - [Aggiornare la Lingua](#updating-the-locale "Aggiornare la Lingua")
+  - [Impostare una Lingua Predefinita](#setting-a-default-locale "Impostare una Lingua Predefinita")
 - Avanzato
-  - [Lingue Supportate](#supported-locales "Lingue supportate")
-  - [Lingua di Fallback](#fallback-language "Lingua di fallback")
+  - [Lingue Supportate](#supported-locales "Lingue Supportate")
+  - [Lingua di Fallback](#fallback-language "Lingua di Fallback")
   - [Supporto RTL](#rtl-support "Supporto RTL")
-  - [Debug Chiavi Mancanti](#debug-missing-keys "Debug chiavi mancanti")
+  - [Debug Chiavi Mancanti](#debug-missing-keys "Debug Chiavi Mancanti")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
-  - [NyLocaleHelper](#nylocalehelper "Classe utility NyLocaleHelper")
-  - [Cambiare Lingua da un Controller](#changing-language-from-controller "Cambiare lingua da un controller")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
+  - [Cambiare Lingua da un Controller](#changing-language-from-controller "Cambiare Lingua da un Controller")
 
 
 <div id="introduction"></div>
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### Segnaposto StyledText
 
-Quando utilizzi `StyledText.template` con stringhe localizzate, puoi usare la sintassi `{{key:text}}`. Questo mantiene il **key** stabile in tutte le lingue (in modo che i tuoi stili e gestori di tap corrispondano sempre), mentre il **text** viene tradotto per ogni lingua.
+Quando utilizzi `StyledText.template` con stringhe localizzate, puoi usare la sintassi `@{{key:text}}`. Questo mantiene il **key** stabile in tutte le lingue (in modo che i tuoi stili e gestori di tap corrispondano sempre), mentre il **text** viene tradotto per ogni lingua.
 
 **lang/it.json**
 ``` json
 {
-  "learn_skills": "Impara {{lang:Lingue}}, {{read:Lettura}} e {{speak:Parlato}}",
-  "already_have_account": "Hai già un account? {{login:Accedi}}"
+  "learn_skills": "Impara @{{lang:Lingue}}, @{{read:Lettura}} e @{{speak:Parlato}}",
+  "already_have_account": "Hai già un account? @{{login:Accedi}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Nota:** La sintassi `@{{key}}` (con prefisso `@`) è per gli argomenti sostituiti da `.tr(arguments:)` al momento della traduzione. La sintassi `{{key:text}}` (senza `@`) è per i segnaposto `StyledText` analizzati al momento del rendering. Non confonderli — usa `@{{}}` per valori dinamici e `{{}}` per gli span stilizzati.
+> **Nota:** La sintassi `@{{key}}` (con prefisso `@`) è per gli argomenti sostituiti da `.tr(arguments:)` al momento della traduzione. La sintassi `@{{key:text}}` (senza `@`) è per i segnaposto `StyledText` analizzati al momento del rendering. Non confonderli — usa `@{{}}` per valori dinamici e `@{{}}` per gli span stilizzati.
 
 <div id="updating-the-locale"></div>
 

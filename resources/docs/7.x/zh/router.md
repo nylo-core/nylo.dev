@@ -22,10 +22,10 @@
   - [路由历史](#route-history "路由历史")
   - [更新路由栈](#update-route-stack "更新路由栈")
 - 路由参数
-  - [使用路由参数](#route-parameters "路由参数")
+  - [使用路由参数](#route-parameters "使用路由参数")
   - [查询参数](#query-parameters "查询参数")
 - 路由守卫
-  - [创建路由守卫](#route-guards "路由守卫")
+  - [创建路由守卫](#route-guards "创建路由守卫")
   - [NyRouteGuard 生命周期](#nyroute-guard-lifecycle "NyRouteGuard 生命周期")
   - [守卫辅助方法](#guard-helper-methods "守卫辅助方法")
   - [参数化守卫](#parameterized-guards "参数化守卫")

@@ -30,7 +30,7 @@
 - [Benutzerdefinierte Matcher](#custom-matchers "Benutzerdefinierte Matcher")
 - [State-Testing](#state-testing "State-Testing")
 - [Debugging](#debugging "Debugging")
-- [Beispiele](#examples "Praktische Beispiele")
+- [Beispiele](#examples "Beispiele")
 
 <div id="introduction"></div>
 

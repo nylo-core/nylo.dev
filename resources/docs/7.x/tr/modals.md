@@ -14,7 +14,7 @@
   - [Kapatma D&#252;&#287;mesi](#close-button "Kapatma D&#252;&#287;mesi")
   - [&#214;zel Dekorasyon](#custom-decoration "&#214;zel Dekorasyon")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [&#214;rnekler](#examples "Pratik &#214;rnekler")
+- [&#214;rnekler](#examples "&#214;rnekler")
 
 <div id="introduction"></div>
 

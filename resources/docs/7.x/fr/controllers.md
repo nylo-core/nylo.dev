@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction aux controleurs")
+- [Introduction](#introduction "Introduction")
 - [Creer des controleurs](#creating-controllers "Creer des controleurs")
 - [Utiliser les controleurs](#using-controllers "Utiliser les controleurs")
 - Fonctionnalites des controleurs

@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Instalasi](#install "Instalasi")
-- [Menjalankan Proyek](#running-the-project "Menjalankan proyek")
+- [Menjalankan Proyek](#running-the-project "Menjalankan Proyek")
 - [Metro CLI](#metro-cli "Metro CLI")
 
 

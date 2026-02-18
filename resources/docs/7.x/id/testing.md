@@ -30,7 +30,7 @@
 - [Matcher Kustom](#custom-matchers "Matcher Kustom")
 - [Testing State](#state-testing "Testing State")
 - [Debugging](#debugging "Debugging")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

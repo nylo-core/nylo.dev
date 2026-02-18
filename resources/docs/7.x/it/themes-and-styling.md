@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione ai temi")
+- [Introduzione](#introduction "Introduzione")
 - Temi
-  - [Temi Chiaro e Scuro](#light-and-dark-themes "Temi chiaro e scuro")
+  - [Temi Chiaro e Scuro](#light-and-dark-themes "Temi Chiaro e Scuro")
   - [Creare un tema](#creating-a-theme "Creare un tema")
 - Configurazione
   - [Colori del tema](#theme-colors "Colori del tema")
@@ -14,7 +14,7 @@
   - [Cambiare tema](#switching-theme "Cambiare tema")
   - [Font](#fonts "Font")
   - [Design](#design "Design")
-- [Estensioni di Testo](#text-extensions "Estensioni di testo")
+- [Estensioni di Testo](#text-extensions "Estensioni di Testo")
 
 
 <div id="introduction"></div>

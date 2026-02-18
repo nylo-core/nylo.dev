@@ -3,12 +3,12 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang berkontribusi")
-- [Memulai](#getting-started "Memulai dengan kontribusi")
-- [Lingkungan Pengembangan](#development-environment "Menyiapkan lingkungan pengembangan")
-- [Panduan Pengembangan](#development-guidelines "Panduan pengembangan")
-- [Mengirimkan Perubahan](#submitting-changes "Cara mengirimkan perubahan")
-- [Melaporkan Masalah](#reporting-issues "Cara melaporkan masalah")
+- [Pengantar](#introduction "Pengantar")
+- [Memulai](#getting-started "Memulai")
+- [Lingkungan Pengembangan](#development-environment "Lingkungan Pengembangan")
+- [Panduan Pengembangan](#development-guidelines "Panduan Pengembangan")
+- [Mengirimkan Perubahan](#submitting-changes "Mengirimkan Perubahan")
+- [Melaporkan Masalah](#reporting-issues "Melaporkan Masalah")
 
 
 <div id="introduction"></div>

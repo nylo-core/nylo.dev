@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction a la structure des repertoires")
+- [Introduction](#introduction "Introduction")
 - [Repertoire racine](#root-directory "Repertoire racine")
 - [Le repertoire lib](#lib-directory "Le repertoire lib")
-  - [app](#app-directory "Repertoire app")
-  - [bootstrap](#bootstrap-directory "Repertoire bootstrap")
-  - [config](#config-directory "Repertoire config")
-  - [resources](#resources-directory "Repertoire resources")
-  - [routes](#routes-directory "Repertoire routes")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
 - [Repertoire des assets](#assets-directory "Repertoire des assets")
 - [Helpers pour les assets](#asset-helpers "Helpers pour les assets")
 

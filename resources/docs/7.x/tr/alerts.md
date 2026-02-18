@@ -15,7 +15,7 @@
   - [Stilleri Kaydetme](#registering-styles "Stilleri Kaydetme")
   - [Stil Factory Oluşturma](#creating-a-style-factory "Stil Factory Oluşturma")
 - [AlertTab](#alert-tab "AlertTab")
-- [Örnekler](#examples "Pratik Örnekler")
+- [Örnekler](#examples "Örnekler")
 
 <div id="introduction"></div>
 

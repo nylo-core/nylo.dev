@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Membuat Ikon Aplikasi](#generating-app-icons "Membuat ikon aplikasi")
-- [Menambahkan Ikon Aplikasi Anda](#adding-your-app-icon "Menambahkan ikon aplikasi Anda")
-- [Persyaratan Ikon Aplikasi](#app-icon-requirements "Persyaratan ikon aplikasi")
+- [Membuat Ikon Aplikasi](#generating-app-icons "Membuat Ikon Aplikasi")
+- [Menambahkan Ikon Aplikasi Anda](#adding-your-app-icon "Menambahkan Ikon Aplikasi Anda")
+- [Persyaratan Ikon Aplikasi](#app-icon-requirements "Persyaratan Ikon Aplikasi")
 - [Konfigurasi](#configuration "Konfigurasi")
-- [Jumlah Badge](#badge-count "Jumlah badge")
+- [Jumlah Badge](#badge-count "Jumlah Badge")
 
 <div id="introduction"></div>
 

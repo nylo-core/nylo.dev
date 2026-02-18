@@ -13,7 +13,7 @@
 - [Controller](#controller "Controller")
 - [Metode Extension](#extension-method "Metode Extension")
 - [Integrasi CollectionView](#collection-view "Integrasi CollectionView")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

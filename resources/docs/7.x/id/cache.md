@@ -5,15 +5,15 @@
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
 - Dasar
-  - [Simpan dengan Kedaluwarsa](#save-with-expiration "Simpan dengan kedaluwarsa")
-  - [Simpan Selamanya](#save-forever "Simpan selamanya")
-  - [Mengambil Data](#retrieve-data "Mengambil data")
-  - [Menyimpan Data Langsung](#store-data-directly "Menyimpan data langsung")
-  - [Menghapus Data](#remove-data "Menghapus data")
-  - [Memeriksa Cache](#check-cache "Memeriksa cache")
+  - [Simpan dengan Kedaluwarsa](#save-with-expiration "Simpan dengan Kedaluwarsa")
+  - [Simpan Selamanya](#save-forever "Simpan Selamanya")
+  - [Mengambil Data](#retrieve-data "Mengambil Data")
+  - [Menyimpan Data Langsung](#store-data-directly "Menyimpan Data Langsung")
+  - [Menghapus Data](#remove-data "Menghapus Data")
+  - [Memeriksa Cache](#check-cache "Memeriksa Cache")
 - Jaringan
-  - [Meng-cache Respons API](#caching-api-responses "Meng-cache respons API")
-- [Dukungan Platform](#platform-support "Dukungan platform")
+  - [Meng-cache Respons API](#caching-api-responses "Meng-cache Respons API")
+- [Dukungan Platform](#platform-support "Dukungan Platform")
 - [Referensi API](#api-reference "Referensi API")
 
 <div id="introduction"></div>

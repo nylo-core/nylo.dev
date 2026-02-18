@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "लोकलाइज़ेशन का परिचय")
+- [परिचय](#introduction "परिचय")
 - [कॉन्फ़िगरेशन](#configuration "कॉन्फ़िगरेशन")
 - [लोकलाइज़्ड फ़ाइलें जोड़ना](#adding-localized-files "लोकलाइज़्ड फ़ाइलें जोड़ना")
 - बेसिक्स
@@ -18,7 +18,7 @@
   - [RTL सपोर्ट](#rtl-support "RTL सपोर्ट")
   - [मिसिंग कीज़ डीबग करें](#debug-missing-keys "मिसिंग कीज़ डीबग करें")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
-  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper यूटिलिटी क्लास")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
   - [कंट्रोलर से भाषा बदलना](#changing-language-from-controller "कंट्रोलर से भाषा बदलना")
 
 
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### StyledText प्लेसहोल्डर
 
-जब आप लोकलाइज़्ड स्ट्रिंग्स के साथ `StyledText.template` का उपयोग करते हैं, तो आप `{{key:text}}` सिंटैक्स का उपयोग कर सकते हैं। यह **key** को सभी लोकेल्स में स्थिर रखता है (ताकि आपकी स्टाइल्स और टैप हैंडलर्स हमेशा मैच करें), जबकि **text** प्रति लोकेल अनुवादित होता है।
+जब आप लोकलाइज़्ड स्ट्रिंग्स के साथ `StyledText.template` का उपयोग करते हैं, तो आप `@{{key:text}}` सिंटैक्स का उपयोग कर सकते हैं। यह **key** को सभी लोकेल्स में स्थिर रखता है (ताकि आपकी स्टाइल्स और टैप हैंडलर्स हमेशा मैच करें), जबकि **text** प्रति लोकेल अनुवादित होता है।
 
 **lang/hi.json**
 ``` json
 {
-  "learn_skills": "{{lang:भाषाएँ}}, {{read:पठन}} और {{speak:बोलना}} सीखें",
-  "already_have_account": "पहले से खाता है? {{login:लॉग इन करें}}"
+  "learn_skills": "@{{lang:भाषाएँ}}, @{{read:पठन}} और @{{speak:बोलना}} सीखें",
+  "already_have_account": "पहले से खाता है? @{{login:लॉग इन करें}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **नोट:** `@{{key}}` सिंटैक्स (`@` प्रीफ़िक्स के साथ) ट्रांसलेशन समय पर `.tr(arguments:)` द्वारा प्रतिस्थापित आर्ग्युमेंट्स के लिए है। `{{key:text}}` सिंटैक्स (`@` के बिना) रेंडर समय पर पार्स किए जाने वाले `StyledText` प्लेसहोल्डर्स के लिए है। इन्हें मिलाएँ नहीं — डायनामिक वैल्यूज़ के लिए `@{{}}` और स्टाइल्ड स्पैन्स के लिए `{{}}` का उपयोग करें।
+> **नोट:** `@{{key}}` सिंटैक्स (`@` प्रीफ़िक्स के साथ) ट्रांसलेशन समय पर `.tr(arguments:)` द्वारा प्रतिस्थापित आर्ग्युमेंट्स के लिए है। `@{{key:text}}` सिंटैक्स (`@` के बिना) रेंडर समय पर पार्स किए जाने वाले `StyledText` प्लेसहोल्डर्स के लिए है। इन्हें मिलाएँ नहीं — डायनामिक वैल्यूज़ के लिए `@{{}}` और स्टाइल्ड स्पैन्स के लिए `@{{}}` का उपयोग करें।
 
 <div id="updating-the-locale"></div>
 

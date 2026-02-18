@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tema")
+- [Pengantar](#introduction "Pengantar")
 - Tema
-  - [Tema terang & gelap](#light-and-dark-themes "Tema terang dan gelap")
+  - [Tema terang & gelap](#light-and-dark-themes "Tema terang & gelap")
   - [Membuat tema](#creating-a-theme "Membuat tema")
 - Konfigurasi
   - [Warna tema](#theme-colors "Warna tema")
@@ -14,7 +14,7 @@
   - [Mengganti tema](#switching-theme "Mengganti tema")
   - [Font](#fonts "Font")
   - [Desain](#design "Desain")
-- [Ekstensi Text](#text-extensions "Ekstensi text")
+- [Ekstensi Text](#text-extensions "Ekstensi Text")
 
 
 <div id="introduction"></div>

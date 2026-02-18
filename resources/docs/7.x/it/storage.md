@@ -3,24 +3,24 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione allo storage")
+- [Introduzione](#introduction "Introduzione")
 - NyStorage
-  - [Salvare Valori](#save-values "Salvare valori")
-  - [Leggere Valori](#read-values "Leggere valori")
-  - [Eliminare Valori](#delete-values "Eliminare valori")
+  - [Salvare Valori](#save-values "Salvare Valori")
+  - [Leggere Valori](#read-values "Leggere Valori")
+  - [Eliminare Valori](#delete-values "Eliminare Valori")
   - [Chiavi di Storage](#storage-keys "Chiavi di Storage")
-  - [Salvare/Leggere JSON](#save-json "Salvare e Leggere JSON")
-  - [TTL (Time-to-Live)](#ttl-storage "TTL Storage")
-  - [Operazioni Batch](#batch-operations "Operazioni batch")
+  - [Salvare/Leggere JSON](#save-json "Salvare/Leggere JSON")
+  - [TTL (Time-to-Live)](#ttl-storage "TTL (Time-to-Live)")
+  - [Operazioni Batch](#batch-operations "Operazioni Batch")
 - Collezioni
-  - [Introduzione](#introduction-to-collections "Introduzione alle collezioni")
-  - [Aggiungere a una Collezione](#add-to-a-collection "Aggiungere a una collezione")
-  - [Leggere una Collezione](#read-a-collection "Leggere una collezione")
-  - [Aggiornare una Collezione](#update-collection "Aggiornare una collezione")
-  - [Eliminare da una Collezione](#delete-from-collection "Eliminare da una collezione")
+  - [Introduzione](#introduction-to-collections "Introduzione")
+  - [Aggiungere a una Collezione](#add-to-a-collection "Aggiungere a una Collezione")
+  - [Leggere una Collezione](#read-a-collection "Leggere una Collezione")
+  - [Aggiornare una Collezione](#update-collection "Aggiornare una Collezione")
+  - [Eliminare da una Collezione](#delete-from-collection "Eliminare da una Collezione")
 - Backpack
-  - [Introduzione](#backpack-storage "Storage Backpack")
-  - [Persistere con Backpack](#persist-data-with-backpack "Persistere i Dati con Backpack")
+  - [Introduzione](#backpack-storage "Introduzione")
+  - [Persistere con Backpack](#persist-data-with-backpack "Persistere con Backpack")
 - [Sessioni](#introduction-to-sessions "Sessioni")
 - Storage dei Modelli
   - [Salvataggio del Modello](#model-save "Salvataggio del Modello")

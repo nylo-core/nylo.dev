@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang lokalisasi")
+- [Pengantar](#introduction "Pengantar")
 - [Konfigurasi](#configuration "Konfigurasi")
-- [Menambahkan File Lokal](#adding-localized-files "Menambahkan file lokal")
+- [Menambahkan File Lokal](#adding-localized-files "Menambahkan File Lokal")
 - Dasar
-  - [Melokalkan Teks](#localizing-text "Melokalkan teks")
+  - [Melokalkan Teks](#localizing-text "Melokalkan Teks")
     - [Argumen](#arguments "Argumen")
     - [Placeholder StyledText](#styled-text-placeholders "Placeholder StyledText")
-  - [Memperbarui Locale](#updating-the-locale "Memperbarui locale")
-  - [Mengatur Locale Default](#setting-a-default-locale "Mengatur locale default")
+  - [Memperbarui Locale](#updating-the-locale "Memperbarui Locale")
+  - [Mengatur Locale Default](#setting-a-default-locale "Mengatur Locale Default")
 - Lanjutan
-  - [Locale yang Didukung](#supported-locales "Locale yang didukung")
-  - [Bahasa Fallback](#fallback-language "Bahasa fallback")
+  - [Locale yang Didukung](#supported-locales "Locale yang Didukung")
+  - [Bahasa Fallback](#fallback-language "Bahasa Fallback")
   - [Dukungan RTL](#rtl-support "Dukungan RTL")
-  - [Debug Key yang Hilang](#debug-missing-keys "Debug key yang hilang")
+  - [Debug Key yang Hilang](#debug-missing-keys "Debug Key yang Hilang")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
-  - [NyLocaleHelper](#nylocalehelper "Kelas utilitas NyLocaleHelper")
-  - [Mengubah Bahasa dari Controller](#changing-language-from-controller "Mengubah bahasa dari controller")
+  - [NyLocaleHelper](#nylocalehelper "NyLocaleHelper")
+  - [Mengubah Bahasa dari Controller](#changing-language-from-controller "Mengubah Bahasa dari Controller")
 
 
 <div id="introduction"></div>
@@ -192,21 +192,21 @@ trans("items_count", arguments: {"count": "5"})
 
 ### Placeholder StyledText
 
-Saat menggunakan `StyledText.template` dengan string yang dilokalkan, Anda dapat menggunakan sintaks `{{key:text}}`. Ini menjaga **key** tetap stabil di semua locale (sehingga style dan tap handler Anda selalu cocok), sementara **text** diterjemahkan per locale.
+Saat menggunakan `StyledText.template` dengan string yang dilokalkan, Anda dapat menggunakan sintaks `@{{key:text}}`. Ini menjaga **key** tetap stabil di semua locale (sehingga style dan tap handler Anda selalu cocok), sementara **text** diterjemahkan per locale.
 
 **lang/id.json**
 ``` json
 {
-  "learn_skills": "Pelajari {{lang:Bahasa}}, {{read:Membaca}} dan {{speak:Berbicara}}",
-  "already_have_account": "Sudah punya akun? {{login:Masuk}}"
+  "learn_skills": "Pelajari @{{lang:Bahasa}}, @{{read:Membaca}} dan @{{speak:Berbicara}}",
+  "already_have_account": "Sudah punya akun? @{{login:Masuk}}"
 }
 ```
 
 **lang/es.json**
 ``` json
 {
-  "learn_skills": "Aprende {{lang:Idiomas}}, {{read:Lectura}} y {{speak:Habla}}",
-  "already_have_account": "¿Ya tienes una cuenta? {{login:Iniciar sesión}}"
+  "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}}",
+  "already_have_account": "¿Ya tienes una cuenta? @{{login:Iniciar sesión}}"
 }
 ```
 
@@ -236,7 +236,7 @@ StyledText.template(
 )
 ```
 
-> **Catatan:** Sintaks `@{{key}}` (dengan awalan `@`) digunakan untuk argumen yang diganti oleh `.tr(arguments:)` pada waktu terjemahan. Sintaks `{{key:text}}` (tanpa `@`) digunakan untuk placeholder `StyledText` yang diurai pada waktu render. Jangan mencampurnya — gunakan `@{{}}` untuk nilai dinamis dan `{{}}` untuk span bergaya.
+> **Catatan:** Sintaks `@{{key}}` (dengan awalan `@`) digunakan untuk argumen yang diganti oleh `.tr(arguments:)` pada waktu terjemahan. Sintaks `@{{key:text}}` (tanpa `@`) digunakan untuk placeholder `StyledText` yang diurai pada waktu render. Jangan mencampurnya — gunakan `@{{}}` untuk nilai dinamis dan `@{{}}` untuk span bergaya.
 
 <div id="updating-the-locale"></div>
 

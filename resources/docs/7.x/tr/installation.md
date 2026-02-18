@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Kurulum](#install "Kurulum")
-- [Projeyi Çalıştırma](#running-the-project "Projeyi çalıştırma")
+- [Projeyi Çalıştırma](#running-the-project "Projeyi Çalıştırma")
 - [Metro CLI](#metro-cli "Metro CLI")
 
 

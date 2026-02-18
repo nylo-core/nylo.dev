@@ -5,16 +5,16 @@
 <a name="section-1"></a>
 - [Giri&#351;](#introduction "Giri&#351;")
 - Temel Bilgiler
-  - [S&#252;reli Kaydetme](#save-with-expiration "S&#252;reli kaydetme")
-  - [S&#252;resiz Kaydetme](#save-forever "S&#252;resiz kaydetme")
-  - [Veri Alma](#retrieve-data "Veri alma")
-  - [Do&#287;rudan Veri Depolama](#store-data-directly "Do&#287;rudan veri depolama")
-  - [Veri Silme](#remove-data "Veri silme")
-  - [&#214;nbellek Kontrol&#252;](#check-cache "&#214;nbellek kontrol&#252;")
+  - [S&#252;reli Kaydetme](#save-with-expiration "S&#252;reli Kaydetme")
+  - [S&#252;resiz Kaydetme](#save-forever "S&#252;resiz Kaydetme")
+  - [Veri Alma](#retrieve-data "Veri Alma")
+  - [Do&#287;rudan Veri Depolama](#store-data-directly "Do&#287;rudan Veri Depolama")
+  - [Veri Silme](#remove-data "Veri Silme")
+  - [&#214;nbellek Kontrol&#252;](#check-cache "&#214;nbellek Kontrol&#252;")
 - A&#287; &#304;&#351;lemleri
-  - [API Yan&#305;tlar&#305;n&#305; &#214;nbellekleme](#caching-api-responses "API yan&#305;tlar&#305;n&#305; &#246;nbellekleme")
-- [Platform Deste&#287;i](#platform-support "Platform deste&#287;i")
-- [API Referans&#305;](#api-reference "API referans&#305;")
+  - [API Yan&#305;tlar&#305;n&#305; &#214;nbellekleme](#caching-api-responses "API Yan&#305;tlar&#305;n&#305; &#214;nbellekleme")
+- [Platform Deste&#287;i](#platform-support "Platform Deste&#287;i")
+- [API Referans&#305;](#api-reference "API Referans&#305;")
 
 <div id="introduction"></div>
 

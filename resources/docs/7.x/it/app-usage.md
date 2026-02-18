@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
-- [Configurazione](#setup "Configurazione dell'utilizzo dell'app")
+- [Configurazione](#setup "Configurazione")
 - Monitoraggio
-    - [Avvii dell'app](#monitoring-app-launches "Monitoraggio degli avvii dell'app")
-    - [Data del primo avvio](#monitoring-app-first-launch-date "Monitoraggio della data del primo avvio dell'app")
-    - [Giorni totali dal primo avvio](#monitoring-app-total-days-since-first-launch "Monitoraggio dei giorni totali dal primo avvio dell'app")
+    - [Avvii dell'app](#monitoring-app-launches "Avvii dell'app")
+    - [Data del primo avvio](#monitoring-app-first-launch-date "Data del primo avvio")
+    - [Giorni totali dal primo avvio](#monitoring-app-total-days-since-first-launch "Giorni totali dal primo avvio")
 
 <div id="introduction"></div>
 

@@ -4,9 +4,9 @@
 
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
-- [Bir Kez Zamanla](#schedule-once "Bir görevi bir kez çalıştırmak için zamanlama")
-- [Tarihten Sonra Bir Kez Zamanla](#schedule-once-after-date "Belirli bir tarihten sonra bir kez çalıştırmak için zamanlama")
-- [Günlük Bir Kez Zamanla](#schedule-once-daily "Günlük bir kez çalıştırmak için zamanlama")
+- [Bir Kez Zamanla](#schedule-once "Bir Kez Zamanla")
+- [Tarihten Sonra Bir Kez Zamanla](#schedule-once-after-date "Tarihten Sonra Bir Kez Zamanla")
+- [Günlük Bir Kez Zamanla](#schedule-once-daily "Günlük Bir Kez Zamanla")
 
 <div id="introduction"></div>
 

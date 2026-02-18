@@ -12,7 +12,7 @@
 - [Mengakses Instance Nylo](#nylo-instance "Mengakses Instance Nylo")
 - [Fungsi Helper](#helper-functions "Fungsi Helper")
 - [Integrasi dengan NyStorage](#integration-with-nystorage "Integrasi dengan NyStorage")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

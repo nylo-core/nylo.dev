@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "वैलिडेशन का परिचय")
+- [परिचय](#introduction "परिचय")
 - बेसिक्स
   - [check() के साथ डेटा वैलिडेट करना](#validating-data "check() के साथ डेटा वैलिडेट करना")
   - [वैलिडेशन रिज़ल्ट्स](#validation-results "वैलिडेशन रिज़ल्ट्स")
@@ -13,7 +13,7 @@
   - [वैलिडेशन नियम चेन करना](#chaining-validation-rules "वैलिडेशन नियम चेन करना")
   - [कस्टम वैलिडेशन](#custom-validation "कस्टम वैलिडेशन")
   - [फ़ील्ड्स के साथ FormValidator का उपयोग](#form-validator-with-fields "फ़ील्ड्स के साथ FormValidator का उपयोग")
-- [उपलब्ध वैलिडेशन नियम](#validation-rules "वैलिडेशन नियम")
+- [उपलब्ध वैलिडेशन नियम](#validation-rules "उपलब्ध वैलिडेशन नियम")
 - [कस्टम वैलिडेशन नियम बनाना](#creating-custom-validation-rules "कस्टम वैलिडेशन नियम बनाना")
 
 <div id="introduction"></div>

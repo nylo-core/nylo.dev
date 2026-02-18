@@ -3,23 +3,23 @@
 ---
 
 <a name="section-1"></a>
-- [Giris](#introduction "Kimlik dogrulamaya giris")
+- [Giris](#introduction "Giris")
 - Temel Bilgiler
-  - [Kullanici Kimlik Dogrulamasi](#authenticating-users "Kullanici kimlik dogrulamasi")
-  - [Kimlik Dogrulama Verilerini Alma](#retrieving-auth-data "Kimlik dogrulama verilerini alma")
-  - [Kimlik Dogrulama Verilerini Guncelleme](#updating-auth-data "Kimlik dogrulama verilerini guncelleme")
-  - [Cikis Yapma](#logging-out "Cikis yapma")
-  - [Kimlik Dogrulama Kontrolu](#checking-authentication "Kimlik dogrulama kontrolu")
+  - [Kullanici Kimlik Dogrulamasi](#authenticating-users "Kullanici Kimlik Dogrulamasi")
+  - [Kimlik Dogrulama Verilerini Alma](#retrieving-auth-data "Kimlik Dogrulama Verilerini Alma")
+  - [Kimlik Dogrulama Verilerini Guncelleme](#updating-auth-data "Kimlik Dogrulama Verilerini Guncelleme")
+  - [Cikis Yapma](#logging-out "Cikis Yapma")
+  - [Kimlik Dogrulama Kontrolu](#checking-authentication "Kimlik Dogrulama Kontrolu")
 - Gelismis
-  - [Coklu Oturum](#multiple-sessions "Coklu oturum")
-  - [Cihaz Kimligi](#device-id "Cihaz kimligi")
-  - [Backpack'e Senkronizasyon](#syncing-to-backpack "Backpack'e senkronizasyon")
+  - [Coklu Oturum](#multiple-sessions "Coklu Oturum")
+  - [Cihaz Kimligi](#device-id "Cihaz Kimligi")
+  - [Backpack'e Senkronizasyon](#syncing-to-backpack "Backpack'e Senkronizasyon")
 - Rota Yapilandirmasi
-  - [Baslangic Rotasi](#initial-route "Baslangic rotasi")
-  - [Kimlik Dogrulanmis Rota](#authenticated-route "Kimlik dogrulanmis rota")
-  - [Onizleme Rotasi](#preview-route "Onizleme rotasi")
-  - [Bilinmeyen Rota](#unknown-route "Bilinmeyen rota")
-- [Yardimci Fonksiyonlar](#helper-functions "Yardimci fonksiyonlar")
+  - [Baslangic Rotasi](#initial-route "Baslangic Rotasi")
+  - [Kimlik Dogrulanmis Rota](#authenticated-route "Kimlik Dogrulanmis Rota")
+  - [Onizleme Rotasi](#preview-route "Onizleme Rotasi")
+  - [Bilinmeyen Rota](#unknown-route "Bilinmeyen Rota")
+- [Yardimci Fonksiyonlar](#helper-functions "Yardimci Fonksiyonlar")
 
 <div id="introduction"></div>
 

@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "थीम्स का परिचय")
+- [परिचय](#introduction "परिचय")
 - थीम्स
   - [लाइट और डार्क थीम्स](#light-and-dark-themes "लाइट और डार्क थीम्स")
   - [थीम बनाना](#creating-a-theme "थीम बनाना")

@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Introduction](#introduction "Introduction a l'authentification")
+- [Introduction](#introduction "Introduction")
 - Bases
   - [Authentifier les utilisateurs](#authenticating-users "Authentifier les utilisateurs")
   - [Recuperer les donnees d'authentification](#retrieving-auth-data "Recuperer les donnees d'authentification")

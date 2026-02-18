@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Giri&#351;](#introduction "Giri&#351;")
-- [Uygulama Simgeleri Olu&#351;turma](#generating-app-icons "Uygulama simgeleri olu&#351;turma")
-- [Uygulama Simgenizi Ekleme](#adding-your-app-icon "Uygulama simgenizi ekleme")
-- [Uygulama Simgesi Gereksinimleri](#app-icon-requirements "Uygulama simgesi gereksinimleri")
+- [Uygulama Simgeleri Olu&#351;turma](#generating-app-icons "Uygulama Simgeleri Olu&#351;turma")
+- [Uygulama Simgenizi Ekleme](#adding-your-app-icon "Uygulama Simgenizi Ekleme")
+- [Uygulama Simgesi Gereksinimleri](#app-icon-requirements "Uygulama Simgesi Gereksinimleri")
 - [Yap&#305;land&#305;rma](#configuration "Yap&#305;land&#305;rma")
-- [Rozet Say&#305;s&#305;](#badge-count "Rozet say&#305;s&#305;")
+- [Rozet Say&#305;s&#305;](#badge-count "Rozet Say&#305;s&#305;")
 
 <div id="introduction"></div>
 

@@ -21,7 +21,7 @@
   - [GuardStack](#guard-stack "GuardStack")
   - [ConditionalGuard](#conditional-guard "ConditionalGuard")
   - [ParameterizedGuard](#parameterized-guard "ParameterizedGuard")
-- [Contoh](#examples "Contoh Praktis")
+- [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
 

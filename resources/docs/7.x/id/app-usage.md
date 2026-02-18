@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Pengaturan](#setup "Mengatur penggunaan aplikasi")
+- [Pengaturan](#setup "Pengaturan")
 - Pemantauan
-    - [Peluncuran aplikasi](#monitoring-app-launches "Memantau peluncuran aplikasi")
-    - [Tanggal peluncuran pertama](#monitoring-app-first-launch-date "Memantau tanggal peluncuran pertama aplikasi")
-    - [Total hari sejak peluncuran pertama](#monitoring-app-total-days-since-first-launch "Memantau total hari sejak peluncuran pertama aplikasi")
+    - [Peluncuran aplikasi](#monitoring-app-launches "Peluncuran aplikasi")
+    - [Tanggal peluncuran pertama](#monitoring-app-first-launch-date "Tanggal peluncuran pertama")
+    - [Total hari sejak peluncuran pertama](#monitoring-app-total-days-since-first-launch "Total hari sejak peluncuran pertama")
 
 <div id="introduction"></div>
 

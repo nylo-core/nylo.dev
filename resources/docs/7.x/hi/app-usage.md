@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [परिचय](#introduction "परिचय")
-- [सेटअप](#setup "ऐप उपयोग सेटअप करना")
+- [सेटअप](#setup "सेटअप")
 - मॉनिटरिंग
-    - [ऐप लॉन्च](#monitoring-app-launches "ऐप लॉन्च मॉनिटर करना")
-    - [पहली लॉन्च तिथि](#monitoring-app-first-launch-date "ऐप पहली लॉन्च तिथि मॉनिटर करना")
-    - [पहले लॉन्च से कुल दिन](#monitoring-app-total-days-since-first-launch "पहले लॉन्च से ऐप के कुल दिन मॉनिटर करना")
+    - [ऐप लॉन्च](#monitoring-app-launches "ऐप लॉन्च")
+    - [पहली लॉन्च तिथि](#monitoring-app-first-launch-date "पहली लॉन्च तिथि")
+    - [पहले लॉन्च से कुल दिन](#monitoring-app-total-days-since-first-launch "पहले लॉन्च से कुल दिन")
 
 <div id="introduction"></div>
 

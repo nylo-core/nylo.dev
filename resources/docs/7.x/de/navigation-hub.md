@@ -11,7 +11,7 @@
     - [Benutzerdefinierter Nav-Bar-Builder](#custom-nav-bar-builder "Benutzerdefinierter Nav-Bar-Builder")
   - [Obere Navigation](#top-navigation "Obere Navigation")
   - [Journey-Navigation](#journey-navigation "Journey-Navigation")
-    - [Fortschrittsstile](#journey-progress-styles "Journey-Fortschrittsstile")
+    - [Fortschrittsstile](#journey-progress-styles "Fortschrittsstile")
     - [JourneyState](#journey-state "JourneyState")
     - [JourneyState-Hilfsmethoden](#journey-state-helper-methods "JourneyState-Hilfsmethoden")
     - [onJourneyComplete](#on-journey-complete "onJourneyComplete")

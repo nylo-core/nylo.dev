@@ -3,21 +3,21 @@
 ---
 
 <a name="section-1"></a>
-- [Pengantar](#introduction "Pengantar tentang controller")
-- [Membuat Controller](#creating-controllers "Membuat controller")
-- [Menggunakan Controller](#using-controllers "Menggunakan controller")
+- [Pengantar](#introduction "Pengantar")
+- [Membuat Controller](#creating-controllers "Membuat Controller")
+- [Menggunakan Controller](#using-controllers "Menggunakan Controller")
 - Fitur Controller
-  - [Mengakses Data Rute](#accessing-route-data "Mengakses data rute")
-  - [Parameter Query](#query-parameters "Parameter query")
-  - [Manajemen State Halaman](#page-state-management "Manajemen state halaman")
-  - [Notifikasi Toast](#toast-notifications "Notifikasi toast")
-  - [Validasi Form](#form-validation "Validasi form")
-  - [Pergantian Bahasa](#language-switching "Pergantian bahasa")
-  - [Lock Release](#lock-release "Lock release")
-  - [Konfirmasi Aksi](#confirm-actions "Konfirmasi aksi")
-- [Controller Singleton](#singleton-controllers "Controller singleton")
-- [Decoder Controller](#controller-decoders "Decoder controller")
-- [Route Guard](#route-guards "Route guard")
+  - [Mengakses Data Rute](#accessing-route-data "Mengakses Data Rute")
+  - [Parameter Query](#query-parameters "Parameter Query")
+  - [Manajemen State Halaman](#page-state-management "Manajemen State Halaman")
+  - [Notifikasi Toast](#toast-notifications "Notifikasi Toast")
+  - [Validasi Form](#form-validation "Validasi Form")
+  - [Pergantian Bahasa](#language-switching "Pergantian Bahasa")
+  - [Lock Release](#lock-release "Lock Release")
+  - [Konfirmasi Aksi](#confirm-actions "Konfirmasi Aksi")
+- [Controller Singleton](#singleton-controllers "Controller Singleton")
+- [Decoder Controller](#controller-decoders "Decoder Controller")
+- [Route Guard](#route-guards "Route Guard")
 
 <div id="introduction"></div>
 

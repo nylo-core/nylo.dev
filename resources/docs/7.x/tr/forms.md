@@ -3,11 +3,11 @@
 ---
 
 <a name="section-1"></a>
-- [Giris](#introduction "Formlara giris")
+- [Giris](#introduction "Giris")
 - Baslangic
-  - [Form Olusturma](#creating-forms "Form olusturma")
-  - [Form Goruntuleme](#displaying-a-form "Form goruntuleme")
-  - [Form Gonderme](#submitting-a-form "Form gonderme")
+  - [Form Olusturma](#creating-forms "Form Olusturma")
+  - [Form Goruntuleme](#displaying-a-form "Form Goruntuleme")
+  - [Form Gonderme](#submitting-a-form "Form Gonderme")
 - Alan Turleri
   - [Metin Alanlari](#text-fields "Metin Alanlari")
   - [Sayi Alanlari](#number-fields "Sayi Alanlari")

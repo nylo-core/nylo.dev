@@ -3,16 +3,16 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [बुनियादी उपयोग](#basic-usage "Basic Usage")
-- [डेटा पढ़ना](#reading-data "Reading Data")
-- [डेटा सहेजना](#saving-data "Saving Data")
-- [डेटा हटाना](#deleting-data "Deleting Data")
-- [सत्र (Sessions)](#sessions "Sessions")
-- [Nylo इंस्टेंस तक पहुँचना](#nylo-instance "Accessing the Nylo Instance")
-- [हेल्पर फंक्शन](#helper-functions "Helper Functions")
-- [NyStorage के साथ एकीकरण](#integration-with-nystorage "Integration with NyStorage")
-- [उदाहरण](#examples "Practical Examples")
+- [परिचय](#introduction "परिचय")
+- [बुनियादी उपयोग](#basic-usage "बुनियादी उपयोग")
+- [डेटा पढ़ना](#reading-data "डेटा पढ़ना")
+- [डेटा सहेजना](#saving-data "डेटा सहेजना")
+- [डेटा हटाना](#deleting-data "डेटा हटाना")
+- [सत्र (Sessions)](#sessions "सत्र (Sessions)")
+- [Nylo इंस्टेंस तक पहुँचना](#nylo-instance "Nylo इंस्टेंस तक पहुँचना")
+- [हेल्पर फंक्शन](#helper-functions "हेल्पर फंक्शन")
+- [NyStorage के साथ एकीकरण](#integration-with-nystorage "NyStorage के साथ एकीकरण")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 

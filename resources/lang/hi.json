@@ -8,6 +8,8 @@
     "Framework": "फ्रेमवर्क",
     "Resources": "संसाधन",
     "Packages": "पैकेज",
+    "Previous": "पिछला",
+    "Next": "अगला",
     "Menu": "मेन्यू",
     "Get Started": "शुरू करें",
     "Star on GitHub": "GitHub पर स्टार दें",
@@ -87,7 +89,7 @@
     "is a micro-framework for Flutter designed to help simplify developing apps.": "Flutter के लिए एक माइक्रो-फ्रेमवर्क है जो ऐप विकास को सरल बनाने में मदद के लिए डिज़ाइन किया गया है।",
 
     "Installation": "इंस्टॉलेशन",
-    "Requirements": "आवश्यकताएं",
+    "Requirements": "आवश्यकताएँ",
     "Router": "राउटर",
     "Themes & Styling": "थीम्स और स्टाइलिंग",
 
@@ -97,6 +99,7 @@
     "Terms & Conditions": "नियम और शर्तें",
 
     "Community": "समुदाय",
+    "Tutorials": "ट्यूटोरियल",
     "Discussions": "चर्चाएं",
     "Twitter": "Twitter",
 
@@ -150,7 +153,7 @@
     "Build complex routes, interfaces and UI pages for your Flutter application.": "अपने Flutter एप्लिकेशन के लिए जटिल रूट, इंटरफेस और UI पेज बनाएं।",
     "Adding Routes": "रूट जोड़ना",
     "Navigating to pages": "पेजों पर नेविगेट करना",
-    "Route Guards": "रूट गार्ड्स",
+    "Route Guards": "रूट गार्ड",
     "Deep linking": "डीप लिंकिंग",
 
     "Authenticate a user": "उपयोगकर्ता को प्रमाणित करें",
@@ -193,5 +196,37 @@
     "Bottom Nav": "बॉटम नेव",
     "Top Nav": "टॉप नेव",
     "Journey Flow": "जर्नी फ्लो",
-    "Badges": "बैजेस"
+    "Badges": "बैजेस",
+    "On This Page": "इस पृष्ठ पर",
+    "Edit this page": "इस पृष्ठ को संपादित करें",
+    "Report an issue": "समस्या की रिपोर्ट करें",
+    "to search": "खोजने के लिए",
+    "Close Menu": "मेनू बंद करें",
+    "Introduction": "परिचय",
+    "Getting Started": "शुरू करें",
+    "Basics": "मूल बातें",
+    "Widgets": "विजेट",
+    "Advanced": "उन्नत",
+    "Configuration": "कॉन्फ़िगरेशन",
+    "Directory Structure": "डायरेक्टरी संरचना",
+    "Upgrade Guide": "अपग्रेड गाइड",
+    "What Is Nylo": "Nylo क्या है",
+    "App Icons": "ऐप आइकन",
+    "Themes": "थीम",
+    "Themes And Styling": "थीम और स्टाइलिंग",
+    "Push Notifications": "पुश सूचनाएँ",
+    "Local Notifications": "स्थानीय सूचनाएँ",
+    "Language Switcher": "भाषा स्विचर",
+    "Input Field": "इनपुट फ़ील्ड",
+    "Navigation Hub": "नेविगेशन हब",
+    "Styled Text": "स्टाइल टेक्स्ट",
+    "Collection View": "कलेक्शन व्यू",
+    "Fade Overlay": "फ़ेड ओवरले",
+
+    "Error tracking and logging for Flutter apps.": "Flutter ऐप्स के लिए त्रुटि ट्रैकिंग और लॉगिंग।",
+    "Get device metadata in your Flutter apps.": "अपने Flutter ऐप्स में डिवाइस मेटाडेटा प्राप्त करें।",
+    "Run background services in Flutter apps.": "Flutter ऐप्स में बैकग्राउंड सर्विसेज चलाएं।",
+    "Simplified Firebase integration for Flutter.": "Flutter के लिए सरलीकृत Firebase एकीकरण।",
+    "UI scaffolding for Flutter apps.": "Flutter ऐप्स के लिए UI स्कैफोल्डिंग।",
+    "Manage permissions in Flutter apps.": "Flutter ऐप्स में अनुमतियां प्रबंधित करें।"
 }

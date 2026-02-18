@@ -4,11 +4,11 @@
 
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
-- [Generare le Icone dell'App](#generating-app-icons "Generare le icone dell'app")
-- [Aggiungere la Tua Icona dell'App](#adding-your-app-icon "Aggiungere la tua icona dell'app")
-- [Requisiti dell'Icona dell'App](#app-icon-requirements "Requisiti dell'icona dell'app")
+- [Generare le Icone dell'App](#generating-app-icons "Generare le Icone dell'App")
+- [Aggiungere la Tua Icona dell'App](#adding-your-app-icon "Aggiungere la Tua Icona dell'App")
+- [Requisiti dell'Icona dell'App](#app-icon-requirements "Requisiti dell'Icona dell'App")
 - [Configurazione](#configuration "Configurazione")
-- [Conteggio Badge](#badge-count "Conteggio badge")
+- [Conteggio Badge](#badge-count "Conteggio Badge")
 
 <div id="introduction"></div>
 

@@ -3,17 +3,17 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "Introduction")
-- [基本用法](#basic-usage "Basic Usage")
-- [构造函数](#constructors "Constructors")
+- [简介](#introduction "简介")
+- [基本用法](#basic-usage "基本用法")
+- [构造函数](#constructors "构造函数")
 - [PullableConfig](#pullable-config "PullableConfig")
-- [头部样式](#header-styles "Header Styles")
-- [上拉加载更多](#pull-up "Pull-Up to Load More")
-- [自定义头部和底部](#custom-headers "Custom Headers and Footers")
-- [控制器](#controller "Controller")
-- [扩展方法](#extension-method "Extension Method")
-- [CollectionView 集成](#collection-view "CollectionView Integration")
-- [示例](#examples "Practical Examples")
+- [头部样式](#header-styles "头部样式")
+- [上拉加载更多](#pull-up "上拉加载更多")
+- [自定义头部和底部](#custom-headers "自定义头部和底部")
+- [控制器](#controller "控制器")
+- [扩展方法](#extension-method "扩展方法")
+- [CollectionView 集成](#collection-view "CollectionView 集成")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

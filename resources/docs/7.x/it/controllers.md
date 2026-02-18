@@ -3,21 +3,21 @@
 ---
 
 <a name="section-1"></a>
-- [Introduzione](#introduction "Introduzione ai controller")
-- [Creazione dei Controller](#creating-controllers "Creazione dei controller")
-- [Utilizzo dei Controller](#using-controllers "Utilizzo dei controller")
+- [Introduzione](#introduction "Introduzione")
+- [Creazione dei Controller](#creating-controllers "Creazione dei Controller")
+- [Utilizzo dei Controller](#using-controllers "Utilizzo dei Controller")
 - Funzionalità dei Controller
-  - [Accesso ai Dati della Rotta](#accessing-route-data "Accesso ai dati della rotta")
-  - [Parametri Query](#query-parameters "Parametri query")
-  - [Gestione dello Stato della Pagina](#page-state-management "Gestione dello stato della pagina")
-  - [Notifiche Toast](#toast-notifications "Notifiche toast")
-  - [Validazione del Form](#form-validation "Validazione del form")
-  - [Cambio Lingua](#language-switching "Cambio lingua")
-  - [Lock Release](#lock-release "Lock release")
-  - [Azioni di Conferma](#confirm-actions "Azioni di conferma")
-- [Controller Singleton](#singleton-controllers "Controller singleton")
-- [Decoder dei Controller](#controller-decoders "Decoder dei controller")
-- [Route Guard](#route-guards "Route guard")
+  - [Accesso ai Dati della Rotta](#accessing-route-data "Accesso ai Dati della Rotta")
+  - [Parametri Query](#query-parameters "Parametri Query")
+  - [Gestione dello Stato della Pagina](#page-state-management "Gestione dello Stato della Pagina")
+  - [Notifiche Toast](#toast-notifications "Notifiche Toast")
+  - [Validazione del Form](#form-validation "Validazione del Form")
+  - [Cambio Lingua](#language-switching "Cambio Lingua")
+  - [Lock Release](#lock-release "Lock Release")
+  - [Azioni di Conferma](#confirm-actions "Azioni di Conferma")
+- [Controller Singleton](#singleton-controllers "Controller Singleton")
+- [Decoder dei Controller](#controller-decoders "Decoder dei Controller")
+- [Route Guard](#route-guards "Route Guard")
 
 <div id="introduction"></div>
 

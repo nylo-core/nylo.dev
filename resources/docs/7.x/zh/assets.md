@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "资源文件简介")
+- [简介](#introduction "简介")
 - 文件
   - [显示图片](#displaying-images "显示图片")
   - [自定义资源路径](#custom-asset-paths "自定义资源路径")

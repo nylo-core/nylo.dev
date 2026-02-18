@@ -3,25 +3,25 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "Introduction")
-- [创建路由守卫](#creating-a-route-guard "Creating a Route Guard")
-- [守卫生命周期](#guard-lifecycle "Guard Lifecycle")
+- [简介](#introduction "简介")
+- [创建路由守卫](#creating-a-route-guard "创建路由守卫")
+- [守卫生命周期](#guard-lifecycle "守卫生命周期")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
   - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
-- [守卫操作](#guard-actions "Guard Actions")
+- [守卫操作](#guard-actions "守卫操作")
   - [next](#next "next")
   - [redirect](#redirect "redirect")
   - [abort](#abort "abort")
   - [setData](#set-data "setData")
-- [将守卫应用于路由](#applying-guards "Applying Guards to Routes")
-- [分组守卫](#group-guards "Group Guards")
-- [守卫组合](#guard-composition "Guard Composition")
+- [将守卫应用于路由](#applying-guards "将守卫应用于路由")
+- [分组守卫](#group-guards "分组守卫")
+- [守卫组合](#guard-composition "守卫组合")
   - [GuardStack](#guard-stack "GuardStack")
   - [ConditionalGuard](#conditional-guard "ConditionalGuard")
   - [ParameterizedGuard](#parameterized-guard "ParameterizedGuard")
-- [示例](#examples "Practical Examples")
+- [示例](#examples "示例")
 
 <div id="introduction"></div>
 

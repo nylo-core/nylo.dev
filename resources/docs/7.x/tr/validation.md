@@ -3,18 +3,18 @@
 ---
 
 <a name="section-1"></a>
-- [Giriş](#introduction "Doğrulamaya giriş")
+- [Giriş](#introduction "Giriş")
 - Temel Bilgiler
-  - [check() ile Veri Doğrulama](#validating-data "check() ile veri doğrulama")
-  - [Doğrulama Sonuçları](#validation-results "Doğrulama sonuçları")
+  - [check() ile Veri Doğrulama](#validating-data "check() ile Veri Doğrulama")
+  - [Doğrulama Sonuçları](#validation-results "Doğrulama Sonuçları")
 - FormValidator
   - [FormValidator Kullanımı](#using-form-validator "FormValidator Kullanımı")
-  - [FormValidator Adlandırılmış Yapıcılar](#form-validator-named-constructors "FormValidator adlandırılmış yapıcılar")
-  - [Doğrulama Kurallarını Zincirleme](#chaining-validation-rules "Doğrulama kurallarını zincirleme")
-  - [Özel Doğrulama](#custom-validation "Özel doğrulama")
+  - [FormValidator Adlandırılmış Yapıcılar](#form-validator-named-constructors "FormValidator Adlandırılmış Yapıcılar")
+  - [Doğrulama Kurallarını Zincirleme](#chaining-validation-rules "Doğrulama Kurallarını Zincirleme")
+  - [Özel Doğrulama](#custom-validation "Özel Doğrulama")
   - [FormValidator'ı Alanlarla Kullanma](#form-validator-with-fields "FormValidator'ı Alanlarla Kullanma")
-- [Mevcut Doğrulama Kuralları](#validation-rules "Doğrulama kuralları")
-- [Özel Doğrulama Kuralları Oluşturma](#creating-custom-validation-rules "Özel doğrulama kuralları oluşturma")
+- [Mevcut Doğrulama Kuralları](#validation-rules "Mevcut Doğrulama Kuralları")
+- [Özel Doğrulama Kuralları Oluşturma](#creating-custom-validation-rules "Özel Doğrulama Kuralları Oluşturma")
 
 <div id="introduction"></div>
 

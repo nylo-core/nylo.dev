@@ -3,9 +3,9 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zu Themes")
+- [Einleitung](#introduction "Einleitung")
 - Themes
-  - [Helles & Dunkles Theme](#light-and-dark-themes "Helles und dunkles Theme")
+  - [Helles & Dunkles Theme](#light-and-dark-themes "Helles & Dunkles Theme")
   - [Ein Theme erstellen](#creating-a-theme "Ein Theme erstellen")
 - Konfiguration
   - [Theme-Farben](#theme-colors "Theme-Farben")

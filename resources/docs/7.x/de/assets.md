@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [Einleitung](#introduction "Einleitung zu Assets")
+- [Einleitung](#introduction "Einleitung")
 - Dateien
   - [Bilder anzeigen](#displaying-images "Bilder anzeigen")
   - [Benutzerdefinierte Asset-Pfade](#custom-asset-paths "Benutzerdefinierte Asset-Pfade")

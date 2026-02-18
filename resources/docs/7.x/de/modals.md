@@ -14,7 +14,7 @@
   - [Schliessen-Schaltflaeche](#close-button "Schliessen-Schaltflaeche")
   - [Benutzerdefinierte Dekoration](#custom-decoration "Benutzerdefinierte Dekoration")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [Beispiele](#examples "Praktische Beispiele")
+- [Beispiele](#examples "Beispiele")
 
 <div id="introduction"></div>
 

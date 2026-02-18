@@ -3,14 +3,14 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "डायरेक्टरी स्ट्रक्चर का परिचय")
+- [परिचय](#introduction "परिचय")
 - [रूट डायरेक्टरी](#root-directory "रूट डायरेक्टरी")
 - [lib डायरेक्टरी](#lib-directory "lib डायरेक्टरी")
-  - [app](#app-directory "App डायरेक्टरी")
-  - [bootstrap](#bootstrap-directory "Bootstrap डायरेक्टरी")
-  - [config](#config-directory "Config डायरेक्टरी")
-  - [resources](#resources-directory "Resources डायरेक्टरी")
-  - [routes](#routes-directory "Routes डायरेक्टरी")
+  - [app](#app-directory "app")
+  - [bootstrap](#bootstrap-directory "bootstrap")
+  - [config](#config-directory "config")
+  - [resources](#resources-directory "resources")
+  - [routes](#routes-directory "routes")
 - [एसेट्स डायरेक्टरी](#assets-directory "एसेट्स डायरेक्टरी")
 - [एसेट हेल्पर्स](#asset-helpers "एसेट हेल्पर्स")
 

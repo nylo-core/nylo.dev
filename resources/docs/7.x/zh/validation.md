@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "验证简介")
+- [简介](#introduction "简介")
 - 基础
   - [使用 check() 验证数据](#validating-data "使用 check() 验证数据")
   - [验证结果](#validation-results "验证结果")
@@ -13,7 +13,7 @@
   - [链式验证规则](#chaining-validation-rules "链式验证规则")
   - [自定义验证](#custom-validation "自定义验证")
   - [将 FormValidator 与字段一起使用](#form-validator-with-fields "将 FormValidator 与字段一起使用")
-- [可用验证规则](#validation-rules "验证规则")
+- [可用验证规则](#validation-rules "可用验证规则")
 - [创建自定义验证规则](#creating-custom-validation-rules "创建自定义验证规则")
 
 <div id="introduction"></div>

@@ -15,7 +15,7 @@
   - [Stile registrieren](#registering-styles "Stile registrieren")
   - [Eine Style-Factory erstellen](#creating-a-style-factory "Eine Style-Factory erstellen")
 - [AlertTab](#alert-tab "AlertTab")
-- [Beispiele](#examples "Praktische Beispiele")
+- [Beispiele](#examples "Beispiele")
 
 <div id="introduction"></div>
 

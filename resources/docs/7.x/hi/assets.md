@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "एसेट्स का परिचय")
+- [परिचय](#introduction "परिचय")
 - फ़ाइलें
   - [इमेज प्रदर्शित करना](#displaying-images "इमेज प्रदर्शित करना")
   - [कस्टम एसेट पाथ](#custom-asset-paths "कस्टम एसेट पाथ")

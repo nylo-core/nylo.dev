@@ -14,7 +14,7 @@
   - [Pulsante di Chiusura](#close-button "Pulsante di Chiusura")
   - [Decorazione Personalizzata](#custom-decoration "Decorazione Personalizzata")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
-- [Esempi](#examples "Esempi Pratici")
+- [Esempi](#examples "Esempi")
 
 <div id="introduction"></div>
 

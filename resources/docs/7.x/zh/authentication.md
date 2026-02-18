@@ -3,7 +3,7 @@
 ---
 
 <a name="section-1"></a>
-- [简介](#introduction "认证简介")
+- [简介](#introduction "简介")
 - 基础
   - [用户认证](#authenticating-users "用户认证")
   - [获取认证数据](#retrieving-auth-data "获取认证数据")

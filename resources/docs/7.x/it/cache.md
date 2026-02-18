@@ -5,15 +5,15 @@
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
 - Fondamenti
-  - [Salvare con Scadenza](#save-with-expiration "Salvare con scadenza")
-  - [Salvare per Sempre](#save-forever "Salvare per sempre")
-  - [Recuperare Dati](#retrieve-data "Recuperare dati")
-  - [Memorizzare Dati Direttamente](#store-data-directly "Memorizzare dati direttamente")
-  - [Rimuovere Dati](#remove-data "Rimuovere dati")
-  - [Controllare la Cache](#check-cache "Controllare la cache")
+  - [Salvare con Scadenza](#save-with-expiration "Salvare con Scadenza")
+  - [Salvare per Sempre](#save-forever "Salvare per Sempre")
+  - [Recuperare Dati](#retrieve-data "Recuperare Dati")
+  - [Memorizzare Dati Direttamente](#store-data-directly "Memorizzare Dati Direttamente")
+  - [Rimuovere Dati](#remove-data "Rimuovere Dati")
+  - [Controllare la Cache](#check-cache "Controllare la Cache")
 - Networking
-  - [Caching delle Risposte API](#caching-api-responses "Caching delle risposte API")
-- [Supporto Piattaforma](#platform-support "Supporto piattaforma")
+  - [Caching delle Risposte API](#caching-api-responses "Caching delle Risposte API")
+- [Supporto Piattaforma](#platform-support "Supporto Piattaforma")
 - [Riferimento API](#api-reference "Riferimento API")
 
 <div id="introduction"></div>

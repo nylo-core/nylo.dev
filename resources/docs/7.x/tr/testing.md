@@ -30,7 +30,7 @@
 - [Özel Eşleştiriciler](#custom-matchers "Özel Eşleştiriciler")
 - [Durum Testi](#state-testing "Durum Testi")
 - [Hata Ayıklama](#debugging "Hata Ayıklama")
-- [Örnekler](#examples "Pratik Örnekler")
+- [Örnekler](#examples "Örnekler")
 
 <div id="introduction"></div>
 

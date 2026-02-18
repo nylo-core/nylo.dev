@@ -31,12 +31,12 @@
                 </svg>
             </div>
             <div class="flex-1 min-w-0">
-                <div class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Previous</div>
+                <div class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">{{ __('Previous') }}</div>
                 <div class="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate transition-colors duration-200">
                     @if (str($prevPage['page'])->startsWith('ny'))
                         {{ str($prevPage['page'])->headline()->replace(" ", "") }}
                     @else
-                        {{ str($prevPage['page'])->headline() }}
+                        {{ __(str($prevPage['page'])->headline()->toString()) }}
                     @endif
                 </div>
             </div>
@@ -54,12 +54,12 @@
                 </svg>
             </div>
             <div class="flex-1 min-w-0">
-                <div class="text-xs font-medium text-blue-600 dark:text-white/80 uppercase tracking-wide mb-1">Next</div>
+                <div class="text-xs font-medium text-blue-600 dark:text-white/80 uppercase tracking-wide mb-1">{{ __('Next') }}</div>
                 <div class="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate transition-colors duration-200">
                     @if (str($nextPage['page'])->startsWith('ny'))
                         {{ str($nextPage['page'])->headline()->replace(" ", "") }}
                     @else
-                        {{ str($nextPage['page'])->headline() }}
+                        {{ __(str($nextPage['page'])->headline()->toString()) }}
                     @endif
                 </div>
             </div>

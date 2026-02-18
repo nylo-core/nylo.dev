@@ -3,19 +3,19 @@
 ---
 
 <a name="section-1"></a>
-- [परिचय](#introduction "Introduction")
-- [बुनियादी उपयोग](#basic-usage "Basic Usage")
-- [बिल्ट-इन स्टाइल](#built-in-styles "Built-in Styles")
-- [पेज से अलर्ट दिखाना](#from-pages "Showing Alerts from Pages")
-- [कंट्रोलर से अलर्ट दिखाना](#from-controllers "Showing Alerts from Controllers")
+- [परिचय](#introduction "परिचय")
+- [बुनियादी उपयोग](#basic-usage "बुनियादी उपयोग")
+- [बिल्ट-इन स्टाइल](#built-in-styles "बिल्ट-इन स्टाइल")
+- [पेज से अलर्ट दिखाना](#from-pages "पेज से अलर्ट दिखाना")
+- [कंट्रोलर से अलर्ट दिखाना](#from-controllers "कंट्रोलर से अलर्ट दिखाना")
 - [showToastNotification](#show-toast-notification "showToastNotification")
 - [ToastMeta](#toast-meta "ToastMeta")
-- [पोज़िशनिंग](#positioning "Positioning")
-- [कस्टम टोस्ट स्टाइल](#custom-styles "Custom Toast Styles")
-  - [स्टाइल रजिस्टर करना](#registering-styles "Registering Styles")
-  - [स्टाइल फैक्ट्री बनाना](#creating-a-style-factory "Creating a Style Factory")
+- [पोज़िशनिंग](#positioning "पोज़िशनिंग")
+- [कस्टम टोस्ट स्टाइल](#custom-styles "कस्टम टोस्ट स्टाइल")
+  - [स्टाइल रजिस्टर करना](#registering-styles "स्टाइल रजिस्टर करना")
+  - [स्टाइल फैक्ट्री बनाना](#creating-a-style-factory "स्टाइल फैक्ट्री बनाना")
 - [AlertTab](#alert-tab "AlertTab")
-- [उदाहरण](#examples "Practical Examples")
+- [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
 
