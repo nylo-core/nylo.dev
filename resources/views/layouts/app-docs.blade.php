@@ -13,6 +13,8 @@
     <meta name="author" content="{{ config('app.name') }}" />
     {!! SEO::generate(true) !!}
 
+    @include('includes.hreflang')
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
         integrity="{{ config('project.meta.fa_integrity') }}" crossorigin="anonymous">
 

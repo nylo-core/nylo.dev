@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Facades\Route;
 use Request;
 use SEO;
 
@@ -22,17 +23,35 @@ class SeoService
 
     /**
      * Sets the default SEO settings for all pages.
-     *
-     * @return void
      */
-    public function setDefaultSeo()
+    public function setDefaultSeo(): void
     {
         SEO::setDescription(config('app.name').' is an open-source micro-framework for Flutter that makes building apps a breeze. It provides all the basic building blocks to create a modern application.');
-        SEO::setCanonical(Request::url());
-        SEO::opengraph()->setUrl(Request::url());
+        SEO::setCanonical($this->resolveCanonicalUrl());
+        SEO::opengraph()->setUrl($this->resolveCanonicalUrl());
         SEO::twitter()->setSite('@nylo_dev');
         SEO::opengraph()->addProperty('type', 'website');
         SEO::jsonLd()->addImage(asset('images/nylo-social-banner-github.png'));
+    }
+
+    /**
+     * Resolves the canonical URL for the current page.
+     * Doc pages always canonicalize to the non-localized /docs/{version}/{page} route.
+     */
+    private function resolveCanonicalUrl(): string
+    {
+        $routeName = Route::currentRouteName();
+
+        if (in_array($routeName, ['landing.docs', 'landing.docs.default'])) {
+            $params = Route::current()->parameters();
+
+            return route('landing.docs.default', [
+                'version' => $params['version'] ?? '',
+                'page' => $params['page'] ?? 'installation',
+            ]);
+        }
+
+        return Request::url();
     }
 
     /**

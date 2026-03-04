@@ -82,6 +82,8 @@ class GenerateSitemapCommand extends Command
 
     /**
      * Add documentation pages to the sitemap.
+     * Each doc page gets a single canonical entry (non-localized /docs/ route)
+     * with hreflang alternates pointing to all locale variants.
      */
     private function addDocumentationPages(Sitemap $sitemap, string $latestVersion): bool
     {
@@ -92,27 +94,60 @@ class GenerateSitemapCommand extends Command
         }
 
         $added = false;
+        $locales = array_keys(config('localization.supported_locales', ['en' => []]));
+
         foreach ($docs['versions'] as $version => $versionLinks) {
             if ($version !== $latestVersion) {
                 continue;
             }
 
-            $locales = array_keys(config('localization.supported_locales', ['en' => []]));
             $links = collect($versionLinks)->flatten()->toArray();
 
-            // Add non-localized doc URLs (/docs/{version}/{page}) as canonical English entry points
             foreach ($links as $link) {
-                $urlLink = route('landing.docs.default', ['version' => $version, 'page' => $link]);
-                $sitemap->add(Url::create($urlLink)->setPriority(0.85));
+                // Canonical entry: non-localized /docs/{version}/{page}
+                $canonicalUrl = route('landing.docs.default', ['version' => $version, 'page' => $link]);
+                $url = Url::create($canonicalUrl)
+                    ->setPriority(1.0)
+                    ->addAlternate($canonicalUrl, 'x-default')
+                    ->addAlternate($canonicalUrl, 'en');
+
+                // Add alternate for each non-English locale
+                foreach ($locales as $locale) {
+                    if ($locale === 'en') {
+                        continue;
+                    }
+                    $localizedUrl = route('landing.docs', ['locale' => $locale, 'version' => $version, 'page' => $link]);
+                    $url->addAlternate($localizedUrl, $locale);
+                }
+
+                $sitemap->add($url);
                 $added = true;
             }
 
-            // Add localized doc URLs (/{locale}/docs/{version}/{page})
+            // Also add localized doc entries (lower priority) with the same hreflang set
             foreach ($locales as $locale) {
+                if ($locale === 'en') {
+                    continue;
+                }
+
                 foreach ($links as $link) {
-                    $urlLink = route('landing.docs', ['locale' => $locale, 'version' => $version, 'page' => $link]);
-                    $priority = $locale === 'en' ? 0.8 : 0.6;
-                    $sitemap->add(Url::create($urlLink)->setPriority($priority));
+                    $localizedUrl = route('landing.docs', ['locale' => $locale, 'version' => $version, 'page' => $link]);
+                    $canonicalUrl = route('landing.docs.default', ['version' => $version, 'page' => $link]);
+
+                    $url = Url::create($localizedUrl)
+                        ->setPriority(0.5)
+                        ->addAlternate($canonicalUrl, 'x-default')
+                        ->addAlternate($canonicalUrl, 'en');
+
+                    foreach ($locales as $altLocale) {
+                        if ($altLocale === 'en') {
+                            continue;
+                        }
+                        $altUrl = route('landing.docs', ['locale' => $altLocale, 'version' => $version, 'page' => $link]);
+                        $url->addAlternate($altUrl, $altLocale);
+                    }
+
+                    $sitemap->add($url);
                     $added = true;
                 }
             }
