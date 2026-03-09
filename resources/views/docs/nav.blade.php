@@ -1,10 +1,11 @@
 <nav class="text-sm leading-6 font-semibold text-slate-700 dark:text-slate-200">
     <ul class="flex space-x-8 whitespace-nowrap">
-        <li><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $nyloDocVersion, 'page' => 'installation']) }}">{{ __('Docs') }}</a></li>
-        <li><a href="https://github.com/nylo-core/nylo/discussions" target="_BLANK" class="hover:text-sky-500 dark:hover:text-sky-400">{{ __('Community') }}</a></li>
+        <li class="flex items-center"><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $nyloDocVersion, 'page' => 'installation']) }}">{{ __('Docs') }}</a></li>
+        <li class="flex items-center"><a href="https://github.com/nylo-core/nylo/discussions" target="_BLANK" class="hover:text-sky-500 dark:hover:text-sky-400">{{ __('Community') }}</a></li>
         @if(array_key_exists($version, config('project.doc-tutorials.versions', [])))
-        <li><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('tutorials.index', ['version' => $version]) }}">{{ __('Tutorials') }}</a></li>
+        <li class="flex items-center"><a class="hover:text-sky-500 dark:hover:text-sky-400" href="{{ route('tutorials.index', ['version' => $version]) }}">{{ __('Tutorials') }}</a></li>
         @endif
+        <x-language-switcher dropdownDirection="bottom" />
     </ul>
 </nav>
 <div class="flex items-center border-l border-slate-200 ml-6 dark:border-slate-800">
