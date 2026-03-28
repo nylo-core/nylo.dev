@@ -32,7 +32,7 @@
         x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 translate-y-2"
-        class="absolute {{ $dropdownDirection === 'bottom' ? 'top-full mt-3' : 'bottom-full mb-3' }} right-0 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden"
+        class="absolute {{ $dropdownDirection === 'bottom' ? 'top-full mt-3' : 'bottom-full mb-3' }} left-0 sm:right-0 sm:left-auto w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden"
     >
         {{-- Header --}}
         <div class="px-4 py-3 bg-gray-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-600">
@@ -83,9 +83,9 @@
 
         {{-- Arrow pointer --}}
         @if($dropdownDirection === 'bottom')
-            <div class="absolute -top-2 right-6 w-4 h-4 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+            <div class="absolute -top-2 left-6 sm:left-auto sm:right-6 w-4 h-4 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 transform rotate-45"></div>
         @else
-            <div class="absolute -bottom-2 right-6 w-4 h-4 bg-white dark:bg-slate-800 border-r border-b border-slate-200 dark:border-slate-700 transform rotate-45"></div>
+            <div class="absolute -bottom-2 left-6 sm:left-auto sm:right-6 w-4 h-4 bg-white dark:bg-slate-800 border-r border-b border-slate-200 dark:border-slate-700 transform rotate-45"></div>
         @endif
     </div>
 </div>
