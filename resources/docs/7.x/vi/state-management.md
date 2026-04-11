@@ -320,13 +320,13 @@ get stateActions => {
 Cuối cùng, bạn có thể gửi action từ bất kỳ đâu trong ứng dụng.
 
 ``` dart
-stateAction('test_page_action', state: MyPage.state);
+stateAction('test_page_action', state: MyPage.path);
 // in ra 'Hello from the page'
 
-stateAction('reset_data', state: MyPage.state);
+stateAction('reset_data', state: MyPage.path);
 // Đặt lại dữ liệu trong trang
 
-stateAction('show_toast', state: MyPage.state, data: {
+stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
 // hiển thị toast thành công với thông báo

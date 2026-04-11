@@ -320,13 +320,13 @@ get stateActions => {
 마지막으로 애플리케이션 어디서나 액션을 보낼 수 있습니다.
 
 ``` dart
-stateAction('test_page_action', state: MyPage.state);
+stateAction('test_page_action', state: MyPage.path);
 // '페이지에서 Hello'를 출력합니다
 
-stateAction('reset_data', state: MyPage.state);
+stateAction('reset_data', state: MyPage.path);
 // 페이지에서 데이터 초기화
 
-stateAction('show_toast', state: MyPage.state, data: {
+stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
 // 메시지와 함께 성공 토스트 표시

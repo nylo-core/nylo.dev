@@ -320,13 +320,13 @@ get stateActions => {
 Na koniec mozesz wyslac akcje z dowolnego miejsca w aplikacji.
 
 ``` dart
-stateAction('test_page_action', state: MyPage.state);
+stateAction('test_page_action', state: MyPage.path);
 // wypisuje 'Hello from the page'
 
-stateAction('reset_data', state: MyPage.state);
+stateAction('reset_data', state: MyPage.path);
 // Resetuje dane na stronie
 
-stateAction('show_toast', state: MyPage.state, data: {
+stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
 // wyswietla toast sukcesu z wiadomoscia
