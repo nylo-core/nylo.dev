@@ -152,5 +152,5 @@ ASSET_PATH="res"
 Sau khi thay đổi, tạo lại cấu hình môi trường:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```

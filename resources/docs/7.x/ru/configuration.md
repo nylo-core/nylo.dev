@@ -91,7 +91,7 @@ metro make:env
 При изменении файла `.env` перегенерируйте конфигурацию:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 Флаг `--force` перезаписывает существующий `env.g.dart`.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Шаг 3:** Перегенерируйте конфигурацию окружения:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Шаг 4:** Используйте класс конфигурации в приложении:
@@ -234,10 +234,10 @@ API_BASE_URL="https://api.myapp.com"
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Шаг 3: Сборка приложения
@@ -249,7 +249,7 @@ metro make:env --file=".env.staging" --force
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ flutter run --dart-define=APP_KEY=your-secret-key
 
 1. **Никогда не коммитьте `.env` в систему контроля версий** -- добавьте его в `.gitignore`
 2. **Используйте `.env-example`** -- коммитьте шаблон без конфиденциальных значений
-3. **Перегенерируйте после изменений** -- всегда запускайте `metro make:env --force` после изменения `.env`
+3. **Перегенерируйте после изменений** -- всегда запускайте `metro make:env` после изменения `.env`
 4. **Разные ключи для разных окружений** -- используйте уникальные APP_KEY для разработки, тестирования и продакшена

@@ -91,7 +91,7 @@ Env Anda secara otomatis didaftarkan saat aplikasi Anda dimulai -- `Nylo.init(en
 Saat Anda mengubah file `.env`, buat ulang konfigurasinya:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 Flag `--force` menimpa `env.g.dart` yang ada.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Langkah 3:** Buat ulang konfigurasi environment Anda:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Langkah 4:** Gunakan kelas config di aplikasi Anda:
@@ -234,10 +234,10 @@ Buat dari file env tertentu:
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Langkah 3: Build Aplikasi Anda
@@ -249,7 +249,7 @@ Build dengan konfigurasi yang sesuai:
 flutter run
 
 # Build produksi
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ Pendekatan ini menjaga APP_KEY di luar kode sumber Anda, yang berguna untuk:
 
 1. **Jangan pernah commit `.env` ke version control** - Tambahkan ke `.gitignore`
 2. **Gunakan `.env-example`** - Commit template tanpa nilai sensitif
-3. **Buat ulang setelah perubahan** - Selalu jalankan `metro make:env --force` setelah mengubah `.env`
+3. **Buat ulang setelah perubahan** - Selalu jalankan `metro make:env` setelah mengubah `.env`
 4. **Kunci berbeda per environment** - Gunakan APP_KEY unik untuk pengembangan, staging, dan produksi

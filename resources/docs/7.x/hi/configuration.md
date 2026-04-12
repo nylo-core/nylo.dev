@@ -91,7 +91,7 @@ metro make:env
 जब आप अपनी `.env` फ़ाइल को संशोधित करें, तो कॉन्फ़िग को पुनः जेनरेट करें:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 `--force` फ्लैग मौजूदा `env.g.dart` को ओवरराइट करता है।
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **चरण 3:** अपनी एनवायरनमेंट कॉन्फ़िग पुनः जेनरेट करें:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **चरण 4:** अपने ऐप में config क्लास का उपयोग करें:
@@ -234,10 +234,10 @@ API_BASE_URL="https://api.myapp.com"
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### चरण 3: अपना ऐप बिल्ड करें
@@ -249,7 +249,7 @@ metro make:env --file=".env.staging" --force
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ flutter run --dart-define=APP_KEY=your-secret-key
 
 1. **कभी भी `.env` को वर्शन कंट्रोल में कमिट न करें** - इसे `.gitignore` में जोड़ें
 2. **`.env-example` का उपयोग करें** - संवेदनशील वैल्यूज़ के बिना एक टेम्पलेट कमिट करें
-3. **बदलावों के बाद पुनः जेनरेट करें** - `.env` को संशोधित करने के बाद हमेशा `metro make:env --force` चलाएँ
+3. **बदलावों के बाद पुनः जेनरेट करें** - `.env` को संशोधित करने के बाद हमेशा `metro make:env` चलाएँ
 4. **प्रति एनवायरनमेंट अलग कीज़** - डेवलपमेंट, स्टेजिंग और प्रोडक्शन के लिए यूनिक APP_KEY उपयोग करें

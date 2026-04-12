@@ -91,7 +91,7 @@ metro make:env
 `.env` ファイルを変更したら、設定を再生成します:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 `--force` フラグは既存の `env.g.dart` を上書きします。
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **ステップ 3:** 環境設定を再生成します:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **ステップ 4:** アプリで Config クラスを使用します:
@@ -234,10 +234,10 @@ API_BASE_URL="https://api.myapp.com"
 
 ``` bash
 # 本番用
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # ステージング用
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### ステップ 3: アプリのビルド
@@ -249,7 +249,7 @@ metro make:env --file=".env.staging" --force
 flutter run
 
 # 本番ビルド
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ flutter run --dart-define=APP_KEY=your-secret-key
 
 1. **`.env` をバージョン管理にコミットしない** - `.gitignore` に追加してください
 2. **`.env-example` を使用する** - 機密値を含まないテンプレートをコミットしてください
-3. **変更後に再生成する** - `.env` を変更したら必ず `metro make:env --force` を実行してください
+3. **変更後に再生成する** - `.env` を変更したら必ず `metro make:env` を実行してください
 4. **環境ごとに異なるキーを使用する** - 開発、ステージング、本番で一意の APP_KEY を使用してください

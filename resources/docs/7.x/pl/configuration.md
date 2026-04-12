@@ -91,7 +91,7 @@ To tworzy `lib/bootstrap/env.g.dart` z zaszyfrowanymi zmiennymi środowiskowymi.
 Gdy zmodyfikujesz plik `.env`, ponownie wygeneruj konfigurację:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 Flaga `--force` nadpisuje istniejący `env.g.dart`.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Krok 3:** Ponownie wygeneruj konfigurację środowiska:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Krok 4:** Użyj klasy konfiguracyjnej w aplikacji:
@@ -234,10 +234,10 @@ Wygeneruj z konkretnego pliku env:
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Krok 3: Zbuduj aplikację
@@ -249,7 +249,7 @@ Zbuduj z odpowiednią konfiguracją:
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ To podejście utrzymuje APP_KEY poza kodem źródłowym, co jest przydatne dla:
 
 1. **Nigdy nie commituj `.env` do kontroli wersji** - Dodaj go do `.gitignore`
 2. **Używaj `.env-example`** - Commituj szablon bez wrażliwych wartości
-3. **Ponownie generuj po zmianach** - Zawsze uruchamiaj `metro make:env --force` po modyfikacji `.env`
+3. **Ponownie generuj po zmianach** - Zawsze uruchamiaj `metro make:env` po modyfikacji `.env`
 4. **Różne klucze per środowisko** - Używaj unikalnych APP_KEY dla development, staging i production

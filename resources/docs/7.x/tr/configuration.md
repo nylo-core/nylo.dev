@@ -91,7 +91,7 @@ Ortam&#305;n&#305;z uygulaman&#305;z ba&#351;lad&#305;&#287;&#305;nda otomatik o
 `.env` dosyan&#305;z&#305; de&#287;i&#351;tirdi&#287;inizde, yap&#305;land&#305;rmay&#305; yeniden olu&#351;turun:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 `--force` bayra&#287;&#305; mevcut `env.g.dart` dosyas&#305;n&#305;n &#252;zerine yazar.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Ad&#305;m 3:** Ortam yap&#305;land&#305;rman&#305;z&#305; yeniden olu&#351;turun:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Ad&#305;m 4:** Config s&#305;n&#305;f&#305;n&#305; uygulaman&#305;zda kullan&#305;n:
@@ -234,10 +234,10 @@ Belirli bir ortam dosyas&#305;ndan olu&#351;turun:
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Ad&#305;m 3: Uygulaman&#305;z&#305; Derleme
@@ -249,7 +249,7 @@ Uygun yap&#305;land&#305;rma ile derleyin:
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ Bu yakla&#351;&#305;m APP_KEY'i kaynak kodunuzun d&#305;&#351;&#305;nda tutar ve
 
 1. **`.env` dosyas&#305;n&#305; asla s&#252;r&#252;m kontrol&#252;ne eklemeyin** - `.gitignore`'a ekleyin
 2. **`.env-example` kullan&#305;n** - Hassas de&#287;erler olmadan bir &#351;ablon kaydedin
-3. **De&#287;i&#351;ikliklerden sonra yeniden olu&#351;turun** - `.env` de&#287;i&#351;tikten sonra her zaman `metro make:env --force` &#231;al&#305;&#351;t&#305;r&#305;n
+3. **De&#287;i&#351;ikliklerden sonra yeniden olu&#351;turun** - `.env` de&#287;i&#351;tikten sonra her zaman `metro make:env` &#231;al&#305;&#351;t&#305;r&#305;n
 4. **Ortam ba&#351;&#305;na farkl&#305; anahtarlar** - Geli&#351;tirme, test ve &#252;retim i&#231;in benzersiz APP_KEY'ler kullan&#305;n

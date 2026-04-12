@@ -152,6 +152,6 @@ ASSET_PATH="res"
 After changing, regenerate your environment config:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 

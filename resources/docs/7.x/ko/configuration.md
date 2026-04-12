@@ -91,7 +91,7 @@ metro make:env
 `.env` 파일을 수정한 후 설정을 재생성합니다:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 `--force` 플래그는 기존 `env.g.dart`를 덮어씁니다.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **3단계:** 환경 설정을 재생성합니다:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **4단계:** 앱에서 Config 클래스를 사용합니다:
@@ -234,10 +234,10 @@ API_BASE_URL="https://api.myapp.com"
 
 ``` bash
 # 프로덕션용
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # 스테이징용
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### 3단계: 앱 빌드
@@ -249,7 +249,7 @@ metro make:env --file=".env.staging" --force
 flutter run
 
 # 프로덕션 빌드
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ flutter run --dart-define=APP_KEY=your-secret-key
 
 1. **`.env`를 버전 관리에 커밋하지 마세요** - `.gitignore`에 추가하세요
 2. **`.env-example`을 사용하세요** - 민감한 값 없이 템플릿을 커밋하세요
-3. **변경 후 재생성하세요** - `.env` 수정 후 항상 `metro make:env --force`를 실행하세요
+3. **변경 후 재생성하세요** - `.env` 수정 후 항상 `metro make:env`를 실행하세요
 4. **환경별로 다른 키 사용** - 개발, 스테이징, 프로덕션에 고유한 APP_KEY를 사용하세요

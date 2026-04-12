@@ -152,5 +152,5 @@ ASSET_PATH="res"
 Po zmianie wygeneruj ponownie konfiguracje srodowiska:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```

@@ -294,7 +294,7 @@ LOCALE_TYPE="device"
 หลังจากเปลี่ยน `.env` ให้สร้าง config สภาพแวดล้อมใหม่:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 <div id="supported-locales"></div>

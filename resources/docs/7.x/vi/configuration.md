@@ -91,7 +91,7 @@ Env của bạn được tự động đăng ký khi ứng dụng khởi động
 Khi bạn chỉnh sửa file `.env`, tạo lại cấu hình:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 Cờ `--force` ghi đè `env.g.dart` hiện có.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Bước 3:** Tạo lại cấu hình môi trường:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Bước 4:** Sử dụng class cấu hình trong ứng dụng:
@@ -234,10 +234,10 @@ Tạo từ file env cụ thể:
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Bước 3: Build ứng dụng
@@ -249,7 +249,7 @@ Build với cấu hình phù hợp:
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ Cách tiếp cận này giữ APP_KEY ngoài mã nguồn, hữu ích cho:
 
 1. **Không bao giờ commit `.env` vào quản lý phiên bản** - Thêm nó vào `.gitignore`
 2. **Sử dụng `.env-example`** - Commit template không có giá trị nhạy cảm
-3. **Tạo lại sau khi thay đổi** - Luôn chạy `metro make:env --force` sau khi chỉnh sửa `.env`
+3. **Tạo lại sau khi thay đổi** - Luôn chạy `metro make:env` sau khi chỉnh sửa `.env`
 4. **Khóa khác nhau cho mỗi môi trường** - Sử dụng APP_KEY duy nhất cho phát triển, staging và production

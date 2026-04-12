@@ -152,6 +152,6 @@ ASSET_PATH="res"
 Değiştirdikten sonra ortam yapılandırmanızı yeniden oluşturun:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 

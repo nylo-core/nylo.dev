@@ -152,6 +152,6 @@ ASSET_PATH="res"
 बदलने के बाद, अपना एनवायरनमेंट कॉन्फ़िग पुनः जेनरेट करें:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 

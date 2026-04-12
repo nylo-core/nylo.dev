@@ -152,6 +152,6 @@ ASSET_PATH="res"
 更改后，重新生成您的环境配置：
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 

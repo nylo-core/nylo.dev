@@ -152,5 +152,5 @@ ASSET_PATH="res"
 変更後、環境設定を再生成します:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```

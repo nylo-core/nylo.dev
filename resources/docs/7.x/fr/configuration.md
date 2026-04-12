@@ -91,7 +91,7 @@ Votre environnement est automatiquement enregistre au demarrage de votre applica
 Lorsque vous modifiez votre fichier `.env`, regenerez la configuration :
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 Le drapeau `--force` ecrase le fichier `env.g.dart` existant.
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **Etape 3 :** Regenerez votre configuration d'environnement :
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **Etape 4 :** Utilisez la classe de configuration dans votre application :
@@ -234,10 +234,10 @@ Generez a partir d'un fichier d'environnement specifique :
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### Etape 3 : Compiler votre application
@@ -249,7 +249,7 @@ Compilez avec la configuration appropriee :
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ Cette approche garde l'APP_KEY en dehors de votre code source, ce qui est utile 
 
 1. **Ne jamais committer `.env` dans le controle de version** - Ajoutez-le au `.gitignore`
 2. **Utiliser `.env-example`** - Committez un modele sans valeurs sensibles
-3. **Regenerer apres les modifications** - Executez toujours `metro make:env --force` apres avoir modifie `.env`
+3. **Regenerer apres les modifications** - Executez toujours `metro make:env` apres avoir modifie `.env`
 4. **Des cles differentes par environnement** - Utilisez des APP_KEYs uniques pour le developpement, la pre-production et la production

@@ -294,7 +294,7 @@ LOCALE_TYPE="device"
 `.env` を変更した後、環境設定を再生成します:
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 <div id="supported-locales"></div>

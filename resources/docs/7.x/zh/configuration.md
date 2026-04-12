@@ -91,7 +91,7 @@ metro make:env
 当您修改 `.env` 文件时，重新生成配置：
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 `--force` 标志会覆盖现有的 `env.g.dart`。
@@ -165,7 +165,7 @@ final class RevenueCatConfig {
 **步骤 3：** 重新生成您的环境配置：
 
 ``` bash
-metro make:env --force
+metro make:env
 ```
 
 **步骤 4：** 在您的应用中使用配置类：
@@ -234,10 +234,10 @@ API_BASE_URL="https://api.myapp.com"
 
 ``` bash
 # For production
-metro make:env --file=".env.production" --force
+metro make:env --file=".env.production"
 
 # For staging
-metro make:env --file=".env.staging" --force
+metro make:env --file=".env.staging"
 ```
 
 ### 步骤 3：构建您的应用
@@ -249,7 +249,7 @@ metro make:env --file=".env.staging" --force
 flutter run
 
 # Production build
-metro make:env --file=.env.production --force
+metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
 ```
@@ -290,5 +290,5 @@ flutter run --dart-define=APP_KEY=your-secret-key
 
 1. **永远不要将 `.env` 提交到版本控制** - 将其添加到 `.gitignore`
 2. **使用 `.env-example`** - 提交一个不包含敏感值的模板
-3. **修改后重新生成** - 修改 `.env` 后始终运行 `metro make:env --force`
+3. **修改后重新生成** - 修改 `.env` 后始终运行 `metro make:env`
 4. **每个环境使用不同的密钥** - 为开发、预发布和生产使用唯一的 APP_KEY
