@@ -60,6 +60,8 @@ Widget build(BuildContext context) {
 }
 ```
 
+アクティブなロケールファイルにキーが見つからない場合、{{ config('app.name') }} は生のキー文字列を返す前に、フォールバック言語（`lib/config/localization.dart` で設定）を自動的に参照します。これはトップレベルのキーとドット表記のネストされたキーの両方に適用されます。
+
 <div id="string-interpolation"></div>
 
 ## 文字列補間

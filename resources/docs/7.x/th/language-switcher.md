@@ -7,7 +7,9 @@
 - การใช้งาน
     - [widget แบบเลื่อนลง](#usage-dropdown "widget แบบเลื่อนลง")
     - [Bottom Sheet Modal](#usage-bottom-modal "Bottom Sheet Modal")
+- [สไตล์แอนิเมชัน](#animation-style "สไตล์แอนิเมชัน")
 - [ตัวสร้างเลื่อนลงที่กำหนดเอง](#custom-builder "ตัวสร้างเลื่อนลงที่กำหนดเอง")
+- [การดำเนินการสถานะ](#state-actions "การดำเนินการสถานะ")
 - [พารามิเตอร์](#parameters "พารามิเตอร์")
 - [เมธอดแบบ Static](#methods "เมธอดแบบ Static")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // เพิ่มใน app bar
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 bottom modal จะแสดงรายการภาษาพร้อมเครื่องหมายถูกข้างภาษาที่เลือกอยู่ในปัจจุบัน
 
-### การปรับแต่งความสูงของ Modal
+### การปรับแต่ง Modal
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // แสดง modal เหนือทุก route รวมถึง tab bar
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## สไตล์แอนิเมชัน
+
+พารามิเตอร์ `animationStyle` ควบคุมแอนิเมชันการเปลี่ยนผ่านสำหรับทั้งปุ่มกดเมนูเลื่อนลงและรายการใน bottom modal มีสี่ preset ให้เลือก:
+
+``` dart
+// ไม่มีแอนิเมชัน
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// แอนิเมชันที่นุ่มนวลและเรียบร้อย (แนะนำสำหรับแอปส่วนใหญ่)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// แอนิเมชันแบบสนุกสนานและเด้งดึ๋ง
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Fade-in นุ่มนวลพร้อม scale เบาๆ
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+คุณยังสามารถส่ง `LanguageSwitcherAnimationStyle()` แบบกำหนดเองพร้อมพารามิเตอร์แต่ละตัว หรือใช้ `copyWith` เพื่อปรับแต่ง preset
+
+พารามิเตอร์ `animationStyle` เดียวกันนี้ยังรับได้โดย `LanguageSwitcher.showBottomModal`
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // เช่น "English"
+        // language['locale'] มีรหัส locale เช่น "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // ดำเนินการเพิ่มเติมเมื่อภาษาเปลี่ยน
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## การดำเนินการสถานะ
+
+ควบคุม `LanguageSwitcher` โดยทางโปรแกรมโดยใช้ `stateActions()`:
+
+``` dart
+// รีเฟรชรายการภาษา (อ่านภาษาที่มีอยู่ใหม่อีกครั้ง)
+LanguageSwitcher.stateActions().refresh();
+
+// สลับไปยังภาษาด้วยรหัส locale
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+สิ่งนี้มีประโยชน์เมื่อคุณต้องการเปลี่ยนภาษาของแอปโดยไม่มีการโต้ตอบของผู้ใช้ เช่น หลังจากเข้าสู่ระบบด้วยการตั้งค่าภาษาของผู้ใช้
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// พร้อมตัวเลือก
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Locale ที่รองรับ

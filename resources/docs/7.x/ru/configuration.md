@@ -10,6 +10,7 @@
   - [Получение значений](#retrieving-values "Получение значений окружения")
   - [Создание классов конфигурации](#creating-config-classes "Создание классов конфигурации")
   - [Типы переменных](#variable-types "Типы переменных окружения")
+  - [Интерполяция переменных](#variable-interpolation "Интерполяция переменных")
 - [Варианты окружения](#environment-flavours "Варианты окружения")
 - [Внедрение на этапе сборки](#build-time-injection "Внедрение на этапе сборки")
 
@@ -32,7 +33,7 @@
 Файл `.env` в корне вашего проекта содержит переменные конфигурации:
 
 ``` bash
-# Environment configuration
+# Конфигурация окружения
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ metro make:env
 metro make:env
 ```
 
-Флаг `--force` перезаписывает существующий `env.g.dart`.
+Это всегда перезаписывает существующий `env.g.dart`.
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 Затем в коде приложения обращайтесь к значениям через класс конфигурации:
 
 ``` dart
-// Anywhere in your app
+// В любом месте вашего приложения
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ metro make:config RevenueCat
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Добавьте здесь ваши значения конфигурации
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Инициализация RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Проверка прав
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Предоставить премиум-доступ
 }
 ```
 
@@ -200,6 +201,30 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (пустая строка) |
 
+
+<div id="variable-interpolation"></div>
+
+## Интерполяция переменных
+
+Строковые значения в файле `.env` могут ссылаться на другие переменные с помощью синтаксиса `${VAR_NAME}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Когда код вызывает `getEnv('APP_URL')`, возвращаемое значение будет `https://myapp.com`. Ссылки разрешаются рекурсивно, поэтому цепочки ссылок работают ожидаемо:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` возвращает `https://example.com/uploads`.
+
+Циклические ссылки защищены — если переменная ссылается на саму себя (прямо или через цепочку), нераскрытый плейсхолдер `${VAR_NAME}` сохраняется в результате вместо возникновения бесконечного цикла.
 
 <div id="environment-flavours"></div>
 
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Генерация из конкретного файла env:
 
 ``` bash
-# For production
+# Для продакшена
 metro make:env --file=".env.production"
 
-# For staging
+# Для тестирования
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 Соберите приложение с соответствующей конфигурацией:
 
 ``` bash
-# Development
+# Разработка
 flutter run
 
-# Production build
+# Сборка для продакшена
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Запуск
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

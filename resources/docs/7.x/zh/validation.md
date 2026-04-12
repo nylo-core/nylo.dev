@@ -11,6 +11,7 @@
   - [使用 FormValidator](#using-form-validator "使用 FormValidator")
   - [FormValidator 命名构造函数](#form-validator-named-constructors "FormValidator 命名构造函数")
   - [链式验证规则](#chaining-validation-rules "链式验证规则")
+  - [可空字段](#nullable-fields "可空字段")
   - [自定义验证](#custom-validation "自定义验证")
   - [将 FormValidator 与字段一起使用](#form-validator-with-fields "将 FormValidator 与字段一起使用")
 - [可用验证规则](#validation-rules "可用验证规则")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7 提供了围绕 `FormValidator` 类构建的验证系统。您可以在页面内使用 `check()` 方法验证数据，也可以直接使用 `FormValidator` 进行独立和字段级验证。
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// 在 NyPage/NyState 中使用 check() 验证数据
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// 在表单字段中使用 FormValidator
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -53,10 +54,10 @@ class _RegisterPageState extends NyPage<RegisterPage> {
           .notEmpty()
           .password(strength: 2);
     }, onSuccess: () {
-      // All validations passed
+      // 所有验证通过
       _submitForm();
     }, onValidationError: (FormValidationResponseBag bag) {
-      // Validation failed
+      // 验证失败
       print(bag.firstErrorMessage);
     });
   }
@@ -102,14 +103,14 @@ FormValidationResponseBag bag = check((validate) {
 if (bag.isValid) {
   print("All valid!");
 } else {
-  // Get the first error message
+  // 获取第一条错误消息
   String? error = bag.firstErrorMessage;
   print(error);
 
-  // Get all failed results
+  // 获取所有失败结果
   List<FormValidationResult> errors = bag.validationErrors;
 
-  // Get all successful results
+  // 获取所有成功结果
   List<FormValidationResult> successes = bag.validationSuccess;
 }
 ```
@@ -128,13 +129,13 @@ FormValidationResult result = validator.check();
 if (result.isValid) {
   print("Valid!");
 } else {
-  // First error message
+  // 第一条错误消息
   String? message = result.getFirstErrorMessage();
 
-  // All error messages
+  // 所有错误消息
   List<String> messages = result.errorMessages();
 
-  // Error responses
+  // 错误响应
   List<FormValidationError> errors = result.errorResponses;
 }
 ```
@@ -148,7 +149,7 @@ if (result.isValid) {
 ### 独立使用
 
 ``` dart
-// Using a named constructor
+// 使用命名构造函数
 FormValidator validator = FormValidator.email();
 FormValidationResult result = validator.check("user@example.com");
 
@@ -178,69 +179,69 @@ print(result.isValid); // true
 {{ config('app.name') }} v7 提供了常用验证的命名构造函数：
 
 ``` dart
-// Email validation
+// 邮箱验证
 FormValidator.email(message: "Please enter a valid email")
 
-// Password validation (strength 1 or 2)
+// 密码验证（强度 1 或 2）
 FormValidator.password(strength: 1)
 FormValidator.password(strength: 2, message: "Password too weak")
 
-// Phone numbers
+// 电话号码
 FormValidator.phoneNumberUk()
 FormValidator.phoneNumberUs()
 
-// URL validation
+// URL 验证
 FormValidator.url()
 
-// Length constraints
+// 长度约束
 FormValidator.minLength(5, message: "Too short")
 FormValidator.maxLength(100, message: "Too long")
 
-// Value constraints
+// 值约束
 FormValidator.minValue(18, message: "Must be 18+")
 FormValidator.maxValue(100)
 
-// Size constraints (for lists/strings)
+// 大小约束（适用于列表/字符串）
 FormValidator.minSize(2, message: "Select at least 2")
 FormValidator.maxSize(5)
 
-// Not empty
+// 非空
 FormValidator.notEmpty(message: "This field is required")
 
-// Contains values
+// 包含值
 FormValidator.contains(['option1', 'option2'])
 
-// Starts/ends with
+// 以指定字符串开始/结束
 FormValidator.beginsWith("https://")
 FormValidator.endsWith(".com")
 
-// Boolean checks
+// 布尔值检查
 FormValidator.booleanTrue(message: "Must accept terms")
 FormValidator.booleanFalse()
 
-// Numeric
+// 数值
 FormValidator.numeric()
 
-// Date validations
+// 日期验证
 FormValidator.date()
 FormValidator.dateInPast()
 FormValidator.dateInFuture()
 FormValidator.dateAgeIsOlder(18, message: "Must be 18+")
 FormValidator.dateAgeIsYounger(65)
 
-// Text case
+// 文本大小写
 FormValidator.uppercase()
 FormValidator.lowercase()
 FormValidator.capitalized()
 
-// Location formats
+// 地址格式
 FormValidator.zipcodeUs()
 FormValidator.postcodeUk()
 
-// Regex pattern
+// 正则表达式模式
 FormValidator.regex(r'^[A-Z]{3}\d{4}$', message: "Invalid format")
 
-// Custom validation
+// 自定义验证
 FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## 可空字段
+
+使用 `.nullable()` 将验证器标记为可选。设为可空后，null 或空值将自动通过验证 — 其他所有规则仅在值存在时才会应用。
+
+``` dart
+// 昵称是可选的，但如果填写了，必须在 3~20 个字符之间
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+没有 `.nullable()` 时，空字段会导致 `minLength` 规则失败。使用 `.nullable()` 后，将字段留空也能通过验证。
+
+这对于可选的个人资料字段、次要联系信息，或任何只在用户填写时才需要验证的字段非常有用。有关 `nullable()` 如何与 `Field` 组件集成的详细信息，请参阅[表单文档](/docs/{{ $version }}/forms)。
+
 <div id="custom-validation"></div>
 
 ## 自定义验证
@@ -291,7 +313,7 @@ FormValidator()
 FormValidator.custom(
   message: "Username already taken",
   validate: (data) {
-    // Return true if valid, false if invalid
+    // 有效返回 true，无效返回 false
     return !_takenUsernames.contains(data);
   },
 )
@@ -403,6 +425,7 @@ Field.slider(
 | 正则表达式 | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | 必须匹配正则模式 |
 | 等值 | — | `.equals(otherValue)` | 必须等于另一个值 |
 | 自定义 | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | 自定义验证函数 |
+| 可空 | — | `.nullable()` | null 或空值自动通过；仅在值存在时应用规则 |
 
 所有规则都接受可选的 `message` 参数来自定义错误消息。
 
@@ -429,7 +452,7 @@ class FormRuleUsername extends FormRule {
   @override
   bool validate(data) {
     if (data is! String) return false;
-    // Username: alphanumeric, underscores, 3-20 chars
+    // 用户名：字母数字、下划线，3-20 个字符
     return RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(data);
   }
 }

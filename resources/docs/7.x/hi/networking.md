@@ -42,11 +42,7 @@
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -227,12 +223,12 @@ if (response.isSuccessful) {
 ### network बनाम networkResponse
 
 ```dart
-// network() — returns the data directly
+// network() — डेटा सीधे रिटर्न करता है
 User? user = await network<User>(
   request: (request) => request.get("/users/1"),
 );
 
-// networkResponse() — returns the full response
+// networkResponse() — पूर्ण रिस्पॉन्स रिटर्न करता है
 NyResponse<User> response = await networkResponse<User>(
   request: (request) => request.get("/users/1"),
 );
@@ -283,22 +279,22 @@ int? status = response.statusCode;
 ```dart
 NyResponse<User> response = await apiService.fetchUser(1);
 
-// Get data or throw if null
+// डेटा प्राप्त करें या null होने पर throw करें
 User user = response.dataOrThrow('User not found');
 
-// Get data or use a fallback
+// डेटा प्राप्त करें या fallback का उपयोग करें
 User user = response.dataOr(User.guest());
 
-// Run callback only if successful
+// केवल सफल होने पर callback चलाएं
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
-// Pattern match on success/failure
+// सफलता/विफलता पर pattern match करें
 String result = response.when(
   success: (user) => 'Welcome, ${user.name}!',
   failure: (response) => 'Error: ${response.statusMessage}',
 );
 
-// Get a specific header
+// एक विशिष्ट header प्राप्त करें
 String? authHeader = response.getHeader('Authorization');
 ```
 
@@ -311,8 +307,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Future<void> downloadFile(String url, String savePath) async {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +537,8 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- लॉगर अक्षम करें
         );
@@ -564,7 +557,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // केवल विशिष्ट एंडपॉइंट्स पर रिक्वेस्ट्स लॉग करें
     return options.path.contains('/api/v1');
   },
 )
@@ -613,10 +606,10 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 await api<ApiService>(
   (request) => request.fetchUser(),
   onSuccess: (response, data) {
-    // data is the morphed User? instance
+    // data मॉर्फ़ किया गया User? इंस्टेंस है
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // एरर संभालें
   },
 );
 ```
@@ -626,7 +619,6 @@ await api<ApiService>(
 | पैरामीटर | प्रकार | विवरण |
 |-----------|------|-------------|
 | `request` | `Function(T)` | API रिक्वेस्ट फ़ंक्शन |
-| `context` | `BuildContext?` | बिल्ड कॉन्टेक्स्ट |
 | `headers` | `Map<String, dynamic>` | अतिरिक्त हेडर्स |
 | `bearerToken` | `String?` | Bearer टोकन |
 | `baseUrl` | `String?` | बेस URL ओवरराइड करें |
@@ -703,16 +695,16 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
-  // Returns a single User
+  // एक User रिटर्न करता है
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Returns a List of Users
+  // Users की List रिटर्न करता है
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -758,10 +750,10 @@ Future<List<Country>> fetchCountries() async {
 ### कैश क्लियर करना
 
 ```dart
-// Clear a specific cache key
+// एक विशिष्ट कैश कुंजी क्लियर करें
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// सभी API कैश क्लियर करें
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +842,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // केवल सर्वर एरर पर रीट्राई करें
       return dioException.response?.statusCode == 500;
     },
   );
@@ -876,7 +868,7 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -911,17 +903,17 @@ apiService.setCheckConnectivityBeforeRequest(true);
 पेंडिंग रिक्वेस्ट्स प्रबंधित और कैंसल करें।
 
 ```dart
-// Create a managed cancel token
+// एक managed cancel token बनाएं
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// सभी pending रिक्वेस्ट्स रद्द करें (जैसे, logout पर)
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// सक्रिय रिक्वेस्ट काउंट जाँचें
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// पूरा होने पर एक विशिष्ट token साफ़ करें
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +944,13 @@ class ApiService extends NyApiService {
 पब्लिक एंडपॉइंट्स के लिए जिन्हें ऑथेंटिकेशन की आवश्यकता नहीं:
 
 ```dart
-// Per-request
+// प्रति-रिक्वेस्ट
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// सर्विस-स्तर
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +969,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // जाँचें कि टोकन को रिफ्रेश करने की ज़रूरत है या नहीं
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // टोकन रिफ्रेश करने के लिए नए Dio इंस्टेंस (बिना interceptors के) का उपयोग करें
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // नया टोकन स्टोरेज में सेव करें
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +998,9 @@ class ApiService extends NyApiService {
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // हर बार नया इंस्टेंस
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // Singleton — हमेशा वही इंस्टेंस
 };
 ```
 
@@ -1021,8 +1013,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

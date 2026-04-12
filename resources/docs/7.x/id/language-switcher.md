@@ -7,7 +7,9 @@
 - Penggunaan
     - [Widget Dropdown](#usage-dropdown "Widget Dropdown")
     - [Modal Bottom Sheet](#usage-bottom-modal "Modal Bottom Sheet")
+- [Gaya Animasi](#animation-style "Gaya Animasi")
 - [Builder Dropdown Kustom](#custom-builder "Builder Dropdown Kustom")
+- [Aksi State](#state-actions "Aksi State")
 - [Parameter](#parameters "Parameter")
 - [Method Statis](#methods "Method Statis")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Tambahkan ke app bar
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Modal bottom menampilkan daftar bahasa dengan tanda centang di sebelah bahasa yang sedang dipilih.
 
-### Menyesuaikan Tinggi Modal
+### Menyesuaikan Modal
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Tampilkan modal di atas semua route, termasuk tab bar
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Gaya Animasi
+
+Parameter `animationStyle` mengontrol animasi transisi untuk trigger dropdown dan item daftar modal bottom. Tersedia empat preset:
+
+``` dart
+// Tanpa animasi
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Animasi halus dan elegan (direkomendasikan untuk sebagian besar aplikasi)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Animasi playful dan springy
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Fade-in halus dengan scale lembut
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Anda juga dapat meneruskan `LanguageSwitcherAnimationStyle()` kustom dengan parameter individual, atau menggunakan `copyWith` untuk mengubah preset.
+
+Parameter `animationStyle` yang sama diterima oleh `LanguageSwitcher.showBottomModal`.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // misalnya, "English"
+        // language['locale'] berisi kode locale, misalnya "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Lakukan aksi tambahan saat bahasa berubah
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Aksi State
+
+Kontrol `LanguageSwitcher` secara programatis menggunakan `stateActions()`:
+
+``` dart
+// Segarkan daftar bahasa (baca ulang bahasa yang tersedia)
+LanguageSwitcher.stateActions().refresh();
+
+// Beralih ke bahasa berdasarkan kode locale
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Ini berguna saat Anda ingin mengganti bahasa aplikasi tanpa interaksi pengguna, misalnya setelah login dengan preferensi pengguna.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Tampilkan modal pemilihan bahasa:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Dengan opsi
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Locale yang Didukung

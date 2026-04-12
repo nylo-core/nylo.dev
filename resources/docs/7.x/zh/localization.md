@@ -52,34 +52,34 @@ Text("greeting".tr(arguments: {"name": "Anthony"}))  // "Hello Anthony"
 
 ``` dart
 final class LocalizationConfig {
-  // Default language code (matches your JSON file, e.g., 'en' for lang/en.json)
+  // 默认语言代码（与 JSON 文件匹配，例如 'en' 对应 lang/en.json）
   static final String languageCode =
       getEnv('DEFAULT_LOCALE', defaultValue: "en");
 
-  // LocaleType.device - Use device's language setting
-  // LocaleType.asDefined - Use languageCode above
+  // LocaleType.device - 使用设备的语言设置
+  // LocaleType.asDefined - 使用上面的 languageCode
   static final LocaleType localeType =
       getEnv('LOCALE_TYPE', defaultValue: 'asDefined') == 'device'
           ? LocaleType.device
           : LocaleType.asDefined;
 
-  // Directory containing language JSON files
+  // 包含语言 JSON 文件的目录
   static const String assetsDirectory = 'lang/';
 
-  // List of supported locales
+  // 支持的区域设置列表
   static const List<Locale> supportedLocales = [
     Locale('en'),
     Locale('es'),
-    // Add more locales as needed
+    // 根据需要添加更多区域设置
   ];
 
-  // Fallback when a key is not found in the active locale
+  // 在活动区域中找不到键时的回退
   static const String fallbackLanguageCode = 'en';
 
-  // RTL language codes
+  // RTL 语言代码
   static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-  // Log warnings for missing translation keys
+  // 记录缺失翻译键的警告
   static final bool debugMissingKeys =
       getEnv('DEBUG_TRANSLATIONS', defaultValue: 'false') == 'true';
 }
@@ -140,10 +140,10 @@ flutter:
 使用 `.tr()` 扩展或 `trans()` 辅助函数来翻译字符串：
 
 ``` dart
-// Using the .tr() extension
+// 使用 .tr() 扩展
 "welcome".tr()
 
-// Using the trans() helper
+// 使用 trans() 辅助函数
 trans("welcome")
 ```
 
@@ -245,10 +245,10 @@ StyledText.template(
 在运行时更改应用的语言：
 
 ``` dart
-// Using NyLocalization directly
+// 直接使用 NyLocalization
 await NyLocalization.instance.setLanguage(
   context,
-  language: 'es'  // Must match your JSON filename (es.json)
+  language: 'es'  // 必须与您的 JSON 文件名匹配（es.json）
 );
 ```
 
@@ -319,13 +319,21 @@ static const List<Locale> supportedLocales = [
 
 ## 备用语言
 
-当在当前区域中找不到翻译键时，{{ config('app.name') }} 会回退到指定的语言：
+当在活动区域中找不到翻译键时，{{ config('app.name') }} 会在返回原始键之前在备用语言中查找该键。备用语言在 `lib/config/localization.dart` 中配置：
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-这确保您的应用在翻译缺失时永远不会显示原始键。
+这种两步解析适用于顶级键和点符号嵌套键：
+
+1. 在活动区域文件中查找键。
+2. 如果找不到，在备用区域文件中查找。
+3. 如果仍然找不到，返回原始键字符串。
+
+例如，如果法语区域文件缺少 `settings.privacy` 键，备用逻辑会在英语区域文件中查找 `settings.privacy`，然后才回退到原样返回 `"settings.privacy"`。
+
+这确保您的应用即使翻译只完成了一部分，也永远不会显示原始键。
 
 <div id="rtl-support"></div>
 
@@ -336,9 +344,9 @@ static const String fallbackLanguageCode = 'en';
 ``` dart
 static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-// Check if current language is RTL
+// 检查当前语言是否为 RTL
 if (LocalizationConfig.isRtl(currentLanguageCode)) {
-  // Handle RTL layout
+  // 处理 RTL 布局
 }
 ```
 
@@ -365,9 +373,9 @@ DEBUG_TRANSLATIONS="true"
 
 ``` dart
 bool exists = NyLocalization.instance.hasTranslation('welcome');
-// true if the key exists in the current language file
+// 如果键存在于当前语言文件中则返回 true
 
-// Also works with nested keys
+// 也适用于嵌套键
 bool nestedExists = NyLocalization.instance.hasTranslation('navigation.home');
 ```
 
@@ -399,13 +407,13 @@ bool isRtl = NyLocalization.instance.isDirectionRTL(context);
 ### 访问当前区域设置
 
 ``` dart
-// Get the current language code
-String code = NyLocalization.instance.languageCode;  // e.g., 'en'
+// 获取当前语言代码
+String code = NyLocalization.instance.languageCode;  // 例如 'en'
 
-// Get the current Locale object
+// 获取当前 Locale 对象
 Locale currentLocale = NyLocalization.instance.locale;
 
-// Get Flutter localization delegates (used in MaterialApp)
+// 获取 Flutter 本地化代理（在 MaterialApp 中使用）
 var delegates = NyLocalization.instance.delegates;
 ```
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | 当前语言代码 |
 | `locale` | `Locale` | 当前 Locale 对象 |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter 本地化代理 |
+| `setValuesForTesting({values, fallbackValues})` | `void` | 直接为单元测试注入翻译映射 |
 
 <div id="nylocalehelper"></div>
 
@@ -433,26 +442,26 @@ var delegates = NyLocalization.instance.delegates;
 `NyLocaleHelper` 是一个用于区域操作的静态工具类。它提供了检测当前区域、检查 RTL 支持和创建 Locale 对象的方法。
 
 ``` dart
-// Get the current system locale
+// 获取当前系统区域设置
 Locale locale = NyLocaleHelper.getCurrentLocale(context: context);
 
-// Get language and country codes
+// 获取语言和国家代码
 String langCode = NyLocaleHelper.getLanguageCode(context: context);  // 'en'
-String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' or null
+String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' 或 null
 
-// Check if current locale matches
+// 检查当前区域是否匹配
 bool isEnglish = NyLocaleHelper.matchesLocale(context, 'en');
 bool isUsEnglish = NyLocaleHelper.matchesLocale(context, 'en', 'US');
 
-// RTL detection
+// RTL 检测
 bool isRtl = NyLocaleHelper.isRtlLanguage('ar');  // true
 bool currentIsRtl = NyLocaleHelper.isCurrentLocaleRtl(context: context);
 
-// Get text direction
+// 获取文本方向
 TextDirection direction = NyLocaleHelper.getTextDirection('ar');  // TextDirection.rtl
 TextDirection currentDir = NyLocaleHelper.getCurrentTextDirection(context: context);
 
-// Create a Locale from strings
+// 从字符串创建 Locale
 Locale newLocale = NyLocaleHelper.toLocale('en', 'US');
 ```
 

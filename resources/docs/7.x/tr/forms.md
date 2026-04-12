@@ -3,62 +3,63 @@
 ---
 
 <a name="section-1"></a>
-- [Giris](#introduction "Giris")
-- Baslangic
-  - [Form Olusturma](#creating-forms "Form Olusturma")
-  - [Form Goruntuleme](#displaying-a-form "Form Goruntuleme")
-  - [Form Gonderme](#submitting-a-form "Form Gonderme")
-- Alan Turleri
-  - [Metin Alanlari](#text-fields "Metin Alanlari")
-  - [Sayi Alanlari](#number-fields "Sayi Alanlari")
-  - [Sifre Alanlari](#password-fields "Sifre Alanlari")
-  - [E-posta Alanlari](#email-fields "E-posta Alanlari")
-  - [URL Alanlari](#url-fields "URL Alanlari")
-  - [Metin Alani (Cok Satirli)](#text-area-fields "Metin Alani (Cok Satirli)")
-  - [Telefon Numarasi Alanlari](#phone-number-fields "Telefon Numarasi Alanlari")
-  - [Kelimeleri Buyuk Harfle Baslatma](#capitalize-words-fields "Kelimeleri Buyuk Harfle Baslatma")
-  - [Cumleleri Buyuk Harfle Baslatma](#capitalize-sentences-fields "Cumleleri Buyuk Harfle Baslatma")
-  - [Tarih Alanlari](#date-fields "Tarih Alanlari")
-  - [TarihSaat Alanlari](#datetime-fields "TarihSaat Alanlari")
-  - [Maskeli Giris Alanlari](#masked-input-fields "Maskeli Giris Alanlari")
-  - [Para Birimi Alanlari](#currency-fields "Para Birimi Alanlari")
-  - [Onay Kutusu Alanlari](#checkbox-fields "Onay Kutusu Alanlari")
-  - [Anahtar Kutusu Alanlari](#switch-box-fields "Anahtar Kutusu Alanlari")
-  - [Secici Alanlari](#picker-fields "Secici Alanlari")
-  - [Radyo Alanlari](#radio-fields "Radyo Alanlari")
-  - [Cip Alanlari](#chip-fields "Cip Alanlari")
-  - [Kaydirici Alanlari](#slider-fields "Kaydirici Alanlari")
-  - [Aralik Kaydirici Alanlari](#range-slider-fields "Aralik Kaydirici Alanlari")
-  - [Ozel Alanlar](#custom-fields "Ozel Alanlar")
-  - [Widget Alanlari](#widget-fields "Widget Alanlari")
+- [Giriş](#introduction "Giriş")
+- Başlarken
+  - [Form Oluşturma](#creating-forms "Form Oluşturma")
+  - [Form Görüntüleme](#displaying-a-form "Form Görüntüleme")
+  - [Form Gönderme](#submitting-a-form "Form Gönderme")
+- Alan Türleri
+  - [Metin Alanları](#text-fields "Metin Alanları")
+  - [Sayı Alanları](#number-fields "Sayı Alanları")
+  - [Şifre Alanları](#password-fields "Şifre Alanları")
+  - [E-posta Alanları](#email-fields "E-posta Alanları")
+  - [URL Alanları](#url-fields "URL Alanları")
+  - [Metin Alanı (Çok Satırlı)](#text-area-fields "Metin Alanı (Çok Satırlı)")
+  - [Telefon Numarası Alanları](#phone-number-fields "Telefon Numarası Alanları")
+  - [Kelimeleri Büyük Harfle Başlatma](#capitalize-words-fields "Kelimeleri Büyük Harfle Başlatma")
+  - [Cümleleri Büyük Harfle Başlatma](#capitalize-sentences-fields "Cümleleri Büyük Harfle Başlatma")
+  - [Tarih Alanları](#date-fields "Tarih Alanları")
+  - [TarihSaat Alanları](#datetime-fields "TarihSaat Alanları")
+  - [Maskeli Giriş Alanları](#masked-input-fields "Maskeli Giriş Alanları")
+  - [Para Birimi Alanları](#currency-fields "Para Birimi Alanları")
+  - [Onay Kutusu Alanları](#checkbox-fields "Onay Kutusu Alanları")
+  - [Anahtar Kutusu Alanları](#switch-box-fields "Anahtar Kutusu Alanları")
+  - [Seçici Alanları](#picker-fields "Seçici Alanları")
+  - [Radyo Alanları](#radio-fields "Radyo Alanları")
+  - [Çip Alanları](#chip-fields "Çip Alanları")
+  - [Kaydırıcı Alanları](#slider-fields "Kaydırıcı Alanları")
+  - [Aralık Kaydırıcı Alanları](#range-slider-fields "Aralık Kaydırıcı Alanları")
+  - [Özel Alanlar](#custom-fields "Özel Alanlar")
+  - [Builder Alanları](#builder-fields "Builder Alanları")
+  - [Widget Alanları](#widget-fields "Widget Alanları")
 - [FormCollection](#form-collection "FormCollection")
-- [Form Dogrulama](#form-validation "Form Dogrulama")
-- [Form Verilerini Yonetme](#managing-form-data "Form Verilerini Yonetme")
-  - [Baslangic Verileri](#initial-data "Baslangic Verileri")
-  - [Alan Degerlerini Ayarlama](#setting-field-values "Alan Degerlerini Ayarlama")
-  - [Alan Seceneklerini Ayarlama](#setting-field-options "Alan Seceneklerini Ayarlama")
+- [Form Doğrulama](#form-validation "Form Doğrulama")
+- [Form Verilerini Yönetme](#managing-form-data "Form Verilerini Yönetme")
+  - [Başlangıç Verileri](#initial-data "Başlangıç Verileri")
+  - [Alan Değerlerini Ayarlama](#setting-field-values "Alan Değerlerini Ayarlama")
+  - [Alan Seçeneklerini Ayarlama](#setting-field-options "Alan Seçeneklerini Ayarlama")
   - [Form Verilerini Okuma](#reading-form-data "Form Verilerini Okuma")
   - [Verileri Temizleme](#clearing-data "Verileri Temizleme")
-  - [Alanlari Guncelleme](#finding-and-updating-fields "Alanlari Guncelleme")
-- [Gonder Dugmesi](#submit-button "Gonder Dugmesi")
-- [Form Duzeni](#form-layout "Form Duzeni")
-- [Alan Gorunurlugu](#field-visibility "Alan Gorunurlugu")
+  - [Alanları Güncelleme](#finding-and-updating-fields "Alanları Güncelleme")
+- [Gönder Düğmesi](#submit-button "Gönder Düğmesi")
+- [Form Düzeni](#form-layout "Form Düzeni")
+- [Alan Görünürlüğü](#field-visibility "Alan Görünürlüğü")
 - [Alan Stilleri](#field-styling "Alan Stilleri")
-- [NyFormWidget Statik Metotlari](#ny-form-widget-static-methods "NyFormWidget Statik Metotlari")
-- [NyFormWidget Kurucu Referansi](#ny-form-widget-constructor-reference "NyFormWidget Kurucu Referansi")
+- [NyFormWidget Statik Metotları](#ny-form-widget-static-methods "NyFormWidget Statik Metotları")
+- [NyFormWidget Kurucu Referansı](#ny-form-widget-constructor-reference "NyFormWidget Kurucu Referansı")
 - [NyFormActions](#ny-form-actions "NyFormActions")
-- [Tum Alan Turleri Referansi](#all-field-types-reference "Tum Alan Turleri Referansi")
+- [Tüm Alan Türleri Referansı](#all-field-types-reference "Tüm Alan Türleri Referansı")
 
 <div id="introduction"></div>
 
-## Giris
+## Giriş
 
-{{ config('app.name') }} v7, `NyFormWidget` etrafinda olusturulmus bir form sistemi sunar. Form sinfiniz `NyFormWidget` sinifini genisletir ve **kendisi** widget'tir -- ayri bir wrapper gerekmez. Formlar yerlesik dogrulama, bircok alan turu, stilleme ve veri yonetimini destekler.
+{{ config('app.name') }} v7, `NyFormWidget` etrafında oluşturulmuş bir form sistemi sunar. Form sınıfınız `NyFormWidget` sınıfını genişletir ve **kendisi** widget'tır — ayrı bir wrapper gerekmez. Formlar yerleşik doğrulama, birçok alan türü, stilleme ve veri yönetimini destekler.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// 1. Define a form
+// 1. Formu tanımla
 class LoginForm extends NyFormWidget {
   LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
 
@@ -71,7 +72,7 @@ class LoginForm extends NyFormWidget {
   static NyFormActions get actions => const NyFormActions('LoginForm');
 }
 
-// 2. Display and submit it
+// 2. Görüntüle ve gönder
 LoginForm(
   submitButton: Button.primary(text: "Login"),
   onSubmit: (data) {
@@ -83,15 +84,15 @@ LoginForm(
 
 <div id="creating-forms"></div>
 
-## Form Olusturma
+## Form Oluşturma
 
-Yeni bir form olusturmak icin Metro CLI kullanin:
+Yeni bir form oluşturmak için Metro CLI kullanın:
 
 ``` bash
 metro make:form LoginForm
 ```
 
-Bu, `lib/app/forms/login_form.dart` dosyasini olusturur:
+Bu, `lib/app/forms/login_form.dart` dosyasını oluşturur:
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -109,14 +110,14 @@ class LoginForm extends NyFormWidget {
 }
 ```
 
-Formlar `NyFormWidget` sinifini genisletir ve form alanlarini tanimlamak icin `fields()` metodunu gecersiz kilar. Her alan `Field.text()`, `Field.email()` veya `Field.password()` gibi adlandirilmis bir kurucu kullanir. `static NyFormActions get actions` getter'i, uygulamanizin herhangi bir yerinden formla etkilesim kurmak icin uygun bir yol saglar.
+Formlar `NyFormWidget` sınıfını genişletir ve form alanlarını tanımlamak için `fields()` metodunu geçersiz kılar. Her alan `Field.text()`, `Field.email()` veya `Field.password()` gibi adlandırılmış bir kurucu kullanır. `static NyFormActions get actions` getter'ı, uygulamanızın herhangi bir yerinden formla etkileşim kurmak için uygun bir yol sağlar.
 
 
 <div id="displaying-a-form"></div>
 
-## Form Goruntuleme
+## Form Görüntüleme
 
-Form sinfiniz `NyFormWidget` sinifini genislettigi icin, **kendisi** widget'tir. Dogrudan widget agacinizda kullanin:
+Form sınıfınız `NyFormWidget` sınıfını genişlettiği için, **kendisi** widget'tır. Doğrudan widget ağacınızda kullanın:
 
 ``` dart
 @override
@@ -137,13 +138,13 @@ Widget view(BuildContext context) {
 
 <div id="submitting-a-form"></div>
 
-## Form Gonderme
+## Form Gönderme
 
-Bir formu gondermenin uc yolu vardir:
+Bir formu göndermenin üç yolu vardır:
 
 ### onSubmit ve submitButton kullanma
 
-Formu olustururken `onSubmit` ve bir `submitButton` gecirin. {{ config('app.name') }}, gonder dugmesi olarak calisan onceden olusturulmus dugmeler saglar:
+Formu oluştururken `onSubmit` ve bir `submitButton` geçirin. {{ config('app.name') }}, gönder düğmesi olarak çalışan önceden oluşturulmuş düğmeler sağlar:
 
 ``` dart
 LoginForm(
@@ -157,11 +158,11 @@ LoginForm(
 )
 ```
 
-Mevcut dugme stilleri: `Button.primary`, `Button.secondary`, `Button.outlined`, `Button.textOnly`, `Button.icon`, `Button.gradient`, `Button.rounded`, `Button.transparency`.
+Mevcut düğme stilleri: `Button.primary`, `Button.secondary`, `Button.outlined`, `Button.textOnly`, `Button.icon`, `Button.gradient`, `Button.rounded`, `Button.transparency`.
 
 ### NyFormActions kullanma
 
-Herhangi bir yerden gondermek icin `actions` getter'ini kullanin:
+Herhangi bir yerden göndermek için `actions` getter'ını kullanın:
 
 ``` dart
 LoginForm.actions.submit(
@@ -177,7 +178,7 @@ LoginForm.actions.submit(
 
 ### NyFormWidget.submit() statik metodu kullanma
 
-Bir formu adiyla herhangi bir yerden gonderin:
+Bir formu adıyla herhangi bir yerden gönderin:
 
 ``` dart
 NyFormWidget.submit("LoginForm",
@@ -191,34 +192,34 @@ NyFormWidget.submit("LoginForm",
 );
 ```
 
-Gonderildiginde, form tum alanlari dogrular. Gecerliyse, `onSuccess` alan verilerinin `Map<String, dynamic>` degeriyle cagrilir (anahtarlar alan adlarinin snake_case versiyonlaridir). Gecersizse, varsayilan olarak bir toast hatasi gosterilir ve saglanmissa `onFailure` cagrilir.
+Gönderildiğinde, form tüm alanları doğrular. Geçerliyse, `onSuccess` alan verilerinin `Map<String, dynamic>` değeriyle çağrılır (anahtarlar alan adlarının snake_case versiyonlarıdır). Geçersizse, varsayılan olarak bir toast hatası gösterilir ve sağlanmışsa `onFailure` çağrılır.
 
 
 <div id="field-types"></div>
 
-## Alan Turleri
+## Alan Türleri
 
-{{ config('app.name') }} v7, `Field` sinifinda adlandirilmis kurucular araciligiyla 22 alan turu saglar. Tum alan kuruculari su ortak parametreleri paylasir:
+{{ config('app.name') }} v7, `Field` sınıfında adlandırılmış kurucular aracılığıyla 22 alan türü sağlar. Tüm alan kurucuları şu ortak parametreleri paylaşır:
 
-| Parametre | Tur | Varsayilan | Aciklama |
+| Parametre | Tür | Varsayılan | Açıklama |
 |-----------|------|---------|-------------|
-| `key` | `String` | Zorunlu | Alan tanimlayicisi (konumsal) |
-| `label` | `String?` | `null` | Ozel goruntuleme etiketi (varsayilan olarak anahtar baslik buyuklugunde) |
-| `value` | `dynamic` | `null` | Baslangic degeri |
-| `validator` | `FormValidator?` | `null` | Dogrulama kurallari |
-| `autofocus` | `bool` | `false` | Yuklemede otomatik odaklanma |
-| `dummyData` | `String?` | `null` | Test/gelistirme verileri |
-| `header` | `Widget?` | `null` | Alanin ustunde goruntulenen widget |
-| `footer` | `Widget?` | `null` | Alanin altinda goruntulenen widget |
-| `titleStyle` | `TextStyle?` | `null` | Ozel etiket metin stili |
-| `hidden` | `bool` | `false` | Alani gizle |
-| `readOnly` | `bool?` | `null` | Alani salt okunur yap |
-| `style` | `FieldStyle?` | Degisir | Alana ozgu stil yapilandirmasi |
-| `onChanged` | `Function(dynamic)?` | `null` | Deger degisikligi callback'i |
+| `key` | `String` | Zorunlu | Alan tanımlayıcısı (konumsal) |
+| `label` | `String?` | `null` | Özel görüntüleme etiketi (varsayılan olarak anahtar başlık büyüklüğünde) |
+| `value` | `dynamic` | `null` | Başlangıç değeri |
+| `validator` | `FormValidator?` | `null` | Doğrulama kuralları |
+| `autofocus` | `bool` | `false` | Yüklemede otomatik odaklanma |
+| `dummyData` | `String?` | `null` | Test/geliştirme verileri |
+| `header` | `Widget?` | `null` | Alanın üstünde görüntülenen widget |
+| `footer` | `Widget?` | `null` | Alanın altında görüntülenen widget |
+| `titleStyle` | `TextStyle?` | `null` | Özel etiket metin stili |
+| `hidden` | `bool` | `false` | Alanı gizle |
+| `readOnly` | `bool?` | `null` | Alanı salt okunur yap |
+| `style` | `FieldStyle?` | Değişir | Alana özgü stil yapılandırması |
+| `onChanged` | `Function(dynamic)?` | `null` | Değer değişikliği callback'i |
 
 <div id="text-fields"></div>
 
-### Metin Alanlari
+### Metin Alanları
 
 ``` dart
 Field.text("Name")
@@ -230,97 +231,97 @@ Field.text("Name",
 )
 ```
 
-Stil turu: `FieldStyleTextField`
+Stil türü: `FieldStyleTextField`
 
 <div id="number-fields"></div>
 
-### Sayi Alanlari
+### Sayı Alanları
 
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// Ondalık sayılar
 Field.number("Score", decimal: true)
 ```
 
-`decimal` parametresi ondalik giris izin verilip verilmeyecegini kontrol eder. Stil turu: `FieldStyleTextField`
+`decimal` parametresi ondalık giriş izin verilip verilmeyeceğini kontrol eder. Stil türü: `FieldStyleTextField`
 
 <div id="password-fields"></div>
 
-### Sifre Alanlari
+### Şifre Alanları
 
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// Görünürlük geçiş düğmesiyle
 Field.password("Password", viewable: true)
 ```
 
-`viewable` parametresi bir goster/gizle gecis dugmesi ekler. Stil turu: `FieldStyleTextField`
+`viewable` parametresi bir göster/gizle geçiş düğmesi ekler. Stil türü: `FieldStyleTextField`
 
 <div id="email-fields"></div>
 
-### E-posta Alanlari
+### E-posta Alanları
 
 ``` dart
 Field.email("Email", validator: FormValidator.email())
 ```
 
-Otomatik olarak e-posta klavye turunu ayarlar ve bosluklari filtreler. Stil turu: `FieldStyleTextField`
+Otomatik olarak e-posta klavye türünü ayarlar ve boşlukları filtreler. Stil türü: `FieldStyleTextField`
 
 <div id="url-fields"></div>
 
-### URL Alanlari
+### URL Alanları
 
 ``` dart
 Field.url("Website", validator: FormValidator.url())
 ```
 
-URL klavye turunu ayarlar. Stil turu: `FieldStyleTextField`
+URL klavye türünü ayarlar. Stil türü: `FieldStyleTextField`
 
 <div id="text-area-fields"></div>
 
-### Metin Alani (Cok Satirli)
+### Metin Alanı (Çok Satırlı)
 
 ``` dart
 Field.textArea("Description")
 ```
 
-Cok satirli metin girisi. Stil turu: `FieldStyleTextField`
+Çok satırlı metin girişi. Stil türü: `FieldStyleTextField`
 
 <div id="phone-number-fields"></div>
 
-### Telefon Numarasi Alanlari
+### Telefon Numarası Alanları
 
 ``` dart
 Field.phoneNumber("Mobile Phone")
 ```
 
-Telefon numarasi girisini otomatik olarak bicimlendirir. Stil turu: `FieldStyleTextField`
+Telefon numarası girişini otomatik olarak biçimlendirir. Stil türü: `FieldStyleTextField`
 
 <div id="capitalize-words-fields"></div>
 
-### Kelimeleri Buyuk Harfle Baslatma
+### Kelimeleri Büyük Harfle Başlatma
 
 ``` dart
 Field.capitalizeWords("Full Name")
 ```
 
-Her kelimenin ilk harfini buyuk yapar. Stil turu: `FieldStyleTextField`
+Her kelimenin ilk harfini büyük yapar. Stil türü: `FieldStyleTextField`
 
 <div id="capitalize-sentences-fields"></div>
 
-### Cumleleri Buyuk Harfle Baslatma
+### Cümleleri Büyük Harfle Başlatma
 
 ``` dart
 Field.capitalizeSentences("Bio")
 ```
 
-Her cumlenin ilk harfini buyuk yapar. Stil turu: `FieldStyleTextField`
+Her cümlenin ilk harfini büyük yapar. Stil türü: `FieldStyleTextField`
 
 <div id="date-fields"></div>
 
-### Tarih Alanlari
+### Tarih Alanları
 
 ``` dart
 Field.date("Birthday")
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// Temizleme düğmesini devre dışı bırak
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// Özel temizleme simgesi
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -348,11 +349,11 @@ Field.date("Birthday",
 )
 ```
 
-Bir tarih secici acar. Varsayilan olarak, alan kullanicilarin degeri sifirlamasina izin veren bir temizleme dugmesi gosterir. Gizlemek icin `canClear: false` ayarlayin veya simgeyi degistirmek icin `clearIconData` kullanin. Stil turu: `FieldStyleDateTimePicker`
+Bir tarih seçici açar. Varsayılan olarak, alan kullanıcıların değeri sıfırlamasına izin veren bir temizleme düğmesi gösterir. Gizlemek için `canClear: false` ayarlayın veya simgeyi değiştirmek için `clearIconData` kullanın. Stil türü: `FieldStyleDateTimePicker`
 
 <div id="datetime-fields"></div>
 
-### TarihSaat Alanlari
+### TarihSaat Alanları
 
 ``` dart
 Field.datetime("Check in Date")
@@ -365,11 +366,11 @@ Field.datetime("Appointment",
 )
 ```
 
-Bir tarih ve saat secici acar. `firstDate`, `lastDate`, `dateFormat` ve `initialPickerDateTime` degerlerini dogrudan ust duzey parametreler olarak ayarlayabilirsiniz. Stil turu: `FieldStyleDateTimePicker`
+Bir tarih ve saat seçici açar. `firstDate`, `lastDate`, `dateFormat` ve `initialPickerDateTime` değerlerini doğrudan üst düzey parametreler olarak ayarlayabilirsiniz. Stil türü: `FieldStyleDateTimePicker`
 
 <div id="masked-input-fields"></div>
 
-### Maskeli Giris Alanlari
+### Maskeli Giriş Alanları
 
 ``` dart
 Field.mask("Phone", mask: "(###) ###-####")
@@ -379,25 +380,25 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // Biçimlendirilmiş değeri döndürür
 )
 ```
 
-Maskedeki `#` karakteri kullanici girisiyle degistirilir. Izin verilen karakterleri kontrol etmek icin `match` kullanin. `maskReturnValue` `true` oldugunda, dondurulen deger maske bicimlendirmesini icerir.
+Maskedeki `#` karakteri kullanıcı girişiyle değiştirilir. İzin verilen karakterleri kontrol etmek için `match` kullanın. `maskReturnValue` `true` olduğunda, döndürülen değer maske biçimlendirmesini içerir.
 
 <div id="currency-fields"></div>
 
-### Para Birimi Alanlari
+### Para Birimi Alanları
 
 ``` dart
 Field.currency("Price", currency: "usd")
 ```
 
-`currency` parametresi zorunludur ve para birimi bicimini belirler. Stil turu: `FieldStyleTextField`
+`currency` parametresi zorunludur ve para birimi biçimini belirler. Stil türü: `FieldStyleTextField`
 
 <div id="checkbox-fields"></div>
 
-### Onay Kutusu Alanlari
+### Onay Kutusu Alanları
 
 ``` dart
 Field.checkbox("Accept Terms")
@@ -409,28 +410,28 @@ Field.checkbox("Agree to terms",
 )
 ```
 
-Stil turu: `FieldStyleCheckbox`
+Stil türü: `FieldStyleCheckbox`
 
 <div id="switch-box-fields"></div>
 
-### Anahtar Kutusu Alanlari
+### Anahtar Kutusu Alanları
 
 ``` dart
 Field.switchBox("Enable Notifications")
 ```
 
-Stil turu: `FieldStyleSwitchBox`
+Stil türü: `FieldStyleSwitchBox`
 
 <div id="picker-fields"></div>
 
-### Secici Alanlari
+### Seçici Alanları
 
 ``` dart
 Field.picker("Category",
   options: FormCollection.from(["Electronics", "Clothing", "Books"]),
 )
 
-// With key-value pairs
+// Anahtar-değer çiftleriyle
 Field.picker("Country",
   options: FormCollection.fromMap({
     "us": "United States",
@@ -440,13 +441,13 @@ Field.picker("Country",
 )
 ```
 
-`options` parametresi bir `FormCollection` gerektirir (ham liste degil). Ayrintilar icin [FormCollection](#form-collection) bolumune bakin. Stil turu: `FieldStylePicker`
+`options` parametresi bir `FormCollection` gerektirir (ham liste değil). Ayrıntılar için [FormCollection](#form-collection) bölümüne bakın. Stil türü: `FieldStylePicker`
 
-#### Liste Kutucugu Stilleri
+#### Liste Kutucuğu Stilleri
 
-`PickerListTileStyle` kullanarak picker'in alt sayfasinda ogelerin gorunumunu ozellestirebilirsiniz. Varsayilan olarak, alt sayfa duz metin kutucukleri gosterir. Secim gostergelerini eklemek icin yerlesik sablonlari kullanin veya tamamen ozel bir builder saglayin.
+`PickerListTileStyle` kullanarak picker'ın alt sayfasında ögelerin görünümünü özelleştirebilirsiniz. Varsayılan olarak, alt sayfa düz metin kutucukları gösterir. Seçim göstergelerini eklemek için yerleşik şablonları kullanın veya tamamen özel bir builder sağlayın.
 
-**Radyo stili** — basta widget olarak bir radyo dugmesi simgesi gosterir:
+**Radyo stili** — başta widget olarak bir radyo düğmesi simgesi gösterir:
 
 ``` dart
 Field.picker("Country",
@@ -456,13 +457,13 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// Özel aktif renkle
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
 ```
 
-**Onay isareti stili** — secildiginde sonda widget olarak bir onay simgesi gosterir:
+**Onay işareti stili** — seçildiğinde sonda widget olarak bir onay simgesi gösterir:
 
 ``` dart
 Field.picker("Category",
@@ -473,7 +474,7 @@ Field.picker("Category",
 )
 ```
 
-**Ozel builder** — her kutucugun widget'i uzerinde tam kontrol:
+**Özel builder** — her kutucuğun widget'ı üzerinde tam kontrol:
 
 ``` dart
 Field.picker("Color",
@@ -496,7 +497,7 @@ Field.picker("Color",
 )
 ```
 
-Her iki onayarli stil ayrica `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` ve `selectedTileColor` destekler:
+Her iki ön ayarlı stil ayrıca `textStyle`, `selectedTextStyle`, `contentPadding`, `tileColor` ve `selectedTileColor` destekler:
 
 ``` dart
 FieldStylePicker(
@@ -511,7 +512,7 @@ FieldStylePicker(
 
 <div id="radio-fields"></div>
 
-### Radyo Alanlari
+### Radyo Alanları
 
 ``` dart
 Field.radio("Newsletter",
@@ -522,18 +523,18 @@ Field.radio("Newsletter",
 )
 ```
 
-`options` parametresi bir `FormCollection` gerektirir. Stil turu: `FieldStyleRadio`
+`options` parametresi bir `FormCollection` gerektirir. Stil türü: `FieldStyleRadio`
 
 <div id="chip-fields"></div>
 
-### Cip Alanlari
+### Çip Alanları
 
 ``` dart
 Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// Anahtar-değer çiftleriyle
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -543,11 +544,11 @@ Field.chips("Engine Size",
 )
 ```
 
-Cip widget'lari araciligiyla coklu secim yapilmasini saglar. `options` parametresi bir `FormCollection` gerektirir. Stil turu: `FieldStyleChip`
+Çip widget'ları aracılığıyla çoklu seçim yapılmasını sağlar. `options` parametresi bir `FormCollection` gerektirir. Stil türü: `FieldStyleChip`
 
 <div id="slider-fields"></div>
 
-### Kaydirici Alanlari
+### Kaydırıcı Alanları
 
 ``` dart
 Field.slider("Rating",
@@ -563,11 +564,11 @@ Field.slider("Rating",
 )
 ```
 
-Stil turu: `FieldStyleSlider` -- `min`, `max`, `divisions`, renkler, deger gosterimi ve daha fazlasini yapilandirin.
+Stil türü: `FieldStyleSlider` — `min`, `max`, `divisions`, renkler, değer gösterimi ve daha fazlasını yapılandırın.
 
 <div id="range-slider-fields"></div>
 
-### Aralik Kaydirici Alanlari
+### Aralık Kaydırıcı Alanları
 
 ``` dart
 Field.rangeSlider("Price Range",
@@ -581,13 +582,13 @@ Field.rangeSlider("Price Range",
 )
 ```
 
-Bir `RangeValues` nesnesi dondurur. Stil turu: `FieldStyleRangeSlider`
+Bir `RangeValues` nesnesi döndürür. Stil türü: `FieldStyleRangeSlider`
 
 <div id="custom-fields"></div>
 
-### Ozel Alanlar
+### Özel Alanlar
 
-Kendi durum bilgili widget'inizi saglamak icin `Field.custom()` kullanin:
+Kendi durum bilgili widget'ınızı sağlamak için `Field.custom()` kullanın:
 
 ``` dart
 Field.custom("My Field",
@@ -595,13 +596,50 @@ Field.custom("My Field",
 )
 ```
 
-`child` parametresi `NyFieldStatefulWidget` sinifini genisleten bir widget gerektirir. Bu, alanin render edilmesi ve davranisi uzerinde tam kontrol saglar.
+`child` parametresi `NyFieldStatefulWidget` sınıfını genişleten bir widget gerektirir. Bu, alanın render edilmesi ve davranışı üzerinde tam kontrol sağlar.
+
+<div id="builder-fields"></div>
+
+### Builder Alanları
+
+<!-- uncertain: new Nylo-specific term "Field.builder()" with 4-argument signature including setState — not seen in existing locale file -->
+`NyFieldStatefulWidget` alt sınıfı oluşturmadan özel bir form alanı inline oluşturmak için `Field.builder()` kullanın. Builder işlevi, mevcut değeri, forma değer değişikliklerini bildiren bir `onChanged` callback'ini ve UI'yı yeniden oluşturmayı tetikleyen bir `setState` callback'ini alır.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // alan widget'ını yeniden oluştur
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+Üçüncü parametre mevcut alan değeri, dördüncüsü ise `setState`'tir. Builder'ınız `setState`'e ihtiyaç duymuyorsa, hâlâ desteklenen eski 3-argümanlı imzayı (`NyFieldBuilderLegacy`) kullanabilirsiniz:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
 
 <div id="widget-fields"></div>
 
-### Widget Alanlari
+### Widget Alanları
 
-Form alani olmadan form icine herhangi bir widget yerlestirmek icin `Field.widget()` kullanin:
+Form alanı olmadan form içine herhangi bir widget yerleştirmek için `Field.widget()` kullanın:
 
 ``` dart
 Field.widget(child: Divider())
@@ -609,42 +647,45 @@ Field.widget(child: Divider())
 Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ```
 
-Widget alanlari dogrulama veya veri toplamaya katilmaz. Yalnizca duzen amaclidir.
+Widget alanları doğrulama veya veri toplamaya katılmaz. Yalnızca düzen amaçlıdır.
 
 
 <div id="form-collection"></div>
 
 ## FormCollection
 
-Secici, radyo ve cip alanlari, secenekleri icin bir `FormCollection` gerektirir. `FormCollection`, farkli secenek bicimlerini islemek icin birlesik bir arayuz saglar.
+Seçici, radyo ve çip alanları, seçenekleri için bir `FormCollection` gerektirir. `FormCollection`, farklı seçenek biçimlerini işlemek için birleşik bir arayüz sağlar.
 
-### FormCollection Olusturma
+### FormCollection Oluşturma
 
 ``` dart
-// From a list of strings (value and label are the same)
+// Boş koleksiyon (seçenekler yüklenmeden önce yer tutucu olarak kullanışlı)
+const FormCollection.empty()
+
+// Dizelerden oluşan listeden (değer ve etiket aynıdır)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// Yukarıdakiyle aynı, açık biçimde
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// Haritadan (anahtar = değer, değer = etiket)
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// Yapılandırılmış verilerden (API yanıtları için kullanışlı)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
 ])
 ```
 
-`FormCollection.from()`, veri bicimini otomatik olarak algilar ve uygun kurucuya yonlendirir.
+`FormCollection.from()`, veri biçimini otomatik olarak algılar ve uygun kurucuya yönlendirir.
 
 ### FormOption
 
-Bir `FormCollection` icindeki her secenek, `value` ve `label` ozelliklerine sahip bir `FormOption`'dir:
+Bir `FormCollection` içindeki her seçenek, `value` ve `label` özelliklerine sahip bir `FormOption`'dır:
 
 ``` dart
 FormOption option = FormOption(value: "us", label: "United States");
@@ -652,7 +693,7 @@ print(option.value); // "us"
 print(option.label); // "United States"
 ```
 
-### Secenekleri Sorgulama
+### Seçenekleri Sorgulama
 
 ``` dart
 FormCollection options = FormCollection.fromMap({"us": "United States", "ca": "Canada"});
@@ -668,15 +709,15 @@ options.labels;                    // ["United States", "Canada"]
 
 <div id="form-validation"></div>
 
-## Form Dogrulama
+## Form Doğrulama
 
-`FormValidator` ile `validator` parametresini kullanarak herhangi bir alana dogrulama ekleyin:
+`FormValidator` ile `validator` parametresini kullanarak herhangi bir alana doğrulama ekleyin:
 
 ``` dart
-// Named constructor
+// Adlandırılmış kurucu
 Field.email("Email", validator: FormValidator.email())
 
-// Chained rules
+// Zincirlenmiş kurallar
 Field.text("Username",
   validator: FormValidator()
     .notEmpty()
@@ -684,17 +725,17 @@ Field.text("Username",
     .maxLength(20)
 )
 
-// Password with strength level
+// Güç seviyeli şifre
 Field.password("Password",
   validator: FormValidator.password(strength: 2)
 )
 
-// Boolean validation
+// Boolean doğrulama
 Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// Özel inline doğrulama
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,24 +745,31 @@ Field.number("Age",
     },
   )
 )
+
+// Null kabul eder — alan boş olduğunda doğrulama geçer
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
 
-Bir form gonderildiginde, tum dogrulayicilar kontrol edilir. Herhangi biri basarisiz olursa, ilk hata mesajini gosteren bir toast hatasi goruntulenir ve `onFailure` callback'i cagrilir.
+`nullable()`, bir doğrulayıcıyı isteğe bağlı olarak işaretler. Alan değeri null veya boş olduğunda, tüm doğrulama kuralları atlanır ve alan geçer. Alan bir değere sahip olduğunda, tüm kurallar normal şekilde uygulanır. Herhangi bir `FormValidator`'ın sonuna ekleyin.
 
-**Ayrica bakin:** Kullanilabilir dogrulayicilarin tam listesi icin [Dogrulama](/docs/7.x/validation#validation-rules) sayfasina bakin.
+Bir form gönderildiğinde, tüm doğrulayıcılar kontrol edilir. Herhangi biri başarısız olursa, ilk hata mesajını gösteren bir toast hatası görüntülenir ve `onFailure` callback'i çağrılır.
+
+**Ayrıca bakın:** Kullanılabilir doğrulayıcıların tam listesi için [Doğrulama](/docs/7.x/validation#validation-rules) sayfasına bakın.
 
 
 <div id="managing-form-data"></div>
 
-## Form Verilerini Yonetme
+## Form Verilerini Yönetme
 
 <div id="initial-data"></div>
 
-### Baslangic Verileri
+### Başlangıç Verileri
 
-Bir forma baslangic verileri ayarlamanin iki yolu vardir.
+Bir forma başlangıç verileri ayarlamanın iki yolu vardır.
 
-**Secenek 1: Form sinifinizda `init` getter'ini gecersiz kilin**
+**Seçenek 1: Form sınıfınızda `init` getter'ını geçersiz kılın**
 
 ``` dart
 class EditAccountForm extends NyFormWidget {
@@ -747,11 +795,11 @@ class EditAccountForm extends NyFormWidget {
 }
 ```
 
-`init` getter'i senkron bir `Map` veya asenkron bir `Future<Map>` dondurebilir. Anahtarlar, snake_case normalizasyonu kullanilarak alan adlariyla eslestirilir, bu nedenle `"First Name"` anahtari `"First Name"` adli bir alanla eslesir.
+`init` getter'ı senkron bir `Map` veya asenkron bir `Future<Map>` döndürebilir. Anahtarlar, snake_case normalizasyonu kullanılarak alan adlarıyla eşleştirilir, bu nedenle `"First Name"` anahtarı `"First Name"` adlı bir alanla eşleşir.
 
-#### init icinde `define()` kullanimi
+#### init içinde `define()` kullanımı
 
-`init` icerisinde bir alan icin **secenekler** (veya hem bir deger hem de secenekler) ayarlamaniz gerektiginde `define()` yardimcisini kullanin. Bu, seceneklerin bir API veya baska bir asenkron kaynaktan geldigi picker, chip ve radio alanlari icin kullanislidir.
+`init` içerisinde bir alan için **seçenekler** (veya hem bir değer hem de seçenekler) ayarlamanız gerektiğinde `define()` yardımcısını kullanın. Bu, seçeneklerin bir API veya başka bir asenkron kaynaktan geldiği picker, chip ve radio alanları için kullanışlıdır.
 
 ``` dart
 class CreatePostForm extends NyFormWidget {
@@ -777,30 +825,30 @@ class CreatePostForm extends NyFormWidget {
 }
 ```
 
-`define()` iki adlandirilmis parametre kabul eder:
+`define()` iki adlandırılmış parametre kabul eder:
 
-| Parametre | Aciklama |
+| Parametre | Açıklama |
 |-----------|-------------|
-| `value` | Alan icin baslangic degeri |
-| `options` | Picker, chip veya radio alanlari icin secenekler |
+| `value` | Alan için başlangıç değeri |
+| `options` | Picker, chip veya radio alanları için seçenekler |
 
 ``` dart
-// Set only options (no initial value)
+// Yalnızca seçenekleri ayarla (başlangıç değeri yok)
 "Category": define(options: categories),
 
-// Set only an initial value
+// Yalnızca başlangıç değerini ayarla
 "Price": define(value: "100"),
 
-// Set both a value and options
+// Hem değer hem de seçenekleri ayarla
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// Düz değerler hâlâ basit alanlar için çalışır
 "Name": "John",
 ```
 
-`define()`'a gonderilen secenekler bir `List`, `Map` veya `FormCollection` olabilir. Uygulandiginda otomatik olarak bir `FormCollection`'a donusturulur.
+`define()`'a gönderilen seçenekler bir `List`, `Map` veya `FormCollection` olabilir. Uygulandığında otomatik olarak bir `FormCollection`'a dönüştürülür.
 
-**Secenek 2: Form widget'ina `initialData` gecirin**
+**Seçenek 2: Form widget'ına `initialData` geçirin**
 
 ``` dart
 EditAccountForm(
@@ -813,20 +861,20 @@ EditAccountForm(
 
 <div id="setting-field-values"></div>
 
-### Alan Degerlerini Ayarlama
+### Alan Değerlerini Ayarlama
 
-Herhangi bir yerden alan degerlerini ayarlamak icin `NyFormActions` kullanin:
+Herhangi bir yerden alan değerlerini ayarlamak için `NyFormActions` kullanın:
 
 ``` dart
-// Set a single field value
+// Tek bir alan değerini ayarla
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
 <div id="setting-field-options"></div>
 
-### Alan Seceneklerini Ayarlama
+### Alan Seçeneklerini Ayarlama
 
-Secici, cip veya radyo alanlarindaki secenekleri dinamik olarak guncelleyin:
+Seçici, çip veya radyo alanlarındaki seçenekleri dinamik olarak güncelleyin:
 
 ``` dart
 EditAccountForm.actions.setOptions("Category", FormCollection.from(["New Option 1", "New Option 2"]));
@@ -836,12 +884,12 @@ EditAccountForm.actions.setOptions("Category", FormCollection.from(["New Option 
 
 ### Form Verilerini Okuma
 
-Form verileri, form gonderildiginde `onSubmit` callback'i araciligiyla veya gercek zamanli guncellemeler icin `onChanged` callback'i araciligiyla erisilir:
+Form verileri, form gönderildiğinde `onSubmit` callback'i aracılığıyla veya gerçek zamanlı güncellemeler için `onChanged` callback'i aracılığıyla erişilir:
 
 ``` dart
 EditAccountForm(
   onSubmit: (data) {
-    // data is a Map<String, dynamic>
+    // data bir Map<String, dynamic>'tir
     // {first_name: "Jane", last_name: "Doe", email: "jane@example.com"}
     print(data);
   },
@@ -856,35 +904,35 @@ EditAccountForm(
 ### Verileri Temizleme
 
 ``` dart
-// Clear all fields
+// Tüm alanları temizle
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// Belirli bir alanı temizle
 EditAccountForm.actions.clearField("First Name");
 ```
 
 
 <div id="finding-and-updating-fields"></div>
 
-### Alanlari Guncelleme
+### Alanları Güncelleme
 
 ``` dart
-// Update a field value
+// Alan değerini güncelle
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// Form UI'ını yenile
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// Form alanlarını yenile (fields() yeniden çağırır)
 EditAccountForm.actions.refreshForm();
 ```
 
 
 <div id="submit-button"></div>
 
-## Gonder Dugmesi
+## Gönder Düğmesi
 
-Formu olustururken bir `submitButton` ve `onSubmit` callback'i gecirin:
+Formu oluştururken bir `submitButton` ve `onSubmit` callback'i geçirin:
 
 ``` dart
 UserInfoForm(
@@ -898,9 +946,9 @@ UserInfoForm(
 )
 ```
 
-`submitButton` otomatik olarak form alanlarinin altinda goruntulenir. Yerlesik dugme stillerinden herhangi birini veya ozel bir widget kullanabilirsiniz.
+`submitButton` otomatik olarak form alanlarının altında görüntülenir. Yerleşik düğme stillerinden herhangi birini veya özel bir widget kullanabilirsiniz.
 
-Herhangi bir widget'i `footer` olarak gecirerek gonder dugmesi olarak da kullanabilirsiniz:
+Herhangi bir widget'ı `footer` olarak geçirerek gönder düğmesi olarak da kullanabilirsiniz:
 
 ``` dart
 UserInfoForm(
@@ -923,68 +971,68 @@ UserInfoForm(
 
 <div id="form-layout"></div>
 
-## Form Duzeni
+## Form Düzeni
 
-Alanlari yan yana yerlestirmek icin bir `List` icine sarin:
+Alanları yan yana yerleştirmek için bir `List` içine sarın:
 
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // Tek alan (tam genişlik)
   Field.text("Title"),
 
-  // Two fields in a row
+  // Bir satırda iki alan
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // Başka bir tek alan
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // Bir satırda kaydırıcı ve aralık kaydırıcı
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // Alan olmayan bir widget yerleştir
   Field.widget(child: Divider()),
 
   Field.email("Email"),
 ];
 ```
 
-Bir `List` icindeki alanlar, esit `Expanded` genisliklere sahip bir `Row` icinde render edilir. Alanlar arasindaki bosluk, `NyFormWidget` uzerindeki `crossAxisSpacing` parametresiyle kontrol edilir.
+Bir `List` içindeki alanlar, eşit `Expanded` genişliklere sahip bir `Row` içinde render edilir. Alanlar arasındaki boşluk, `NyFormWidget` üzerindeki `crossAxisSpacing` parametresiyle kontrol edilir.
 
 
 <div id="field-visibility"></div>
 
-## Alan Gorunurlugu
+## Alan Görünürlüğü
 
-`Field` uzerindeki `hide()` ve `show()` metotlarini kullanarak alanlari programatik olarak gosterin veya gizleyin. Alanlara form sinifinizin icinden veya `onChanged` callback'i araciligiyla erisebilirsiniz:
+`Field` üzerindeki `hide()` ve `show()` metotlarını kullanarak alanları programatik olarak gösterin veya gizleyin. Alanlara form sınıfınızın içinden veya `onChanged` callback'i aracılığıyla erişebilirsiniz:
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// NyFormWidget alt sınıfınızın veya onChanged callback'inin içinde
 Field nameField = ...;
 
-// Hide the field
+// Alanı gizle
 nameField.hide();
 
-// Show the field
+// Alanı göster
 nameField.show();
 ```
 
-Gizli alanlar arayuzde render edilmez ancak formun alan listesinde var olmaya devam eder.
+Gizli alanlar arayüzde render edilmez ancak formun alan listesinde var olmaya devam eder.
 
 
 <div id="field-styling"></div>
 
 ## Alan Stilleri
 
-Her alan turunun stilleme icin karsilik gelen bir `FieldStyle` alt sinifi vardir:
+Her alan türünün stilleme için karşılık gelen bir `FieldStyle` alt sınıfı vardır:
 
-| Alan Turu | Stil Sinifi |
+| Alan Türü | Stil Sınıfı |
 |------------|-------------|
 | Text, Email, Password, Number, URL, TextArea, PhoneNumber, Currency, Mask, CapitalizeWords, CapitalizeSentences | `FieldStyleTextField` |
 | Date, DateTime | `FieldStyleDateTimePicker` |
@@ -996,7 +1044,7 @@ Her alan turunun stilleme icin karsilik gelen bir `FieldStyle` alt sinifi vardir
 | Slider | `FieldStyleSlider` |
 | Range Slider | `FieldStyleRangeSlider` |
 
-Herhangi bir alanin `style` parametresine bir stil nesnesi gecirin:
+Herhangi bir alanın `style` parametresine bir stil nesnesi geçirin:
 
 ``` dart
 Field.text("Name",
@@ -1033,62 +1081,62 @@ Field.chips("Tags",
 
 <div id="ny-form-widget-static-methods"></div>
 
-## NyFormWidget Statik Metotlari
+## NyFormWidget Statik Metotları
 
-`NyFormWidget`, uygulamanizin herhangi bir yerinden formlarla ada gore etkilesim kurmak icin statik metotlar saglar:
+`NyFormWidget`, uygulamanızın herhangi bir yerinden formlarla ada göre etkileşim kurmak için statik metotlar sağlar:
 
-| Metot | Aciklama |
+| Metot | Açıklama |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Bir formu adiyla gonder |
-| `NyFormWidget.stateRefresh(name)` | Formun arayuz durumunu yenile |
-| `NyFormWidget.stateSetValue(name, key, value)` | Form adiyla alan degerini ayarla |
-| `NyFormWidget.stateSetOptions(name, key, options)` | Form adiyla alan seceneklerini ayarla |
-| `NyFormWidget.stateClearData(name)` | Form adiyla tum alanlari temizle |
-| `NyFormWidget.stateRefreshForm(name)` | Form alanlarini yenile (`fields()` yeniden cagirir) |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Bir formu adıyla gönder |
+| `NyFormWidget.stateRefresh(name)` | Formun arayüz durumunu yenile |
+| `NyFormWidget.stateSetValue(name, key, value)` | Form adıyla alan değerini ayarla |
+| `NyFormWidget.stateSetOptions(name, key, options)` | Form adıyla alan seçeneklerini ayarla |
+| `NyFormWidget.stateClearData(name)` | Form adıyla tüm alanları temizle |
+| `NyFormWidget.stateRefreshForm(name)` | Form alanlarını yenile (`fields()` yeniden çağırır) |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// "LoginForm" adlı formu herhangi bir yerden gönder
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// Alan değerini uzaktan güncelle
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// Tüm form verilerini temizle
 NyFormWidget.stateClearData("LoginForm");
 ```
 
-> **Ipucu:** Bu statik metotlari dogrudan cagirmak yerine `NyFormActions` (asagiya bakin) kullanmayi tercih edin -- daha kisa ve daha az hataya aciktir.
+> **İpucu:** Bu statik metotları doğrudan çağırmak yerine `NyFormActions` (aşağıya bakın) kullanmayı tercih edin — daha kısa ve daha az hataya açıktır.
 
 
 <div id="ny-form-widget-constructor-reference"></div>
 
-## NyFormWidget Kurucu Referansi
+## NyFormWidget Kurucu Referansı
 
-`NyFormWidget` sinifini genisletirken, gecebileceginiz kurucu parametreleri sunlardir:
+`NyFormWidget` sınıfını genişletirken, geçebileceğiniz kurucu parametreleri şunlardır:
 
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // Satırdaki alanlar arasındaki yatay boşluk
+  double mainAxisSpacing = 10,   // Alanlar arasındaki dikey boşluk
+  Map<String, dynamic>? initialData, // Başlangıç alan değerleri
+  Function(Field field, dynamic value)? onChanged, // Alan değişikliği callback'i
+  Widget? header,                // Formun üstündeki widget
+  Widget? submitButton,          // Gönder düğmesi widget'ı
+  Widget? footer,                // Formun altındaki widget
+  double headerSpacing = 10,     // Başlıktan sonraki boşluk
+  double submitButtonSpacing = 10, // Gönder düğmesinden sonraki boşluk
+  double footerSpacing = 10,     // Altbilgiden önceki boşluk
+  LoadingStyle? loadingStyle,    // Yükleme göstergesi stili
+  bool locked = false,           // Formu salt okunur yapar
+  Function(dynamic data)? onSubmit,   // Başarılı doğrulamada form verileriyle çağrılır
+  Function(dynamic error)? onFailure, // Başarısız doğrulamada hatalarla çağrılır
 )
 ```
 
-`onChanged` callback'i, degisen `Field` ve yeni degerini alir:
+`onChanged` callback'i, değişen `Field` ve yeni değerini alır:
 
 ``` dart
 LoginForm(
@@ -1103,7 +1151,7 @@ LoginForm(
 
 ## NyFormActions
 
-`NyFormActions`, uygulamanizin herhangi bir yerinden bir formla etkilesim kurmak icin uygun bir yol saglar. Form sinifinizda statik getter olarak tanimlayin:
+`NyFormActions`, uygulamanızın herhangi bir yerinden bir formla etkileşim kurmak için uygun bir yol sağlar. Form sınıfınızda statik getter olarak tanımlayın:
 
 ``` dart
 class LoginForm extends NyFormWidget {
@@ -1121,24 +1169,24 @@ class LoginForm extends NyFormWidget {
 
 ### Mevcut Aksiyonlar
 
-| Metot | Aciklama |
+| Metot | Açıklama |
 |--------|-------------|
-| `actions.updateField(key, value)` | Bir alanin degerini ayarla |
-| `actions.clearField(key)` | Belirli bir alani temizle |
-| `actions.clear()` | Tum alanlari temizle |
-| `actions.refresh()` | Formun arayuz durumunu yenile |
-| `actions.refreshForm()` | `fields()` yeniden cagir ve yeniden olustur |
-| `actions.setOptions(key, options)` | Secici/cip/radyo alanlarinda secenekleri ayarla |
-| `actions.submit(onSuccess:, onFailure:, showToastError:)` | Dogrulama ile gonder |
+| `actions.updateField(key, value)` | Bir alanın değerini ayarla |
+| `actions.clearField(key)` | Belirli bir alanı temizle |
+| `actions.clear()` | Tüm alanları temizle |
+| `actions.refresh()` | Formun arayüz durumunu yenile |
+| `actions.refreshForm()` | `fields()` yeniden çağır ve yeniden oluştur |
+| `actions.setOptions(key, options)` | Seçici/çip/radyo alanlarında seçenekleri ayarla |
+| `actions.submit(onSuccess:, onFailure:, showToastError:)` | Doğrulama ile gönder |
 
 ``` dart
-// Update a field value
+// Alan değerini güncelle
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// Tüm form verilerini temizle
 LoginForm.actions.clear();
 
-// Submit the form
+// Formu gönder
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);
@@ -1146,43 +1194,43 @@ LoginForm.actions.submit(
 );
 ```
 
-### NyFormWidget Gecersiz Kilmalari
+### NyFormWidget Geçersiz Kılmaları
 
-`NyFormWidget` alt sinifinizdaki gecersiz kilabilecek metotlar:
+`NyFormWidget` alt sınıfınızdaki geçersiz kılabileceğiniz metotlar:
 
-| Gecersiz Kilma | Aciklama |
+| Geçersiz Kılma | Açıklama |
 |----------|-------------|
-| `fields()` | Form alanlarini tanimlayin (zorunlu) |
-| `init` | Baslangic verileri saglayin (senkron veya asenkron) |
-| `onChange(field, data)` | Alan degisikliklerini dahili olarak yonetin |
+| `fields()` | Form alanlarını tanımlayın (zorunlu) |
+| `init` | Başlangıç verileri sağlayın (senkron veya asenkron) |
+| `onChange(field, data)` | Alan değişikliklerini dahili olarak yönetin |
 
 
 <div id="all-field-types-reference"></div>
 
-## Tum Alan Turleri Referansi
+## Tüm Alan Türleri Referansı
 
-| Kurucu | Anahtar Parametreler | Aciklama |
+| Kurucu | Anahtar Parametreler | Açıklama |
 |-------------|----------------|-------------|
-| `Field.text()` | -- | Standart metin girisi |
-| `Field.email()` | -- | Klavye turlu e-posta girisi |
-| `Field.password()` | `viewable` | Istege bagli gorunurluk gecisli sifre |
-| `Field.number()` | `decimal` | Sayisal giris, istege bagli ondalik |
-| `Field.currency()` | `currency` (zorunlu) | Para birimi bicimli giris |
-| `Field.capitalizeWords()` | -- | Baslik buyuklugunde metin girisi |
-| `Field.capitalizeSentences()` | -- | Cumle buyuklugunde metin girisi |
-| `Field.textArea()` | -- | Cok satirli metin girisi |
-| `Field.phoneNumber()` | -- | Otomatik bicimli telefon numarasi |
-| `Field.url()` | -- | Klavye turlu URL girisi |
-| `Field.mask()` | `mask` (zorunlu), `match`, `maskReturnValue` | Maskeli metin girisi |
-| `Field.date()` | -- | Tarih secici |
-| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Tarih ve saat secici |
-| `Field.checkbox()` | -- | Boolean onay kutusu |
-| `Field.switchBox()` | -- | Boolean gecis anahtari |
-| `Field.picker()` | `options` (zorunlu `FormCollection`) | Listeden tekli secim |
-| `Field.radio()` | `options` (zorunlu `FormCollection`) | Radyo dugme grubu |
-| `Field.chips()` | `options` (zorunlu `FormCollection`) | Coklu secim cipleri |
-| `Field.slider()` | -- | Tekli deger kaydiricisi |
-| `Field.rangeSlider()` | -- | Aralik deger kaydiricisi |
-| `Field.custom()` | `child` (zorunlu `NyFieldStatefulWidget`) | Ozel durum bilgili widget |
-| `Field.widget()` | `child` (zorunlu `Widget`) | Herhangi bir widget yerlestir (alan disi) |
-
+| `Field.text()` | — | Standart metin girişi |
+| `Field.email()` | — | Klavye türlü e-posta girişi |
+| `Field.password()` | `viewable` | İsteğe bağlı görünürlük geçişli şifre |
+| `Field.number()` | `decimal` | Sayısal giriş, isteğe bağlı ondalık |
+| `Field.currency()` | `currency` (zorunlu) | Para birimi biçimli giriş |
+| `Field.capitalizeWords()` | — | Başlık büyüklüğünde metin girişi |
+| `Field.capitalizeSentences()` | — | Cümle büyüklüğünde metin girişi |
+| `Field.textArea()` | — | Çok satırlı metin girişi |
+| `Field.phoneNumber()` | — | Otomatik biçimli telefon numarası |
+| `Field.url()` | — | Klavye türlü URL girişi |
+| `Field.mask()` | `mask` (zorunlu), `match`, `maskReturnValue` | Maskeli metin girişi |
+| `Field.date()` | — | Tarih seçici |
+| `Field.datetime()` | `firstDate`, `lastDate`, `dateFormat`, `initialPickerDateTime` | Tarih ve saat seçici |
+| `Field.checkbox()` | — | Boolean onay kutusu |
+| `Field.switchBox()` | — | Boolean geçiş anahtarı |
+| `Field.picker()` | `options` (zorunlu `FormCollection`) | Listeden tekli seçim |
+| `Field.radio()` | `options` (zorunlu `FormCollection`) | Radyo düğme grubu |
+| `Field.chips()` | `options` (zorunlu `FormCollection`) | Çoklu seçim çipleri |
+| `Field.slider()` | — | Tekli değer kaydırıcısı |
+| `Field.rangeSlider()` | — | Aralık değer kaydırıcısı |
+| `Field.custom()` | `child` (zorunlu `NyFieldStatefulWidget`) | Özel durum bilgili widget |
+| `Field.builder()` | `builder` (zorunlu `NyFieldBuilder` veya `NyFieldBuilderLegacy`) | Alt sınıf oluşturmadan özel alan inline |
+| `Field.widget()` | `child` (zorunlu `Widget`) | Herhangi bir widget yerleştir (alan dışı) |

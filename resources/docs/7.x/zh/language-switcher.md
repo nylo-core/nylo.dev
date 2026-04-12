@@ -7,7 +7,9 @@
 - 使用方法
     - [下拉组件](#usage-dropdown "下拉组件")
     - [底部弹窗](#usage-bottom-modal "底部弹窗")
+- [动画样式](#animation-style "动画样式")
 - [自定义下拉构建器](#custom-builder "自定义下拉构建器")
+- [状态操作](#state-actions "状态操作")
 - [参数](#parameters "参数")
 - [静态方法](#methods "静态方法")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // 添加到应用栏
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 底部弹窗显示语言列表，当前选定的语言旁边有一个勾选标记。
 
-### 自定义弹窗高度
+### 自定义弹窗
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // 在所有路由上方显示弹窗，包括标签栏
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## 动画样式
+
+`animationStyle` 参数控制下拉触发器和底部弹窗列表项的过渡动画。提供四种预设：
+
+``` dart
+// 无动画
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// 精致细腻的动画（推荐用于大多数应用）
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// 活泼弹性的动画
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// 带有轻缓缩放的平滑淡入
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+您也可以传入带有独立参数的自定义 `LanguageSwitcherAnimationStyle()`，或使用 `copyWith` 微调预设。
+
+`LanguageSwitcher.showBottomModal` 也接受相同的 `animationStyle` 参数。
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // 例如: "English"
+        // language['locale'] 包含区域代码，例如 "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // 语言更改时执行其他操作
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## 状态操作
+
+使用 `stateActions()` 以编程方式控制 `LanguageSwitcher`：
+
+``` dart
+// 刷新语言列表（重新读取可用语言）
+LanguageSwitcher.stateActions().refresh();
+
+// 通过区域代码切换语言
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+当您希望不经用户交互就更改应用语言时（例如使用用户偏好设置登录后），此功能非常有用。
 
 <div id="parameters"></div>
 
@@ -150,7 +205,7 @@ LanguageSwitcher(
 
 ``` dart
 Map<String, dynamic>? lang = await LanguageSwitcher.currentLanguage();
-// Returns: {"en": "English"} or null if not set
+// 返回：{"en": "English"} 或未设置时返回 null
 ```
 
 ### 存储语言
@@ -177,10 +232,10 @@ await LanguageSwitcher.clearLanguage();
 
 ``` dart
 Map<String, String>? langData = LanguageSwitcher.getLanguageData("en");
-// Returns: {"en": "English"}
+// 返回：{"en": "English"}
 
 Map<String, String>? langData = LanguageSwitcher.getLanguageData("fr_CA");
-// Returns: {"fr_CA": "French (Canada)"}
+// 返回：{"fr_CA": "French (Canada)"}
 ```
 
 ### 获取语言列表
@@ -189,7 +244,7 @@ Map<String, String>? langData = LanguageSwitcher.getLanguageData("fr_CA");
 
 ``` dart
 List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
-// Returns: [{"en": "English"}, {"es": "Spanish"}, ...]
+// 返回：[{"en": "English"}, {"es": "Spanish"}, ...]
 ```
 
 ### 显示底部弹窗
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// 带选项
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## 支持的区域设置

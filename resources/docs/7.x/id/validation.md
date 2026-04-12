@@ -11,6 +11,7 @@
   - [Menggunakan FormValidator](#using-form-validator "Menggunakan FormValidator")
   - [Konstruktor Bernama FormValidator](#form-validator-named-constructors "Konstruktor Bernama FormValidator")
   - [Merangkai Aturan Validasi](#chaining-validation-rules "Merangkai Aturan Validasi")
+  - [Field yang Bisa Null](#nullable-fields "Field yang Bisa Null")
   - [Validasi Kustom](#custom-validation "Validasi Kustom")
   - [Menggunakan FormValidator dengan Field](#form-validator-with-fields "Menggunakan FormValidator dengan Field")
 - [Aturan Validasi yang Tersedia](#validation-rules "Aturan Validasi yang Tersedia")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7 menyediakan sistem validasi yang dibangun di sekitar class `FormValidator`. Anda dapat memvalidasi data di dalam halaman menggunakan metode `check()`, atau menggunakan `FormValidator` secara langsung untuk validasi mandiri dan tingkat field.
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// Validasi data di NyPage/NyState menggunakan check()
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// FormValidator dengan form field
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -53,10 +54,10 @@ class _RegisterPageState extends NyPage<RegisterPage> {
           .notEmpty()
           .password(strength: 2);
     }, onSuccess: () {
-      // All validations passed
+      // Semua validasi berhasil
       _submitForm();
     }, onValidationError: (FormValidationResponseBag bag) {
-      // Validation failed
+      // Validasi gagal
       print(bag.firstErrorMessage);
     });
   }
@@ -102,14 +103,14 @@ FormValidationResponseBag bag = check((validate) {
 if (bag.isValid) {
   print("All valid!");
 } else {
-  // Get the first error message
+  // Dapatkan pesan error pertama
   String? error = bag.firstErrorMessage;
   print(error);
 
-  // Get all failed results
+  // Dapatkan semua hasil yang gagal
   List<FormValidationResult> errors = bag.validationErrors;
 
-  // Get all successful results
+  // Dapatkan semua hasil yang berhasil
   List<FormValidationResult> successes = bag.validationSuccess;
 }
 ```
@@ -128,13 +129,13 @@ FormValidationResult result = validator.check();
 if (result.isValid) {
   print("Valid!");
 } else {
-  // First error message
+  // Pesan error pertama
   String? message = result.getFirstErrorMessage();
 
-  // All error messages
+  // Semua pesan error
   List<String> messages = result.errorMessages();
 
-  // Error responses
+  // Respons error
   List<FormValidationError> errors = result.errorResponses;
 }
 ```
@@ -148,7 +149,7 @@ if (result.isValid) {
 ### Penggunaan Mandiri
 
 ``` dart
-// Using a named constructor
+// Menggunakan konstruktor bernama
 FormValidator validator = FormValidator.email();
 FormValidationResult result = validator.check("user@example.com");
 
@@ -178,69 +179,69 @@ print(result.isValid); // true
 {{ config('app.name') }} v7 menyediakan konstruktor bernama untuk validasi umum:
 
 ``` dart
-// Email validation
+// Validasi email
 FormValidator.email(message: "Please enter a valid email")
 
-// Password validation (strength 1 or 2)
+// Validasi password (strength 1 atau 2)
 FormValidator.password(strength: 1)
 FormValidator.password(strength: 2, message: "Password too weak")
 
-// Phone numbers
+// Nomor telepon
 FormValidator.phoneNumberUk()
 FormValidator.phoneNumberUs()
 
-// URL validation
+// Validasi URL
 FormValidator.url()
 
-// Length constraints
+// Batasan panjang
 FormValidator.minLength(5, message: "Too short")
 FormValidator.maxLength(100, message: "Too long")
 
-// Value constraints
+// Batasan nilai
 FormValidator.minValue(18, message: "Must be 18+")
 FormValidator.maxValue(100)
 
-// Size constraints (for lists/strings)
+// Batasan ukuran (untuk list/string)
 FormValidator.minSize(2, message: "Select at least 2")
 FormValidator.maxSize(5)
 
-// Not empty
+// Tidak boleh kosong
 FormValidator.notEmpty(message: "This field is required")
 
-// Contains values
+// Mengandung nilai
 FormValidator.contains(['option1', 'option2'])
 
-// Starts/ends with
+// Dimulai/diakhiri dengan
 FormValidator.beginsWith("https://")
 FormValidator.endsWith(".com")
 
-// Boolean checks
+// Pemeriksaan boolean
 FormValidator.booleanTrue(message: "Must accept terms")
 FormValidator.booleanFalse()
 
-// Numeric
+// Numerik
 FormValidator.numeric()
 
-// Date validations
+// Validasi tanggal
 FormValidator.date()
 FormValidator.dateInPast()
 FormValidator.dateInFuture()
 FormValidator.dateAgeIsOlder(18, message: "Must be 18+")
 FormValidator.dateAgeIsYounger(65)
 
-// Text case
+// Kapitalisasi teks
 FormValidator.uppercase()
 FormValidator.lowercase()
 FormValidator.capitalized()
 
-// Location formats
+// Format lokasi
 FormValidator.zipcodeUs()
 FormValidator.postcodeUk()
 
-// Regex pattern
+// Pola regex
 FormValidator.regex(r'^[A-Z]{3}\d{4}$', message: "Invalid format")
 
-// Custom validation
+// Validasi kustom
 FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Field yang Bisa Null
+
+Gunakan `.nullable()` untuk menandai validator sebagai opsional. Ketika nullable, nilai null atau kosong secara otomatis lulus validasi — semua aturan lain hanya diterapkan jika nilai ada.
+
+``` dart
+// Nickname bersifat opsional, namun jika diisi harus 3–20 karakter
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+Tanpa `.nullable()`, field kosong akan gagal aturan `minLength`. Dengan `.nullable()`, membiarkan field kosong akan lulus validasi.
+
+Ini berguna untuk field profil opsional, info kontak sekunder, atau field apa pun yang hanya divalidasi ketika pengguna mengisinya. Lihat [dokumentasi Forms](/docs/{{ $version }}/forms) untuk cara `nullable()` berintegrasi dengan widget `Field`.
+
 <div id="custom-validation"></div>
 
 ## Validasi Kustom
@@ -291,7 +313,7 @@ Gunakan `.custom()` untuk menambahkan logika validasi inline:
 FormValidator.custom(
   message: "Username already taken",
   validate: (data) {
-    // Return true if valid, false if invalid
+    // Kembalikan true jika valid, false jika tidak valid
     return !_takenUsernames.contains(data);
   },
 )
@@ -402,6 +424,7 @@ Semua aturan yang tersedia untuk `FormValidator`, baik sebagai konstruktor berna
 | Postcode UK | `FormValidator.postcodeUk()` | `.postcodeUk()` | Format postcode UK |
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | Harus cocok dengan pola regex |
 | Equals | — | `.equals(otherValue)` | Harus sama dengan nilai lain |
+| Nullable | — | `.nullable()` | Nilai null atau kosong otomatis lulus; aturan hanya diterapkan jika nilai ada |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | Fungsi validasi kustom |
 
 Semua aturan menerima parameter `message` opsional untuk menyesuaikan pesan error.
@@ -429,7 +452,7 @@ class FormRuleUsername extends FormRule {
   @override
   bool validate(data) {
     if (data is! String) return false;
-    // Username: alphanumeric, underscores, 3-20 chars
+    // Username: alfanumerik, garis bawah, 3-20 karakter
     return RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(data);
   }
 }

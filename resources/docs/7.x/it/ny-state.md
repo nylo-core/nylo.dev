@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Rimuove la pagina corrente dallo stack.
 
+Passa `rootNavigator: true` per fare pop dal navigator radice invece del navigator locale piu' vicino. Questo e' utile all'interno delle schede del Navigation Hub quando un modal o overlay e' stato aperto usando il navigator radice.
+
 Esempio
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop dal navigator radice (es. per chiudere un modal a livello radice)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

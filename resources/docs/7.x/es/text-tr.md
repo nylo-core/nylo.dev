@@ -60,6 +60,8 @@ El widget buscara la clave de traduccion en tus archivos de idioma (por ejemplo,
 }
 ```
 
+Si falta una clave en el archivo de la locale activa, {{ config('app.name') }} la busca automaticamente en el idioma de respaldo (configurado en `lib/config/localization.dart`) antes de devolver la cadena de la clave sin procesar. Esto se aplica tanto a las claves de nivel superior como a las claves anidadas con notacion de puntos.
+
 <div id="string-interpolation"></div>
 
 ## Interpolacion de Cadenas

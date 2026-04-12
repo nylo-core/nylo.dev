@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Введение](#introduction "Введение")
 - [Виджет Connective](#connective-widget "Виджет Connective")
-    - [Построители на основе состояния](#state-builders "Построители на основе состояния")
     - [Пользовательский построитель](#custom-builder "Пользовательский построитель")
 - [Виджет OfflineBanner](#offline-banner "Виджет OfflineBanner")
 - [Помощник NyConnectivity](#connectivity-helper "Помощник NyConnectivity")
@@ -25,39 +24,22 @@
 
 Виджет `Connective` отслеживает изменения подключения и перестраивается в зависимости от текущего состояния сети.
 
-<div id="state-builders"></div>
-
-### Построители на основе состояния
-
-Предоставляйте различные виджеты для каждого типа подключения:
+Используйте `noInternet` для отображения альтернативного виджета, когда устройство не имеет интернета (wifi, mobile или ethernet — все отсутствуют):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### Доступные состояния
-
-| Свойство | Описание |
-|----------|-------------|
-| `onWifi` | Виджет при подключении через WiFi |
-| `onMobile` | Виджет при подключении через мобильные данные |
-| `onEthernet` | Виджет при подключении через Ethernet |
-| `onVpn` | Виджет при подключении через VPN |
-| `onBluetooth` | Виджет при подключении через Bluetooth |
-| `onOther` | Виджет для других типов подключения |
-| `onNone` | Виджет при отсутствии подключения |
-| `child` | Виджет по умолчанию, если конкретный обработчик не указан |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Показать тип подключения
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 Построитель получает:
 - `context` -- BuildContext
-- `state` -- перечисление `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` -- перечисление `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` -- `List<ConnectivityResult>` для проверки нескольких подключений
 
 ### Отслеживание изменений
@@ -117,16 +99,16 @@ Connective(
 
 ## Виджет OfflineBanner
 
-Отображайте баннер в верхней части экрана при отсутствии подключения:
+Отображайте баннер в верхней части экрана при отсутствии интернета (wifi, mobile или ethernet — все отсутствуют):
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Ваш основной контент
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Офлайн-баннер (скрывается автоматически при наличии подключения)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Анимация скольжения при появлении/скрытии
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ OfflineBanner(
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // Выполнить API-запрос
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Загрузить из кэша
   final data = await cache.getData();
 }
 
-// Or check if offline
+// Или проверить офлайн
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,34 +156,45 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // Загружать большие файлы по WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Предупредить об использовании данных
   showDataWarning();
 }
 
-// Other methods:
+// Другие методы:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### Проверка наличия интернета
+
+`hasInternet()` строже, чем `isOnline()` — возвращает `true` только когда устройство подключено через wifi, mobile или ethernet. Подключения через VPN, bluetooth и спутник исключены.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Доступ в интернет подтверждён через wifi, mobile или ethernet
+  await syncData();
+}
+```
+
 ### Получение текущего состояния
 
 ``` dart
-// Get all active connection types
+// Получить все активные типы подключения
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Получить читаемую строку
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None", и т.д.
 ```
 
 ### Отслеживание изменений
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// Не забудьте отменить подписку по завершении
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### Условное выполнение
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Выполнить только при наличии подключения (возвращает null при офлайне)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Выполнить разные обратные вызовы в зависимости от статуса
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ final result = await NyConnectivity.when(
 ### Показ альтернативы при офлайне
 
 ``` dart
-// Show a different widget when offline
+// Показать другой виджет при офлайне
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### Показ только при онлайне
 
 ``` dart
-// Hide completely when offline
+// Полностью скрыть при офлайне
 SyncButton().onlyOnline()
 ```
 
 ### Показ только при офлайне
 
 ``` dart
-// Show only when offline
+// Показывать только при офлайне
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Параметр | Тип | По умолчанию | Описание |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Виджет при подключении через WiFi |
-| `onMobile` | `Widget?` | - | Виджет при подключении через мобильные данные |
-| `onEthernet` | `Widget?` | - | Виджет при подключении через Ethernet |
-| `onVpn` | `Widget?` | - | Виджет при подключении через VPN |
-| `onBluetooth` | `Widget?` | - | Виджет при подключении через Bluetooth |
-| `onOther` | `Widget?` | - | Виджет для других подключений |
-| `onNone` | `Widget?` | - | Виджет при отсутствии подключения |
-| `child` | `Widget?` | - | Виджет по умолчанию |
-| `showLoadingOnInit` | `bool` | `false` | Показывать загрузку при проверке |
-| `loadingWidget` | `Widget?` | - | Пользовательский виджет загрузки |
+| `noInternet` | `Widget?` | - | Виджет, отображаемый когда wifi, mobile и ethernet все отсутствуют |
+| `child` | `Widget?` | - | Виджет, отображаемый при наличии интернета |
 | `onConnectivityChanged` | `Function?` | - | Обратный вызов при изменении |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Подключение через Ethernet |
 | `vpn` | Подключение через VPN |
 | `bluetooth` | Подключение через Bluetooth |
+| `satellite` | Подключение через спутник |
 | `other` | Другой тип подключения |
 | `none` | Нет подключения |

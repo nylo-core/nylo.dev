@@ -42,11 +42,7 @@ API servisleriniz `lib/app/networking/` dizininde bulunur. Yeni bir proje varsay
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -227,12 +223,12 @@ if (response.isSuccessful) {
 ### network ile networkResponse Karşılaştırması
 
 ```dart
-// network() — returns the data directly
+// network() — veriyi dogrudan dondurur
 User? user = await network<User>(
   request: (request) => request.get("/users/1"),
 );
 
-// networkResponse() — returns the full response
+// networkResponse() — tam yaniti dondurur
 NyResponse<User> response = await networkResponse<User>(
   request: (request) => request.get("/users/1"),
 );
@@ -283,22 +279,22 @@ Her iki metot da aynı parametreleri kabul eder. Yanıtı verinin ötesinde ince
 ```dart
 NyResponse<User> response = await apiService.fetchUser(1);
 
-// Get data or throw if null
+// Veriyi al veya null ise istisna firlatir
 User user = response.dataOrThrow('User not found');
 
-// Get data or use a fallback
+// Veriyi al veya yedek kullan
 User user = response.dataOr(User.guest());
 
-// Run callback only if successful
+// Yalnizca basarili ise callback calistir
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
-// Pattern match on success/failure
+// Basari/basarisizlik icin oruntu eslestirme
 String result = response.when(
   success: (user) => 'Welcome, ${user.name}!',
   failure: (response) => 'Error: ${response.statusMessage}',
 );
 
-// Get a specific header
+// Belirli bir basligi al
 String? authHeader = response.getHeader('Authorization');
 ```
 
@@ -311,8 +307,7 @@ API servisiniz için varsayılan Dio seçeneklerini `baseOptions` parametresini 
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Interceptor'ları şu durumlarda kullanın:
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,11 +537,10 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
-          useNetworkLogger: false, // <-- Günlükçüyü devre dışı bırak
+          useNetworkLogger: false, // <-- Gunlukçuyu devre disi birak
         );
 ```
 
@@ -564,7 +557,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // Yalnizca belirli endpoint'lere yapilan istekleri gunlukle
     return options.path.contains('/api/v1');
   },
 )
@@ -613,10 +606,10 @@ Callback'lerle birlikte:
 await api<ApiService>(
   (request) => request.fetchUser(),
   onSuccess: (response, data) {
-    // data is the morphed User? instance
+    // data donusturulmus User? ornegi
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // Hatayi isle
   },
 );
 ```
@@ -626,7 +619,6 @@ await api<ApiService>(
 | Parametre | Tür | Açıklama |
 |-----------|------|-------------|
 | `request` | `Function(T)` | API istek fonksiyonu |
-| `context` | `BuildContext?` | Build bağlamı |
 | `headers` | `Map<String, dynamic>` | Ek başlıklar |
 | `bearerToken` | `String?` | Bearer token |
 | `baseUrl` | `String?` | Temel URL'yi geçersiz kıl |
@@ -703,16 +695,16 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
-  // Returns a single User
+  // Tek bir kullanici dondurur
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Returns a List of Users
+  // Kullanici listesi dondurur
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -758,10 +750,10 @@ Future<List<Country>> fetchCountries() async {
 ### Önbelleği Temizleme
 
 ```dart
-// Clear a specific cache key
+// Belirli bir onbellek anahtarini temizle
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// Tum API onbellegini temizle
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +842,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // Yalnizca sunucu hatalarinda yeniden dene
       return dioException.response?.statusCode == 500;
     },
   );
@@ -876,7 +868,7 @@ Cihaz çevrimdışı olduğunda zaman aşımı beklemek yerine hızlıca başar�
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -911,17 +903,17 @@ Etkinleştirildiğinde ve cihaz çevrimdışı olduğunda:
 Bekleyen istekleri yönetin ve iptal edin.
 
 ```dart
-// Create a managed cancel token
+// Yonetilen bir iptal token'i olustur
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// Tum bekleyen istekleri iptal et (orn. cikis yapildiginda)
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// Aktif istek sayisini kontrol et
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// Islem tamamlandiginda belirli bir token'i temizle
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +944,13 @@ class ApiService extends NyApiService {
 Kimlik doğrulama gerektirmeyen genel uç noktalar için:
 
 ```dart
-// Per-request
+// Istek basina
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// Servis duzeyinde
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +969,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // Token'in yenilenmesi gerekip gerekmedigini kontrol et
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // Token'i yenilemek icin yeni Dio ornegini (interceptor'suz) kullan
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // Yeni token'i depolamaya kaydet
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +998,9 @@ Varsayılan olarak, `api` yardımcısı her seferinde yeni bir örnek oluşturur
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // Her seferinde yeni ornek
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // Singleton — her zaman ayni ornek
 };
 ```
 
@@ -1021,8 +1013,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

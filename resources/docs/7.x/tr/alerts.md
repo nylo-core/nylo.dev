@@ -14,6 +14,7 @@
 - [Özel Toast Stilleri](#custom-styles "Özel Toast Stilleri")
   - [Stilleri Kaydetme](#registering-styles "Stilleri Kaydetme")
   - [Stil Factory Oluşturma](#creating-a-style-factory "Stil Factory Oluşturma")
+  - [Veriye Duyarlı Toast Stilleri](#data-aware-toast-styles "Veriye Duyarlı Toast Stilleri")
 - [AlertTab](#alert-tab "AlertTab")
 - [Örnekler](#examples "Örnekler")
 
@@ -32,16 +33,16 @@ Uyarılar sayfalardan, controller'lardan veya `BuildContext`'e sahip olduğunuz 
 Herhangi bir `NyState` sayfasında kolaylık metotlarını kullanarak toast bildirimi gösterin:
 
 ``` dart
-// Success toast
+// Başarı toastı
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// Uyarı toastı
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// Bilgi toastı
 showToastInfo(description: "New version available");
 
-// Danger toast
+// Tehlike toastı
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Başarı
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // Özel başlık ile
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // Uyarı
     showToastWarning(description: "Check your input");
 
-    // Info
+    // Bilgi
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // Tehlike
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // Oops (tehlike stilini kullanır)
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // Özür (tehlike stilini kullanır)
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // ID ile özel stil
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // Toast'a dokunulduğunda çağrılır
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // Toast kapatıldığında çağrılır
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // Toast görünür olduğunda çağrılır
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | zorunlu | Build context |
 | `id` | `String` | `'success'` | Toast stil ID'si |
-| `title` | `String?` | null | Varsayılan başlığı geçersiz kıl |
+| `title` | `String?` | null | Başlık metni; toast widget'ına olduğu gibi iletilir |
 | `description` | `String?` | null | Açıklama metni |
+| `data` | `Map<String, dynamic>?` | null | Veriye duyarlı toast stillerine iletilen anahtar-değer çiftleri; `title` ve `description` eşleşen anahtarlara göre önceliklidir |
 | `duration` | `Duration?` | null | Toast'ın görüntülenme süresi |
 | `position` | `ToastNotificationPosition?` | null | Ekrandaki konum |
 | `action` | `VoidCallback?` | null | Dokunma geri çağırması |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 Toast'ların ekranda nerede görüneceğini kontrol edin:
 
 ``` dart
-// Top of screen (default)
+// Ekranın üstü (varsayılan)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// Ekranın altı
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// Ekranın ortası
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,79 @@ Toast widget'ı üzerinde tam kontrol için:
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Veriye Duyarlı Toast Stilleri
+
+<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
+Çağrı anında çalışma zamanı verisi alan toast stillerini kaydetmek için `ToastStyleDataFactory` kullanın. Bu, kullanıcının adı veya avatarı gibi kayıt anında bilinmeyen toast içerikleri için kullanışlıdır.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+`registerWithData()` ile veriye duyarlı bir stil kaydedin:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+Veya `AppProvider`'ınızda statik stillerle birlikte kaydedin:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Çalışma zamanında bir `data` haritası ile çağırın:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+Ayrıca `title` veya `description` iletirseniz, bunlar `data` içindeki eşleşen anahtarlara göre önceliklidir.
+
+Widget'ı kendiniz oluşturmanız gerekiyorsa `ToastNotificationRegistry.resolve(id, data)` yöntemini doğrudan kullanın:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

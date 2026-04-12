@@ -60,6 +60,8 @@ The widget will look up the translation key in your language files (e.g., `/lang
 }
 ```
 
+If a key is missing from the active locale's file, {{ config('app.name') }} automatically looks it up in the fallback language (configured in `lib/config/localization.dart`) before returning the raw key string. This applies to both top-level keys and dot-notated nested keys.
+
 <div id="string-interpolation"></div>
 
 ## String Interpolation

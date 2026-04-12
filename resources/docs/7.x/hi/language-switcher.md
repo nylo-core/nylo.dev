@@ -7,7 +7,9 @@
 - उपयोग
     - [ड्रॉपडाउन विजेट](#usage-dropdown "ड्रॉपडाउन विजेट")
     - [बॉटम शीट मोडल](#usage-bottom-modal "बॉटम शीट मोडल")
+- [एनिमेशन स्टाइल](#animation-style "एनिमेशन स्टाइल")
 - [कस्टम ड्रॉपडाउन बिल्डर](#custom-builder "कस्टम ड्रॉपडाउन बिल्डर")
+- [स्टेट एक्शन्स](#state-actions "स्टेट एक्शन्स")
 - [पैरामीटर्स](#parameters "पैरामीटर्स")
 - [स्टैटिक मेथड्स](#methods "स्टैटिक मेथड्स")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // ऐप बार में जोड़ें
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 बॉटम मोडल वर्तमान में चुनी गई भाषा के बगल में चेकमार्क के साथ भाषाओं की एक लिस्ट दिखाता है।
 
-### मोडल की ऊँचाई कस्टमाइज़ करना
+### मोडल कस्टमाइज़ करना
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // सभी routes के ऊपर मोडल दिखाएँ, टैब बार सहित
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## एनिमेशन स्टाइल
+
+`animationStyle` पैरामीटर ड्रॉपडाउन ट्रिगर और बॉटम मोडल लिस्ट आइटम्स दोनों के लिए ट्रांज़िशन एनिमेशन को नियंत्रित करता है। चार प्रीसेट उपलब्ध हैं:
+
+``` dart
+// कोई एनिमेशन नहीं
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// सूक्ष्म, परिष्कृत एनिमेशन (अधिकांश ऐप्स के लिए अनुशंसित)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// चंचल, स्प्रिंगी एनिमेशन
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// मुलायम फ़ेड-इन के साथ हल्की स्केल
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+आप अलग-अलग पैरामीटर्स के साथ कस्टम `LanguageSwitcherAnimationStyle()` भी पास कर सकते हैं, या किसी प्रीसेट को बदलने के लिए `copyWith` का उपयोग कर सकते हैं।
+
+वही `animationStyle` पैरामीटर `LanguageSwitcher.showBottomModal` द्वारा भी स्वीकार किया जाता है।
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // जैसे, "English"
+        // language['locale'] में लोकेल कोड होता है, जैसे "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // भाषा बदलने पर अतिरिक्त एक्शन्स करें
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## स्टेट एक्शन्स
+
+`stateActions()` का उपयोग करके `LanguageSwitcher` को प्रोग्रामैटिक रूप से नियंत्रित करें:
+
+``` dart
+// भाषा सूची रीफ्रेश करें (उपलब्ध भाषाएँ फिर से पढ़ें)
+LanguageSwitcher.stateActions().refresh();
+
+// लोकेल कोड द्वारा भाषा बदलें
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+यह तब उपयोगी होता है जब आप यूज़र इंटरेक्शन के बिना ऐप की भाषा बदलना चाहते हैं, उदाहरण के लिए यूज़र प्राथमिकता के साथ लॉगिन करने के बाद।
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// विकल्पों के साथ
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## समर्थित लोकेल्स

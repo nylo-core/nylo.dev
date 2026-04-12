@@ -30,6 +30,7 @@
   - [Slider-Felder](#slider-fields "Slider-Felder")
   - [Range-Slider-Felder](#range-slider-fields "Range-Slider-Felder")
   - [Benutzerdefinierte Felder](#custom-fields "Benutzerdefinierte Felder")
+  - [Builder-Felder](#builder-fields "Builder-Felder")
   - [Widget-Felder](#widget-fields "Widget-Felder")
 - [FormCollection](#form-collection "FormCollection")
 - [Formularvalidierung](#form-validation "Formularvalidierung")
@@ -58,7 +59,7 @@
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// 1. Define a form
+// 1. Ein Formular definieren
 class LoginForm extends NyFormWidget {
   LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
 
@@ -71,7 +72,7 @@ class LoginForm extends NyFormWidget {
   static NyFormActions get actions => const NyFormActions('LoginForm');
 }
 
-// 2. Display and submit it
+// 2. Anzeigen und absenden
 LoginForm(
   submitButton: Button.primary(text: "Login"),
   onSubmit: (data) {
@@ -239,7 +240,7 @@ Stiltyp: `FieldStyleTextField`
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// Dezimalzahlen
 Field.number("Score", decimal: true)
 ```
 
@@ -252,7 +253,7 @@ Der Parameter `decimal` steuert, ob Dezimaleingaben erlaubt sind. Stiltyp: `Fiel
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// Mit Sichtbarkeitsumschalter
 Field.password("Password", viewable: true)
 ```
 
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// Löschen-Button deaktivieren
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// Benutzerdefiniertes Löschen-Symbol
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -379,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // Gibt den formatierten Wert zurueck
 )
 ```
 
@@ -456,7 +457,7 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// Mit einer benutzerdefinierten aktiven Farbe
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
@@ -533,7 +534,7 @@ Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// Mit Schlüssel-Wert-Paaren
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 Der Parameter `child` erfordert ein Widget, das `NyFieldStatefulWidget` erweitert. Dies gibt Ihnen volle Kontrolle über das Rendering und Verhalten des Feldes.
 
+<div id="builder-fields"></div>
+
+### Builder-Felder
+
+Verwenden Sie `Field.builder()`, um ein benutzerdefiniertes Inline-Formularfeld zu erstellen, ohne `NyFieldStatefulWidget` zu unterklassifizieren. Die Builder-Funktion empfängt den aktuellen Wert, einen `onChanged`-Callback zur Meldung von Wertänderungen an das Formular und einen `setState`-Callback zum Ausloesen einer UI-Neudarstellung.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // Das Feld-Widget neu aufbauen
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+Der dritte Parameter ist der aktuelle Feldwert und der vierte ist `setState`. Wenn Ihr Builder kein `setState` benoetigt, koennen Sie die veraltete 3-Argument-Signatur (`NyFieldBuilderLegacy`) verwenden, die weiterhin unterstuetzt wird:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Widget-Felder
@@ -621,19 +658,22 @@ Picker-, Radio- und Chip-Felder erfordern eine `FormCollection` für ihre Option
 ### Eine FormCollection erstellen
 
 ``` dart
-// From a list of strings (value and label are the same)
+// Leere Sammlung (nützlich als Platzhalter, bevor Optionen geladen werden)
+const FormCollection.empty()
+
+// Aus einer Liste von Strings (Wert und Label sind identisch)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// Wie oben, explizit
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// Aus einer Map (Schlüssel = Wert, Wert = Label)
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// Aus strukturierten Daten (nützlich für API-Antworten)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -694,7 +734,7 @@ Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// Benutzerdefinierte Inline-Validierung
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,7 +744,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable -- Validierung besteht, wenn das Feld leer ist
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` markiert einen Validator als optional. Wenn der Feldwert null oder leer ist, werden alle Validierungsregeln übersprungen und das Feld besteht. Wenn das Feld einen Wert hat, werden alle Regeln normal angewendet. Verketten Sie es am Ende eines beliebigen `FormValidator`.
 
 Beim Absenden eines Formulars werden alle Validatoren geprüft. Bei einem Fehler wird ein Toast mit der ersten Fehlermeldung angezeigt und der `onFailure`-Callback aufgerufen.
 
@@ -785,16 +832,16 @@ class CreatePostForm extends NyFormWidget {
 | `options` | Die Optionen für Picker-, Chip- oder Radio-Felder |
 
 ``` dart
-// Set only options (no initial value)
+// Nur Optionen setzen (kein Anfangswert)
 "Category": define(options: categories),
 
-// Set only an initial value
+// Nur einen Anfangswert setzen
 "Price": define(value: "100"),
 
-// Set both a value and options
+// Sowohl einen Wert als auch Optionen setzen
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// Einfache Werte funktionieren weiterhin für einfache Felder
 "Name": "John",
 ```
 
@@ -818,7 +865,7 @@ EditAccountForm(
 Verwenden Sie `NyFormActions`, um Feldwerte von überall zu setzen:
 
 ``` dart
-// Set a single field value
+// Einen einzelnen Feldwert setzen
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
@@ -841,7 +888,7 @@ Formulardaten werden über den `onSubmit`-Callback beim Absenden des Formulars a
 ``` dart
 EditAccountForm(
   onSubmit: (data) {
-    // data is a Map<String, dynamic>
+    // data ist eine Map<String, dynamic>
     // {first_name: "Jane", last_name: "Doe", email: "jane@example.com"}
     print(data);
   },
@@ -856,10 +903,10 @@ EditAccountForm(
 ### Daten löschen
 
 ``` dart
-// Clear all fields
+// Alle Felder löschen
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// Ein bestimmtes Feld löschen
 EditAccountForm.actions.clearField("First Name");
 ```
 
@@ -869,13 +916,13 @@ EditAccountForm.actions.clearField("First Name");
 ### Felder aktualisieren
 
 ``` dart
-// Update a field value
+// Einen Feldwert aktualisieren
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// Die Formular-UI aktualisieren
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// Formularfelder aktualisieren (ruft fields() erneut auf)
 EditAccountForm.actions.refreshForm();
 ```
 
@@ -930,25 +977,25 @@ Platzieren Sie Felder nebeneinander, indem Sie sie in eine `List` einschließen:
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // Einzelnes Feld (volle Breite)
   Field.text("Title"),
 
-  // Two fields in a row
+  // Zwei Felder in einer Zeile
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // Ein weiteres einzelnes Feld
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // Slider und Range-Slider in einer Zeile
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // Ein Nicht-Feld-Widget einbetten
   Field.widget(child: Divider()),
 
   Field.email("Email"),
@@ -965,13 +1012,13 @@ Felder in einer `List` werden in einer `Row` mit gleichen `Expanded`-Breiten ger
 Felder programmatisch ein- oder ausblenden mit den Methoden `hide()` und `show()` auf `Field`. Sie können innerhalb Ihrer Formularklasse oder über den `onChanged`-Callback auf Felder zugreifen:
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// Innerhalb Ihrer NyFormWidget-Unterklasse oder im onChanged-Callback
 Field nameField = ...;
 
-// Hide the field
+// Das Feld ausblenden
 nameField.hide();
 
-// Show the field
+// Das Feld einblenden
 nameField.show();
 ```
 
@@ -1047,15 +1094,15 @@ Field.chips("Tags",
 | `NyFormWidget.stateRefreshForm(name)` | Formularfelder aktualisieren (ruft `fields()` erneut auf) |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// Ein Formular namens "LoginForm" von überall absenden
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// Einen Feldwert aus der Ferne aktualisieren
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// Alle Formulardaten löschen
 NyFormWidget.stateClearData("LoginForm");
 ```
 
@@ -1071,20 +1118,20 @@ Beim Erweitern von `NyFormWidget` sind dies die Konstruktor-Parameter, die Sie �
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // Horizontaler Abstand zwischen Zeilenfeldern
+  double mainAxisSpacing = 10,   // Vertikaler Abstand zwischen Feldern
+  Map<String, dynamic>? initialData, // Anfangsfeld-Werte
+  Function(Field field, dynamic value)? onChanged, // Feldaenderungs-Callback
+  Widget? header,                // Widget über dem Formular
+  Widget? submitButton,          // Absende-Button-Widget
+  Widget? footer,                // Widget unter dem Formular
+  double headerSpacing = 10,     // Abstand nach dem Header
+  double submitButtonSpacing = 10, // Abstand nach dem Absende-Button
+  double footerSpacing = 10,     // Abstand vor dem Footer
+  LoadingStyle? loadingStyle,    // Ladeindikator-Stil
+  bool locked = false,           // Formular schreibgeschuetzt machen
+  Function(dynamic data)? onSubmit,   // Wird mit Formulardaten bei erfolgreicher Validierung aufgerufen
+  Function(dynamic error)? onFailure, // Wird mit Fehlern bei fehlgeschlagener Validierung aufgerufen
 )
 ```
 
@@ -1132,13 +1179,13 @@ class LoginForm extends NyFormWidget {
 | `actions.submit(onSuccess:, onFailure:, showToastError:)` | Absenden mit Validierung |
 
 ``` dart
-// Update a field value
+// Einen Feldwert aktualisieren
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// Alle Formulardaten löschen
 LoginForm.actions.clear();
 
-// Submit the form
+// Das Formular absenden
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);
@@ -1184,5 +1231,6 @@ Methoden, die Sie in Ihrer `NyFormWidget`-Unterklasse überschreiben können:
 | `Field.slider()` | -- | Einzelwert-Slider |
 | `Field.rangeSlider()` | -- | Bereichswert-Slider |
 | `Field.custom()` | `child` (erforderlich `NyFieldStatefulWidget`) | Benutzerdefiniertes zustandsbehaftetes Widget |
+| `Field.builder()` | `builder` (erforderlich `NyFieldBuilder` oder `NyFieldBuilderLegacy`) | Inline-Benutzerdefiniertes Feld ohne Unterklassifizierung |
 | `Field.widget()` | `child` (erforderlich `Widget`) | Beliebiges Widget einbetten (kein Feld) |
 

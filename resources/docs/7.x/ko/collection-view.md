@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // 항목 사이에 간격 추가
   padding: EdgeInsets.all(16),
 )
 ```
@@ -198,7 +198,7 @@ CollectionView<Post>.pullable(
   onRefresh: () {
     print('List was refreshed!');
   },
-  headerStyle: 'WaterDropHeader', // Pull indicator style
+  headerStyle: 'WaterDropHeader', // 당기기 인디케이터 스타일
 )
 ```
 
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## 상태 업데이트
 
-`stateName`을 지정하여 CollectionView를 업데이트하거나 리셋할 수 있습니다:
+`stateName`을 지정하고 `CollectionView.stateActions()`를 호출하여 CollectionView를 프로그래밍 방식으로 업데이트할 수 있습니다:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### 리스트 리셋
+`stateActions`를 사용하여 런타임에 리스트를 조작합니다:
 
 ``` dart
+final actions = CollectionView.stateActions("my_todo_list");
+
 // 처음부터 데이터를 리셋하고 다시 로드
-CollectionView.stateReset("my_todo_list");
+actions.reset();
+
+// 데이터 새로고침 (다시 가져오고 페이지네이션 리셋)
+actions.refreshData();
+
+// 리스트 끝에 항목 추가
+actions.addItem(newTodo);
+
+// 특정 인덱스에 항목 삽입
+actions.insertItem(0, newTodo);
+
+// 인덱스로 항목 제거
+actions.removeFromIndex(2);
+
+// 특정 인덱스의 항목 교체
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### 항목 제거
-
-``` dart
-// 인덱스 2의 항목 제거
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### 일반 업데이트 트리거
-
-``` dart
-// 전역 updateState 헬퍼 사용
-updateState("my_todo_list");
-```
+모든 `stateActions` 메서드는 동기 및 비동기 데이터 모두에서 리빌드 간에 올바르게 유지됩니다. `refreshData()`는 페이지네이션 반복 카운터도 리셋하므로 pullable 리스트가 1페이지부터 다시 시작됩니다.
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | 매개변수 | 타입 | 설명 |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | 페이지네이션 데이터 함수 |
+| `enablePullDown` | `bool` | 당겨서 새로고침 제스처 활성화 (기본값: `true`) |
 | `onRefresh` | `Function()?` | 새로고침 완료 시 콜백 |
 | `beforeRefresh` | `Function()?` | 새로고침 전 콜백 |
 | `afterRefresh` | `Function(dynamic)?` | 데이터 로드 후 콜백 |

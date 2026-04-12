@@ -30,6 +30,7 @@
   - [Campos de deslizador](#slider-fields "Campos de deslizador")
   - [Campos de deslizador de rango](#range-slider-fields "Campos de deslizador de rango")
   - [Campos personalizados](#custom-fields "Campos personalizados")
+  - [Campos builder](#builder-fields "Campos builder")
   - [Campos de widget](#widget-fields "Campos de widget")
 - [FormCollection](#form-collection "FormCollection")
 - [Validación de formularios](#form-validation "Validación de formularios")
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 El parámetro `child` requiere un widget que extienda `NyFieldStatefulWidget`. Esto te da control total sobre la renderización y el comportamiento del campo.
 
+<div id="builder-fields"></div>
+
+### Campos builder
+
+Usa `Field.builder()` para crear un campo de formulario en linea personalizado sin subclasificar `NyFieldStatefulWidget`. La funcion builder recibe el valor actual, un callback `onChanged` para reportar cambios de valor al formulario, y un callback `setState` para disparar una reconstruccion de la interfaz.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // Reconstruir el widget del campo
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+El tercer parametro es el valor actual del campo y el cuarto es `setState`. Si tu builder no necesita `setState`, puedes usar la firma legacy de 3 argumentos (`NyFieldBuilderLegacy`), que sigue siendo compatible:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Campos de widget
@@ -621,10 +658,13 @@ Los campos de selector, radio y chip requieren un `FormCollection` para sus opci
 ### Crear un FormCollection
 
 ``` dart
+// Coleccion vacia (util como marcador de posicion antes de que carguen las opciones)
+const FormCollection.empty()
+
 // Desde una lista de cadenas (el valor y la etiqueta son iguales)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Lo mismo que arriba, explícito
+// Lo mismo que arriba, explicito
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
 // Desde un mapa (clave = valor, valor = etiqueta)
@@ -633,7 +673,7 @@ FormCollection.fromMap({
   "ca": "Canada",
 })
 
-// Desde datos estructurados (útil para respuestas de API)
+// Desde datos estructurados (util para respuestas de API)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -694,7 +734,7 @@ Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Validación personalizada en línea
+// Validacion personalizada en linea
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,7 +744,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable -- la validacion pasa cuando el campo esta vacio
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` marca un validador como opcional. Cuando el valor del campo es null o vacio, todas las reglas de validacion se omiten y el campo pasa. Cuando el campo tiene un valor, todas las reglas se aplican normalmente. Encadenalo al final de cualquier `FormValidator`.
 
 Cuando se envía un formulario, se verifican todos los validadores. Si alguno falla, se muestra un error toast con el primer mensaje de error y se llama al callback `onFailure`.
 
@@ -1184,4 +1231,5 @@ Métodos que puedes sobreescribir en tu subclase de `NyFormWidget`:
 | `Field.slider()` | — | Deslizador de valor único |
 | `Field.rangeSlider()` | — | Deslizador de rango de valores |
 | `Field.custom()` | `child` (requiere `NyFieldStatefulWidget`) | Widget con estado personalizado |
+| `Field.builder()` | `builder` (requiere `NyFieldBuilder` o `NyFieldBuilderLegacy`) | Campo personalizado en linea sin subclasificar |
 | `Field.widget()` | `child` (requiere `Widget`) | Incrustar cualquier widget (no es campo) |

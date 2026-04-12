@@ -14,6 +14,7 @@
 - [Estilos de Toast Personalizados](#custom-styles "Estilos de Toast Personalizados")
   - [Registrando Estilos](#registering-styles "Registrando Estilos")
   - [Criando uma Style Factory](#creating-a-style-factory "Criando uma Style Factory")
+  - [Estilos de Toast com Dados](#data-aware-toast-styles "Estilos de Toast com Dados")
 - [AlertTab](#alert-tab "AlertTab")
 - [Exemplos](#examples "Exemplos Práticos")
 
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // Chamado quando o toast é tocado
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // Chamado quando o toast é dispensado
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // Chamado quando o toast se torna visível
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | obrigatório | Contexto de build |
 | `id` | `String` | `'success'` | ID do estilo do toast |
-| `title` | `String?` | null | Sobrescreve o título padrão |
+| `title` | `String?` | null | Texto do título; passado diretamente ao widget toast |
 | `description` | `String?` | null | Texto de descrição |
+| `data` | `Map<String, dynamic>?` | null | Pares chave-valor passados a estilos de toast com dados; `title` e `description` têm prioridade sobre chaves correspondentes em `data` |
 | `duration` | `Duration?` | null | Por quanto tempo o toast é exibido |
 | `position` | `ToastNotificationPosition?` | null | Posição na tela |
 | `action` | `VoidCallback?` | null | Callback ao tocar |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 Controle onde os toasts aparecem na tela:
 
 ``` dart
-// Top of screen (default)
+// Topo da tela (padrão)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// Base da tela
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// Centro da tela
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,78 @@ Para controle completo sobre o widget do toast:
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Estilos de Toast com Dados
+
+Use `ToastStyleDataFactory` para registrar estilos de toast que recebem dados em tempo de execução no momento da chamada. Isso é útil quando o conteúdo do toast — como o nome ou avatar de um usuário — não é conhecido no momento do registro.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+Registre um estilo com dados usando `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+Ou registre-o junto com estilos estáticos no seu `AppProvider`:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Chame-o com um mapa `data` em tempo de execução:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+Se você também passar `title` ou `description`, eles têm prioridade sobre chaves correspondentes em `data`.
+
+Use `ToastNotificationRegistry.resolve(id, data)` diretamente se precisar construir o widget você mesmo:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

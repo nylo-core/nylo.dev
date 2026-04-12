@@ -60,6 +60,8 @@ Widget wyszuka klucz tlumaczenia w Twoich plikach jezykowych (np. `/lang/en.json
 }
 ```
 
+Jesli klucz nie istnieje w pliku aktywnej lokalizacji, {{ config('app.name') }} automatycznie wyszuka go w jezyku zapasowym (skonfigurowanym w `lib/config/localization.dart`) przed zwroceniem surowego ciagu klucza. Dotyczy to zarowno kluczy najwyzszego poziomu, jak i kluczy zagniezdonych z notacja kropkowa.
+
 <div id="string-interpolation"></div>
 
 ## Interpolacja ciagow

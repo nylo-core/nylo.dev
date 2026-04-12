@@ -53,12 +53,12 @@
 **Шаг 1:** Определите виджет со статическим именем состояния
 
 ``` dart
-/// The Cart widget
+/// Виджет Cart
 class Cart extends StatefulWidget {
 
   Cart({Key? key}) : super(key: key);
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart"; // Уникальный идентификатор состояния этого виджета
 
   @override
   _CartState createState() => _CartState();
@@ -68,23 +68,23 @@ class Cart extends StatefulWidget {
 **Шаг 2:** Создайте класс состояния, расширяющий `NyState`
 
 ``` dart
-/// The state class for the Cart widget
+/// Класс состояния для виджета Cart
 class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
   _CartState() {
-    stateName = Cart.state; // Register the state name
+    stateName = Cart.state; // Зарегистрировать имя состояния
   }
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue(); // Загрузить начальные данные
   };
 
   @override
   void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
+    reboot(); // Перезагрузить виджет при обновлении состояния
   }
 
   @override
@@ -100,15 +100,15 @@ class _CartState extends NyState<Cart> {
 **Шаг 3:** Создайте вспомогательные функции для чтения и обновления корзины
 
 ``` dart
-/// Get the cart value from storage
+/// Получить значение корзины из хранилища
 Future<String> getCartValue() async {
   return await storageRead(Keys.cart) ?? "1";
 }
 
-/// Set the cart value and notify the widget
+/// Установить значение корзины и уведомить виджет
 Future setCartValue(String value) async {
     await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
+    updateState(Cart.state); // Это запускает stateUpdated() на виджете
 }
 ```
 
@@ -173,10 +173,10 @@ _updateCart() async {
 - Создать переиспользуемые поведения виджетов, которые можно вызывать из нескольких мест
 
 ``` dart
-// Sending an action to the widget
+// Отправка действия виджету
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Ещё один пример с данными
 stateAction('show_high_score', state: HighScore.state, data: {
   "high_score": 100,
 });
@@ -192,7 +192,7 @@ get stateActions => {
     print('Hello world');
   },
   "reset_data": (data) async {
-    // Example with data
+    // Пример с данными
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+Если у вас уже есть экземпляр `StateActions` (например, из статического метода `stateActions()` виджета), вы можете вызвать `action()` непосредственно на нём вместо использования свободной функции:
+
+``` dart
+// Используя свободную функцию
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// Используя метод экземпляра StateActions — эквивалентно, меньше повторений
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 Вы также можете определить действия состояния, используя метод `whenStateAction` в геттере `init`.
 
 ``` dart
@@ -218,7 +230,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Сбросить счётчик значка
       _count = 0;
     }
   });
@@ -248,12 +260,12 @@ class _UserAvatarState extends NyState<UserAvatar> {
 @override
 get stateActions => {
   "reset_avatar": () {
-    // Example
+    // Пример
     _avatar = null;
     setState(() {});
   },
   "update_user_image": (User user) {
-    // Example
+    // Пример
     _avatar = user.image;
     setState(() {});
   },
@@ -270,10 +282,10 @@ stateAction('reset_avatar', state: MyWidget.state);
 // prints 'Hello from the widget'
 
 stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
+// Сбросить данные в виджете
 
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
+// показывает всплывающее уведомление об успехе с сообщением
 ```
 
 
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // установить true для включения действий состояния на этой странице
 
 @override
 get stateActions => {
@@ -306,7 +318,7 @@ get stateActions => {
     print('Hello from the page');
   },
   "reset_data": () {
-    // Example
+    // Пример
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -324,12 +336,12 @@ stateAction('test_page_action', state: MyPage.path);
 // prints 'Hello from the page'
 
 stateAction('reset_data', state: MyPage.path);
-// Reset data in page
+// Сбросить данные на странице
 
 stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
-// shows a success toast with the message
+// показывает всплывающее уведомление об успехе с сообщением
 ```
 
 Вы также можете определить действия состояния, используя метод `whenStateAction`.
@@ -340,7 +352,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Сбросить счётчик значка
       _count = 0;
     }
   });
@@ -363,7 +375,7 @@ stateAction('reset_badge', state: MyWidget.state);
 ``` dart
 updateState(MyStateName.state);
 
-// or with data
+// или с данными
 updateState(MyStateName.state, data: "The Data");
 ```
 

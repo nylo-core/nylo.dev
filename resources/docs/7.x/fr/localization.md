@@ -140,10 +140,10 @@ flutter:
 Utilisez l'extension `.tr()` ou le helper `trans()` pour traduire des chaines :
 
 ``` dart
-// Using the .tr() extension
+// Avec l'extension .tr()
 "welcome".tr()
 
-// Using the trans() helper
+// Avec le helper trans()
 trans("welcome")
 ```
 
@@ -245,10 +245,10 @@ StyledText.template(
 Changez la langue de l'application au moment de l'execution :
 
 ``` dart
-// Using NyLocalization directly
+// Utiliser NyLocalization directement
 await NyLocalization.instance.setLanguage(
   context,
-  language: 'es'  // Must match your JSON filename (es.json)
+  language: 'es'  // Doit correspondre au nom de fichier JSON (es.json)
 );
 ```
 
@@ -319,13 +319,21 @@ Cette liste est utilisee par `MaterialApp.supportedLocales` de Flutter.
 
 ## Langue de secours
 
-Lorsqu'une cle de traduction n'est pas trouvee dans la locale active, {{ config('app.name') }} se rabat sur la langue specifiee :
+Lorsqu'une cle de traduction n'est pas trouvee dans la locale active, {{ config('app.name') }} la recherche automatiquement dans la langue de secours avant de retourner la cle brute. La langue de secours est configuree dans `lib/config/localization.dart` :
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Cela garantit que votre application n'affiche jamais de cles brutes si une traduction est manquante.
+Cette resolution en deux etapes s'applique aussi bien aux cles de niveau superieur qu'aux cles imbriquees en notation par points :
+
+1. Rechercher la cle dans le fichier de locale actif.
+2. Si non trouvee, la rechercher dans le fichier de locale de secours.
+3. Si toujours pas trouvee, retourner la cle brute.
+
+Par exemple, si le fichier de locale francais ne contient pas la cle `settings.privacy`, la logique de secours recherche `settings.privacy` dans le fichier de locale anglais avant de retourner `"settings.privacy"` tel quel.
+
+Cela garantit que votre application n'affiche jamais de cles brutes si une traduction est seulement partiellement complete.
 
 <div id="rtl-support"></div>
 
@@ -336,9 +344,9 @@ Cela garantit que votre application n'affiche jamais de cles brutes si une tradu
 ``` dart
 static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-// Check if current language is RTL
+// Verifier si la langue actuelle est RTL
 if (LocalizationConfig.isRtl(currentLanguageCode)) {
-  // Handle RTL layout
+  // Gerer la mise en page RTL
 }
 ```
 
@@ -365,9 +373,9 @@ Cela journalise les avertissements lorsque `.tr()` ne trouve pas une cle, vous a
 
 ``` dart
 bool exists = NyLocalization.instance.hasTranslation('welcome');
-// true if the key exists in the current language file
+// true si la cle existe dans le fichier de langue actuel
 
-// Also works with nested keys
+// Fonctionne egalement avec les cles imbriquees
 bool nestedExists = NyLocalization.instance.hasTranslation('navigation.home');
 ```
 
@@ -399,13 +407,13 @@ bool isRtl = NyLocalization.instance.isDirectionRTL(context);
 ### Acceder a la locale actuelle
 
 ``` dart
-// Get the current language code
-String code = NyLocalization.instance.languageCode;  // e.g., 'en'
+// Obtenir le code de langue actuel
+String code = NyLocalization.instance.languageCode;  // par ex., 'en'
 
-// Get the current Locale object
+// Obtenir l'objet Locale actuel
 Locale currentLocale = NyLocalization.instance.locale;
 
-// Get Flutter localization delegates (used in MaterialApp)
+// Obtenir les delegues de localisation Flutter (utilises dans MaterialApp)
 var delegates = NyLocalization.instance.delegates;
 ```
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Code de langue actuel |
 | `locale` | `Locale` | Objet Locale actuel |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Delegues de localisation Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Injecter directement des maps de traduction pour les tests unitaires |
 
 <div id="nylocalehelper"></div>
 
@@ -433,26 +442,26 @@ var delegates = NyLocalization.instance.delegates;
 `NyLocaleHelper` est une classe utilitaire statique pour les operations de locale. Elle fournit des methodes pour detecter la locale actuelle, verifier le support RTL et creer des objets Locale.
 
 ``` dart
-// Get the current system locale
+// Obtenir la locale systeme actuelle
 Locale locale = NyLocaleHelper.getCurrentLocale(context: context);
 
-// Get language and country codes
+// Obtenir les codes de langue et de pays
 String langCode = NyLocaleHelper.getLanguageCode(context: context);  // 'en'
-String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' or null
+String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' ou null
 
-// Check if current locale matches
+// Verifier si la locale actuelle correspond
 bool isEnglish = NyLocaleHelper.matchesLocale(context, 'en');
 bool isUsEnglish = NyLocaleHelper.matchesLocale(context, 'en', 'US');
 
-// RTL detection
+// Detection RTL
 bool isRtl = NyLocaleHelper.isRtlLanguage('ar');  // true
 bool currentIsRtl = NyLocaleHelper.isCurrentLocaleRtl(context: context);
 
-// Get text direction
+// Obtenir la direction du texte
 TextDirection direction = NyLocaleHelper.getTextDirection('ar');  // TextDirection.rtl
 TextDirection currentDir = NyLocaleHelper.getCurrentTextDirection(context: context);
 
-// Create a Locale from strings
+// Creer une Locale a partir de chaines
 Locale newLocale = NyLocaleHelper.toLocale('en', 'US');
 ```
 

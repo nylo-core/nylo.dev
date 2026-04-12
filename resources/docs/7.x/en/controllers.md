@@ -220,6 +220,11 @@ class HomeController extends NyController {
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // Pop from the root navigator (e.g. to dismiss a root-level modal in a Navigation Hub)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
     // Send custom action to page
     updatePageState("customAction", {"key": "value"});

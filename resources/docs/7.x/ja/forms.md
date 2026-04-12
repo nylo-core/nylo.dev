@@ -30,6 +30,7 @@
   - [スライダーフィールド](#slider-fields "スライダーフィールド")
   - [範囲スライダーフィールド](#range-slider-fields "範囲スライダーフィールド")
   - [カスタムフィールド](#custom-fields "カスタムフィールド")
+  - [ビルダーフィールド](#builder-fields "ビルダーフィールド")
   - [ウィジェットフィールド](#widget-fields "ウィジェットフィールド")
 - [FormCollection](#form-collection "FormCollection")
 - [フォームバリデーション](#form-validation "フォームバリデーション")
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 `child` パラメータには `NyFieldStatefulWidget` を継承するウィジェットが必要です。これにより、フィールドのレンダリングと動作を完全に制御できます。
 
+<div id="builder-fields"></div>
+
+### ビルダーフィールド
+
+`Field.builder()` を使用して、`NyFieldStatefulWidget` をサブクラス化せずにカスタムインラインフォームフィールドを作成します。ビルダー関数は現在の値、フォームに値の変更を通知する `onChanged` コールバック、UI 再構築をトリガーする `setState` コールバックを受け取ります。
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // フィールドウィジェットを再構築
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+3 番目のパラメータは現在のフィールド値で、4 番目は `setState` です。ビルダーが `setState` を必要としない場合は、引き続きサポートされているレガシーの 3 引数シグネチャ（`NyFieldBuilderLegacy`）を使用できます:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### ウィジェットフィールド
@@ -704,7 +741,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — フィールドが空の場合にバリデーションを通過
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` はバリデーターをオプションとしてマークします。フィールドの値が null または空の場合、すべてのバリデーションルールがスキップされてフィールドがパスします。フィールドに値がある場合、すべてのルールが通常通り適用されます。任意の `FormValidator` の末尾にチェーンしてください。
 
 フォーム送信時、すべてのバリデーターがチェックされます。いずれかが失敗すると、最初のエラーメッセージのトーストエラーが表示され、`onFailure` コールバックが呼び出されます。
 

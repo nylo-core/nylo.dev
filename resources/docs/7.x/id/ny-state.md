@@ -72,7 +72,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
   get init => () async {
-    await sleep(3); // simulate a network call for 3 seconds
+    await sleep(3); // simulasi panggilan jaringan selama 3 detik
   };
 ```
 
@@ -93,7 +93,7 @@ Anda dapat mengubah gaya loading seperti ini:
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// atau
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -107,7 +107,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// same for skeletonizer
+// sama untuk skeletonizer
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -123,7 +123,7 @@ Contoh di bawah ini:
 ``` dart
 class _HomePageState extends NyState<HomePage> {
     get init => () async {
-        await sleep(3); // simulate a network call for 3 seconds
+        await sleep(3); // simulasi panggilan jaringan selama 3 detik
     };
 
     @override
@@ -156,7 +156,7 @@ class _MyWidgetState extends NyState<MyWidget> {
 
   @override
   get init => () async {
-    // handle how you want to initialize the state
+    // tangani cara Anda ingin menginisialisasi state
   };
 
   @override
@@ -165,7 +165,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // Contoh dengan data
       _userName = user.name;
       setState(() {});
     },
@@ -181,10 +181,10 @@ Kemudian, Anda dapat memanggil aksi dari kelas lain menggunakan method `stateAct
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Contoh lain dengan data
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// Contoh lain dengan data
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -193,11 +193,11 @@ Jika Anda menggunakan stateActions dengan `NyPage`, Anda harus menggunakan **pat
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// Contoh lain dengan data
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// Contoh lain dengan data
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -280,7 +280,7 @@ class _HomePageState extends NyState<HomePage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                reboot(); // refresh the data
+                reboot(); // segarkan data
               },
             )
           ],
@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Hapus halaman saat ini dari stack.
 
+Berikan `rootNavigator: true` untuk pop dari root navigator alih-alih navigator lokal terdekat. Ini berguna di dalam tab Navigation Hub ketika modal atau overlay didorong menggunakan root navigator.
+
 Contoh
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop dari root navigator (mis. untuk menutup modal di level root)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -748,7 +755,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   get init => () async {
-    _user = await api<ApiService>((request) => request.fetchUser()); // example
+    _user = await api<ApiService>((request) => request.fetchUser()); // contoh
     setState(() {});
   };
 

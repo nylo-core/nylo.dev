@@ -30,6 +30,7 @@
   - [Field Slider](#slider-fields "Field Slider")
   - [Field Range Slider](#range-slider-fields "Field Range Slider")
   - [Field Kustom](#custom-fields "Field Kustom")
+  - [Field Builder](#builder-fields "Field Builder")
   - [Field Widget](#widget-fields "Field Widget")
 - [FormCollection](#form-collection "FormCollection")
 - [Validasi Form](#form-validation "Validasi Form")
@@ -58,7 +59,7 @@
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// 1. Define a form
+// 1. Definisikan sebuah form
 class LoginForm extends NyFormWidget {
   LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
 
@@ -71,7 +72,7 @@ class LoginForm extends NyFormWidget {
   static NyFormActions get actions => const NyFormActions('LoginForm');
 }
 
-// 2. Display and submit it
+// 2. Tampilkan dan kirim
 LoginForm(
   submitButton: Button.primary(text: "Login"),
   onSubmit: (data) {
@@ -239,7 +240,7 @@ Tipe gaya: `FieldStyleTextField`
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// Angka desimal
 Field.number("Score", decimal: true)
 ```
 
@@ -252,7 +253,7 @@ Parameter `decimal` mengontrol apakah input desimal diizinkan. Tipe gaya: `Field
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// Dengan toggle visibilitas
 Field.password("Password", viewable: true)
 ```
 
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// Nonaktifkan tombol hapus
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// Ikon hapus kustom
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -379,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // Mengembalikan nilai yang diformat
 )
 ```
 
@@ -430,7 +431,7 @@ Field.picker("Category",
   options: FormCollection.from(["Electronics", "Clothing", "Books"]),
 )
 
-// With key-value pairs
+// Dengan pasangan key-value
 Field.picker("Country",
   options: FormCollection.fromMap({
     "us": "United States",
@@ -456,7 +457,7 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// Dengan warna aktif kustom
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
@@ -533,7 +534,7 @@ Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// Dengan pasangan key-value
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -597,6 +598,43 @@ Field.custom("My Field",
 
 Parameter `child` memerlukan widget yang meng-extend `NyFieldStatefulWidget`. Ini memberi Anda kontrol penuh atas rendering dan perilaku field.
 
+<div id="builder-fields"></div>
+
+### Field Builder
+
+<!-- uncertain: new Nylo-specific term "NyFieldBuilder" dan "NyFieldBuilderLegacy" — not seen in existing locale file -->
+Gunakan `Field.builder()` untuk membuat field form inline kustom tanpa men-subclass `NyFieldStatefulWidget`. Fungsi builder menerima nilai saat ini, callback `onChanged` untuk melaporkan perubahan nilai ke form, dan callback `setState` untuk memicu rebuild UI.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // rebuild widget field
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+Parameter ketiga adalah nilai field saat ini dan yang keempat adalah `setState`. Jika builder Anda tidak memerlukan `setState`, Anda dapat menggunakan tanda tangan 3-argumen legacy (`NyFieldBuilderLegacy`), yang masih didukung:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Field Widget
@@ -621,19 +659,19 @@ Field picker, radio, dan chip memerlukan `FormCollection` untuk opsi mereka. `Fo
 ### Membuat FormCollection
 
 ``` dart
-// From a list of strings (value and label are the same)
+// Dari daftar string (value dan label sama)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// Sama seperti di atas, eksplisit
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// Dari map (key = value, value = label)
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// Dari data terstruktur (berguna untuk respons API)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -673,10 +711,10 @@ options.labels;                    // ["United States", "Canada"]
 Tambahkan validasi ke field apa pun menggunakan parameter `validator` dengan `FormValidator`:
 
 ``` dart
-// Named constructor
+// Named constructor (konstruktor bernama)
 Field.email("Email", validator: FormValidator.email())
 
-// Chained rules
+// Aturan berantai
 Field.text("Username",
   validator: FormValidator()
     .notEmpty()
@@ -684,17 +722,17 @@ Field.text("Username",
     .maxLength(20)
 )
 
-// Password with strength level
+// Password dengan level kekuatan
 Field.password("Password",
   validator: FormValidator.password(strength: 2)
 )
 
-// Boolean validation
+// Validasi boolean
 Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// Validasi inline kustom
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,7 +742,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — validasi lolos ketika field kosong
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+Field yang ditandai `nullable()` akan melewati semua validasi jika nilainya kosong atau null. Ini berguna untuk field opsional yang hanya perlu divalidasi jika diisi.
 
 Saat form dikirim, semua validator diperiksa. Jika ada yang gagal, error toast menampilkan pesan error pertama dan callback `onFailure` dipanggil.
 
@@ -785,16 +830,16 @@ class CreatePostForm extends NyFormWidget {
 | `options` | Options untuk field picker, chip, atau radio |
 
 ``` dart
-// Set only options (no initial value)
+// Atur hanya options (tanpa nilai awal)
 "Category": define(options: categories),
 
-// Set only an initial value
+// Atur hanya nilai awal
 "Price": define(value: "100"),
 
-// Set both a value and options
+// Atur nilai dan options sekaligus
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// Nilai biasa tetap berfungsi untuk field sederhana
 "Name": "John",
 ```
 
@@ -818,7 +863,7 @@ EditAccountForm(
 Gunakan `NyFormActions` untuk mengatur nilai field dari mana saja:
 
 ``` dart
-// Set a single field value
+// Atur nilai field tunggal
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
@@ -841,7 +886,7 @@ Data form diakses melalui callback `onSubmit` saat form dikirim, atau melalui ca
 ``` dart
 EditAccountForm(
   onSubmit: (data) {
-    // data is a Map<String, dynamic>
+    // data adalah Map<String, dynamic>
     // {first_name: "Jane", last_name: "Doe", email: "jane@example.com"}
     print(data);
   },
@@ -856,10 +901,10 @@ EditAccountForm(
 ### Menghapus Data
 
 ``` dart
-// Clear all fields
+// Hapus semua field
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// Hapus field tertentu
 EditAccountForm.actions.clearField("First Name");
 ```
 
@@ -869,13 +914,13 @@ EditAccountForm.actions.clearField("First Name");
 ### Memperbarui Field
 
 ``` dart
-// Update a field value
+// Perbarui nilai field
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// Refresh UI form
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// Refresh field form (memanggil ulang fields())
 EditAccountForm.actions.refreshForm();
 ```
 
@@ -930,25 +975,25 @@ Tempatkan field berdampingan dengan membungkusnya dalam `List`:
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // Field tunggal (lebar penuh)
   Field.text("Title"),
 
-  // Two fields in a row
+  // Dua field dalam satu baris
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // Field tunggal lainnya
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // Slider dan range slider dalam satu baris
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // Sematkan widget non-field
   Field.widget(child: Divider()),
 
   Field.email("Email"),
@@ -965,13 +1010,13 @@ Field dalam `List` dirender dalam `Row` dengan lebar `Expanded` yang sama. Jarak
 Tampilkan atau sembunyikan field secara programatis menggunakan method `hide()` dan `show()` pada `Field`. Anda dapat mengakses field di dalam kelas form Anda atau melalui callback `onChanged`:
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// Di dalam subkelas NyFormWidget atau callback onChanged Anda
 Field nameField = ...;
 
-// Hide the field
+// Sembunyikan field
 nameField.hide();
 
-// Show the field
+// Tampilkan field
 nameField.show();
 ```
 
@@ -1047,15 +1092,15 @@ Field.chips("Tags",
 | `NyFormWidget.stateRefreshForm(name)` | Refresh field form (memanggil ulang `fields()`) |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// Kirim form bernama "LoginForm" dari mana saja
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// Perbarui nilai field dari jarak jauh
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// Hapus semua data form
 NyFormWidget.stateClearData("LoginForm");
 ```
 
@@ -1071,20 +1116,20 @@ Saat meng-extend `NyFormWidget`, ini adalah parameter konstruktor yang dapat And
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // Jarak horizontal antar field dalam baris
+  double mainAxisSpacing = 10,   // Jarak vertikal antar field
+  Map<String, dynamic>? initialData, // Nilai field awal
+  Function(Field field, dynamic value)? onChanged, // Callback perubahan field
+  Widget? header,                // Widget di atas form
+  Widget? submitButton,          // Widget tombol submit
+  Widget? footer,                // Widget di bawah form
+  double headerSpacing = 10,     // Jarak setelah header
+  double submitButtonSpacing = 10, // Jarak setelah tombol submit
+  double footerSpacing = 10,     // Jarak sebelum footer
+  LoadingStyle? loadingStyle,    // Gaya indikator loading
+  bool locked = false,           // Membuat form hanya-baca
+  Function(dynamic data)? onSubmit,   // Dipanggil dengan data form saat validasi berhasil
+  Function(dynamic error)? onFailure, // Dipanggil dengan error saat validasi gagal
 )
 ```
 
@@ -1132,13 +1177,13 @@ class LoginForm extends NyFormWidget {
 | `actions.submit(onSuccess:, onFailure:, showToastError:)` | Kirim dengan validasi |
 
 ``` dart
-// Update a field value
+// Perbarui nilai field
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// Hapus semua data form
 LoginForm.actions.clear();
 
-// Submit the form
+// Kirim form
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);
@@ -1184,5 +1229,6 @@ Method yang dapat Anda override di subkelas `NyFormWidget` Anda:
 | `Field.slider()` | -- | Slider nilai tunggal |
 | `Field.rangeSlider()` | -- | Slider nilai rentang |
 | `Field.custom()` | `child` (wajib `NyFieldStatefulWidget`) | Widget stateful kustom |
+| `Field.builder()` | `builder` (wajib `NyFieldBuilder` atau `NyFieldBuilderLegacy`) | Field inline kustom tanpa subclass |
 | `Field.widget()` | `child` (wajib `Widget`) | Sematkan widget apa pun (non-field) |
 

@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 La commande ci-dessus creera un nouveau widget s'il n'existe pas deja dans le repertoire `lib/resources/widgets/`.
 
+Toutes les commandes `make:*` acceptent un separateur de chemin dans le nom pour placer le fichier dans un sous-repertoire :
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Cela cree le widget dans `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Forcer la creation d'un widget stateless
@@ -432,6 +440,14 @@ metro make:event login_event
 
 Cela creera un nouvel evenement dans `lib/app/events`.
 
+Utilisez un separateur de chemin pour organiser l'evenement dans un sous-repertoire :
+
+``` bash
+metro make:event auth/login_event
+```
+
+Cela cree l'evenement dans `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Forcer la creation d'un evenement
@@ -462,6 +478,14 @@ metro make:provider firebase_provider
 ```
 
 Le provider nouvellement cree sera place dans `lib/app/providers/`.
+
+Utilisez un separateur de chemin pour organiser le provider dans un sous-repertoire :
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Cela cree le provider dans `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -525,6 +549,14 @@ metro make:form car_advert_form
 
 Cela creera un nouveau formulaire dans `lib/app/forms`.
 
+Utilisez un separateur de chemin pour organiser le formulaire dans un sous-repertoire :
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Cela cree le formulaire dans `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Forcer la creation d'un formulaire
@@ -555,6 +587,14 @@ metro make:route_guard premium_content
 ```
 
 Cela creera un nouveau garde de route dans `lib/app/route_guards`.
+
+Utilisez un separateur de chemin pour organiser le garde dans un sous-repertoire :
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Cela cree le garde dans `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -815,9 +855,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Commande Heure Actuelle
 ///
-/// Usage:
+/// Utilisation :
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -832,11 +872,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Obtenir l'heure actuelle
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Formater l'heure actuelle
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -896,12 +936,12 @@ Les options permettent a votre commande d'accepter des entrees supplementaires d
 @override
 CommandBuilder builder(CommandBuilder command) {
 
-  // Add an option with a default value
+  // Ajouter une option avec une valeur par defaut
   command.addOption(
-    'environment',     // option name
-    abbr: 'e',         // short form abbreviation
-    help: 'Target deployment environment', // help text
-    defaultValue: 'development',  // default value
+    'environment',     // nom de l'option
+    abbr: 'e',         // abreviation forme courte
+    help: 'Target deployment environment', // texte d'aide
+    defaultValue: 'development',  // valeur par defaut
     allowed: ['development', 'staging', 'production'] // allowed values
   );
 
@@ -917,7 +957,7 @@ Future<void> handle(CommandResult result) async {
   final environment = result.getString('environment');
   info('Deploying to $environment environment...');
 
-  // Command implementation...
+  // Implementation de la commande...
 }
 ```
 
@@ -925,7 +965,7 @@ Exemple d'utilisation :
 
 ```bash
 metro project:deploy --environment=production
-# or using abbreviation
+# ou en utilisant l'abreviation
 metro project:deploy -e production
 ```
 
@@ -940,9 +980,9 @@ Les flags sont des options booleennes qui peuvent etre activees ou desactivees. 
 CommandBuilder builder(CommandBuilder command) {
 
   command.addFlag(
-    'verbose',       // flag name
-    abbr: 'v',       // short form abbreviation
-    help: 'Enable verbose output', // help text
+    'verbose',       // nom du flag
+    abbr: 'v',       // abreviation forme courte
+    help: 'Enable verbose output', // texte d'aide
     defaultValue: false  // default to off
   );
 
@@ -959,10 +999,10 @@ Future<void> handle(CommandResult result) async {
 
   if (verbose) {
     info('Verbose mode enabled');
-    // Additional logging...
+    // Journalisation supplementaire...
   }
 
-  // Command implementation...
+  // Implementation de la commande...
 }
 ```
 
@@ -1038,13 +1078,13 @@ Vous pouvez egalement utiliser les methodes d'aide suivantes pour gerer les argu
 ### Execution de processus externes
 
 ```dart
-// Run a process with output displayed in the console
+// Executer un processus avec affichage de la sortie dans la console
 await runProcess('flutter build web --release');
 
-// Run a process silently
+// Executer un processus silencieusement
 await runProcess('flutter pub get', silent: true);
 
-// Run a process in a specific directory
+// Executer un processus dans un repertoire specifique
 await runProcess('git pull', workingDirectory: './my-project');
 ```
 
@@ -1054,13 +1094,13 @@ await runProcess('git pull', workingDirectory: './my-project');
 <div id="custom-command-helper-add-packages"></div>
 
 ```dart
-// Add a package to pubspec.yaml
+// Ajouter un package a pubspec.yaml
 addPackage('firebase_core', version: '^2.4.0');
 
-// Add a dev package to pubspec.yaml
+// Ajouter un package de dev a pubspec.yaml
 addPackage('build_runner', dev: true);
 
-// Add multiple packages at once
+// Ajouter plusieurs packages en une fois
 addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
@@ -1069,11 +1109,11 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ### Formatage de sortie
 
 ```dart
-// Print status messages with color coding
-info('Processing files...');    // Blue text
-error('Operation failed');      // Red text
-success('Deployment complete'); // Green text
-warning('Outdated package');    // Yellow text
+// Afficher des messages de statut avec codage couleur
+info('Processing files...');    // Texte bleu
+error('Operation failed');      // Texte rouge
+success('Deployment complete'); // Texte vert
+warning('Outdated package');    // Texte jaune
 ```
 
 <div id="interactive-input-methods"></div>
@@ -1123,10 +1163,10 @@ Pose une question oui/non a l'utilisateur et retourne un resultat booleen.
 **Exemple :**
 ```dart
 if (confirm('Would you like to continue?', defaultValue: true)) {
-  // User confirmed or pressed Enter (accepting the default)
+  // Utilisateur a confirme ou appuye sur Entree (acceptant la valeur par defaut)
   await runProcess('flutter pub get');
 } else {
-  // User declined
+  // Utilisateur a decline
   info('Operation canceled');
 }
 ```
@@ -1204,7 +1244,7 @@ Future<T?> api<T>(Future<T?> Function(ApiService) request) async
 ### Requete GET
 
 ```dart
-// Fetch data
+// Recuperer des donnees
 final userData = await api((request) =>
   request.get('https://api.example.com/users/1')
 );
@@ -1213,7 +1253,7 @@ final userData = await api((request) =>
 ### Requete POST
 
 ```dart
-// Create a resource
+// Creer une ressource
 final result = await api((request) =>
   request.post(
     'https://api.example.com/items',
@@ -1225,7 +1265,7 @@ final result = await api((request) =>
 ### Requete PUT
 
 ```dart
-// Update a resource
+// Mettre a jour une ressource
 final updateResult = await api((request) =>
   request.put(
     'https://api.example.com/items/42',
@@ -1237,14 +1277,14 @@ final updateResult = await api((request) =>
 ### Requete DELETE
 
 ```dart
-// Delete a resource
+// Supprimer une ressource
 final deleteResult = await api((request) => request.delete('https://api.example.com/items/42'));
 ```
 
 ### Requete PATCH
 
 ```dart
-// Partially update a resource
+// Mettre a jour partiellement une ressource
 final patchResult = await api((request) => request.patch(
     'https://api.example.com/items/42',
     data: {'price': 24.99}
@@ -1255,7 +1295,7 @@ final patchResult = await api((request) => request.patch(
 ### Avec des parametres de requete
 
 ```dart
-// Add query parameters
+// Ajouter des parametres de requete
 final searchResults = await api((request) => request.get(
     'https://api.example.com/search',
     queryParameters: {'q': 'keyword', 'limit': 10}
@@ -1266,11 +1306,11 @@ final searchResults = await api((request) => request.get(
 ### Avec Spinner
 
 ```dart
-// Using with spinner for better UI
+// Utiliser avec un spinner pour une meilleure interface
 final data = await withSpinner(
   task: () async {
     final data = await api((request) => request.get('https://api.example.com/config'));
-    // Process the data
+    // Traiter les donnees
   },
   message: 'Loading configuration',
 );
@@ -1314,10 +1354,10 @@ Future<T> withSpinner<T>({
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Run a task with a spinner
+  // Executer une tache avec un spinner
   final projectFiles = await withSpinner(
     task: () async {
-      // Long-running task (e.g., analyzing project files)
+      // Tache longue (ex. : analyse des fichiers du projet)
       await sleep(2);
       return ['pubspec.yaml', 'lib/main.dart', 'README.md'];
     },
@@ -1326,7 +1366,7 @@ Future<void> handle(CommandResult result) async {
     errorMessage: 'Failed to analyze project',
   );
 
-  // Continue with the results
+  // Continuer avec les resultats
   info('Found ${projectFiles.length} key files');
 }
 ```
@@ -1350,26 +1390,26 @@ ConsoleSpinner createSpinner(String message)
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a spinner instance
+  // Creer une instance de spinner
   final spinner = createSpinner('Deploying to production');
   spinner.start();
 
   try {
-    // First task
+    // Premiere tache
     await runProcess('flutter clean', silent: true);
     spinner.update('Building release version');
 
-    // Second task
+    // Deuxieme tache
     await runProcess('flutter build web --release', silent: true);
     spinner.update('Uploading to server');
 
-    // Third task
+    // Troisieme tache
     await runProcess('./deploy.sh', silent: true);
 
-    // Complete successfully
+    // Terminer avec succes
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
   } catch (e) {
-    // Handle failure
+    // Gerer l'echec
     spinner.stop(completionMessage: 'Deployment failed: $e', success: false);
     rethrow;
   }
@@ -1387,7 +1427,7 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   await withSpinner(
     task: () async {
-      // Install dependencies
+      // Installer les dependances
       await runProcess('flutter pub get', silent: true);
       return true;
     },
@@ -1402,19 +1442,19 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // First operation with spinner
+  // Premiere operation avec spinner
   await withSpinner(
     task: () => runProcess('flutter clean', silent: true),
     message: 'Cleaning project',
   );
 
-  // Second operation with spinner
+  // Deuxieme operation avec spinner
   await withSpinner(
     task: () => runProcess('flutter pub get', silent: true),
     message: 'Updating dependencies',
   );
 
-  // Third operation with spinner
+  // Troisieme operation avec spinner
   final buildSuccess = await withSpinner(
     task: () async {
       await runProcess('flutter build apk --release', silent: true);
@@ -1439,7 +1479,7 @@ Future<void> handle(CommandResult result) async {
   spinner.start();
 
   try {
-    // Run multiple steps with status updates
+    // Executer plusieurs etapes avec mises a jour du statut
     spinner.update('Step 1: Cleaning project');
     await runProcess('flutter clean', silent: true);
 
@@ -1449,7 +1489,7 @@ Future<void> handle(CommandResult result) async {
     spinner.update('Step 3: Building release');
     await runProcess('flutter build web --release', silent: true);
 
-    // Complete the process
+    // Finaliser le processus
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
 
   } catch (e) {
@@ -1582,28 +1622,28 @@ Au-dela des methodes basiques `info`, `error`, `success` et `warning`, `NyCustom
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Print plain text (no color)
+  // Afficher du texte brut (sans couleur)
   line('Processing your request...');
 
-  // Print blank lines
-  newLine();       // one blank line
-  newLine(3);      // three blank lines
+  // Afficher des lignes vides
+  newLine();       // une ligne vide
+  newLine(3);      // trois lignes vides
 
-  // Print a muted comment (gray text)
+  // Afficher un commentaire attenue (texte gris)
   comment('This is a background note');
 
-  // Print a prominent alert box
+  // Afficher une boite d'alerte proeminente
   alert('Important: Please read carefully');
 
-  // Ask is an alias for prompt
+  // Ask est un alias pour prompt
   final name = ask('What is your name?');
 
-  // Hidden input for sensitive data (e.g., passwords, API keys)
+  // Saisie masquee pour les donnees sensibles (ex. : mots de passe, cles API)
   final apiKey = promptSecret('Enter your API key:');
 
-  // Abort the command with an error message and exit code
+  // Annuler la commande avec un message d'erreur et un code de sortie
   if (name.isEmpty) {
-    abort('Name is required');  // exits with code 1
+    abort('Name is required');  // quitte avec le code 1
   }
 }
 ```
@@ -1629,38 +1669,38 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Check if a file exists
+  // Verifier si un fichier existe
   if (fileExists('lib/config/app.dart')) {
     info('Config file found');
   }
 
-  // Check if a directory exists
+  // Verifier si un repertoire existe
   if (directoryExists('lib/app/models')) {
     info('Models directory found');
   }
 
-  // Read a file (async)
+  // Lire un fichier (async)
   String content = await readFile('pubspec.yaml');
 
-  // Read a file (sync)
+  // Lire un fichier (sync)
   String contentSync = readFileSync('pubspec.yaml');
 
-  // Write to a file (async)
+  // Ecrire dans un fichier (async)
   await writeFile('lib/generated/output.dart', 'class Output {}');
 
-  // Write to a file (sync)
+  // Ecrire dans un fichier (sync)
   writeFileSync('lib/generated/output.dart', 'class Output {}');
 
-  // Append content to a file
+  // Ajouter du contenu a un fichier
   await appendFile('log.txt', 'New log entry\n');
 
-  // Ensure a directory exists (creates it if missing)
+  // S'assurer qu'un repertoire existe (le cree s'il est manquant)
   await ensureDirectory('lib/generated');
 
-  // Delete a file
+  // Supprimer un fichier
   await deleteFile('lib/generated/output.dart');
 
-  // Copy a file
+  // Copier un fichier
   await copyFile('lib/config/app.dart', 'lib/config/app.bak.dart');
 }
 ```
@@ -1687,27 +1727,27 @@ Lire et ecrire des fichiers JSON et YAML avec les helpers integres.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Read a JSON file as a Map
+  // Lire un fichier JSON comme une Map
   Map<String, dynamic> config = await readJson('config.json');
 
-  // Read a JSON file as a List
+  // Lire un fichier JSON comme une Liste
   List<dynamic> items = await readJsonArray('lib/app/commands/commands.json');
 
-  // Write data to a JSON file (pretty printed by default)
+  // Ecrire des donnees dans un fichier JSON (pretty-print par defaut)
   await writeJson('output.json', {'name': 'MyApp', 'version': '1.0.0'});
 
-  // Write compact JSON
+  // Ecrire du JSON compact
   await writeJson('output.json', data, pretty: false);
 
-  // Append an item to a JSON array file
-  // If the file contains [{"name": "a"}], this adds to that array
+  // Ajouter un element a un fichier JSON de type tableau
+  // Si le fichier contient [{"name": "a"}], ceci l'ajoute au tableau
   await appendToJsonArray(
     'lib/app/commands/commands.json',
     {'name': 'my_command', 'category': 'app', 'script': 'my_command.dart'},
     uniqueKey: 'name',  // prevents duplicates by this key
   );
 
-  // Read a YAML file as a Map
+  // Lire un fichier YAML comme une Map
   Map<String, dynamic> pubspec = await readYaml('pubspec.yaml');
   info('Project: ${pubspec['name']}');
 }
@@ -1770,7 +1810,7 @@ Future<void> handle(CommandResult result) async {
   info(networkingPath);   // lib/app/networking
   info(themesPath);       // lib/resources/themes
 
-  // Build a custom path relative to the project root
+  // Construire un chemin personnalise relatif a la racine du projet
   String customPath = projectPath('lib/app/services/auth_service.dart');
 }
 ```
@@ -1798,7 +1838,7 @@ Verifier la plateforme et acceder aux variables d'environnement.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Platform checks
+  // Verifications de plateforme
   if (isWindows) {
     info('Running on Windows');
   } else if (isMacOS) {
@@ -1807,10 +1847,10 @@ Future<void> handle(CommandResult result) async {
     info('Running on Linux');
   }
 
-  // Current working directory
+  // Repertoire de travail actuel
   info('Working in: $workingDirectory');
 
-  // Read system environment variables
+  // Lire les variables d'environnement systeme
   String home = env('HOME', '/default/path');
 }
 ```
@@ -1832,25 +1872,25 @@ Executer les commandes CLI courantes Dart et Flutter comme methodes d'aide. Chac
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Format a Dart file or directory
+  // Formater un fichier ou un repertoire Dart
   await dartFormat('lib/app/models/user.dart');
 
-  // Run dart analyze
+  // Executer dart analyze
   int analyzeResult = await dartAnalyze('lib/');
 
-  // Run flutter pub get
+  // Executer flutter pub get
   await flutterPubGet();
 
-  // Run flutter clean
+  // Executer flutter clean
   await flutterClean();
 
-  // Build for a target with additional args
+  // Construire pour une cible avec des arguments supplementaires
   await flutterBuild('apk', args: ['--release', '--split-per-abi']);
   await flutterBuild('web', args: ['--release']);
 
-  // Run flutter test
+  // Executer flutter test
   await flutterTest();
-  await flutterTest('test/unit/');  // specific directory
+  await flutterTest('test/unit/');  // repertoire specifique
 }
 ```
 
@@ -1872,26 +1912,26 @@ Helpers pour editer programmatiquement des fichiers Dart, utiles lors de la crea
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Add an import statement to a Dart file (avoids duplicates)
+  // Ajouter une instruction d'import a un fichier Dart (evite les doublons)
   await addImport(
     'lib/bootstrap/providers.dart',
     "import '/app/providers/firebase_provider.dart';",
   );
 
-  // Insert code before the last closing brace in a file
-  // Useful for adding entries to registration maps
+  // Inserer du code avant la derniere accolade fermante d'un fichier
+  // Utile pour ajouter des entrees dans les maps d'enregistrement
   await insertBeforeClosingBrace(
     'lib/bootstrap/providers.dart',
     '  FirebaseProvider(),',
   );
 
-  // Check if a file contains a specific string
+  // Verifier si un fichier contient une chaine specifique
   bool hasImport = await fileContains(
     'lib/bootstrap/providers.dart',
     'firebase_provider',
   );
 
-  // Check if a file matches a regex pattern
+  // Verifier si un fichier correspond a un pattern regex
   bool hasClass = await fileContainsPattern(
     'lib/app/models/user.dart',
     RegExp(r'class User'),
@@ -1915,32 +1955,32 @@ Helpers pour travailler avec des repertoires et trouver des fichiers.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // List directory contents
+  // Lister le contenu d'un repertoire
   var entities = listDirectory('lib/app/models');
   for (var entity in entities) {
     info(entity.path);
   }
 
-  // List recursively
+  // Lister recursivement
   var allEntities = listDirectory('lib/', recursive: true);
 
-  // Find files matching criteria
+  // Trouver des fichiers selon des criteres
   List<File> dartFiles = findFiles(
     'lib/app/models',
     extension: '.dart',
     recursive: true,
   );
 
-  // Find files by name pattern
+  // Trouver des fichiers par motif de nom
   List<File> testFiles = findFiles(
     'test/',
     namePattern: RegExp(r'_test\.dart$'),
   );
 
-  // Delete a directory recursively
+  // Supprimer un repertoire recursivement
   await deleteDirectory('build/');
 
-  // Copy a directory (recursive)
+  // Copier un repertoire (recursif)
   await copyDirectory('lib/templates', 'lib/generated');
 }
 ```
@@ -1961,21 +2001,21 @@ Helpers pour valider et nettoyer les saisies utilisateur pour la generation de c
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Validate a Dart identifier
+  // Valider un identifiant Dart
   if (!isValidDartIdentifier('MyClass')) {
     error('Invalid Dart identifier');
   }
 
-  // Require a non-empty first argument
+  // Exiger un premier argument non vide
   String name = requireArgument(result, message: 'Please provide a name');
 
-  // Clean a class name (PascalCase, remove suffixes)
+  // Nettoyer un nom de classe (PascalCase, supprimer les suffixes)
   String className = cleanClassName('user_model', removeSuffixes: ['_model']);
-  // Returns: 'User'
+  // Retourne : 'User'
 
-  // Clean a file name (snake_case with extension)
+  // Nettoyer un nom de fichier (snake_case avec extension)
   String fileName = cleanFileName('UserModel', extension: '.dart');
-  // Returns: 'user_model.dart'
+  // Retourne : 'user_model.dart'
 }
 ```
 
@@ -2142,13 +2182,13 @@ Afficher une barre de progression pour les operations avec un nombre d'elements 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a progress bar for 100 items
+  // Creer une barre de progression pour 100 elements
   final progress = progressBar(100, message: 'Processing files');
   progress.start();
 
   for (int i = 0; i < 100; i++) {
     await Future.delayed(Duration(milliseconds: 50));
-    progress.tick();  // increment by 1
+    progress.tick();  // incrementer de 1
   }
 
   progress.complete('All files processed');
@@ -2162,11 +2202,11 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   final files = findFiles('lib/', extension: '.dart');
 
-  // Process items with automatic progress tracking
+  // Traiter les elements avec suivi automatique de progression
   final results = await withProgress<File, String>(
     items: files,
     process: (file, index) async {
-      // process each file
+      // traiter chaque fichier
       return file.path;
     },
     message: 'Analyzing Dart files',
@@ -2187,7 +2227,7 @@ Future<void> handle(CommandResult result) async {
   final results = withProgressSync<String, String>(
     items: items,
     process: (item, index) {
-      // synchronous processing
+      // traitement synchrone
       return item.toUpperCase();
     },
     message: 'Converting items',

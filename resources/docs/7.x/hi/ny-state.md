@@ -72,7 +72,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
   get init => () async {
-    await sleep(3); // simulate a network call for 3 seconds
+    await sleep(3); // 3 सेकंड के लिए नेटवर्क कॉल सिमुलेट करें
   };
 ```
 
@@ -93,7 +93,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// या
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -107,7 +107,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// same for skeletonizer
+// skeletonizer के लिए भी समान
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -123,7 +123,7 @@ LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
 ``` dart
 class _HomePageState extends NyState<HomePage> {
     get init => () async {
-        await sleep(3); // simulate a network call for 3 seconds
+        await sleep(3); // 3 सेकंड के लिए नेटवर्क कॉल सिमुलेट करें
     };
 
     @override
@@ -156,7 +156,7 @@ class _MyWidgetState extends NyState<MyWidget> {
 
   @override
   get init => () async {
-    // handle how you want to initialize the state
+    // state को initialize करने का तरीका हैंडल करें
   };
 
   @override
@@ -165,7 +165,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // डेटा के साथ उदाहरण
       _userName = user.name;
       setState(() {});
     },
@@ -181,10 +181,10 @@ class _MyWidgetState extends NyState<MyWidget> {
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// डेटा के साथ एक और उदाहरण
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// डेटा के साथ एक और उदाहरण
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -193,11 +193,11 @@ stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// डेटा के साथ एक और उदाहरण
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// डेटा के साथ एक और उदाहरण
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -280,7 +280,7 @@ class _HomePageState extends NyState<HomePage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                reboot(); // refresh the data
+                reboot(); // डेटा रिफ्रेश करें
               },
             )
           ],
@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - स्टैक से वर्तमान पेज हटाएँ।
 
+रूट नेविगेटर से पॉप करने के लिए `rootNavigator: true` पास करें, न कि निकटतम लोकल नेविगेटर से। यह तब उपयोगी है जब Navigation Hub टैब्स के अंदर कोई मॉडल या ओवरले रूट नेविगेटर का उपयोग करके पुश किया गया हो।
+
 उदाहरण
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // रूट नेविगेटर से पॉप करें (उदा. रूट-लेवल मॉडल को बंद करने के लिए)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -748,7 +755,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   get init => () async {
-    _user = await api<ApiService>((request) => request.fetchUser()); // example
+    _user = await api<ApiService>((request) => request.fetchUser()); // उदाहरण
     setState(() {});
   };
 

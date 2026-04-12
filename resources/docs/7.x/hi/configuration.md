@@ -10,6 +10,7 @@
   - [वैल्यूज़ प्राप्त करना](#retrieving-values "वैल्यूज़ प्राप्त करना")
   - [कॉन्फ़िग क्लासेज़ बनाना](#creating-config-classes "कॉन्फ़िग क्लासेज़ बनाना")
   - [वेरिएबल टाइप्स](#variable-types "वेरिएबल टाइप्स")
+  - [वेरिएबल इंटरपोलेशन](#variable-interpolation "वेरिएबल इंटरपोलेशन")
 - [एनवायरनमेंट फ्लेवर्स](#environment-flavours "एनवायरनमेंट फ्लेवर्स")
 - [बिल्ड-टाइम इंजेक्शन](#build-time-injection "बिल्ड-टाइम इंजेक्शन")
 
@@ -32,7 +33,7 @@
 आपके प्रोजेक्ट रूट पर `.env` फ़ाइल में आपके कॉन्फ़िगरेशन वेरिएबल्स होते हैं:
 
 ``` bash
-# Environment configuration
+# एनवायरनमेंट कॉन्फ़िगरेशन
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ metro make:env
 metro make:env
 ```
 
-`--force` फ्लैग मौजूदा `env.g.dart` को ओवरराइट करता है।
+यह हमेशा मौजूदा `env.g.dart` को ओवरराइट करता है।
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 फिर अपने ऐप कोड में, config क्लास के माध्यम से वैल्यूज़ एक्सेस करें:
 
 ``` dart
-// Anywhere in your app
+// आपके ऐप में कहीं भी
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ metro make:config RevenueCat
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // यहाँ अपनी config वैल्यूज़ जोड़ें
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// RevenueCat इनिशियलाइज़ करें
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// एंटाइटलमेंट जाँचें
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // प्रीमियम एक्सेस दें
 }
 ```
 
@@ -201,6 +202,30 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 | `EMPTY=""` | `String` | `""` (खाली स्ट्रिंग) |
 
 
+<div id="variable-interpolation"></div>
+
+## वेरिएबल इंटरपोलेशन
+
+आपकी `.env` फ़ाइल में स्ट्रिंग वैल्यूज़ `${VAR_NAME}` सिंटैक्स का उपयोग करके अन्य वेरिएबल्स को रेफ़र कर सकती हैं:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+जब आपका कोड `getEnv('APP_URL')` कॉल करता है, तो रिटर्न की गई वैल्यू `https://myapp.com` होती है। रेफ़रेंस रिकर्सिवली रिज़ॉल्व होते हैं, इसलिए चेन किए गए रेफ़रेंस भी अपेक्षित रूप से काम करते हैं:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` रिटर्न करता है `https://example.com/uploads`।
+
+सर्कुलर रेफ़रेंस से सुरक्षा है — यदि कोई वेरिएबल खुद को रेफ़र करता है (सीधे या चेन के माध्यम से), तो अनरिज़ॉल्व्ड `${VAR_NAME}` प्लेसहोल्डर आउटपुट में रखा जाता है बजाय इनफ़िनिट लूप के।
+
 <div id="environment-flavours"></div>
 
 ## एनवायरनमेंट फ्लेवर्स
@@ -212,9 +237,9 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 अलग-अलग `.env` फ़ाइलें बनाएँ:
 
 ``` bash
-.env                  # Development (default)
-.env.staging          # Staging
-.env.production       # Production
+.env                  # डेवलपमेंट (डिफ़ॉल्ट)
+.env.staging          # स्टेजिंग
+.env.production       # प्रोडक्शन
 ```
 
 `.env.production` का उदाहरण:
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 किसी विशिष्ट env फ़ाइल से जेनरेट करें:
 
 ``` bash
-# For production
+# प्रोडक्शन के लिए
 metro make:env --file=".env.production"
 
-# For staging
+# स्टेजिंग के लिए
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 उपयुक्त कॉन्फ़िगरेशन के साथ बिल्ड करें:
 
 ``` bash
-# Development
+# डेवलपमेंट
 flutter run
 
-# Production build
+# प्रोडक्शन बिल्ड
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -274,10 +299,10 @@ metro make:env --dart-define
 # iOS
 flutter build ios --dart-define=APP_KEY=your-secret-key
 
-# Android
+# एंड्रॉइड
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# रन करें
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

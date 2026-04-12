@@ -10,6 +10,7 @@
   - [Estilizar marcadores de posicion](#styling-placeholders "Estilizar marcadores de posicion")
   - [Callbacks de toque](#tap-callbacks "Callbacks de toque")
   - [Claves separadas por pipe](#pipe-keys "Claves separadas por pipe")
+  - [Estilos con comodin](#wildcard-styles "Estilos con comodin")
   - [Claves de localizacion](#localization-keys "Claves de localizacion")
 - [Parametros](#parameters "Parametros")
 - [Extensiones de texto](#text-extensions "Extensiones de texto")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 Esto mapea el mismo estilo y callback a los tres marcadores de posicion.
+
+<div id="wildcard-styles"></div>
+
+### Estilos con comodin
+
+Usa `"*"` como clave para aplicar un estilo o callback de toque a cada marcador de posicion que no tenga su propia clave especifica:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Tanto `name` como `app` reciben el estilo comodin. Si un marcador de posicion tambien tiene una clave explicita, la clave explicita tiene prioridad sobre `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // se aplica solo a "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // toque en cualquier marcador sin coincidencia
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

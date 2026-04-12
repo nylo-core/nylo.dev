@@ -80,6 +80,7 @@ O `loadingStyle` **padrao** sera o seu Widget de carregamento (resources/widgets
 Voce pode personalizar o `loadingStyle` para atualizar o estilo de carregamento.
 
 Aqui esta uma tabela com os diferentes estilos de carregamento que voce pode usar:
+// normal, skeletonizer, none
 
 | Estilo | Descricao |
 | --- | --- |
@@ -301,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Remove a pagina atual da pilha.
 
+Passe `rootNavigator: true` para fazer pop do navigator raiz em vez do navigator local mais proximo. Isso e util dentro das abas do Navigation Hub quando um modal ou overlay foi empurrado usando o navigator raiz.
+
 Exemplo
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop do navigator raiz (ex.: para dispensar um modal no nivel raiz)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

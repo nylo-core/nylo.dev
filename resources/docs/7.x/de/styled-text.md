@@ -10,6 +10,8 @@
   - [Platzhalter stylen](#styling-placeholders "Platzhalter stylen")
   - [Tipp-Callbacks](#tap-callbacks "Tipp-Callbacks")
   - [Pipe-getrennte Schluessel](#pipe-keys "Pipe-getrennte Schluessel")
+  - [Platzhalter mit Wildcards](#wildcard-styles "Platzhalter mit Wildcards")
+  - [Lokalisierungsschluessel](#localization-keys "Lokalisierungsschluessel")
 - [Parameter](#parameters "Parameter")
 - [Text-Erweiterungen](#text-extensions "Text-Erweiterungen")
   - [Typografie-Stile](#typography-styles "Typografie-Stile")
@@ -32,7 +34,7 @@ StyledText unterstuetzt zwei Modi:
 ## Grundlegende Verwendung
 
 ``` dart
-// Children mode - list of Text widgets
+// Children-Modus - Liste von Text-Widgets
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Template-Modus - Platzhalter-Syntax
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 Dies ordnet allen drei Platzhaltern denselben Stil und Callback zu.
 
+<div id="wildcard-styles"></div>
+
+### Platzhalter mit Wildcards
+
+Verwenden Sie `"*"` als Schluessel, um einen Stil oder Tipp-Callback auf jeden Platzhalter anzuwenden, der keinen eigenen spezifischen Schluessel hat:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Sowohl `name` als auch `app` erhalten den Wildcard-Stil. Wenn ein Platzhalter auch einen expliziten Schluessel hat, hat der explizite Schluessel Vorrang vor `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // gilt nur fuer "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // Tipp auf jeden ungematchten Platzhalter
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### Lokalisierungsschluessel
+
+Verwenden Sie die Syntax `@{{key:text}}`, um den **Nachschlageschluessel** vom **Anzeigetext** zu trennen. Dies ist nuetzlich fuer die Lokalisierung — der Schluessel bleibt ueber alle Sprachen hinweg gleich, waehrend sich der Anzeigetext pro Sprache aendert.
+
+``` dart
+// In Ihren Sprachdateien:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN rendert: "Learn Languages, Reading and Speaking in AppName"
+// ES rendert: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+Der Teil vor `:` ist der **Schluessel**, der zum Nachschlagen von Stilen und Tipp-Callbacks verwendet wird. Der Teil nach `:` ist der **Anzeigetext**, der auf dem Bildschirm dargestellt wird. Ohne `:` verhaelt sich der Platzhalter genau wie bisher — vollstaendig abwaertskompatibel.
+
+Dies funktioniert mit allen bestehenden Funktionen einschliesslich [Pipe-getrennte Schluessel](#pipe-keys) und [Tipp-Callbacks](#tap-callbacks).
+
 <div id="parameters"></div>
 
 ## Parameter
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Hilfsmethoden
 
 ``` dart
-// Font weight
+// Schriftstaerke
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Ausrichtung
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Maximale Zeilenanzahl
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Schriftfamilie
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Schriftgroesse
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Benutzerdefinierter Stil
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// Innenabstand
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Kopieren mit Aenderungen
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

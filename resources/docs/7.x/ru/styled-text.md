@@ -10,6 +10,7 @@
   - [Стилизация плейсхолдеров](#styling-placeholders "Стилизация плейсхолдеров")
   - [Обратные вызовы нажатий](#tap-callbacks "Обратные вызовы нажатий")
   - [Ключи через разделитель Pipe](#pipe-keys "Ключи через разделитель Pipe")
+  - [Стили Wildcard](#wildcard-styles "Стили Wildcard")
   - [Ключи локализации](#localization-keys "Ключи локализации")
 - [Параметры](#parameters "Параметры")
 - [Расширения Text](#text-extensions "Расширения Text")
@@ -33,7 +34,7 @@ StyledText поддерживает два режима:
 ## Базовое использование
 
 ``` dart
-// Children mode - list of Text widgets
+// Режим children - список виджетов Text
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -41,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Режим template - синтаксис плейсхолдеров
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -173,6 +174,36 @@ StyledText.template(
 
 Это сопоставляет один и тот же стиль и обратный вызов со всеми тремя плейсхолдерами.
 
+<div id="wildcard-styles"></div>
+
+### Стили Wildcard
+
+Используйте `"*"` в качестве ключа для применения стиля или обратного вызова нажатия к любому плейсхолдеру, у которого нет собственного конкретного ключа:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+И `name`, и `app` получают стиль wildcard. Если у плейсхолдера также есть явный ключ, явный ключ имеет приоритет над `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // применяется только к "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // нажатие на любой плейсхолдер без соответствия
+  },
+)
+```
+
 <div id="localization-keys"></div>
 
 ### Ключи локализации
@@ -180,7 +211,7 @@ StyledText.template(
 Используйте синтаксис `@{{key:text}}` для разделения **ключа поиска** и **отображаемого текста**. Это полезно для локализации --- ключ остаётся одинаковым для всех локалей, а отображаемый текст меняется в зависимости от языка.
 
 ``` dart
-// In your locale files:
+// В ваших файлах локали:
 // en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
 // es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
 
@@ -197,8 +228,8 @@ StyledText.template(
     "app": () => routeTo("/about"),
   },
 )
-// EN renders: "Learn Languages, Reading and Speaking in AppName"
-// ES renders: "Aprende Idiomas, Lectura y Habla en AppName"
+// EN отображает: "Learn Languages, Reading and Speaking in AppName"
+// ES отображает: "Aprende Idiomas, Lectura y Habla en AppName"
 ```
 
 Часть перед `:` --- это **ключ**, используемый для поиска стилей и обратных вызовов нажатий. Часть после `:` --- это **отображаемый текст**, который рендерится на экране. Без `:` плейсхолдер работает точно так же, как и раньше --- полная обратная совместимость.
@@ -303,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Утилитарные методы
 
 ``` dart
-// Font weight
+// Насыщенность шрифта
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Выравнивание
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Максимальное количество строк
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Семейство шрифтов
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Размер шрифта
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Пользовательский стиль
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// Отступ
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Копировать с изменениями
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

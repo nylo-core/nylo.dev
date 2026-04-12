@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [Widget Connective](#connective-widget "Widget Connective")
-    - [Constructeurs bases sur l'etat](#state-builders "Constructeurs bases sur l'etat")
     - [Constructeur personnalise](#custom-builder "Constructeur personnalise")
 - [Widget OfflineBanner](#offline-banner "Widget OfflineBanner")
 - [Helper NyConnectivity](#connectivity-helper "Helper NyConnectivity")
@@ -25,39 +24,22 @@
 
 Le widget `Connective` ecoute les changements de connectivite et se reconstruit en fonction de l'etat actuel du reseau.
 
-<div id="state-builders"></div>
-
-### Constructeurs bases sur l'etat
-
-Fournissez differents widgets pour chaque type de connexion :
+Utilisez `noInternet` pour afficher un widget de secours lorsque l'appareil n'a pas d'internet (wifi, mobile et ethernet tous absents) :
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### Etats disponibles
-
-| Propriete | Description |
-|----------|-------------|
-| `onWifi` | Widget lorsque connecte via WiFi |
-| `onMobile` | Widget lorsque connecte via donnees mobiles |
-| `onEthernet` | Widget lorsque connecte via Ethernet |
-| `onVpn` | Widget lorsque connecte via VPN |
-| `onBluetooth` | Widget lorsque connecte via Bluetooth |
-| `onOther` | Widget pour les autres types de connexion |
-| `onNone` | Widget lorsque hors ligne |
-| `child` | Widget par defaut si aucun gestionnaire specifique n'est fourni |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Afficher le type de connexion
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 Le constructeur recoit :
 - `context` - BuildContext
-- `state` - enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` pour verifier plusieurs connexions
 
 ### Ecouter les changements
@@ -117,16 +99,16 @@ Connective(
 
 ## Widget OfflineBanner
 
-Affichez une banniere en haut de l'ecran lorsque hors ligne :
+Affichez une banniere en haut de l'ecran lorsqu'il n'y a pas d'internet (wifi, mobile et ethernet tous absents) :
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Votre contenu principal
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Banniere hors ligne (se masque automatiquement en ligne)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Animation de glissement entree/sortie
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ La classe `NyConnectivity` fournit des methodes statiques pour verifier la conne
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // Effectuer une requete API
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Charger depuis le cache
   final data = await cache.getData();
 }
 
-// Or check if offline
+// Ou verifier si hors ligne
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,32 +156,43 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // Telecharger des fichiers volumineux sur WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Avertir de la consommation de donnees
   showDataWarning();
 }
 
-// Other methods:
+// Autres methodes :
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### Verifier l'acces internet
+
+`hasInternet()` est plus strict que `isOnline()` — il ne retourne `true` que lorsque l'appareil est connecte via wifi, mobile ou ethernet. Les connexions VPN, bluetooth et satellite sont exclues.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Acces internet confirme via wifi, mobile ou ethernet
+  await syncData();
+}
+```
+
 ### Obtenir l'etat actuel
 
 ``` dart
-// Get all active connection types
+// Obtenir tous les types de connexion actifs
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Obtenir une chaine lisible
 String type = await NyConnectivity.connectionTypeString();
 print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
 ```
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// N'oubliez pas d'annuler lorsque vous avez termine
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### Execution conditionnelle
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Executer uniquement en ligne (retourne null si hors ligne)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Executer differents callbacks selon l'etat
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ Ajoutez rapidement la sensibilite a la connectivite a n'importe quel widget :
 ### Afficher une alternative hors ligne
 
 ``` dart
-// Show a different widget when offline
+// Afficher un widget different lorsque hors ligne
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### Afficher uniquement en ligne
 
 ``` dart
-// Hide completely when offline
+// Masquer completement lorsque hors ligne
 SyncButton().onlyOnline()
 ```
 
 ### Afficher uniquement hors ligne
 
 ``` dart
-// Show only when offline
+// Afficher uniquement lorsque hors ligne
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Parametre | Type | Par defaut | Description |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Widget lorsque sur WiFi |
-| `onMobile` | `Widget?` | - | Widget lorsque sur donnees mobiles |
-| `onEthernet` | `Widget?` | - | Widget lorsque sur Ethernet |
-| `onVpn` | `Widget?` | - | Widget lorsque sur VPN |
-| `onBluetooth` | `Widget?` | - | Widget lorsque sur Bluetooth |
-| `onOther` | `Widget?` | - | Widget pour d'autres connexions |
-| `onNone` | `Widget?` | - | Widget lorsque hors ligne |
-| `child` | `Widget?` | - | Widget par defaut |
-| `showLoadingOnInit` | `bool` | `false` | Afficher le chargement pendant la verification |
-| `loadingWidget` | `Widget?` | - | Widget de chargement personnalise |
+| `noInternet` | `Widget?` | - | Widget lorsque wifi, mobile et ethernet sont tous absents |
+| `child` | `Widget?` | - | Widget lorsqu'internet est disponible |
 | `onConnectivityChanged` | `Function?` | - | Callback lors du changement |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Connecte via Ethernet |
 | `vpn` | Connecte via VPN |
 | `bluetooth` | Connecte via Bluetooth |
+| `satellite` | Connecte via satellite |
 | `other` | Autre type de connexion |
 | `none` | Aucune connexion |

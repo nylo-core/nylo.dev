@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | Tham số | Kiểu | Mô tả |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Callback dữ liệu phân trang (iteration bắt đầu từ 1) |
+| `enablePullDown` | `bool` | Bật cử chỉ kéo-xuống-để-làm-mới (mặc định: `true`) |
 | `onRefresh` | `Function()?` | Callback sau khi làm mới |
 | `beforeRefresh` | `Function()?` | Hook trước khi bắt đầu làm mới |
 | `afterRefresh` | `Function(dynamic)?` | Hook sau khi làm mới với dữ liệu |
 | `headerStyle` | `String?` | Tên kiểu header (ví dụ: `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | Chỉ báo tải tùy chỉnh cho footer |
+
+Để làm mới `CollectionView.pullable` theo chương trình, sử dụng `CollectionView.stateActions(stateName).refreshData()`. Thao tác này tải lại dữ liệu và đặt lại vòng lặp phân trang về 1 để danh sách bắt đầu lại từ trang đầu tiên.
 
 <div id="examples"></div>
 

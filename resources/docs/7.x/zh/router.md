@@ -62,7 +62,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(PostDetailPage.path);
 
-  // add more routes
+  // 添加更多路由
   // router.add(AccountPage.path);
 
 });
@@ -77,7 +77,7 @@ metro make:page account_page
 ```
 
 ``` dart
-// Adds your new route automatically to /lib/routes/router.dart
+// 自动将新路由添加到 /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
   ...
   router.add(AccountPage.path);
@@ -109,7 +109,7 @@ appRouter() => nyRoutes((router) {
   ...
   router.add(HomePage.path).initialRoute();
 
-  // My new route
+  // 新路由
   router.add(ProfilePage.path);
 });
 ```
@@ -141,7 +141,7 @@ appRouter() => nyRoutes((router) {
   router.add(SettingsPage.path);
 
   router.add(ProfilePage.path).initialRoute();
-  // new initial route
+  // 新的初始路由
 });
 ```
 
@@ -186,7 +186,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(SettingsPage.path);
 
-  router.add(ProfilePage.path).previewRoute(); // This will be shown first during development
+  router.add(ProfilePage.path).previewRoute(); // 开发期间将首先显示此路由
 });
 ```
 
@@ -216,7 +216,7 @@ appRouter() => nyRoutes((router) {
   router.add(LoginPage.path);
 
   router.add(ProfilePage.path).authenticatedRoute();
-  // auth page
+  // 认证页面
 });
 ```
 
@@ -287,9 +287,9 @@ appRouter() => nyRoutes((router) {
 
   router.add(DashboardPage.path,
     routeGuards: [
-      DashboardRouteGuard() // Add your guard
+      DashboardRouteGuard() // 添加守卫
     ]
-  ); // restricted page
+  ); // 受限页面
 });
 ```
 
@@ -301,7 +301,7 @@ appRouter() => nyRoutes((router) {
     router.add(DashboardPage.path)
             .addRouteGuard(MyRouteGuard());
 
-    // or add multiple guards
+    // 或添加多个守卫
 
     router.add(DashboardPage.path)
             .addRouteGuards([MyRouteGuard(), MyOtherRouteGuard()]);
@@ -326,7 +326,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    // Perform a check if they can access the page
+    // 检查用户是否可以访问此页面
     bool userLoggedIn = await Auth.isAuthenticated();
 
     if (userLoggedIn == false) {
@@ -338,7 +338,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<void> onAfter(RouteContext context) async {
-    // Track page view after successful navigation
+    // 成功导航后跟踪页面访问
     Analytics.trackPageView(context.routeName);
   }
 }
@@ -378,7 +378,7 @@ Future<GuardResult> onBefore(RouteContext context) async {
 ``` dart
 @override
 Future<GuardResult> onBefore(RouteContext context) async {
-  return next(); // Allow navigation to continue
+  return next(); // 允许导航继续
 }
 ```
 
@@ -420,7 +420,7 @@ Future<GuardResult> onBefore(RouteContext context) async {
 Future<GuardResult> onBefore(RouteContext context) async {
   if (isMaintenanceMode) {
     showMaintenanceDialog();
-    return abort(); // User stays on current route
+    return abort(); // 用户停留在当前路由
   }
   return next();
 }
@@ -459,7 +459,7 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
   }
 }
 
-// Usage:
+// 用法：
 router.add(AdminPage.path, routeGuards: [
   RoleGuard(['admin', 'moderator'])
 ]);
@@ -472,7 +472,7 @@ router.add(AdminPage.path, routeGuards: [
 使用 `GuardStack` 将多个守卫组合成一个可重用的守卫：
 
 ``` dart
-// Create reusable guard combinations
+// 创建可复用的守卫组合
 final adminGuards = GuardStack([
   AuthGuard(),
   RoleGuard(['admin']),
@@ -507,18 +507,18 @@ router.add(DashboardPage.path, routeGuards: [
 从您的 Widget 中，使用 `routeTo` 辅助函数并传递要发送到新页面的 `data`。
 
 ``` dart
-// HomePage Widget
+// HomePage Widget（首页组件）
 void _pressedSettings() {
     routeTo(SettingsPage.path, data: "Hello World");
 }
 ...
-// SettingsPage Widget (other page)
+// SettingsPage Widget（其他页面组件）
 class _SettingsPageState extends NyPage<SettingsPage> {
   ...
   @override
   get init => () {
     print(widget.data()); // Hello World
-    // or
+    // 或者
     print(data()); // Hello World
   };
 ```
@@ -526,7 +526,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 更多示例
 
 ``` dart
-// Home page widget
+// 首页组件
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -538,7 +538,7 @@ class _HomePageState extends NyPage<HomePage> {
 
 ...
 
-// Profile page widget (other page)
+// 个人资料页组件（其他页面）
 class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
@@ -630,17 +630,17 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 让我们看一下。
 
 ```dart
-  // Home page
+  // 首页
   routeTo(ProfilePage.path, queryParameters: {"user": "7"});
-  // navigate to profile page
+  // 导航到个人资料页
 
   ...
 
-  // Profile Page
+  // 个人资料页
   @override
   get init => () {
     print(widget.queryParameters()); // {"user": 7}
-    // or
+    // 或者
     print(queryParameters()); // {"user": 7}
   };
 ```
@@ -648,11 +648,11 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 > **注意：** 只要您的页面 Widget 扩展了 `NyStatefulWidget` 和 `NyPage` 类，您就可以调用 `widget.queryParameters()` 来获取路由名称中的所有查询参数。
 
 ```dart
-// Example page
+// 示例页面
 routeTo(ProfilePage.path, queryParameters: {"hello": "world", "say": "I love code"});
 ...
 
-// Home page
+// 首页
 class MyHomePage extends NyStatefulWidget<HomeController> {
   ...
 }
@@ -662,7 +662,7 @@ class _MyHomePageState extends NyPage<MyHomePage> {
   @override
   get init => () {
     widget.queryParameters(); // {"hello": "World", "say": "I love code"}
-    // or
+    // 或者
     queryParameters(); // {"hello": "World", "say": "I love code"}
   };
 ```
@@ -681,12 +681,12 @@ import 'package:page_transition/page_transition.dart';
 
 appRouter() => nyRoutes((router) {
 
-  // bottomToTop
+  // 从下到上
   router.add(SettingsPage.path,
     transitionType: TransitionType.bottomToTop()
   );
 
-  // fade
+  // 淡入淡出
   router.add(HomePage.path,
     transitionType: TransitionType.fade()
   );
@@ -745,7 +745,7 @@ appRouter() => nyRoutes((router) {
 
 
 ``` dart
-// Home page widget
+// 首页组件
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -772,7 +772,7 @@ class _HomePageState extends NyPage<HomePage> {
 | `NavigationType.pushAndForgetAll` | 推入新页面并释放路由栈上的所有其他页面 |
 
 ``` dart
-// Home page widget
+// 首页组件
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -792,12 +792,12 @@ class _HomePageState extends NyPage<HomePage> {
 在新页面上，您可以使用 `pop()` 辅助函数返回到上一个页面。
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage Widget（设置页面组件）
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
     pop();
-    // or
+    // 或者
     Navigator.pop(context);
   }
 ...
@@ -806,7 +806,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 如果您想向上一个组件返回一个值，请提供一个 `result`，如下面的示例所示。
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage Widget（设置页面组件）
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
@@ -815,8 +815,8 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 
 ...
 
-// Get the value from the previous widget using the `onPop` parameter
-// HomePage Widget
+// 使用 `onPop` 参数从上一个组件获取返回值
+// 首页组件
 class _HomePageState extends NyPage<HomePage> {
 
   _viewSettings() {
@@ -835,10 +835,10 @@ class _HomePageState extends NyPage<HomePage> {
 使用 `routeIf()` 仅在满足条件时导航：
 
 ``` dart
-// Only navigate if the user is logged in
+// 仅在用户已登录时导航
 routeIf(isLoggedIn, DashboardPage.path);
 
-// With additional options
+// 附加选项
 routeIf(
   hasPermission('view_reports'),
   ReportsPage.path,
@@ -857,25 +857,25 @@ routeIf(
 在 {{ config('app.name') }} 中，您可以使用以下辅助函数访问路由历史信息。
 
 ``` dart
-// Get route history
+// 获取路由历史
 Nylo.getRouteHistory(); // List<dynamic>
 
-// Get the current route
+// 获取当前路由
 Nylo.getCurrentRoute(); // Route<dynamic>?
 
-// Get the previous route
+// 获取上一个路由
 Nylo.getPreviousRoute(); // Route<dynamic>?
 
-// Get the current route name
+// 获取当前路由名称
 Nylo.getCurrentRouteName(); // String?
 
-// Get the previous route name
+// 获取上一个路由名称
 Nylo.getPreviousRouteName(); // String?
 
-// Get the current route arguments
+// 获取当前路由参数
 Nylo.getCurrentRouteArguments(); // dynamic
 
-// Get the previous route arguments
+// 获取上一个路由参数
 Nylo.getPreviousRouteArguments(); // dynamic
 ```
 
@@ -887,14 +887,14 @@ Nylo.getPreviousRouteArguments(); // dynamic
 您可以使用 `NyNavigator.updateStack()` 以编程方式更新导航栈：
 
 ``` dart
-// Update the stack with a list of routes
+// 用路由列表更新路由栈
 NyNavigator.updateStack([
   HomePage.path,
   SettingsPage.path,
   ProfilePage.path,
 ], replace: true);
 
-// Pass data to specific routes
+// 向特定路由传递数据
 NyNavigator.updateStack([
   HomePage.path,
   ProfilePage.path,
@@ -947,12 +947,12 @@ NyNavigator.updateStack([
 ```dart
 // File: /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
-  // Basic routes
+  // 基本路由
   router.add(HomePage.path).initialRoute();
   router.add(ProfilePage.path);
   router.add(SettingsPage.path);
 
-  // Route with parameters
+  // 带参数的路由
   router.add(HotelBookingPage.path);
 });
 ```
@@ -966,8 +966,8 @@ appRouter() => nyRoutes((router) {
 导航到特定页面的简单链接：
 
 ``` bash
-https://yourdomain.com/profile       // Opens the profile page
-https://yourdomain.com/settings      // Opens the settings page
+https://yourdomain.com/profile       // 打开个人资料页
+https://yourdomain.com/settings      // 打开设置页
 ```
 
 要在应用内以编程方式触发这些导航：
@@ -985,7 +985,7 @@ routeTo(SettingsPage.path);
 
 ```dart
 class HotelBookingPage extends NyStatefulWidget {
-  // Define a route with a parameter placeholder {id}
+  // 定义带参数占位符 {id} 的路由
   static RouteView path = ("/hotel/{id}/booking", (_) => HotelBookingPage());
 
   HotelBookingPage({super.key}) : super(child: () => _HotelBookingPageState());
@@ -994,14 +994,14 @@ class HotelBookingPage extends NyStatefulWidget {
 class _HotelBookingPageState extends NyPage<HotelBookingPage> {
   @override
   get init => () {
-    // Access the path parameter
-    final hotelId = queryParameters()["id"]; // Returns "87" for URL ../hotel/87/booking
+    // 访问路径参数
+    final hotelId = queryParameters()["id"]; // 对于 URL ../hotel/87/booking 返回 "87"
     print("Loading hotel ID: $hotelId");
 
-    // Use the ID to fetch hotel data or perform operations
+    // 使用 ID 获取酒店数据或执行操作
   };
 
-  // Rest of your page implementation
+  // 页面其余实现
 }
 ```
 
@@ -1014,7 +1014,7 @@ https://yourdomain.com/hotel/87/booking
 #### 编程式导航
 
 ```dart
-// Navigate with parameters
+// 带参数导航
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "bookings": "active",
             });
@@ -1037,14 +1037,14 @@ https://yourdomain.com/hotel/87/booking?checkIn=2025-04-10&nights=3
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   get init => () {
-    // Get all query parameters
+    // 获取所有查询参数
     final params = queryParameters();
 
-    // Access specific parameters
+    // 访问特定参数
     final userId = params["user"];            // "20"
     final activeTab = params["tab"];          // "posts"
 
-    // Alternative access method
+    // 替代访问方式
     final params2 = widget.queryParameters();
     print(params2);                           // {"user": "20", "tab": "posts"}
   };
@@ -1054,10 +1054,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 #### 使用查询参数的编程式导航
 
 ```dart
-// Navigate with query parameters
+// 带查询参数导航
 routeTo(ProfilePage.path.withQueryParams({"user": "20", "tab": "posts"}));
 
-// Combine path and query parameters
+// 结合路径参数和查询参数
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "checkIn": "2025-04-10",
               "nights": "3",
@@ -1074,7 +1074,7 @@ class RouteProvider implements NyProvider {
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
 
-    // Handle deep links
+    // 处理深度链接
     nylo.onDeepLink(_onDeepLink);
     return nylo;
   }
@@ -1083,7 +1083,7 @@ class RouteProvider implements NyProvider {
     print("Deep link route: $route");
     print("Deep link data: $data");
 
-    // Update the route stack for deep links
+    // 为深度链接更新路由栈
     if (route == ProfilePage.path) {
       NyNavigator.updateStack([
         HomePage.path,
@@ -1128,7 +1128,7 @@ xcrun simctl openurl booted "https://yourdomain.com/profile?user=20"
 由于所有 URL 参数都是字符串形式传递的，您通常需要转换它们：
 
 ```dart
-// Converting string parameters to appropriate types
+// 将字符串参数转换为适当的类型
 final hotelId = int.parse(queryParameters()["id"] ?? "0");
 final isAvailable = (queryParameters()["available"] ?? "false") == "true";
 final checkInDate = DateTime.parse(queryParameters()["checkIn"] ?? "");
@@ -1141,16 +1141,16 @@ final checkInDate = DateTime.parse(queryParameters()["checkIn"] ?? "");
 ```dart
 final userId = queryParameters()["user"];
 if (userId != null) {
-  // Load specific user profile
+  // 加载特定用户的个人资料
 } else {
-  // Load current user profile
+  // 加载当前用户的个人资料
 }
 
-// Or check hasQueryParameter
+// 或检查 hasQueryParameter
 if (hasQueryParameter('status')) {
-  // Do something with the status parameter
+  // 使用 status 参数做处理
 } else {
-  // Handle absence of the parameter
+  // 处理参数缺失的情况
 }
 ```
 
@@ -1190,7 +1190,7 @@ if (Nylo.containsRoute("/profile")) {
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // Get typed arguments
+    // 获取类型化参数
     final args = NyRouter.args<NyArgument>(context);
     final userData = args?.data;
 
@@ -1204,11 +1204,11 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 路由之间传递的数据被包装在这些类中：
 
 ``` dart
-// NyArgument contains route data
+// NyArgument 包含路由数据
 NyArgument argument = NyArgument({'userId': 42});
 print(argument.data); // {'userId': 42}
 
-// NyQueryParameters contains URL query parameters
+// NyQueryParameters 包含 URL 查询参数
 NyQueryParameters params = NyQueryParameters({'tab': 'posts'});
 print(params.data); // {'tab': 'posts'}
 ```

@@ -11,6 +11,7 @@
   - [Używanie FormValidator](#using-form-validator "Używanie FormValidator")
   - [Nazwane konstruktory FormValidator](#form-validator-named-constructors "Nazwane konstruktory FormValidator")
   - [Łączenie reguł walidacji](#chaining-validation-rules "Łączenie reguł walidacji")
+  - [Pola opcjonalne](#nullable-fields "Pola opcjonalne")
   - [Niestandardowa walidacja](#custom-validation "Niestandardowa walidacja")
   - [Używanie FormValidator z polami](#form-validator-with-fields "Używanie FormValidator z polami")
 - [Dostępne reguły walidacji](#validation-rules "Reguły walidacji")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7 udostępnia system walidacji oparty na klasie `FormValidator`. Możesz walidować dane wewnątrz stron za pomocą metody `check()` lub używać `FormValidator` bezpośrednio do samodzielnej walidacji i walidacji na poziomie pól.
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// Waliduj dane w NyPage/NyState za pomocą check()
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// FormValidator z polami formularza
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -53,10 +54,10 @@ class _RegisterPageState extends NyPage<RegisterPage> {
           .notEmpty()
           .password(strength: 2);
     }, onSuccess: () {
-      // All validations passed
+      // Wszystkie walidacje przeszły
       _submitForm();
     }, onValidationError: (FormValidationResponseBag bag) {
-      // Validation failed
+      // Walidacja nie powiodła się
       print(bag.firstErrorMessage);
     });
   }
@@ -102,14 +103,14 @@ FormValidationResponseBag bag = check((validate) {
 if (bag.isValid) {
   print("All valid!");
 } else {
-  // Get the first error message
+  // Pobierz pierwszy komunikat błędu
   String? error = bag.firstErrorMessage;
   print(error);
 
-  // Get all failed results
+  // Pobierz wszystkie nieudane wyniki
   List<FormValidationResult> errors = bag.validationErrors;
 
-  // Get all successful results
+  // Pobierz wszystkie udane wyniki
   List<FormValidationResult> successes = bag.validationSuccess;
 }
 ```
@@ -128,13 +129,13 @@ FormValidationResult result = validator.check();
 if (result.isValid) {
   print("Valid!");
 } else {
-  // First error message
+  // Pierwszy komunikat błędu
   String? message = result.getFirstErrorMessage();
 
-  // All error messages
+  // Wszystkie komunikaty błędów
   List<String> messages = result.errorMessages();
 
-  // Error responses
+  // Odpowiedzi z błędami
   List<FormValidationError> errors = result.errorResponses;
 }
 ```
@@ -148,7 +149,7 @@ if (result.isValid) {
 ### Samodzielne użycie
 
 ``` dart
-// Using a named constructor
+// Używając nazwanego konstruktora
 FormValidator validator = FormValidator.email();
 FormValidationResult result = validator.check("user@example.com");
 
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Pola opcjonalne
+
+Użyj `.nullable()`, aby oznaczyć walidator jako opcjonalny. Gdy pole jest opcjonalne, wartość null lub pusta automatycznie przechodzi walidację — wszystkie inne reguły są stosowane tylko wtedy, gdy wartość jest obecna.
+
+``` dart
+// Pseudonim jest opcjonalny, ale jeśli podany, musi mieć 3–20 znaków
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+Bez `.nullable()` puste pole nie przeszłoby reguły `minLength`. Z `.nullable()` pozostawienie pola pustego przechodzi walidację.
+
+Jest to przydatne w przypadku opcjonalnych pól profilu, dodatkowych danych kontaktowych lub dowolnego pola, które jest walidowane tylko wtedy, gdy użytkownik je wypełni. Zapoznaj się z [dokumentacją formularzy](/docs/{{ $version }}/forms), aby dowiedzieć się, jak `nullable()` integruje się z widgetami `Field`.
+
 <div id="custom-validation"></div>
 
 ## Niestandardowa walidacja
@@ -291,7 +313,7 @@ Użyj `.custom()`, aby dodać inline logikę walidacji:
 FormValidator.custom(
   message: "Username already taken",
   validate: (data) {
-    // Return true if valid, false if invalid
+    // Zwróć true jeśli prawidłowe, false jeśli nieprawidłowe
     return !_takenUsernames.contains(data);
   },
 )
@@ -403,6 +425,7 @@ Wszystkie dostępne reguły dla `FormValidator`, zarówno jako nazwane konstrukt
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | Musi pasować do wzorca regex |
 | Equals | — | `.equals(otherValue)` | Musi być równe innej wartości |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | Niestandardowa funkcja walidacji |
+| Nullable | — | `.nullable()` | Wartości null lub puste automatycznie przechodzą; reguły stosowane tylko gdy wartość jest obecna |
 
 Wszystkie reguły przyjmują opcjonalny parametr `message` do dostosowania komunikatu błędu.
 
@@ -429,7 +452,7 @@ class FormRuleUsername extends FormRule {
   @override
   bool validate(data) {
     if (data is! String) return false;
-    // Username: alphanumeric, underscores, 3-20 chars
+    // Nazwa użytkownika: alfanumeryczna, podkreślenia, 3-20 znaków
     return RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(data);
   }
 }

@@ -14,6 +14,7 @@
 - [Gaya Toast Kustom](#custom-styles "Gaya Toast Kustom")
   - [Mendaftarkan Gaya](#registering-styles "Mendaftarkan Gaya")
   - [Membuat Style Factory](#creating-a-style-factory "Membuat Style Factory")
+  - [Gaya Toast Berbasis Data](#data-aware-toast-styles "Gaya Toast Berbasis Data")
 - [AlertTab](#alert-tab "AlertTab")
 - [Contoh](#examples "Contoh")
 
@@ -32,16 +33,16 @@ Alert dapat dipicu dari halaman, controller, atau di mana saja Anda memiliki `Bu
 Tampilkan notifikasi toast menggunakan metode praktis di halaman `NyState` mana pun:
 
 ``` dart
-// Success toast
+// Toast sukses
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// Toast peringatan
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// Toast info
 showToastInfo(description: "New version available");
 
-// Danger toast
+// Toast bahaya
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ Di halaman mana pun yang meng-extend `NyState` atau `NyBaseState`, gunakan metod
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Sukses
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // Dengan judul kustom
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // Peringatan
     showToastWarning(description: "Check your input");
 
     // Info
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // Bahaya
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // Oops (menggunakan gaya danger)
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // Maaf (menggunakan gaya danger)
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // Gaya kustom berdasarkan ID
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // Dipanggil ketika toast diketuk
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // Dipanggil ketika toast dihilangkan
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // Dipanggil ketika toast menjadi terlihat
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | required | Build context |
 | `id` | `String` | `'success'` | ID gaya toast |
-| `title` | `String?` | null | Mengganti judul default |
+| `title` | `String?` | null | Teks judul; diteruskan apa adanya ke widget toast |
 | `description` | `String?` | null | Teks deskripsi |
+| `data` | `Map<String, dynamic>?` | null | Pasangan key-value yang diteruskan ke gaya toast berbasis data; `title` dan `description` diutamakan atas key yang cocok |
 | `duration` | `Duration?` | null | Berapa lama toast ditampilkan |
 | `position` | `ToastNotificationPosition?` | null | Posisi di layar |
 | `action` | `VoidCallback?` | null | Callback saat diketuk |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 Kontrol di mana toast muncul di layar:
 
 ``` dart
-// Top of screen (default)
+// Bagian atas layar (default)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// Bagian bawah layar
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// Tengah layar
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,79 @@ Untuk kontrol penuh atas widget toast:
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Gaya Toast Berbasis Data
+
+<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
+Gunakan `ToastStyleDataFactory` untuk mendaftarkan gaya toast yang menerima data saat dipanggil. Ini berguna ketika konten toast — seperti nama atau avatar pengguna — belum diketahui saat pendaftaran.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+Daftarkan gaya berbasis data dengan `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+Atau daftarkan bersama gaya statis di `AppProvider` Anda:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Panggil dengan map `data` saat runtime:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+Jika Anda juga meneruskan `title` atau `description`, keduanya diutamakan atas key yang cocok di `data`.
+
+Gunakan `ToastNotificationRegistry.resolve(id, data)` langsung jika Anda perlu membuat widget sendiri:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

@@ -30,6 +30,7 @@
   - [Slider Fields](#slider-fields "Slider Fields")
   - [Range Slider Fields](#range-slider-fields "Range Slider Fields")
   - [Custom Fields](#custom-fields "Custom Fields")
+  - [Builder Fields](#builder-fields "Builder Fields")
   - [Widget Fields](#widget-fields "Widget Fields")
 - [FormCollection](#form-collection "FormCollection")
 - [การตรวจสอบฟอร์ม](#form-validation "การตรวจสอบฟอร์ม")
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 พารามิเตอร์ `child` ต้องการ widget ที่ extend จาก `NyFieldStatefulWidget` ซึ่งให้คุณควบคุมการแสดงผลและพฤติกรรมของ field ได้อย่างเต็มที่
 
+<div id="builder-fields"></div>
+
+### Builder Fields
+
+ใช้ `Field.builder()` เพื่อสร้าง form field แบบ inline ที่กำหนดเองโดยไม่ต้อง subclass `NyFieldStatefulWidget` ฟังก์ชัน builder รับค่าปัจจุบัน callback `onChanged` สำหรับรายงานการเปลี่ยนแปลงค่าให้กับฟอร์ม และ callback `setState` สำหรับกระตุ้นการ rebuild UI
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // rebuild widget ของ field
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+พารามิเตอร์ที่สามคือค่า field ปัจจุบันและที่สี่คือ `setState` หาก builder ไม่ต้องการ `setState` คุณสามารถใช้ syntax 3 อาร์กิวเมนต์แบบเดิม (`NyFieldBuilderLegacy`) ซึ่งยังคงรองรับอยู่:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Widget Fields
@@ -673,7 +710,7 @@ options.labels;                    // ["United States", "Canada"]
 เพิ่มการตรวจสอบให้กับ field ใดก็ได้โดยใช้พารามิเตอร์ `validator` กับ `FormValidator`:
 
 ``` dart
-// Named constructor
+// Named constructor (constructor แบบมีชื่อ)
 Field.email("Email", validator: FormValidator.email())
 
 // กฎแบบต่อเชื่อม
@@ -704,7 +741,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — การตรวจสอบผ่านเมื่อ field ว่างเปล่า
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` ทำเครื่องหมาย validator ว่าเป็นทางเลือก เมื่อค่า field เป็น null หรือว่างเปล่า กฎการตรวจสอบทั้งหมดจะถูกข้ามและ field ผ่าน เมื่อ field มีค่า กฎทั้งหมดจะถูกนำไปใช้ตามปกติ เชื่อมต่อไว้ที่ท้ายสุดของ `FormValidator` ใดก็ได้
 
 เมื่อส่งฟอร์ม validators ทั้งหมดจะถูกตรวจสอบ หากมีข้อผิดพลาด toast error จะแสดงข้อความข้อผิดพลาดแรกและ callback `onFailure` จะถูกเรียก
 
@@ -1184,4 +1228,5 @@ LoginForm.actions.submit(
 | `Field.slider()` | -- | Slider ค่าเดียว |
 | `Field.rangeSlider()` | -- | Slider ช่วงค่า |
 | `Field.custom()` | `child` (จำเป็น `NyFieldStatefulWidget`) | Stateful widget ที่กำหนดเอง |
+| `Field.builder()` | `builder` (จำเป็น `NyFieldBuilder` หรือ `NyFieldBuilderLegacy`) | Field inline แบบกำหนดเองโดยไม่ต้อง subclass |
 | `Field.widget()` | `child` (จำเป็น `Widget`) | ฝัง widget ใดก็ได้ (ไม่ใช่ field) |

@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// Действия над состоянием
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Построитель макета
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Следует ли сохранять состояние
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// Начальный индекс
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Страницы навигации
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Обработка события нажатия
   @override
   onTap(int index) {
     super.onTap(index);
@@ -189,7 +189,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // Стандартный стиль Flutter Material
 );
 ```
 
@@ -439,7 +439,7 @@ _MyNavigationHubState() : super(() => {
         page: PhoneNumberStep(),
         progressStyle: JourneyProgressStyle(
             indicator: JourneyProgressIndicator.numbered(),
-        ), // overrides the layout default for this tab only
+        ), // переопределяет макет по умолчанию только для этой вкладки
     ),
     2: NavigationTab.journey(
         page: AddPhotosStep(),
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // Ваша логика инициализации здесь
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Кнопки навигации
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Проверить, может ли путешествие продолжиться к следующему шагу
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Вызывается перед переходом к следующему шагу
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Напр., сохранить данные в сессию
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Вызывается, когда путешествие завершено (на последнем шаге)
   @override
   Future<void> onComplete() async {}
 }
@@ -647,7 +647,7 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: nextStep, // runs validation then navigates
+            onPressed: nextStep, // выполняет проверку и затем переходит
         ),
     );
 }
@@ -669,7 +669,7 @@ onPressed: () => nextStep(force: true),
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // Уже на первом шаге
     }
 },
 ```
@@ -723,7 +723,7 @@ Future<void> onComplete() async {
 ``` dart
 @override
 Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Напр., сохранить данные в сессию
     // session('onboarding', {
     //   'name': 'Anthony Gordon',
     //   'occupation': 'Software Engineer',
@@ -740,7 +740,7 @@ Future<void> onBeforeNext() async {
 ``` dart
 @override
 Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
+    // print('Выполнен переход к следующему шагу');
 }
 ```
 
@@ -753,8 +753,8 @@ Future<void> onAfterNext() async {
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // Выполните вашу логику проверки здесь
+    // Верните true, если путешествие может продолжаться, false иначе
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -826,7 +826,7 @@ LinearProgressIndicator(value: completionPercentage),
 nextButton: Button.primary(
     text: "Skip to photos",
     onPressed: () {
-        goToStep(2); // jump to step index 2
+        goToStep(2); // перейти к шагу с индексом 2
     },
 ),
 ```
@@ -839,7 +839,7 @@ nextButton: Button.primary(
 
 ``` dart
 onPressed: () {
-    goToNextStep(); // skip validation and go to next step
+    goToNextStep(); // пропустить проверку и перейти к следующему шагу
 },
 ```
 
@@ -887,7 +887,7 @@ onPressed: () {
 
 ``` dart
 onPressed: () {
-    exitJourney(); // pop the root navigator
+    exitJourney(); // выполнить pop корневого навигатора
 },
 ```
 
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// Обратный вызов при завершении путешествия
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // Перейти на домашнюю страницу или следующий пункт назначения
     routeTo(HomePage.path);
   };
 
@@ -930,7 +930,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
           ...
           Button.primary(
             text: "Get Started",
-            onPressed: onJourneyComplete, // triggers the completion callback
+            onPressed: onJourneyComplete, // вызывает обратный вызов завершения
           ),
         ],
       ),
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+При выходе из вложенного навигатора внутри вкладки используйте `rootNavigator: true` для выхода из корневого навигатора, а не из локального навигатора вкладки:
+
+``` dart
+// Выход из локального навигатора вкладки (по умолчанию)
+pop();
+
+// Выход из корневого навигатора — используйте это, когда модальное окно или оверлей
+// был открыт с использованием корневого навигатора
+pop(rootNavigator: true);
+```
+
+Параметр `rootNavigator` доступен в `pop()` в `NyState`, `NyController`, `StateAction.pop()` и в расширении `BuildContext`.
 
 <div id="tabs"></div>
 
@@ -1085,13 +1098,13 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 Вы также можете обновлять счётчик значка программно.
 
 ``` dart
-/// Increment the badge count
+/// Увеличить счётчик значка
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// Обновить счётчик значка
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// Сбросить счётчик значка
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 Вы также можете обновлять оповещение программно.
 
 ``` dart
-/// Enable the alert
+/// Включить оповещение
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// Отключить оповещение
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // Начать со второй вкладки
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // Добавьте пользовательскую логику здесь
+        // Напр., отслеживание аналитики, показ подтверждения и т.д.
+        super.onTap(index); // Всегда вызывайте super для обработки переключения вкладок
     }
 }
 ```
@@ -1216,40 +1229,40 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 Вот доступные действия состояния:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// Сбросить вкладку по заданному индексу
+/// Напр. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// Изменить текущую вкладку программно
+/// Напр. MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// Обновить счётчик значка
+/// Напр. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// Увеличить счётчик значка
+/// Напр. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// Сбросить счётчик значка
+/// Напр. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// Включить оповещение для вкладки
+/// Напр. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// Отключить оповещение для вкладки
+/// Напр. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// Перейти на следующую страницу в макете journey
+/// Напр. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// Перейти на предыдущую страницу в макете journey
+/// Напр. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
 ```
 
@@ -1260,9 +1273,9 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // Переключиться на вкладку 2
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: перейти на следующую страницу
 ```
 
 <div id="loading-style"></div>
@@ -1309,7 +1322,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     _MyNavigationHubState() : super(() async {
 
-      await sleep(3); // simulate loading for 3 seconds
+      await sleep(3); // имитировать загрузку в течение 3 секунд
 
       return {
         0: NavigationTab.tab(

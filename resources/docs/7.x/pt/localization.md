@@ -52,34 +52,34 @@ A localizacao e configurada em `lib/config/localization.dart`:
 
 ``` dart
 final class LocalizationConfig {
-  // Default language code (matches your JSON file, e.g., 'en' for lang/en.json)
+  // Codigo do idioma padrao (corresponde ao seu arquivo JSON, ex. 'en' para lang/en.json)
   static final String languageCode =
       getEnv('DEFAULT_LOCALE', defaultValue: "en");
 
-  // LocaleType.device - Use device's language setting
-  // LocaleType.asDefined - Use languageCode above
+  // LocaleType.device - Usar a configuracao de idioma do dispositivo
+  // LocaleType.asDefined - Usar o languageCode acima
   static final LocaleType localeType =
       getEnv('LOCALE_TYPE', defaultValue: 'asDefined') == 'device'
           ? LocaleType.device
           : LocaleType.asDefined;
 
-  // Directory containing language JSON files
+  // Diretorio contendo os arquivos JSON de idioma
   static const String assetsDirectory = 'lang/';
 
-  // List of supported locales
+  // Lista de localidades suportadas
   static const List<Locale> supportedLocales = [
     Locale('en'),
     Locale('es'),
-    // Add more locales as needed
+    // Adicionar mais localidades conforme necessario
   ];
 
-  // Fallback when a key is not found in the active locale
+  // Fallback quando uma chave nao e encontrada na localidade ativa
   static const String fallbackLanguageCode = 'en';
 
-  // RTL language codes
+  // Codigos de idioma RTL
   static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-  // Log warnings for missing translation keys
+  // Registrar avisos para chaves de traducao ausentes
   static final bool debugMissingKeys =
       getEnv('DEBUG_TRANSLATIONS', defaultValue: 'false') == 'true';
 }
@@ -140,10 +140,10 @@ flutter:
 Use a extensao `.tr()` ou o helper `trans()` para traduzir strings:
 
 ``` dart
-// Using the .tr() extension
+// Usando a extensao .tr()
 "welcome".tr()
 
-// Using the trans() helper
+// Usando o helper trans()
 trans("welcome")
 ```
 
@@ -245,10 +245,10 @@ StyledText.template(
 Mude o idioma do app em tempo de execucao:
 
 ``` dart
-// Using NyLocalization directly
+// Usando NyLocalization diretamente
 await NyLocalization.instance.setLanguage(
   context,
-  language: 'es'  // Must match your JSON filename (es.json)
+  language: 'es'  // Deve corresponder ao nome do arquivo JSON (es.json)
 );
 ```
 
@@ -319,13 +319,21 @@ Esta lista e usada pelo `MaterialApp.supportedLocales` do Flutter.
 
 ## Idioma de Fallback
 
-Quando uma chave de traducao nao e encontrada na localidade ativa, {{ config('app.name') }} recorre ao idioma especificado:
+Quando uma chave de traducao nao e encontrada na localidade ativa, {{ config('app.name') }} busca automaticamente no idioma de fallback antes de retornar a chave bruta. O idioma de fallback e configurado em `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Isso garante que seu app nunca mostre chaves brutas se uma traducao estiver faltando.
+Essa resolucao em duas etapas se aplica tanto a chaves de nivel superior quanto a chaves aninhadas com notacao de ponto:
+
+1. Buscar a chave no arquivo da localidade ativa.
+2. Se nao encontrada, busca-la no arquivo da localidade de fallback.
+3. Se ainda nao encontrada, retornar a string da chave bruta.
+
+Por exemplo, se o arquivo de localidade francesa nao tem a chave `settings.privacy`, a logica de fallback busca `settings.privacy` no arquivo de localidade inglesa antes de retornar `"settings.privacy"` como esta.
+
+Isso garante que seu app nunca mostre chaves brutas se uma traducao estiver apenas parcialmente completa.
 
 <div id="rtl-support"></div>
 
@@ -336,9 +344,9 @@ Isso garante que seu app nunca mostre chaves brutas se uma traducao estiver falt
 ``` dart
 static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-// Check if current language is RTL
+// Verificar se o idioma atual e RTL
 if (LocalizationConfig.isRtl(currentLanguageCode)) {
-  // Handle RTL layout
+  // Tratar layout RTL
 }
 ```
 
@@ -365,9 +373,9 @@ Isso registra avisos quando `.tr()` nao consegue encontrar uma chave, ajudando v
 
 ``` dart
 bool exists = NyLocalization.instance.hasTranslation('welcome');
-// true if the key exists in the current language file
+// true se a chave existe no arquivo de idioma atual
 
-// Also works with nested keys
+// Funciona tambem com chaves aninhadas
 bool nestedExists = NyLocalization.instance.hasTranslation('navigation.home');
 ```
 
@@ -399,13 +407,13 @@ bool isRtl = NyLocalization.instance.isDirectionRTL(context);
 ### Acessar a Localidade Atual
 
 ``` dart
-// Get the current language code
-String code = NyLocalization.instance.languageCode;  // e.g., 'en'
+// Obter o codigo do idioma atual
+String code = NyLocalization.instance.languageCode;  // ex., 'en'
 
-// Get the current Locale object
+// Obter o objeto Locale atual
 Locale currentLocale = NyLocalization.instance.locale;
 
-// Get Flutter localization delegates (used in MaterialApp)
+// Obter os delegates de localizacao do Flutter (usados no MaterialApp)
 var delegates = NyLocalization.instance.delegates;
 ```
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Codigo do idioma atual |
 | `locale` | `Locale` | Objeto Locale atual |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Delegates de localizacao do Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Injetar mapas de traducao diretamente para testes unitarios |
 
 <div id="nylocalehelper"></div>
 
@@ -433,26 +442,26 @@ var delegates = NyLocalization.instance.delegates;
 `NyLocaleHelper` e uma classe utilitaria estatica para operacoes de localidade. Ela fornece metodos para detectar a localidade atual, verificar suporte RTL e criar objetos Locale.
 
 ``` dart
-// Get the current system locale
+// Obter a localidade atual do sistema
 Locale locale = NyLocaleHelper.getCurrentLocale(context: context);
 
-// Get language and country codes
+// Obter os codigos de idioma e pais
 String langCode = NyLocaleHelper.getLanguageCode(context: context);  // 'en'
-String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' or null
+String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' ou null
 
-// Check if current locale matches
+// Verificar se a localidade atual corresponde
 bool isEnglish = NyLocaleHelper.matchesLocale(context, 'en');
 bool isUsEnglish = NyLocaleHelper.matchesLocale(context, 'en', 'US');
 
-// RTL detection
+// Deteccao RTL
 bool isRtl = NyLocaleHelper.isRtlLanguage('ar');  // true
 bool currentIsRtl = NyLocaleHelper.isCurrentLocaleRtl(context: context);
 
-// Get text direction
+// Obter a direcao do texto
 TextDirection direction = NyLocaleHelper.getTextDirection('ar');  // TextDirection.rtl
 TextDirection currentDir = NyLocaleHelper.getCurrentTextDirection(context: context);
 
-// Create a Locale from strings
+// Criar um Locale a partir de strings
 Locale newLocale = NyLocaleHelper.toLocale('en', 'US');
 ```
 

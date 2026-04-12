@@ -236,14 +236,22 @@ InputField(
 ### 状態アクション
 
 ``` dart
+final actions = InputField.stateActions("username_field");
+
 // フィールドをクリア
-InputField.stateActions("username_field").clear();
+actions.clear();
 
 // 値を設定
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+actions.setValue("new_value");
+
+// フィールドにフォーカスを移動
+actions.focus();
+
+// フィールドからフォーカスを外す
+actions.unfocus();
+
+// パスワードの表示/非表示を切り替え（InputField.password 用）
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | ラベルテキストスタイル |
 | `hintStyle` | `TextStyle?` | ヒントテキストスタイル |
 | `prefixIcon` | `Widget?` | 入力前のアイコン |
+| `suffixIcon` | `Widget?` | 入力後のアイコン |
 
 ### マスキングパラメータ
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | パスワード表示切り替えを許可 |
 | `dummyData` | `String?` | 開発用のフェイクデータ |
 | `stateName` | `String?` | 状態管理用の名前 |
+| `enableInteractiveSelection` | `bool` | テキスト選択を有効化（デフォルト: `true`） |
 | `onChanged` | `Function(String)?` | 値変更時に呼び出される |

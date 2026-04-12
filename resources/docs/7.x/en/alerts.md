@@ -14,6 +14,7 @@
 - [Custom Toast Styles](#custom-styles "Custom Toast Styles")
   - [Registering Styles](#registering-styles "Registering Styles")
   - [Creating a Style Factory](#creating-a-style-factory "Creating a Style Factory")
+  - [Data-Aware Toast Styles](#data-aware-toast-styles "Data-Aware Toast Styles")
 - [AlertTab](#alert-tab "AlertTab")
 - [Examples](#examples "Practical Examples")
 
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | required | Build context |
 | `id` | `String` | `'success'` | Toast style ID |
-| `title` | `String?` | null | Override the default title |
+| `title` | `String?` | null | Title text; passed through as-is to the toast widget |
 | `description` | `String?` | null | Description text |
+| `data` | `Map<String, dynamic>?` | null | Key-value pairs passed to data-aware toast styles; `title` and `description` take priority over matching keys |
 | `duration` | `Duration?` | null | How long the toast displays |
 | `position` | `ToastNotificationPosition?` | null | Where on screen |
 | `action` | `VoidCallback?` | null | Tap callback |
@@ -388,6 +390,78 @@ For complete control over the toast widget:
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Data-Aware Toast Styles
+
+Use `ToastStyleDataFactory` to register toast styles that receive runtime data at call time. This is useful when the toast content — such as a user's name or avatar — is not known at registration time.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+Register a data-aware style with `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+Or register it alongside static styles in your `AppProvider`:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Call it with a `data` map at runtime:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+If you also pass `title` or `description`, they take priority over matching keys in `data`.
+
+Use `ToastNotificationRegistry.resolve(id, data)` directly if you need to build the widget yourself:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

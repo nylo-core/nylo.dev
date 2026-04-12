@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [はじめに](#introduction "はじめに")
 - [Connective ウィジェット](#connective-widget "Connective ウィジェット")
-    - [状態ベースのビルダー](#state-builders "状態ベースのビルダー")
     - [カスタムビルダー](#custom-builder "カスタムビルダー")
 - [OfflineBanner ウィジェット](#offline-banner "OfflineBanner ウィジェット")
 - [NyConnectivity ヘルパー](#connectivity-helper "NyConnectivity ヘルパー")
@@ -25,39 +24,22 @@
 
 `Connective` ウィジェットは接続状態の変更を監視し、現在のネットワーク状態に基づいて再構築します。
 
-<div id="state-builders"></div>
-
-### 状態ベースのビルダー
-
-各接続タイプに異なるウィジェットを提供します:
+`noInternet` を使用して、デバイスにインターネットがない場合（Wi-Fi、モバイル、イーサネットのすべてが不在）にフォールバックウィジェットを表示します:
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // 未指定の状態のデフォルト
+  child: MyContent(),
 )
 ```
-
-#### 利用可能な状態
-
-| プロパティ | 説明 |
-|----------|-------------|
-| `onWifi` | WiFi 接続時のウィジェット |
-| `onMobile` | モバイルデータ接続時のウィジェット |
-| `onEthernet` | イーサネット接続時のウィジェット |
-| `onVpn` | VPN 接続時のウィジェット |
-| `onBluetooth` | Bluetooth 接続時のウィジェット |
-| `onOther` | その他の接続タイプのウィジェット |
-| `onNone` | オフライン時のウィジェット |
-| `child` | 特定のハンドラーがない場合のデフォルトウィジェット |
 
 <div id="custom-builder"></div>
 
@@ -93,7 +75,7 @@ Connective.builder(
 
 ビルダーは以下を受け取ります:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` 列挙型（wifi、mobile、ethernet、vpn、bluetooth、other、none）
+- `state` - `NyConnectivityState` 列挙型（wifi、mobile、ethernet、vpn、bluetooth、satellite、other、none）
 - `results` - 複数の接続を確認するための `List<ConnectivityResult>`
 
 ### 変更の監視
@@ -117,7 +99,7 @@ Connective(
 
 ## OfflineBanner ウィジェット
 
-オフライン時に画面上部にバナーを表示します:
+インターネットがない場合（Wi-Fi、モバイル、イーサネットのすべてが不在）に画面上部にバナーを表示します:
 
 ``` dart
 Scaffold(
@@ -187,6 +169,17 @@ if (await NyConnectivity.isMobile()) {
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
+```
+
+### インターネットの確認
+
+`hasInternet()` は `isOnline()` より厳格です — Wi-Fi、モバイル、またはイーサネット経由で接続されている場合のみ `true` を返します。VPN、Bluetooth、衛星接続は除外されます。
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Wi-Fi、モバイル、またはイーサネット経由でのインターネットアクセスを確認済み
+  await syncData();
+}
 ```
 
 ### 現在のステータスを取得
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | WiFi 接続時のウィジェット |
-| `onMobile` | `Widget?` | - | モバイルデータ接続時のウィジェット |
-| `onEthernet` | `Widget?` | - | イーサネット接続時のウィジェット |
-| `onVpn` | `Widget?` | - | VPN 接続時のウィジェット |
-| `onBluetooth` | `Widget?` | - | Bluetooth 接続時のウィジェット |
-| `onOther` | `Widget?` | - | その他の接続のウィジェット |
-| `onNone` | `Widget?` | - | オフライン時のウィジェット |
-| `child` | `Widget?` | - | デフォルトウィジェット |
-| `showLoadingOnInit` | `bool` | `false` | 確認中にローディングを表示 |
-| `loadingWidget` | `Widget?` | - | カスタムローディングウィジェット |
+| `noInternet` | `Widget?` | - | Wi-Fi、モバイル、イーサネットがすべて不在の場合に表示されるウィジェット |
+| `child` | `Widget?` | - | インターネットが利用可能な場合に表示されるウィジェット |
 | `onConnectivityChanged` | `Function?` | - | 変更時のコールバック |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | イーサネット接続 |
 | `vpn` | VPN 接続 |
 | `bluetooth` | Bluetooth 接続 |
+| `satellite` | 衛星接続 |
 | `other` | その他の接続タイプ |
 | `none` | 接続なし |

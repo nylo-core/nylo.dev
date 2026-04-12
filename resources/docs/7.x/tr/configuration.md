@@ -1,38 +1,39 @@
-# Yap&#305;land&#305;rma
+# Yapılandırma
 
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Giri&#351;")
+- [Giriş](#introduction "Giriş")
 - Ortam
-  - [.env Dosyas&#305;](#env-file ".env Dosyas&#305;")
-  - [Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma](#generating-env "Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma")
-  - [De&#287;erleri Alma](#retrieving-values "De&#287;erleri Alma")
-  - [Config S&#305;n&#305;flar&#305; Olu&#351;turma](#creating-config-classes "Config S&#305;n&#305;flar&#305; Olu&#351;turma")
-  - [De&#287;i&#351;ken T&#252;rleri](#variable-types "De&#287;i&#351;ken T&#252;rleri")
-- [Ortam &#199;e&#351;itleri](#environment-flavours "Ortam &#199;e&#351;itleri")
-- [Derleme Zamanl&#305; Enjeksiyon](#build-time-injection "Derleme Zamanl&#305; Enjeksiyon")
+  - [.env Dosyası](#env-file ".env Dosyası")
+  - [Ortam Yapılandırması Oluşturma](#generating-env "Ortam Yapılandırması Oluşturma")
+  - [Değerleri Alma](#retrieving-values "Değerleri Alma")
+  - [Config Sınıfları Oluşturma](#creating-config-classes "Config Sınıfları Oluşturma")
+  - [Değişken Türleri](#variable-types "Değişken Türleri")
+  - [Değişken İçi Değişken](#variable-interpolation "Değişken İçi Değişken")
+- [Ortam Çeşitleri](#environment-flavours "Ortam Çeşitleri")
+- [Derleme Zamanlı Enjeksiyon](#build-time-injection "Derleme Zamanlı Enjeksiyon")
 
 
 <div id="introduction"></div>
 
-## Giri&#351;
+## Giriş
 
-{{ config('app.name') }} v7, g&#252;venli bir ortam yap&#305;land&#305;rma sistemi kullan&#305;r. Ortam de&#287;i&#351;kenleriniz bir `.env` dosyas&#305;nda saklan&#305;r ve ard&#305;ndan uygulaman&#305;zda kullan&#305;lmak &#252;zere olu&#351;turulan bir Dart dosyas&#305;na (`env.g.dart`) &#351;ifrelenir.
+{{ config('app.name') }} v7, güvenli bir ortam yapılandırma sistemi kullanır. Ortam değişkenleriniz bir `.env` dosyasında saklanır ve ardından uygulamanızda kullanılmak üzere oluşturulan bir Dart dosyasına (`env.g.dart`) şifrelenir.
 
-Bu yakla&#351;&#305;m &#351;unlar&#305; sa&#287;lar:
-- **G&#252;venlik**: Ortam de&#287;erleri derlenen uygulamada XOR &#351;ifrelidir
-- **Tip g&#252;venli&#287;i**: De&#287;erler otomatik olarak uygun t&#252;rlere d&#246;n&#252;&#351;t&#252;r&#252;l&#252;r
-- **Derleme zamanl&#305; esneklik**: Geli&#351;tirme, test ve &#252;retim i&#231;in farkl&#305; yap&#305;land&#305;rmalar
+Bu yaklaşım şunları sağlar:
+- **Güvenlik**: Ortam değerleri derlenen uygulamada XOR şifrelidir
+- **Tip güvenliği**: Değerler otomatik olarak uygun türlere dönüştürülür
+- **Derleme zamanlı esneklik**: Geliştirme, test ve üretim için farklı yapılandırmalar
 
 <div id="env-file"></div>
 
-## .env Dosyas&#305;
+## .env Dosyası
 
-Proje k&#246;k&#252;n&#252;zdeki `.env` dosyas&#305; yap&#305;land&#305;rma de&#287;i&#351;kenlerinizi i&#231;erir:
+Proje kökünüzdeki `.env` dosyası yapılandırma değişkenlerinizi içerir:
 
 ``` bash
-# Environment configuration
+# Ortam yapılandırması
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -45,62 +46,62 @@ ASSET_PATH="assets"
 DEFAULT_LOCALE="en"
 ```
 
-### Mevcut De&#287;i&#351;kenler
+### Mevcut Değişkenler
 
-| De&#287;i&#351;ken | A&#231;&#305;klama |
+| Değişken | Açıklama |
 |----------|-------------|
-| `APP_KEY` | **Zorunlu**. &#350;ifreleme i&#231;in 32 karakterlik gizli anahtar |
-| `APP_NAME` | Uygulama ad&#305;n&#305;z |
+| `APP_KEY` | **Zorunlu**. Şifreleme için 32 karakterlik gizli anahtar |
+| `APP_NAME` | Uygulama adınız |
 | `APP_ENV` | Ortam: `developing` veya `production` |
-| `APP_DEBUG` | Hata ay&#305;klama modunu etkinle&#351;tir (`true`/`false`) |
-| `APP_URL` | Uygulaman&#305;z&#305;n URL'si |
-| `API_BASE_URL` | API istekleri i&#231;in temel URL |
-| `ASSET_PATH` | Varl&#305;klar klas&#246;r&#252;n&#252;n yolu |
-| `DEFAULT_LOCALE` | Varsay&#305;lan dil kodu |
+| `APP_DEBUG` | Hata ayıklama modunu etkinleştir (`true`/`false`) |
+| `APP_URL` | Uygulamanızın URL'si |
+| `API_BASE_URL` | API istekleri için temel URL |
+| `ASSET_PATH` | Varlıklar klasörünün yolu |
+| `DEFAULT_LOCALE` | Varsayılan dil kodu |
 
 <div id="generating-env"></div>
 
-## Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma
+## Ortam Yapılandırması Oluşturma
 
-{{ config('app.name') }} v7, uygulaman&#305;z&#305;n ortam de&#287;erlerine eri&#351;ebilmesi i&#231;in &#351;ifrelenmi&#351; bir ortam dosyas&#305; olu&#351;turman&#305;z&#305; gerektirir.
+{{ config('app.name') }} v7, uygulamanızın ortam değerlerine erişebilmesi için şifrelenmiş bir ortam dosyası oluşturmanızı gerektirir.
 
-### Ad&#305;m 1: APP_KEY Olu&#351;turma
+### Adım 1: APP_KEY Oluşturma
 
-&#214;nce g&#252;venli bir APP_KEY olu&#351;turun:
+Önce güvenli bir APP_KEY oluşturun:
 
 ``` bash
 metro make:key
 ```
 
-Bu, `.env` dosyan&#305;za 32 karakterlik bir `APP_KEY` ekler.
+Bu, `.env` dosyanıza 32 karakterlik bir `APP_KEY` ekler.
 
-### Ad&#305;m 2: env.g.dart Olu&#351;turma
+### Adım 2: env.g.dart Oluşturma
 
-&#350;ifrelenmi&#351; ortam dosyas&#305;n&#305; olu&#351;turun:
-
-``` bash
-metro make:env
-```
-
-Bu, &#351;ifrelenmi&#351; ortam de&#287;i&#351;kenlerinizle birlikte `lib/bootstrap/env.g.dart` dosyas&#305;n&#305; olu&#351;turur.
-
-Ortam&#305;n&#305;z uygulaman&#305;z ba&#351;lad&#305;&#287;&#305;nda otomatik olarak kaydedilir &#8212; `main.dart` dosyas&#305;ndaki `Nylo.init(env: Env.get, ...)` bunu sizin i&#231;in halleder. Ek bir kurulum gerekmez.
-
-### De&#287;i&#351;ikliklerden Sonra Yeniden Olu&#351;turma
-
-`.env` dosyan&#305;z&#305; de&#287;i&#351;tirdi&#287;inizde, yap&#305;land&#305;rmay&#305; yeniden olu&#351;turun:
+Şifrelenmiş ortam dosyasını oluşturun:
 
 ``` bash
 metro make:env
 ```
 
-`--force` bayra&#287;&#305; mevcut `env.g.dart` dosyas&#305;n&#305;n &#252;zerine yazar.
+Bu, şifrelenmiş ortam değişkenlerinizle birlikte `lib/bootstrap/env.g.dart` dosyasını oluşturur.
+
+Ortamınız uygulamanız başladığında otomatik olarak kaydedilir — `main.dart` dosyasındaki `Nylo.init(env: Env.get, ...)` bunu sizin için halleder. Ek bir kurulum gerekmez.
+
+### Değişikliklerden Sonra Yeniden Oluşturma
+
+`.env` dosyanızı değiştirdiğinizde, yapılandırmayı yeniden oluşturun:
+
+``` bash
+metro make:env
+```
+
+Bu her zaman mevcut `env.g.dart` dosyasının üzerine yazar.
 
 <div id="retrieving-values"></div>
 
-## De&#287;erleri Alma
+## Değerleri Alma
 
-Ortam de&#287;erlerine eri&#351;menin &#246;nerilen yolu **config s&#305;n&#305;flar&#305;** arac&#305;l&#305;&#287;&#305;ylad&#305;r. `lib/config/app.dart` dosyan&#305;z, ortam de&#287;erlerini tipli statik alanlar olarak sunmak i&#231;in `getEnv()` kullan&#305;r:
+Ortam değerlerine erişmenin önerilen yolu **config sınıfları** aracılığıyladır. `lib/config/app.dart` dosyanız, ortam değerlerini tipli statik alanlar olarak sunmak için `getEnv()` kullanır:
 
 ``` dart
 // lib/config/app.dart
@@ -112,45 +113,45 @@ final class AppConfig {
 }
 ```
 
-Ard&#305;ndan uygulama kodunuzda de&#287;erlere config s&#305;n&#305;f&#305; arac&#305;l&#305;&#287;&#305;yla eri&#351;in:
+Ardından uygulama kodunuzda değerlere config sınıfı aracılığıyla erişin:
 
 ``` dart
-// Anywhere in your app
+// Uygulamanızın herhangi bir yerinde
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
 ```
 
-Bu kal&#305;p, ortam eri&#351;imini config s&#305;n&#305;flar&#305;n&#305;zda merkezile&#351;tirir. `getEnv()` yard&#305;mc&#305;s&#305;, do&#287;rudan uygulama kodunda de&#287;il, config s&#305;n&#305;flar&#305; i&#231;inde kullan&#305;lmal&#305;d&#305;r.
+Bu kalıp, ortam erişimini config sınıflarınızda merkezileştirir. `getEnv()` yardımcısı, doğrudan uygulama kodunda değil, config sınıfları içinde kullanılmalıdır.
 
 <div id="creating-config-classes"></div>
 
-## Config S&#305;n&#305;flar&#305; Olu&#351;turma
+## Config Sınıfları Oluşturma
 
-&#220;&#231;&#252;nc&#252; taraf hizmetler veya &#246;zelli&#287;e &#246;zg&#252; yap&#305;land&#305;rma i&#231;in Metro kullanarak &#246;zel config s&#305;n&#305;flar&#305; olu&#351;turabilirsiniz:
+Üçüncü taraf hizmetler veya özelliğe özgü yapılandırma için Metro kullanarak özel config sınıfları oluşturabilirsiniz:
 
 ``` bash
 metro make:config RevenueCat
 ```
 
-Bu, `lib/config/revenue_cat_config.dart` konumunda yeni bir config dosyas&#305; olu&#351;turur:
+Bu, `lib/config/revenue_cat_config.dart` konumunda yeni bir config dosyası oluşturur:
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Yapılandırma değerlerinizi buraya ekleyin
 }
 ```
 
-### &#214;rnek: RevenueCat Yap&#305;land&#305;rmas&#305;
+### Örnek: RevenueCat Yapılandırması
 
-**Ad&#305;m 1:** Ortam de&#287;i&#351;kenlerini `.env` dosyan&#305;za ekleyin:
+**Adım 1:** Ortam değişkenlerini `.env` dosyanıza ekleyin:
 
 ``` bash
 REVENUECAT_API_KEY="appl_xxxxxxxxxxxxx"
 REVENUECAT_ENTITLEMENT_ID="premium"
 ```
 
-**Ad&#305;m 2:** Config s&#305;n&#305;f&#305;n&#305;z&#305; bu de&#287;erleri referans alacak &#351;ekilde g&#252;ncelleyin:
+**Adım 2:** Config sınıfınızı bu değerleri referans alacak şekilde güncelleyin:
 
 ``` dart
 // lib/config/revenue_cat_config.dart
@@ -162,62 +163,87 @@ final class RevenueCatConfig {
 }
 ```
 
-**Ad&#305;m 3:** Ortam yap&#305;land&#305;rman&#305;z&#305; yeniden olu&#351;turun:
+**Adım 3:** Ortam yapılandırmanızı yeniden oluşturun:
 
 ``` bash
 metro make:env
 ```
 
-**Ad&#305;m 4:** Config s&#305;n&#305;f&#305;n&#305; uygulaman&#305;zda kullan&#305;n:
+**Adım 4:** Config sınıfını uygulamanızda kullanın:
 
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// RevenueCat'i başlat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Yetkilendirmeleri kontrol et
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Premium erişim ver
 }
 ```
 
-Bu yakla&#351;&#305;m API anahtarlar&#305;n&#305;z&#305; ve yap&#305;land&#305;rma de&#287;erlerinizi g&#252;venli ve merkezi tutar, farkl&#305; ortamlarda farkl&#305; de&#287;erleri y&#246;netmeyi kolayla&#351;t&#305;r&#305;r.
+Bu yaklaşım API anahtarlarınızı ve yapılandırma değerlerinizi güvenli ve merkezi tutar, farklı ortamlarda farklı değerleri yönetmeyi kolaylaştırır.
 
 <div id="variable-types"></div>
 
-## De&#287;i&#351;ken T&#252;rleri
+## Değişken Türleri
 
-`.env` dosyan&#305;zdaki de&#287;erler otomatik olarak ayr&#305;&#351;t&#305;r&#305;l&#305;r:
+`.env` dosyanızdaki değerler otomatik olarak ayrıştırılır:
 
-| .env De&#287;eri | Dart T&#252;r&#252; | &#214;rnek |
+| .env Değeri | Dart Türü | Örnek |
 |------------|-----------|---------|
 | `APP_NAME="My App"` | `String` | `"My App"` |
 | `DEBUG=true` | `bool` | `true` |
 | `DEBUG=false` | `bool` | `false` |
 | `VALUE=null` | `null` | `null` |
-| `EMPTY=""` | `String` | `""` (bo&#351; metin) |
+| `EMPTY=""` | `String` | `""` (boş metin) |
 
+
+<div id="variable-interpolation"></div>
+
+## Değişken İçi Değişken
+
+<!-- uncertain: "Variable Interpolation" — rendered as "Değişken İçi Değişken" (literal: variable within variable); established Turkish convention in similar docs may differ -->
+`.env` dosyanızdaki string değerler, `${DEĞİŞKEN_ADI}` sözdizimini kullanarak diğer değişkenlere başvurabilir:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Kodunuz `getEnv('APP_URL')` çağırdığında, döndürülen değer `https://myapp.com` olur. Başvurular özyinelemeli olarak çözülür, bu nedenle zincirleme başvurular beklendiği gibi çalışır:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')`, `https://example.com/uploads` döndürür.
+
+Döngüsel başvurular korunur — bir değişken kendisine başvuruyorsa (doğrudan veya bir zincir aracılığıyla), çözümlenmemiş `${DEĞİŞKEN_ADI}` yer tutucu, sonsuz döngüye neden olmak yerine çıktıda korunur.
 
 <div id="environment-flavours"></div>
 
-## Ortam &#199;e&#351;itleri
+## Ortam Çeşitleri
 
-Geli&#351;tirme, test ve &#252;retim i&#231;in farkl&#305; yap&#305;land&#305;rmalar olu&#351;turun.
+Geliştirme, test ve üretim için farklı yapılandırmalar oluşturun.
 
-### Ad&#305;m 1: Ortam Dosyalar&#305; Olu&#351;turma
+### Adım 1: Ortam Dosyaları Oluşturma
 
-Ayr&#305; `.env` dosyalar&#305; olu&#351;turun:
+Ayrı `.env` dosyaları oluşturun:
 
 ``` bash
-.env                  # Geli&#351;tirme (varsay&#305;lan)
+.env                  # Geliştirme (varsayılan)
 .env.staging          # Test
-.env.production       # &#220;retim
+.env.production       # Üretim
 ```
 
-`.env.production` &#246;rne&#287;i:
+`.env.production` örneği:
 
 ``` bash
 APP_KEY=production-secret-key-here
@@ -228,27 +254,27 @@ APP_URL="https://myapp.com"
 API_BASE_URL="https://api.myapp.com"
 ```
 
-### Ad&#305;m 2: Ortam Yap&#305;land&#305;rmas&#305; Olu&#351;turma
+### Adım 2: Ortam Yapılandırması Oluşturma
 
-Belirli bir ortam dosyas&#305;ndan olu&#351;turun:
+Belirli bir ortam dosyasından oluşturun:
 
 ``` bash
-# For production
+# Üretim için
 metro make:env --file=".env.production"
 
-# For staging
+# Test için
 metro make:env --file=".env.staging"
 ```
 
-### Ad&#305;m 3: Uygulaman&#305;z&#305; Derleme
+### Adım 3: Uygulamanızı Derleme
 
-Uygun yap&#305;land&#305;rma ile derleyin:
+Uygun yapılandırma ile derleyin:
 
 ``` bash
-# Development
+# Geliştirme
 flutter run
 
-# Production build
+# Üretim derlemesi
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -256,17 +282,17 @@ flutter build appbundle
 
 <div id="build-time-injection"></div>
 
-## Derleme Zamanl&#305; Enjeksiyon
+## Derleme Zamanlı Enjeksiyon
 
-Daha y&#252;ksek g&#252;venlik i&#231;in, APP_KEY'i kaynak koduna g&#246;mmek yerine derleme zaman&#305;nda enjekte edebilirsiniz.
+Daha yüksek güvenlik için, APP_KEY'i kaynak koduna gömmek yerine derleme zamanında enjekte edebilirsiniz.
 
-### --dart-define Modu ile Olu&#351;turma
+### --dart-define Modu ile Oluşturma
 
 ``` bash
 metro make:env --dart-define
 ```
 
-Bu, APP_KEY g&#246;mmeden `env.g.dart` olu&#351;turur.
+Bu, APP_KEY gömmeden `env.g.dart` oluşturur.
 
 ### APP_KEY Enjeksiyonu ile Derleme
 
@@ -277,18 +303,18 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Çalıştır
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 
-Bu yakla&#351;&#305;m APP_KEY'i kaynak kodunuzun d&#305;&#351;&#305;nda tutar ve &#351;unlar i&#231;in kullan&#305;&#351;l&#305;d&#305;r:
-- Gizli anahtarlar&#305;n enjekte edildi&#287;i CI/CD hatt&#305;
-- A&#231;&#305;k kaynak projeler
-- Geli&#351;mi&#351; g&#252;venlik gereksinimleri
+Bu yaklaşım APP_KEY'i kaynak kodunuzun dışında tutar ve şunlar için kullanışlıdır:
+- Gizli anahtarların enjekte edildiği CI/CD hattı
+- Açık kaynak projeler
+- Gelişmiş güvenlik gereksinimleri
 
-### En &#304;yi Uygulamalar
+### En İyi Uygulamalar
 
-1. **`.env` dosyas&#305;n&#305; asla s&#252;r&#252;m kontrol&#252;ne eklemeyin** - `.gitignore`'a ekleyin
-2. **`.env-example` kullan&#305;n** - Hassas de&#287;erler olmadan bir &#351;ablon kaydedin
-3. **De&#287;i&#351;ikliklerden sonra yeniden olu&#351;turun** - `.env` de&#287;i&#351;tikten sonra her zaman `metro make:env` &#231;al&#305;&#351;t&#305;r&#305;n
-4. **Ortam ba&#351;&#305;na farkl&#305; anahtarlar** - Geli&#351;tirme, test ve &#252;retim i&#231;in benzersiz APP_KEY'ler kullan&#305;n
+1. **`.env` dosyasını asla sürüm kontrolüne eklemeyin** - `.gitignore`'a ekleyin
+2. **`.env-example` kullanın** - Hassas değerler olmadan bir şablon kaydedin
+3. **Değişikliklerden sonra yeniden oluşturun** - `.env` değiştikten sonra her zaman `metro make:env` çalıştırın
+4. **Ortam başına farklı anahtarlar** - Geliştirme, test ve üretim için benzersiz APP_KEY'ler kullanın

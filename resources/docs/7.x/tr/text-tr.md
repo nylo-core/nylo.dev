@@ -60,6 +60,8 @@ Widget, çeviri anahtarını dil dosyalarınızda (örn. `/lang/en.json`) arayac
 }
 ```
 
+Aktif yerel ayarın dosyasında bir anahtar eksikse, {{ config('app.name') }} ham anahtar dizesini döndürmeden önce yedek dilde (lib/config/localization.dart`'ta yapılandırılmış) otomatik olarak arar. Bu, hem üst düzey anahtarlar hem de nokta notasyonlu iç içe anahtarlar için geçerlidir.
+
 <div id="string-interpolation"></div>
 
 ## String İnterpolasyonu

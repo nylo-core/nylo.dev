@@ -142,11 +142,11 @@ class BottomSheetModal extends NyBaseModal {
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// พร้อม callback ที่กำหนดเอง
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // ลอจิกออกจากระบบที่กำหนดเอง
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | widget ส่วนหัวด้านบน |
 | `useSafeArea` | `bool` | `true` | ครอบเนื้อหาด้วย SafeArea |
 | `isScrollControlled` | `bool` | `false` | อนุญาตให้ modal เลื่อนได้ |
+| `isDismissible` | `bool` | `true` | อนุญาตให้ปิดโดยการแตะด้านนอก |
+| `enableDrag` | `bool` | `true` | อนุญาตให้ลากเพื่อปิด |
 | `showCloseButton` | `bool` | `false` | แสดงปุ่มปิด X |
 | `headerPadding` | `EdgeInsets?` | null | ระยะห่างเมื่อมีส่วนหัว |
+| `contentPadding` | `EdgeInsets?` | null | ระยะห่างรอบเนื้อหาหลัก |
+| `actionsPadding` | `EdgeInsets?` | null | ระยะห่างรอบส่วนการดำเนินการ |
 | `backgroundColor` | `Color?` | null | สีพื้นหลัง modal |
 | `showHandle` | `bool` | `true` | แสดงที่จับลากด้านบน |
 | `closeButtonColor` | `Color?` | null | สีพื้นหลังปุ่มปิด |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// การใช้งาน
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // ลบรายการนี้
 }
 ```
 

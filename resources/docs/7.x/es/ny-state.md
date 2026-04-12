@@ -302,6 +302,8 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Eliminar la pagina actual de la pila.
 
+Pasa `rootNavigator: true` para hacer pop desde el navegador raiz en lugar del navegador local mas cercano. Esto es util dentro de las pestanas del Navigation Hub cuando un modal o superposicion fue abierto usando el navegador raiz.
+
 Ejemplo
 
 ``` dart
@@ -309,6 +311,11 @@ class _HomePageState extends NyState<HomePage> {
 
   popView() {
     pop();
+  }
+
+  // Hacer pop desde el navegador raiz (ej., para cerrar un modal raiz)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

@@ -10,6 +10,8 @@
   - [Styliser les espaces reserves](#styling-placeholders "Styliser les espaces reserves")
   - [Callbacks au toucher](#tap-callbacks "Callbacks au toucher")
   - [Cles separees par des barres verticales](#pipe-keys "Cles separees par des barres verticales")
+  - [Styles avec caractere generique](#wildcard-styles "Styles avec caractere generique")
+  - [Cles de localisation](#localization-keys "Cles de localisation")
 - [Parametres](#parameters "Parametres")
 - [Extensions de Text](#text-extensions "Extensions de Text")
   - [Styles typographiques](#typography-styles "Styles typographiques")
@@ -32,7 +34,7 @@ StyledText prend en charge deux modes :
 ## Utilisation de base
 
 ``` dart
-// Children mode - list of Text widgets
+// Mode enfants - liste de widgets Text
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Mode template - syntaxe d'espace reserve
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 Cela associe le meme style et callback aux trois espaces reserves.
 
+<div id="wildcard-styles"></div>
+
+### Styles avec caractere generique
+
+Utilisez `"*"` comme cle pour appliquer un style ou un callback au toucher a chaque espace reserve qui n'a pas sa propre cle specifique :
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name` et `app` recoivent tous deux le style generique. Si un espace reserve possede egalement une cle explicite, la cle explicite prend la priorite sur `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // s'applique uniquement a "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // toucher sur tout espace reserve sans correspondance
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### Cles de localisation
+
+Utilisez la syntaxe `@{{key:text}}` pour separer la **cle de recherche** du **texte affiche**. C'est utile pour la localisation — la cle reste la meme dans toutes les langues tandis que le texte affiche change selon la langue.
+
+``` dart
+// Dans vos fichiers de langue :
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN affiche : "Learn Languages, Reading and Speaking in AppName"
+// ES affiche : "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+La partie avant `:` est la **cle** utilisee pour rechercher les styles et les callbacks au toucher. La partie apres `:` est le **texte affiche** qui s'affiche a l'ecran. Sans `:`, l'espace reserve se comporte exactement comme avant — entierement retrocompatible.
+
+Cela fonctionne avec toutes les fonctionnalites existantes, y compris les [cles separees par des barres verticales](#pipe-keys) et les [callbacks au toucher](#tap-callbacks).
+
 <div id="parameters"></div>
 
 ## Parametres
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Methodes utilitaires
 
 ``` dart
-// Font weight
+// Graisse de la police
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Alignement
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Nombre maximum de lignes
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Famille de police
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Taille de la police
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Style personnalise
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// Rembourrage
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Copier avec des modifications
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

@@ -30,6 +30,7 @@
   - [Campi Slider](#slider-fields "Campi Slider")
   - [Campi Range Slider](#range-slider-fields "Campi Range Slider")
   - [Campi Personalizzati](#custom-fields "Campi Personalizzati")
+  - [Campi Builder](#builder-fields "Campi Builder")
   - [Campi Widget](#widget-fields "Campi Widget")
 - [FormCollection](#form-collection "FormCollection")
 - [Validazione del Form](#form-validation "Validazione del Form")
@@ -239,7 +240,7 @@ Tipo di stile: `FieldStyleTextField`
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// Numeri decimali
 Field.number("Score", decimal: true)
 ```
 
@@ -252,7 +253,7 @@ Il parametro `decimal` controlla se l'input decimale e' consentito. Tipo di stil
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// Con toggle di visibilita'
 Field.password("Password", viewable: true)
 ```
 
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// Disabilita il pulsante di cancellazione
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// Icona di cancellazione personalizzata
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -379,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // Restituisce il valore formattato
 )
 ```
 
@@ -430,7 +431,7 @@ Field.picker("Category",
   options: FormCollection.from(["Electronics", "Clothing", "Books"]),
 )
 
-// With key-value pairs
+// Con coppie chiave-valore
 Field.picker("Country",
   options: FormCollection.fromMap({
     "us": "United States",
@@ -456,7 +457,7 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// Con un colore attivo personalizzato
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
@@ -533,7 +534,7 @@ Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// Con coppie chiave-valore
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 Il parametro `child` richiede un widget che estende `NyFieldStatefulWidget`. Questo ti da il pieno controllo sulla renderizzazione e il comportamento del campo.
 
+<div id="builder-fields"></div>
+
+### Campi Builder
+
+Usa `Field.builder()` per creare un campo inline personalizzato senza sottoclassare `NyFieldStatefulWidget`. La funzione builder riceve il valore corrente, un callback `onChanged` per segnalare le modifiche al form e un callback `setState` per attivare il rebuild dell'interfaccia.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // ricostruire il widget campo
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+Il terzo parametro e' il valore corrente del campo e il quarto e' `setState`. Se il builder non ha bisogno di `setState`, puoi usare la firma legacy a 3 argomenti (`NyFieldBuilderLegacy`), ancora supportata:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Campi Widget
@@ -621,19 +658,19 @@ I campi picker, radio e chip richiedono una `FormCollection` per le loro opzioni
 ### Creare una FormCollection
 
 ``` dart
-// From a list of strings (value and label are the same)
+// Da una lista di stringhe (valore e label sono gli stessi)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// Come sopra, esplicito
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// Da una mappa (chiave = valore, valore = label)
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// Da dati strutturati (utile per le risposte API)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -673,10 +710,10 @@ options.labels;                    // ["United States", "Canada"]
 Aggiungi la validazione a qualsiasi campo utilizzando il parametro `validator` con `FormValidator`:
 
 ``` dart
-// Named constructor
+// Costruttore con nome
 Field.email("Email", validator: FormValidator.email())
 
-// Chained rules
+// Regole concatenate
 Field.text("Username",
   validator: FormValidator()
     .notEmpty()
@@ -684,17 +721,17 @@ Field.text("Username",
     .maxLength(20)
 )
 
-// Password with strength level
+// Password con livello di sicurezza
 Field.password("Password",
   validator: FormValidator.password(strength: 2)
 )
 
-// Boolean validation
+// Validazione booleana
 Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// Validazione inline personalizzata
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -785,16 +822,16 @@ class CreatePostForm extends NyFormWidget {
 | `options` | Le opzioni per i campi picker, chip o radio |
 
 ``` dart
-// Set only options (no initial value)
+// Imposta solo le opzioni (nessun valore iniziale)
 "Category": define(options: categories),
 
-// Set only an initial value
+// Imposta solo un valore iniziale
 "Price": define(value: "100"),
 
-// Set both a value and options
+// Imposta sia un valore che le opzioni
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// I valori semplici funzionano ancora per i campi semplici
 "Name": "John",
 ```
 
@@ -818,7 +855,7 @@ EditAccountForm(
 Usa `NyFormActions` per impostare i valori dei campi da qualsiasi punto:
 
 ``` dart
-// Set a single field value
+// Imposta il valore di un singolo campo
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
@@ -856,10 +893,10 @@ EditAccountForm(
 ### Cancellare i Dati
 
 ``` dart
-// Clear all fields
+// Cancella tutti i campi
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// Cancella un campo specifico
 EditAccountForm.actions.clearField("First Name");
 ```
 
@@ -869,13 +906,13 @@ EditAccountForm.actions.clearField("First Name");
 ### Aggiornare i Campi
 
 ``` dart
-// Update a field value
+// Aggiorna il valore di un campo
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// Aggiorna l'interfaccia del form
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// Aggiorna i campi del form (richiama fields())
 EditAccountForm.actions.refreshForm();
 ```
 
@@ -930,25 +967,25 @@ Posiziona i campi affiancati racchiudendoli in una `List`:
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // Campo singolo (larghezza piena)
   Field.text("Title"),
 
-  // Two fields in a row
+  // Due campi in una riga
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // Un altro campo singolo
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // Slider e range slider in una riga
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // Incorpora un widget non-campo
   Field.widget(child: Divider()),
 
   Field.email("Email"),
@@ -965,13 +1002,13 @@ I campi in una `List` vengono renderizzati in una `Row` con larghezze `Expanded`
 Mostra o nascondi i campi programmaticamente utilizzando i metodi `hide()` e `show()` su `Field`. Puoi accedere ai campi all'interno della tua classe form o tramite il callback `onChanged`:
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// All'interno della tua sottoclasse NyFormWidget o del callback onChanged
 Field nameField = ...;
 
-// Hide the field
+// Nascondi il campo
 nameField.hide();
 
-// Show the field
+// Mostra il campo
 nameField.show();
 ```
 
@@ -1047,15 +1084,15 @@ Field.chips("Tags",
 | `NyFormWidget.stateRefreshForm(name)` | Aggiorna i campi del form (richiama `fields()`) |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// Invia un form chiamato "LoginForm" da qualsiasi luogo
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// Aggiorna il valore di un campo da remoto
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// Cancella tutti i dati del form
 NyFormWidget.stateClearData("LoginForm");
 ```
 
@@ -1071,20 +1108,20 @@ Quando estendi `NyFormWidget`, questi sono i parametri del costruttore che puoi 
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // Spaziatura orizzontale tra i campi nella riga
+  double mainAxisSpacing = 10,   // Spaziatura verticale tra i campi
+  Map<String, dynamic>? initialData, // Valori iniziali dei campi
+  Function(Field field, dynamic value)? onChanged, // Callback al cambio campo
+  Widget? header,                // Widget sopra il form
+  Widget? submitButton,          // Widget del pulsante di invio
+  Widget? footer,                // Widget sotto il form
+  double headerSpacing = 10,     // Spaziatura dopo l'header
+  double submitButtonSpacing = 10, // Spaziatura dopo il pulsante di invio
+  double footerSpacing = 10,     // Spaziatura prima del footer
+  LoadingStyle? loadingStyle,    // Stile dell'indicatore di caricamento
+  bool locked = false,           // Rende il form in sola lettura
+  Function(dynamic data)? onSubmit,   // Chiamato con i dati del form dopo validazione riuscita
+  Function(dynamic error)? onFailure, // Chiamato con gli errori dopo validazione fallita
 )
 ```
 
@@ -1132,13 +1169,13 @@ class LoginForm extends NyFormWidget {
 | `actions.submit(onSuccess:, onFailure:, showToastError:)` | Invia con validazione |
 
 ``` dart
-// Update a field value
+// Aggiorna il valore di un campo
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// Cancella tutti i dati del form
 LoginForm.actions.clear();
 
-// Submit the form
+// Invia il form
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);
@@ -1184,5 +1221,6 @@ Metodi che puoi sovrascrivere nella tua sottoclasse di `NyFormWidget`:
 | `Field.slider()` | -- | Slider a valore singolo |
 | `Field.rangeSlider()` | -- | Slider a intervallo di valori |
 | `Field.custom()` | `child` (obbligatorio `NyFieldStatefulWidget`) | Widget stateful personalizzato |
+| `Field.builder()` | `builder` (obbligatorio `NyFieldBuilder` o `NyFieldBuilderLegacy`) | Campo inline personalizzato senza sottoclassare |
 | `Field.widget()` | `child` (obbligatorio `Widget`) | Incorpora qualsiasi widget (non-campo) |
 

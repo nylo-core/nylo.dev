@@ -319,13 +319,21 @@ This list is used by Flutter's `MaterialApp.supportedLocales`.
 
 ## Fallback Language
 
-When a translation key is not found in the active locale, {{ config('app.name') }} falls back to the specified language:
+When a translation key is not found in the active locale, {{ config('app.name') }} automatically looks it up in the fallback language before returning the raw key. The fallback language is configured in `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-This ensures your app never shows raw keys if a translation is missing.
+This two-step resolution applies to both top-level keys and dot-notated nested keys:
+
+1. Look up the key in the active locale file.
+2. If not found, look it up in the fallback locale file.
+3. If still not found, return the raw key string.
+
+For example, if the French locale file is missing the key `settings.privacy`, the fallback logic looks for `settings.privacy` in the English locale file before falling back to returning `"settings.privacy"` as-is.
+
+This ensures your app never shows raw keys if a translation is only partially complete.
 
 <div id="rtl-support"></div>
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Current language code |
 | `locale` | `Locale` | Current Locale object |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter localization delegates |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Inject translation maps directly for unit tests |
 
 <div id="nylocalehelper"></div>
 

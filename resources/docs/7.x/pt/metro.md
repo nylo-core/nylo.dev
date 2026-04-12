@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 O comando acima criará um novo widget se ele não existir dentro do diretório `lib/resources/widgets/`.
 
+Todos os comandos `make:*` aceitam um separador de caminho no nome para colocar o arquivo em um subdiretório:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Isso cria o widget em `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Forçar criação de um stateless widget
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Isso criará um novo evento em `lib/app/events`.
 
+Use um separador de caminho para organizar o evento em um subdiretório:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Isso cria o evento em `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Forçar criação de um evento
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Ele colocará o provider recém-criado em `lib/app/providers/`.
+
+Use um separador de caminho para organizar o provider em um subdiretório:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Isso cria o provider em `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Isso criará um novo formulário em `lib/app/forms`.
 
+Use um separador de caminho para organizar o formulário em um subdiretório:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Isso cria o formulário em `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Forçar criação de um formulário
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Isso criará um novo route guard em `lib/app/route_guards`.
+
+Use um separador de caminho para organizar o guard em um subdiretório:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Isso cria o guard em `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -755,14 +795,10 @@ metro make:key
 
 | Flag / Opção | Abreviação | Descrição |
 |---------------|-------|-------------|
-| `--force` | `-f` | Sobrescrever APP_KEY existente |
-| `--file` | `-e` | Arquivo .env de destino (padrão: `.env`) |
+| `--file` | `-e` | Arquivo .env de destino (padrao: `.env`) |
 
 ``` bash
-# Gerar chave e sobrescrever existente
-metro make:key --force
-
-# Gerar chave para um arquivo env específico
+# Gerar chave para um arquivo env especifico
 metro make:key --file=.env.production
 ```
 
@@ -816,9 +852,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Comando Hora Atual
 ///
-/// Usage:
+/// Uso:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +869,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Obter a hora atual
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Formatar a hora atual
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -2003,7 +2039,7 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: implementar login
     return false;
   }
 }

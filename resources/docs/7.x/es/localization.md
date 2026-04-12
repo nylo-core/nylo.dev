@@ -319,13 +319,21 @@ Esta lista es utilizada por `MaterialApp.supportedLocales` de Flutter.
 
 ## Idioma de respaldo
 
-Cuando no se encuentra una clave de traducción en la localización activa, {{ config('app.name') }} recurre al idioma especificado:
+Cuando no se encuentra una clave de traducción en la localización activa, {{ config('app.name') }} la busca automáticamente en el idioma de respaldo antes de devolver la clave sin procesar. El idioma de respaldo se configura en `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Esto asegura que tu aplicación nunca muestre claves crudas si falta una traducción.
+Esta resolución en dos pasos se aplica tanto a claves de nivel superior como a claves anidadas con notación de puntos:
+
+1. Buscar la clave en el archivo de localización activo.
+2. Si no se encuentra, buscarla en el archivo de localización de respaldo.
+3. Si aún no se encuentra, devolver la cadena de clave sin procesar.
+
+Por ejemplo, si el archivo de localización francés no tiene la clave `settings.privacy`, la lógica de respaldo busca `settings.privacy` en el archivo de localización inglés antes de devolver `"settings.privacy"` tal cual.
+
+Esto asegura que tu aplicación nunca muestre claves sin procesar si una traducción solo está parcialmente completa.
 
 <div id="rtl-support"></div>
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Código de idioma actual |
 | `locale` | `Locale` | Objeto Locale actual |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Delegados de localización de Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Inyectar mapas de traducción directamente para pruebas unitarias |
 
 <div id="nylocalehelper"></div>
 

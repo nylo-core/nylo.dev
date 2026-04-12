@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // 显示/隐藏切换图标
+  passwordViewable: true, // 允许用户切换可见性
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 为格式化数据（如电话号码或信用卡）应用输入掩码：
 
 ``` dart
-// Phone number mask
+// 电话号码掩码
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // 返回未掩码的值：1234567890
 )
 
-// Credit card mask
+// 信用卡掩码
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // 返回掩码后的值：1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // 自定义清除图标
   onChanged: (value) {
-    // Handle search
+    // 处理搜索
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### 状态操作
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// 清除字段
+actions.clear();
+
+// 设置值
+actions.setValue("new_value");
+
+// 将焦点移至字段
+actions.focus();
+
+// 从字段移除焦点
+actions.unfocus();
+
+// 切换密码可见性（用于 InputField.password）
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | 标签文本样式 |
 | `hintStyle` | `TextStyle?` | 提示文本样式 |
 | `prefixIcon` | `Widget?` | 输入前的图标 |
+| `suffixIcon` | `Widget?` | 输入后的图标 |
 
 ### 掩码参数
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | 允许密码可见性切换 |
 | `dummyData` | `String?` | 用于开发的模拟数据 |
 | `stateName` | `String?` | 状态管理名称 |
+| `enableInteractiveSelection` | `bool` | 启用文本选择（默认值：`true`） |
 | `onChanged` | `Function(String)?` | 值变化时调用 |

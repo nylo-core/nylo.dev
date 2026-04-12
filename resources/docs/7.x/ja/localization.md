@@ -319,13 +319,21 @@ static const List<Locale> supportedLocales = [
 
 ## フォールバック言語
 
-アクティブなロケールで翻訳キーが見つからない場合、{{ config('app.name') }} は指定された言語にフォールバックします:
+アクティブなロケールで翻訳キーが見つからない場合、{{ config('app.name') }} は生のキーを返す前にフォールバック言語でそのキーを検索します。フォールバック言語は `lib/config/localization.dart` で設定します:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-これにより、翻訳が欠落している場合でもアプリが生のキーを表示することはありません。
+この2段階の解決はトップレベルのキーとドット記法のネストされたキーの両方に適用されます:
+
+1. アクティブなロケールファイルでキーを検索します。
+2. 見つからない場合は、フォールバックロケールファイルでキーを検索します。
+3. それでも見つからない場合は、生のキー文字列を返します。
+
+例えば、フランス語のロケールファイルに `settings.privacy` キーが欠落している場合、フォールバックロジックは英語のロケールファイルで `settings.privacy` を検索し、その後 `"settings.privacy"` をそのまま返すフォールバックを行います。
+
+これにより、翻訳が部分的にしか完了していない場合でも、アプリが生のキーを表示することはありません。
 
 <div id="rtl-support"></div>
 
@@ -365,7 +373,7 @@ DEBUG_TRANSLATIONS="true"
 
 ``` dart
 bool exists = NyLocalization.instance.hasTranslation('welcome');
-// 現在の言語ファイルにキーが存在する場合 true
+// 現在の言語ファイルにキーが存在する場合は true
 
 // ネストされたキーでも動作
 bool nestedExists = NyLocalization.instance.hasTranslation('navigation.home');
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | 現在の言語コード |
 | `locale` | `Locale` | 現在の Locale オブジェクト |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter ローカリゼーションデリゲート |
+| `setValuesForTesting({values, fallbackValues})` | `void` | ユニットテスト用に翻訳マップを直接注入 |
 
 <div id="nylocalehelper"></div>
 

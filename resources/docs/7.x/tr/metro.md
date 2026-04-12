@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Yukaridaki komut, `lib/resources/widgets/` dizininde mevcut degilse yeni bir widget olusturacaktir.
 
+Tüm `make:*` komutları, dosyayı bir alt dizine yerleştirmek için adda yol ayırıcısı kabul eder:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Bu, widget'ı `lib/resources/widgets/login/brand_panel.dart` konumunda oluşturur.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Zorunlu stateless widget olusturma
@@ -338,7 +346,7 @@ Terminalde asagidaki komutu calistirarak yeni bir journey widget olusturabilirsi
 ``` bash
 metro make:journey_widget product_journey --parent="[NAVIGATION_HUB]"
 
-# Full example if you have a BaseNavigationHub
+# BaseNavigationHub varsa tam örnek
 metro make:journey_widget welcome,user_dob,user_photos --parent="Base"
 ```
 
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Bu, `lib/app/events` dizininde yeni bir event olusturacaktir.
 
+Olayı bir alt dizinde düzenlemek için yol ayırıcısı kullanın:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Bu, olayı `lib/app/events/auth/login_event.dart` konumunda oluşturur.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Zorunlu event olusturma
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Yeni olusturulan provider `lib/app/providers/` dizinine yerlestirilecektir.
+
+Provider'ı bir alt dizinde düzenlemek için yol ayırıcısı kullanın:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Bu, provider'ı `lib/app/providers/integrations/firebase_provider.dart` konumunda oluşturur.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Bu, `lib/app/forms` dizininde yeni bir form olusturacaktir.
 
+Formu bir alt dizinde düzenlemek için yol ayırıcısı kullanın:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Bu, formu `lib/app/forms/checkout/car_advert_form.dart` konumunda oluşturur.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Zorunlu form olusturma
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Bu, `lib/app/route_guards` dizininde yeni bir route guard olusturacaktir.
+
+Guard'ı bir alt dizinde düzenlemek için yol ayırıcısı kullanın:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Bu, guard'ı `lib/app/route_guards/subscriptions/premium_content.dart` konumunda oluşturur.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -671,7 +711,7 @@ Bu, `lib/resources/pages/` dizininde yeni bir navigation hub olusturacak ve rout
 | `--force` | `-f` | Mevcutsa uzerine yaz |
 
 ``` bash
-# Create as the initial page
+# Başlangıç sayfası olarak oluştur
 metro make:navigation_hub dashboard --initial
 ```
 
@@ -759,10 +799,10 @@ metro make:key
 | `--file` | `-e` | Hedef .env dosyasi (varsayilan: `.env`) |
 
 ``` bash
-# Generate key and overwrite existing
+# Anahtar oluştur ve mevcut anahtarın üzerine yaz
 metro make:key --force
 
-# Generate key for a specific env file
+# Belirli bir env dosyası için anahtar oluştur
 metro make:key --file=.env.production
 ```
 
@@ -805,7 +845,7 @@ metro make:command current_time
 Komutunuz icin `--category` secenegini kullanarak bir kategori belirtebilirsiniz:
 
 ```bash
-# Specify a category
+# Kategori belirt
 metro make:command current_time --category="project"
 ```
 
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Mevcut zamanı al
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Mevcut zamanı biçimlendir
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -897,13 +937,13 @@ Secenekler, komutunuzun kullanicilardan ek girdi almasini saglar. `builder` meto
 @override
 CommandBuilder builder(CommandBuilder command) {
 
-  // Add an option with a default value
+  // Varsayilan degerli bir secenek ekle
   command.addOption(
-    'environment',     // option name
-    abbr: 'e',         // short form abbreviation
-    help: 'Target deployment environment', // help text
-    defaultValue: 'development',  // default value
-    allowed: ['development', 'staging', 'production'] // allowed values
+    'environment',     // seçenek adı
+    abbr: 'e',         // kısa form kısaltması
+    help: 'Target deployment environment', // yardım metni
+    defaultValue: 'development',  // varsayılan değer
+    allowed: ['development', 'staging', 'production'] // izin verilen değerler
   );
 
   return command;
@@ -918,7 +958,7 @@ Future<void> handle(CommandResult result) async {
   final environment = result.getString('environment');
   info('Deploying to $environment environment...');
 
-  // Command implementation...
+  // Komut uygulaması...
 }
 ```
 
@@ -941,10 +981,10 @@ Bayraklar, acilip kapanabilen boole secenekleridir. `addFlag` metodunu kullanara
 CommandBuilder builder(CommandBuilder command) {
 
   command.addFlag(
-    'verbose',       // flag name
-    abbr: 'v',       // short form abbreviation
-    help: 'Enable verbose output', // help text
-    defaultValue: false  // default to off
+    'verbose',       // bayrak adı
+    abbr: 'v',       // kısa form kısaltması
+    help: 'Enable verbose output', // yardım metni
+    defaultValue: false  // varsayılan olarak kapalı
   );
 
   return command;
@@ -960,14 +1000,14 @@ Future<void> handle(CommandResult result) async {
 
   if (verbose) {
     info('Verbose mode enabled');
-    // Additional logging...
+    // Ek günlük kaydı...
   }
 
-  // Command implementation...
+  // Komut uygulaması...
 }
 ```
 
-Ornek kullanim:
+Örnek kullanım:
 
 ```bash
 metro project:deploy --verbose
@@ -1039,13 +1079,13 @@ Komut argumanlarini yonetmek icin asagidaki yardimci metotlari da kullanabilirsi
 ### Harici Islemleri Calistirma
 
 ```dart
-// Run a process with output displayed in the console
+// Çıktısı konsolda görüntülenen bir işlem çalıştır
 await runProcess('flutter build web --release');
 
-// Run a process silently
+// İşlemi sessizce çalıştır
 await runProcess('flutter pub get', silent: true);
 
-// Run a process in a specific directory
+// Belirli bir dizinde işlem çalıştır
 await runProcess('git pull', workingDirectory: './my-project');
 ```
 
@@ -1055,13 +1095,13 @@ await runProcess('git pull', workingDirectory: './my-project');
 <div id="custom-command-helper-add-packages"></div>
 
 ```dart
-// Add a package to pubspec.yaml
+// pubspec.yaml'a paket ekle
 addPackage('firebase_core', version: '^2.4.0');
 
-// Add a dev package to pubspec.yaml
+// pubspec.yaml'a geliştirici paketi ekle
 addPackage('build_runner', dev: true);
 
-// Add multiple packages at once
+// Birden fazla paketi aynı anda ekle
 addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
@@ -1070,11 +1110,11 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ### Cikti Bicimlendirme
 
 ```dart
-// Print status messages with color coding
-info('Processing files...');    // Blue text
-error('Operation failed');      // Red text
-success('Deployment complete'); // Green text
-warning('Outdated package');    // Yellow text
+// Renk kodlamayla durum mesajları yazdır
+info('Processing files...');    // Mavi metin
+error('Operation failed');      // Kırmızı metin
+success('Deployment complete'); // Yeşil metin
+warning('Outdated package');    // Sarı metin
 ```
 
 <div id="interactive-input-methods"></div>
@@ -1124,10 +1164,10 @@ Kullaniciya evet/hayir sorusu sorar ve boole sonuc dondurur.
 **Ornek:**
 ```dart
 if (confirm('Would you like to continue?', defaultValue: true)) {
-  // User confirmed or pressed Enter (accepting the default)
+  // Kullanici onayladi veya Enter'a basti (varsayilani kabul etti)
   await runProcess('flutter pub get');
 } else {
-  // User declined
+  // Kullanici reddetti
   info('Operation canceled');
 }
 ```
@@ -1205,7 +1245,7 @@ Future<T?> api<T>(Future<T?> Function(ApiService) request) async
 ### GET Istegi
 
 ```dart
-// Fetch data
+// Veri getir
 final userData = await api((request) =>
   request.get('https://api.example.com/users/1')
 );
@@ -1214,7 +1254,7 @@ final userData = await api((request) =>
 ### POST Istegi
 
 ```dart
-// Create a resource
+// Kaynak olustur
 final result = await api((request) =>
   request.post(
     'https://api.example.com/items',
@@ -1226,7 +1266,7 @@ final result = await api((request) =>
 ### PUT Istegi
 
 ```dart
-// Update a resource
+// Kaynagi guncelle
 final updateResult = await api((request) =>
   request.put(
     'https://api.example.com/items/42',
@@ -1238,14 +1278,14 @@ final updateResult = await api((request) =>
 ### DELETE Istegi
 
 ```dart
-// Delete a resource
+// Kaynagi sil
 final deleteResult = await api((request) => request.delete('https://api.example.com/items/42'));
 ```
 
 ### PATCH Istegi
 
 ```dart
-// Partially update a resource
+// Kaynagi kismen guncelle
 final patchResult = await api((request) => request.patch(
     'https://api.example.com/items/42',
     data: {'price': 24.99}
@@ -1256,7 +1296,7 @@ final patchResult = await api((request) => request.patch(
 ### Sorgu Parametreleri ile
 
 ```dart
-// Add query parameters
+// Sorgu parametreleri ekle
 final searchResults = await api((request) => request.get(
     'https://api.example.com/search',
     queryParameters: {'q': 'keyword', 'limit': 10}
@@ -1267,11 +1307,11 @@ final searchResults = await api((request) => request.get(
 ### Spinner ile
 
 ```dart
-// Using with spinner for better UI
+// Daha iyi UI icin spinner ile kullan
 final data = await withSpinner(
   task: () async {
     final data = await api((request) => request.get('https://api.example.com/config'));
-    // Process the data
+    // Veriyi isle
   },
   message: 'Loading configuration',
 );
@@ -1315,10 +1355,10 @@ Future<T> withSpinner<T>({
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Run a task with a spinner
+  // Spinner ile bir gorev calistir
   final projectFiles = await withSpinner(
     task: () async {
-      // Long-running task (e.g., analyzing project files)
+      // Uzun sureli gorev (orn. proje dosyalarini analiz et)
       await sleep(2);
       return ['pubspec.yaml', 'lib/main.dart', 'README.md'];
     },
@@ -1327,7 +1367,7 @@ Future<void> handle(CommandResult result) async {
     errorMessage: 'Failed to analyze project',
   );
 
-  // Continue with the results
+  // Sonuclarla devam et
   info('Found ${projectFiles.length} key files');
 }
 ```
@@ -1351,26 +1391,26 @@ ConsoleSpinner createSpinner(String message)
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a spinner instance
+  // Bir spinner ornegi olustur
   final spinner = createSpinner('Deploying to production');
   spinner.start();
 
   try {
-    // First task
+    // Birinci gorev
     await runProcess('flutter clean', silent: true);
     spinner.update('Building release version');
 
-    // Second task
+    // Ikinci gorev
     await runProcess('flutter build web --release', silent: true);
     spinner.update('Uploading to server');
 
-    // Third task
+    // Ucuncu gorev
     await runProcess('./deploy.sh', silent: true);
 
-    // Complete successfully
+    // Basariyla tamamla
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
   } catch (e) {
-    // Handle failure
+    // Hatayı isle
     spinner.stop(completionMessage: 'Deployment failed: $e', success: false);
     rethrow;
   }
@@ -1388,7 +1428,7 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   await withSpinner(
     task: () async {
-      // Install dependencies
+      // Bagimlilikları yukle
       await runProcess('flutter pub get', silent: true);
       return true;
     },
@@ -1403,19 +1443,19 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // First operation with spinner
+  // Spinner ile birinci islem
   await withSpinner(
     task: () => runProcess('flutter clean', silent: true),
     message: 'Cleaning project',
   );
 
-  // Second operation with spinner
+  // Spinner ile ikinci islem
   await withSpinner(
     task: () => runProcess('flutter pub get', silent: true),
     message: 'Updating dependencies',
   );
 
-  // Third operation with spinner
+  // Spinner ile ucuncu islem
   final buildSuccess = await withSpinner(
     task: () async {
       await runProcess('flutter build apk --release', silent: true);
@@ -1440,7 +1480,7 @@ Future<void> handle(CommandResult result) async {
   spinner.start();
 
   try {
-    // Run multiple steps with status updates
+    // Durum guncellemeleriyle birden fazla adim calistir
     spinner.update('Step 1: Cleaning project');
     await runProcess('flutter clean', silent: true);
 
@@ -1450,7 +1490,7 @@ Future<void> handle(CommandResult result) async {
     spinner.update('Step 3: Building release');
     await runProcess('flutter build web --release', silent: true);
 
-    // Complete the process
+    // Islemi tamamla
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
 
   } catch (e) {
@@ -1583,28 +1623,28 @@ Temel `info`, `error`, `success` ve `warning` metotlarinin otesinde, `NyCustomCo
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Print plain text (no color)
+  // Düz metin yazdır (renk yok)
   line('Processing your request...');
 
-  // Print blank lines
-  newLine();       // one blank line
-  newLine(3);      // three blank lines
+  // Boş satırlar yazdır
+  newLine();       // bir boş satır
+  newLine(3);      // üç boş satır
 
-  // Print a muted comment (gray text)
+  // Soluk yorum yazdır (gri metin)
   comment('This is a background note');
 
-  // Print a prominent alert box
+  // Belirgin bir uyarı kutusu yazdır
   alert('Important: Please read carefully');
 
-  // Ask is an alias for prompt
+  // Ask, prompt için takma addır
   final name = ask('What is your name?');
 
-  // Hidden input for sensitive data (e.g., passwords, API keys)
+  // Hassas veriler için gizli girdi (örn. şifreler, API anahtarları)
   final apiKey = promptSecret('Enter your API key:');
 
-  // Abort the command with an error message and exit code
+  // Komutu hata mesajı ve çıkış koduyla iptal et
   if (name.isEmpty) {
-    abort('Name is required');  // exits with code 1
+    abort('Name is required');  // kod 1 ile çıkar
   }
 }
 ```
@@ -1630,38 +1670,38 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Check if a file exists
+  // Dosyanın var olup olmadığını kontrol et
   if (fileExists('lib/config/app.dart')) {
     info('Config file found');
   }
 
-  // Check if a directory exists
+  // Dizinin var olup olmadığını kontrol et
   if (directoryExists('lib/app/models')) {
     info('Models directory found');
   }
 
-  // Read a file (async)
+  // Dosyayı oku (asenkron)
   String content = await readFile('pubspec.yaml');
 
-  // Read a file (sync)
+  // Dosyayı oku (senkron)
   String contentSync = readFileSync('pubspec.yaml');
 
-  // Write to a file (async)
+  // Dosyaya yaz (asenkron)
   await writeFile('lib/generated/output.dart', 'class Output {}');
 
-  // Write to a file (sync)
+  // Dosyaya yaz (senkron)
   writeFileSync('lib/generated/output.dart', 'class Output {}');
 
-  // Append content to a file
+  // Dosyaya içerik ekle
   await appendFile('log.txt', 'New log entry\n');
 
-  // Ensure a directory exists (creates it if missing)
+  // Dizinin var olduğundan emin ol (yoksa oluştur)
   await ensureDirectory('lib/generated');
 
-  // Delete a file
+  // Dosyayı sil
   await deleteFile('lib/generated/output.dart');
 
-  // Copy a file
+  // Dosyayı kopyala
   await copyFile('lib/config/app.dart', 'lib/config/app.bak.dart');
 }
 ```
@@ -1688,27 +1728,27 @@ Yerlesik yardimlarla JSON ve YAML dosyalarini okuyun ve yazin.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Read a JSON file as a Map
+  // JSON dosyasını Map olarak oku
   Map<String, dynamic> config = await readJson('config.json');
 
-  // Read a JSON file as a List
+  // JSON dosyasını List olarak oku
   List<dynamic> items = await readJsonArray('lib/app/commands/commands.json');
 
-  // Write data to a JSON file (pretty printed by default)
+  // Veriyi JSON dosyasına yaz (varsayılan olarak güzel biçimlendirilmiş)
   await writeJson('output.json', {'name': 'MyApp', 'version': '1.0.0'});
 
-  // Write compact JSON
+  // Sıkıştırılmış JSON yaz
   await writeJson('output.json', data, pretty: false);
 
-  // Append an item to a JSON array file
-  // If the file contains [{"name": "a"}], this adds to that array
+  // JSON dizi dosyasına öğe ekle
+  // Dosya [{"name": "a"}] içeriyorsa bu, o diziye ekler
   await appendToJsonArray(
     'lib/app/commands/commands.json',
     {'name': 'my_command', 'category': 'app', 'script': 'my_command.dart'},
-    uniqueKey: 'name',  // prevents duplicates by this key
+    uniqueKey: 'name',  // bu anahtara göre tekrarlananları önler
   );
 
-  // Read a YAML file as a Map
+  // YAML dosyasını Map olarak oku
   Map<String, dynamic> pubspec = await readYaml('pubspec.yaml');
   info('Project: ${pubspec['name']}');
 }
@@ -1771,7 +1811,7 @@ Future<void> handle(CommandResult result) async {
   info(networkingPath);   // lib/app/networking
   info(themesPath);       // lib/resources/themes
 
-  // Build a custom path relative to the project root
+  // Proje köküne göre özel bir yol oluştur
   String customPath = projectPath('lib/app/services/auth_service.dart');
 }
 ```
@@ -1799,7 +1839,7 @@ Platformu kontrol edin ve ortam degiskenlerine erisin.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Platform checks
+  // Platform kontrolleri
   if (isWindows) {
     info('Running on Windows');
   } else if (isMacOS) {
@@ -1808,10 +1848,10 @@ Future<void> handle(CommandResult result) async {
     info('Running on Linux');
   }
 
-  // Current working directory
+  // Mevcut çalışma dizini
   info('Working in: $workingDirectory');
 
-  // Read system environment variables
+  // Sistem ortam değişkenlerini oku
   String home = env('HOME', '/default/path');
 }
 ```
@@ -1833,25 +1873,25 @@ Yaygin Dart ve Flutter CLI komutlarini yardimci metotlar olarak calistirin. Her 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Format a Dart file or directory
+  // Bir Dart dosyasını veya dizini biçimlendir
   await dartFormat('lib/app/models/user.dart');
 
-  // Run dart analyze
+  // dart analyze çalıştır
   int analyzeResult = await dartAnalyze('lib/');
 
-  // Run flutter pub get
+  // flutter pub get çalıştır
   await flutterPubGet();
 
-  // Run flutter clean
+  // flutter clean çalıştır
   await flutterClean();
 
-  // Build for a target with additional args
+  // Ek argümanlarla bir hedef için derle
   await flutterBuild('apk', args: ['--release', '--split-per-abi']);
   await flutterBuild('web', args: ['--release']);
 
-  // Run flutter test
+  // flutter test çalıştır
   await flutterTest();
-  await flutterTest('test/unit/');  // specific directory
+  await flutterTest('test/unit/');  // belirli dizin
 }
 ```
 
@@ -1873,26 +1913,26 @@ Iskele araclari olustururken kullanisli olan Dart dosyalarini programatik olarak
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Add an import statement to a Dart file (avoids duplicates)
+  // Dart dosyasına import ifadesi ekle (tekrarları önler)
   await addImport(
     'lib/bootstrap/providers.dart',
     "import '/app/providers/firebase_provider.dart';",
   );
 
-  // Insert code before the last closing brace in a file
-  // Useful for adding entries to registration maps
+  // Dosyadaki son kapanış parantezinden önce kod ekle
+  // Kayıt haritalarına giriş eklemek için kullanışlı
   await insertBeforeClosingBrace(
     'lib/bootstrap/providers.dart',
     '  FirebaseProvider(),',
   );
 
-  // Check if a file contains a specific string
+  // Dosyanın belirli bir string içerip içermediğini kontrol et
   bool hasImport = await fileContains(
     'lib/bootstrap/providers.dart',
     'firebase_provider',
   );
 
-  // Check if a file matches a regex pattern
+  // Dosyanın bir regex kalıbıyla eşleşip eşleşmediğini kontrol et
   bool hasClass = await fileContainsPattern(
     'lib/app/models/user.dart',
     RegExp(r'class User'),
@@ -1916,32 +1956,32 @@ Dizinlerle calisma ve dosya bulma yardimlari.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // List directory contents
+  // Dizin iceriklerini listele
   var entities = listDirectory('lib/app/models');
   for (var entity in entities) {
     info(entity.path);
   }
 
-  // List recursively
+  // Tekrarli olarak listele
   var allEntities = listDirectory('lib/', recursive: true);
 
-  // Find files matching criteria
+  // Kriterlere uyan dosyalari bul
   List<File> dartFiles = findFiles(
     'lib/app/models',
     extension: '.dart',
     recursive: true,
   );
 
-  // Find files by name pattern
+  // Dosyalari ad kalibina gore bul
   List<File> testFiles = findFiles(
     'test/',
     namePattern: RegExp(r'_test\.dart$'),
   );
 
-  // Delete a directory recursively
+  // Dizini tekrarli olarak sil
   await deleteDirectory('build/');
 
-  // Copy a directory (recursive)
+  // Dizini kopyala (tekrarli)
   await copyDirectory('lib/templates', 'lib/generated');
 }
 ```
@@ -1962,21 +2002,21 @@ Kod uretimi icin kullanici girdisini dogrulama ve temizleme yardimlari.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Validate a Dart identifier
+  // Dart tanimlayicisini dogrula
   if (!isValidDartIdentifier('MyClass')) {
     error('Invalid Dart identifier');
   }
 
-  // Require a non-empty first argument
+  // Bos olmayan ilk argumani zorunlu kil
   String name = requireArgument(result, message: 'Please provide a name');
 
-  // Clean a class name (PascalCase, remove suffixes)
+  // Sinif adini temizle (PascalCase, sonekleri kaldir)
   String className = cleanClassName('user_model', removeSuffixes: ['_model']);
-  // Returns: 'User'
+  // Dondurur: 'User'
 
-  // Clean a file name (snake_case with extension)
+  // Dosya adini temizle (uzantili snake_case)
   String fileName = cleanFileName('UserModel', extension: '.dart');
-  // Returns: 'user_model.dart'
+  // Dondurur: 'user_model.dart'
 }
 ```
 
@@ -2003,12 +2043,12 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: giris islemini uygula
     return false;
   }
 }
 ''',
-    force: false,  // don't overwrite if exists
+    force: false,  // mevcutsa uzerine yazma
     successMessage: 'AuthService created',
   );
 }
@@ -2065,7 +2105,7 @@ Future<void> handle(CommandResult result) async {
     CommandTask(
       'Run tests',
       () => runProcess('flutter test', silent: true),
-      stopOnError: true,  // stop pipeline if this fails (default)
+      stopOnError: true,  // bu basarisiz olursa hatti durdur (varsayilan)
     ),
   ]);
 }
@@ -2143,13 +2183,13 @@ Bilinen oge sayisina sahip islemler icin ilerleme cubugu goruntuleyin.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a progress bar for 100 items
+  // 100 oge icin ilerleme cubugu olustur
   final progress = progressBar(100, message: 'Processing files');
   progress.start();
 
   for (int i = 0; i < 100; i++) {
     await Future.delayed(Duration(milliseconds: 50));
-    progress.tick();  // increment by 1
+    progress.tick();  // 1 artir
   }
 
   progress.complete('All files processed');
@@ -2163,11 +2203,11 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   final files = findFiles('lib/', extension: '.dart');
 
-  // Process items with automatic progress tracking
+  // Ogeler otomatik ilerleme takibiyle isle
   final results = await withProgress<File, String>(
     items: files,
     process: (file, index) async {
-      // process each file
+      // her dosyayi isle
       return file.path;
     },
     message: 'Analyzing Dart files',
@@ -2188,7 +2228,7 @@ Future<void> handle(CommandResult result) async {
   final results = withProgressSync<String, String>(
     items: items,
     process: (item, index) {
-      // synchronous processing
+      // senkron isleme
       return item.toUpperCase();
     },
     message: 'Converting items',

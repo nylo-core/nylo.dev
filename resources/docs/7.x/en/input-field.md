@@ -236,14 +236,22 @@ InputField(
 ### State Actions
 
 ``` dart
+final actions = InputField.stateActions("username_field");
+
 // Clear the field
-InputField.stateActions("username_field").clear();
+actions.clear();
 
 // Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+actions.setValue("new_value");
+
+// Move focus to the field
+actions.focus();
+
+// Remove focus from the field
+actions.unfocus();
+
+// Toggle password visibility (for InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Label text style |
 | `hintStyle` | `TextStyle?` | Hint text style |
 | `prefixIcon` | `Widget?` | Icon before input |
+| `suffixIcon` | `Widget?` | Icon after input |
 
 ### Masking Parameters
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Allow password visibility toggle |
 | `dummyData` | `String?` | Fake data for development |
 | `stateName` | `String?` | Name for state management |
+| `enableInteractiveSelection` | `bool` | Enable text selection (default: `true`) |
 | `onChanged` | `Function(String)?` | Called when value changes |

@@ -35,7 +35,7 @@ class HomeController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Initialize services or fetch data
+    // Khởi tạo dịch vụ hoặc tải dữ liệu
   }
 
   void onTapProfile() {
@@ -58,12 +58,12 @@ class HomeController extends NyController {
 Sử dụng Metro CLI để tạo controller:
 
 ``` bash
-# Create a page with a controller
+# Tạo một trang với controller
 metro make:page dashboard --controller
-# or shorthand
+# hoặc viết tắt
 metro make:page dashboard -c
 
-# Create a controller only
+# Chỉ tạo controller
 metro make:controller profile_controller
 ```
 
@@ -92,7 +92,7 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   get init => () async {
-    // Access controller methods
+    // Truy cập các phương thức controller
     widget.controller.fetchData();
   };
 
@@ -123,17 +123,17 @@ class _HomePageState extends NyPage<HomePage> {
 Truyền dữ liệu giữa các trang và truy cập trong controller:
 
 ``` dart
-// Navigate with data
+// Điều hướng kèm dữ liệu
 routeTo(ProfilePage.path, data: {"userId": 123});
 
-// In your controller
+// Trong controller của bạn
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get the passed data
+    // Lấy dữ liệu đã truyền
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -147,10 +147,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
   get init => () async {
-    // From controller
+    // Từ controller
     var userData = widget.controller.data();
 
-    // Or from widget directly
+    // Hoặc từ widget trực tiếp
     var userData = widget.data();
   };
 }
@@ -163,21 +163,21 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 Truy cập tham số truy vấn URL trong controller:
 
 ``` dart
-// Navigate to: /profile?tab=settings&highlight=true
+// Điều hướng đến: /profile?tab=settings&highlight=true
 routeTo("/profile?tab=settings&highlight=true");
 
-// In your controller
+// Trong controller của bạn
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get all query parameters as Map
+    // Lấy tất cả tham số truy vấn dạng Map
     Map<String, dynamic>? params = queryParameters();
     // {"tab": "settings", "highlight": "true"}
 
-    // Get a specific parameter
+    // Lấy một tham số cụ thể
     String? tab = queryParameters(key: "tab");
     // "settings"
   }
@@ -187,9 +187,9 @@ class ProfileController extends NyController {
 Kiểm tra xem tham số truy vấn có tồn tại không:
 
 ``` dart
-// In your page
+// Trong trang của bạn
 if (widget.hasQueryParameter("tab")) {
-  // Handle tab parameter
+  // Xử lý tham số tab
 }
 ```
 
@@ -206,22 +206,27 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Trigger a setState on the page
+    // Kích hoạt setState trên trang
     setState(setState: () {});
   }
 
   void refresh() {
-    // Refresh the entire page
+    // Làm mới toàn bộ trang
     refreshPage();
   }
 
   void goBack() {
-    // Pop the page with optional result
+    // Pop trang với kết quả tùy chọn
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // Pop từ navigator gốc (ví dụ: để đóng modal cấp gốc trong Navigation Hub)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
-    // Send custom action to page
+    // Gửi hành động tùy chỉnh đến trang
     updatePageState("customAction", {"key": "value"});
   }
 }
@@ -237,33 +242,33 @@ Controller bao gồm các phương thức thông báo toast dựng sẵn:
 class FormController extends NyController {
 
   void showNotifications() {
-    // Success toast
+    // Toast thành công
     showToastSuccess(description: "Profile updated!");
 
-    // Warning toast
+    // Toast cảnh báo
     showToastWarning(description: "Please check your input");
 
-    // Error/Danger toast
+    // Toast lỗi/nguy hiểm
     showToastDanger(description: "Failed to save changes");
 
-    // Info toast
+    // Toast thông tin
     showToastInfo(description: "New features available");
 
-    // Sorry toast
+    // Toast xin lỗi
     showToastSorry(description: "We couldn't process your request");
 
-    // Oops toast
+    // Toast ôi thôi
     showToastOops(description: "Something went wrong");
   }
 
   void showCustomToast() {
-    // Custom toast with title
+    // Toast tùy chỉnh có tiêu đề
     showToastSuccess(
       title: "Great Job!",
       description: "Your changes have been saved",
     );
 
-    // Use custom toast style (registered in Nylo)
+    // Dùng kiểu toast tùy chỉnh (đã đăng ký trong Nylo)
     showToastCustom(
       title: "Custom",
       description: "Using custom style",
@@ -302,18 +307,18 @@ class RegisterController extends NyController {
       showAlert: true,
       alertStyle: 'warning',
       onSuccess: () {
-        // Validation passed
+        // Xác thực thành công
         _performRegistration();
       },
       onFailure: (exception) {
-        // Validation failed
+        // Xác thực thất bại
         print(exception.toString());
       },
     );
   }
 
   void _performRegistration() async {
-    // Handle registration logic
+    // Xử lý logic đăng ký
     showToastSuccess(description: "Account created!");
   }
 }
@@ -349,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // This code only runs once until the lock is released
+      // Code này chỉ chạy một lần cho đến khi khóa được giải phóng
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -361,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Don't trigger setState after
+      shouldSetState: false, // Không kích hoạt setState sau
     );
   }
 }
@@ -379,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // User confirmed - perform deletion
+        // Người dùng đã xác nhận - thực hiện xóa
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -405,7 +410,7 @@ class AuthController extends NyController {
   User? currentUser;
 
   Future<void> login(String email, String password) async {
-    // Login logic
+    // Logic đăng nhập
     currentUser = await AuthService.login(email, password);
   }
 
@@ -454,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Only runs if all guards pass
+    // Chỉ chạy nếu tất cả guard vượt qua
   }
 }
 ```

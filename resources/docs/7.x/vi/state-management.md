@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+Nếu bạn đã có một instance `StateActions` (ví dụ từ phương thức static `stateActions()` của widget), bạn có thể gọi `action()` trực tiếp trên nó thay vì dùng hàm tự do:
+
+``` dart
+// Sử dụng hàm tự do
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// Sử dụng phương thức instance StateActions — tương đương, ít lặp lại hơn
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 Bạn cũng có thể định nghĩa state actions bằng phương thức `whenStateAction` trong getter `init`.
 
 ``` dart

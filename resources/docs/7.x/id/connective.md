@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
 - [Widget Connective](#connective-widget "Widget Connective")
-    - [Builder Berbasis State](#state-builders "Builder Berbasis State")
     - [Builder Kustom](#custom-builder "Builder Kustom")
 - [Widget OfflineBanner](#offline-banner "Widget OfflineBanner")
 - [Helper NyConnectivity](#connectivity-helper "Helper NyConnectivity")
@@ -25,39 +24,22 @@
 
 Widget `Connective` mendengarkan perubahan konektivitas dan membangun ulang berdasarkan status jaringan saat ini.
 
-<div id="state-builders"></div>
-
-### Builder Berbasis State
-
-Berikan widget berbeda untuk setiap jenis koneksi:
+Gunakan `noInternet` untuk menampilkan widget fallback saat perangkat tidak memiliki internet (wifi, mobile, atau ethernet semua tidak ada):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### State yang Tersedia
-
-| Properti | Deskripsi |
-|----------|-----------|
-| `onWifi` | Widget saat terhubung melalui WiFi |
-| `onMobile` | Widget saat terhubung melalui data seluler |
-| `onEthernet` | Widget saat terhubung melalui Ethernet |
-| `onVpn` | Widget saat terhubung melalui VPN |
-| `onBluetooth` | Widget saat terhubung melalui Bluetooth |
-| `onOther` | Widget untuk jenis koneksi lainnya |
-| `onNone` | Widget saat offline |
-| `child` | Widget default jika tidak ada handler spesifik yang disediakan |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Tampilkan jenis koneksi
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 Builder menerima:
 - `context` - BuildContext
-- `state` - Enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - Enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` untuk memeriksa beberapa koneksi
 
 ### Mendengarkan Perubahan
@@ -117,16 +99,16 @@ Connective(
 
 ## Widget OfflineBanner
 
-Tampilkan banner di bagian atas layar saat offline:
+Tampilkan banner di bagian atas layar saat tidak ada internet (wifi, mobile, atau ethernet semua tidak ada):
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Konten utama Anda
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Banner offline (disembunyikan otomatis saat online)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Animasi geser masuk/keluar
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ Kelas `NyConnectivity` menyediakan method statis untuk memeriksa konektivitas:
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // Buat permintaan API
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Muat dari cache
   final data = await cache.getData();
 }
 
-// Or check if offline
+// Atau periksa jika offline
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,34 +156,45 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // Unduh file besar melalui WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Peringatkan tentang penggunaan data
   showDataWarning();
 }
 
-// Other methods:
+// Method lainnya:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### Memeriksa Internet
+
+`hasInternet()` lebih ketat daripada `isOnline()` — hanya mengembalikan `true` saat perangkat terhubung melalui wifi, mobile, atau ethernet. Koneksi VPN, bluetooth, dan satellite dikecualikan.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Akses internet terkonfirmasi melalui wifi, mobile, atau ethernet
+  await syncData();
+}
+```
+
 ### Mendapatkan Status Saat Ini
 
 ``` dart
-// Get all active connection types
+// Dapatkan semua jenis koneksi yang aktif
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Dapatkan string yang mudah dibaca
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None", dll.
 ```
 
 ### Mendengarkan Perubahan
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// Jangan lupa batalkan saat selesai
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### Eksekusi Bersyarat
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Jalankan hanya saat online (mengembalikan null jika offline)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Jalankan callback berbeda berdasarkan status
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ Tambahkan kesadaran konektivitas ke widget apa pun dengan cepat:
 ### Tampilkan Alternatif Offline
 
 ``` dart
-// Show a different widget when offline
+// Tampilkan widget berbeda saat offline
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### Hanya Tampilkan Saat Online
 
 ``` dart
-// Hide completely when offline
+// Sembunyikan sepenuhnya saat offline
 SyncButton().onlyOnline()
 ```
 
 ### Hanya Tampilkan Saat Offline
 
 ``` dart
-// Show only when offline
+// Tampilkan hanya saat offline
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Parameter | Tipe | Default | Deskripsi |
 |-----------|------|---------|-----------|
-| `onWifi` | `Widget?` | - | Widget saat di WiFi |
-| `onMobile` | `Widget?` | - | Widget saat di data seluler |
-| `onEthernet` | `Widget?` | - | Widget saat di Ethernet |
-| `onVpn` | `Widget?` | - | Widget saat di VPN |
-| `onBluetooth` | `Widget?` | - | Widget saat di Bluetooth |
-| `onOther` | `Widget?` | - | Widget untuk koneksi lainnya |
-| `onNone` | `Widget?` | - | Widget saat offline |
-| `child` | `Widget?` | - | Widget default |
-| `showLoadingOnInit` | `bool` | `false` | Tampilkan loading saat memeriksa |
-| `loadingWidget` | `Widget?` | - | Widget loading kustom |
+| `noInternet` | `Widget?` | - | Widget yang ditampilkan saat wifi, mobile, dan ethernet semua tidak ada |
+| `child` | `Widget?` | - | Widget yang ditampilkan saat internet tersedia |
 | `onConnectivityChanged` | `Function?` | - | Callback saat berubah |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Terhubung melalui Ethernet |
 | `vpn` | Terhubung melalui VPN |
 | `bluetooth` | Terhubung melalui Bluetooth |
+| `satellite` | Terhubung melalui satelit |
 | `other` | Jenis koneksi lainnya |
 | `none` | Tidak ada koneksi |

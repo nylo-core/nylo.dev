@@ -10,6 +10,7 @@
   - [Mengambil Nilai](#retrieving-values "Mengambil Nilai")
   - [Membuat Kelas Config](#creating-config-classes "Membuat Kelas Config")
   - [Tipe Variabel](#variable-types "Tipe Variabel")
+  - [Interpolasi Variabel](#variable-interpolation "Interpolasi Variabel")
 - [Varian Environment](#environment-flavours "Varian Environment")
 - [Injeksi Waktu Build](#build-time-injection "Injeksi Waktu Build")
 
@@ -94,7 +95,7 @@ Saat Anda mengubah file `.env`, buat ulang konfigurasinya:
 metro make:env
 ```
 
-Flag `--force` menimpa `env.g.dart` yang ada.
+Ini selalu menimpa `env.g.dart` yang ada.
 
 <div id="retrieving-values"></div>
 
@@ -137,7 +138,7 @@ Ini membuat file config baru di `lib/config/revenue_cat_config.dart`:
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Tambahkan nilai config Anda di sini
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Inisialisasi RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Periksa hak akses
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Berikan akses premium
 }
 ```
 
@@ -200,6 +201,30 @@ Nilai di file `.env` Anda secara otomatis diurai:
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (string kosong) |
 
+
+<div id="variable-interpolation"></div>
+
+## Interpolasi Variabel
+
+Nilai string di file `.env` Anda dapat mereferensikan variabel lain menggunakan sintaks `${VAR_NAME}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Ketika kode Anda memanggil `getEnv('APP_URL')`, nilai yang dikembalikan adalah `https://myapp.com`. Referensi diselesaikan secara rekursif, sehingga referensi berantai juga bekerja sebagaimana mestinya:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` mengembalikan `https://example.com/uploads`.
+
+Referensi sirkular dilindungi — jika sebuah variabel mereferensikan dirinya sendiri (langsung atau melalui rantai), placeholder `${VAR_NAME}` yang belum diselesaikan tetap ada di output daripada menyebabkan infinite loop.
 
 <div id="environment-flavours"></div>
 
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Buat dari file env tertentu:
 
 ``` bash
-# For production
+# Untuk produksi
 metro make:env --file=".env.production"
 
-# For staging
+# Untuk staging
 metro make:env --file=".env.staging"
 ```
 
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Jalankan
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

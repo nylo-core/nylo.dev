@@ -30,6 +30,7 @@
   - [滑块字段](#slider-fields "滑块字段")
   - [范围滑块字段](#range-slider-fields "范围滑块字段")
   - [自定义字段](#custom-fields "自定义字段")
+  - [构建器字段](#builder-fields "构建器字段")
   - [组件字段](#widget-fields "组件字段")
 - [FormCollection](#form-collection "FormCollection")
 - [表单验证](#form-validation "表单验证")
@@ -58,7 +59,7 @@
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// 1. Define a form
+// 1. 定义表单
 class LoginForm extends NyFormWidget {
   LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure});
 
@@ -71,7 +72,7 @@ class LoginForm extends NyFormWidget {
   static NyFormActions get actions => const NyFormActions('LoginForm');
 }
 
-// 2. Display and submit it
+// 2. 显示并提交
 LoginForm(
   submitButton: Button.primary(text: "Login"),
   onSubmit: (data) {
@@ -239,7 +240,7 @@ Field.text("Name",
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// 小数
 Field.number("Score", decimal: true)
 ```
 
@@ -252,7 +253,7 @@ Field.number("Score", decimal: true)
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// 带可见性切换
 Field.password("Password", viewable: true)
 ```
 
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// 禁用清除按钮
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// 自定义清除图标
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -379,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // 返回格式化后的值
 )
 ```
 
@@ -430,7 +431,7 @@ Field.picker("Category",
   options: FormCollection.from(["Electronics", "Clothing", "Books"]),
 )
 
-// With key-value pairs
+// 使用键值对
 Field.picker("Country",
   options: FormCollection.fromMap({
     "us": "United States",
@@ -456,7 +457,7 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// 使用自定义活跃颜色
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
@@ -533,7 +534,7 @@ Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// 使用键值对
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 `child` 参数需要一个继承 `NyFieldStatefulWidget` 的组件。这让您完全控制字段的渲染和行为。
 
+<div id="builder-fields"></div>
+
+### 构建器字段
+
+使用 `Field.builder()` 无需子类化 `NyFieldStatefulWidget` 即可创建自定义内联表单字段。构建器函数接收当前值、向表单报告值变更的 `onChanged` 回调，以及触发 UI 重建的 `setState` 回调。
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // 重建字段组件
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+第三个参数是当前字段值，第四个是 `setState`。如果您的构建器不需要 `setState`，仍可使用仍受支持的旧版 3 参数签名（`NyFieldBuilderLegacy`）：
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### 组件字段
@@ -621,19 +658,19 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### 创建 FormCollection
 
 ``` dart
-// From a list of strings (value and label are the same)
+// 从字符串列表创建（值和标签相同）
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// 与上面相同，显式写法
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// 从映射创建（键 = 值，值 = 标签）
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// 从结构化数据创建（适用于 API 响应）
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -673,10 +710,10 @@ options.labels;                    // ["United States", "Canada"]
 使用 `validator` 参数和 `FormValidator` 为任何字段添加验证：
 
 ``` dart
-// Named constructor
+// 命名构造函数
 Field.email("Email", validator: FormValidator.email())
 
-// Chained rules
+// 链式规则
 Field.text("Username",
   validator: FormValidator()
     .notEmpty()
@@ -684,17 +721,17 @@ Field.text("Username",
     .maxLength(20)
 )
 
-// Password with strength level
+// 带强度等级的密码
 Field.password("Password",
   validator: FormValidator.password(strength: 2)
 )
 
-// Boolean validation
+// 布尔验证
 Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// 自定义内联验证
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,7 +741,14 @@ Field.number("Age",
     },
   )
 )
+
+// 可空 — 字段为空时验证通过
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` 将验证器标记为可选。当字段值为 null 或空时，所有验证规则都会跳过，字段通过验证。当字段有值时，所有规则正常应用。在任何 `FormValidator` 末尾链式调用。
 
 提交表单时，所有验证器都会被检查。如果任何验证失败，将显示第一个错误消息的 toast，并调用 `onFailure` 回调。
 
@@ -785,16 +829,16 @@ class CreatePostForm extends NyFormWidget {
 | `options` | 选择器、芯片或单选字段的选项 |
 
 ``` dart
-// Set only options (no initial value)
+// 仅设置选项（无初始值）
 "Category": define(options: categories),
 
-// Set only an initial value
+// 仅设置初始值
 "Price": define(value: "100"),
 
-// Set both a value and options
+// 同时设置值和选项
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// 简单字段仍可使用普通值
 "Name": "John",
 ```
 
@@ -818,7 +862,7 @@ EditAccountForm(
 使用 `NyFormActions` 从任何位置设置字段值：
 
 ``` dart
-// Set a single field value
+// 设置单个字段值
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
@@ -841,7 +885,7 @@ EditAccountForm.actions.setOptions("Category", FormCollection.from(["New Option 
 ``` dart
 EditAccountForm(
   onSubmit: (data) {
-    // data is a Map<String, dynamic>
+    // data 是 Map<String, dynamic>
     // {first_name: "Jane", last_name: "Doe", email: "jane@example.com"}
     print(data);
   },
@@ -856,10 +900,10 @@ EditAccountForm(
 ### 清除数据
 
 ``` dart
-// Clear all fields
+// 清除所有字段
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// 清除特定字段
 EditAccountForm.actions.clearField("First Name");
 ```
 
@@ -869,13 +913,13 @@ EditAccountForm.actions.clearField("First Name");
 ### 更新字段
 
 ``` dart
-// Update a field value
+// 更新字段值
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// 刷新表单 UI
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// 刷新表单字段（重新调用 fields()）
 EditAccountForm.actions.refreshForm();
 ```
 
@@ -930,25 +974,25 @@ UserInfoForm(
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // 单个字段（全宽）
   Field.text("Title"),
 
-  // Two fields in a row
+  // 一行两个字段
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // 另一个单字段
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // 一行中的滑块和范围滑块
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // 嵌入非字段组件
   Field.widget(child: Divider()),
 
   Field.email("Email"),
@@ -965,13 +1009,13 @@ fields() => [
 使用 `Field` 上的 `hide()` 和 `show()` 方法以编程方式显示或隐藏字段。您可以在表单类内部或通过 `onChanged` 回调访问字段：
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// 在 NyFormWidget 子类或 onChanged 回调中
 Field nameField = ...;
 
-// Hide the field
+// 隐藏字段
 nameField.hide();
 
-// Show the field
+// 显示字段
 nameField.show();
 ```
 
@@ -1047,15 +1091,15 @@ Field.chips("Tags",
 | `NyFormWidget.stateRefreshForm(name)` | 刷新表单字段（重新调用 `fields()`） |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// 从任何地方提交名为 "LoginForm" 的表单
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// 远程更新字段值
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// 清除所有表单数据
 NyFormWidget.stateClearData("LoginForm");
 ```
 
@@ -1071,20 +1115,20 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // 行字段之间的水平间距
+  double mainAxisSpacing = 10,   // 字段之间的垂直间距
+  Map<String, dynamic>? initialData, // 初始字段值
+  Function(Field field, dynamic value)? onChanged, // 字段变更回调
+  Widget? header,                // 表单上方的组件
+  Widget? submitButton,          // 提交按钮组件
+  Widget? footer,                // 表单下方的组件
+  double headerSpacing = 10,     // 标题后的间距
+  double submitButtonSpacing = 10, // 提交按钮后的间距
+  double footerSpacing = 10,     // 底部前的间距
+  LoadingStyle? loadingStyle,    // 加载指示器样式
+  bool locked = false,           // 使表单只读
+  Function(dynamic data)? onSubmit,   // 验证成功时调用，传入表单数据
+  Function(dynamic error)? onFailure, // 验证失败时调用，传入错误
 )
 ```
 
@@ -1132,13 +1176,13 @@ class LoginForm extends NyFormWidget {
 | `actions.submit(onSuccess:, onFailure:, showToastError:)` | 带验证提交 |
 
 ``` dart
-// Update a field value
+// 更新字段值
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// 清除所有表单数据
 LoginForm.actions.clear();
 
-// Submit the form
+// 提交表单
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);

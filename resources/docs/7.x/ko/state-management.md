@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+이미 `StateActions` 인스턴스가 있다면(예: 위젯의 `stateActions()` 정적 메서드에서 가져온 경우), 독립 함수 대신 인스턴스에서 직접 `action()`을 호출할 수 있습니다:
+
+``` dart
+// 독립 함수 사용
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// StateActions 인스턴스 메서드 사용 — 동일하며 반복이 적음
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 `init` getter에서 `whenStateAction` 메서드를 사용하여 State Action을 정의할 수도 있습니다.
 
 ``` dart
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // 이 페이지에서 State Action을 활성화하려면 true로 설정
 
 @override
 get stateActions => {

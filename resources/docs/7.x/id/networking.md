@@ -42,11 +42,7 @@ API service Anda berada di `lib/app/networking/`. Proyek baru menyertakan `ApiSe
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -311,8 +307,7 @@ Konfigurasikan opsi Dio default untuk API service Anda menggunakan parameter `ba
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Gunakan interceptor ketika Anda perlu:
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +537,8 @@ Anda dapat menonaktifkannya dengan mengatur `useNetworkLogger: false`.
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- Nonaktifkan logger
         );
@@ -564,7 +557,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // Hanya log permintaan ke endpoint tertentu
     return options.path.contains('/api/v1');
   },
 )
@@ -613,10 +606,10 @@ Dengan callback:
 await api<ApiService>(
   (request) => request.fetchUser(),
   onSuccess: (response, data) {
-    // data is the morphed User? instance
+    // data adalah instance User? yang telah di-morph
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // Tangani error
   },
 );
 ```
@@ -626,7 +619,6 @@ await api<ApiService>(
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-----------|
 | `request` | `Function(T)` | Fungsi permintaan API |
-| `context` | `BuildContext?` | Build context |
 | `headers` | `Map<String, dynamic>` | Header tambahan |
 | `bearerToken` | `String?` | Bearer token |
 | `baseUrl` | `String?` | Override base URL |
@@ -703,7 +695,7 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   // Mengembalikan satu User
   Future<User?> fetchUser() async {
@@ -758,10 +750,10 @@ Future<List<Country>> fetchCountries() async {
 ### Menghapus Cache
 
 ```dart
-// Clear a specific cache key
+// Hapus kunci cache tertentu
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// Hapus semua cache API
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +842,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // Hanya coba ulang pada error server
       return dioException.response?.statusCode == 500;
     },
   );
@@ -876,7 +868,7 @@ Gagal cepat ketika perangkat offline alih-alih menunggu timeout.
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -911,17 +903,17 @@ Ketika diaktifkan dan perangkat offline:
 Kelola dan batalkan permintaan yang tertunda.
 
 ```dart
-// Create a managed cancel token
+// Buat cancel token yang dikelola
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// Batalkan semua permintaan yang tertunda (mis. saat logout)
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// Periksa jumlah permintaan aktif
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// Bersihkan token tertentu saat selesai
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +944,13 @@ class ApiService extends NyApiService {
 Untuk endpoint publik yang tidak membutuhkan autentikasi:
 
 ```dart
-// Per-request
+// Per-permintaan
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// Tingkat layanan
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +969,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // Periksa apakah token perlu diperbarui
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // Gunakan instance Dio baru (tanpa interceptor) untuk memperbarui token
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // Simpan token baru ke penyimpanan
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +998,9 @@ Secara default, helper `api` membuat instance baru setiap kali. Untuk menggunaka
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // Instance baru setiap kali
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // Singleton — selalu instance yang sama
 };
 ```
 
@@ -1021,8 +1013,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

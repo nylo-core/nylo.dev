@@ -30,6 +30,7 @@
 - [Matcher Kustom](#custom-matchers "Matcher Kustom")
 - [Testing State](#state-testing "Testing State")
 - [Debugging](#debugging "Debugging")
+- [Helper Navigasi dan Interaksi](#nav-interaction "Helper Navigasi dan Interaksi")
 - [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
@@ -180,13 +181,13 @@ expect(find.text('Loaded Data'), findsOneWidget);
 #### Helper Pompa
 
 ``` dart
-// Pump frames until a specific widget appears
+// Pompa frame hingga widget tertentu muncul
 bool found = await tester.pumpUntilFound(
   find.text('Welcome'),
   timeout: Duration(seconds: 5),
 );
 
-// Settle gracefully (won't throw on timeout)
+// Settle dengan mulus (tidak akan error saat timeout)
 await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 ```
 
@@ -198,7 +199,7 @@ Simulasikan perubahan `AppLifecycleState` pada `NyPage` manapun di widget tree:
 await tester.pumpNyWidget(MyPage());
 await tester.simulateLifecycleState(AppLifecycleState.paused);
 await tester.pump();
-// Assert side effects of the paused lifecycle action
+// Periksa efek samping dari lifecycle action paused
 ```
 
 #### Pemeriksaan Loading dan Lock
@@ -206,13 +207,13 @@ await tester.pump();
 Periksa kunci loading bernama dan lock pada widget `NyPage`/`NyState`:
 
 ``` dart
-// Check if a named loading key is active
+// Periksa apakah kunci loading bernama aktif
 bool loading = tester.isLoadingNamed(find.byType(MyPage), name: 'fetchUsers');
 
-// Check if a named lock is held
+// Periksa apakah lock bernama dipegang
 bool locked = tester.isLockedNamed(find.byType(MyPage), name: 'submit');
 
-// Check for any loading indicator (CircularProgressIndicator or Skeletonizer)
+// Periksa indikator loading apa pun (CircularProgressIndicator atau Skeletonizer)
 bool isAnyLoading = tester.isLoading();
 ```
 
@@ -252,10 +253,10 @@ Mixin yang menyediakan utilitas testing halaman umum:
 ``` dart
 class HomePageTest with NyPageTestMixin {
   void runTests(WidgetTester tester) async {
-    // Verify init was called and loading completed
+    // Verifikasi init dipanggil dan loading selesai
     await verifyInitCalled(tester, HomePage(), timeout: Duration(seconds: 5));
 
-    // Verify loading state is shown during init
+    // Verifikasi state loading ditampilkan saat init
     await verifyLoadingState(tester, HomePage());
   }
 }
@@ -293,19 +294,19 @@ void main() {
   NyTest.init();
 
   nySetUpAll(() {
-    // Runs once before all tests
+    // Berjalan sekali sebelum semua test
   });
 
   nySetUp(() {
-    // Runs before each test
+    // Berjalan sebelum setiap test
   });
 
   nyTearDown(() {
-    // Runs after each test
+    // Berjalan setelah setiap test
   });
 
   nyTearDownAll(() {
-    // Runs once after all tests
+    // Berjalan sekali setelah semua test
   });
 }
 ```
@@ -315,19 +316,19 @@ void main() {
 ### Melewati dan Test CI
 
 ``` dart
-// Skip a test with a reason
+// Lewati test dengan alasan
 nySkip('not implemented yet', () async {
   // ...
 }, "Waiting for API update");
 
-// Tests expected to fail
+// Test yang diharapkan gagal
 nyFailing('known bug', () async {
   // ...
 });
 
-// CI-only tests (tagged with 'ci')
+// Test khusus CI (diberi tag 'ci')
 nyCi('integration test', () async {
-  // Only runs in CI environments
+  // Hanya berjalan di lingkungan CI
 });
 ```
 
@@ -339,19 +340,19 @@ Simulasikan pengguna yang terautentikasi dalam test:
 
 ``` dart
 nyTest('user can access profile', () async {
-  // Simulate a logged-in user
+  // Simulasikan pengguna yang sudah login
   NyTest.actingAs<User>(User(name: "Anthony", email: "anthony@example.com"));
 
-  // Verify authenticated
+  // Verifikasi terautentikasi
   expectAuthenticated<User>();
 
-  // Access the acting user
+  // Akses pengguna yang sedang aktif
   User? user = NyTest.actingUser<User>();
   expect(user?.name, equals("Anthony"));
 });
 
 nyTest('guest cannot access profile', () async {
-  // Verify not authenticated
+  // Verifikasi tidak terautentikasi
   expectGuest();
 });
 ```
@@ -360,6 +361,13 @@ Logout pengguna:
 
 ``` dart
 NyTest.logout();
+expectGuest();
+```
+
+Gunakan `actingAsGuest()` sebagai alias yang mudah dibaca untuk `logout()` saat menyiapkan konteks tamu:
+
+``` dart
+NyTest.actingAsGuest();
 expectGuest();
 ```
 
@@ -377,27 +385,27 @@ nyTest('time travel to 2025', () async {
 
   expect(NyTime.now().year, equals(2025));
 
-  NyTest.travelBack(); // Reset to real time
+  NyTest.travelBack(); // Kembali ke waktu nyata
 });
 ```
 
 ### Memajukan atau Memundurkan Waktu
 
 ``` dart
-NyTest.travelForward(Duration(days: 30)); // Jump 30 days ahead
-NyTest.travelBackward(Duration(hours: 2)); // Go back 2 hours
+NyTest.travelForward(Duration(days: 30)); // Maju 30 hari ke depan
+NyTest.travelBackward(Duration(hours: 2)); // Mundur 2 jam ke belakang
 ```
 
 ### Membekukan Waktu
 
 ``` dart
-NyTest.freezeTime(); // Freeze at the current moment
+NyTest.freezeTime(); // Bekukan di saat ini
 
 DateTime frozen = NyTime.now();
 await Future.delayed(Duration(seconds: 1));
-expect(NyTime.now(), equals(frozen)); // Time hasn't moved
+expect(NyTime.now(), equals(frozen)); // Waktu tidak bergerak
 
-NyTest.travelBack(); // Unfreeze
+NyTest.travelBack(); // Cairkan pembekuan
 ```
 
 ### Batas Waktu
@@ -405,10 +413,10 @@ NyTest.travelBack(); // Unfreeze
 ``` dart
 NyTime.travelToStartOfDay();   // 00:00:00.000
 NyTime.travelToEndOfDay();     // 23:59:59.999
-NyTime.travelToStartOfMonth(); // 1st of current month
-NyTime.travelToEndOfMonth();   // Last day of current month
-NyTime.travelToStartOfYear();  // Jan 1st
-NyTime.travelToEndOfYear();    // Dec 31st
+NyTime.travelToStartOfMonth(); // Tanggal 1 bulan ini
+NyTime.travelToEndOfMonth();   // Hari terakhir bulan ini
+NyTime.travelToStartOfYear();  // 1 Januari
+NyTime.travelToEndOfYear();    // 31 Desember
 ```
 
 ### Perjalanan Waktu Terbatas
@@ -419,7 +427,7 @@ Jalankan kode dalam konteks waktu yang dibekukan:
 await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
   expect(NyTime.now(), equals(DateTime(2025, 6, 15)));
 });
-// Time is automatically restored after the callback
+// Waktu otomatis dipulihkan setelah callback
 ```
 
 <div id="api-mocking"></div>
@@ -434,16 +442,16 @@ Mock respons API menggunakan pola URL dengan dukungan wildcard:
 
 ``` dart
 nyTest('mock API responses', () async {
-  // Exact URL match
+  // Cocokkan URL persis
   NyMockApi.respond('/users/1', {'id': 1, 'name': 'Anthony'});
 
-  // Single segment wildcard (*)
+  // Wildcard satu segmen (*)
   NyMockApi.respond('/users/*', {'id': 1, 'name': 'User'});
 
-  // Multi-segment wildcard (**)
+  // Wildcard multi-segmen (**)
   NyMockApi.respond('/api/**', {'status': 'ok'});
 
-  // With status code and headers
+  // Dengan kode status dan header
   NyMockApi.respond(
     '/users',
     {'error': 'Unauthorized'},
@@ -452,7 +460,7 @@ nyTest('mock API responses', () async {
     headers: {'X-Error': 'true'},
   );
 
-  // With simulated delay
+  // Dengan penundaan simulasi
   NyMockApi.respond(
     '/slow-endpoint',
     {'data': 'loaded'},
@@ -488,23 +496,29 @@ Lacak dan verifikasi panggilan API:
 nyTest('verify API was called', () async {
   NyMockApi.setRecordCalls(true);
 
-  // ... perform actions that trigger API calls ...
+  // ... lakukan aksi yang memicu panggilan API ...
 
-  // Assert endpoint was called
+  // Verifikasi endpoint dipanggil
   expectApiCalled('/users');
 
-  // Assert endpoint was not called
+  // Verifikasi endpoint tidak dipanggil
   expectApiNotCalled('/admin');
 
-  // Assert call count
+  // Verifikasi jumlah panggilan
   expectApiCalled('/users', times: 2);
 
-  // Assert specific method
+  // Verifikasi method tertentu
   expectApiCalled('/users', method: 'POST');
 
-  // Get call details
+  // Dapatkan detail panggilan
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Tegaskan bahwa sebuah endpoint dipanggil dengan data request body tertentu:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Membuat Respons Mock
@@ -566,19 +580,19 @@ NyFactory.state<User>('premium', (User user, NyFaker faker) {
 ### Membuat Instance
 
 ``` dart
-// Create a single instance
+// Buat satu instance
 User user = NyFactory.make<User>();
 
-// Create with overrides
+// Buat dengan override
 User admin = NyFactory.make<User>(overrides: {'name': 'Admin User'});
 
-// Create with states applied
+// Buat dengan state diterapkan
 User premiumAdmin = NyFactory.make<User>(states: ['admin', 'premium']);
 
-// Create multiple instances
+// Buat beberapa instance
 List<User> users = NyFactory.create<User>(count: 5);
 
-// Create a sequence with index-based data
+// Buat urutan dengan data berbasis indeks
 List<User> numbered = NyFactory.sequence<User>(3, (int index, NyFaker faker) {
   return User(name: "User ${index + 1}", email: faker.email());
 });
@@ -640,25 +654,25 @@ NyFaker faker = NyFaker();
 nyTest('cache operations', () async {
   NyTestCache cache = NyTest.cache;
 
-  // Store a value
+  // Simpan nilai
   await cache.put<String>("key", "value");
 
-  // Store with expiration
+  // Simpan dengan kedaluwarsa
   await cache.put<String>("temp", "data", seconds: 60);
 
-  // Read a value
+  // Baca nilai
   String? value = await cache.get<String>("key");
 
-  // Check existence
+  // Periksa keberadaan
   bool exists = await cache.has("key");
 
-  // Clear a key
+  // Hapus kunci
   await cache.clear("key");
 
-  // Flush all
+  // Hapus semua
   await cache.flush();
 
-  // Get cache info
+  // Dapatkan info cache
   int size = await cache.size();
   List<String> keys = await cache.documents();
 });
@@ -672,9 +686,9 @@ nyTest('cache operations', () async {
 
 ``` dart
 void main() {
-  NyTest.init(); // Automatically sets up mock channels
+  NyTest.init(); // Secara otomatis menyiapkan mock channel
 
-  // Or set up manually
+  // Atau siapkan secara manual
   NyMockChannels.setup();
 }
 ```
@@ -722,7 +736,7 @@ final guard = NyMockRouteGuard.pass();
 ``` dart
 final guard = NyMockRouteGuard.redirect('/login');
 
-// With additional data
+// Dengan data tambahan
 final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ```
 
@@ -731,9 +745,9 @@ final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ``` dart
 final guard = NyMockRouteGuard.custom((context) async {
   if (context.data == null) {
-    return GuardResult.handled; // abort navigation
+    return GuardResult.handled; // batalkan navigasi
   }
-  return GuardResult.next; // allow navigation
+  return GuardResult.next; // izinkan navigasi
 });
 ```
 
@@ -745,10 +759,10 @@ Setelah guard dipanggil, Anda dapat memeriksa state-nya:
 expect(guard.wasCalled, isTrue);
 expect(guard.callCount, 1);
 
-// Access the RouteContext from the last call
+// Akses RouteContext dari panggilan terakhir
 RouteContext? context = guard.lastContext;
 
-// Reset tracking
+// Reset pelacakan
 guard.reset();
 ```
 
@@ -761,33 +775,33 @@ guard.reset();
 ### Assertion Rute
 
 ``` dart
-expectRoute('/home');           // Assert current route
-expectNotRoute('/login');       // Assert not on route
-expectRouteInHistory('/home');  // Assert route was visited
-expectRouteExists('/profile');  // Assert route is registered
+expectRoute('/home');           // Verifikasi rute saat ini
+expectNotRoute('/login');       // Verifikasi tidak pada rute
+expectRouteInHistory('/home');  // Verifikasi rute pernah dikunjungi
+expectRouteExists('/profile');  // Verifikasi rute terdaftar
 expectRoutesExist(['/home', '/profile', '/settings']);
 ```
 
 ### Assertion State
 
 ``` dart
-expectBackpackContains("key");                        // Key exists
-expectBackpackContains("key", value: "expected");     // Key has value
-expectBackpackNotContains("key");                     // Key doesn't exist
+expectBackpackContains("key");                        // Kunci ada
+expectBackpackContains("key", value: "expected");     // Kunci memiliki nilai
+expectBackpackNotContains("key");                     // Kunci tidak ada
 ```
 
 ### Assertion Auth
 
 ``` dart
-expectAuthenticated<User>();  // User is authenticated
-expectGuest();                // No user authenticated
+expectAuthenticated<User>();  // Pengguna terautentikasi
+expectGuest();                // Tidak ada pengguna terautentikasi
 ```
 
 ### Assertion Environment
 
 ``` dart
-expectEnv("APP_NAME", "MyApp");  // Env variable equals value
-expectEnvSet("APP_KEY");          // Env variable is set
+expectEnv("APP_NAME", "MyApp");  // Variabel Env sama dengan nilai
+expectEnvSet("APP_KEY");          // Variabel Env sudah diset
 ```
 
 ### Assertion Mode
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Assertion Widget
+
+``` dart
+// Verifikasi tipe widget muncul sejumlah tertentu
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Verifikasi teks terlihat
+expectTextVisible('Welcome');
+
+// Verifikasi teks tidak terlihat
+expectTextNotVisible('Error');
+
+// Verifikasi widget apa pun terlihat (gunakan Finder apa pun)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Verifikasi widget tidak terlihat
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Assertion Locale
@@ -824,7 +862,7 @@ setUp(() {
 
 nyWidgetTest('shows success toast', (tester) async {
   await tester.pumpNyWidget(MyPage());
-  // ... trigger action that shows a toast ...
+  // ... picu aksi yang menampilkan toast ...
 
   expectToastShown(id: 'success');
   expectToastShown(id: 'danger', description: 'Something went wrong');
@@ -835,16 +873,16 @@ nyWidgetTest('shows success toast', (tester) async {
 **NyToastRecorder** melacak notifikasi toast selama test:
 
 ``` dart
-// Record a toast manually
+// Rekam toast secara manual
 NyToastRecorder.record(id: 'success', title: 'Done', description: 'Saved!');
 
-// Check if a toast was shown
+// Periksa apakah toast ditampilkan
 bool shown = NyToastRecorder.wasShown(id: 'success');
 
-// Access all recorded toasts
+// Akses semua toast yang direkam
 List<ToastRecord> toasts = NyToastRecorder.records;
 
-// Clear recorded toasts
+// Hapus toast yang direkam
 NyToastRecorder.clear();
 ```
 
@@ -853,16 +891,16 @@ NyToastRecorder.clear();
 Periksa state lock dan loading bernama pada widget `NyPage`/`NyState`:
 
 ``` dart
-// Assert a named lock is held
+// Verifikasi lock bernama dipegang
 expectLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named lock is not held
+// Verifikasi lock bernama tidak dipegang
 expectNotLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named loading key is active
+// Verifikasi kunci loading bernama aktif
 expectLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 
-// Assert a named loading key is not active
+// Verifikasi kunci loading bernama tidak aktif
 expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ```
 
@@ -873,16 +911,16 @@ expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 Gunakan matcher kustom dengan `expect()`:
 
 ``` dart
-// Type matcher
+// Matcher tipe
 expect(result, isType<User>());
 
-// Route name matcher
+// Matcher nama rute
 expect(widget, hasRouteName('/home'));
 
-// Backpack matcher
+// Matcher Backpack
 expect(true, backpackHas("key", value: "expected"));
 
-// API call matcher
+// Matcher panggilan API
 expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 ```
 
@@ -897,7 +935,7 @@ Uji manajemen state berbasis EventBus pada widget `NyPage` dan `NyState` menggun
 Simulasikan update state yang biasanya datang dari widget atau controller lain:
 
 ``` dart
-// Fire an UpdateState event
+// Picu event UpdateState
 fireStateUpdate('HomePageState', data: {'items': ['a', 'b']});
 await tester.pump();
 expect(find.text('a'), findsOneWidget);
@@ -911,7 +949,7 @@ Kirim action state yang ditangani oleh `whenStateAction()` di halaman Anda:
 fireStateAction('HomePageState', 'refresh-page');
 await tester.pump();
 
-// With additional data
+// Dengan data tambahan
 fireStateAction('CartState', 'add-item', data: {'id': 42});
 await tester.pump();
 ```
@@ -919,15 +957,15 @@ await tester.pump();
 ### Assertion State
 
 ``` dart
-// Assert a state update was fired
+// Verifikasi update state dipicu
 expectStateUpdated('HomePageState');
 expectStateUpdated('HomePageState', times: 2);
 
-// Assert a state action was fired
+// Verifikasi action state dipicu
 expectStateAction('HomePageState', 'refresh-page');
 expectStateAction('CartState', 'add-item', times: 1);
 
-// Assert on the stateData of a NyPage/NyState widget
+// Verifikasi stateData pada widget NyPage/NyState
 expectStateData(tester, find.byType(MyWidget), equals(42));
 ```
 
@@ -936,13 +974,13 @@ expectStateData(tester, find.byType(MyWidget), equals(42));
 Lacak dan periksa update dan action state yang dipicu:
 
 ``` dart
-// Get all updates fired to a state
+// Dapatkan semua update yang dipicu ke suatu state
 List updates = NyStateTestHelpers.getUpdatesFor('MyWidget');
 
-// Get all actions fired to a state
+// Dapatkan semua action yang dipicu ke suatu state
 List actions = NyStateTestHelpers.getActionsFor('MyWidget');
 
-// Reset all tracked state updates and actions
+// Reset semua update dan action state yang dilacak
 NyStateTestHelpers.reset();
 ```
 
@@ -987,6 +1025,101 @@ NyTest.seedBackpack({
 });
 ```
 
+<div id="nav-interaction"></div>
+
+## Helper Navigasi dan Interaksi
+
+Ekstensi `WidgetTester` menyediakan DSL tingkat tinggi untuk menulis alur navigasi dan interaksi UI dalam `nyWidgetTest`.
+
+### visit
+
+Navigasi ke sebuah rute dan tunggu hingga halaman settle:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Verifikasi bahwa aksi navigasi membawa Anda ke rute yang diharapkan:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Verifikasi bahwa rute saat ini sesuai dengan rute yang diberikan (gunakan untuk konfirmasi posisi Anda, bukan bahwa Anda baru saja bernavigasi):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Tunggu semua animasi dan frame callback yang tertunda selesai:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Pop rute saat ini dan settle:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Temukan widget berdasarkan teks, tap, dan settle dalam satu panggilan:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Tap form field, masukkan teks, dan settle:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Scroll hingga widget terlihat, lalu settle:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Berikan `scrollable` finder dan `delta` tertentu untuk kontrol yang lebih presisi:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
+```
+
 <div id="examples"></div>
 
 ## Contoh
@@ -1028,7 +1161,7 @@ void main() {
         ]
       });
 
-      // ... trigger API call ...
+      // ... picu panggilan API ...
 
       expectApiCalled('/api/users');
     });
@@ -1038,7 +1171,7 @@ void main() {
     nyTest('subscription expires correctly', () async {
       NyTest.travel(DateTime(2025, 1, 1));
 
-      // Test subscription logic at a known date
+      // Uji logika langganan pada tanggal yang diketahui
       expect(NyTime.now().year, equals(2025));
 
       NyTest.travelForward(Duration(days: 365));

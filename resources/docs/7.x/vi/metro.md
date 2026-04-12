@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Lệnh trên sẽ tạo widget mới nếu nó chưa tồn tại trong thư mục `lib/resources/widgets/`.
 
+Tất cả các lệnh `make:*` chấp nhận dấu phân cách đường dẫn trong tên để đặt tệp vào thư mục con:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Lệnh này tạo widget tại `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Buộc tạo stateless widget
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Lệnh này sẽ tạo event mới trong `lib/app/events`.
 
+Sử dụng dấu phân cách đường dẫn để tổ chức event vào thư mục con:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Lệnh này tạo event tại `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Buộc tạo event
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Lệnh này sẽ đặt provider mới được tạo trong `lib/app/providers/`.
+
+Sử dụng dấu phân cách đường dẫn để tổ chức provider vào thư mục con:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Lệnh này tạo provider tại `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Lệnh này sẽ tạo form mới trong `lib/app/forms`.
 
+Sử dụng dấu phân cách đường dẫn để tổ chức form vào thư mục con:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Lệnh này tạo form tại `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Buộc tạo form
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Lệnh này sẽ tạo route guard mới trong `lib/app/route_guards`.
+
+Sử dụng dấu phân cách đường dẫn để tổ chức guard vào thư mục con:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Lệnh này tạo guard tại `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Lệnh thời gian hiện tại
 ///
-/// Usage:
+/// Cách dùng:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Lấy thời gian hiện tại
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Định dạng thời gian hiện tại
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -2208,5 +2248,3 @@ Class `ConsoleProgressBar` cung cấp:
 | `updateMessage(String newMessage)` | Thay đổi thông báo hiển thị |
 | `complete([String? completionMessage])` | Hoàn thành với thông báo tùy chọn |
 | `stop()` | Dừng mà không hoàn thành |
-| `current` | Giá trị tiến trình hiện tại (getter) |
-| `percentage` | Tiến trình dưới dạng phần trăm (getter) |

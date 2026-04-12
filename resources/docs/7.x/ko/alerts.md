@@ -14,6 +14,7 @@
 - [커스텀 토스트 스타일](#custom-styles "커스텀 토스트 스타일")
   - [스타일 등록](#registering-styles "스타일 등록")
   - [스타일 팩토리 생성](#creating-a-style-factory "스타일 팩토리 생성")
+  - [데이터 인식 토스트 스타일](#data-aware-toast-styles "데이터 인식 토스트 스타일")
 - [AlertTab](#alert-tab "AlertTab")
 - [예제](#examples "예제")
 
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | 필수 | Build context |
 | `id` | `String` | `'success'` | 토스트 스타일 ID |
-| `title` | `String?` | null | 기본 제목 재정의 |
+| `title` | `String?` | null | 제목 텍스트. 토스트 위젯에 그대로 전달됩니다 |
 | `description` | `String?` | null | 설명 텍스트 |
+| `data` | `Map<String, dynamic>?` | null | 데이터 인식 토스트 스타일에 런타임에 전달되는 키-값 쌍. `title`과 `description`은 `data`의 일치하는 키보다 우선합니다 |
 | `duration` | `Duration?` | null | 토스트 표시 시간 |
 | `position` | `ToastNotificationPosition?` | null | 화면 위치 |
 | `action` | `VoidCallback?` | null | 탭 콜백 |
@@ -388,6 +390,78 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### 데이터 인식 토스트 스타일
+
+`ToastStyleDataFactory`를 사용하여 호출 시 런타임 데이터를 받는 토스트 스타일을 등록합니다. 이는 사용자 이름이나 아바타처럼 등록 시점에 알 수 없는 토스트 콘텐츠에 유용합니다.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+`registerWithData()`로 데이터 인식 스타일을 등록합니다:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+또는 `AppProvider`에서 정적 스타일과 함께 등록합니다:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+런타임에 `data` 맵과 함께 호출합니다:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+`title` 또는 `description`도 함께 전달하면 `data`의 일치하는 키보다 우선합니다.
+
+위젯을 직접 빌드해야 하는 경우 `ToastNotificationRegistry.resolve(id, data)`를 직접 사용합니다:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

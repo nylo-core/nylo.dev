@@ -62,7 +62,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(PostDetailPage.path);
 
-  // add more routes
+  // tambahkan lebih banyak rute
   // router.add(AccountPage.path);
 
 });
@@ -77,7 +77,7 @@ metro make:page account_page
 ```
 
 ``` dart
-// Adds your new route automatically to /lib/routes/router.dart
+// Menambahkan rute baru Anda secara otomatis ke /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
   ...
   router.add(AccountPage.path);
@@ -109,7 +109,7 @@ appRouter() => nyRoutes((router) {
   ...
   router.add(HomePage.path).initialRoute();
 
-  // My new route
+  // Rute baru saya
   router.add(ProfilePage.path);
 });
 ```
@@ -141,7 +141,7 @@ appRouter() => nyRoutes((router) {
   router.add(SettingsPage.path);
 
   router.add(ProfilePage.path).initialRoute();
-  // new initial route
+  // rute awal baru
 });
 ```
 
@@ -186,7 +186,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(SettingsPage.path);
 
-  router.add(ProfilePage.path).previewRoute(); // This will be shown first during development
+  router.add(ProfilePage.path).previewRoute(); // Ini akan ditampilkan pertama saat pengembangan
 });
 ```
 
@@ -216,7 +216,7 @@ appRouter() => nyRoutes((router) {
   router.add(LoginPage.path);
 
   router.add(ProfilePage.path).authenticatedRoute();
-  // auth page
+  // halaman auth
 });
 ```
 
@@ -287,9 +287,9 @@ appRouter() => nyRoutes((router) {
 
   router.add(DashboardPage.path,
     routeGuards: [
-      DashboardRouteGuard() // Add your guard
+      DashboardRouteGuard() // Tambahkan guard Anda
     ]
-  ); // restricted page
+  ); // halaman terbatas
 });
 ```
 
@@ -301,7 +301,7 @@ appRouter() => nyRoutes((router) {
     router.add(DashboardPage.path)
             .addRouteGuard(MyRouteGuard());
 
-    // or add multiple guards
+    // atau tambahkan beberapa guard
 
     router.add(DashboardPage.path)
             .addRouteGuards([MyRouteGuard(), MyOtherRouteGuard()]);
@@ -326,7 +326,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    // Perform a check if they can access the page
+    // Lakukan pemeriksaan apakah mereka dapat mengakses halaman
     bool userLoggedIn = await Auth.isAuthenticated();
 
     if (userLoggedIn == false) {
@@ -338,7 +338,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<void> onAfter(RouteContext context) async {
-    // Track page view after successful navigation
+    // Lacak tampilan halaman setelah navigasi berhasil
     Analytics.trackPageView(context.routeName);
   }
 }
@@ -378,7 +378,7 @@ Lanjutkan ke guard berikutnya atau ke rute:
 ``` dart
 @override
 Future<GuardResult> onBefore(RouteContext context) async {
-  return next(); // Allow navigation to continue
+  return next(); // Izinkan navigasi untuk melanjutkan
 }
 ```
 
@@ -420,7 +420,7 @@ Hentikan navigasi tanpa pengalihan:
 Future<GuardResult> onBefore(RouteContext context) async {
   if (isMaintenanceMode) {
     showMaintenanceDialog();
-    return abort(); // User stays on current route
+    return abort(); // Pengguna tetap di rute saat ini
   }
   return next();
 }
@@ -459,7 +459,7 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
   }
 }
 
-// Usage:
+// Penggunaan:
 router.add(AdminPage.path, routeGuards: [
   RoleGuard(['admin', 'moderator'])
 ]);
@@ -472,7 +472,7 @@ router.add(AdminPage.path, routeGuards: [
 Gabungkan beberapa guard menjadi satu guard yang dapat digunakan kembali menggunakan `GuardStack`:
 
 ``` dart
-// Create reusable guard combinations
+// Buat kombinasi guard yang dapat digunakan kembali
 final adminGuards = GuardStack([
   AuthGuard(),
   RoleGuard(['admin']),
@@ -507,18 +507,18 @@ Di bagian ini, kami akan menunjukkan bagaimana Anda dapat mengirim data dari sat
 Dari Widget Anda, gunakan helper `routeTo` dan kirim `data` yang ingin Anda kirim ke halaman baru.
 
 ``` dart
-// HomePage Widget
+// Widget HomePage
 void _pressedSettings() {
     routeTo(SettingsPage.path, data: "Hello World");
 }
 ...
-// SettingsPage Widget (other page)
+// Widget SettingsPage (halaman lain)
 class _SettingsPageState extends NyPage<SettingsPage> {
   ...
   @override
   get init => () {
     print(widget.data()); // Hello World
-    // or
+    // atau
     print(data()); // Hello World
   };
 ```
@@ -526,7 +526,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 Contoh lainnya
 
 ``` dart
-// Home page widget
+// Widget halaman Home
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -538,7 +538,7 @@ class _HomePageState extends NyPage<HomePage> {
 
 ...
 
-// Profile page widget (other page)
+// Widget halaman Profile (halaman lain)
 class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
@@ -630,17 +630,17 @@ Saat menavigasi ke halaman baru, Anda juga dapat memberikan query parameters.
 Mari kita lihat.
 
 ```dart
-  // Home page
+  // Halaman Home
   routeTo(ProfilePage.path, queryParameters: {"user": "7"});
-  // navigate to profile page
+  // navigasi ke halaman profile
 
   ...
 
-  // Profile Page
+  // Halaman Profile
   @override
   get init => () {
     print(widget.queryParameters()); // {"user": 7}
-    // or
+    // atau
     print(queryParameters()); // {"user": 7}
   };
 ```
@@ -648,11 +648,11 @@ Mari kita lihat.
 > **Catatan:** Selama widget halaman Anda meng-extend `NyStatefulWidget` dan kelas `NyPage`, maka Anda dapat memanggil `widget.queryParameters()` untuk mengambil semua query parameters dari nama rute.
 
 ```dart
-// Example page
+// Contoh halaman
 routeTo(ProfilePage.path, queryParameters: {"hello": "world", "say": "I love code"});
 ...
 
-// Home page
+// Halaman Home
 class MyHomePage extends NyStatefulWidget<HomeController> {
   ...
 }
@@ -662,7 +662,7 @@ class _MyHomePageState extends NyPage<MyHomePage> {
   @override
   get init => () {
     widget.queryParameters(); // {"hello": "World", "say": "I love code"}
-    // or
+    // atau
     queryParameters(); // {"hello": "World", "say": "I love code"}
   };
 ```
@@ -681,12 +681,12 @@ import 'package:page_transition/page_transition.dart';
 
 appRouter() => nyRoutes((router) {
 
-  // bottomToTop
+  // dari bawah ke atas
   router.add(SettingsPage.path,
     transitionType: TransitionType.bottomToTop()
   );
 
-  // fade
+  // memudar
   router.add(HomePage.path,
     transitionType: TransitionType.fade()
   );
@@ -745,7 +745,7 @@ Setiap transisi menerima parameter opsional berikut:
 
 
 ``` dart
-// Home page widget
+// Widget halaman Home
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -772,7 +772,7 @@ Saat menavigasi, Anda dapat menentukan salah satu dari berikut ini jika Anda men
 | `NavigationType.pushAndForgetAll` | Mendorong ke halaman baru dan menghapus semua halaman lain pada tumpukan rute |
 
 ``` dart
-// Home page widget
+// Widget halaman Home
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -792,12 +792,12 @@ class _HomePageState extends NyPage<HomePage> {
 Setelah Anda berada di halaman baru, Anda dapat menggunakan helper `pop()` untuk kembali ke halaman sebelumnya.
 
 ``` dart
-// SettingsPage Widget
+// Widget SettingsPage
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
     pop();
-    // or
+    // atau
     Navigator.pop(context);
   }
 ...
@@ -806,7 +806,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 Jika Anda ingin mengembalikan nilai ke widget sebelumnya, berikan `result` seperti pada contoh di bawah ini.
 
 ``` dart
-// SettingsPage Widget
+// Widget SettingsPage
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
@@ -815,8 +815,8 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 
 ...
 
-// Get the value from the previous widget using the `onPop` parameter
-// HomePage Widget
+// Dapatkan nilai dari widget sebelumnya menggunakan parameter `onPop`
+// Widget HomePage
 class _HomePageState extends NyPage<HomePage> {
 
   _viewSettings() {
@@ -835,10 +835,10 @@ class _HomePageState extends NyPage<HomePage> {
 Gunakan `routeIf()` untuk menavigasi hanya ketika suatu kondisi terpenuhi:
 
 ``` dart
-// Only navigate if the user is logged in
+// Hanya navigasi jika pengguna sudah login
 routeIf(isLoggedIn, DashboardPage.path);
 
-// With additional options
+// Dengan opsi tambahan
 routeIf(
   hasPermission('view_reports'),
   ReportsPage.path,
@@ -857,25 +857,25 @@ Jika kondisinya bernilai `false`, tidak ada navigasi yang terjadi.
 Di {{ config('app.name') }}, Anda dapat mengakses informasi riwayat rute menggunakan helper di bawah ini.
 
 ``` dart
-// Get route history
+// Dapatkan riwayat rute
 Nylo.getRouteHistory(); // List<dynamic>
 
-// Get the current route
+// Dapatkan rute saat ini
 Nylo.getCurrentRoute(); // Route<dynamic>?
 
-// Get the previous route
+// Dapatkan rute sebelumnya
 Nylo.getPreviousRoute(); // Route<dynamic>?
 
-// Get the current route name
+// Dapatkan nama rute saat ini
 Nylo.getCurrentRouteName(); // String?
 
-// Get the previous route name
+// Dapatkan nama rute sebelumnya
 Nylo.getPreviousRouteName(); // String?
 
-// Get the current route arguments
+// Dapatkan argumen rute saat ini
 Nylo.getCurrentRouteArguments(); // dynamic
 
-// Get the previous route arguments
+// Dapatkan argumen rute sebelumnya
 Nylo.getPreviousRouteArguments(); // dynamic
 ```
 
@@ -887,14 +887,14 @@ Nylo.getPreviousRouteArguments(); // dynamic
 Anda dapat memperbarui tumpukan navigasi secara programatis menggunakan `NyNavigator.updateStack()`:
 
 ``` dart
-// Update the stack with a list of routes
+// Perbarui stack dengan daftar rute
 NyNavigator.updateStack([
   HomePage.path,
   SettingsPage.path,
   ProfilePage.path,
 ], replace: true);
 
-// Pass data to specific routes
+// Kirim data ke rute tertentu
 NyNavigator.updateStack([
   HomePage.path,
   ProfilePage.path,
@@ -947,12 +947,12 @@ Semua rute yang harus dapat diakses melalui deep links harus didaftarkan di konf
 ```dart
 // File: /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
-  // Basic routes
+  // Rute dasar
   router.add(HomePage.path).initialRoute();
   router.add(ProfilePage.path);
   router.add(SettingsPage.path);
 
-  // Route with parameters
+  // Rute dengan parameter
   router.add(HotelBookingPage.path);
 });
 ```
@@ -966,8 +966,8 @@ Setelah dikonfigurasi, aplikasi Anda dapat menangani URL yang masuk dalam berbag
 Navigasi sederhana ke halaman tertentu:
 
 ``` bash
-https://yourdomain.com/profile       // Opens the profile page
-https://yourdomain.com/settings      // Opens the settings page
+https://yourdomain.com/profile       // Membuka halaman profile
+https://yourdomain.com/settings      // Membuka halaman settings
 ```
 
 Untuk memicu navigasi ini secara programatis di dalam aplikasi Anda:
@@ -985,7 +985,7 @@ Untuk rute yang memerlukan data dinamis sebagai bagian dari path:
 
 ```dart
 class HotelBookingPage extends NyStatefulWidget {
-  // Define a route with a parameter placeholder {id}
+  // Definisikan rute dengan placeholder parameter {id}
   static RouteView path = ("/hotel/{id}/booking", (_) => HotelBookingPage());
 
   HotelBookingPage({super.key}) : super(child: () => _HotelBookingPageState());
@@ -994,14 +994,14 @@ class HotelBookingPage extends NyStatefulWidget {
 class _HotelBookingPageState extends NyPage<HotelBookingPage> {
   @override
   get init => () {
-    // Access the path parameter
-    final hotelId = queryParameters()["id"]; // Returns "87" for URL ../hotel/87/booking
+    // Akses parameter path
+    final hotelId = queryParameters()["id"]; // Mengembalikan "87" untuk URL ../hotel/87/booking
     print("Loading hotel ID: $hotelId");
 
-    // Use the ID to fetch hotel data or perform operations
+    // Gunakan ID untuk mengambil data hotel atau melakukan operasi
   };
 
-  // Rest of your page implementation
+  // Sisa implementasi halaman Anda
 }
 ```
 
@@ -1014,7 +1014,7 @@ https://yourdomain.com/hotel/87/booking
 #### Navigasi Programatis
 
 ```dart
-// Navigate with parameters
+// Navigasi dengan parameter
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "bookings": "active",
             });
@@ -1037,14 +1037,14 @@ https://yourdomain.com/hotel/87/booking?checkIn=2025-04-10&nights=3
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   get init => () {
-    // Get all query parameters
+    // Dapatkan semua query parameter
     final params = queryParameters();
 
-    // Access specific parameters
+    // Akses parameter tertentu
     final userId = params["user"];            // "20"
     final activeTab = params["tab"];          // "posts"
 
-    // Alternative access method
+    // Metode akses alternatif
     final params2 = widget.queryParameters();
     print(params2);                           // {"user": "20", "tab": "posts"}
   };
@@ -1054,10 +1054,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 #### Navigasi Programatis dengan Query Parameters
 
 ```dart
-// Navigate with query parameters
+// Navigasi dengan query parameter
 routeTo(ProfilePage.path.withQueryParams({"user": "20", "tab": "posts"}));
 
-// Combine path and query parameters
+// Gabungkan parameter path dan query
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "checkIn": "2025-04-10",
               "nights": "3",
@@ -1074,7 +1074,7 @@ class RouteProvider implements NyProvider {
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
 
-    // Handle deep links
+    // Tangani deep link
     nylo.onDeepLink(_onDeepLink);
     return nylo;
   }
@@ -1083,7 +1083,7 @@ class RouteProvider implements NyProvider {
     print("Deep link route: $route");
     print("Deep link data: $data");
 
-    // Update the route stack for deep links
+    // Perbarui route stack untuk deep link
     if (route == ProfilePage.path) {
       NyNavigator.updateStack([
         HomePage.path,
@@ -1128,7 +1128,7 @@ xcrun simctl openurl booted "https://yourdomain.com/profile?user=20"
 Karena semua parameter URL dikirim sebagai string, Anda sering perlu mengonversinya:
 
 ```dart
-// Converting string parameters to appropriate types
+// Mengonversi parameter string ke tipe yang sesuai
 final hotelId = int.parse(queryParameters()["id"] ?? "0");
 final isAvailable = (queryParameters()["available"] ?? "false") == "true";
 final checkInDate = DateTime.parse(queryParameters()["checkIn"] ?? "");
@@ -1141,16 +1141,16 @@ Menangani kasus di mana parameter mungkin tidak ada:
 ```dart
 final userId = queryParameters()["user"];
 if (userId != null) {
-  // Load specific user profile
+  // Muat profil pengguna tertentu
 } else {
-  // Load current user profile
+  // Muat profil pengguna saat ini
 }
 
-// Or check hasQueryParameter
+// Atau periksa hasQueryParameter
 if (hasQueryParameter('status')) {
-  // Do something with the status parameter
+  // Lakukan sesuatu dengan parameter status
 } else {
-  // Handle absence of the parameter
+  // Tangani ketiadaan parameter
 }
 ```
 
@@ -1190,7 +1190,7 @@ Anda dapat mendapatkan argumen rute menggunakan `NyRouter.args<T>()`:
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // Get typed arguments
+    // Dapatkan argumen bertipe
     final args = NyRouter.args<NyArgument>(context);
     final userData = args?.data;
 
@@ -1204,11 +1204,11 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 Data yang dikirim antar rute dibungkus dalam kelas-kelas ini:
 
 ``` dart
-// NyArgument contains route data
+// NyArgument berisi data rute
 NyArgument argument = NyArgument({'userId': 42});
 print(argument.data); // {'userId': 42}
 
-// NyQueryParameters contains URL query parameters
+// NyQueryParameters berisi query parameter URL
 NyQueryParameters params = NyQueryParameters({'tab': 'posts'});
 print(params.data); // {'tab': 'posts'}
 ```

@@ -10,6 +10,7 @@
   - [Styling Placeholders](#styling-placeholders "Styling Placeholders")
   - [Tap Callbacks](#tap-callbacks "Tap Callbacks")
   - [Pipe-Separated Keys](#pipe-keys "Pipe-Separated Keys")
+  - [Wildcard Styles](#wildcard-styles "Wildcard Styles")
   - [Localization Keys](#localization-keys "Localization Keys")
 - [Parameters](#parameters "Parameters")
 - [Text Extensions](#text-extensions "Text Extensions")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 This maps the same style and callback to all three placeholders.
+
+<div id="wildcard-styles"></div>
+
+### Wildcard Styles
+
+Use `"*"` as a key to apply a style or tap callback to every placeholder that does not have its own specific key:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Both `name` and `app` receive the wildcard style. If a placeholder also has an explicit key, the explicit key takes precedence over `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // applies to "cancel" only
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // tap on any unmatched placeholder
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

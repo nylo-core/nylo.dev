@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 คำสั่งด้านบนจะสร้าง widget ใหม่หากยังไม่มีอยู่ภายในไดเรกทอรี `lib/resources/widgets/`
 
+คำสั่ง `make:*` ทั้งหมดรับตัวคั่นเส้นทางในชื่อเพื่อวางไฟล์ไว้ในไดเรกทอรีย่อย:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+คำสั่งนี้สร้าง widget ที่ `lib/resources/widgets/login/brand_panel.dart`
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### บังคับสร้าง stateless widget
@@ -433,6 +441,14 @@ metro make:event login_event
 
 สิ่งนี้จะสร้าง event ใหม่ใน `lib/app/events`
 
+ใช้ตัวคั่นเส้นทางเพื่อจัดระเบียบ event ไว้ในไดเรกทอรีย่อย:
+
+``` bash
+metro make:event auth/login_event
+```
+
+คำสั่งนี้สร้าง event ที่ `lib/app/events/auth/login_event.dart`
+
 <div id="forcefully-make-an-event"></div>
 
 ### บังคับสร้าง event
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 มันจะวาง provider ที่สร้างใหม่ใน `lib/app/providers/`
+
+ใช้ตัวคั่นเส้นทางเพื่อจัดระเบียบ provider ไว้ในไดเรกทอรีย่อย:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+คำสั่งนี้สร้าง provider ที่ `lib/app/providers/integrations/firebase_provider.dart`
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 สิ่งนี้จะสร้างฟอร์มใหม่ใน `lib/app/forms`
 
+ใช้ตัวคั่นเส้นทางเพื่อจัดระเบียบฟอร์มไว้ในไดเรกทอรีย่อย:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+คำสั่งนี้สร้างฟอร์มที่ `lib/app/forms/checkout/car_advert_form.dart`
+
 <div id="forcefully-make-a-form"></div>
 
 ### บังคับสร้างฟอร์ม
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 สิ่งนี้จะสร้าง route guard ใหม่ใน `lib/app/route_guards`
+
+ใช้ตัวคั่นเส้นทางเพื่อจัดระเบียบ guard ไว้ในไดเรกทอรีย่อย:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+คำสั่งนี้สร้าง guard ที่ `lib/app/route_guards/subscriptions/premium_content.dart`
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// คำสั่งเวลาปัจจุบัน
 ///
-/// Usage:
+/// การใช้งาน:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -2208,5 +2248,3 @@ Future<void> handle(CommandResult result) async {
 | `updateMessage(String newMessage)` | เปลี่ยนข้อความที่แสดง |
 | `complete([String? completionMessage])` | เสร็จสมบูรณ์พร้อมข้อความที่เป็นตัวเลือก |
 | `stop()` | หยุดโดยไม่เสร็จสมบูรณ์ |
-| `current` | ค่าความคืบหน้าปัจจุบัน (getter) |
-| `percentage` | ความคืบหน้าเป็นเปอร์เซ็นต์ (getter) |

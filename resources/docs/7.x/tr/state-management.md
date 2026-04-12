@@ -53,12 +53,12 @@ Nylo'da durum yönetimli bir `Cart` widget'ı şöyle görünecektir:
 **Adım 1:** Widget'ı statik bir durum adıyla tanımlayın
 
 ``` dart
-/// The Cart widget
+/// Cart widget'ı
 class Cart extends StatefulWidget {
 
   Cart({Key? key}) : super(key: key);
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart"; // Bu widget'ın durumu için benzersiz tanımlayıcı
 
   @override
   _CartState createState() => _CartState();
@@ -68,23 +68,23 @@ class Cart extends StatefulWidget {
 **Adım 2:** `NyState`'i genişleten durum sınıfını oluşturun
 
 ``` dart
-/// The state class for the Cart widget
+/// Cart widget'ı için durum sınıfı
 class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
   _CartState() {
-    stateName = Cart.state; // Register the state name
+    stateName = Cart.state; // Durum adını kaydet
   }
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue(); // Başlangıç verilerini yükle
   };
 
   @override
   void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
+    reboot(); // Durum güncellendiğinde widget'ı yeniden yükle
   }
 
   @override
@@ -100,15 +100,15 @@ class _CartState extends NyState<Cart> {
 **Adım 3:** Sepeti okumak ve güncellemek için yardımcı fonksiyonlar oluşturun
 
 ``` dart
-/// Get the cart value from storage
+/// Sepet değerini depodan al
 Future<String> getCartValue() async {
   return await storageRead(Keys.cart) ?? "1";
 }
 
-/// Set the cart value and notify the widget
+/// Sepet değerini ayarla ve widget'ı bilgilendir
 Future setCartValue(String value) async {
     await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
+    updateState(Cart.state); // Bu, widget üzerinde stateUpdated() metodunu tetikler
 }
 ```
 
@@ -173,10 +173,10 @@ Durum aksiyonlarını şu durumlarda kullanın:
 - Birden fazla yerden çağrılabilecek yeniden kullanılabilir widget davranışları oluşturmak istediğinizde
 
 ``` dart
-// Sending an action to the widget
+// Widget'a bir aksiyon gönderme
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Veriyle başka bir örnek
 stateAction('show_high_score', state: HighScore.state, data: {
   "high_score": 100,
 });
@@ -192,7 +192,7 @@ get stateActions => {
     print('Hello world');
   },
   "reset_data": (data) async {
-    // Example with data
+    // Veriyle örnek
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -204,10 +204,22 @@ Ardından, uygulamanızın herhangi bir yerinden `stateAction` metodunu çağır
 
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
-// prints 'Hello world'
+// 'Hello world' yazdırır
 
 User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
+```
+
+Zaten bir `StateActions` örneğiniz varsa (örneğin bir widget'ın `stateActions()` statik metodundan), serbest fonksiyon yerine doğrudan üzerinde `action()` çağırabilirsiniz:
+
+``` dart
+// Serbest fonksiyonu kullanarak
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// StateActions örnek metodunu kullanarak — eşdeğer, daha az tekrar
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
 ```
 
 Durum aksiyonlarınızı `init` getter'ınızda `whenStateAction` metodunu kullanarak da tanımlayabilirsiniz.
@@ -218,7 +230,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Rozet sayısını sıfırla
       _count = 0;
     }
   });
@@ -248,12 +260,12 @@ class _UserAvatarState extends NyState<UserAvatar> {
 @override
 get stateActions => {
   "reset_avatar": () {
-    // Example
+    // Örnek
     _avatar = null;
     setState(() {});
   },
   "update_user_image": (User user) {
-    // Example
+    // Örnek
     _avatar = user.image;
     setState(() {});
   },
@@ -267,13 +279,13 @@ Son olarak, uygulamanızın herhangi bir yerinden aksiyonu gönderebilirsiniz.
 
 ``` dart
 stateAction('reset_avatar', state: MyWidget.state);
-// prints 'Hello from the widget'
+// 'Hello from the widget' yazdırır
 
 stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
+// Widget'taki verileri sıfırlar
 
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
+// Mesajla birlikte başarı tostu gösterir
 ```
 
 
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // bu sayfada durum aksiyonlarını etkinleştirmek için true olarak ayarlayın
 
 @override
 get stateActions => {
@@ -306,7 +318,7 @@ get stateActions => {
     print('Hello from the page');
   },
   "reset_data": () {
-    // Example
+    // Örnek
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -321,15 +333,15 @@ Son olarak, uygulamanızın herhangi bir yerinden aksiyonu gönderebilirsiniz.
 
 ``` dart
 stateAction('test_page_action', state: MyPage.path);
-// prints 'Hello from the page'
+// 'Hello from the page' yazdırır
 
 stateAction('reset_data', state: MyPage.path);
-// Reset data in page
+// Sayfadaki verileri sıfırlar
 
 stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
-// shows a success toast with the message
+// Mesajla birlikte başarı tostu gösterir
 ```
 
 Durum aksiyonlarınızı `whenStateAction` metodunu kullanarak da tanımlayabilirsiniz.
@@ -340,7 +352,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Rozet sayısını sıfırla
       _count = 0;
     }
   });
@@ -363,7 +375,7 @@ stateAction('reset_badge', state: MyWidget.state);
 ``` dart
 updateState(MyStateName.state);
 
-// or with data
+// veya veriyle
 updateState(MyStateName.state, data: "The Data");
 ```
 

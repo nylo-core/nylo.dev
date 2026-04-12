@@ -62,7 +62,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(PostDetailPage.path);
 
-  // add more routes
+  // weitere Routen hinzufuegen
   // router.add(AccountPage.path);
 
 });
@@ -77,7 +77,7 @@ metro make:page account_page
 ```
 
 ``` dart
-// Adds your new route automatically to /lib/routes/router.dart
+// Fuegt Ihre neue Route automatisch zu /lib/routes/router.dart hinzu
 appRouter() => nyRoutes((router) {
   ...
   router.add(AccountPage.path);
@@ -109,7 +109,7 @@ appRouter() => nyRoutes((router) {
   ...
   router.add(HomePage.path).initialRoute();
 
-  // My new route
+  // Meine neue Route
   router.add(ProfilePage.path);
 });
 ```
@@ -141,7 +141,7 @@ appRouter() => nyRoutes((router) {
   router.add(SettingsPage.path);
 
   router.add(ProfilePage.path).initialRoute();
-  // new initial route
+  // neue initiale Route
 });
 ```
 
@@ -186,7 +186,7 @@ appRouter() => nyRoutes((router) {
 
   router.add(SettingsPage.path);
 
-  router.add(ProfilePage.path).previewRoute(); // This will be shown first during development
+  router.add(ProfilePage.path).previewRoute(); // Wird waehrend der Entwicklung als erstes angezeigt
 });
 ```
 
@@ -216,7 +216,7 @@ appRouter() => nyRoutes((router) {
   router.add(LoginPage.path);
 
   router.add(ProfilePage.path).authenticatedRoute();
-  // auth page
+  // Auth-Seite
 });
 ```
 
@@ -279,7 +279,7 @@ metro make:route_guard dashboard
 Fuegen Sie als Naechstes den neuen Route Guard zu Ihrer Route hinzu.
 
 ``` dart
-// File: /routes/router.dart
+// Datei: /routes/router.dart
 appRouter() => nyRoutes((router) {
   router.add(HomePage.path);
 
@@ -287,21 +287,21 @@ appRouter() => nyRoutes((router) {
 
   router.add(DashboardPage.path,
     routeGuards: [
-      DashboardRouteGuard() // Add your guard
+      DashboardRouteGuard() // Guard hinzufuegen
     ]
-  ); // restricted page
+  ); // eingeschraenkte Seite
 });
 ```
 
 Sie koennen Route Guards auch mit der `addRouteGuard`-Methode setzen:
 
 ``` dart
-// File: /routes/router.dart
+// Datei: /routes/router.dart
 appRouter() => nyRoutes((router) {
     router.add(DashboardPage.path)
             .addRouteGuard(MyRouteGuard());
 
-    // or add multiple guards
+    // oder mehrere Guards hinzufuegen
 
     router.add(DashboardPage.path)
             .addRouteGuards([MyRouteGuard(), MyOtherRouteGuard()]);
@@ -326,7 +326,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    // Perform a check if they can access the page
+    // Pruefen, ob sie auf die Seite zugreifen koennen
     bool userLoggedIn = await Auth.isAuthenticated();
 
     if (userLoggedIn == false) {
@@ -338,7 +338,7 @@ class DashboardRouteGuard extends NyRouteGuard {
 
   @override
   Future<void> onAfter(RouteContext context) async {
-    // Track page view after successful navigation
+    // Seitenaufruf nach erfolgreicher Navigation verfolgen
     Analytics.trackPageView(context.routeName);
   }
 }
@@ -378,7 +378,7 @@ Zum naechsten Guard oder zur Route fortfahren:
 ``` dart
 @override
 Future<GuardResult> onBefore(RouteContext context) async {
-  return next(); // Allow navigation to continue
+  return next(); // Navigation fortsetzen erlauben
 }
 ```
 
@@ -420,7 +420,7 @@ Navigation ohne Umleitung stoppen:
 Future<GuardResult> onBefore(RouteContext context) async {
   if (isMaintenanceMode) {
     showMaintenanceDialog();
-    return abort(); // User stays on current route
+    return abort(); // Benutzer bleibt auf der aktuellen Route
   }
   return next();
 }
@@ -459,7 +459,7 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
   }
 }
 
-// Usage:
+// Verwendung:
 router.add(AdminPage.path, routeGuards: [
   RoleGuard(['admin', 'moderator'])
 ]);
@@ -472,7 +472,7 @@ router.add(AdminPage.path, routeGuards: [
 Kombinieren Sie mehrere Guards zu einem einzelnen wiederverwendbaren Guard mit `GuardStack`:
 
 ``` dart
-// Create reusable guard combinations
+// Wiederverwendbare Guard-Kombinationen erstellen
 final adminGuards = GuardStack([
   AuthGuard(),
   RoleGuard(['admin']),
@@ -507,18 +507,18 @@ In diesem Abschnitt zeigen wir, wie Sie Daten von einem Widget an ein anderes ue
 Verwenden Sie in Ihrem Widget den `routeTo`-Helfer und uebergeben Sie die `data`, die Sie an die neue Seite senden moechten.
 
 ``` dart
-// HomePage Widget
+// HomePage-Widget
 void _pressedSettings() {
     routeTo(SettingsPage.path, data: "Hello World");
 }
 ...
-// SettingsPage Widget (other page)
+// SettingsPage-Widget (andere Seite)
 class _SettingsPageState extends NyPage<SettingsPage> {
   ...
   @override
   get init => () {
     print(widget.data()); // Hello World
-    // or
+    // oder
     print(data()); // Hello World
   };
 ```
@@ -526,7 +526,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 Weitere Beispiele
 
 ``` dart
-// Home page widget
+// Home-Seite-Widget
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -538,7 +538,7 @@ class _HomePageState extends NyPage<HomePage> {
 
 ...
 
-// Profile page widget (other page)
+// Profil-Seite-Widget (andere Seite)
 class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
@@ -630,17 +630,17 @@ Beim Navigieren zu einer neuen Seite koennen Sie auch Query-Parameter angeben.
 Schauen wir uns das an.
 
 ```dart
-  // Home page
+  // Startseite
   routeTo(ProfilePage.path, queryParameters: {"user": "7"});
-  // navigate to profile page
+  // zur Profilseite navigieren
 
   ...
 
-  // Profile Page
+  // Profilseite
   @override
   get init => () {
     print(widget.queryParameters()); // {"user": 7}
-    // or
+    // oder
     print(queryParameters()); // {"user": 7}
   };
 ```
@@ -648,11 +648,11 @@ Schauen wir uns das an.
 > **Hinweis:** Solange Ihr Seiten-Widget das `NyStatefulWidget` und die `NyPage`-Klasse erweitert, koennen Sie `widget.queryParameters()` aufrufen, um alle Query-Parameter aus dem Routennamen abzurufen.
 
 ```dart
-// Example page
+// Beispielseite
 routeTo(ProfilePage.path, queryParameters: {"hello": "world", "say": "I love code"});
 ...
 
-// Home page
+// Startseite
 class MyHomePage extends NyStatefulWidget<HomeController> {
   ...
 }
@@ -662,7 +662,7 @@ class _MyHomePageState extends NyPage<MyHomePage> {
   @override
   get init => () {
     widget.queryParameters(); // {"hello": "World", "say": "I love code"}
-    // or
+    // oder
     queryParameters(); // {"hello": "World", "say": "I love code"}
   };
 ```
@@ -745,7 +745,7 @@ Jeder Uebergang akzeptiert die folgenden optionalen Parameter:
 
 
 ``` dart
-// Home page widget
+// Startseite-Widget
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -772,7 +772,7 @@ Beim Navigieren koennen Sie einen der folgenden Typen angeben, wenn Sie den `rou
 | `NavigationType.pushAndForgetAll` | Zu einer neuen Seite navigieren und alle anderen Seiten auf dem Routen-Stack verwerfen |
 
 ``` dart
-// Home page widget
+// Startseite-Widget
 class _HomePageState extends NyPage<HomePage> {
 
   _showProfile() {
@@ -792,12 +792,12 @@ class _HomePageState extends NyPage<HomePage> {
 Sobald Sie auf der neuen Seite sind, koennen Sie den `pop()`-Helfer verwenden, um zur vorherigen Seite zurueckzukehren.
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage-Widget
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
     pop();
-    // or
+    // oder
     Navigator.pop(context);
   }
 ...
@@ -806,7 +806,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 Wenn Sie einen Wert an das vorherige Widget zurueckgeben moechten, uebergeben Sie ein `result` wie im folgenden Beispiel.
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage-Widget
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
@@ -815,8 +815,8 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 
 ...
 
-// Get the value from the previous widget using the `onPop` parameter
-// HomePage Widget
+// Den Wert vom vorherigen Widget mit dem `onPop`-Parameter abrufen
+// HomePage-Widget
 class _HomePageState extends NyPage<HomePage> {
 
   _viewSettings() {
@@ -835,10 +835,10 @@ class _HomePageState extends NyPage<HomePage> {
 Verwenden Sie `routeIf()`, um nur zu navigieren, wenn eine Bedingung erfuellt ist:
 
 ``` dart
-// Only navigate if the user is logged in
+// Nur navigieren, wenn der Benutzer eingeloggt ist
 routeIf(isLoggedIn, DashboardPage.path);
 
-// With additional options
+// Mit zusaetzlichen Optionen
 routeIf(
   hasPermission('view_reports'),
   ReportsPage.path,
@@ -857,25 +857,25 @@ Wenn die Bedingung `false` ist, findet keine Navigation statt.
 In {{ config('app.name') }} koennen Sie mit den folgenden Helfern auf die Routen-Verlaufsinformationen zugreifen.
 
 ``` dart
-// Get route history
+// Routen-Verlauf abrufen
 Nylo.getRouteHistory(); // List<dynamic>
 
-// Get the current route
+// Aktuelle Route abrufen
 Nylo.getCurrentRoute(); // Route<dynamic>?
 
-// Get the previous route
+// Vorherige Route abrufen
 Nylo.getPreviousRoute(); // Route<dynamic>?
 
-// Get the current route name
+// Aktuellen Routennamen abrufen
 Nylo.getCurrentRouteName(); // String?
 
-// Get the previous route name
+// Vorherigen Routennamen abrufen
 Nylo.getPreviousRouteName(); // String?
 
-// Get the current route arguments
+// Aktuelle Routen-Argumente abrufen
 Nylo.getCurrentRouteArguments(); // dynamic
 
-// Get the previous route arguments
+// Vorherige Routen-Argumente abrufen
 Nylo.getPreviousRouteArguments(); // dynamic
 ```
 
@@ -887,14 +887,14 @@ Nylo.getPreviousRouteArguments(); // dynamic
 Sie koennen den Navigationsstapel programmatisch mit `NyNavigator.updateStack()` aktualisieren:
 
 ``` dart
-// Update the stack with a list of routes
+// Stack mit einer Liste von Routen aktualisieren
 NyNavigator.updateStack([
   HomePage.path,
   SettingsPage.path,
   ProfilePage.path,
 ], replace: true);
 
-// Pass data to specific routes
+// Daten an bestimmte Routen uebergeben
 NyNavigator.updateStack([
   HomePage.path,
   ProfilePage.path,
@@ -945,14 +945,14 @@ Bevor Sie Deep Linking in Ihrer App implementieren, stellen Sie sicher, dass Ihr
 Alle Routen, die ueber Deep Links erreichbar sein sollen, muessen in Ihrer Router-Konfiguration registriert sein:
 
 ```dart
-// File: /lib/routes/router.dart
+// Datei: /lib/routes/router.dart
 appRouter() => nyRoutes((router) {
-  // Basic routes
+  // Grundlegende Routen
   router.add(HomePage.path).initialRoute();
   router.add(ProfilePage.path);
   router.add(SettingsPage.path);
 
-  // Route with parameters
+  // Route mit Parametern
   router.add(HotelBookingPage.path);
 });
 ```
@@ -966,8 +966,8 @@ Sobald konfiguriert, kann Ihre App eingehende URLs in verschiedenen Formaten ver
 Einfache Navigation zu bestimmten Seiten:
 
 ``` bash
-https://yourdomain.com/profile       // Opens the profile page
-https://yourdomain.com/settings      // Opens the settings page
+https://yourdomain.com/profile       // Oeffnet die Profilseite
+https://yourdomain.com/settings      // Oeffnet die Einstellungsseite
 ```
 
 Um diese Navigationen programmatisch in Ihrer App auszuloesen:
@@ -985,7 +985,7 @@ Fuer Routen, die dynamische Daten als Teil des Pfades erfordern:
 
 ```dart
 class HotelBookingPage extends NyStatefulWidget {
-  // Define a route with a parameter placeholder {id}
+  // Route mit einem Parameter-Platzhalter {id} definieren
   static RouteView path = ("/hotel/{id}/booking", (_) => HotelBookingPage());
 
   HotelBookingPage({super.key}) : super(child: () => _HotelBookingPageState());
@@ -994,14 +994,14 @@ class HotelBookingPage extends NyStatefulWidget {
 class _HotelBookingPageState extends NyPage<HotelBookingPage> {
   @override
   get init => () {
-    // Access the path parameter
-    final hotelId = queryParameters()["id"]; // Returns "87" for URL ../hotel/87/booking
+    // Auf den Pfad-Parameter zugreifen
+    final hotelId = queryParameters()["id"]; // Gibt "87" zurueck fuer URL ../hotel/87/booking
     print("Loading hotel ID: $hotelId");
 
-    // Use the ID to fetch hotel data or perform operations
+    // ID verwenden, um Hoteldaten abzurufen oder Operationen durchzufuehren
   };
 
-  // Rest of your page implementation
+  // Rest der Seitenimplementierung
 }
 ```
 
@@ -1014,7 +1014,7 @@ https://yourdomain.com/hotel/87/booking
 #### Programmatische Navigation
 
 ```dart
-// Navigate with parameters
+// Mit Parametern navigieren
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "bookings": "active",
             });
@@ -1037,14 +1037,14 @@ https://yourdomain.com/hotel/87/booking?checkIn=2025-04-10&nights=3
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   get init => () {
-    // Get all query parameters
+    // Alle Query-Parameter abrufen
     final params = queryParameters();
 
-    // Access specific parameters
+    // Auf bestimmte Parameter zugreifen
     final userId = params["user"];            // "20"
     final activeTab = params["tab"];          // "posts"
 
-    // Alternative access method
+    // Alternativer Zugriffsweg
     final params2 = widget.queryParameters();
     print(params2);                           // {"user": "20", "tab": "posts"}
   };
@@ -1054,10 +1054,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 #### Programmatische Navigation mit Query-Parametern
 
 ```dart
-// Navigate with query parameters
+// Mit Query-Parametern navigieren
 routeTo(ProfilePage.path.withQueryParams({"user": "20", "tab": "posts"}));
 
-// Combine path and query parameters
+// Pfad- und Query-Parameter kombinieren
 routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
               "checkIn": "2025-04-10",
               "nights": "3",
@@ -1074,7 +1074,7 @@ class RouteProvider implements NyProvider {
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
 
-    // Handle deep links
+    // Deep Links behandeln
     nylo.onDeepLink(_onDeepLink);
     return nylo;
   }
@@ -1083,7 +1083,7 @@ class RouteProvider implements NyProvider {
     print("Deep link route: $route");
     print("Deep link data: $data");
 
-    // Update the route stack for deep links
+    // Routen-Stack fuer Deep Links aktualisieren
     if (route == ProfilePage.path) {
       NyNavigator.updateStack([
         HomePage.path,
@@ -1128,7 +1128,7 @@ xcrun simctl openurl booted "https://yourdomain.com/profile?user=20"
 Da alle URL-Parameter als Strings uebergeben werden, muessen Sie sie oft konvertieren:
 
 ```dart
-// Converting string parameters to appropriate types
+// String-Parameter in geeignete Typen konvertieren
 final hotelId = int.parse(queryParameters()["id"] ?? "0");
 final isAvailable = (queryParameters()["available"] ?? "false") == "true";
 final checkInDate = DateTime.parse(queryParameters()["checkIn"] ?? "");
@@ -1141,16 +1141,16 @@ Behandeln Sie Faelle, in denen Parameter fehlen koennten:
 ```dart
 final userId = queryParameters()["user"];
 if (userId != null) {
-  // Load specific user profile
+  // Bestimmtes Benutzerprofil laden
 } else {
-  // Load current user profile
+  // Aktuelles Benutzerprofil laden
 }
 
-// Or check hasQueryParameter
+// Oder hasQueryParameter pruefen
 if (hasQueryParameter('status')) {
-  // Do something with the status parameter
+  // Etwas mit dem Status-Parameter tun
 } else {
-  // Handle absence of the parameter
+  // Fehlen des Parameters behandeln
 }
 ```
 
@@ -1190,7 +1190,7 @@ Sie koennen Routen-Argumente mit `NyRouter.args<T>()` abrufen:
 class _ProfilePageState extends NyPage<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    // Get typed arguments
+    // Typisierte Argumente abrufen
     final args = NyRouter.args<NyArgument>(context);
     final userData = args?.data;
 
@@ -1204,11 +1204,11 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 Zwischen Routen uebergebene Daten werden in diesen Klassen verpackt:
 
 ``` dart
-// NyArgument contains route data
+// NyArgument enthaelt Routendaten
 NyArgument argument = NyArgument({'userId': 42});
 print(argument.data); // {'userId': 42}
 
-// NyQueryParameters contains URL query parameters
+// NyQueryParameters enthaelt URL-Query-Parameter
 NyQueryParameters params = NyQueryParameters({'tab': 'posts'});
 print(params.data); // {'tab': 'posts'}
 ```

@@ -30,6 +30,7 @@
 - [カスタムマッチャー](#custom-matchers "カスタムマッチャー")
 - [ステートテスト](#state-testing "ステートテスト")
 - [デバッグ](#debugging "デバッグ")
+- [ナビゲーションとインタラクションヘルパー](#nav-interaction "ナビゲーションとインタラクションヘルパー")
 - [使用例](#examples "使用例")
 
 <div id="introduction"></div>
@@ -363,6 +364,13 @@ NyTest.logout();
 expectGuest();
 ```
 
+ゲストコンテキストを設定する際、`actingAsGuest()` を `logout()` の読みやすいエイリアスとして使用できます。
+
+``` dart
+NyTest.actingAsGuest();
+expectGuest();
+```
+
 <div id="time-travel"></div>
 
 ## タイムトラベル
@@ -505,6 +513,12 @@ nyTest('verify API was called', () async {
   // 呼び出しの詳細を取得
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+特定のリクエストボディデータでエンドポイントが呼び出されたことをアサートします:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### モックレスポンスの作成
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### ウィジェットアサーション
+
+``` dart
+// 特定のウィジェットタイプが指定回数出現することをアサート
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// テキストが表示されていることをアサート
+expectTextVisible('Welcome');
+
+// テキストが表示されていないことをアサート
+expectTextNotVisible('Error');
+
+// 任意のウィジェットが表示されていることをアサート（任意のFinderを使用）
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// ウィジェットが表示されていないことをアサート
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### ロケールアサーション
@@ -985,6 +1023,101 @@ NyTest.seedBackpack({
   "auth_token": "test_token",
   "settings": {"theme": "dark"},
 });
+```
+
+<div id="nav-interaction"></div>
+
+## ナビゲーションとインタラクションヘルパー
+
+`WidgetTester` エクステンションは、`nyWidgetTest` 内でナビゲーションフローや UI インタラクションを記述するための高レベル DSL を提供します。
+
+### visit
+
+ルートに移動してページが安定するまで待機します:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+あるナビゲーション操作によって期待するルートに遷移したことをアサートします:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+現在のルートが指定したルートと一致することをアサートします（直前のナビゲーション動作ではなく現在地の確認に使用）:
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+保留中のアニメーションとフレームコールバックがすべて完了するまで待機します:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+現在のルートをポップして安定するまで待機します:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+テキストでウィジェットを検索し、タップして安定するまで待機する一連の操作を一度に実行します:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+フォームフィールドをタップし、テキストを入力して安定するまで待機します:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+ウィジェットが表示されるまでスクロールして安定するまで待機します:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+特定の `scrollable` ファインダーと `delta` を渡して細かく制御できます:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
 ```
 
 <div id="examples"></div>

@@ -142,11 +142,11 @@ Gọi từ bất kỳ đâu:
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// Với callback tùy chỉnh
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Logic đăng xuất tùy chỉnh
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget header ở trên cùng |
 | `useSafeArea` | `bool` | `true` | Bọc nội dung trong SafeArea |
 | `isScrollControlled` | `bool` | `false` | Cho phép modal cuộn được |
+| `isDismissible` | `bool` | `true` | Cho phép đóng bằng cách nhấn bên ngoài |
+| `enableDrag` | `bool` | `true` | Cho phép kéo để đóng |
 | `showCloseButton` | `bool` | `false` | Hiển thị nút đóng X |
 | `headerPadding` | `EdgeInsets?` | null | Padding khi có header |
+| `contentPadding` | `EdgeInsets?` | null | Padding xung quanh nội dung chính |
+| `actionsPadding` | `EdgeInsets?` | null | Padding xung quanh phần hành động |
 | `backgroundColor` | `Color?` | null | Màu nền modal |
 | `showHandle` | `bool` | `true` | Hiển thị thanh kéo ở trên cùng |
 | `closeButtonColor` | `Color?` | null | Màu nền nút đóng |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Cách dùng
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // xóa mục này
 }
 ```
 

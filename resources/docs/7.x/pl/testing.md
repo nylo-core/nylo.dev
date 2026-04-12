@@ -30,6 +30,7 @@
 - [Niestandardowe matchery](#custom-matchers "Niestandardowe matchery")
 - [Testowanie stanu](#state-testing "Testowanie stanu")
 - [Debugowanie](#debugging "Debugowanie")
+- [Pomocniki nawigacji i interakcji](#nav-interaction "Pomocniki nawigacji i interakcji")
 - [Przykłady](#examples "Praktyczne przykłady")
 
 <div id="introduction"></div>
@@ -87,7 +88,7 @@ Opcje:
 
 ``` dart
 nyTest('my test', () async {
-  // test body
+  // treść testu
 }, skip: false, timeout: Timeout(Duration(seconds: 30)));
 ```
 
@@ -173,20 +174,20 @@ await tester.pumpNyWidgetAndWaitForInit(
   timeout: Duration(seconds: 10),
   useSimpleTheme: true,
 );
-// init() has completed
+// init() zakończony
 expect(find.text('Loaded Data'), findsOneWidget);
 ```
 
 #### Helpery pompowania
 
 ``` dart
-// Pump frames until a specific widget appears
+// Pompuj klatki do pojawienia się konkretnego widgetu
 bool found = await tester.pumpUntilFound(
   find.text('Welcome'),
   timeout: Duration(seconds: 5),
 );
 
-// Settle gracefully (won't throw on timeout)
+// Osadź łagodnie (nie rzuci wyjątku przy przekroczeniu czasu)
 await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 ```
 
@@ -198,7 +199,7 @@ Symuluj zmiany `AppLifecycleState` na dowolnym `NyPage` w drzewie widgetów:
 await tester.pumpNyWidget(MyPage());
 await tester.simulateLifecycleState(AppLifecycleState.paused);
 await tester.pump();
-// Assert side effects of the paused lifecycle action
+// Sprawdź efekty uboczne akcji cyklu życia paused
 ```
 
 #### Sprawdzanie ładowania i blokad
@@ -206,13 +207,13 @@ await tester.pump();
 Sprawdzaj nazwane klucze ładowania i blokady na widgetach `NyPage`/`NyState`:
 
 ``` dart
-// Check if a named loading key is active
+// Sprawdź czy nazwany klucz ładowania jest aktywny
 bool loading = tester.isLoadingNamed(find.byType(MyPage), name: 'fetchUsers');
 
-// Check if a named lock is held
+// Sprawdź czy nazwana blokada jest utrzymywana
 bool locked = tester.isLockedNamed(find.byType(MyPage), name: 'submit');
 
-// Check for any loading indicator (CircularProgressIndicator or Skeletonizer)
+// Sprawdź dowolny wskaźnik ładowania (CircularProgressIndicator lub Skeletonizer)
 bool isAnyLoading = tester.isLoading();
 ```
 
@@ -252,10 +253,10 @@ Mixin zapewniający typowe narzędzia do testowania stron:
 ``` dart
 class HomePageTest with NyPageTestMixin {
   void runTests(WidgetTester tester) async {
-    // Verify init was called and loading completed
+    // Sprawdź czy init został wywołany i ładowanie zakończone
     await verifyInitCalled(tester, HomePage(), timeout: Duration(seconds: 5));
 
-    // Verify loading state is shown during init
+    // Sprawdź czy stan ładowania jest wyświetlany podczas init
     await verifyLoadingState(tester, HomePage());
   }
 }
@@ -293,19 +294,19 @@ void main() {
   NyTest.init();
 
   nySetUpAll(() {
-    // Runs once before all tests
+    // Uruchamiane raz przed wszystkimi testami
   });
 
   nySetUp(() {
-    // Runs before each test
+    // Uruchamiane przed każdym testem
   });
 
   nyTearDown(() {
-    // Runs after each test
+    // Uruchamiane po każdym teście
   });
 
   nyTearDownAll(() {
-    // Runs once after all tests
+    // Uruchamiane raz po wszystkich testach
   });
 }
 ```
@@ -315,19 +316,19 @@ void main() {
 ### Pomijanie i testy CI
 
 ``` dart
-// Skip a test with a reason
+// Pomiń test z powodem
 nySkip('not implemented yet', () async {
   // ...
 }, "Waiting for API update");
 
-// Tests expected to fail
+// Testy oczekiwane do niepowodzenia
 nyFailing('known bug', () async {
   // ...
 });
 
-// CI-only tests (tagged with 'ci')
+// Testy tylko dla CI (oznaczone tagiem 'ci')
 nyCi('integration test', () async {
-  // Only runs in CI environments
+  // Uruchamiane tylko w środowiskach CI
 });
 ```
 
@@ -339,19 +340,19 @@ Symuluj uwierzytelnionych użytkowników w testach:
 
 ``` dart
 nyTest('user can access profile', () async {
-  // Simulate a logged-in user
+  // Symuluj zalogowanego użytkownika
   NyTest.actingAs<User>(User(name: "Anthony", email: "anthony@example.com"));
 
-  // Verify authenticated
+  // Sprawdź uwierzytelnienie
   expectAuthenticated<User>();
 
-  // Access the acting user
+  // Dostęp do aktualnego użytkownika
   User? user = NyTest.actingUser<User>();
   expect(user?.name, equals("Anthony"));
 });
 
 nyTest('guest cannot access profile', () async {
-  // Verify not authenticated
+  // Sprawdź brak uwierzytelnienia
   expectGuest();
 });
 ```
@@ -360,6 +361,13 @@ Wyloguj użytkownika:
 
 ``` dart
 NyTest.logout();
+expectGuest();
+```
+
+Użyj `actingAsGuest()` jako czytelnego aliasu dla `logout()` przy konfigurowaniu kontekstu gościa:
+
+``` dart
+NyTest.actingAsGuest();
 expectGuest();
 ```
 
@@ -377,27 +385,27 @@ nyTest('time travel to 2025', () async {
 
   expect(NyTime.now().year, equals(2025));
 
-  NyTest.travelBack(); // Reset to real time
+  NyTest.travelBack(); // Powrót do rzeczywistego czasu
 });
 ```
 
 ### Przesunięcie czasu do przodu lub wstecz
 
 ``` dart
-NyTest.travelForward(Duration(days: 30)); // Jump 30 days ahead
-NyTest.travelBackward(Duration(hours: 2)); // Go back 2 hours
+NyTest.travelForward(Duration(days: 30)); // Przesuń o 30 dni do przodu
+NyTest.travelBackward(Duration(hours: 2)); // Cofnij o 2 godziny
 ```
 
 ### Zamrożenie czasu
 
 ``` dart
-NyTest.freezeTime(); // Freeze at the current moment
+NyTest.freezeTime(); // Zamróź w bieżącym momencie
 
 DateTime frozen = NyTime.now();
 await Future.delayed(Duration(seconds: 1));
-expect(NyTime.now(), equals(frozen)); // Time hasn't moved
+expect(NyTime.now(), equals(frozen)); // Czas się nie przesunął
 
-NyTest.travelBack(); // Unfreeze
+NyTest.travelBack(); // Odmróź
 ```
 
 ### Granice czasowe
@@ -405,10 +413,10 @@ NyTest.travelBack(); // Unfreeze
 ``` dart
 NyTime.travelToStartOfDay();   // 00:00:00.000
 NyTime.travelToEndOfDay();     // 23:59:59.999
-NyTime.travelToStartOfMonth(); // 1st of current month
-NyTime.travelToEndOfMonth();   // Last day of current month
-NyTime.travelToStartOfYear();  // Jan 1st
-NyTime.travelToEndOfYear();    // Dec 31st
+NyTime.travelToStartOfMonth(); // 1. dzień bieżącego miesiąca
+NyTime.travelToEndOfMonth();   // Ostatni dzień bieżącego miesiąca
+NyTime.travelToStartOfYear();  // 1 sty
+NyTime.travelToEndOfYear();    // 31 gru
 ```
 
 ### Zakresowa podróż w czasie
@@ -419,7 +427,7 @@ Wykonaj kod w kontekście zamrożonego czasu:
 await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
   expect(NyTime.now(), equals(DateTime(2025, 6, 15)));
 });
-// Time is automatically restored after the callback
+// Czas jest automatycznie przywracany po zakończeniu wywołania zwrotnego
 ```
 
 <div id="api-mocking"></div>
@@ -434,16 +442,16 @@ Mockuj odpowiedzi API za pomocą wzorców URL z obsługą symboli wieloznacznych
 
 ``` dart
 nyTest('mock API responses', () async {
-  // Exact URL match
+  // Dokładne dopasowanie URL
   NyMockApi.respond('/users/1', {'id': 1, 'name': 'Anthony'});
 
-  // Single segment wildcard (*)
+  // Symbol wieloznaczny jednego segmentu (*)
   NyMockApi.respond('/users/*', {'id': 1, 'name': 'User'});
 
-  // Multi-segment wildcard (**)
+  // Symbol wieloznaczny wielu segmentów (**)
   NyMockApi.respond('/api/**', {'status': 'ok'});
 
-  // With status code and headers
+  // Z kodem statusu i nagłówkami
   NyMockApi.respond(
     '/users',
     {'error': 'Unauthorized'},
@@ -452,7 +460,7 @@ nyTest('mock API responses', () async {
     headers: {'X-Error': 'true'},
   );
 
-  // With simulated delay
+  // Z symulowanym opóźnieniem
   NyMockApi.respond(
     '/slow-endpoint',
     {'data': 'loaded'},
@@ -488,23 +496,29 @@ nyTest('mock API service', () async {
 nyTest('verify API was called', () async {
   NyMockApi.setRecordCalls(true);
 
-  // ... perform actions that trigger API calls ...
+  // ... wykonaj akcje wyzwalające wywołania API ...
 
-  // Assert endpoint was called
+  // Sprawdź czy endpoint był wywoływany
   expectApiCalled('/users');
 
-  // Assert endpoint was not called
+  // Sprawdź czy endpoint nie był wywoływany
   expectApiNotCalled('/admin');
 
-  // Assert call count
+  // Sprawdź liczbę wywołań
   expectApiCalled('/users', times: 2);
 
-  // Assert specific method
+  // Sprawdź konkretną metodę
   expectApiCalled('/users', method: 'POST');
 
-  // Get call details
+  // Pobierz szczegóły wywołań
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Sprawdź, czy endpoint był wywołany z konkretnymi danymi w treści żądania:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Tworzenie mockowanych odpowiedzi
@@ -566,19 +580,19 @@ NyFactory.state<User>('premium', (User user, NyFaker faker) {
 ### Tworzenie instancji
 
 ``` dart
-// Create a single instance
+// Utwórz pojedynczą instancję
 User user = NyFactory.make<User>();
 
-// Create with overrides
+// Utwórz z nadpisaniem
 User admin = NyFactory.make<User>(overrides: {'name': 'Admin User'});
 
-// Create with states applied
+// Utwórz z zastosowanymi stanami
 User premiumAdmin = NyFactory.make<User>(states: ['admin', 'premium']);
 
-// Create multiple instances
+// Utwórz wiele instancji
 List<User> users = NyFactory.create<User>(count: 5);
 
-// Create a sequence with index-based data
+// Utwórz sekwencję z danymi opartymi na indeksie
 List<User> numbered = NyFactory.sequence<User>(3, (int index, NyFaker faker) {
   return User(name: "User ${index + 1}", email: faker.email());
 });
@@ -640,25 +654,25 @@ NyFaker faker = NyFaker();
 nyTest('cache operations', () async {
   NyTestCache cache = NyTest.cache;
 
-  // Store a value
+  // Zapisz wartość
   await cache.put<String>("key", "value");
 
-  // Store with expiration
+  // Zapisz z wygaśnięciem
   await cache.put<String>("temp", "data", seconds: 60);
 
-  // Read a value
+  // Odczytaj wartość
   String? value = await cache.get<String>("key");
 
-  // Check existence
+  // Sprawdź istnienie
   bool exists = await cache.has("key");
 
-  // Clear a key
+  // Wyczyść klucz
   await cache.clear("key");
 
-  // Flush all
+  // Wyczyść wszystko
   await cache.flush();
 
-  // Get cache info
+  // Pobierz informacje o cache
   int size = await cache.size();
   List<String> keys = await cache.documents();
 });
@@ -672,9 +686,9 @@ nyTest('cache operations', () async {
 
 ``` dart
 void main() {
-  NyTest.init(); // Automatically sets up mock channels
+  NyTest.init(); // Automatycznie konfiguruje mockowane kanały
 
-  // Or set up manually
+  // Lub skonfiguruj ręcznie
   NyMockChannels.setup();
 }
 ```
@@ -722,7 +736,7 @@ final guard = NyMockRouteGuard.pass();
 ``` dart
 final guard = NyMockRouteGuard.redirect('/login');
 
-// With additional data
+// Z dodatkowymi danymi
 final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ```
 
@@ -731,9 +745,9 @@ final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ``` dart
 final guard = NyMockRouteGuard.custom((context) async {
   if (context.data == null) {
-    return GuardResult.handled; // abort navigation
+    return GuardResult.handled; // przerwij nawigację
   }
-  return GuardResult.next; // allow navigation
+  return GuardResult.next; // zezwól na nawigację
 });
 ```
 
@@ -745,10 +759,10 @@ Po wywołaniu strażnika możesz sprawdzić jego stan:
 expect(guard.wasCalled, isTrue);
 expect(guard.callCount, 1);
 
-// Access the RouteContext from the last call
+// Dostęp do RouteContext z ostatniego wywołania
 RouteContext? context = guard.lastContext;
 
-// Reset tracking
+// Zresetuj śledzenie
 guard.reset();
 ```
 
@@ -761,33 +775,33 @@ guard.reset();
 ### Asercje tras
 
 ``` dart
-expectRoute('/home');           // Assert current route
-expectNotRoute('/login');       // Assert not on route
-expectRouteInHistory('/home');  // Assert route was visited
-expectRouteExists('/profile');  // Assert route is registered
+expectRoute('/home');           // Sprawdź bieżącą trasę
+expectNotRoute('/login');       // Sprawdź że nie jesteś na trasie
+expectRouteInHistory('/home');  // Sprawdź że trasa była odwiedzona
+expectRouteExists('/profile');  // Sprawdź że trasa jest zarejestrowana
 expectRoutesExist(['/home', '/profile', '/settings']);
 ```
 
 ### Asercje stanu
 
 ``` dart
-expectBackpackContains("key");                        // Key exists
-expectBackpackContains("key", value: "expected");     // Key has value
-expectBackpackNotContains("key");                     // Key doesn't exist
+expectBackpackContains("key");                        // Klucz istnieje
+expectBackpackContains("key", value: "expected");     // Klucz ma wartość
+expectBackpackNotContains("key");                     // Klucz nie istnieje
 ```
 
 ### Asercje uwierzytelniania
 
 ``` dart
-expectAuthenticated<User>();  // User is authenticated
-expectGuest();                // No user authenticated
+expectAuthenticated<User>();  // Użytkownik jest uwierzytelniony
+expectGuest();                // Brak uwierzytelnionego użytkownika
 ```
 
 ### Asercje środowiska
 
 ``` dart
-expectEnv("APP_NAME", "MyApp");  // Env variable equals value
-expectEnvSet("APP_KEY");          // Env variable is set
+expectEnv("APP_NAME", "MyApp");  // Zmienna środowiskowa równa wartości
+expectEnvSet("APP_KEY");          // Zmienna środowiskowa jest ustawiona
 ```
 
 ### Asercje trybu
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Asercje widgetów
+
+``` dart
+// Sprawdź czy typ widgetu pojawia się określoną liczbę razy
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Sprawdź czy tekst jest widoczny
+expectTextVisible('Welcome');
+
+// Sprawdź czy tekst nie jest widoczny
+expectTextNotVisible('Error');
+
+// Sprawdź czy dowolny widget jest widoczny (użyj dowolnego Findera)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Sprawdź czy widget nie jest widoczny
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Asercje lokalizacji
@@ -835,16 +873,16 @@ nyWidgetTest('shows success toast', (tester) async {
 **NyToastRecorder** śledzi powiadomienia toast podczas testów:
 
 ``` dart
-// Record a toast manually
+// Nagraj toast ręcznie
 NyToastRecorder.record(id: 'success', title: 'Done', description: 'Saved!');
 
-// Check if a toast was shown
+// Sprawdź czy toast był wyświetlony
 bool shown = NyToastRecorder.wasShown(id: 'success');
 
-// Access all recorded toasts
+// Dostęp do wszystkich nagranych toastów
 List<ToastRecord> toasts = NyToastRecorder.records;
 
-// Clear recorded toasts
+// Wyczyść nagrane toasty
 NyToastRecorder.clear();
 ```
 
@@ -853,16 +891,16 @@ NyToastRecorder.clear();
 Asercje nazwanych stanów blokad i ładowania w widgetach `NyPage`/`NyState`:
 
 ``` dart
-// Assert a named lock is held
+// Sprawdź czy nazwana blokada jest utrzymywana
 expectLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named lock is not held
+// Sprawdź czy nazwana blokada nie jest utrzymywana
 expectNotLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named loading key is active
+// Sprawdź czy nazwany klucz ładowania jest aktywny
 expectLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 
-// Assert a named loading key is not active
+// Sprawdź czy nazwany klucz ładowania nie jest aktywny
 expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ```
 
@@ -873,16 +911,16 @@ expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 Używaj niestandardowych matcherów z `expect()`:
 
 ``` dart
-// Type matcher
+// Matcher typów
 expect(result, isType<User>());
 
-// Route name matcher
+// Matcher nazw tras
 expect(widget, hasRouteName('/home'));
 
-// Backpack matcher
+// Matcher Backpack
 expect(true, backpackHas("key", value: "expected"));
 
-// API call matcher
+// Matcher wywołań API
 expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 ```
 
@@ -897,7 +935,7 @@ Testuj zarządzanie stanem oparte na EventBus w widgetach `NyPage` i `NyState` z
 Symuluj aktualizacje stanu, które normalnie pochodzą z innego widgetu lub kontrolera:
 
 ``` dart
-// Fire an UpdateState event
+// Wyzwól zdarzenie UpdateState
 fireStateUpdate('HomePageState', data: {'items': ['a', 'b']});
 await tester.pump();
 expect(find.text('a'), findsOneWidget);
@@ -911,7 +949,7 @@ Wysyłaj akcje stanu obsługiwane przez `whenStateAction()` w Twojej stronie:
 fireStateAction('HomePageState', 'refresh-page');
 await tester.pump();
 
-// With additional data
+// Z dodatkowymi danymi
 fireStateAction('CartState', 'add-item', data: {'id': 42});
 await tester.pump();
 ```
@@ -919,15 +957,15 @@ await tester.pump();
 ### Asercje stanu
 
 ``` dart
-// Assert a state update was fired
+// Sprawdź czy aktualizacja stanu była wyzwolona
 expectStateUpdated('HomePageState');
 expectStateUpdated('HomePageState', times: 2);
 
-// Assert a state action was fired
+// Sprawdź czy akcja stanu była wyzwolona
 expectStateAction('HomePageState', 'refresh-page');
 expectStateAction('CartState', 'add-item', times: 1);
 
-// Assert on the stateData of a NyPage/NyState widget
+// Sprawdź stateData widgetu NyPage/NyState
 expectStateData(tester, find.byType(MyWidget), equals(42));
 ```
 
@@ -936,13 +974,13 @@ expectStateData(tester, find.byType(MyWidget), equals(42));
 Śledź i sprawdzaj wyzwolone aktualizacje i akcje stanu:
 
 ``` dart
-// Get all updates fired to a state
+// Pobierz wszystkie aktualizacje wyzwolone dla stanu
 List updates = NyStateTestHelpers.getUpdatesFor('MyWidget');
 
-// Get all actions fired to a state
+// Pobierz wszystkie akcje wyzwolone dla stanu
 List actions = NyStateTestHelpers.getActionsFor('MyWidget');
 
-// Reset all tracked state updates and actions
+// Zresetuj wszystkie śledzone aktualizacje i akcje stanu
 NyStateTestHelpers.reset();
 ```
 
@@ -987,6 +1025,101 @@ NyTest.seedBackpack({
 });
 ```
 
+<div id="nav-interaction"></div>
+
+## Pomocniki nawigacji i interakcji
+
+Rozszerzenia `WidgetTester` zapewniają wysokopoziomowy DSL do pisania przepływów nawigacyjnych i interakcji UI w `nyWidgetTest`.
+
+### visit
+
+Nawiguj do trasy i czekaj na osadzenie strony:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Sprawdź, że akcja nawigacyjna przeniosła Cię do oczekiwanej trasy:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Sprawdź, że bieżąca trasa pasuje do podanej (użyj aby potwierdzić gdzie jesteś, nie że właśnie nawigujesz):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Poczekaj na zakończenie wszystkich oczekujących animacji i wywołań zwrotnych klatek:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Pop bieżącej trasy i osadź:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Znajdź widget po tekście, tapnij go i osadź w jednym wywołaniu:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Tapnij pole formularza, wprowadź tekst i osadź:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Przewijaj do pojawienia się widgetu, a następnie osadź:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Przekaż konkretny finder `scrollable` i `delta` dla precyzyjnej kontroli:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
+```
+
 <div id="examples"></div>
 
 ## Przykłady
@@ -1028,7 +1161,7 @@ void main() {
         ]
       });
 
-      // ... trigger API call ...
+      // ... wyzwól wywołanie API ...
 
       expectApiCalled('/api/users');
     });
@@ -1038,7 +1171,7 @@ void main() {
     nyTest('subscription expires correctly', () async {
       NyTest.travel(DateTime(2025, 1, 1));
 
-      // Test subscription logic at a known date
+      // Testuj logikę subskrypcji w znanych dacie
       expect(NyTime.now().year, equals(2025));
 
       NyTest.travelForward(Duration(days: 365));

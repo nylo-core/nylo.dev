@@ -1,4 +1,4 @@
-# Alerts
+# Alertas
 
 ---
 
@@ -14,6 +14,7 @@
 - [Estilos de toast personalizados](#custom-styles "Estilos de toast personalizados")
   - [Registrar estilos](#registering-styles "Registrar estilos")
   - [Crear una fabrica de estilos](#creating-a-style-factory "Crear una fabrica de estilos")
+  - [Estilos de toast con datos](#data-aware-toast-styles "Estilos de toast con datos")
 - [AlertTab](#alert-tab "AlertTab")
 - [Ejemplos](#examples "Ejemplos practicos")
 
@@ -32,16 +33,16 @@ Las alertas pueden activarse desde paginas, controladores o cualquier lugar dond
 Muestra una notificacion toast usando metodos de conveniencia en cualquier pagina `NyState`:
 
 ``` dart
-// Success toast
+// Toast de exito
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// Toast de advertencia
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// Toast de informacion
 showToastInfo(description: "New version available");
 
-// Danger toast
+// Toast de peligro
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ En cualquier pagina que extienda `NyState` o `NyBaseState`, usa estos metodos de
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Exito
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // Con titulo personalizado
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // Advertencia
     showToastWarning(description: "Check your input");
 
-    // Info
+    // Informacion
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // Peligro
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // Oops (usa el estilo de peligro)
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // Sorry (usa el estilo de peligro)
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // Estilo personalizado por ID
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // Se llama cuando se toca el toast
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // Se llama cuando se descarta el toast
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // Se llama cuando el toast se hace visible
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | requerido | Contexto de construccion |
 | `id` | `String` | `'success'` | ID del estilo de toast |
-| `title` | `String?` | null | Sobrescribir el titulo por defecto |
+| `title` | `String?` | null | Texto del titulo; se transmite tal cual al widget toast |
 | `description` | `String?` | null | Texto de descripcion |
+| `data` | `Map<String, dynamic>?` | null | Pares clave-valor transmitidos a los estilos de toast con datos; `title` y `description` tienen prioridad sobre las claves coincidentes en `data` |
 | `duration` | `Duration?` | null | Tiempo de visualizacion del toast |
 | `position` | `ToastNotificationPosition?` | null | Posicion en pantalla |
 | `action` | `VoidCallback?` | null | Callback al tocar |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 Controla donde aparecen los toasts en la pantalla:
 
 ``` dart
-// Top of screen (default)
+// Parte superior de la pantalla (predeterminado)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// Parte inferior de la pantalla
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// Centro de la pantalla
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,80 @@ Para control total sobre el widget del toast:
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Estilos de toast con datos
+
+<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
+Usa `ToastStyleDataFactory` para registrar estilos de toast que reciben datos en tiempo de ejecucion. Esto es util cuando el contenido del toast -- como el nombre o avatar de un usuario -- no se conoce en el momento del registro.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+<!-- uncertain: new method "registerWithData()" — not seen in existing locale file -->
+Registra un estilo con datos usando `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+O registralo junto con estilos estaticos en tu `AppProvider`:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Llamalo con un mapa `data` en tiempo de ejecucion:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+Si tambien pasas `title` o `description`, estos tienen prioridad sobre las claves coincidentes en `data`.
+
+Usa `ToastNotificationRegistry.resolve(id, data)` directamente si necesitas construir el widget tu mismo:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

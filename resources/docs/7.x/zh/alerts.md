@@ -14,6 +14,7 @@
 - [自定义 Toast 样式](#custom-styles "自定义 Toast 样式")
   - [注册样式](#registering-styles "注册样式")
   - [创建样式工厂](#creating-a-style-factory "创建样式工厂")
+  - [数据感知 Toast 样式](#data-aware-toast-styles "数据感知 Toast 样式")
 - [AlertTab](#alert-tab "AlertTab")
 - [示例](#examples "示例")
 
@@ -32,16 +33,16 @@
 在任何 `NyState` 页面中使用便捷方法显示 toast 通知：
 
 ``` dart
-// Success toast
+// 成功 toast
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// 警告 toast
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// 信息 toast
 showToastInfo(description: "New version available");
 
-// Danger toast
+// 危险 toast
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // 成功
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // 自定义标题
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // 警告
     showToastWarning(description: "Check your input");
 
-    // Info
+    // 信息
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // 危险
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // Oops（使用 danger 样式）
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // Sorry（使用 danger 样式）
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // 通过 ID 指定自定义样式
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // 当 toast 被点击时调用
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // 当 toast 被关闭时调用
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // 当 toast 变为可见时调用
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | 必填 | 构建上下文 |
 | `id` | `String` | `'success'` | Toast 样式 ID |
-| `title` | `String?` | null | 覆盖默认标题 |
+| `title` | `String?` | null | 标题文本，原样传递给 toast 组件 |
 | `description` | `String?` | null | 描述文本 |
+| `data` | `Map<String, dynamic>?` | null | 在调用时传递给数据感知 toast 样式的键值对。`title` 和 `description` 优先于 `data` 中的同名键 |
 | `duration` | `Duration?` | null | Toast 显示时长 |
 | `position` | `ToastNotificationPosition?` | null | 屏幕位置 |
 | `action` | `VoidCallback?` | null | 点击回调 |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 控制 toast 在屏幕上的显示位置：
 
 ``` dart
-// Top of screen (default)
+// 屏幕顶部（默认）
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// 屏幕底部
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// 屏幕中央
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,78 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### 数据感知 Toast 样式
+
+使用 `ToastStyleDataFactory` 注册可在调用时接收运行时数据的 toast 样式。当 toast 内容（例如用户名或头像）在注册时未知时，这非常有用。
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+使用 `registerWithData()` 注册数据感知样式：
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+或在 `AppProvider` 中与静态样式一起注册：
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+在运行时传入 `data` 映射调用：
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+如果同时传入 `title` 或 `description`，它们将优先于 `data` 中的同名键。
+
+如需自行构建组件，可直接使用 `ToastNotificationRegistry.resolve(id, data)`：
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

@@ -42,11 +42,7 @@ Vos services API se trouvent dans `lib/app/networking/`. Un nouveau projet inclu
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -227,12 +223,12 @@ if (response.isSuccessful) {
 ### network vs networkResponse
 
 ```dart
-// network() — returns the data directly
+// network() — retourne les donnees directement
 User? user = await network<User>(
   request: (request) => request.get("/users/1"),
 );
 
-// networkResponse() — returns the full response
+// networkResponse() — retourne la reponse complete
 NyResponse<User> response = await networkResponse<User>(
   request: (request) => request.get("/users/1"),
 );
@@ -283,22 +279,22 @@ Les deux methodes acceptent les memes parametres. Choisissez `networkResponse` l
 ```dart
 NyResponse<User> response = await apiService.fetchUser(1);
 
-// Get data or throw if null
+// Obtenir les donnees ou lancer une exception si null
 User user = response.dataOrThrow('User not found');
 
-// Get data or use a fallback
+// Obtenir les donnees ou utiliser un fallback
 User user = response.dataOr(User.guest());
 
-// Run callback only if successful
+// Executer le callback uniquement en cas de succes
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
-// Pattern match on success/failure
+// Correspondance de pattern sur succes/echec
 String result = response.when(
   success: (user) => 'Welcome, ${user.name}!',
   failure: (response) => 'Error: ${response.statusMessage}',
 );
 
-// Get a specific header
+// Obtenir un en-tete specifique
 String? authHeader = response.getHeader('Authorization');
 ```
 
@@ -311,8 +307,7 @@ Configurez les options Dio par defaut pour votre service API en utilisant le par
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Utilisez les intercepteurs lorsque vous devez :
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +537,8 @@ Vous pouvez le desactiver en definissant `useNetworkLogger: false`.
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- Desactiver le journal
         );
@@ -564,7 +557,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // Journaliser uniquement les requetes vers des points d'acces specifiques
     return options.path.contains('/api/v1');
   },
 )
@@ -613,10 +606,10 @@ Avec des callbacks :
 await api<ApiService>(
   (request) => request.fetchUser(),
   onSuccess: (response, data) {
-    // data is the morphed User? instance
+    // data est l'instance User? transformee
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // Gerer l'erreur
   },
 );
 ```
@@ -626,7 +619,6 @@ await api<ApiService>(
 | Parametre | Type | Description |
 |-----------|------|-------------|
 | `request` | `Function(T)` | La fonction de requete API |
-| `context` | `BuildContext?` | Contexte de construction |
 | `headers` | `Map<String, dynamic>` | En-tetes supplementaires |
 | `bearerToken` | `String?` | Jeton Bearer |
 | `baseUrl` | `String?` | Remplacer l'URL de base |
@@ -703,16 +695,16 @@ Le "morphing" est le terme de {{ config('app.name') }} pour la conversion automa
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
-  // Returns a single User
+  // Retourne un seul User
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Returns a List of Users
+  // Retourne une liste de Users
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -758,10 +750,10 @@ Future<List<Country>> fetchCountries() async {
 ### Vider le cache
 
 ```dart
-// Clear a specific cache key
+// Vider une cle de cache specifique
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// Vider tout le cache API
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +842,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // Relancer uniquement sur les erreurs serveur
       return dioException.response?.statusCode == 500;
     },
   );
@@ -876,7 +868,7 @@ Echouez rapidement lorsque l'appareil est hors ligne au lieu d'attendre un delai
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -911,17 +903,17 @@ Lorsque c'est active et que l'appareil est hors ligne :
 Gerez et annulez les requetes en attente.
 
 ```dart
-// Create a managed cancel token
+// Creer un jeton d'annulation gere
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// Annuler toutes les requetes en attente (ex. a la deconnexion)
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// Verifier le nombre de requetes actives
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// Nettoyer un jeton specifique quand c'est termine
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +944,13 @@ class ApiService extends NyApiService {
 Pour les points d'acces publics qui n'ont pas besoin d'authentification :
 
 ```dart
-// Per-request
+// Par requete
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// Au niveau du service
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +969,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // Verifier si le jeton doit etre rafraichi
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // Utiliser la nouvelle instance Dio (sans intercepteurs) pour rafraichir le jeton
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // Sauvegarder le nouveau jeton dans le stockage
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +998,9 @@ Par defaut, le helper `api` cree une nouvelle instance a chaque fois. Pour utili
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // Nouvelle instance a chaque fois
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // Singleton — toujours la meme instance
 };
 ```
 
@@ -1021,8 +1013,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

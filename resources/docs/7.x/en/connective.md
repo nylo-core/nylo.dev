@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [Connective Widget](#connective-widget "Connective Widget")
-    - [State-Based Builders](#state-builders "State-Based Builders")
     - [Custom Builder](#custom-builder "Custom Builder")
 - [OfflineBanner Widget](#offline-banner "OfflineBanner Widget")
 - [NyConnectivity Helper](#connectivity-helper "NyConnectivity Helper")
@@ -25,39 +24,22 @@
 
 The `Connective` widget listens to connectivity changes and rebuilds based on the current network state.
 
-<div id="state-builders"></div>
-
-### State-Based Builders
-
-Provide different widgets for each connection type:
+Use `noInternet` to show a fallback widget when the device has no internet (wifi, mobile, or ethernet all absent):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### Available States
-
-| Property | Description |
-|----------|-------------|
-| `onWifi` | Widget when connected via WiFi |
-| `onMobile` | Widget when connected via mobile data |
-| `onEthernet` | Widget when connected via Ethernet |
-| `onVpn` | Widget when connected via VPN |
-| `onBluetooth` | Widget when connected via Bluetooth |
-| `onOther` | Widget for other connection types |
-| `onNone` | Widget when offline |
-| `child` | Default widget if no specific handler is provided |
 
 <div id="custom-builder"></div>
 
@@ -93,7 +75,7 @@ Connective.builder(
 
 The builder receives:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` for checking multiple connections
 
 ### Listening to Changes
@@ -117,7 +99,7 @@ Connective(
 
 ## OfflineBanner Widget
 
-Display a banner at the top of the screen when offline:
+Display a banner at the top of the screen when there is no internet (wifi, mobile, or ethernet all absent):
 
 ``` dart
 Scaffold(
@@ -187,6 +169,17 @@ if (await NyConnectivity.isMobile()) {
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
+```
+
+### Check for Internet
+
+`hasInternet()` is stricter than `isOnline()` — it only returns `true` when the device is connected via wifi, mobile, or ethernet. VPN, bluetooth, and satellite connections are excluded.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Confirmed internet access via wifi, mobile, or ethernet
+  await syncData();
+}
 ```
 
 ### Get Current Status
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Widget when on WiFi |
-| `onMobile` | `Widget?` | - | Widget when on mobile data |
-| `onEthernet` | `Widget?` | - | Widget when on Ethernet |
-| `onVpn` | `Widget?` | - | Widget when on VPN |
-| `onBluetooth` | `Widget?` | - | Widget when on Bluetooth |
-| `onOther` | `Widget?` | - | Widget for other connections |
-| `onNone` | `Widget?` | - | Widget when offline |
-| `child` | `Widget?` | - | Default widget |
-| `showLoadingOnInit` | `bool` | `false` | Show loading while checking |
-| `loadingWidget` | `Widget?` | - | Custom loading widget |
+| `noInternet` | `Widget?` | - | Widget shown when wifi, mobile, and ethernet are all absent |
+| `child` | `Widget?` | - | Widget shown when internet is available |
 | `onConnectivityChanged` | `Function?` | - | Callback on change |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Connected via Ethernet |
 | `vpn` | Connected via VPN |
 | `bluetooth` | Connected via Bluetooth |
+| `satellite` | Connected via satellite |
 | `other` | Other connection type |
 | `none` | No connection |

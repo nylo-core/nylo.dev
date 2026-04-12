@@ -47,9 +47,9 @@ Cela genere deux choses :
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// Modale Options de paiement
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// Utilise dans BottomSheetModal.showPaymentOptions()
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **Une methode statique** ajoutee a votre classe `BottomSheetModal` dans `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart` :
 
 ``` dart
-/// Show Payment Options modal
+/// Afficher la modale Options de paiement
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// Afficher la modale de deconnexion
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -142,11 +142,11 @@ Appelez-la depuis n'importe ou :
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// Avec des callbacks personnalises
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Logique de deconnexion personnalisee
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget d'en-tete en haut |
 | `useSafeArea` | `bool` | `true` | Envelopper le contenu dans SafeArea |
 | `isScrollControlled` | `bool` | `false` | Permettre le defilement de la modale |
+| `isDismissible` | `bool` | `true` | Permettre la fermeture en tapant en dehors |
+| `enableDrag` | `bool` | `true` | Permettre le geste de glissement pour fermer |
 | `showCloseButton` | `bool` | `false` | Afficher un bouton de fermeture X |
 | `headerPadding` | `EdgeInsets?` | null | Espacement lorsqu'un en-tete est present |
+| `contentPadding` | `EdgeInsets?` | null | Espacement autour du contenu principal |
+| `actionsPadding` | `EdgeInsets?` | null | Espacement autour de la section des actions |
 | `backgroundColor` | `Color?` | null | Couleur de fond de la modale |
 | `showHandle` | `bool` | `true` | Afficher la poignee de glissement en haut |
 | `closeButtonColor` | `Color?` | null | Couleur de fond du bouton de fermeture |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Utilisation
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // supprimer l'element
 }
 ```
 

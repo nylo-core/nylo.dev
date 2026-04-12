@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Paginated data callback (iteration starts at 1) |
+| `enablePullDown` | `bool` | Enable pull-down-to-refresh gesture (default: `true`) |
 | `onRefresh` | `Function()?` | Callback after refresh |
 | `beforeRefresh` | `Function()?` | Hook before refresh begins |
 | `afterRefresh` | `Function(dynamic)?` | Hook after refresh with data |
 | `headerStyle` | `String?` | Header type name (e.g., `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | Custom loading indicator for footer |
+
+To programmatically refresh a `CollectionView.pullable`, use `CollectionView.stateActions(stateName).refreshData()`. This re-fetches data and resets the pagination iteration back to 1 so the list restarts from the first page.
 
 <div id="examples"></div>
 

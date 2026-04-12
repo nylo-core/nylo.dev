@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` -- удаляет текущую страницу из стека.
 
+Передайте `rootNavigator: true` для pop из корневого навигатора вместо ближайшего локального. Это полезно внутри вкладок Navigation Hub, когда модальное окно или оверлей был открыт с использованием корневого навигатора.
+
 Пример
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop из корневого навигатора (например, для закрытия корневого модального окна)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

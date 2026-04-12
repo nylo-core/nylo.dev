@@ -164,7 +164,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // 데이터 포함 예시
       _userName = user.name;
       setState(() {});
     },
@@ -180,10 +180,10 @@ class _MyWidgetState extends NyState<MyWidget> {
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// 데이터 포함 또 다른 예시
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// 데이터 포함 또 다른 예시
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -192,11 +192,11 @@ stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// 데이터 포함 또 다른 예시
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// 데이터 포함 또 다른 예시
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 

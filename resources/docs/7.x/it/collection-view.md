@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // Aggiungi spaziatura tra gli elementi
   padding: EdgeInsets.all(16),
 )
 ```
@@ -187,7 +187,7 @@ Crea una lista con pull-to-refresh e paginazione a scorrimento infinito:
 ``` dart
 CollectionView<Post>.pullable(
   data: (int iteration) async {
-    // iteration starts at 1 and increments on each load
+    // l'iterazione inizia da 1 e si incrementa ad ogni caricamento
     return await api<ApiService>((request) =>
       request.get('/posts?page=$iteration')
     );
@@ -198,7 +198,7 @@ CollectionView<Post>.pullable(
   onRefresh: () {
     print('List was refreshed!');
   },
-  headerStyle: 'WaterDropHeader', // Pull indicator style
+  headerStyle: 'WaterDropHeader', // Stile dell'indicatore pull
 )
 ```
 
@@ -260,7 +260,7 @@ CollectionView<Photo>.pullableGrid(
 Personalizza l'indicatore di caricamento usando `loadingStyle`:
 
 ``` dart
-// Normal loading with custom widget
+// Caricamento normale con widget personalizzato
 CollectionView<Item>(
   data: () async => await fetchItems(),
   builder: (context, item) => ItemTile(item: item.data),
@@ -269,7 +269,7 @@ CollectionView<Item>(
   ),
 )
 
-// Skeletonizer loading effect
+// Effetto di caricamento skeletonizer
 CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserCard(user: item.data),
@@ -331,7 +331,7 @@ CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserTile(user: item.data),
   transform: (List<User> users) {
-    // Filter to only active users
+    // Filtra solo gli utenti attivi
     return users.where((u) => u.isActive).toList();
   },
 )
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## Aggiornamento dello Stato
 
-Puoi aggiornare o reimpostare un CollectionView assegnandogli un `stateName`:
+Puoi aggiornare un CollectionView a livello di codice assegnandogli un `stateName` e chiamando `CollectionView.stateActions()`:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### Reimpostare la lista
+Usa `stateActions` per manipolare la lista a runtime:
 
 ``` dart
-// Resets and reloads data from scratch
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// Reimposta e ricarica i dati dall'inizio
+actions.reset();
+
+// Aggiorna i dati (ri-recupera e reimposta la paginazione)
+actions.refreshData();
+
+// Aggiungi un elemento alla fine della lista
+actions.addItem(newTodo);
+
+// Inserisci un elemento a un indice specifico
+actions.insertItem(0, newTodo);
+
+// Rimuovi un elemento per indice
+actions.removeFromIndex(2);
+
+// Sostituisci un elemento a un indice specifico
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### Rimuovere un elemento
-
-``` dart
-// Remove item at index 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### Attivare un aggiornamento generale
-
-``` dart
-// Using the global updateState helper
-updateState("my_todo_list");
-```
+Tutti i metodi di `stateActions` persistono correttamente tra i rebuild sia per i dati sincroni che asincroni. `refreshData()` reimposta anche il contatore di iterazione della paginazione in modo che le liste pullable ripartano dalla pagina 1.
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | Parametro | Tipo | Descrizione |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Funzione dati paginata |
+| `enablePullDown` | `bool` | Abilita il gesto pull-to-refresh (predefinito: `true`) |
 | `onRefresh` | `Function()?` | Callback quando l'aggiornamento e' completato |
 | `beforeRefresh` | `Function()?` | Callback prima dell'aggiornamento |
 | `afterRefresh` | `Function(dynamic)?` | Callback dopo il caricamento dei dati |

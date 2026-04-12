@@ -60,6 +60,8 @@ Widget sẽ tra cứu khóa dịch trong các tệp ngôn ngữ của bạn (ví
 }
 ```
 
+Nếu một khóa bị thiếu trong tệp locale hiện tại, {{ config('app.name') }} sẽ tự động tra cứu nó trong ngôn ngữ dự phòng (được cấu hình trong `lib/config/localization.dart`) trước khi trả về chuỗi khóa thô. Điều này áp dụng cho cả khóa cấp cao nhất và khóa lồng nhau được ký hiệu chấm.
+
 <div id="string-interpolation"></div>
 
 ## Nội suy chuỗi

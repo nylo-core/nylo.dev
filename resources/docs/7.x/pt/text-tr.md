@@ -60,6 +60,8 @@ O widget buscará a chave de tradução nos seus arquivos de idioma (ex.: `/lang
 }
 ```
 
+Se uma chave estiver ausente no arquivo do locale ativo, o {{ config('app.name') }} a busca automaticamente no idioma de fallback (configurado em `lib/config/localization.dart`) antes de retornar a string da chave bruta. Isso se aplica tanto a chaves de nível superior quanto a chaves aninhadas com notação de ponto.
+
 <div id="string-interpolation"></div>
 
 ## Interpolação de Strings

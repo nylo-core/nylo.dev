@@ -344,6 +344,7 @@ CollectionView<Product>.pullableGrid(
 | Parametr | Typ | Opis |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Wywolanie zwrotne danych z paginacja (iteracja zaczyna sie od 1) |
+| `enablePullDown` | `bool` | Wlacz gest odswiezania przez pociagniecie w dol (domyslnie: `true`) |
 | `onRefresh` | `Function()?` | Wywolanie zwrotne po odswiezeniu |
 | `beforeRefresh` | `Function()?` | Hak przed rozpoczeciem odswiezania |
 | `afterRefresh` | `Function(dynamic)?` | Hak po odswiezeniu z danymi |

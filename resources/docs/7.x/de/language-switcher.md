@@ -7,7 +7,9 @@
 - Verwendung
     - [Dropdown-Widget](#usage-dropdown "Dropdown-Widget")
     - [Bottom Sheet Modal](#usage-bottom-modal "Bottom Sheet Modal")
+- [Animationsstil](#animation-style "Animationsstil")
 - [Benutzerdefinierter Dropdown-Builder](#custom-builder "Benutzerdefinierter Dropdown-Builder")
+- [State-Aktionen](#state-actions "State-Aktionen")
 - [Parameter](#parameters "Parameter")
 - [Statische Methoden](#methods "Statische Methoden")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Zur App-Leiste hinzufuegen
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Das Bottom Modal zeigt eine Liste von Sprachen mit einem Häkchen neben der aktuell ausgewählten Sprache an.
 
-### Modal-Höhe anpassen
+### Modal anpassen
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Modal ueber allen Routen anzeigen, auch Tabbars
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Animationsstil
+
+Der Parameter `animationStyle` steuert die Uebergangsanimationen fuer den Dropdown-Trigger und die Modal-Listenelemente. Vier Voreinstellungen sind verfuegbar:
+
+``` dart
+// Keine Animationen
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Dezente, verfeinerte Animationen (empfohlen fuer die meisten Apps)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Verspielt, federnde Animationen
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Sanftes Einblenden mit leichter Skalierung
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Sie koennen auch einen benutzerdefinierten `LanguageSwitcherAnimationStyle()` mit einzelnen Parametern uebergeben oder `copyWith` verwenden, um eine Voreinstellung anzupassen.
+
+Der gleiche Parameter `animationStyle` wird von `LanguageSwitcher.showBottomModal` akzeptiert.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // z.B. "English"
+        // language['locale'] enthaelt den Locale-Code, z.B. "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Weitere Aktionen ausfuehren, wenn die Sprache wechselt
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## State-Aktionen
+
+Steuern Sie den `LanguageSwitcher` programmatisch mit `stateActions()`:
+
+``` dart
+// Sprachliste aktualisieren (verfuegbare Sprachen neu laden)
+LanguageSwitcher.stateActions().refresh();
+
+// Sprache per Locale-Code wechseln
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Dies ist nuetzlich, wenn Sie die App-Sprache ohne Benutzerinteraktion aendern moechten, beispielsweise nach dem Einloggen mit einer gespeicherten Benutzereinstellung.
 
 <div id="parameters"></div>
 
@@ -150,7 +205,7 @@ Rufen Sie die aktuell ausgewählte Sprache ab:
 
 ``` dart
 Map<String, dynamic>? lang = await LanguageSwitcher.currentLanguage();
-// Returns: {"en": "English"} or null if not set
+// Gibt zurueck: {"en": "English"} oder null, wenn nicht gesetzt
 ```
 
 ### Sprache speichern
@@ -177,10 +232,10 @@ Sprachinformationen aus einem Locale-Code abrufen:
 
 ``` dart
 Map<String, String>? langData = LanguageSwitcher.getLanguageData("en");
-// Returns: {"en": "English"}
+// Gibt zurueck: {"en": "English"}
 
 Map<String, String>? langData = LanguageSwitcher.getLanguageData("fr_CA");
-// Returns: {"fr_CA": "French (Canada)"}
+// Gibt zurueck: {"fr_CA": "French (Canada)"}
 ```
 
 ### Sprachliste abrufen
@@ -189,7 +244,7 @@ Alle verfügbaren Sprachen aus dem `/lang`-Verzeichnis abrufen:
 
 ``` dart
 List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
-// Returns: [{"en": "English"}, {"es": "Spanish"}, ...]
+// Gibt zurueck: [{"en": "English"}, {"es": "Spanish"}, ...]
 ```
 
 ### Bottom Modal anzeigen
@@ -199,8 +254,16 @@ Das Sprachauswahl-Modal anzeigen:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Mit Optionen
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Unterstützte Locales

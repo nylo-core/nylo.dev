@@ -7,7 +7,9 @@
 - 使い方
     - [ドロップダウンウィジェット](#usage-dropdown "ドロップダウンウィジェット")
     - [ボトムシートモーダル](#usage-bottom-modal "ボトムシートモーダル")
+- [アニメーションスタイル](#animation-style "アニメーションスタイル")
 - [カスタムドロップダウンビルダー](#custom-builder "カスタムドロップダウンビルダー")
+- [状態アクション](#state-actions "状態アクション")
 - [パラメータ](#parameters "パラメータ")
 - [静的メソッド](#methods "静的メソッド")
 
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 ボトムモーダルは、現在選択されている言語の横にチェックマークを付けた言語リストを表示します。
 
-### モーダルの高さのカスタマイズ
+### モーダルのカスタマイズ
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // カスタムの高さ
+  height: 300,
+  useRootNavigator: true, // すべてのルートの上にモーダルをプッシュ（タブバーを含む）
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## アニメーションスタイル
+
+`animationStyle` パラメータは、ドロップダウントリガーとボトムモーダルリストアイテムの両方のトランジションアニメーションを制御します。4つのプリセットが利用可能です:
+
+``` dart
+// アニメーションなし
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// 繊細で洗練されたアニメーション（ほとんどのアプリに推奨）
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// 遊び心のあるスプリングアニメーション
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// ゆるやかなスケールを伴うスムーズなフェードイン
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+カスタムパラメータで `LanguageSwitcherAnimationStyle()` を渡すか、`copyWith` を使ってプリセットを調整することもできます。
+
+`animationStyle` パラメータは `LanguageSwitcher.showBottomModal` でも使用できます。
 
 <div id="custom-builder"></div>
 
@@ -116,6 +154,23 @@ LanguageSwitcher(
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## 状態アクション
+
+`stateActions()` を使用して `LanguageSwitcher` をプログラムで制御します:
+
+``` dart
+// 言語リストを更新（利用可能な言語を再読み込み）
+LanguageSwitcher.stateActions().refresh();
+
+// ロケールコードで言語を切り替え
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+これは、ユーザー操作なしにアプリの言語を変更したい場合（例えばユーザー設定でログイン後）に便利です。
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// カスタムの高さ指定
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// オプション付き
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## サポートされているロケール

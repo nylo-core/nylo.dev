@@ -47,9 +47,9 @@ metro make:bottom_sheet_modal payment_options
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// 支払いオプションモーダル
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// BottomSheetModal.showPaymentOptions() で使用
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **静的メソッド** `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart` の `BottomSheetModal` クラスに追加:
 
 ``` dart
-/// Show Payment Options modal
+/// 支払いオプションモーダルを表示
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | 上部のヘッダーウィジェット |
 | `useSafeArea` | `bool` | `true` | コンテンツを SafeArea でラップ |
 | `isScrollControlled` | `bool` | `false` | モーダルをスクロール可能に |
+| `isDismissible` | `bool` | `true` | 外側タップで閉じることを許可 |
+| `enableDrag` | `bool` | `true` | ドラッグで閉じるジェスチャーを許可 |
 | `showCloseButton` | `bool` | `false` | X 閉じるボタンを表示 |
 | `headerPadding` | `EdgeInsets?` | null | ヘッダー存在時のパディング |
+| `contentPadding` | `EdgeInsets?` | null | メインコンテンツ周りのパディング |
+| `actionsPadding` | `EdgeInsets?` | null | アクションセクション周りのパディング |
 | `backgroundColor` | `Color?` | null | モーダルの背景色 |
 | `showHandle` | `bool` | `true` | 上部のドラッグハンドルを表示 |
 | `closeButtonColor` | `Color?` | null | 閉じるボタンの背景色 |

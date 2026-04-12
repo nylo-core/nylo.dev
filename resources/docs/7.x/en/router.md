@@ -703,8 +703,8 @@ appRouter() => nyRoutes((router) {
 #### Directional Slide Transitions
 - **`TransitionType.rightToLeft()`** - Slides from right edge of screen
 - **`TransitionType.leftToRight()`** - Slides from left edge of screen
-- **`TransitionType.topToBottom()`** - Slides from top edge of screen
-- **`TransitionType.bottomToTop()`** - Slides from bottom edge of screen
+- **`TransitionType.topToBottom()`** - New page slides in from the top; the outgoing route does not animate (modal-style)
+- **`TransitionType.bottomToTop()`** - New page slides in from the bottom; the outgoing route does not animate (modal-style)
 
 #### Slide with Fade Transitions
 - **`TransitionType.rightToLeftWithFade()`** - Slides and fades from right edge

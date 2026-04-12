@@ -681,12 +681,12 @@ import 'package:page_transition/page_transition.dart';
 
 appRouter() => nyRoutes((router) {
 
-  // bottomToTop
+  // từ dưới lên trên
   router.add(SettingsPage.path,
     transitionType: TransitionType.bottomToTop()
   );
 
-  // fade
+  // mờ dần
   router.add(HomePage.path,
     transitionType: TransitionType.fade()
   );

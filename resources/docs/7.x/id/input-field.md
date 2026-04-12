@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // Tampilkan/sembunyikan ikon toggle
+  passwordViewable: true, // Izinkan pengguna untuk toggle visibilitas
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 Terapkan mask input untuk data berformat seperti nomor telepon atau kartu kredit:
 
 ``` dart
-// Phone number mask
+// Mask nomor telepon
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // Mengembalikan nilai tanpa mask: 1234567890
 )
 
-// Credit card mask
+// Mask kartu kredit
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // Mengembalikan nilai dengan mask: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // Ikon hapus kustom
   onChanged: (value) {
-    // Handle search
+    // Tangani pencarian
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### Aksi State
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// Hapus field
+actions.clear();
+
+// Atur nilai
+actions.setValue("new_value");
+
+// Pindahkan fokus ke field
+actions.focus();
+
+// Hapus fokus dari field
+actions.unfocus();
+
+// Toggle visibilitas password (untuk InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Gaya teks label |
 | `hintStyle` | `TextStyle?` | Gaya teks hint |
 | `prefixIcon` | `Widget?` | Ikon sebelum input |
+| `suffixIcon` | `Widget?` | Ikon setelah input |
 
 ### Parameter Masking
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Izinkan toggle visibilitas password |
 | `dummyData` | `String?` | Data palsu untuk pengembangan |
 | `stateName` | `String?` | Nama untuk manajemen state |
+| `enableInteractiveSelection` | `bool` | Aktifkan pemilihan teks (default: `true`) |
 | `onChanged` | `Function(String)?` | Dipanggil saat nilai berubah |

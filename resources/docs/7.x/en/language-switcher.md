@@ -7,7 +7,9 @@
 - Usage
     - [Dropdown Widget](#usage-dropdown "Dropdown Widget")
     - [Bottom Sheet Modal](#usage-bottom-modal "Bottom Sheet Modal")
+- [Animation Style](#animation-style "Animation Style")
 - [Custom Dropdown Builder](#custom-builder "Custom Dropdown Builder")
+- [State Actions](#state-actions "State Actions")
 - [Parameters](#parameters "Parameters")
 - [Static Methods](#methods "Static Methods")
 
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 The bottom modal displays a list of languages with a checkmark next to the currently selected language.
 
-### Customizing the Modal Height
+### Customizing the Modal
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Push modal over all routes, including tab bars
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Animation Style
+
+The `animationStyle` parameter controls the transition animations for both the dropdown trigger and the bottom modal list items. Four presets are available:
+
+``` dart
+// No animations
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Subtle, refined animations (recommended for most apps)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Playful, springy animations
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Smooth fade-in with gentle scale
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+You can also pass a custom `LanguageSwitcherAnimationStyle()` with individual parameters, or use `copyWith` to tweak a preset.
+
+The same `animationStyle` parameter is accepted by `LanguageSwitcher.showBottomModal`.
 
 <div id="custom-builder"></div>
 
@@ -116,6 +154,23 @@ LanguageSwitcher(
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## State Actions
+
+Control the `LanguageSwitcher` programmatically using `stateActions()`:
+
+``` dart
+// Refresh the language list (re-reads available languages)
+LanguageSwitcher.stateActions().refresh();
+
+// Switch to a language by locale code
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+This is useful when you want to change the app language without user interaction, for example after logging in with a user preference.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Display the language selection modal:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// With options
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Supported Locales

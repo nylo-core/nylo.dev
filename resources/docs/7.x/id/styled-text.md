@@ -10,6 +10,8 @@
   - [Styling Placeholder](#styling-placeholders "Styling Placeholder")
   - [Callback Tap](#tap-callbacks "Callback Tap")
   - [Key Dipisahkan Pipe](#pipe-keys "Key Dipisahkan Pipe")
+  - [Gaya Wildcard](#wildcard-styles "Gaya Wildcard")
+  - [Key Lokalisasi](#localization-keys "Key Lokalisasi")
 - [Parameter](#parameters "Parameter")
 - [Extension Text](#text-extensions "Extension Text")
   - [Gaya Tipografi](#typography-styles "Gaya Tipografi")
@@ -32,7 +34,7 @@ StyledText mendukung dua mode:
 ## Penggunaan Dasar
 
 ``` dart
-// Children mode - list of Text widgets
+// Mode Children - daftar widget Text
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Mode Template - sintaks placeholder
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 Ini memetakan gaya dan callback yang sama ke ketiga placeholder.
 
+<div id="wildcard-styles"></div>
+
+### Gaya Wildcard
+
+Gunakan `"*"` sebagai key untuk menerapkan gaya atau callback tap ke setiap placeholder yang tidak memiliki key spesifiknya sendiri:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name` dan `app` keduanya mendapatkan gaya wildcard. Jika placeholder juga memiliki key eksplisit, key eksplisit lebih diutamakan daripada `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // hanya berlaku untuk "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // tap pada placeholder yang tidak cocok
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### Key Lokalisasi
+
+Gunakan sintaks `@{{key:text}}` untuk memisahkan **key pencarian** dari **teks tampilan**. Ini berguna untuk lokalisasi — key tetap sama di semua lokal sementara teks tampilan berubah per bahasa.
+
+``` dart
+// Di file lokal Anda:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN merender: "Learn Languages, Reading and Speaking in AppName"
+// ES merender: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+Bagian sebelum `:` adalah **key** yang digunakan untuk mencari gaya dan callback tap. Bagian setelah `:` adalah **teks tampilan** yang dirender di layar. Tanpa `:`, placeholder berperilaku persis seperti sebelumnya — sepenuhnya kompatibel mundur.
+
+Ini bekerja dengan semua fitur yang ada termasuk [key yang dipisahkan pipe](#pipe-keys) dan [callback tap](#tap-callbacks).
+
 <div id="parameters"></div>
 
 ## Parameter
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Metode Utilitas
 
 ``` dart
-// Font weight
+// Ketebalan font
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Perataan
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Baris maksimum
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Keluarga font
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Ukuran font
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Gaya kustom
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
 // Padding
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Salin dengan modifikasi
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

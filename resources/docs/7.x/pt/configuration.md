@@ -10,6 +10,7 @@
   - [Recuperando Valores](#retrieving-values "Recuperando valores do ambiente")
   - [Criando Classes de Config](#creating-config-classes "Criando classes de config")
   - [Tipos de Variáveis](#variable-types "Tipos de variáveis de ambiente")
+  - [Interpolação de Variáveis](#variable-interpolation "Interpolação de variáveis")
 - [Flavours de Ambiente](#environment-flavours "Flavours de ambiente")
 - [Injeção em Tempo de Build](#build-time-injection "Injeção em tempo de build")
 
@@ -32,7 +33,7 @@ Esta abordagem fornece:
 O arquivo `.env` na raiz do seu projeto contém suas variáveis de configuração:
 
 ``` bash
-# Environment configuration
+# Configuração do ambiente
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ Quando você modificar seu arquivo `.env`, regenere a configuração:
 metro make:env
 ```
 
-A flag `--force` sobrescreve o `env.g.dart` existente.
+Isso sempre sobrescreve o `env.g.dart` existente.
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 Então no código do seu app, acesse os valores através da classe de config:
 
 ``` dart
-// Anywhere in your app
+// Em qualquer lugar do seu app
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ Isso cria um novo arquivo de config em `lib/config/revenue_cat_config.dart`:
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Adicione seus valores de config aqui
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Inicializar RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Verificar direitos
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Conceder acesso premium
 }
 ```
 
@@ -200,6 +201,30 @@ Os valores no seu arquivo `.env` são automaticamente parseados:
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (string vazia) |
 
+
+<div id="variable-interpolation"></div>
+
+## Interpolação de Variáveis
+
+Valores de string no seu arquivo `.env` podem referenciar outras variáveis usando a sintaxe `${VAR_NAME}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Quando seu código chama `getEnv('APP_URL')`, o valor retornado é `https://myapp.com`. Referências são resolvidas recursivamente, então referências encadeadas funcionam como esperado:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` retorna `https://example.com/uploads`.
+
+Referências circulares são protegidas — se uma variável referencia a si mesma (diretamente ou por uma cadeia), o placeholder não resolvido `${VAR_NAME}` é mantido na saída em vez de causar um loop infinito.
 
 <div id="environment-flavours"></div>
 
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Gere a partir de um arquivo env específico:
 
 ``` bash
-# For production
+# Para produção
 metro make:env --file=".env.production"
 
-# For staging
+# Para staging
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 Compile com a configuração apropriada:
 
 ``` bash
-# Development
+# Desenvolvimento
 flutter run
 
-# Production build
+# Build de produção
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Executar
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

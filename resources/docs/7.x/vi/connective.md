@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Giới thiệu](#introduction "Giới thiệu")
 - [Widget Connective](#connective-widget "Widget Connective")
-    - [Builder theo trạng thái](#state-builders "Builder theo trạng thái")
     - [Builder tùy chỉnh](#custom-builder "Builder tùy chỉnh")
 - [Widget OfflineBanner](#offline-banner "Widget OfflineBanner")
 - [Helper NyConnectivity](#connectivity-helper "Helper NyConnectivity")
@@ -25,39 +24,22 @@
 
 Widget `Connective` lắng nghe thay đổi kết nối và rebuild dựa trên trạng thái mạng hiện tại.
 
-<div id="state-builders"></div>
-
-### Builder theo trạng thái
-
-Cung cấp các widget khác nhau cho mỗi loại kết nối:
+Dùng `noInternet` để hiển thị widget dự phòng khi thiết bị không có internet (wifi, mobile, hay ethernet đều vắng mặt):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### Các trạng thái có sẵn
-
-| Thuộc tính | Mô tả |
-|----------|-------------|
-| `onWifi` | Widget khi kết nối qua WiFi |
-| `onMobile` | Widget khi kết nối qua dữ liệu di động |
-| `onEthernet` | Widget khi kết nối qua Ethernet |
-| `onVpn` | Widget khi kết nối qua VPN |
-| `onBluetooth` | Widget khi kết nối qua Bluetooth |
-| `onOther` | Widget cho các loại kết nối khác |
-| `onNone` | Widget khi ngoại tuyến |
-| `child` | Widget mặc định nếu không có handler cụ thể |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Hiển thị loại kết nối
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 Builder nhận:
 - `context` - BuildContext
-- `state` - Enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - Enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` để kiểm tra nhiều kết nối
 
 ### Lắng nghe thay đổi
@@ -117,16 +99,16 @@ Connective(
 
 ## Widget OfflineBanner
 
-Hiển thị banner ở đầu màn hình khi ngoại tuyến:
+Hiển thị banner ở đầu màn hình khi không có internet (wifi, mobile, hay ethernet đều vắng mặt):
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Nội dung chính của bạn
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Banner ngoại tuyến (tự ẩn khi trực tuyến)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Hiệu ứng trượt vào/ra
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ Class `NyConnectivity` cung cấp các phương thức static để kiểm tra k
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // Thực hiện yêu cầu API
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Tải từ bộ nhớ đệm
   final data = await cache.getData();
 }
 
-// Or check if offline
+// Hoặc kiểm tra ngoại tuyến
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,34 +156,45 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // Tải file lớn trên WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Cảnh báo về việc sử dụng dữ liệu
   showDataWarning();
 }
 
-// Other methods:
+// Các phương thức khác:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### Kiểm tra internet
+
+`hasInternet()` nghiêm ngặt hơn `isOnline()` — nó chỉ trả về `true` khi thiết bị kết nối qua wifi, mobile, hoặc ethernet. Kết nối VPN, bluetooth, và satellite bị loại trừ.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Đã xác nhận truy cập internet qua wifi, mobile, hoặc ethernet
+  await syncData();
+}
+```
+
 ### Lấy trạng thái hiện tại
 
 ``` dart
-// Get all active connection types
+// Lấy tất cả loại kết nối đang hoạt động
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Lấy chuỗi dễ đọc
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None", v.v.
 ```
 
 ### Lắng nghe thay đổi
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// Đừng quên hủy khi hoàn thành
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### Thực thi có điều kiện
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Chỉ thực thi khi trực tuyến (trả về null nếu ngoại tuyến)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Thực thi callback khác nhau dựa trên trạng thái
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ Nhanh chóng thêm nhận biết kết nối cho bất kỳ widget nào:
 ### Hiển thị giao diện thay thế khi ngoại tuyến
 
 ``` dart
-// Show a different widget when offline
+// Hiển thị widget khác khi ngoại tuyến
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### Chỉ hiển thị khi trực tuyến
 
 ``` dart
-// Hide completely when offline
+// Ẩn hoàn toàn khi ngoại tuyến
 SyncButton().onlyOnline()
 ```
 
 ### Chỉ hiển thị khi ngoại tuyến
 
 ``` dart
-// Show only when offline
+// Chỉ hiển thị khi ngoại tuyến
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Tham số | Kiểu | Mặc định | Mô tả |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Widget khi kết nối WiFi |
-| `onMobile` | `Widget?` | - | Widget khi kết nối dữ liệu di động |
-| `onEthernet` | `Widget?` | - | Widget khi kết nối Ethernet |
-| `onVpn` | `Widget?` | - | Widget khi kết nối VPN |
-| `onBluetooth` | `Widget?` | - | Widget khi kết nối Bluetooth |
-| `onOther` | `Widget?` | - | Widget cho kết nối khác |
-| `onNone` | `Widget?` | - | Widget khi ngoại tuyến |
-| `child` | `Widget?` | - | Widget mặc định |
-| `showLoadingOnInit` | `bool` | `false` | Hiển thị tải khi đang kiểm tra |
-| `loadingWidget` | `Widget?` | - | Widget tải tùy chỉnh |
+| `noInternet` | `Widget?` | - | Widget hiển thị khi wifi, mobile, và ethernet đều vắng mặt |
+| `child` | `Widget?` | - | Widget hiển thị khi có internet |
 | `onConnectivityChanged` | `Function?` | - | Callback khi thay đổi |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Kết nối qua Ethernet |
 | `vpn` | Kết nối qua VPN |
 | `bluetooth` | Kết nối qua Bluetooth |
+| `satellite` | Kết nối qua vệ tinh |
 | `other` | Loại kết nối khác |
 | `none` | Không có kết nối |

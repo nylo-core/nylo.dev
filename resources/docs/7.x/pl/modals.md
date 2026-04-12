@@ -146,7 +146,7 @@ BottomSheetModal.showLogout(context);
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Niestandardowa logika wylogowania
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget nagłówka na górze |
 | `useSafeArea` | `bool` | `true` | Opakowuje treść w SafeArea |
 | `isScrollControlled` | `bool` | `false` | Umożliwia przewijanie modala |
+| `isDismissible` | `bool` | `true` | Umożliwia zamknięcie przez dotknięcie poza modalem |
+| `enableDrag` | `bool` | `true` | Umożliwia gest przeciągania w celu zamknięcia |
 | `showCloseButton` | `bool` | `false` | Wyświetla przycisk zamykania X |
 | `headerPadding` | `EdgeInsets?` | null | Padding gdy obecny jest nagłówek |
+| `contentPadding` | `EdgeInsets?` | null | Padding wokół głównej treści |
+| `actionsPadding` | `EdgeInsets?` | null | Padding wokół sekcji akcji |
 | `backgroundColor` | `Color?` | null | Kolor tła modala |
 | `showHandle` | `bool` | `true` | Wyświetla uchwyt do przeciągania na górze |
 | `closeButtonColor` | `Color?` | null | Kolor tła przycisku zamykania |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Użycie
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // usuń element
 }
 ```
 

@@ -220,6 +220,11 @@ class HomeController extends NyController {
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // Fechar a partir do navigator raiz (ex.: para dispensar um modal root-level em um Navigation Hub)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
     // Enviar ação personalizada para a página
     updatePageState("customAction", {"key": "value"});

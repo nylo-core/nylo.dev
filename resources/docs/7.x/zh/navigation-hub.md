@@ -73,31 +73,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// 状态操作
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// 布局构建器
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// 是否保持状态
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// 初始索引
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// 导航页面
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// 处理点击事件
   @override
   onTap(int index) {
     super.onTap(index);
@@ -485,7 +485,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // 在此处编写初始化逻辑
   };
 
   @override
@@ -507,7 +507,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // 导航按钮
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -534,19 +534,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// 检查旅程是否可以继续到下一步
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// 导航到下一步之前调用
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // 例如：保存数据到会话
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// 旅程完成时调用（在最后一步）
   @override
   Future<void> onComplete() async {}
 }
@@ -752,8 +752,8 @@ Future<void> onAfterNext() async {
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // 在此处执行验证逻辑
+    // 旅程可以继续则返回 true，否则返回 false
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -913,10 +913,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// 旅程完成时的回调
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // 导航到首页或下一个目的地
     routeTo(HomePage.path);
   };
 
@@ -1004,6 +1004,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+在标签页内的嵌套导航器中执行 pop 时，使用 `rootNavigator: true` 可以从根导航器而非标签页的本地导航器中 pop：
+
+``` dart
+// 从标签页的本地导航器 pop（默认）
+pop();
+
+// 从根导航器 pop — 当模态框或遮罩层
+// 使用根导航器 push 时使用此方法
+pop(rootNavigator: true);
+```
+
+`rootNavigator` 参数在 `NyState`、`NyController`、`StateAction.pop()` 以及 `BuildContext` 扩展的 `pop()` 中均可使用。
 
 <div id="tabs"></div>
 
@@ -1199,8 +1212,8 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
+        // 在此处添加自定义逻辑
+        // 例如：埋点分析、显示确认等
         super.onTap(index); // 务必调用 super 来处理标签页切换
     }
 }

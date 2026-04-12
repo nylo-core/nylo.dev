@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // Göster/gizle geçiş simgesi
+  passwordViewable: true, // Kullanıcının görünürlüğü değiştirmesine izin ver
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 Telefon numaraları veya kredi kartları gibi biçimlendirilmiş veriler için giriş maskeleri uygulayın:
 
 ``` dart
-// Phone number mask
+// Telefon numarası maskesi
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // Maskesiz değeri döndürür: 1234567890
 )
 
-// Credit card mask
+// Kredi kartı maskesi
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // Maskeli değeri döndürür: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // Özel temizleme simgesi
   onChanged: (value) {
-    // Handle search
+    // Aramayı yönet
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### Durum Eylemleri
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// Alanı temizle
+actions.clear();
+
+// Değer ayarla
+actions.setValue("new_value");
+
+// Alana odağı taşı
+actions.focus();
+
+// Alandan odağı kaldır
+actions.unfocus();
+
+// Şifre görünürlüğünü değiştir (InputField.password için)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Etiket metin stili |
 | `hintStyle` | `TextStyle?` | İpucu metin stili |
 | `prefixIcon` | `Widget?` | Girişten önceki simge |
+| `suffixIcon` | `Widget?` | Girişten sonraki simge |
 
 ### Maskeleme Parametreleri
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Şifre görünürlük geçişine izin ver |
 | `dummyData` | `String?` | Geliştirme için sahte veri |
 | `stateName` | `String?` | Durum yönetimi için ad |
+| `enableInteractiveSelection` | `bool` | Metin seçimini etkinleştir (varsayılan: `true`) |
 | `onChanged` | `Function(String)?` | Değer değiştiğinde çağrılır |

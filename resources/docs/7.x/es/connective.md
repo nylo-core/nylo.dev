@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [Introduccion](#introduction "Introduccion")
 - [Widget Connective](#connective-widget "Widget Connective")
-    - [Constructores basados en estado](#state-builders "Constructores basados en estado")
     - [Constructor personalizado](#custom-builder "Constructor personalizado")
 - [Widget OfflineBanner](#offline-banner "Widget OfflineBanner")
 - [Helper NyConnectivity](#connectivity-helper "Helper NyConnectivity")
@@ -25,39 +24,22 @@
 
 El widget `Connective` escucha los cambios de conectividad y se reconstruye basandose en el estado actual de la red.
 
-<div id="state-builders"></div>
-
-### Constructores basados en estado
-
-Proporciona diferentes widgets para cada tipo de conexion:
+Usa `noInternet` para mostrar un widget alternativo cuando el dispositivo no tiene internet (wifi, movil y ethernet todos ausentes):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### Estados disponibles
-
-| Propiedad | Descripcion |
-|----------|-------------|
-| `onWifi` | Widget cuando esta conectado via WiFi |
-| `onMobile` | Widget cuando esta conectado via datos moviles |
-| `onEthernet` | Widget cuando esta conectado via Ethernet |
-| `onVpn` | Widget cuando esta conectado via VPN |
-| `onBluetooth` | Widget cuando esta conectado via Bluetooth |
-| `onOther` | Widget para otros tipos de conexion |
-| `onNone` | Widget cuando esta sin conexion |
-| `child` | Widget predeterminado si no se proporciona un manejador especifico |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Mostrar tipo de conexion
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 El constructor recibe:
 - `context` - BuildContext
-- `state` - enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - enum `NyConnectivityState` (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` para verificar multiples conexiones
 
 ### Escuchar cambios
@@ -117,16 +99,16 @@ Connective(
 
 ## Widget OfflineBanner
 
-Muestra un banner en la parte superior de la pantalla cuando estas sin conexion:
+Muestra un banner en la parte superior de la pantalla cuando no hay internet (wifi, movil y ethernet todos ausentes):
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Tu contenido principal
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Banner sin conexion (se oculta automaticamente cuando hay conexion)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Animacion de entrada/salida con deslizamiento
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ La clase `NyConnectivity` proporciona metodos estaticos para verificar la conect
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // Realizar solicitud API
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Cargar desde cache
   final data = await cache.getData();
 }
 
-// Or check if offline
+// O verificar si esta sin conexion
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,32 +156,43 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // Descargar archivos grandes por WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Advertir sobre el uso de datos
   showDataWarning();
 }
 
-// Other methods:
+// Otros metodos:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### Verificar acceso a internet
+
+`hasInternet()` es mas estricto que `isOnline()` — solo retorna `true` cuando el dispositivo esta conectado via wifi, movil o ethernet. Las conexiones VPN, bluetooth y satelite estan excluidas.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Acceso a internet confirmado via wifi, movil o ethernet
+  await syncData();
+}
+```
+
 ### Obtener estado actual
 
 ``` dart
-// Get all active connection types
+// Obtener todos los tipos de conexion activos
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Obtener cadena legible
 String type = await NyConnectivity.connectionTypeString();
 print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
 ```
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// No olvides cancelar cuando hayas terminado
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### Ejecucion condicional
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Ejecutar solo cuando esta en linea (retorna null si esta sin conexion)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Ejecutar diferentes callbacks segun el estado
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ Agrega rapidamente consciencia de conectividad a cualquier widget:
 ### Mostrar alternativa sin conexion
 
 ``` dart
-// Show a different widget when offline
+// Mostrar un widget diferente cuando esta sin conexion
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### Mostrar solo cuando esta en linea
 
 ``` dart
-// Hide completely when offline
+// Ocultar completamente cuando esta sin conexion
 SyncButton().onlyOnline()
 ```
 
 ### Mostrar solo cuando esta sin conexion
 
 ``` dart
-// Show only when offline
+// Mostrar solo cuando esta sin conexion
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | Parametro | Tipo | Predeterminado | Descripcion |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Widget cuando esta en WiFi |
-| `onMobile` | `Widget?` | - | Widget cuando esta en datos moviles |
-| `onEthernet` | `Widget?` | - | Widget cuando esta en Ethernet |
-| `onVpn` | `Widget?` | - | Widget cuando esta en VPN |
-| `onBluetooth` | `Widget?` | - | Widget cuando esta en Bluetooth |
-| `onOther` | `Widget?` | - | Widget para otras conexiones |
-| `onNone` | `Widget?` | - | Widget cuando esta sin conexion |
-| `child` | `Widget?` | - | Widget predeterminado |
-| `showLoadingOnInit` | `bool` | `false` | Mostrar carga mientras verifica |
-| `loadingWidget` | `Widget?` | - | Widget de carga personalizado |
+| `noInternet` | `Widget?` | - | Widget cuando wifi, movil y ethernet estan todos ausentes |
+| `child` | `Widget?` | - | Widget cuando internet esta disponible |
 | `onConnectivityChanged` | `Function?` | - | Callback al cambiar |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | Conectado via Ethernet |
 | `vpn` | Conectado via VPN |
 | `bluetooth` | Conectado via Bluetooth |
+| `satellite` | Conectado via satelite |
 | `other` | Otro tipo de conexion |
 | `none` | Sin conexion |

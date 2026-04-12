@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [소개](#introduction "소개")
 - [Connective 위젯](#connective-widget "Connective 위젯")
-    - [상태 기반 빌더](#state-builders "상태 기반 빌더")
     - [커스텀 빌더](#custom-builder "커스텀 빌더")
 - [OfflineBanner 위젯](#offline-banner "OfflineBanner 위젯")
 - [NyConnectivity 헬퍼](#connectivity-helper "NyConnectivity 헬퍼")
@@ -25,39 +24,22 @@
 
 `Connective` 위젯은 연결 변경을 수신하고 현재 네트워크 상태에 따라 다시 빌드합니다.
 
-<div id="state-builders"></div>
-
-### 상태 기반 빌더
-
-각 연결 유형에 대해 다른 위젯을 제공합니다:
+`noInternet`을 사용하여 디바이스에 인터넷이 없을 때(wifi, mobile, ethernet 모두 없을 때) 대체 위젯을 표시합니다:
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // 지정되지 않은 상태의 기본값
+  child: MyContent(),
 )
 ```
-
-#### 사용 가능한 상태
-
-| 속성 | 설명 |
-|----------|-------------|
-| `onWifi` | WiFi로 연결된 경우의 위젯 |
-| `onMobile` | 모바일 데이터로 연결된 경우의 위젯 |
-| `onEthernet` | 이더넷으로 연결된 경우의 위젯 |
-| `onVpn` | VPN으로 연결된 경우의 위젯 |
-| `onBluetooth` | Bluetooth로 연결된 경우의 위젯 |
-| `onOther` | 기타 연결 유형의 위젯 |
-| `onNone` | 오프라인인 경우의 위젯 |
-| `child` | 특정 핸들러가 제공되지 않은 경우의 기본 위젯 |
 
 <div id="custom-builder"></div>
 
@@ -93,7 +75,7 @@ Connective.builder(
 
 빌더는 다음을 받습니다:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - 여러 연결을 확인하기 위한 `List<ConnectivityResult>`
 
 ### 변경 사항 수신
@@ -117,7 +99,7 @@ Connective(
 
 ## OfflineBanner 위젯
 
-오프라인일 때 화면 상단에 배너를 표시합니다:
+인터넷이 없을 때(wifi, mobile, ethernet 모두 없을 때) 화면 상단에 배너를 표시합니다:
 
 ``` dart
 Scaffold(
@@ -187,6 +169,17 @@ if (await NyConnectivity.isMobile()) {
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
+```
+
+### 인터넷 확인
+
+`hasInternet()`은 `isOnline()`보다 엄격합니다 — wifi, mobile, 또는 ethernet을 통해 연결된 경우에만 `true`를 반환합니다. VPN, bluetooth, satellite 연결은 제외됩니다.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // wifi, mobile, 또는 ethernet을 통한 인터넷 접근 확인됨
+  await syncData();
+}
 ```
 
 ### 현재 상태 가져오기
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | 매개변수 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | WiFi 연결 시 위젯 |
-| `onMobile` | `Widget?` | - | 모바일 데이터 연결 시 위젯 |
-| `onEthernet` | `Widget?` | - | 이더넷 연결 시 위젯 |
-| `onVpn` | `Widget?` | - | VPN 연결 시 위젯 |
-| `onBluetooth` | `Widget?` | - | Bluetooth 연결 시 위젯 |
-| `onOther` | `Widget?` | - | 기타 연결 시 위젯 |
-| `onNone` | `Widget?` | - | 오프라인 시 위젯 |
-| `child` | `Widget?` | - | 기본 위젯 |
-| `showLoadingOnInit` | `bool` | `false` | 확인 중 로딩 표시 |
-| `loadingWidget` | `Widget?` | - | 커스텀 로딩 위젯 |
+| `noInternet` | `Widget?` | - | wifi, mobile, ethernet 모두 없을 때 표시되는 위젯 |
+| `child` | `Widget?` | - | 인터넷이 사용 가능할 때 표시되는 위젯 |
 | `onConnectivityChanged` | `Function?` | - | 변경 시 콜백 |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | 이더넷으로 연결됨 |
 | `vpn` | VPN으로 연결됨 |
 | `bluetooth` | Bluetooth로 연결됨 |
+| `satellite` | 위성으로 연결됨 |
 | `other` | 기타 연결 유형 |
 | `none` | 연결 없음 |

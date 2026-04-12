@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// स्टेट एक्शन्स
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// लेआउट बिल्डर
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// स्टेट बनाए रखना चाहिए या नहीं
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// प्रारंभिक इंडेक्स
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// नेविगेशन पेजेज़
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// टैप इवेंट हैंडल करें
   @override
   onTap(int index) {
     super.onTap(index);
@@ -144,7 +144,7 @@ appRouter() => nyRoutes((router) {
     router.add(BaseNavigationHub.path).initialRoute();
 });
 
-// or navigate to the Navigation Hub from anywhere in your app
+// या अपने ऐप में कहीं से भी Navigation Hub पर नेविगेट करें
 
 routeTo(BaseNavigationHub.path);
 ```
@@ -189,7 +189,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // डिफ़ॉल्ट Flutter material स्टाइल
 );
 ```
 
@@ -439,7 +439,7 @@ _MyNavigationHubState() : super(() => {
         page: PhoneNumberStep(),
         progressStyle: JourneyProgressStyle(
             indicator: JourneyProgressIndicator.numbered(),
-        ), // overrides the layout default for this tab only
+        ), // केवल इस टैब के लिए लेआउट डिफ़ॉल्ट को ओवरराइड करता है
     ),
     2: NavigationTab.journey(
         page: AddPhotosStep(),
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // आपका initialization लॉजिक यहाँ
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // नेविगेशन बटन्स
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// जाँचें कि journey अगले स्टेप पर जारी रह सकती है या नहीं
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// अगले स्टेप पर नेविगेट करने से पहले कॉल होता है
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // उदा. session में डेटा सेव करें
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// journey पूरी होने पर कॉल होता है (अंतिम स्टेप पर)
   @override
   Future<void> onComplete() async {}
 }
@@ -647,7 +647,7 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: nextStep, // runs validation then navigates
+            onPressed: nextStep, // validation चलाता है फिर नेविगेट करता है
         ),
     );
 }
@@ -669,7 +669,7 @@ onPressed: () => nextStep(force: true),
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // पहले से ही पहले स्टेप पर
     }
 },
 ```
@@ -723,7 +723,7 @@ Future<void> onComplete() async {
 ``` dart
 @override
 Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // उदा. session में डेटा सेव करें
     // session('onboarding', {
     //   'name': 'Anthony Gordon',
     //   'occupation': 'Software Engineer',
@@ -740,7 +740,7 @@ Future<void> onBeforeNext() async {
 ``` dart
 @override
 Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
+    // print('अगले स्टेप पर नेविगेट किया');
 }
 ```
 
@@ -753,8 +753,8 @@ Future<void> onAfterNext() async {
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // यहाँ अपना validation लॉजिक करें
+    // यदि journey जारी रह सकती है तो true रिटर्न करें, अन्यथा false
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -826,7 +826,7 @@ LinearProgressIndicator(value: completionPercentage),
 nextButton: Button.primary(
     text: "Skip to photos",
     onPressed: () {
-        goToStep(2); // jump to step index 2
+        goToStep(2); // step index 2 पर जाएं
     },
 ),
 ```
@@ -839,7 +839,7 @@ nextButton: Button.primary(
 
 ``` dart
 onPressed: () {
-    goToNextStep(); // skip validation and go to next step
+    goToNextStep(); // validation स्किप करें और अगले स्टेप पर जाएं
 },
 ```
 
@@ -887,7 +887,7 @@ onPressed: () {
 
 ``` dart
 onPressed: () {
-    exitJourney(); // pop the root navigator
+    exitJourney(); // root navigator को pop करें
 },
 ```
 
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// journey पूरी होने पर कॉलबैक
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // अपने home page या अगले destination पर नेविगेट करें
     routeTo(HomePage.path);
   };
 
@@ -930,7 +930,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
           ...
           Button.primary(
             text: "Get Started",
-            onPressed: onJourneyComplete, // triggers the completion callback
+            onPressed: onJourneyComplete, // completion कॉलबैक ट्रिगर करता है
           ),
         ],
       ),
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+किसी टैब के अंदर nested navigator से pop करते समय, root navigator से pop करने के लिए `rootNavigator: true` का उपयोग करें बजाय टैब के local navigator के:
+
+``` dart
+// टैब के local navigator से pop करें (डिफ़ॉल्ट)
+pop();
+
+// root navigator से pop करें — इसका उपयोग करें जब modal या overlay
+// को root navigator का उपयोग करके push किया गया था
+pop(rootNavigator: true);
+```
+
+`rootNavigator` पैरामीटर `NyState`, `NyController`, `StateAction.pop()`, और `BuildContext` extension में `pop()` पर उपलब्ध है।
 
 <div id="tabs"></div>
 
@@ -1085,13 +1098,13 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 आप प्रोग्रामैटिक रूप से badge count भी अपडेट कर सकते हैं।
 
 ``` dart
-/// Increment the badge count
+/// badge count बढ़ाएं
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// badge count अपडेट करें
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// badge count क्लियर करें
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 आप प्रोग्रामैटिक रूप से alert भी अपडेट कर सकते हैं।
 
 ``` dart
-/// Enable the alert
+/// alert सक्षम करें
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// alert अक्षम करें
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // दूसरे टैब से शुरू करें
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // यहाँ कस्टम लॉजिक जोड़ें
+        // उदा. analytics ट्रैक करें, confirmation दिखाएं, आदि
+        super.onTap(index); // टैब switch हैंडल करने के लिए हमेशा super कॉल करें
     }
 }
 ```
@@ -1216,41 +1229,49 @@ State actions आपके ऐप में कहीं से भी Navigatio
 यहाँ उपलब्ध state actions हैं:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// दिए गए index पर टैब रीसेट करें
+/// उदा. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// प्रोग्रामैटिक रूप से वर्तमान टैब बदलें
+/// उदा. MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// badge count अपडेट करें
+/// उदा. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// badge count बढ़ाएं
+/// उदा. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// badge count क्लियर करें
+/// उदा. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// किसी टैब के लिए alert सक्षम करें
+/// उदा. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// किसी टैब के लिए alert अक्षम करें
+/// उदा. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// journey लेआउट में अगले पेज पर नेविगेट करें
+/// उदा. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// journey लेआउट में पिछले पेज पर नेविगेट करें
+/// उदा. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// किसी विशिष्ट टैब को रिफ्रेश करें, उसे rebuild करने के लिए बाध्य करें
+/// उदा. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// सभी टैब्स को रिफ्रेश करें, उन्हें rebuild करने के लिए बाध्य करें
+/// उदा. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 State action का उपयोग करने के लिए:
@@ -1260,9 +1281,13 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // टैब 2 पर जाएं
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: अगले पेज पर जाएं
+
+MyNavigationHub.stateActions.refreshTab(0); // टैब 0 को rebuild करने के लिए बाध्य करें
+
+MyNavigationHub.stateActions.refresh(); // सभी टैब्स को rebuild करने के लिए बाध्य करें
 ```
 
 <div id="loading-style"></div>
@@ -1284,7 +1309,7 @@ await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// या
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -1309,7 +1334,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     _MyNavigationHubState() : super(() async {
 
-      await sleep(3); // simulate loading for 3 seconds
+      await sleep(3); // 3 सेकंड के लिए loading simulate करें
 
       return {
         0: NavigationTab.tab(

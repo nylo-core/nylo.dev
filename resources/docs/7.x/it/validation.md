@@ -11,6 +11,7 @@
   - [Utilizzare FormValidator](#using-form-validator "Utilizzare FormValidator")
   - [Costruttori Nominati di FormValidator](#form-validator-named-constructors "Costruttori Nominati di FormValidator")
   - [Concatenare Regole di Validazione](#chaining-validation-rules "Concatenare Regole di Validazione")
+  - [Campi Nullable](#nullable-fields "Campi Nullable")
   - [Validazione Personalizzata](#custom-validation "Validazione Personalizzata")
   - [Utilizzare FormValidator con i Campi](#form-validator-with-fields "Utilizzare FormValidator con i Campi")
 - [Regole di Validazione Disponibili](#validation-rules "Regole di Validazione Disponibili")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7 fornisce un sistema di validazione costruito attorno alla classe `FormValidator`. Puoi validare i dati all'interno delle pagine utilizzando il metodo `check()`, o usare `FormValidator` direttamente per la validazione standalone e a livello di campo.
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// Valida i dati in un NyPage/NyState usando check()
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// FormValidator con campi del form
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Campi Nullable
+
+Usa `.nullable()` per contrassegnare un validatore come opzionale. Quando e' nullable, un valore null o vuoto supera automaticamente la validazione — tutte le altre regole vengono applicate solo se il valore e' presente.
+
+``` dart
+// Nickname e' opzionale, ma se fornito deve avere 3-20 caratteri
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+Senza `.nullable()`, un campo vuoto fallirebbe la regola `minLength`. Con `.nullable()`, lasciare il campo vuoto supera la validazione.
+
+Questo e' utile per i campi profilo opzionali, le informazioni di contatto secondarie o qualsiasi campo che viene validato solo quando l'utente lo compila. Consulta la [documentazione sui Form](/docs/{{ $version }}/forms) per come `nullable()` si integra con i widget `Field`.
+
 <div id="custom-validation"></div>
 
 ## Validazione Personalizzata
@@ -403,6 +425,7 @@ Tutte le regole disponibili per `FormValidator`, sia come costruttori nominati c
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | Deve corrispondere al pattern regex |
 | Uguale | -- | `.equals(otherValue)` | Deve essere uguale a un altro valore |
 | Personalizzato | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | Funzione di validazione personalizzata |
+| Nullable | — | `.nullable()` | Valori null o vuoti superano automaticamente; le regole si applicano solo quando e' presente un valore |
 
 Tutte le regole accettano un parametro opzionale `message` per personalizzare il messaggio di errore.
 

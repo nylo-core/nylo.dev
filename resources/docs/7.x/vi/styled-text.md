@@ -10,6 +10,7 @@
   - [Tạo kiểu cho Placeholder](#styling-placeholders "Tạo kiểu cho Placeholder")
   - [Callback khi nhấn](#tap-callbacks "Callback khi nhấn")
   - [Khóa phân tách bằng Pipe](#pipe-keys "Khóa phân tách bằng Pipe")
+  - [Kiểu Wildcard](#wildcard-styles "Kiểu Wildcard")
   - [Khóa bản địa hóa](#localization-keys "Khóa bản địa hóa")
 - [Tham số](#parameters "Tham số")
 - [Text Extensions](#text-extensions "Text Extensions")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 Điều này ánh xạ cùng kiểu và callback cho cả ba placeholder.
+
+<div id="wildcard-styles"></div>
+
+### Kiểu Wildcard
+
+Dùng `"*"` làm khóa để áp dụng kiểu hoặc callback khi nhấn cho mọi placeholder không có khóa riêng:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Cả `name` và `app` đều nhận kiểu wildcard. Nếu placeholder cũng có khóa rõ ràng, khóa rõ ràng sẽ được ưu tiên hơn `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // chỉ áp dụng cho "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // nhấn vào bất kỳ placeholder không khớp
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

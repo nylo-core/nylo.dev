@@ -14,6 +14,7 @@
 - [สไตล์ Toast แบบกำหนดเอง](#custom-styles "สไตล์ Toast แบบกำหนดเอง")
   - [การลงทะเบียนสไตล์](#registering-styles "การลงทะเบียนสไตล์")
   - [การสร้าง Style Factory](#creating-a-style-factory "การสร้าง Style Factory")
+  - [สไตล์ Toast แบบรับข้อมูลจากรันไทม์](#data-aware-toast-styles "สไตล์ Toast แบบรับข้อมูลจากรันไทม์")
 - [AlertTab](#alert-tab "AlertTab")
 - [ตัวอย่าง](#examples "ตัวอย่างการใช้งานจริง")
 
@@ -32,16 +33,16 @@
 แสดงการแจ้งเตือน toast โดยใช้เมธอดลัดในหน้า `NyState` ใดก็ได้:
 
 ``` dart
-// Success toast
+// Toast สำเร็จ
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// Toast เตือน
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// Toast ข้อมูล
 showToastInfo(description: "New version available");
 
-// Danger toast
+// Toast อันตราย
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // สำเร็จ
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // พร้อมชื่อเรื่องแบบกำหนดเอง
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // เตือน
     showToastWarning(description: "Check your input");
 
-    // Info
+    // ข้อมูล
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // อันตราย
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // อ๊ะ (ใช้สไตล์ danger)
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // ขออภัย (ใช้สไตล์ danger)
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // สไตล์กำหนดเองตาม ID
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // ถูกเรียกเมื่อแตะ toast
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // ถูกเรียกเมื่อ toast ถูกปิด
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // ถูกเรียกเมื่อ toast ปรากฏ
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | จำเป็น | Build context |
 | `id` | `String` | `'success'` | ID ของสไตล์ toast |
-| `title` | `String?` | null | แทนที่ชื่อเริ่มต้น |
+| `title` | `String?` | null | ข้อความชื่อเรื่อง; ส่งตรงไปยัง widget toast โดยไม่เปลี่ยนแปลง |
 | `description` | `String?` | null | ข้อความอธิบาย |
+| `data` | `Map<String, dynamic>?` | null | คู่ key-value ที่ส่งไปยังสไตล์ toast แบบรับข้อมูลจากรันไทม์; `title` และ `description` มีความสำคัญกว่า key ที่ตรงกัน |
 | `duration` | `Duration?` | null | ระยะเวลาที่ toast แสดง |
 | `position` | `ToastNotificationPosition?` | null | ตำแหน่งบนหน้าจอ |
 | `action` | `VoidCallback?` | null | callback เมื่อแตะ |
@@ -388,6 +390,79 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### สไตล์ Toast แบบรับข้อมูลจากรันไทม์
+
+<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
+ใช้ `ToastStyleDataFactory` เพื่อลงทะเบียนสไตล์ toast ที่รับข้อมูลจากรันไทม์ในขณะที่ถูกเรียก ซึ่งเป็นประโยชน์เมื่อเนื้อหา toast — เช่น ชื่อหรือรูปโปรไฟล์ของผู้ใช้ — ยังไม่ทราบในเวลาลงทะเบียน
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+ลงทะเบียนสไตล์แบบรับข้อมูลจากรันไทม์ด้วย `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+หรือลงทะเบียนพร้อมกับสไตล์คงที่ใน `AppProvider`:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+เรียกใช้พร้อม map `data` ในขณะรันไทม์:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+หากคุณยังส่ง `title` หรือ `description` ด้วย ค่าเหล่านี้จะมีความสำคัญกว่า key ที่ตรงกันใน `data`
+
+ใช้ `ToastNotificationRegistry.resolve(id, data)` โดยตรงหากคุณต้องการสร้าง widget เอง:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

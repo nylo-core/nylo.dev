@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Это создаст новый виджет, если он ещё не существует, в каталоге `lib/resources/widgets/`.
 
+Все команды `make:*` принимают разделитель пути в имени для размещения файла в подкаталоге:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Это создаст виджет в `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Принудительное создание stateless-виджета
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Это создаст новое событие в `lib/app/events`.
 
+Используйте разделитель пути для организации события в подкаталог:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Это создаст событие в `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Принудительное создание события
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Новый провайдер будет размещён в `lib/app/providers/`.
+
+Используйте разделитель пути для организации провайдера в подкаталог:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Это создаст провайдер в `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Это создаст новую форму в `lib/app/forms`.
 
+Используйте разделитель пути для организации формы в подкаталог:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Это создаст форму в `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Принудительное создание формы
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Это создаст новую защиту маршрута в `lib/app/route_guards`.
+
+Используйте разделитель пути для организации защиты в подкаталог:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Это создаст защиту в `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -755,13 +795,9 @@ metro make:key
 
 | Флаг / Опция | Сокращение | Описание |
 |--------------|------------|----------|
-| `--force` | `-f` | Перезаписать существующий APP_KEY |
 | `--file` | `-e` | Целевой файл .env (по умолчанию: `.env`) |
 
 ``` bash
-# Сгенерировать ключ и перезаписать существующий
-metro make:key --force
-
 # Сгенерировать ключ для определённого файла окружения
 metro make:key --file=.env.production
 ```
@@ -816,9 +852,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Команда текущего времени
 ///
-/// Usage:
+/// Использование:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +869,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Получить текущее время
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Отформатировать текущее время
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -2003,7 +2039,7 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: реализовать login
     return false;
   }
 }

@@ -47,9 +47,9 @@ metro make:bottom_sheet_modal payment_options
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// 결제 옵션 모달
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// BottomSheetModal.showPaymentOptions()에서 사용
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart`의 `BottomSheetModal` 클래스에 **정적 메서드**가 추가됩니다:
 
 ``` dart
-/// Show Payment Options modal
+/// 결제 옵션 모달 표시
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// 로그아웃 모달 표시
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | 상단 헤더 위젯 |
 | `useSafeArea` | `bool` | `true` | SafeArea로 콘텐츠 감싸기 |
 | `isScrollControlled` | `bool` | `false` | 모달 스크롤 가능 여부 |
+| `isDismissible` | `bool` | `true` | 외부 탭으로 닫기 허용 |
+| `enableDrag` | `bool` | `true` | 드래그로 닫기 제스처 허용 |
 | `showCloseButton` | `bool` | `false` | X 닫기 버튼 표시 |
 | `headerPadding` | `EdgeInsets?` | null | 헤더가 있을 때의 패딩 |
+| `contentPadding` | `EdgeInsets?` | null | 메인 콘텐츠 주변 패딩 |
+| `actionsPadding` | `EdgeInsets?` | null | 액션 섹션 주변 패딩 |
 | `backgroundColor` | `Color?` | null | 모달 배경 색상 |
 | `showHandle` | `bool` | `true` | 상단 드래그 핸들 표시 |
 | `closeButtonColor` | `Color?` | null | 닫기 버튼 배경 색상 |

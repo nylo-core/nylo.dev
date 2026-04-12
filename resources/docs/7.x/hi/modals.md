@@ -142,11 +142,11 @@ class BottomSheetModal extends NyBaseModal {
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// कस्टम कॉलबैक के साथ
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // कस्टम लॉगआउट लॉजिक
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | शीर्ष पर हेडर विजेट |
 | `useSafeArea` | `bool` | `true` | कंटेंट को SafeArea में लपेटें |
 | `isScrollControlled` | `bool` | `false` | मोडल को स्क्रॉल करने योग्य बनाएँ |
+| `isDismissible` | `bool` | `true` | बाहर टैप करके बंद करने की अनुमति दें |
+| `enableDrag` | `bool` | `true` | ड्रैग-टु-डिसमिस जेस्चर की अनुमति दें |
 | `showCloseButton` | `bool` | `false` | X बंद करने का बटन दिखाएँ |
 | `headerPadding` | `EdgeInsets?` | null | हेडर मौजूद होने पर पैडिंग |
+| `contentPadding` | `EdgeInsets?` | null | मुख्य कंटेंट के चारों ओर पैडिंग |
+| `actionsPadding` | `EdgeInsets?` | null | एक्शन सेक्शन के चारों ओर पैडिंग |
 | `backgroundColor` | `Color?` | null | मोडल का बैकग्राउंड रंग |
 | `showHandle` | `bool` | `true` | शीर्ष पर ड्रैग हैंडल दिखाएँ |
 | `closeButtonColor` | `Color?` | null | बंद बटन का बैकग्राउंड रंग |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// उपयोग
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // आइटम डिलीट करें
 }
 ```
 

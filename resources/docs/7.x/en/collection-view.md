@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## Updating the State
 
-You can update or reset a CollectionView by giving it a `stateName`:
+You can update a CollectionView programmatically by giving it a `stateName` and calling `CollectionView.stateActions()`:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### Reset the list
+Use `stateActions` to manipulate the list at runtime:
 
 ``` dart
-// Resets and reloads data from scratch
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// Reset and reload data from scratch
+actions.reset();
+
+// Refresh data (re-fetches and resets pagination)
+actions.refreshData();
+
+// Add an item to the end of the list
+actions.addItem(newTodo);
+
+// Insert an item at a specific index
+actions.insertItem(0, newTodo);
+
+// Remove an item by index
+actions.removeFromIndex(2);
+
+// Replace an item at a specific index
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### Remove an item
-
-``` dart
-// Remove item at index 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### Trigger a general update
-
-``` dart
-// Using the global updateState helper
-updateState("my_todo_list");
-```
+All `stateActions` methods persist correctly across rebuilds for both synchronous and asynchronous data. `refreshData()` also resets the pagination iteration counter so pullable lists restart from page 1.
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Paginated data function |
+| `enablePullDown` | `bool` | Enable pull-to-refresh gesture (default: `true`) |
 | `onRefresh` | `Function()?` | Callback when refresh completes |
 | `beforeRefresh` | `Function()?` | Callback before refresh |
 | `afterRefresh` | `Function(dynamic)?` | Callback after data loads |

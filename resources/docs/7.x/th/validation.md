@@ -11,6 +11,7 @@
   - [การใช้งาน FormValidator](#using-form-validator "การใช้งาน FormValidator")
   - [FormValidator Named Constructor](#form-validator-named-constructors "FormValidator Named Constructor")
   - [การต่อเชื่อมกฎการตรวจสอบ](#chaining-validation-rules "การต่อเชื่อมกฎการตรวจสอบ")
+  - [ฟิลด์ Nullable](#nullable-fields "ฟิลด์ Nullable")
   - [การตรวจสอบแบบกำหนดเอง](#custom-validation "การตรวจสอบแบบกำหนดเอง")
   - [การใช้ FormValidator กับ Field](#form-validator-with-fields "การใช้ FormValidator กับ Field")
 - [กฎการตรวจสอบที่ใช้ได้](#validation-rules "กฎการตรวจสอบ")
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator กับ form field
+// FormValidator กับ form field ในฟอร์ม
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## ฟิลด์ Nullable
+
+ใช้ `.nullable()` เพื่อทำเครื่องหมาย validator ว่าเป็นตัวเลือก เมื่อ nullable ค่า null หรือว่างเปล่าจะผ่านการตรวจสอบโดยอัตโนมัติ — กฎอื่น ๆ ทั้งหมดจะใช้เฉพาะเมื่อมีค่าเท่านั้น
+
+``` dart
+// Nickname เป็นตัวเลือก แต่ถ้าระบุต้องมี 3–20 ตัวอักษร
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+หากไม่มี `.nullable()` ฟิลด์ว่างเปล่าจะไม่ผ่านกฎ `minLength` เมื่อมี `.nullable()` การปล่อยฟิลด์ว่างจะผ่านการตรวจสอบ
+
+ฟีเจอร์นี้มีประโยชน์สำหรับฟิลด์โปรไฟล์ที่เป็นตัวเลือก ข้อมูลติดต่อสำรอง หรือฟิลด์ใด ๆ ที่ตรวจสอบเฉพาะเมื่อผู้ใช้กรอก ดู[เอกสาร Forms](/docs/{{ $version }}/forms) เพื่อดูว่า `nullable()` ทำงานร่วมกับ widget `Field` อย่างไร
+
 <div id="custom-validation"></div>
 
 ## การตรวจสอบแบบกำหนดเอง
@@ -403,6 +425,7 @@ Field.slider(
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | ต้องตรงกับรูปแบบ regex |
 | Equals | -- | `.equals(otherValue)` | ต้องเท่ากับค่าอื่น |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | ฟังก์ชันตรวจสอบแบบกำหนดเอง |
+| Nullable | — | `.nullable()` | ค่า null หรือว่างเปล่าผ่านอัตโนมัติ; กฎจะใช้เฉพาะเมื่อมีค่า |
 
 กฎทั้งหมดรับพารามิเตอร์ `message` ที่เป็นตัวเลือกเพื่อปรับแต่งข้อความผิดพลาด
 

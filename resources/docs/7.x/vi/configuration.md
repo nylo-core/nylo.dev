@@ -10,6 +10,7 @@
   - [Lấy giá trị](#retrieving-values "Lấy giá trị môi trường")
   - [Tạo class cấu hình](#creating-config-classes "Tạo class cấu hình")
   - [Kiểu biến](#variable-types "Kiểu biến môi trường")
+  - [Nội suy biến](#variable-interpolation "Nội suy biến")
 - [Các phiên bản môi trường](#environment-flavours "Các phiên bản môi trường")
 - [Tiêm lúc build](#build-time-injection "Tiêm lúc build")
 
@@ -32,7 +33,7 @@ Cách tiếp cận này cung cấp:
 File `.env` tại thư mục gốc dự án chứa các biến cấu hình của bạn:
 
 ``` bash
-# Environment configuration
+# Cấu hình môi trường
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ Khi bạn chỉnh sửa file `.env`, tạo lại cấu hình:
 metro make:env
 ```
 
-Cờ `--force` ghi đè `env.g.dart` hiện có.
+Lệnh này luôn ghi đè `env.g.dart` hiện có.
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 Sau đó trong mã ứng dụng, truy cập giá trị thông qua class cấu hình:
 
 ``` dart
-// Anywhere in your app
+// Bất kỳ nơi nào trong ứng dụng
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ Lệnh này tạo file cấu hình mới tại `lib/config/revenue_cat_config.da
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Thêm các giá trị cấu hình ở đây
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Khởi tạo RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Kiểm tra quyền truy cập
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Cấp quyền truy cập premium
 }
 ```
 
@@ -201,6 +202,30 @@ Các giá trị trong file `.env` được tự động phân tích:
 | `EMPTY=""` | `String` | `""` (chuỗi rỗng) |
 
 
+<div id="variable-interpolation"></div>
+
+## Nội suy biến
+
+Các giá trị chuỗi trong file `.env` có thể tham chiếu đến các biến khác bằng cú pháp `${VAR_NAME}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Khi mã của bạn gọi `getEnv('APP_URL')`, giá trị trả về là `https://myapp.com`. Các tham chiếu được giải quyết đệ quy, vì vậy các tham chiếu chuỗi cũng hoạt động như mong đợi:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` trả về `https://example.com/uploads`.
+
+Các tham chiếu vòng tròn được bảo vệ — nếu một biến tham chiếu chính nó (trực tiếp hoặc qua chuỗi), placeholder `${VAR_NAME}` chưa được giải quyết sẽ được giữ nguyên trong đầu ra thay vì gây ra vòng lặp vô hạn.
+
 <div id="environment-flavours"></div>
 
 ## Các phiên bản môi trường
@@ -212,7 +237,7 @@ Tạo các cấu hình khác nhau cho phát triển, staging và production.
 Tạo các file `.env` riêng biệt:
 
 ``` bash
-.env                  # Development (default)
+.env                  # Phát triển (mặc định)
 .env.staging          # Staging
 .env.production       # Production
 ```
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Tạo từ file env cụ thể:
 
 ``` bash
-# For production
+# Cho production
 metro make:env --file=".env.production"
 
-# For staging
+# Cho staging
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 Build với cấu hình phù hợp:
 
 ``` bash
-# Development
+# Phát triển
 flutter run
 
-# Production build
+# Build production
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Chạy
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

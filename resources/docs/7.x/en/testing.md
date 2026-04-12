@@ -30,6 +30,7 @@
 - [Custom Matchers](#custom-matchers "Custom Matchers")
 - [State Testing](#state-testing "State Testing")
 - [Debugging](#debugging "Debugging")
+- [Navigation and Interaction Helpers](#nav-interaction "Navigation and Interaction Helpers")
 - [Examples](#examples "Practical Examples")
 
 <div id="introduction"></div>
@@ -363,6 +364,13 @@ NyTest.logout();
 expectGuest();
 ```
 
+Use `actingAsGuest()` as a readable alias for `logout()` when setting up a guest context:
+
+``` dart
+NyTest.actingAsGuest();
+expectGuest();
+```
+
 <div id="time-travel"></div>
 
 ## Time Travel
@@ -505,6 +513,12 @@ nyTest('verify API was called', () async {
   // Get call details
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Assert that an endpoint was called with specific request body data:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Creating Mock Responses
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Widget Assertions
+
+``` dart
+// Assert a widget type appears a specific number of times
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Assert text is visible
+expectTextVisible('Welcome');
+
+// Assert text is not visible
+expectTextNotVisible('Error');
+
+// Assert any widget is visible (use any Finder)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Assert a widget is not visible
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Locale Assertions
@@ -985,6 +1023,101 @@ NyTest.seedBackpack({
   "auth_token": "test_token",
   "settings": {"theme": "dark"},
 });
+```
+
+<div id="nav-interaction"></div>
+
+## Navigation and Interaction Helpers
+
+`WidgetTester` extensions provide a high-level DSL for writing navigation flows and UI interactions in `nyWidgetTest`.
+
+### visit
+
+Navigate to a route and wait for the page to settle:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Assert that a navigation action took you to the expected route:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Assert that the current route matches the given route (use to confirm where you are, not that you just navigated):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Wait for all pending animations and frame callbacks to complete:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Pop the current route and settle:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Find a widget by text, tap it, and settle in one call:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Tap a form field, enter text, and settle:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Scroll until a widget is visible, then settle:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Pass a specific `scrollable` finder and `delta` for precise control:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
 ```
 
 <div id="examples"></div>

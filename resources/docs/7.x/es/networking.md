@@ -42,11 +42,7 @@ Tus servicios API se encuentran en `lib/app/networking/`. Un proyecto nuevo incl
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -311,8 +307,7 @@ Configura las opciones por defecto de Dio para tu servicio API usando el paramet
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Usa interceptores cuando necesites:
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +537,8 @@ Puedes deshabilitarlo configurando `useNetworkLogger: false`.
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- Deshabilitar logger
         );
@@ -626,7 +619,6 @@ await api<ApiService>(
 | Parametro | Tipo | Descripcion |
 |-----------|------|-------------|
 | `request` | `Function(T)` | La funcion de solicitud API |
-| `context` | `BuildContext?` | Contexto de construccion |
 | `headers` | `Map<String, dynamic>` | Encabezados adicionales |
 | `bearerToken` | `String?` | Token Bearer |
 | `baseUrl` | `String?` | Sobreescribir URL base |
@@ -703,7 +695,7 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   // Devuelve un solo User
   Future<User?> fetchUser() async {
@@ -876,7 +868,7 @@ Falla rapidamente cuando el dispositivo esta sin conexion en lugar de esperar un
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -1021,8 +1013,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

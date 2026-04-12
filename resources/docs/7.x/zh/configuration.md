@@ -10,6 +10,7 @@
   - [获取值](#retrieving-values "获取值")
   - [创建配置类](#creating-config-classes "创建配置类")
   - [变量类型](#variable-types "变量类型")
+  - [变量插值](#variable-interpolation "变量插值")
 - [环境风味](#environment-flavours "环境风味")
 - [构建时注入](#build-time-injection "构建时注入")
 
@@ -32,7 +33,7 @@
 项目根目录中的 `.env` 文件包含您的配置变量：
 
 ``` bash
-# Environment configuration
+# 环境配置
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ metro make:env
 metro make:env
 ```
 
-`--force` 标志会覆盖现有的 `env.g.dart`。
+这将始终覆盖现有的 `env.g.dart`。
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 然后在您的应用代码中，通过配置类访问值：
 
 ``` dart
-// Anywhere in your app
+// 应用中的任何地方
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ metro make:config RevenueCat
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // 在此处添加您的配置值
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// 初始化 RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// 检查授权
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // 授予高级访问权限
 }
 ```
 
@@ -201,6 +202,30 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 | `EMPTY=""` | `String` | `""`（空字符串） |
 
 
+<div id="variable-interpolation"></div>
+
+## 变量插值
+
+`.env` 文件中的字符串值可以使用 `${VAR_NAME}` 语法引用其他变量：
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+当您的代码调用 `getEnv('APP_URL')` 时，返回值为 `https://myapp.com`。引用会递归解析，因此链式引用也可以按预期工作：
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` 返回 `https://example.com/uploads`。
+
+循环引用受到保护——如果一个变量直接或通过链式引用自身，输出中将保留未解析的 `${VAR_NAME}` 占位符，而不是导致无限循环。
+
 <div id="environment-flavours"></div>
 
 ## 环境风味
@@ -212,9 +237,9 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 创建单独的 `.env` 文件：
 
 ``` bash
-.env                  # Development (default)
-.env.staging          # Staging
-.env.production       # Production
+.env                  # 开发（默认）
+.env.staging          # 预发布
+.env.production       # 生产
 ```
 
 `.env.production` 示例：
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 从特定的环境文件生成：
 
 ``` bash
-# For production
+# 生产环境
 metro make:env --file=".env.production"
 
-# For staging
+# 预发布环境
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 使用相应的配置进行构建：
 
 ``` bash
-# Development
+# 开发
 flutter run
 
-# Production build
+# 生产构建
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# 运行
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

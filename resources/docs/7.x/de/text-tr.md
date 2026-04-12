@@ -60,6 +60,8 @@ Das Widget sucht den Uebersetzungsschluessel in Ihren Sprachdateien (z.B. `/lang
 }
 ```
 
+Wenn ein Schluessel in der Datei des aktiven Locale fehlt, sucht {{ config('app.name') }} ihn automatisch in der Fallback-Sprache (konfiguriert in `lib/config/localization.dart`), bevor der rohe Schluessel-String zurueckgegeben wird. Dies gilt sowohl fuer Schluessel auf oberster Ebene als auch fuer punktnotierte verschachtelte Schluessel.
+
 <div id="string-interpolation"></div>
 
 ## String-Interpolation

@@ -74,7 +74,7 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// การกระทำ State
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
@@ -740,7 +740,7 @@ Future<void> onBeforeNext() async {
 ``` dart
 @override
 Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
+    // print('นำทางไปยังขั้นตอนถัดไปแล้ว');
 }
 ```
 
@@ -1006,6 +1006,19 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
+เมื่อ pop จาก navigator ที่ซ้อนอยู่ภายใน tab ให้ใช้ `rootNavigator: true` เพื่อ pop จาก root navigator แทน navigator ท้องถิ่นของ tab:
+
+``` dart
+// Pop จาก navigator ท้องถิ่นของ tab (ค่าเริ่มต้น)
+pop();
+
+// Pop จาก root navigator — ใช้เมื่อ modal หรือ overlay
+// ถูก push โดยใช้ root navigator
+pop(rootNavigator: true);
+```
+
+พารามิเตอร์ `rootNavigator` ใช้ได้กับ `pop()` ใน `NyState`, `NyController`, `StateAction.pop()` และ extension `BuildContext`
+
 <div id="tabs"></div>
 
 ## แท็บ
@@ -1251,6 +1264,14 @@ Future<bool> nextPage();
 /// นำทางไปยังหน้าก่อนหน้าในเลย์เอาต์ journey
 /// เช่น await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// รีเฟรชแท็บที่ระบุ บังคับให้ rebuild
+/// เช่น MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// รีเฟรชแท็บทั้งหมด บังคับให้ rebuild
+/// เช่น MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 เพื่อใช้ state action คุณสามารถทำดังนี้:
@@ -1263,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // สลับไปยังแท็บ 2
 
 await MyNavigationHub.stateActions.nextPage(); // Journey: ไปยังหน้าถัดไป
+
+MyNavigationHub.stateActions.refreshTab(0); // บังคับให้แท็บ 0 rebuild
+
+MyNavigationHub.stateActions.refresh(); // บังคับให้แท็บทั้งหมด rebuild
 ```
 
 <div id="loading-style"></div>

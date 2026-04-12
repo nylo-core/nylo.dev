@@ -142,11 +142,11 @@ Herhangi bir yerden &#231;a&#287;&#305;r&#305;n:
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// Ozel callback'lerle
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Ozel cikis mantigi
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | &#220;stteki ba&#351;l&#305;k widget'&#305; |
 | `useSafeArea` | `bool` | `true` | &#304;&#231;eri&#287;i SafeArea ile sar |
 | `isScrollControlled` | `bool` | `false` | Modal'&#305;n kayd&#305;r&#305;labilir olmas&#305;na izin ver |
+| `isDismissible` | `bool` | `true` | D&#305;&#351;ar&#305;ya dokunarak kapat&#305;lmas&#305;na izin ver |
+| `enableDrag` | `bool` | `true` | S&#252;r&#252;klerek kapatma hareketiyle kapat&#305;lmas&#305;na izin ver |
 | `showCloseButton` | `bool` | `false` | X kapatma d&#252;&#287;mesini g&#246;ster |
 | `headerPadding` | `EdgeInsets?` | null | Ba&#351;l&#305;k mevcut oldu&#287;unda dolgu |
+| `contentPadding` | `EdgeInsets?` | null | Ana i&#231;eri&#287;in etraf&#305;ndaki dolgu |
+| `actionsPadding` | `EdgeInsets?` | null | Eylemler b&#246;l&#252;m&#252;n&#252;n etraf&#305;ndaki dolgu |
 | `backgroundColor` | `Color?` | null | Modal arka plan rengi |
 | `showHandle` | `bool` | `true` | &#220;stteki s&#252;r&#252;kleme tutamac&#305;n&#305; g&#246;ster |
 | `closeButtonColor` | `Color?` | null | Kapatma d&#252;&#287;mesi arka plan rengi |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Kullanim
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // oeyi sil
 }
 ```
 

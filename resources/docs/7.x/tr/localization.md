@@ -52,34 +52,34 @@ Yerelleştirme `lib/config/localization.dart` dosyasında yapılandırılır:
 
 ``` dart
 final class LocalizationConfig {
-  // Default language code (matches your JSON file, e.g., 'en' for lang/en.json)
+  // Varsayılan dil kodu (JSON dosyanıza karşılık gelir, örn. lang/en.json için 'en')
   static final String languageCode =
       getEnv('DEFAULT_LOCALE', defaultValue: "en");
 
-  // LocaleType.device - Use device's language setting
-  // LocaleType.asDefined - Use languageCode above
+  // LocaleType.device - Cihazın dil ayarını kullan
+  // LocaleType.asDefined - Yukarıdaki languageCode'u kullan
   static final LocaleType localeType =
       getEnv('LOCALE_TYPE', defaultValue: 'asDefined') == 'device'
           ? LocaleType.device
           : LocaleType.asDefined;
 
-  // Directory containing language JSON files
+  // Dil JSON dosyalarını içeren dizin
   static const String assetsDirectory = 'lang/';
 
-  // List of supported locales
+  // Desteklenen yerel ayarların listesi
   static const List<Locale> supportedLocales = [
     Locale('en'),
     Locale('es'),
-    // Add more locales as needed
+    // Gerektiğinde daha fazla yerel ayar ekleyin
   ];
 
-  // Fallback when a key is not found in the active locale
+  // Aktif yerel ayarda anahtar bulunamadığında yedek dil
   static const String fallbackLanguageCode = 'en';
 
-  // RTL language codes
+  // RTL dil kodları
   static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-  // Log warnings for missing translation keys
+  // Eksik çeviri anahtarları için uyarıları günlüğe kaydet
   static final bool debugMissingKeys =
       getEnv('DEBUG_TRANSLATIONS', defaultValue: 'false') == 'true';
 }
@@ -140,10 +140,10 @@ flutter:
 Dizeleri çevirmek için `.tr()` uzantısını veya `trans()` yardımcısını kullanın:
 
 ``` dart
-// Using the .tr() extension
+// .tr() uzantısını kullanma
 "welcome".tr()
 
-// Using the trans() helper
+// trans() yardımcısını kullanma
 trans("welcome")
 ```
 
@@ -245,10 +245,10 @@ StyledText.template(
 Uygulamanın dilini çalışma zamanında değiştirin:
 
 ``` dart
-// Using NyLocalization directly
+// NyLocalization'ı doğrudan kullanma
 await NyLocalization.instance.setLanguage(
   context,
-  language: 'es'  // Must match your JSON filename (es.json)
+  language: 'es'  // JSON dosya adınızla eşleşmelidir (es.json)
 );
 ```
 
@@ -319,13 +319,21 @@ Bu liste, Flutter'ın `MaterialApp.supportedLocales` tarafından kullanılır.
 
 ## Yedek Dil
 
-Aktif yerel ayarda bir çeviri anahtarı bulunamadığında, {{ config('app.name') }} belirtilen dile geri döner:
+Aktif yerel ayarda bir çeviri anahtarı bulunamadığında, {{ config('app.name') }} ham anahtarı döndürmeden önce yedek dilde otomatik olarak arar. Yedek dil `lib/config/localization.dart` dosyasında yapılandırılır:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Bu, bir çeviri eksik olduğunda uygulamanızın asla ham anahtarları göstermemesini sağlar.
+Bu iki aşamalı çözümleme, hem üst düzey anahtarlar hem de nokta gösterimli iç içe anahtarlar için geçerlidir:
+
+1. Anahtarı aktif yerel ayar dosyasında ara.
+2. Bulunamazsa, yedek yerel ayar dosyasında ara.
+3. Hâlâ bulunamazsa, ham anahtar dizesini döndür.
+
+Örneğin, Fransızca yerel ayar dosyasında `settings.privacy` anahtarı eksikse, yedek mantığı `"settings.privacy"` olduğu gibi döndürmeden önce İngilizce yerel ayar dosyasında `settings.privacy`'yi arar.
+
+Bu, tüm çeviriler yalnızca kısmen tamamlanmış olsa bile uygulamanızın ham anahtarlar göstermemesini sağlar.
 
 <div id="rtl-support"></div>
 
@@ -336,9 +344,9 @@ Bu, bir çeviri eksik olduğunda uygulamanızın asla ham anahtarları gösterme
 ``` dart
 static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-// Check if current language is RTL
+// Mevcut dilin RTL olup olmadığını kontrol et
 if (LocalizationConfig.isRtl(currentLanguageCode)) {
-  // Handle RTL layout
+  // RTL düzenini işle
 }
 ```
 
@@ -365,9 +373,9 @@ Bu, `.tr()` bir anahtar bulamadığında uyarıları günlüğe kaydeder ve çev
 
 ``` dart
 bool exists = NyLocalization.instance.hasTranslation('welcome');
-// true if the key exists in the current language file
+// mevcut dil dosyasında anahtar varsa true
 
-// Also works with nested keys
+// İç içe anahtarlarla da çalışır
 bool nestedExists = NyLocalization.instance.hasTranslation('navigation.home');
 ```
 
@@ -377,7 +385,7 @@ Hangi anahtarların yüklendiğini görmek için hata ayıklamada kullanışlıd
 
 ``` dart
 List<String> keys = NyLocalization.instance.getAllKeys();
-// ['welcome', 'settings', 'navigation', ...]
+// ['welcome', 'settings', 'navigation', ...]  (örnek anahtarlar)
 ```
 
 ### Yeniden Başlatmadan Yerel Ayar Değiştirme
@@ -399,13 +407,13 @@ bool isRtl = NyLocalization.instance.isDirectionRTL(context);
 ### Mevcut Yerel Ayara Erişim
 
 ``` dart
-// Get the current language code
-String code = NyLocalization.instance.languageCode;  // e.g., 'en'
+// Mevcut dil kodunu al
+String code = NyLocalization.instance.languageCode;  // örn. 'en'
 
-// Get the current Locale object
+// Mevcut Locale nesnesini al
 Locale currentLocale = NyLocalization.instance.locale;
 
-// Get Flutter localization delegates (used in MaterialApp)
+// Flutter yerelleştirme delegelerini al (MaterialApp'ta kullanılır)
 var delegates = NyLocalization.instance.delegates;
 ```
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Mevcut dil kodu |
 | `locale` | `Locale` | Mevcut Locale nesnesi |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter yerelleştirme delegeleri |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Birim testleri için çeviri haritalarını doğrudan enjekte et |
 
 <div id="nylocalehelper"></div>
 
@@ -433,26 +442,26 @@ var delegates = NyLocalization.instance.delegates;
 `NyLocaleHelper`, yerel ayar işlemleri için statik bir yardımcı sınıftır. Mevcut yerel ayarı algılama, RTL desteğini kontrol etme ve Locale nesneleri oluşturma metotları sağlar.
 
 ``` dart
-// Get the current system locale
+// Mevcut sistem yerel ayarını al
 Locale locale = NyLocaleHelper.getCurrentLocale(context: context);
 
-// Get language and country codes
+// Dil ve ülke kodlarını al
 String langCode = NyLocaleHelper.getLanguageCode(context: context);  // 'en'
-String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' or null
+String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' veya null
 
-// Check if current locale matches
+// Mevcut yerel ayarın eşleşip eşleşmediğini kontrol et
 bool isEnglish = NyLocaleHelper.matchesLocale(context, 'en');
 bool isUsEnglish = NyLocaleHelper.matchesLocale(context, 'en', 'US');
 
-// RTL detection
+// RTL tespiti
 bool isRtl = NyLocaleHelper.isRtlLanguage('ar');  // true
 bool currentIsRtl = NyLocaleHelper.isCurrentLocaleRtl(context: context);
 
-// Get text direction
+// Metin yönünü al
 TextDirection direction = NyLocaleHelper.getTextDirection('ar');  // TextDirection.rtl
 TextDirection currentDir = NyLocaleHelper.getCurrentTextDirection(context: context);
 
-// Create a Locale from strings
+// Dizelerden Locale oluştur
 Locale newLocale = NyLocaleHelper.toLocale('en', 'US');
 ```
 

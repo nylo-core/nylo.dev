@@ -25,13 +25,13 @@ O Backpack é usado internamente pelo framework para armazenar instâncias crít
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// Save a value
+// Salvar um valor
 Backpack.instance.save("user_name", "Anthony");
 
-// Read a value (synchronous)
+// Ler um valor (síncrono)
 String? name = Backpack.instance.read("user_name");
 
-// Delete a value
+// Excluir um valor
 Backpack.instance.delete("user_name");
 ```
 
@@ -42,13 +42,13 @@ Backpack.instance.delete("user_name");
 O Backpack usa o **padrão singleton** -- acesse-o através de `Backpack.instance`:
 
 ``` dart
-// Save data
+// Salvar dados
 Backpack.instance.save("theme", "dark");
 
-// Read data
+// Ler dados
 String? theme = Backpack.instance.read("theme"); // "dark"
 
-// Check if data exists
+// Verificar se os dados existem
 bool hasTheme = Backpack.instance.contains("theme"); // true
 ```
 
@@ -59,21 +59,26 @@ bool hasTheme = Backpack.instance.contains("theme"); // true
 Leia valores do Backpack usando o método `read<T>()`. Ele suporta tipos genéricos e um valor padrão opcional:
 
 ``` dart
-// Read a String
+// Ler uma String
 String? name = Backpack.instance.read<String>("name");
 
-// Read with a default value
+// Ler com um valor padrão
 String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "Guest";
 
-// Read an int
+// Ler um int
 int? score = Backpack.instance.read<int>("score");
 ```
 
-O Backpack desserializa automaticamente strings JSON para objetos de modelo quando um tipo é fornecido:
+O Backpack desserializa automaticamente valores armazenados para objetos de modelo quando um tipo é fornecido. Isso funciona tanto para strings JSON quanto para valores raw `Map<String, dynamic>`:
 
 ``` dart
-// If a User model is stored as JSON, it will be deserialized
+// Se um modelo User estiver armazenado como string JSON, ele será desserializado
 User? user = Backpack.instance.read<User>("current_user");
+
+// Se um Map raw foi armazenado (ex: via syncKeys do NyStorage), ele também é
+// automaticamente desserializado no modelo tipado na leitura
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // retorna um User
 ```
 
 <div id="saving-data"></div>
@@ -93,11 +98,11 @@ Backpack.instance.save("cart_count", 3);
 Use `append()` para adicionar valores a uma lista armazenada em uma chave:
 
 ``` dart
-// Append to a list
+// Adicionar a uma lista
 Backpack.instance.append("recent_searches", "Flutter");
 Backpack.instance.append("recent_searches", "Dart");
 
-// Append with a limit (keeps only the last N items)
+// Adicionar com um limite (mantém apenas os últimos N itens)
 Backpack.instance.append("recent_searches", "Nylo", limit: 10);
 ```
 
@@ -191,14 +196,14 @@ bool isReady = Backpack.instance.isNyloInitialized(); // true
 ### Exemplo
 
 ``` dart
-// Using helper functions
+// Usando funções auxiliares
 backpackSave("locale", "en");
 
 String? locale = backpackRead<String>("locale"); // "en"
 
 backpackDelete("locale");
 
-// Access the Nylo instance
+// Acessar a instância do Nylo
 Nylo nylo = backpackNylo();
 ```
 
@@ -209,13 +214,13 @@ Nylo nylo = backpackNylo();
 O Backpack se integra com `NyStorage` para armazenamento combinado persistente + em memória:
 
 ``` dart
-// Save to both NyStorage (persistent) and Backpack (in-memory)
+// Salvar tanto no NyStorage (persistente) quanto no Backpack (em memória)
 await NyStorage.save("auth_token", "abc123", inBackpack: true);
 
-// Now accessible synchronously via Backpack
+// Agora acessível de forma síncrona via Backpack
 String? token = Backpack.instance.read("auth_token");
 
-// When deleting from NyStorage, also clear from Backpack
+// Ao excluir do NyStorage, também limpar do Backpack
 await NyStorage.deleteAll(andFromBackpack: true);
 ```
 
@@ -228,7 +233,7 @@ Este padrão é útil para dados como tokens de autenticação que precisam tant
 ### Armazenando Tokens de Auth para Requisições de API
 
 ``` dart
-// In your auth interceptor
+// No seu interceptador de autenticação
 class BearerAuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -246,24 +251,24 @@ class BearerAuthInterceptor extends Interceptor {
 ### Gerenciamento de Carrinho Baseado em Sessão
 
 ``` dart
-// Add items to a cart session
+// Adicionar itens a uma sessão de carrinho
 Backpack.instance.sessionUpdate("cart", "items", ["item_1", "item_2"]);
 Backpack.instance.sessionUpdate("cart", "total", 49.99);
 
-// Read cart data
+// Ler dados do carrinho
 Map<String, dynamic>? cart = Backpack.instance.sessionData("cart");
 
-// Clear the cart
+// Limpar o carrinho
 Backpack.instance.sessionFlush("cart");
 ```
 
 ### Feature Flags Rápidas
 
 ``` dart
-// Store feature flags in Backpack for fast access
+// Armazenar feature flags no Backpack para acesso rápido
 backpackSave("feature_dark_mode", true);
 backpackSave("feature_notifications", false);
 
-// Check a feature flag
+// Verificar um feature flag
 bool darkMode = backpackRead<bool>("feature_dark_mode") ?? false;
 ```

@@ -72,7 +72,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
   get init => () async {
-    await sleep(3); // simulate a network call for 3 seconds
+    await sleep(3); // 3 saniye ag cagrisi simule et
   };
 ```
 
@@ -80,7 +80,6 @@ class _ProfileImageState extends NyState<ProfileImage> {
 Yükleme stilini güncellemek için `loadingStyle`'ı özelleştirebilirsiniz.
 
 İşte kullanabileceğiniz farklı yükleme stillerinin tablosu:
-// normal, skeletonizer, none
 
 | Stil | Açıklama |
 | --- | --- |
@@ -93,7 +92,7 @@ Yükleme stilini şu şekilde değiştirebilirsiniz:
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// veya
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -107,7 +106,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// same for skeletonizer
+// skeletonizer icin de ayni
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -123,7 +122,7 @@ Aşağıdaki örnek:
 ``` dart
 class _HomePageState extends NyState<HomePage> {
     get init => () async {
-        await sleep(3); // simulate a network call for 3 seconds
+        await sleep(3); // 3 saniye ag cagrisi simule et
     };
 
     @override
@@ -156,7 +155,7 @@ class _MyWidgetState extends NyState<MyWidget> {
 
   @override
   get init => () async {
-    // handle how you want to initialize the state
+    // durumu nasil baslatmak istedigini belirle
   };
 
   @override
@@ -165,7 +164,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // Veri ile ornek
       _userName = user.name;
       setState(() {});
     },
@@ -181,10 +180,10 @@ Ardından, `stateAction` metodunu kullanarak eylemi başka bir sınıftan çağ�
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Veri ile baska bir ornek
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// Veri ile baska bir ornek
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -193,11 +192,11 @@ stateActions'ı bir `NyPage` ile kullanıyorsanız, sayfanın **path**'ini kulla
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// Veri ile baska bir ornek
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// Veri ile baska bir ornek
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -280,7 +279,7 @@ class _HomePageState extends NyState<HomePage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                reboot(); // refresh the data
+                reboot(); // verileri yenile
               },
             )
           ],
@@ -302,13 +301,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Mevcut sayfayı yığından kaldırır.
 
+En yakın yerel navigator yerine root navigator'dan pop yapmak icin `rootNavigator: true` gecirebilirsiniz. Bu, Navigation Hub sekmelerinde root navigator kullanilarak acilan modal veya katman kapatilmak istendiginde kullanislidir.
+
 Örnek
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Root navigator'dan pop yap (orn. root seviyesindeki modali kapatmak icin)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -537,7 +543,7 @@ Bu metot, devam etmeden önce kullanıcının bir eylemi onaylamasını istediğ
 ``` dart
 _logout() {
  confirmAction(() {
-    // logout();
+    // cikisYap();
  }, title: "Logout of the app?");
 }
 ```
@@ -748,7 +754,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   get init => () async {
-    _user = await api<ApiService>((request) => request.fetchUser()); // example
+    _user = await api<ApiService>((request) => request.fetchUser()); // ornek
     setState(() {});
   };
 

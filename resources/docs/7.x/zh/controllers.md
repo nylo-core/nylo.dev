@@ -35,7 +35,7 @@ class HomeController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Initialize services or fetch data
+    // 初始化服务或获取数据
   }
 
   void onTapProfile() {
@@ -58,12 +58,12 @@ class HomeController extends NyController {
 使用 Metro CLI 生成控制器：
 
 ``` bash
-# Create a page with a controller
+# 创建带控制器的页面
 metro make:page dashboard --controller
-# or shorthand
+# 或简写
 metro make:page dashboard -c
 
-# Create a controller only
+# 仅创建控制器
 metro make:controller profile_controller
 ```
 
@@ -92,7 +92,7 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   get init => () async {
-    // Access controller methods
+    // 访问控制器方法
     widget.controller.fetchData();
   };
 
@@ -123,17 +123,17 @@ class _HomePageState extends NyPage<HomePage> {
 在页面之间传递数据并在控制器中访问：
 
 ``` dart
-// Navigate with data
+// 携带数据导航
 routeTo(ProfilePage.path, data: {"userId": 123});
 
-// In your controller
+// 控制器内部
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get the passed data
+    // 获取传递的数据
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -147,10 +147,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
   get init => () async {
-    // From controller
+    // 来自控制器
     var userData = widget.controller.data();
 
-    // Or from widget directly
+    // 或直接来自组件
     var userData = widget.data();
   };
 }
@@ -163,21 +163,21 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 在控制器中访问 URL 查询参数：
 
 ``` dart
-// Navigate to: /profile?tab=settings&highlight=true
+// 导航到：/profile?tab=settings&highlight=true
 routeTo("/profile?tab=settings&highlight=true");
 
-// In your controller
+// 控制器内部
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get all query parameters as Map
+    // 获取所有查询参数为 Map
     Map<String, dynamic>? params = queryParameters();
     // {"tab": "settings", "highlight": "true"}
 
-    // Get a specific parameter
+    // 获取特定参数
     String? tab = queryParameters(key: "tab");
     // "settings"
   }
@@ -187,9 +187,9 @@ class ProfileController extends NyController {
 检查查询参数是否存在：
 
 ``` dart
-// In your page
+// 在页面中
 if (widget.hasQueryParameter("tab")) {
-  // Handle tab parameter
+  // 处理 tab 参数
 }
 ```
 
@@ -206,22 +206,27 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Trigger a setState on the page
+    // 触发页面的 setState
     setState(setState: () {});
   }
 
   void refresh() {
-    // Refresh the entire page
+    // 刷新整个页面
     refreshPage();
   }
 
   void goBack() {
-    // Pop the page with optional result
+    // 带可选结果弹出页面
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // 从根导航器弹出（例如关闭 Navigation Hub 中的根级模态框）
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
-    // Send custom action to page
+    // 向页面发送自定义操作
     updatePageState("customAction", {"key": "value"});
   }
 }
@@ -237,16 +242,16 @@ class HomeController extends NyController {
 class FormController extends NyController {
 
   void showNotifications() {
-    // Success toast
+    // 成功 toast
     showToastSuccess(description: "Profile updated!");
 
-    // Warning toast
+    // 警告 toast
     showToastWarning(description: "Please check your input");
 
-    // Error/Danger toast
+    // 错误/危险 toast
     showToastDanger(description: "Failed to save changes");
 
-    // Info toast
+    // 信息 toast
     showToastInfo(description: "New features available");
 
     // Sorry toast
@@ -257,13 +262,13 @@ class FormController extends NyController {
   }
 
   void showCustomToast() {
-    // Custom toast with title
+    // 带标题的自定义 toast
     showToastSuccess(
       title: "Great Job!",
       description: "Your changes have been saved",
     );
 
-    // Use custom toast style (registered in Nylo)
+    // 使用自定义 toast 样式（在 Nylo 中注册）
     showToastCustom(
       title: "Custom",
       description: "Using custom style",
@@ -302,18 +307,18 @@ class RegisterController extends NyController {
       showAlert: true,
       alertStyle: 'warning',
       onSuccess: () {
-        // Validation passed
+        // 验证通过
         _performRegistration();
       },
       onFailure: (exception) {
-        // Validation failed
+        // 验证失败
         print(exception.toString());
       },
     );
   }
 
   void _performRegistration() async {
-    // Handle registration logic
+    // 处理注册逻辑
     showToastSuccess(description: "Account created!");
   }
 }
@@ -349,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // This code only runs once until the lock is released
+      // 此代码在锁释放之前只运行一次
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -361,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Don't trigger setState after
+      shouldSetState: false, // 完成后不触发 setState
     );
   }
 }
@@ -379,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // User confirmed - perform deletion
+        // 用户已确认 - 执行删除
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -405,7 +410,7 @@ class AuthController extends NyController {
   User? currentUser;
 
   Future<void> login(String email, String password) async {
-    // Login logic
+    // 登录逻辑
     currentUser = await AuthService.login(email, password);
   }
 
@@ -454,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Only runs if all guards pass
+    // 仅在所有守卫通过时运行
   }
 }
 ```

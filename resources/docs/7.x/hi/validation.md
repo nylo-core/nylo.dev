@@ -11,6 +11,7 @@
   - [FormValidator का उपयोग](#using-form-validator "FormValidator का उपयोग")
   - [FormValidator नेम्ड कंस्ट्रक्टर्स](#form-validator-named-constructors "FormValidator नेम्ड कंस्ट्रक्टर्स")
   - [वैलिडेशन नियम चेन करना](#chaining-validation-rules "वैलिडेशन नियम चेन करना")
+  - [नलेबल फ़ील्ड्स](#nullable-fields "नलेबल फ़ील्ड्स")
   - [कस्टम वैलिडेशन](#custom-validation "कस्टम वैलिडेशन")
   - [फ़ील्ड्स के साथ FormValidator का उपयोग](#form-validator-with-fields "फ़ील्ड्स के साथ FormValidator का उपयोग")
 - [उपलब्ध वैलिडेशन नियम](#validation-rules "उपलब्ध वैलिडेशन नियम")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7 `FormValidator` क्लास के आधार पर एक वैलिडेशन सिस्टम प्रदान करता है। आप `check()` मेथड का उपयोग करके पेजों के अंदर डेटा वैलिडेट कर सकते हैं, या स्टैंडअलोन और फ़ील्ड-लेवल वैलिडेशन के लिए सीधे `FormValidator` का उपयोग कर सकते हैं।
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// NyPage/NyState में check() का उपयोग करके डेटा वैलिडेट करें
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// फ़ॉर्म फ़ील्ड्स के साथ FormValidator
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -53,10 +54,10 @@ class _RegisterPageState extends NyPage<RegisterPage> {
           .notEmpty()
           .password(strength: 2);
     }, onSuccess: () {
-      // All validations passed
+      // सभी वैलिडेशन पास हुए
       _submitForm();
     }, onValidationError: (FormValidationResponseBag bag) {
-      // Validation failed
+      // वैलिडेशन विफल
       print(bag.firstErrorMessage);
     });
   }
@@ -102,14 +103,14 @@ FormValidationResponseBag bag = check((validate) {
 if (bag.isValid) {
   print("All valid!");
 } else {
-  // Get the first error message
+  // पहला एरर मैसेज प्राप्त करें
   String? error = bag.firstErrorMessage;
   print(error);
 
-  // Get all failed results
+  // सभी विफल परिणाम प्राप्त करें
   List<FormValidationResult> errors = bag.validationErrors;
 
-  // Get all successful results
+  // सभी सफल परिणाम प्राप्त करें
   List<FormValidationResult> successes = bag.validationSuccess;
 }
 ```
@@ -128,13 +129,13 @@ FormValidationResult result = validator.check();
 if (result.isValid) {
   print("Valid!");
 } else {
-  // First error message
+  // पहला एरर मैसेज
   String? message = result.getFirstErrorMessage();
 
-  // All error messages
+  // सभी एरर मैसेज
   List<String> messages = result.errorMessages();
 
-  // Error responses
+  // एरर रिस्पॉन्स
   List<FormValidationError> errors = result.errorResponses;
 }
 ```
@@ -148,7 +149,7 @@ if (result.isValid) {
 ### स्टैंडअलोन उपयोग
 
 ``` dart
-// Using a named constructor
+// नेम्ड कंस्ट्रक्टर का उपयोग करके
 FormValidator validator = FormValidator.email();
 FormValidationResult result = validator.check("user@example.com");
 
@@ -178,69 +179,69 @@ print(result.isValid); // true
 {{ config('app.name') }} v7 सामान्य वैलिडेशन के लिए नेम्ड कंस्ट्रक्टर्स प्रदान करता है:
 
 ``` dart
-// Email validation
+// ईमेल वैलिडेशन
 FormValidator.email(message: "Please enter a valid email")
 
-// Password validation (strength 1 or 2)
+// पासवर्ड वैलिडेशन (स्ट्रेंथ 1 या 2)
 FormValidator.password(strength: 1)
 FormValidator.password(strength: 2, message: "Password too weak")
 
-// Phone numbers
+// फ़ोन नंबर
 FormValidator.phoneNumberUk()
 FormValidator.phoneNumberUs()
 
-// URL validation
+// URL वैलिडेशन
 FormValidator.url()
 
-// Length constraints
+// लंबाई की सीमाएँ
 FormValidator.minLength(5, message: "Too short")
 FormValidator.maxLength(100, message: "Too long")
 
-// Value constraints
+// वैल्यू की सीमाएँ
 FormValidator.minValue(18, message: "Must be 18+")
 FormValidator.maxValue(100)
 
-// Size constraints (for lists/strings)
+// साइज़ की सीमाएँ (सूचियों/स्ट्रिंग्स के लिए)
 FormValidator.minSize(2, message: "Select at least 2")
 FormValidator.maxSize(5)
 
-// Not empty
+// खाली नहीं
 FormValidator.notEmpty(message: "This field is required")
 
-// Contains values
+// वैल्यूज़ शामिल हैं
 FormValidator.contains(['option1', 'option2'])
 
-// Starts/ends with
+// से शुरू/समाप्त होता है
 FormValidator.beginsWith("https://")
 FormValidator.endsWith(".com")
 
-// Boolean checks
+// बूलियन जाँच
 FormValidator.booleanTrue(message: "Must accept terms")
 FormValidator.booleanFalse()
 
-// Numeric
+// संख्यात्मक
 FormValidator.numeric()
 
-// Date validations
+// तिथि वैलिडेशन
 FormValidator.date()
 FormValidator.dateInPast()
 FormValidator.dateInFuture()
 FormValidator.dateAgeIsOlder(18, message: "Must be 18+")
 FormValidator.dateAgeIsYounger(65)
 
-// Text case
+// टेक्स्ट केस
 FormValidator.uppercase()
 FormValidator.lowercase()
 FormValidator.capitalized()
 
-// Location formats
+// लोकेशन फ़ॉर्मेट
 FormValidator.zipcodeUs()
 FormValidator.postcodeUk()
 
-// Regex pattern
+// रीजेक्स पैटर्न
 FormValidator.regex(r'^[A-Z]{3}\d{4}$', message: "Invalid format")
 
-// Custom validation
+// कस्टम वैलिडेशन
 FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## नलेबल फ़ील्ड्स
+
+किसी वैलिडेटर को वैकल्पिक चिह्नित करने के लिए `.nullable()` का उपयोग करें। नलेबल होने पर, एक null या खाली वैल्यू स्वचालित रूप से वैलिडेशन पास करती है — अन्य सभी नियम केवल तभी लागू होते हैं जब कोई वैल्यू मौजूद हो।
+
+``` dart
+// Nickname वैकल्पिक है, लेकिन यदि दिया गया तो 3–20 कैरेक्टर होना चाहिए
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+`.nullable()` के बिना, एक खाली फ़ील्ड `minLength` नियम को विफल कर देगी। `.nullable()` के साथ, फ़ील्ड खाली छोड़ने पर वैलिडेशन पास हो जाती है।
+
+यह वैकल्पिक प्रोफ़ाइल फ़ील्ड्स, सेकेंडरी संपर्क जानकारी, या किसी भी फ़ील्ड के लिए उपयोगी है जो केवल तब वैलिडेट होती है जब उपयोगकर्ता उसे भरता है। `Field` विजेट्स के साथ `nullable()` के इंटीग्रेशन के लिए [Forms डॉक्यूमेंटेशन](/docs/{{ $version }}/forms) देखें।
+
 <div id="custom-validation"></div>
 
 ## कस्टम वैलिडेशन
@@ -291,7 +313,7 @@ FormValidator()
 FormValidator.custom(
   message: "Username already taken",
   validate: (data) {
-    // Return true if valid, false if invalid
+    // वैलिड होने पर true, अवैलिड होने पर false रिटर्न करें
     return !_takenUsernames.contains(data);
   },
 )
@@ -403,6 +425,7 @@ Field.slider(
 | रीजेक्स | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | रीजेक्स पैटर्न से मेल खाना चाहिए |
 | इक्वल्स | — | `.equals(otherValue)` | दूसरी वैल्यू के बराबर होना चाहिए |
 | कस्टम | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | कस्टम वैलिडेशन फ़ंक्शन |
+| नलेबल | — | `.nullable()` | null या खाली वैल्यू स्वचालित पास; नियम केवल वैल्यू मौजूद होने पर लागू होते हैं |
 
 सभी नियम एरर मैसेज कस्टमाइज़ करने के लिए एक वैकल्पिक `message` पैरामीटर स्वीकार करते हैं।
 
@@ -429,7 +452,7 @@ class FormRuleUsername extends FormRule {
   @override
   bool validate(data) {
     if (data is! String) return false;
-    // Username: alphanumeric, underscores, 3-20 chars
+    // यूज़रनेम: अल्फ़ान्यूमेरिक, अंडरस्कोर, 3-20 कैरेक्टर
     return RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(data);
   }
 }

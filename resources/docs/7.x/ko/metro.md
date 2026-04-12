@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 위 명령어는 `lib/resources/widgets/` 디렉토리 내에 해당 위젯이 존재하지 않으면 새로 생성합니다.
 
+모든 `make:*` 명령어는 이름에 경로 구분자를 사용하여 파일을 하위 디렉토리에 배치할 수 있습니다.
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+이 명령어는 `lib/resources/widgets/login/brand_panel.dart` 에 위젯을 생성합니다.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Stateless 위젯 강제 생성
@@ -433,6 +441,14 @@ metro make:event login_event
 
 `lib/app/events`에 새 Event가 생성됩니다.
 
+경로 구분자를 사용하여 Event를 하위 디렉토리에 구성할 수 있습니다.
+
+``` bash
+metro make:event auth/login_event
+```
+
+이 명령어는 `lib/app/events/auth/login_event.dart` 에 Event를 생성합니다.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Event 강제 생성
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 새로 생성된 Provider는 `lib/app/providers/`에 배치됩니다.
+
+경로 구분자를 사용하여 Provider를 하위 디렉토리에 구성할 수 있습니다.
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+이 명령어는 `lib/app/providers/integrations/firebase_provider.dart` 에 Provider를 생성합니다.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 `lib/app/forms`에 새 Form이 생성됩니다.
 
+경로 구분자를 사용하여 Form을 하위 디렉토리에 구성할 수 있습니다.
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+이 명령어는 `lib/app/forms/checkout/car_advert_form.dart` 에 Form을 생성합니다.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Form 강제 생성
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 `lib/app/route_guards`에 새 Route Guard가 생성됩니다.
+
+경로 구분자를 사용하여 Route Guard를 하위 디렉토리에 구성할 수 있습니다.
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+이 명령어는 `lib/app/route_guards/subscriptions/premium_content.dart` 에 Route Guard를 생성합니다.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// 현재 시간 명령어
 ///
-/// Usage:
+/// 사용법:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // 현재 시간 가져오기
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // 현재 시간 포맷
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -2003,7 +2043,7 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: 로그인 구현
     return false;
   }
 }

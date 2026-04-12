@@ -30,6 +30,7 @@
   - [Slider Fields](#slider-fields "Slider Fields")
   - [Range Slider Fields](#range-slider-fields "Range Slider Fields")
   - [Custom Fields](#custom-fields "Custom Fields")
+  - [Builder Fields](#builder-fields "Builder Fields")
   - [Widget Fields](#widget-fields "Widget Fields")
 - [FormCollection](#form-collection "FormCollection")
 - [Form Validation](#form-validation "Form Validation")
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 The `child` parameter requires a widget that extends `NyFieldStatefulWidget`. This gives you full control over the field's rendering and behavior.
 
+<div id="builder-fields"></div>
+
+### Builder Fields
+
+Use `Field.builder()` to create a custom inline form field without subclassing `NyFieldStatefulWidget`. The builder function receives the current value, an `onChanged` callback to report value changes to the form, and a `setState` callback to trigger a UI rebuild.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // rebuild the field widget
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+The third parameter is the current field value and the fourth is `setState`. If your builder does not need `setState`, you can use the legacy 3-argument signature (`NyFieldBuilderLegacy`), which is still supported:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### Widget Fields
@@ -621,6 +658,9 @@ Picker, radio, and chip fields require a `FormCollection` for their options. `Fo
 ### Creating a FormCollection
 
 ``` dart
+// Empty collection (useful as a placeholder before options load)
+const FormCollection.empty()
+
 // From a list of strings (value and label are the same)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -704,7 +744,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — validation passes when the field is empty
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` marks a validator as optional. When the field value is null or empty, all validation rules are skipped and the field passes. When the field has a value, all rules are applied normally. Chain it at the end of any `FormValidator`.
 
 When a form is submitted, all validators are checked. If any fail, a toast error shows the first error message and the `onFailure` callback is called.
 
@@ -1184,5 +1231,6 @@ Methods you can override in your `NyFormWidget` subclass:
 | `Field.slider()` | — | Single value slider |
 | `Field.rangeSlider()` | — | Range value slider |
 | `Field.custom()` | `child` (required `NyFieldStatefulWidget`) | Custom stateful widget |
+| `Field.builder()` | `builder` (required `NyFieldBuilder` or `NyFieldBuilderLegacy`) | Inline custom field without subclassing |
 | `Field.widget()` | `child` (required `Widget`) | Embed any widget (non-field) |
 

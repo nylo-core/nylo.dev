@@ -11,6 +11,7 @@
   - [Using FormValidator](#using-form-validator "Using FormValidator")
   - [FormValidator Named Constructors](#form-validator-named-constructors "FormValidator named constructors")
   - [Chaining Validation Rules](#chaining-validation-rules "Chaining validation rules")
+  - [Nullable Fields](#nullable-fields "Nullable fields")
   - [Custom Validation](#custom-validation "Custom validation")
   - [Using FormValidator with Fields](#form-validator-with-fields "Using FormValidator with Fields")
 - [Available Validation Rules](#validation-rules "Validation rules")
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Nullable Fields
+
+Use `.nullable()` to mark a validator as optional. When nullable, a null or empty value automatically passes validation — all other rules are only applied if the value is present.
+
+``` dart
+// Nickname is optional, but if provided it must be 3–20 characters
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+Without `.nullable()`, an empty field would fail the `minLength` rule. With `.nullable()`, leaving the field blank passes validation.
+
+This is useful for optional profile fields, secondary contact info, or any field that is only validated when the user fills it in. See the [Forms documentation](/docs/{{ $version }}/forms) for how `nullable()` integrates with `Field` widgets.
+
 <div id="custom-validation"></div>
 
 ## Custom Validation
@@ -403,6 +425,7 @@ All available rules for `FormValidator`, as both named constructors and chainabl
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | Must match regex pattern |
 | Equals | — | `.equals(otherValue)` | Must equal another value |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | Custom validation function |
+| Nullable | — | `.nullable()` | Null or empty values auto-pass; rules only apply when a value is present |
 
 All rules accept an optional `message` parameter to customize the error message.
 

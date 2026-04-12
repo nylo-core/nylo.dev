@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // 표시/숨기기 토글 아이콘
+  passwordViewable: true, // 사용자가 표시 전환 가능
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 전화번호나 신용카드와 같은 포맷된 데이터에 입력 마스크를 적용합니다:
 
 ``` dart
-// Phone number mask
+// 전화번호 마스크
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // 마스크 없는 값 반환: 1234567890
 )
 
-// Credit card mask
+// 신용카드 마스크
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // 마스크된 값 반환: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // 커스텀 지우기 아이콘
   onChanged: (value) {
-    // Handle search
+    // 검색 처리
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### 상태 액션
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// 필드 지우기
+actions.clear();
+
+// 값 설정
+actions.setValue("new_value");
+
+// 필드로 포커스 이동
+actions.focus();
+
+// 필드에서 포커스 제거
+actions.unfocus();
+
+// 비밀번호 표시/숨기기 전환 (InputField.password 용)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | 라벨 텍스트 스타일 |
 | `hintStyle` | `TextStyle?` | 힌트 텍스트 스타일 |
 | `prefixIcon` | `Widget?` | 입력 앞 아이콘 |
+| `suffixIcon` | `Widget?` | 입력 뒤 아이콘 |
 
 ### 마스킹 매개변수
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | 비밀번호 표시/숨기기 토글 허용 |
 | `dummyData` | `String?` | 개발용 가짜 데이터 |
 | `stateName` | `String?` | 상태 관리를 위한 이름 |
+| `enableInteractiveSelection` | `bool` | 텍스트 선택 활성화 (기본값: `true`) |
 | `onChanged` | `Function(String)?` | 값 변경 시 호출 |

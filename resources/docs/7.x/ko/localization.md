@@ -319,13 +319,21 @@ static const List<Locale> supportedLocales = [
 
 ## 폴백 언어
 
-활성 로케일에서 번역 키를 찾지 못하면 {{ config('app.name') }}는 지정된 언어로 폴백합니다:
+활성 로케일에서 번역 키를 찾지 못하면 {{ config('app.name') }}는 원시 키를 반환하기 전에 폴백 언어에서 해당 키를 검색합니다. 폴백 언어는 `lib/config/localization.dart`에서 설정합니다:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-이렇게 하면 번역이 누락된 경우에도 앱에 원시 키가 표시되지 않습니다.
+이 두 단계 해결은 최상위 키와 점 표기법으로 된 중첩 키 모두에 적용됩니다:
+
+1. 활성 로케일 파일에서 키를 검색합니다.
+2. 찾지 못하면 폴백 로케일 파일에서 키를 검색합니다.
+3. 그래도 찾지 못하면 원시 키 문자열을 반환합니다.
+
+예를 들어, 프랑스어 로케일 파일에 `settings.privacy` 키가 없으면 폴백 로직은 영어 로케일 파일에서 `settings.privacy`를 검색한 후 `"settings.privacy"`를 그대로 반환하는 폴백을 수행합니다.
+
+이렇게 하면 번역이 부분적으로만 완료된 경우에도 앱에 원시 키가 표시되지 않습니다.
 
 <div id="rtl-support"></div>
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | 현재 언어 코드 |
 | `locale` | `Locale` | 현재 Locale 객체 |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter 다국어 지원 delegate |
+| `setValuesForTesting({values, fallbackValues})` | `void` | 단위 테스트를 위해 번역 맵을 직접 주입 |
 
 <div id="nylocalehelper"></div>
 

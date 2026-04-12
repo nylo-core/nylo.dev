@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 The above will create a new widget if it doesn't exist within the `lib/resources/widgets/` directory.
 
+All `make:*` commands accept a path separator in the name to place the file into a subdirectory:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+This creates the widget at `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Forcefully make a stateless widget
@@ -433,6 +441,14 @@ metro make:event login_event
 
 This will create a new event in `lib/app/events`.
 
+Use a path separator to organize the event into a subdirectory:
+
+``` bash
+metro make:event auth/login_event
+```
+
+This creates the event at `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Forcefully make an event
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 It will place the newly created provider in `lib/app/providers/`.
+
+Use a path separator to organize the provider into a subdirectory:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+This creates the provider at `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 This will create a new form in `lib/app/forms`.
 
+Use a path separator to organize the form into a subdirectory:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+This creates the form at `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Forcefully make a form
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 This will create a new route guard in `lib/app/route_guards`.
+
+Use a path separator to organize the guard into a subdirectory:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+This creates the guard at `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -755,13 +795,9 @@ metro make:key
 
 | Flag / Option | Short | Description |
 |---------------|-------|-------------|
-| `--force` | `-f` | Overwrite existing APP_KEY |
 | `--file` | `-e` | Target .env file (default: `.env`) |
 
 ``` bash
-# Generate key and overwrite existing
-metro make:key --force
-
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```

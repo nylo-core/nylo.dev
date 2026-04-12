@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // Thêm khoảng cách giữa các item
   padding: EdgeInsets.all(16),
 )
 ```
@@ -187,7 +187,7 @@ Tạo danh sách với tính năng kéo để tải lại và phân trang cuộn
 ``` dart
 CollectionView<Post>.pullable(
   data: (int iteration) async {
-    // iteration starts at 1 and increments on each load
+    // iteration bắt đầu từ 1 và tăng mỗi lần tải
     return await api<ApiService>((request) =>
       request.get('/posts?page=$iteration')
     );
@@ -196,9 +196,9 @@ CollectionView<Post>.pullable(
     return PostCard(post: item.data);
   },
   onRefresh: () {
-    print('List was refreshed!');
+    print('Danh sách đã được làm mới!');
   },
-  headerStyle: 'WaterDropHeader', // Pull indicator style
+  headerStyle: 'WaterDropHeader', // Kiểu chỉ báo kéo
 )
 ```
 
@@ -260,16 +260,16 @@ CollectionView<Photo>.pullableGrid(
 Tùy chỉnh chỉ báo tải bằng `loadingStyle`:
 
 ``` dart
-// Normal loading with custom widget
+// Tải thông thường với widget tùy chỉnh
 CollectionView<Item>(
   data: () async => await fetchItems(),
   builder: (context, item) => ItemTile(item: item.data),
   loadingStyle: LoadingStyle.normal(
-    child: Text("Loading items..."),
+    child: Text("Đang tải các item..."),
   ),
 )
 
-// Skeletonizer loading effect
+// Hiệu ứng tải skeletonizer
 CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserCard(user: item.data),
@@ -331,7 +331,7 @@ CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserTile(user: item.data),
   transform: (List<User> users) {
-    // Filter to only active users
+    // Lọc chỉ lấy người dùng đang hoạt động
     return users.where((u) => u.isActive).toList();
   },
 )
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## Cập nhật trạng thái
 
-Bạn có thể cập nhật hoặc đặt lại CollectionView bằng cách gán cho nó một `stateName`:
+Bạn có thể cập nhật CollectionView theo chương trình bằng cách gán `stateName` và gọi `CollectionView.stateActions()`:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### Đặt lại danh sách
+Dùng `stateActions` để thao tác với danh sách trong thời gian chạy:
 
 ``` dart
-// Resets and reloads data from scratch
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// Đặt lại và tải lại dữ liệu từ đầu
+actions.reset();
+
+// Làm mới dữ liệu (tải lại và đặt lại phân trang)
+actions.refreshData();
+
+// Thêm item vào cuối danh sách
+actions.addItem(newTodo);
+
+// Chèn item vào một vị trí cụ thể
+actions.insertItem(0, newTodo);
+
+// Xóa item theo chỉ mục
+actions.removeFromIndex(2);
+
+// Thay thế item tại một chỉ mục cụ thể
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### Xóa một item
-
-``` dart
-// Remove item at index 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### Kích hoạt cập nhật chung
-
-``` dart
-// Using the global updateState helper
-updateState("my_todo_list");
-```
+Tất cả các phương thức `stateActions` hoạt động chính xác qua các lần rebuild cho cả dữ liệu đồng bộ và bất đồng bộ. `refreshData()` cũng đặt lại bộ đếm iteration phân trang để danh sách pullable bắt đầu lại từ trang 1.
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | Tham số | Kiểu | Mô tả |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Hàm dữ liệu phân trang |
+| `enablePullDown` | `bool` | Bật cử chỉ kéo để tải lại (mặc định: `true`) |
 | `onRefresh` | `Function()?` | Callback khi tải lại hoàn tất |
 | `beforeRefresh` | `Function()?` | Callback trước khi tải lại |
 | `afterRefresh` | `Function(dynamic)?` | Callback sau khi dữ liệu tải xong |

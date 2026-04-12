@@ -42,11 +42,7 @@
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -283,22 +279,22 @@ int? status = response.statusCode;
 ```dart
 NyResponse<User> response = await apiService.fetchUser(1);
 
-// Get data or throw if null
+// Получить данные или выбросить исключение, если null
 User user = response.dataOrThrow('User not found');
 
-// Get data or use a fallback
+// Получить данные или использовать резервное значение
 User user = response.dataOr(User.guest());
 
-// Run callback only if successful
+// Выполнить callback только при успехе
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
-// Pattern match on success/failure
+// Pattern match по успеху/ошибке
 String result = response.when(
   success: (user) => 'Welcome, ${user.name}!',
   failure: (response) => 'Error: ${response.statusMessage}',
 );
 
-// Get a specific header
+// Получить конкретный заголовок
 String? authHeader = response.getHeader('Authorization');
 ```
 
@@ -311,8 +307,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +462,7 @@ Future<void> downloadFile(String url, String savePath) async {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +517,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,11 +537,10 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
-          useNetworkLogger: false, // <-- Disable logger
+          useNetworkLogger: false, // <-- Отключить логгер
         );
 ```
 
@@ -564,7 +557,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // Логировать только запросы к конкретным эндпоинтам
     return options.path.contains('/api/v1');
   },
 )
@@ -613,10 +606,10 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 await api<ApiService>(
   (request) => request.fetchUser(),
   onSuccess: (response, data) {
-    // data is the morphed User? instance
+    // data — это преобразованный экземпляр User?
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // Обработать ошибку
   },
 );
 ```
@@ -703,16 +696,16 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
-  // Returns a single User
+  // Возвращает одного User
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Returns a List of Users
+  // Возвращает список Users
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -758,10 +751,10 @@ Future<List<Country>> fetchCountries() async {
 ### Очистка кэша
 
 ```dart
-// Clear a specific cache key
+// Очистить конкретный ключ кэша
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// Очистить весь кэш API
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +843,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // Повторять только при ошибках сервера
       return dioException.response?.statusCode == 500;
     },
   );
@@ -876,7 +869,7 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -911,17 +904,17 @@ apiService.setCheckConnectivityBeforeRequest(true);
 Управление и отмена ожидающих запросов.
 
 ```dart
-// Create a managed cancel token
+// Создать управляемый токен отмены
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// Отменить все ожидающие запросы (например, при выходе)
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// Проверить количество активных запросов
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// Освободить конкретный токен после завершения
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +945,13 @@ class ApiService extends NyApiService {
 Для публичных конечных точек, не требующих аутентификации:
 
 ```dart
-// Per-request
+// Для конкретного запроса
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// На уровне сервиса
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +970,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // Проверить, нужно ли обновить токен
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // Использовать новый экземпляр Dio (без перехватчиков) для обновления токена
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // Сохранить новый токен в хранилище
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +999,9 @@ class ApiService extends NyApiService {
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // Новый экземпляр каждый раз
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // Singleton — один и тот же экземпляр всегда
 };
 ```
 
@@ -1021,8 +1014,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

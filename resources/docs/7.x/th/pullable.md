@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | พารามิเตอร์ | ประเภท | คำอธิบาย |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Callback ข้อมูลแบบแบ่งหน้า (iteration เริ่มจาก 1) |
+| `enablePullDown` | `bool` | เปิดใช้งานท่าทางดึงลงเพื่อรีเฟรช (ค่าเริ่มต้น: `true`) |
 | `onRefresh` | `Function()?` | Callback หลังการรีเฟรช |
 | `beforeRefresh` | `Function()?` | Hook ก่อนเริ่มรีเฟรช |
 | `afterRefresh` | `Function(dynamic)?` | Hook หลังรีเฟรชพร้อมข้อมูล |
 | `headerStyle` | `String?` | ชื่อประเภท header (เช่น `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | ตัวบ่งชี้การโหลดกำหนดเองสำหรับ footer |
+
+เพื่อรีเฟรช `CollectionView.pullable` ด้วยโปรแกรม ใช้ `CollectionView.stateActions(stateName).refreshData()` ซึ่งจะดึงข้อมูลใหม่และรีเซ็ต pagination iteration กลับไปที่ 1 เพื่อให้รายการเริ่มต้นใหม่จากหน้าแรก
 
 <div id="examples"></div>
 

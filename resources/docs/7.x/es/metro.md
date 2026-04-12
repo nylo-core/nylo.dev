@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Lo anterior creará un nuevo widget si no existe dentro del directorio `lib/resources/widgets/`.
 
+Todos los comandos `make:*` aceptan un separador de ruta en el nombre para colocar el archivo en un subdirectorio:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Esto crea el widget en `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Crear widget sin estado forzadamente
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Esto creará un nuevo evento en `lib/app/events`.
 
+Usa un separador de ruta para organizar el evento en un subdirectorio:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Esto crea el evento en `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Crear evento forzadamente
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Colocará el proveedor recién creado en `lib/app/providers/`.
+
+Usa un separador de ruta para organizar el proveedor en un subdirectorio:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Esto crea el proveedor en `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Esto creará un nuevo formulario en `lib/app/forms`.
 
+Usa un separador de ruta para organizar el formulario en un subdirectorio:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Esto crea el formulario en `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Crear formulario forzadamente
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Esto creará un nuevo guard de ruta en `lib/app/route_guards`.
+
+Usa un separador de ruta para organizar el guard en un subdirectorio:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Esto crea el guard en `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Comando Hora Actual
 ///
-/// Usage:
+/// Uso:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Obtener la hora actual
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Formatear la hora actual
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }

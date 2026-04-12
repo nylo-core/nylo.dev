@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Header widget at the top |
 | `useSafeArea` | `bool` | `true` | Wrap content in SafeArea |
 | `isScrollControlled` | `bool` | `false` | Allow modal to be scrollable |
+| `isDismissible` | `bool` | `true` | Allow dismissal by tapping outside |
+| `enableDrag` | `bool` | `true` | Allow drag-to-dismiss gesture |
 | `showCloseButton` | `bool` | `false` | Show an X close button |
 | `headerPadding` | `EdgeInsets?` | null | Padding when header is present |
+| `contentPadding` | `EdgeInsets?` | null | Padding around the main content |
+| `actionsPadding` | `EdgeInsets?` | null | Padding around the actions section |
 | `backgroundColor` | `Color?` | null | Modal background color |
 | `showHandle` | `bool` | `true` | Show the drag handle at the top |
 | `closeButtonColor` | `Color?` | null | Close button background color |

@@ -319,13 +319,19 @@ Danh sách này được sử dụng bởi `MaterialApp.supportedLocales` của 
 
 ## Ngôn ngữ dự phòng
 
-Khi không tìm thấy khóa dịch trong ngôn ngữ đang hoạt động, {{ config('app.name') }} chuyển sang ngôn ngữ dự phòng:
+Khi không tìm thấy khóa dịch trong ngôn ngữ đang hoạt động, {{ config('app.name') }} sẽ tự động tìm trong ngôn ngữ dự phòng trước khi trả về khóa thô. Ngôn ngữ dự phòng được cấu hình trong `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Điều này đảm bảo ứng dụng không bao giờ hiển thị khóa thô nếu thiếu bản dịch.
+Quy trình phân giải hai bước này áp dụng cho cả khóa cấp cao nhất lẫn khóa lồng nhau theo ký hiệu chấm:
+
+1. Tìm khóa trong file ngôn ngữ đang hoạt động.
+2. Nếu không tìm thấy, tìm trong file ngôn ngữ dự phòng.
+3. Nếu vẫn không tìm thấy, trả về chuỗi khóa thô.
+
+Điều này đảm bảo ứng dụng không bao giờ hiển thị khóa thô nếu bản dịch chỉ hoàn thành một phần.
 
 <div id="rtl-support"></div>
 
@@ -425,6 +431,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Mã ngôn ngữ hiện tại |
 | `locale` | `Locale` | Đối tượng Locale hiện tại |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Delegate bản địa hóa Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Tiêm trực tiếp map dịch cho unit test |
 
 <div id="nylocalehelper"></div>
 

@@ -507,12 +507,12 @@ router.add(DashboardPage.path, routeGuards: [
 Widget에서 `routeTo` 헬퍼를 사용하고 새 페이지에 보낼 `data`를 전달합니다.
 
 ``` dart
-// HomePage Widget
+// HomePage Widget（홈 페이지 위젯）
 void _pressedSettings() {
     routeTo(SettingsPage.path, data: "Hello World");
 }
 ...
-// SettingsPage Widget (다른 페이지)
+// SettingsPage Widget（다른 페이지 위젯）
 class _SettingsPageState extends NyPage<SettingsPage> {
   ...
   @override
@@ -792,7 +792,7 @@ class _HomePageState extends NyPage<HomePage> {
 새 페이지에서 `pop()` 헬퍼를 사용하여 이전 페이지로 돌아갈 수 있습니다.
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage Widget（설정 페이지 위젯）
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {
@@ -806,7 +806,7 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 이전 Widget에 값을 반환하려면, 아래 예시처럼 `result`를 제공합니다.
 
 ``` dart
-// SettingsPage Widget
+// SettingsPage Widget（설정 페이지 위젯）
 class _SettingsPageState extends NyPage<SettingsPage> {
 
   _back() {

@@ -26,7 +26,7 @@
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // Получить свежие данные
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Pullable(
 ### Примеры
 
 ``` dart
-// Classic header
+// Классический заголовок
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// Material-заголовок
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// Без эффекта отскока
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// Пользовательский виджет заголовка
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Pullable.builder(
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // Классический индикатор pull
+  waterDrop,         // Анимация водяной капли (по умолчанию)
+  materialClassic,   // Material Design классический
+  waterDropMaterial,  // Водяная капля Material
+  bezier,            // Анимация кривой Безье
 }
 ```
 
 Установите стиль через конструктор или конфигурацию:
 
 ``` dart
-// Via named constructor
+// Через именованный конструктор
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// Через конфигурацию
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // Сбросить на страницу 1
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // Загрузить следующую страницу
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// Запустить обновление программно
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// Запустить загрузку программно
 _controller.triggerLoading();
 
-// Check state
+// Проверить состояние
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
@@ -344,6 +344,7 @@ CollectionView<Product>.pullableGrid(
 | Параметр | Тип | Описание |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Обратный вызов для пагинированных данных (iteration начинается с 1) |
+| `enablePullDown` | `bool` | Включить жест pull-down-to-refresh (по умолчанию: `true`) |
 | `onRefresh` | `Function()?` | Обратный вызов после обновления |
 | `beforeRefresh` | `Function()?` | Хук перед началом обновления |
 | `afterRefresh` | `Function(dynamic)?` | Хук после обновления с данными |

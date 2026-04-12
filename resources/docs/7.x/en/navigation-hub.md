@@ -1006,6 +1006,19 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
+When popping from a nested navigator inside a tab, use `rootNavigator: true` to pop from the root navigator rather than the tab's local navigator:
+
+``` dart
+// Pop from the tab's local navigator (default)
+pop();
+
+// Pop from the root navigator — use this when a modal or overlay
+// was pushed using the root navigator
+pop(rootNavigator: true);
+```
+
+The `rootNavigator` parameter is available on `pop()` in `NyState`, `NyController`, `StateAction.pop()`, and the `BuildContext` extension.
+
 <div id="tabs"></div>
 
 ## Tabs
@@ -1251,6 +1264,14 @@ Future<bool> nextPage();
 /// Navigate to the previous page in a journey layout
 /// E.g. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Refresh a specific tab, forcing it to rebuild
+/// E.g. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Refresh all tabs, forcing them to rebuild
+/// E.g. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 To use a state action, you can do the following:
@@ -1263,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
 
 await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+
+MyNavigationHub.stateActions.refreshTab(0); // Force tab 0 to rebuild
+
+MyNavigationHub.stateActions.refresh(); // Force all tabs to rebuild
 ```
 
 <div id="loading-style"></div>

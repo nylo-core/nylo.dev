@@ -69,11 +69,16 @@ String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "
 int? score = Backpack.instance.read<int>("score");
 ```
 
-Backpack은 타입이 제공되면 JSON 문자열을 모델 객체로 자동 역직렬화합니다:
+Backpack은 타입이 제공되면 JSON 문자열과 원시 `Map<String, dynamic>` 값 모두를 모델 객체로 자동 역직렬화합니다:
 
 ``` dart
-// User 모델이 JSON으로 저장된 경우 역직렬화됩니다
+// User 모델이 JSON 문자열로 저장된 경우 역직렬화됩니다
 User? user = Backpack.instance.read<User>("current_user");
+
+// 원시 Map이 저장된 경우 (예: NyStorage의 syncKeys를 통해)도
+// 읽을 때 타입이 지정된 모델로 자동 역직렬화됩니다
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // User를 반환합니다
 ```
 
 <div id="saving-data"></div>

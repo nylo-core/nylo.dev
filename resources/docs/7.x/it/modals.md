@@ -47,9 +47,9 @@ Questo genera due cose:
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// Modal Opzioni di Pagamento
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// Usato in BottomSheetModal.showPaymentOptions()
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **Un metodo statico** aggiunto alla tua classe `BottomSheetModal` in `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart`:
 
 ``` dart
-/// Show Payment Options modal
+/// Mostra il modal Opzioni di Pagamento
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// Mostra il modal di Logout
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -142,11 +142,11 @@ Chiamalo da qualsiasi punto:
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// Con callback personalizzati
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Logica di logout personalizzata
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget header in cima |
 | `useSafeArea` | `bool` | `true` | Avvolge il contenuto in SafeArea |
 | `isScrollControlled` | `bool` | `false` | Permette al modal di essere scrollabile |
+| `isDismissible` | `bool` | `true` | Consente la chiusura toccando fuori |
+| `enableDrag` | `bool` | `true` | Consente il gesto di trascinamento per chiudere |
 | `showCloseButton` | `bool` | `false` | Mostra un pulsante X di chiusura |
 | `headerPadding` | `EdgeInsets?` | null | Padding quando l'header e' presente |
+| `contentPadding` | `EdgeInsets?` | null | Padding attorno al contenuto principale |
+| `actionsPadding` | `EdgeInsets?` | null | Padding attorno alla sezione azioni |
 | `backgroundColor` | `Color?` | null | Colore di sfondo del modal |
 | `showHandle` | `bool` | `true` | Mostra la maniglia di trascinamento in cima |
 | `closeButtonColor` | `Color?` | null | Colore di sfondo del pulsante di chiusura |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Utilizzo
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // elimina l'elemento
 }
 ```
 

@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // Hiển thị/ẩn biểu tượng toggle
+  passwordViewable: true, // Cho phép người dùng toggle hiển thị
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 Áp dụng mặt nạ nhập liệu cho dữ liệu định dạng như số điện thoại hoặc thẻ tín dụng:
 
 ``` dart
-// Phone number mask
+// Mặt nạ số điện thoại
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // Trả về giá trị không có mặt nạ: 1234567890
 )
 
-// Credit card mask
+// Mặt nạ thẻ tín dụng
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // Trả về giá trị có mặt nạ: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // Biểu tượng xóa tùy chỉnh
   onChanged: (value) {
-    // Handle search
+    // Xử lý tìm kiếm
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### Hành động trạng thái
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// Xóa trường
+actions.clear();
+
+// Đặt giá trị
+actions.setValue("new_value");
+
+// Di chuyển focus đến trường
+actions.focus();
+
+// Xóa focus khỏi trường
+actions.unfocus();
+
+// Toggle hiển thị mật khẩu (cho InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Kiểu văn bản nhãn |
 | `hintStyle` | `TextStyle?` | Kiểu văn bản gợi ý |
 | `prefixIcon` | `Widget?` | Biểu tượng trước đầu vào |
+| `suffixIcon` | `Widget?` | Biểu tượng sau đầu vào |
 
 ### Tham số mặt nạ
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Cho phép bật/tắt hiển thị mật khẩu |
 | `dummyData` | `String?` | Dữ liệu giả cho phát triển |
 | `stateName` | `String?` | Tên cho quản lý trạng thái |
+| `enableInteractiveSelection` | `bool` | Bật chọn văn bản (mặc định: `true`) |
 | `onChanged` | `Function(String)?` | Gọi khi giá trị thay đổi |

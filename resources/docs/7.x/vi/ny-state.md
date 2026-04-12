@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Xóa trang hiện tại khỏi ngăn xếp.
 
+Truyền `rootNavigator: true` để pop từ root navigator thay vì navigator cục bộ gần nhất. Điều này hữu ích bên trong các tab Navigation Hub khi một modal hoặc overlay được đẩy bằng root navigator.
+
 Ví dụ
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop từ root navigator (ví dụ: để đóng modal ở cấp root)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

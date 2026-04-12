@@ -25,13 +25,13 @@ Backpack, framework tarafından dahili olarak `Nylo` uygulama nesnesi, `EventBus
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// Save a value
+// Bir değer kaydet
 Backpack.instance.save("user_name", "Anthony");
 
-// Read a value (synchronous)
+// Bir değer oku (senkron)
 String? name = Backpack.instance.read("user_name");
 
-// Delete a value
+// Bir değer sil
 Backpack.instance.delete("user_name");
 ```
 
@@ -42,13 +42,13 @@ Backpack.instance.delete("user_name");
 Backpack **singleton deseni** kullanır -- `Backpack.instance` üzerinden erişilir:
 
 ``` dart
-// Save data
+// Veri kaydet
 Backpack.instance.save("theme", "dark");
 
-// Read data
+// Veri oku
 String? theme = Backpack.instance.read("theme"); // "dark"
 
-// Check if data exists
+// Verinin var olup olmadığını kontrol et
 bool hasTheme = Backpack.instance.contains("theme"); // true
 ```
 
@@ -59,21 +59,26 @@ bool hasTheme = Backpack.instance.contains("theme"); // true
 `read<T>()` metodunu kullanarak Backpack'ten değerler okuyun. Jenerik türleri ve isteğe bağlı varsayılan değeri destekler:
 
 ``` dart
-// Read a String
+// String oku
 String? name = Backpack.instance.read<String>("name");
 
-// Read with a default value
+// Varsayılan değer ile oku
 String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "Guest";
 
-// Read an int
+// int oku
 int? score = Backpack.instance.read<int>("score");
 ```
 
-Bir tür sağlandığında Backpack, JSON dizelerini otomatik olarak model nesnelerine dönüştürür:
+Backpack, bir tür sağlandığında saklanan değerleri otomatik olarak model nesnelerine dönüştürür. Bu hem JSON dizeleri hem de ham `Map<String, dynamic>` değerleri için çalışır:
 
 ``` dart
-// If a User model is stored as JSON, it will be deserialized
+// Bir User modeli JSON dizesi olarak saklanmışsa, dönüştürülür
 User? user = Backpack.instance.read<User>("current_user");
+
+// Ham bir Map saklanmışsa (örn. NyStorage'dan syncKeys ile), aynı zamanda
+// okuma sırasında otomatik olarak tipli modele dönüştürülür
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // User döndürür
 ```
 
 <div id="saving-data"></div>
@@ -93,11 +98,11 @@ Backpack.instance.save("cart_count", 3);
 Bir anahtarda saklanan listeye değer eklemek için `append()` kullanın:
 
 ``` dart
-// Append to a list
+// Listeye ekle
 Backpack.instance.append("recent_searches", "Flutter");
 Backpack.instance.append("recent_searches", "Dart");
 
-// Append with a limit (keeps only the last N items)
+// Sınır ile ekle (yalnızca son N öğeyi tutar)
 Backpack.instance.append("recent_searches", "Nylo", limit: 10);
 ```
 
@@ -191,14 +196,14 @@ bool isReady = Backpack.instance.isNyloInitialized(); // true
 ### Örnek
 
 ``` dart
-// Using helper functions
+// Yardımcı fonksiyonları kullanma
 backpackSave("locale", "en");
 
 String? locale = backpackRead<String>("locale"); // "en"
 
 backpackDelete("locale");
 
-// Access the Nylo instance
+// Nylo örneğine erişim
 Nylo nylo = backpackNylo();
 ```
 
@@ -209,13 +214,13 @@ Nylo nylo = backpackNylo();
 Backpack, kalıcı + bellek içi depolama kombinasyonu için `NyStorage` ile entegre çalışır:
 
 ``` dart
-// Save to both NyStorage (persistent) and Backpack (in-memory)
+// Hem NyStorage'a (kalıcı) hem de Backpack'e (bellek içi) kaydet
 await NyStorage.save("auth_token", "abc123", inBackpack: true);
 
-// Now accessible synchronously via Backpack
+// Artık Backpack üzerinden senkron erişilebilir
 String? token = Backpack.instance.read("auth_token");
 
-// When deleting from NyStorage, also clear from Backpack
+// NyStorage'dan silerken, Backpack'ten de temizle
 await NyStorage.deleteAll(andFromBackpack: true);
 ```
 
@@ -228,7 +233,7 @@ Bu desen, hem kalıcılık hem de hızlı senkron erişim gerektiren kimlik doğ
 ### API İstekleri için Auth Token Saklama
 
 ``` dart
-// In your auth interceptor
+// Kimlik doğrulama interceptor'ınızda
 class BearerAuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -246,24 +251,24 @@ class BearerAuthInterceptor extends Interceptor {
 ### Oturum Tabanlı Sepet Yönetimi
 
 ``` dart
-// Add items to a cart session
+// Sepet oturumuna öğeler ekle
 Backpack.instance.sessionUpdate("cart", "items", ["item_1", "item_2"]);
 Backpack.instance.sessionUpdate("cart", "total", 49.99);
 
-// Read cart data
+// Sepet verilerini oku
 Map<String, dynamic>? cart = Backpack.instance.sessionData("cart");
 
-// Clear the cart
+// Sepeti temizle
 Backpack.instance.sessionFlush("cart");
 ```
 
 ### Hızlı Özellik Bayrakları
 
 ``` dart
-// Store feature flags in Backpack for fast access
+// Hızlı erişim için özellik bayraklarını Backpack'te sakla
 backpackSave("feature_dark_mode", true);
 backpackSave("feature_notifications", false);
 
-// Check a feature flag
+// Özellik bayrağını kontrol et
 bool darkMode = backpackRead<bool>("feature_dark_mode") ?? false;
 ```

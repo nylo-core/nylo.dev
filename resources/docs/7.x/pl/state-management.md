@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+Jezeli masz juz instancje `StateActions` (np. ze statycznej metody `stateActions()` widgetu), mozesz wywolac na niej `action()` bezposrednio zamiast uzywac wolnej funkcji:
+
+``` dart
+// Uzywajac wolnej funkcji
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// Uzywajac metody instancji StateActions -- rownowazne, mniej powtorzen
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 Mozesz rowniez definiowac akcje stanu za pomoca metody `whenStateAction` w getterze `init`.
 
 ``` dart
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // ustaw na true, aby wlaczyc akcje stanu na tej stronie
 
 @override
 get stateActions => {

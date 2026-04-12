@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// Acciones de estado
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Constructor de disposicion
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Si el estado debe mantenerse
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// El indice inicial
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Paginas de navegacion
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Manejar el evento de toque
   @override
   onTap(int index) {
     super.onTap(index);
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Botones de navegacion
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Verificar si el recorrido puede continuar al siguiente paso
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Llamado antes de navegar al siguiente paso
   @override
   Future<void> onBeforeNext() async {
     // E.g. save data to session
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Llamado cuando el recorrido esta completo (en el ultimo paso)
   @override
   Future<void> onComplete() async {}
 }
@@ -914,7 +914,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// Callback cuando el recorrido se completa
   @override
   void Function()? get onJourneyComplete => () {
     // Navegar a tu página de inicio o siguiente destino
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+Al hacer pop desde un navegador anidado dentro de una pestaña, usa `rootNavigator: true` para salir del navegador raíz en lugar del navegador local de la pestaña:
+
+``` dart
+// Salir del navegador local de la pestaña (predeterminado)
+pop();
+
+// Salir del navegador raíz -- usa esto cuando un modal o superposición
+// fue abierto usando el navegador raíz
+pop(rootNavigator: true);
+```
+
+El parámetro `rootNavigator` está disponible en `pop()` en `NyState`, `NyController`, `StateAction.pop()`, y la extensión `BuildContext`.
 
 <div id="tabs"></div>
 
@@ -1251,6 +1264,14 @@ Future<bool> nextPage();
 /// Navegar a la página anterior en un diseño de recorrido
 /// Ej. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Actualizar una pestaña específica, forzándola a reconstruirse
+/// Ej. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Actualizar todas las pestañas, forzándolas a reconstruirse
+/// Ej. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Para usar una acción de estado, puedes hacer lo siguiente:
@@ -1263,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // Cambiar a la pestaña 2
 
 await MyNavigationHub.stateActions.nextPage(); // Recorrido: ir a la siguiente página
+
+MyNavigationHub.stateActions.refreshTab(0); // Forzar a la pestaña 0 a reconstruirse
+
+MyNavigationHub.stateActions.refresh(); // Forzar a todas las pestañas a reconstruirse
 ```
 
 <div id="loading-style"></div>

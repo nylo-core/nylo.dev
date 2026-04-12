@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// Acoes de estado
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Construtor de layout
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Se o estado deve ser mantido
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// O indice inicial
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Paginas de navegacao
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Tratar o evento de toque
   @override
   onTap(int index) {
     super.onTap(index);
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Botoes de navegacao
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Verifica se o journey pode continuar para o proximo passo
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Chamado antes de navegar para o proximo passo
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Ex: salvar dados na sessao
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Chamado quando o journey e concluido (no ultimo passo)
   @override
   Future<void> onComplete() async {}
 }
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+Ao sair de um navigator aninhado dentro de uma aba, use `rootNavigator: true` para sair do navigator raiz em vez do navigator local da aba:
+
+``` dart
+// Sair do navigator local da aba (padrão)
+pop();
+
+// Sair do navigator raiz — use isto quando uma modal ou overlay
+// foi aberto usando o navigator raiz
+pop(rootNavigator: true);
+```
+
+O parâmetro `rootNavigator` está disponível em `pop()` no `NyState`, `NyController`, `StateAction.pop()`, e na extensão `BuildContext`.
 
 <div id="tabs"></div>
 

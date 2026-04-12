@@ -10,6 +10,7 @@
   - [การจัดสไตล์ Placeholder](#styling-placeholders "การจัดสไตล์ Placeholder")
   - [Tap Callback](#tap-callbacks "Tap Callback")
   - [คีย์แบบ Pipe-Separated](#pipe-keys "คีย์แบบ Pipe-Separated")
+  - [สไตล์ Wildcard](#wildcard-styles "สไตล์ Wildcard")
   - [คีย์สำหรับการแปลภาษา](#localization-keys "คีย์สำหรับการแปลภาษา")
 - [พารามิเตอร์](#parameters "พารามิเตอร์")
 - [Text Extensions](#text-extensions "Text Extensions")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 สิ่งนี้จะ map สไตล์และ callback เดียวกันไปยัง placeholder ทั้งสามตัว
+
+<div id="wildcard-styles"></div>
+
+### สไตล์ Wildcard
+
+ใช้ `"*"` เป็น key เพื่อใช้สไตล์หรือ tap callback กับทุก placeholder ที่ไม่มี key เฉพาะของตัวเอง:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+ทั้ง `name` และ `app` ได้รับสไตล์ wildcard หาก placeholder มี key ชัดเจน key ชัดเจนจะมีความสำคัญเหนือกว่า `"*"`
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // ใช้กับ "cancel" เท่านั้น
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // tap บน placeholder ที่ไม่ตรงกับ key ใด
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

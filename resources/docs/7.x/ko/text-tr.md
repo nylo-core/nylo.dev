@@ -60,6 +60,8 @@ Widget build(BuildContext context) {
 }
 ```
 
+활성 로케일 파일에 키가 없으면 {{ config('app.name') }}은 원시 키 문자열을 반환하기 전에 폴백 언어(`lib/config/localization.dart`에서 설정)에서 자동으로 키를 찾습니다. 이는 최상위 키와 점 표기법의 중첩 키 모두에 적용됩니다.
+
 <div id="string-interpolation"></div>
 
 ## 문자열 보간

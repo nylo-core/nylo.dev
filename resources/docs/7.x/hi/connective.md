@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [परिचय](#introduction "परिचय")
 - [Connective विजेट](#connective-widget "Connective विजेट")
-    - [स्टेट-आधारित बिल्डर्स](#state-builders "स्टेट-आधारित बिल्डर्स")
     - [कस्टम बिल्डर](#custom-builder "कस्टम बिल्डर")
 - [OfflineBanner विजेट](#offline-banner "OfflineBanner विजेट")
 - [NyConnectivity हेल्पर](#connectivity-helper "NyConnectivity हेल्पर")
@@ -25,39 +24,22 @@
 
 `Connective` विजेट कनेक्टिविटी बदलावों को सुनता है और वर्तमान नेटवर्क स्थिति के आधार पर रीबिल्ड होता है।
 
-<div id="state-builders"></div>
-
-### स्टेट-आधारित बिल्डर्स
-
-प्रत्येक कनेक्शन प्रकार के लिए अलग-अलग विजेट्स प्रदान करें:
+जब डिवाइस में इंटरनेट नहीं है (wifi, mobile, या ethernet सभी अनुपस्थित हों) तो फॉलबैक विजेट दिखाने के लिए `noInternet` का उपयोग करें:
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### उपलब्ध स्टेट्स
-
-| प्रॉपर्टी | विवरण |
-|----------|-------------|
-| `onWifi` | WiFi से कनेक्ट होने पर विजेट |
-| `onMobile` | मोबाइल डेटा से कनेक्ट होने पर विजेट |
-| `onEthernet` | ईथरनेट से कनेक्ट होने पर विजेट |
-| `onVpn` | VPN से कनेक्ट होने पर विजेट |
-| `onBluetooth` | ब्लूटूथ से कनेक्ट होने पर विजेट |
-| `onOther` | अन्य कनेक्शन प्रकारों के लिए विजेट |
-| `onNone` | ऑफ़लाइन होने पर विजेट |
-| `child` | कोई विशिष्ट हैंडलर न होने पर डिफ़ॉल्ट विजेट |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // कनेक्शन प्रकार दिखाएँ
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 बिल्डर को प्राप्त होता है:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` एकाधिक कनेक्शन जाँचने के लिए
 
 ### बदलावों को सुनना
@@ -117,16 +99,16 @@ Connective(
 
 ## OfflineBanner विजेट
 
-ऑफ़लाइन होने पर स्क्रीन के शीर्ष पर एक बैनर दिखाएँ:
+जब इंटरनेट नहीं है (wifi, mobile, या ethernet सभी अनुपस्थित हों) तो स्क्रीन के शीर्ष पर एक बैनर दिखाएँ:
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // आपका मुख्य कंटेंट
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // ऑफ़लाइन बैनर (ऑनलाइन होने पर अपने आप छुपता है)
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // स्लाइड इन/आउट एनिमेशन
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ OfflineBanner(
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // API अनुरोध करें
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // कैश से लोड करें
   final data = await cache.getData();
 }
 
-// Or check if offline
+// या ऑफ़लाइन जाँचें
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,34 +156,45 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // WiFi पर बड़ी फ़ाइलें डाउनलोड करें
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // डेटा उपयोग के बारे में चेतावनी दें
   showDataWarning();
 }
 
-// Other methods:
+// अन्य मेथड्स:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### इंटरनेट जाँचें
+
+`hasInternet()` `isOnline()` से अधिक सख्त है — यह केवल `true` रिटर्न करता है जब डिवाइस wifi, mobile, या ethernet के माध्यम से कनेक्ट हो। VPN, bluetooth, और satellite कनेक्शन शामिल नहीं हैं।
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // wifi, mobile, या ethernet के माध्यम से इंटरनेट की पुष्टि हुई
+  await syncData();
+}
+```
+
 ### वर्तमान स्थिति प्राप्त करें
 
 ``` dart
-// Get all active connection types
+// सभी सक्रिय कनेक्शन प्रकार प्राप्त करें
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// मानव-पठनीय स्ट्रिंग प्राप्त करें
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None", आदि
 ```
 
 ### बदलावों को सुनें
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// समाप्त होने पर कैंसिल करना न भूलें
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### सशर्त निष्पादन
 
 ``` dart
-// Execute only when online (returns null if offline)
+// केवल ऑनलाइन होने पर निष्पादित करें (ऑफ़लाइन होने पर null रिटर्न करता है)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// स्थिति के आधार पर अलग-अलग कॉलबैक निष्पादित करें
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ final result = await NyConnectivity.when(
 ### ऑफ़लाइन विकल्प दिखाएँ
 
 ``` dart
-// Show a different widget when offline
+// ऑफ़लाइन होने पर अलग विजेट दिखाएँ
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### केवल ऑनलाइन होने पर दिखाएँ
 
 ``` dart
-// Hide completely when offline
+// ऑफ़लाइन होने पर पूरी तरह छुपाएँ
 SyncButton().onlyOnline()
 ```
 
 ### केवल ऑफ़लाइन होने पर दिखाएँ
 
 ``` dart
-// Show only when offline
+// केवल ऑफ़लाइन होने पर दिखाएँ
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | पैरामीटर | टाइप | डिफ़ॉल्ट | विवरण |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | WiFi पर होने पर विजेट |
-| `onMobile` | `Widget?` | - | मोबाइल डेटा पर होने पर विजेट |
-| `onEthernet` | `Widget?` | - | ईथरनेट पर होने पर विजेट |
-| `onVpn` | `Widget?` | - | VPN पर होने पर विजेट |
-| `onBluetooth` | `Widget?` | - | ब्लूटूथ पर होने पर विजेट |
-| `onOther` | `Widget?` | - | अन्य कनेक्शन के लिए विजेट |
-| `onNone` | `Widget?` | - | ऑफ़लाइन होने पर विजेट |
-| `child` | `Widget?` | - | डिफ़ॉल्ट विजेट |
-| `showLoadingOnInit` | `bool` | `false` | जाँच करते समय लोडिंग दिखाएँ |
-| `loadingWidget` | `Widget?` | - | कस्टम लोडिंग विजेट |
+| `noInternet` | `Widget?` | - | विजेट जब wifi, mobile और ethernet सभी अनुपस्थित हों |
+| `child` | `Widget?` | - | इंटरनेट उपलब्ध होने पर दिखाया जाने वाला विजेट |
 | `onConnectivityChanged` | `Function?` | - | बदलाव पर कॉलबैक |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | ईथरनेट के माध्यम से कनेक्ट |
 | `vpn` | VPN के माध्यम से कनेक्ट |
 | `bluetooth` | ब्लूटूथ के माध्यम से कनेक्ट |
+| `satellite` | सैटेलाइट के माध्यम से कनेक्ट |
 | `other` | अन्य कनेक्शन प्रकार |
 | `none` | कोई कनेक्शन नहीं |

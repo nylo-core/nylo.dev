@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Powyższe polecenie utworzy nowy widget, jeśli nie istnieje, w katalogu `lib/resources/widgets/`.
 
+Wszystkie polecenia `make:*` akceptują separator ścieżki w nazwie, aby umieścić plik w podkatalogu:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Spowoduje to utworzenie widgetu w `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Wymuszenie tworzenia stateless widget
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Spowoduje to utworzenie nowego zdarzenia w `lib/app/events`.
 
+Użyj separatora ścieżki, aby zorganizować zdarzenie w podkatalogu:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Spowoduje to utworzenie zdarzenia w `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Wymuszenie tworzenia zdarzenia
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Nowo utworzony provider zostanie umieszczony w `lib/app/providers/`.
+
+Użyj separatora ścieżki, aby zorganizować provider w podkatalogu:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Spowoduje to utworzenie providera w `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Spowoduje to utworzenie nowego formularza w `lib/app/forms`.
 
+Użyj separatora ścieżki, aby zorganizować formularz w podkatalogu:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Spowoduje to utworzenie formularza w `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Wymuszenie tworzenia formularza
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Spowoduje to utworzenie nowego strażnika trasy w `lib/app/route_guards`.
+
+Użyj separatora ścieżki, aby zorganizować strażnika w podkatalogu:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Spowoduje to utworzenie strażnika w `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 

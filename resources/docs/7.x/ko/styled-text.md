@@ -10,6 +10,7 @@
   - [플레이스홀더 스타일링](#styling-placeholders "플레이스홀더 스타일링")
   - [탭 콜백](#tap-callbacks "탭 콜백")
   - [파이프 구분 키](#pipe-keys "파이프 구분 키")
+  - [와일드카드 스타일](#wildcard-styles "와일드카드 스타일")
   - [현지화 키](#localization-keys "현지화 키")
 - [매개변수](#parameters "매개변수")
 - [Text 확장](#text-extensions "Text 확장")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 이렇게 하면 세 플레이스홀더 모두에 동일한 스타일과 콜백이 매핑됩니다.
+
+<div id="wildcard-styles"></div>
+
+### 와일드카드 스타일
+
+`"*"`를 키로 사용하면 고유한 키가 없는 모든 플레이스홀더에 스타일이나 탭 콜백을 적용할 수 있습니다:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name`과 `app` 모두 와일드카드 스타일을 받습니다. 플레이스홀더에 명시적인 키도 있는 경우, 명시적인 키가 `"*"`보다 우선합니다.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // "cancel"에만 적용
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // 매칭되지 않는 플레이스홀더 탭 시
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

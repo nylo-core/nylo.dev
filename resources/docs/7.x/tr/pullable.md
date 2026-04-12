@@ -26,7 +26,7 @@
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // Taze verileri getir
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Kullanıcı listeyi aşağı çektiğinde, `onRefresh` geri çağırması tetikl
 ### Örnekler
 
 ``` dart
-// Classic header
+// Klasik baslik
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// Material baslik
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// Sicramma efekti yok
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// Ozel baslik widget'i
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Beş yerleşik başlık animasyonundan birini seçin:
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // Klasik cekme gostergesi
+  waterDrop,         // Su damlasi animasyonu (varsayilan)
+  materialClassic,   // Material Design klasik
+  waterDropMaterial,  // Material su damlasi
+  bezier,            // Bezier egrisi animasyonu
 }
 ```
 
 Stili constructor veya yapılandırma üzerinden ayarlayın:
 
 ``` dart
-// Via named constructor
+// Adlandirilmis constructor ile
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// Yapilandirma ile
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // 1. sayfaya sifirla
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // Sonraki sayfayi yukle
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// Yenilemeyi programatik olarak tetikle
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// Yuklemeyi programatik olarak tetikle
 _controller.triggerLoading();
 
-// Check state
+// Durumu kontrol et
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
@@ -344,6 +344,7 @@ CollectionView<Product>.pullableGrid(
 | Parametre | Tür | Açıklama |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Sayfalanmış veri geri çağırması (iteration 1'den başlar) |
+| `enablePullDown` | `bool` | Asagi cekerek yenileme hareketini etkinlestir (varsayilan: `true`) |
 | `onRefresh` | `Function()?` | Yenilemeden sonra geri çağırma |
 | `beforeRefresh` | `Function()?` | Yenileme başlamadan önceki kanca |
 | `afterRefresh` | `Function(dynamic)?` | Verilerle birlikte yenilemeden sonraki kanca |

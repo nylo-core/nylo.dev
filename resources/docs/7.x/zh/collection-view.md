@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // 添加项目之间的间距
   padding: EdgeInsets.all(16),
 )
 ```
@@ -187,7 +187,7 @@ CollectionView<Product>.grid(
 ``` dart
 CollectionView<Post>.pullable(
   data: (int iteration) async {
-    // iteration starts at 1 and increments on each load
+    // iteration 从 1 开始，每次加载时递增
     return await api<ApiService>((request) =>
       request.get('/posts?page=$iteration')
     );
@@ -198,7 +198,7 @@ CollectionView<Post>.pullable(
   onRefresh: () {
     print('List was refreshed!');
   },
-  headerStyle: 'WaterDropHeader', // Pull indicator style
+  headerStyle: 'WaterDropHeader', // 下拉指示器样式
 )
 ```
 
@@ -260,7 +260,7 @@ CollectionView<Photo>.pullableGrid(
 使用 `loadingStyle` 自定义加载指示器：
 
 ``` dart
-// Normal loading with custom widget
+// 使用自定义组件的普通加载
 CollectionView<Item>(
   data: () async => await fetchItems(),
   builder: (context, item) => ItemTile(item: item.data),
@@ -269,7 +269,7 @@ CollectionView<Item>(
   ),
 )
 
-// Skeletonizer loading effect
+// 骨架屏加载效果
 CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserCard(user: item.data),
@@ -331,7 +331,7 @@ CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserTile(user: item.data),
   transform: (List<User> users) {
-    // Filter to only active users
+    // 仅过滤活跃用户
     return users.where((u) => u.isActive).toList();
   },
 )
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## 更新状态
 
-您可以通过给 CollectionView 一个 `stateName` 来更新或重置它：
+您可以通过为 CollectionView 指定 `stateName` 并调用 `CollectionView.stateActions()` 来以编程方式更新它：
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### 重置列表
+使用 `stateActions` 在运行时操作列表：
 
 ``` dart
-// Resets and reloads data from scratch
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// 从头开始重置并重新加载数据
+actions.reset();
+
+// 刷新数据（重新获取并重置分页）
+actions.refreshData();
+
+// 在列表末尾添加项目
+actions.addItem(newTodo);
+
+// 在特定索引处插入项目
+actions.insertItem(0, newTodo);
+
+// 按索引移除项目
+actions.removeFromIndex(2);
+
+// 替换特定索引处的项目
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### 移除项目
-
-``` dart
-// Remove item at index 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### 触发一般更新
-
-``` dart
-// Using the global updateState helper
-updateState("my_todo_list");
-```
+所有 `stateActions` 方法在同步和异步数据的重建过程中都能正确持久化。`refreshData()` 还会重置分页迭代计数器，使可拉动列表从第 1 页重新开始。
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | 参数 | 类型 | 描述 |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | 分页数据函数 |
+| `enablePullDown` | `bool` | 启用下拉刷新手势（默认：`true`） |
 | `onRefresh` | `Function()?` | 刷新完成时的回调 |
 | `beforeRefresh` | `Function()?` | 刷新前的回调 |
 | `afterRefresh` | `Function(dynamic)?` | 数据加载后的回调 |

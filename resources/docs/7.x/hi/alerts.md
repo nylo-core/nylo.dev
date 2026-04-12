@@ -14,6 +14,7 @@
 - [कस्टम टोस्ट स्टाइल](#custom-styles "कस्टम टोस्ट स्टाइल")
   - [स्टाइल रजिस्टर करना](#registering-styles "स्टाइल रजिस्टर करना")
   - [स्टाइल फैक्ट्री बनाना](#creating-a-style-factory "स्टाइल फैक्ट्री बनाना")
+  - [डेटा-अवेयर टोस्ट स्टाइल](#data-aware-toast-styles "डेटा-अवेयर टोस्ट स्टाइल")
 - [AlertTab](#alert-tab "AlertTab")
 - [उदाहरण](#examples "उदाहरण")
 
@@ -32,16 +33,16 @@
 किसी भी `NyState` पेज में कन्वीनिएंस मेथड का उपयोग करके टोस्ट नोटिफ़िकेशन दिखाएँ:
 
 ``` dart
-// Success toast
+// सफलता टोस्ट
 showToastSuccess(description: "Item saved successfully");
 
-// Warning toast
+// चेतावनी टोस्ट
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
+// जानकारी टोस्ट
 showToastInfo(description: "New version available");
 
-// Danger toast
+// खतरा टोस्ट
 showToastDanger(description: "Failed to save item");
 ```
 
@@ -103,28 +104,28 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // सफलता
     showToastSuccess(description: "Saved!");
 
-    // With custom title
+    // कस्टम शीर्षक के साथ
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
+    // चेतावनी
     showToastWarning(description: "Check your input");
 
-    // Info
+    // जानकारी
     showToastInfo(description: "Tip: Swipe left to delete");
 
-    // Danger
+    // खतरा
     showToastDanger(description: "Something went wrong");
 
-    // Oops (uses danger style)
+    // ओह्ह (danger स्टाइल उपयोग करता है)
     showToastOops(description: "That didn't work");
 
-    // Sorry (uses danger style)
+    // माफ़ करें (danger स्टाइल उपयोग करता है)
     showToastSorry(description: "We couldn't process your request");
 
-    // Custom style by ID
+    // ID द्वारा कस्टम स्टाइल
     showToastCustom(id: "custom", description: "Custom alert!");
   }
 }
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // टोस्ट पर टैप होने पर कॉल होता है
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // टोस्ट डिसमिस होने पर कॉल होता है
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // टोस्ट दृश्यमान होने पर कॉल होता है
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | आवश्यक | बिल्ड कॉन्टेक्स्ट |
 | `id` | `String` | `'success'` | टोस्ट स्टाइल ID |
-| `title` | `String?` | null | डिफ़ॉल्ट शीर्षक को ओवरराइड करें |
+| `title` | `String?` | null | शीर्षक टेक्स्ट; टोस्ट विजेट को जैसा है वैसा पास किया जाता है |
 | `description` | `String?` | null | विवरण टेक्स्ट |
+| `data` | `Map<String, dynamic>?` | null | डेटा-अवेयर टोस्ट स्टाइल को रनटाइम पर पास किए जाने वाले key-value जोड़े; `title` और `description` मिलते-जुलते key पर प्राथमिकता लेते हैं |
 | `duration` | `Duration?` | null | टोस्ट कितनी देर प्रदर्शित हो |
 | `position` | `ToastNotificationPosition?` | null | स्क्रीन पर कहाँ दिखे |
 | `action` | `VoidCallback?` | null | टैप कॉलबैक |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 टोस्ट स्क्रीन पर कहाँ दिखे यह नियंत्रित करें:
 
 ``` dart
-// Top of screen (default)
+// स्क्रीन के ऊपर (डिफ़ॉल्ट)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// स्क्रीन के नीचे
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// स्क्रीन के बीच में
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,79 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### डेटा-अवेयर टोस्ट स्टाइल
+
+<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
+रनटाइम पर कॉल के समय डेटा प्राप्त करने वाली टोस्ट स्टाइल रजिस्टर करने के लिए `ToastStyleDataFactory` का उपयोग करें। यह तब उपयोगी है जब टोस्ट की सामग्री — जैसे उपयोगकर्ता का नाम या अवतार — रजिस्ट्रेशन के समय ज्ञात नहीं होती।
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+`registerWithData()` के साथ डेटा-अवेयर स्टाइल रजिस्टर करें:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+या इसे अपने `AppProvider` में स्टेटिक स्टाइल के साथ रजिस्टर करें:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+रनटाइम पर `data` मैप के साथ इसे कॉल करें:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+यदि आप `title` या `description` भी पास करते हैं, तो वे `data` में मिलते-जुलते key पर प्राथमिकता लेते हैं।
+
+यदि आपको विजेट स्वयं बनाना है तो `ToastNotificationRegistry.resolve(id, data)` सीधे उपयोग करें:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // Icone de basculement afficher/masquer
+  passwordViewable: true, // Permettre a l'utilisateur de basculer la visibilite
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 Appliquez des masques de saisie pour les donnees formatees comme les numeros de telephone ou les cartes de credit :
 
 ``` dart
-// Phone number mask
+// Masque de numero de telephone
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // Retourne la valeur non masquee : 1234567890
 )
 
-// Credit card mask
+// Masque de carte de credit
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // Retourne la valeur masquee : 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // Icone d'effacement personnalisee
   onChanged: (value) {
-    // Handle search
+    // Traiter la recherche
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### Actions d'etat
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// Effacer le champ
+actions.clear();
+
+// Definir une valeur
+actions.setValue("new_value");
+
+// Donner le focus au champ
+actions.focus();
+
+// Retirer le focus du champ
+actions.unfocus();
+
+// Basculer la visibilite du mot de passe (pour InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Style du texte du label |
 | `hintStyle` | `TextStyle?` | Style du texte de remplacement |
 | `prefixIcon` | `Widget?` | Icone avant la saisie |
+| `suffixIcon` | `Widget?` | Icone apres la saisie |
 
 ### Parametres de masquage
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Permettre le basculement de visibilite du mot de passe |
 | `dummyData` | `String?` | Donnees factices pour le developpement |
 | `stateName` | `String?` | Nom pour la gestion d'etat |
+| `enableInteractiveSelection` | `bool` | Activer la selection de texte (defaut : `true`) |
 | `onChanged` | `Function(String)?` | Appele lorsque la valeur change |

@@ -10,6 +10,8 @@
   - [Stilizzare i Placeholder](#styling-placeholders "Stilizzare i Placeholder")
   - [Callback al Tap](#tap-callbacks "Callback al Tap")
   - [Chiavi Separate da Pipe](#pipe-keys "Chiavi Separate da Pipe")
+  - [Stili Wildcard](#wildcard-styles "Stili Wildcard")
+  - [Chiavi di Localizzazione](#localization-keys "Chiavi di Localizzazione")
 - [Parametri](#parameters "Parametri")
 - [Estensioni Text](#text-extensions "Estensioni Text")
   - [Stili Tipografici](#typography-styles "Stili Tipografici")
@@ -32,7 +34,7 @@ StyledText supporta due modalita':
 ## Utilizzo Base
 
 ``` dart
-// Children mode - list of Text widgets
+// Modalita' children - lista di widget Text
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Modalita' template - sintassi placeholder
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 Questo mappa lo stesso stile e callback a tutti e tre i placeholder.
 
+<div id="wildcard-styles"></div>
+
+### Stili Wildcard
+
+Usa `"*"` come chiave per applicare uno stile o un callback al tap a ogni placeholder che non ha la propria chiave specifica:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Sia `name` che `app` ricevono lo stile wildcard. Se un placeholder ha anche una chiave esplicita, la chiave esplicita ha la precedenza su `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // si applica solo a "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // tap su qualsiasi placeholder non corrispondente
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### Chiavi di Localizzazione
+
+Usa la sintassi `@{{key:text}}` per separare la **chiave di ricerca** dal **testo visualizzato**. Questo e' utile per la localizzazione — la chiave rimane invariata in tutti i locale mentre il testo visualizzato cambia per lingua.
+
+``` dart
+// Nei tuoi file locale:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN visualizza: "Learn Languages, Reading and Speaking in AppName"
+// ES visualizza: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+La parte prima di `:` e' la **chiave** usata per cercare stili e callback al tap. La parte dopo `:` e' il **testo visualizzato** che appare sullo schermo. Senza `:`, il placeholder si comporta esattamente come prima — completamente compatibile con le versioni precedenti.
+
+Funziona con tutte le funzionalita' esistenti incluse le [chiavi separate da pipe](#pipe-keys) e i [callback al tap](#tap-callbacks).
+
 <div id="parameters"></div>
 
 ## Parametri
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Metodi di Utilita'
 
 ``` dart
-// Font weight
+// Peso del font
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Allineamento
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Numero massimo di righe
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Famiglia del font
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Dimensione del font
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Stile personalizzato
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
 // Padding
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Copia con modifiche
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

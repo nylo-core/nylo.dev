@@ -30,6 +30,7 @@
   - [स्लाइडर फ़ील्ड्स](#slider-fields "स्लाइडर फ़ील्ड्स")
   - [रेंज स्लाइडर फ़ील्ड्स](#range-slider-fields "रेंज स्लाइडर फ़ील्ड्स")
   - [कस्टम फ़ील्ड्स](#custom-fields "कस्टम फ़ील्ड्स")
+  - [बिल्डर फ़ील्ड्स](#builder-fields "बिल्डर फ़ील्ड्स")
   - [विजेट फ़ील्ड्स](#widget-fields "विजेट फ़ील्ड्स")
 - [FormCollection](#form-collection "FormCollection")
 - [फ़ॉर्म वैलिडेशन](#form-validation "फ़ॉर्म वैलिडेशन")
@@ -239,7 +240,7 @@ Field.text("Name",
 ``` dart
 Field.number("Age")
 
-// Decimal numbers
+// दशमलव संख्याएँ
 Field.number("Score", decimal: true)
 ```
 
@@ -252,7 +253,7 @@ Field.number("Score", decimal: true)
 ``` dart
 Field.password("Password")
 
-// With visibility toggle
+// विज़िबिलिटी टॉगल के साथ
 Field.password("Password", viewable: true)
 ```
 
@@ -333,14 +334,14 @@ Field.date("Birthday",
   ),
 )
 
-// Disable the clear button
+// क्लियर बटन निष्क्रिय करें
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     canClear: false,
   ),
 )
 
-// Custom clear icon
+// कस्टम क्लियर आइकन
 Field.date("Birthday",
   style: FieldStyleDateTimePicker(
     clearIconData: Icons.close,
@@ -379,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Returns the formatted value
+  maskReturnValue: true, // फ़ॉर्मेट की गई वैल्यू रिटर्न करता है
 )
 ```
 
@@ -430,7 +431,7 @@ Field.picker("Category",
   options: FormCollection.from(["Electronics", "Clothing", "Books"]),
 )
 
-// With key-value pairs
+// की-वैल्यू जोड़ों के साथ
 Field.picker("Country",
   options: FormCollection.fromMap({
     "us": "United States",
@@ -456,7 +457,7 @@ Field.picker("Country",
   ),
 )
 
-// With a custom active color
+// कस्टम एक्टिव कलर के साथ
 FieldStylePicker(
   listTileStyle: PickerListTileStyle.radio(activeColor: Colors.blue),
 )
@@ -533,7 +534,7 @@ Field.chips("Tags",
   options: FormCollection.from(["Featured", "Sale", "New"]),
 )
 
-// With key-value pairs
+// की-वैल्यू जोड़ों के साथ
 Field.chips("Engine Size",
   options: FormCollection.fromMap({
     "125": "125cc",
@@ -597,6 +598,42 @@ Field.custom("My Field",
 
 `child` पैरामीटर के लिए `NyFieldStatefulWidget` को एक्सटेंड करने वाला विजेट आवश्यक है। यह आपको फ़ील्ड की रेंडरिंग और व्यवहार पर पूर्ण नियंत्रण देता है।
 
+<div id="builder-fields"></div>
+
+### बिल्डर फ़ील्ड्स
+
+`NyFieldStatefulWidget` को सबक्लास किए बिना कस्टम इनलाइन फ़ॉर्म फ़ील्ड बनाने के लिए `Field.builder()` का उपयोग करें। builder फ़ंक्शन को वर्तमान वैल्यू, फ़ॉर्म को वैल्यू परिवर्तन रिपोर्ट करने के लिए एक `onChanged` कॉलबैक, और UI रीबिल्ड ट्रिगर करने के लिए एक `setState` कॉलबैक मिलता है।
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // field widget को रीबिल्ड करें
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+तीसरा पैरामीटर वर्तमान फ़ील्ड वैल्यू है और चौथा `setState` है। यदि आपके builder को `setState` की आवश्यकता नहीं है, तो आप लीगेसी 3-आर्गुमेंट सिग्नेचर (`NyFieldBuilderLegacy`) का उपयोग कर सकते हैं, जो अभी भी समर्थित है:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
+
 <div id="widget-fields"></div>
 
 ### विजेट फ़ील्ड्स
@@ -621,19 +658,19 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### FormCollection बनाना
 
 ``` dart
-// From a list of strings (value and label are the same)
+// स्ट्रिंग्स की लिस्ट से (वैल्यू और लेबल एक ही हैं)
 FormCollection.from(["Red", "Green", "Blue"])
 
-// Same as above, explicit
+// ऊपर जैसा ही, स्पष्ट रूप से
 FormCollection.fromArray(["Red", "Green", "Blue"])
 
-// From a map (key = value, value = label)
+// मैप से (key = value, value = label)
 FormCollection.fromMap({
   "us": "United States",
   "ca": "Canada",
 })
 
-// From structured data (useful for API responses)
+// स्ट्रक्चर्ड डेटा से (API रिस्पॉन्स के लिए उपयोगी)
 FormCollection.fromKeyValue([
   {"value": "en", "label": "English"},
   {"value": "es", "label": "Spanish"},
@@ -673,10 +710,10 @@ options.labels;                    // ["United States", "Canada"]
 `FormValidator` के साथ `validator` पैरामीटर का उपयोग करके किसी भी फ़ील्ड में वैलिडेशन जोड़ें:
 
 ``` dart
-// Named constructor
+// नेम्ड कंस्ट्रक्टर
 Field.email("Email", validator: FormValidator.email())
 
-// Chained rules
+// चेन किए गए नियम
 Field.text("Username",
   validator: FormValidator()
     .notEmpty()
@@ -684,17 +721,17 @@ Field.text("Username",
     .maxLength(20)
 )
 
-// Password with strength level
+// स्ट्रेंथ लेवल के साथ पासवर्ड
 Field.password("Password",
   validator: FormValidator.password(strength: 2)
 )
 
-// Boolean validation
+// बूलियन वैलिडेशन
 Field.checkbox("Terms",
   validator: FormValidator.booleanTrue(message: "You must accept the terms")
 )
 
-// Custom inline validation
+// कस्टम इनलाइन वैलिडेशन
 Field.number("Age",
   validator: FormValidator.custom(
     message: "Age must be between 18 and 100",
@@ -704,7 +741,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — जब फ़ील्ड खाली हो तो वैलिडेशन पास हो जाता है
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` एक वैलिडेटर को वैकल्पिक के रूप में चिह्नित करता है। जब फ़ील्ड वैल्यू null या खाली होती है, तो सभी वैलिडेशन नियम स्किप हो जाते हैं और फ़ील्ड पास हो जाती है। जब फ़ील्ड में वैल्यू होती है, तो सभी नियम सामान्य रूप से लागू होते हैं। किसी भी `FormValidator` के अंत में इसे चेन करें।
 
 जब फ़ॉर्म सबमिट किया जाता है, तो सभी वैलिडेटर्स जाँचे जाते हैं। यदि कोई विफल होता है, तो पहले एरर संदेश के साथ टोस्ट एरर दिखाया जाता है और `onFailure` कॉलबैक कॉल किया जाता है।
 
@@ -785,16 +829,16 @@ class CreatePostForm extends NyFormWidget {
 | `options` | पिकर, चिप या रेडियो फ़ील्ड्स के लिए ऑप्शंस |
 
 ``` dart
-// Set only options (no initial value)
+// केवल ऑप्शन सेट करें (कोई इनिशियल वैल्यू नहीं)
 "Category": define(options: categories),
 
-// Set only an initial value
+// केवल इनिशियल वैल्यू सेट करें
 "Price": define(value: "100"),
 
-// Set both a value and options
+// वैल्यू और ऑप्शन दोनों सेट करें
 "Country": define(value: "us", options: countries),
 
-// Plain values still work for simple fields
+// सरल फ़ील्ड्स के लिए सादे मान भी काम करते हैं
 "Name": "John",
 ```
 
@@ -818,7 +862,7 @@ EditAccountForm(
 कहीं से भी फ़ील्ड वैल्यू सेट करने के लिए `NyFormActions` का उपयोग करें:
 
 ``` dart
-// Set a single field value
+// एकल फ़ील्ड वैल्यू सेट करें
 EditAccountForm.actions.updateField("First Name", "Jane");
 ```
 
@@ -841,7 +885,7 @@ EditAccountForm.actions.setOptions("Category", FormCollection.from(["New Option 
 ``` dart
 EditAccountForm(
   onSubmit: (data) {
-    // data is a Map<String, dynamic>
+    // data एक Map<String, dynamic> है
     // {first_name: "Jane", last_name: "Doe", email: "jane@example.com"}
     print(data);
   },
@@ -856,10 +900,10 @@ EditAccountForm(
 ### डेटा क्लियर करना
 
 ``` dart
-// Clear all fields
+// सभी फ़ील्ड्स क्लियर करें
 EditAccountForm.actions.clear();
 
-// Clear a specific field
+// एक विशिष्ट फ़ील्ड क्लियर करें
 EditAccountForm.actions.clearField("First Name");
 ```
 
@@ -869,13 +913,13 @@ EditAccountForm.actions.clearField("First Name");
 ### फ़ील्ड्स अपडेट करना
 
 ``` dart
-// Update a field value
+// फ़ील्ड वैल्यू अपडेट करें
 EditAccountForm.actions.updateField("First Name", "Jane");
 
-// Refresh the form UI
+// फ़ॉर्म UI रिफ्रेश करें
 EditAccountForm.actions.refresh();
 
-// Refresh form fields (re-calls fields())
+// फ़ॉर्म फ़ील्ड्स रिफ्रेश करें (fields() को फिर से कॉल करता है)
 EditAccountForm.actions.refreshForm();
 ```
 
@@ -930,25 +974,25 @@ UserInfoForm(
 ``` dart
 @override
 fields() => [
-  // Single field (full width)
+  // एकल फ़ील्ड (पूरी चौड़ाई)
   Field.text("Title"),
 
-  // Two fields in a row
+  // एक पंक्ति में दो फ़ील्ड्स
   [
     Field.text("First Name"),
     Field.text("Last Name"),
   ],
 
-  // Another single field
+  // एक और एकल फ़ील्ड
   Field.textArea("Bio"),
 
-  // Slider and range slider in a row
+  // एक पंक्ति में slider और range slider
   [
     Field.slider("Rating", style: FieldStyleSlider(min: 0, max: 10)),
     Field.rangeSlider("Budget", style: FieldStyleRangeSlider(min: 0, max: 1000)),
   ],
 
-  // Embed a non-field widget
+  // नॉन-फ़ील्ड विजेट एम्बेड करें
   Field.widget(child: Divider()),
 
   Field.email("Email"),
@@ -965,13 +1009,13 @@ fields() => [
 `Field` पर `hide()` और `show()` मेथड्स का उपयोग करके प्रोग्रामेटिक रूप से फ़ील्ड्स दिखाएँ या छुपाएँ। आप अपनी फ़ॉर्म क्लास के अंदर या `onChanged` कॉलबैक के माध्यम से फ़ील्ड्स तक पहुँच सकते हैं:
 
 ``` dart
-// Inside your NyFormWidget subclass or onChanged callback
+// अपने NyFormWidget सबक्लास या onChanged कॉलबैक के अंदर
 Field nameField = ...;
 
-// Hide the field
+// फ़ील्ड छुपाएँ
 nameField.hide();
 
-// Show the field
+// फ़ील्ड दिखाएँ
 nameField.show();
 ```
 
@@ -1047,15 +1091,15 @@ Field.chips("Tags",
 | `NyFormWidget.stateRefreshForm(name)` | फ़ॉर्म फ़ील्ड्स रिफ्रेश करें (`fields()` को पुनः कॉल करता है) |
 
 ``` dart
-// Submit a form named "LoginForm" from anywhere
+// कहीं से भी "LoginForm" नामक फ़ॉर्म सबमिट करें
 NyFormWidget.submit("LoginForm", onSuccess: (data) {
   print(data);
 });
 
-// Update a field value remotely
+// फ़ील्ड वैल्यू रिमोटली अपडेट करें
 NyFormWidget.stateSetValue("LoginForm", "Email", "new@email.com");
 
-// Clear all form data
+// सभी फ़ॉर्म डेटा क्लियर करें
 NyFormWidget.stateClearData("LoginForm");
 ```
 
@@ -1071,20 +1115,20 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
-  Map<String, dynamic>? initialData, // Initial field values
-  Function(Field field, dynamic value)? onChanged, // Field change callback
-  Widget? header,                // Widget above the form
-  Widget? submitButton,          // Submit button widget
-  Widget? footer,                // Widget below the form
-  double headerSpacing = 10,     // Spacing after header
-  double submitButtonSpacing = 10, // Spacing after submit button
-  double footerSpacing = 10,     // Spacing before footer
-  LoadingStyle? loadingStyle,    // Loading indicator style
-  bool locked = false,           // Makes form read-only
-  Function(dynamic data)? onSubmit,   // Called with form data on successful validation
-  Function(dynamic error)? onFailure, // Called with errors on failed validation
+  double crossAxisSpacing = 10,  // पंक्ति फ़ील्ड्स के बीच क्षैतिज स्पेसिंग
+  double mainAxisSpacing = 10,   // फ़ील्ड्स के बीच ऊर्ध्वाधर स्पेसिंग
+  Map<String, dynamic>? initialData, // इनिशियल फ़ील्ड वैल्यूज़
+  Function(Field field, dynamic value)? onChanged, // फ़ील्ड बदलने पर कॉलबैक
+  Widget? header,                // फ़ॉर्म के ऊपर विजेट
+  Widget? submitButton,          // सबमिट बटन विजेट
+  Widget? footer,                // फ़ॉर्म के नीचे विजेट
+  double headerSpacing = 10,     // हेडर के बाद स्पेसिंग
+  double submitButtonSpacing = 10, // सबमिट बटन के बाद स्पेसिंग
+  double footerSpacing = 10,     // फ़ुटर से पहले स्पेसिंग
+  LoadingStyle? loadingStyle,    // लोडिंग इंडिकेटर स्टाइल
+  bool locked = false,           // फ़ॉर्म को रीड-ओनली बनाता है
+  Function(dynamic data)? onSubmit,   // सफल वैलिडेशन पर फ़ॉर्म डेटा के साथ कॉल किया जाता है
+  Function(dynamic error)? onFailure, // विफल वैलिडेशन पर एरर के साथ कॉल किया जाता है
 )
 ```
 
@@ -1132,13 +1176,13 @@ class LoginForm extends NyFormWidget {
 | `actions.submit(onSuccess:, onFailure:, showToastError:)` | वैलिडेशन के साथ सबमिट करें |
 
 ``` dart
-// Update a field value
+// फ़ील्ड वैल्यू अपडेट करें
 LoginForm.actions.updateField("Email", "new@email.com");
 
-// Clear all form data
+// सभी फ़ॉर्म डेटा क्लियर करें
 LoginForm.actions.clear();
 
-// Submit the form
+// फ़ॉर्म सबमिट करें
 LoginForm.actions.submit(
   onSuccess: (data) {
     print(data);
@@ -1184,5 +1228,6 @@ LoginForm.actions.submit(
 | `Field.slider()` | -- | सिंगल वैल्यू स्लाइडर |
 | `Field.rangeSlider()` | -- | रेंज वैल्यू स्लाइडर |
 | `Field.custom()` | `child` (आवश्यक `NyFieldStatefulWidget`) | कस्टम स्टेटफुल विजेट |
+| `Field.builder()` | `builder` (आवश्यक `NyFieldBuilder` या `NyFieldBuilderLegacy`) | सबक्लास किए बिना इनलाइन कस्टम फ़ील्ड |
 | `Field.widget()` | `child` (आवश्यक `Widget`) | कोई भी विजेट एम्बेड करें (नॉन-फ़ील्ड) |
 

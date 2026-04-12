@@ -53,12 +53,12 @@ Flutter 中的一切都是组件，它们只是可以组合成完整应用的 UI
 **步骤 1：** 定义带有静态状态名称的组件
 
 ``` dart
-/// The Cart widget
+/// Cart 组件
 class Cart extends StatefulWidget {
 
   Cart({Key? key}) : super(key: key);
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart"; // 此组件状态的唯一标识符
 
   @override
   _CartState createState() => _CartState();
@@ -68,23 +68,23 @@ class Cart extends StatefulWidget {
 **步骤 2：** 创建扩展 `NyState` 的状态类
 
 ``` dart
-/// The state class for the Cart widget
+/// Cart 组件的状态类
 class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
   _CartState() {
-    stateName = Cart.state; // Register the state name
+    stateName = Cart.state; // 注册状态名称
   }
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue(); // 加载初始数据
   };
 
   @override
   void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
+    reboot(); // 状态更新时重新加载组件
   }
 
   @override
@@ -100,15 +100,15 @@ class _CartState extends NyState<Cart> {
 **步骤 3：** 创建用于读取和更新购物车的辅助函数
 
 ``` dart
-/// Get the cart value from storage
+/// 从存储中获取购物车的值
 Future<String> getCartValue() async {
   return await storageRead(Keys.cart) ?? "1";
 }
 
-/// Set the cart value and notify the widget
+/// 设置购物车的值并通知组件
 Future setCartValue(String value) async {
     await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
+    updateState(Cart.state); // 这会触发组件的 stateUpdated()
 }
 ```
 
@@ -173,10 +173,10 @@ _updateCart() async {
 - 需要创建可从多个位置调用的可重用组件行为
 
 ``` dart
-// Sending an action to the widget
+// 向组件发送动作
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// 另一个带数据的示例
 stateAction('show_high_score', state: HighScore.state, data: {
   "high_score": 100,
 });
@@ -192,7 +192,7 @@ get stateActions => {
     print('Hello world');
   },
   "reset_data": (data) async {
-    // Example with data
+    // 带数据的示例
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -204,10 +204,22 @@ get stateActions => {
 
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
-// prints 'Hello world'
+// 打印 'Hello world'
 
 User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
+```
+
+如果您已经有一个 `StateActions` 实例（例如来自组件的 `stateActions()` 静态方法），可以直接在其上调用 `action()`，而不是使用独立函数：
+
+``` dart
+// 使用独立函数
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// 使用 StateActions 实例方法 — 等价，减少重复
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
 ```
 
 您也可以在 `init` getter 中使用 `whenStateAction` 方法定义状态动作。
@@ -218,7 +230,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // 重置徽章计数
       _count = 0;
     }
   });
@@ -248,12 +260,12 @@ class _UserAvatarState extends NyState<UserAvatar> {
 @override
 get stateActions => {
   "reset_avatar": () {
-    // Example
+    // 示例
     _avatar = null;
     setState(() {});
   },
   "update_user_image": (User user) {
-    // Example
+    // 示例
     _avatar = user.image;
     setState(() {});
   },
@@ -267,13 +279,13 @@ get stateActions => {
 
 ``` dart
 stateAction('reset_avatar', state: MyWidget.state);
-// prints 'Hello from the widget'
+// 打印 'Hello from the widget'
 
 stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
+// 重置组件中的数据
 
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
+// 显示带消息的成功提示
 ```
 
 
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // 设置为 true 以在此页面启用状态动作
 
 @override
 get stateActions => {
@@ -306,7 +318,7 @@ get stateActions => {
     print('Hello from the page');
   },
   "reset_data": () {
-    // Example
+    // 示例
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -321,15 +333,15 @@ get stateActions => {
 
 ``` dart
 stateAction('test_page_action', state: MyPage.path);
-// prints 'Hello from the page'
+// 打印 'Hello from the page'
 
 stateAction('reset_data', state: MyPage.path);
-// Reset data in page
+// 重置页面中的数据
 
 stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
-// shows a success toast with the message
+// 显示带消息的成功提示
 ```
 
 您也可以使用 `whenStateAction` 方法定义状态动作。
@@ -340,7 +352,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // 重置徽章计数
       _count = 0;
     }
   });
@@ -363,7 +375,7 @@ stateAction('reset_badge', state: MyWidget.state);
 ``` dart
 updateState(MyStateName.state);
 
-// or with data
+// 或携带数据
 updateState(MyStateName.state, data: "The Data");
 ```
 

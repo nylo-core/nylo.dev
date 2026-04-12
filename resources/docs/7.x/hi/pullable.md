@@ -26,7 +26,7 @@
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // ताज़ा डेटा लाएं
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Pullable(
 ### उदाहरण
 
 ``` dart
-// Classic header
+// क्लासिक हेडर
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// मटीरियल हेडर
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// कोई बाउंस इफेक्ट नहीं
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// कस्टम हेडर विजेट
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Pullable.builder(
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // क्लासिक पुल इंडिकेटर
+  waterDrop,         // वॉटर ड्रॉप एनिमेशन (डिफ़ॉल्ट)
+  materialClassic,   // मटीरियल डिज़ाइन क्लासिक
+  waterDropMaterial,  // मटीरियल वॉटर ड्रॉप
+  bezier,            // बेज़ियर कर्व एनिमेशन
 }
 ```
 
 कंस्ट्रक्टर या कॉन्फ़िग के माध्यम से स्टाइल सेट करें:
 
 ``` dart
-// Via named constructor
+// नामित कंस्ट्रक्टर के माध्यम से
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// कॉन्फ़िग के माध्यम से
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // पेज 1 पर रीसेट करें
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // अगला पेज लोड करें
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// प्रोग्रामेटिक रूप से रिफ्रेश ट्रिगर करें
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// प्रोग्रामेटिक रूप से लोडिंग ट्रिगर करें
 _controller.triggerLoading();
 
-// Check state
+// स्थिति जांचें
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | पैरामीटर | टाइप | विवरण |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | पेजिनेटेड डेटा कॉलबैक (iteration 1 से शुरू होता है) |
+| `enablePullDown` | `bool` | पुल-डाउन-टू-रिफ्रेश जेस्चर सक्षम करें (डिफ़ॉल्ट: `true`) |
 | `onRefresh` | `Function()?` | रिफ्रेश के बाद कॉलबैक |
 | `beforeRefresh` | `Function()?` | रिफ्रेश शुरू होने से पहले हुक |
 | `afterRefresh` | `Function(dynamic)?` | डेटा के साथ रिफ्रेश के बाद हुक |
 | `headerStyle` | `String?` | हेडर टाइप का नाम (उदा., `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | फ़ुटर के लिए कस्टम लोडिंग इंडिकेटर |
+
+`CollectionView.pullable` को प्रोग्रामेटिक रूप से रिफ्रेश करने के लिए, `CollectionView.stateActions(stateName).refreshData()` का उपयोग करें। यह डेटा को फिर से फ़ेच करता है और पेजिनेशन iteration को 1 पर रीसेट करता है ताकि सूची पहले पेज से फिर से शुरू हो।
 
 <div id="examples"></div>
 

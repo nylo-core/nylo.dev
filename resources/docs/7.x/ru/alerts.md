@@ -14,6 +14,7 @@
 - [Пользовательские стили уведомлений](#custom-styles "Пользовательские стили уведомлений")
   - [Регистрация стилей](#registering-styles "Регистрация стилей")
   - [Создание фабрики стилей](#creating-a-style-factory "Создание фабрики стилей")
+  - [Стили уведомлений с данными](#data-aware-toast-styles "Стили уведомлений с данными")
 - [AlertTab](#alert-tab "AlertTab")
 - [Примеры](#examples "Примеры")
 
@@ -177,14 +178,14 @@ showToastNotification(
   duration: Duration(seconds: 3),
   position: ToastNotificationPosition.top,
   action: () {
-    // Called when the toast is tapped
+    // Вызывается при нажатии на уведомление
     routeTo("/details");
   },
   onDismiss: () {
-    // Called when the toast is dismissed
+    // Вызывается при закрытии уведомления
   },
   onShow: () {
-    // Called when the toast becomes visible
+    // Вызывается когда уведомление становится видимым
   },
 );
 ```
@@ -195,8 +196,9 @@ showToastNotification(
 |----------|-----|--------------|----------|
 | `context` | `BuildContext` | обязательный | Контекст сборки |
 | `id` | `String` | `'success'` | ID стиля уведомления |
-| `title` | `String?` | null | Переопределение заголовка по умолчанию |
+| `title` | `String?` | null | Текст заголовка; передаётся напрямую виджету уведомления |
 | `description` | `String?` | null | Текст описания |
+| `data` | `Map<String, dynamic>?` | null | Пары ключ-значение, передаваемые стилям с данными; `title` и `description` имеют приоритет над соответствующими ключами в `data` |
 | `duration` | `Duration?` | null | Длительность отображения |
 | `position` | `ToastNotificationPosition?` | null | Положение на экране |
 | `action` | `VoidCallback?` | null | Обратный вызов при нажатии |
@@ -261,21 +263,21 @@ ToastMeta updated = originalMeta.copyWith(
 Управляйте расположением уведомлений на экране:
 
 ``` dart
-// Top of screen (default)
+// Вверху экрана (по умолчанию)
 showToastNotification(context,
   id: "success",
   description: "Top alert",
   position: ToastNotificationPosition.top,
 );
 
-// Bottom of screen
+// Внизу экрана
 showToastNotification(context,
   id: "info",
   description: "Bottom alert",
   position: ToastNotificationPosition.bottom,
 );
 
-// Center of screen
+// По центру экрана
 showToastNotification(context,
   id: "warning",
   description: "Center alert",
@@ -388,6 +390,78 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### Стили уведомлений с данными
+
+Используйте `ToastStyleDataFactory` для регистрации стилей уведомлений, получающих данные времени выполнения в момент вызова. Это полезно, когда содержимое уведомления — например, имя или аватар пользователя — неизвестно в момент регистрации.
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+Зарегистрируйте стиль с данными с помощью `registerWithData()`:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+Или зарегистрируйте его вместе со статическими стилями в вашем `AppProvider`:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+Вызовите его с картой `data` во время выполнения:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+Если вы также передаёте `title` или `description`, они имеют приоритет над соответствующими ключами в `data`.
+
+Используйте `ToastNotificationRegistry.resolve(id, data)` напрямую, если нужно самостоятельно построить виджет:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

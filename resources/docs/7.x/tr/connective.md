@@ -3,67 +3,49 @@
 ---
 
 <a name="section-1"></a>
-- [Giri&#351;](#introduction "Giri&#351;")
+- [Giriş](#introduction "Giriş")
 - [Connective Widget](#connective-widget "Connective Widget")
-    - [Duruma Dayal&#305; Olu&#351;turucular](#state-builders "Duruma Dayal&#305; Olu&#351;turucular")
-    - [&#214;zel Olu&#351;turucu](#custom-builder "&#214;zel Olu&#351;turucu")
+    - [Özel Oluşturucu](#custom-builder "Özel Oluşturucu")
 - [OfflineBanner Widget](#offline-banner "OfflineBanner Widget")
-- [NyConnectivity Yard&#305;mc&#305;s&#305;](#connectivity-helper "NyConnectivity Yard&#305;mc&#305;s&#305;")
-- [Widget Uzant&#305;lar&#305;](#extensions "Widget Uzant&#305;lar&#305;")
+- [NyConnectivity Yardımcısı](#connectivity-helper "NyConnectivity Yardımcısı")
+- [Widget Uzantıları](#extensions "Widget Uzantıları")
 - [Parametreler](#parameters "Parametreler")
 
 
 <div id="introduction"></div>
 
-## Giri&#351;
+## Giriş
 
-{{ config('app.name') }}, a&#287; de&#287;i&#351;ikliklerine yan&#305;t veren uygulamalar olu&#351;turman&#305;za yard&#305;mc&#305; olmak i&#231;in ba&#287;lant&#305; fark&#305;ndal&#305;&#287;&#305;na sahip widget'lar ve yard&#305;mc&#305; ara&#231;lar sa&#287;lar. **Connective** widget'&#305;, ba&#287;lant&#305; de&#287;i&#351;ti&#287;inde otomatik olarak yeniden olu&#351;turulurken, **NyConnectivity** yard&#305;mc&#305;s&#305; ba&#287;lant&#305; durumunu kontrol etmek i&#231;in statik metotlar sa&#287;lar.
+{{ config('app.name') }}, ağ değişikliklerine yanıt veren uygulamalar oluşturmanıza yardımcı olmak için bağlantı farkındalığına sahip widget'lar ve yardımcı araçlar sağlar. **Connective** widget'ı, bağlantı değiştiğinde otomatik olarak yeniden oluşturulurken, **NyConnectivity** yardımcısı bağlantı durumunu kontrol etmek için statik metotlar sağlar.
 
 <div id="connective-widget"></div>
 
 ## Connective Widget
 
-`Connective` widget'&#305;, ba&#287;lant&#305; de&#287;i&#351;ikliklerini dinler ve mevcut a&#287; durumuna g&#246;re yeniden olu&#351;turulur.
+`Connective` widget'ı, bağlantı değişikliklerini dinler ve mevcut ağ durumuna göre yeniden oluşturulur.
 
-<div id="state-builders"></div>
-
-### Duruma Dayal&#305; Olu&#351;turucular
-
-Her ba&#287;lant&#305; t&#252;r&#252; i&#231;in farkl&#305; widget'lar sa&#287;lay&#305;n:
+Cihazın interneti olmadığında (wifi, mobile veya ethernet hiçbiri mevcut değil) bir yedek widget göstermek için `noInternet` kullanın:
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
 
-#### Mevcut Durumlar
-
-| &#214;zellik | A&#231;&#305;klama |
-|----------|-------------|
-| `onWifi` | WiFi ile ba&#287;land&#305;&#287;&#305;nda g&#246;sterilen widget |
-| `onMobile` | Mobil veri ile ba&#287;land&#305;&#287;&#305;nda g&#246;sterilen widget |
-| `onEthernet` | Ethernet ile ba&#287;land&#305;&#287;&#305;nda g&#246;sterilen widget |
-| `onVpn` | VPN ile ba&#287;land&#305;&#287;&#305;nda g&#246;sterilen widget |
-| `onBluetooth` | Bluetooth ile ba&#287;land&#305;&#287;&#305;nda g&#246;sterilen widget |
-| `onOther` | Di&#287;er ba&#287;lant&#305; t&#252;rleri i&#231;in widget |
-| `onNone` | &#199;evrimd&#305;&#351;&#305;yken g&#246;sterilen widget |
-| `child` | Belirli bir i&#351;leyici yoksa varsay&#305;lan widget |
-
 <div id="custom-builder"></div>
 
-### &#214;zel Olu&#351;turucu
+### Özel Oluşturucu
 
-Aray&#252;z &#252;zerinde tam kontrol i&#231;in `Connective.builder` kullan&#305;n:
+Arayüz üzerinde tam kontrol için `Connective.builder` kullanın:
 
 ``` dart
 Connective.builder(
@@ -85,20 +67,20 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // Bağlantı türünü göster
     return Text('Connected via: ${state.name}');
   },
 )
 ```
 
-Olu&#351;turucu &#351;unlar&#305; al&#305;r:
+Oluşturucu şunları alır:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, other, none)
-- `results` - Birden fazla ba&#287;lant&#305;y&#305; kontrol etmek i&#231;in `List<ConnectivityResult>`
+- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
+- `results` - Birden fazla bağlantıyı kontrol etmek için `List<ConnectivityResult>`
 
-### De&#287;i&#351;iklikleri Dinleme
+### Değişiklikleri Dinleme
 
-Ba&#287;lant&#305; de&#287;i&#351;ti&#287;inde tepki vermek i&#231;in `onConnectivityChanged` kullan&#305;n:
+Bağlantı değiştiğinde tepki vermek için `onConnectivityChanged` kullanın:
 
 ``` dart
 Connective(
@@ -117,23 +99,23 @@ Connective(
 
 ## OfflineBanner Widget
 
-&#199;evrimd&#305;&#351;&#305;yken ekran&#305;n &#252;st&#252;nde bir banner g&#246;r&#252;nt&#252;leyin:
+İnternet olmadığında (wifi, mobile veya ethernet hiçbiri mevcut değil) ekranın üstünde bir banner görüntüleyin:
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // Ana içeriğiniz
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // Çevrimdışı banner (çevrimiçiyken otomatik gizlenir)
       OfflineBanner(),
     ],
   ),
 )
 ```
 
-### Banner'&#305; &#214;zelle&#351;tirme
+### Banner'ı Özelleştirme
 
 ``` dart
 OfflineBanner(
@@ -142,69 +124,80 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // Kaydırma animasyonu
   animationDuration: Duration(milliseconds: 200),
 )
 ```
 
 <div id="connectivity-helper"></div>
 
-## NyConnectivity Yard&#305;mc&#305;s&#305;
+## NyConnectivity Yardımcısı
 
-`NyConnectivity` s&#305;n&#305;f&#305;, ba&#287;lant&#305;y&#305; kontrol etmek i&#231;in statik metotlar sa&#287;lar:
+`NyConnectivity` sınıfı, bağlantıyı kontrol etmek için statik metotlar sağlar:
 
-### &#199;evrim&#304;&#231;i/&#199;evrimd&#305;&#351;&#305; Kontrol&#252;
+### Çevrimiçi/Çevrimdışı Kontrolü
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // API isteği yap
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // Önbellekten yükle
   final data = await cache.getData();
 }
 
-// Or check if offline
+// Veya çevrimdışı olup olmadığını kontrol et
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
 ```
 
-### Belirli Ba&#287;lant&#305; T&#252;rlerini Kontrol Etme
+### Belirli Bağlantı Türlerini Kontrol Etme
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // WiFi'da büyük dosyaları indir
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // Veri kullanımı hakkında uyar
   showDataWarning();
 }
 
-// Other methods:
+// Diğer metotlar:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### İnternet Kontrolü
+
+`hasInternet()`, `isOnline()`'dan daha kısıtlayıcıdır — yalnızca cihaz wifi, mobile veya ethernet üzerinden bağlı olduğunda `true` döndürür. VPN, bluetooth ve uydu bağlantıları hariç tutulur.
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // Wifi, mobile veya ethernet üzerinden onaylanmış internet erişimi
+  await syncData();
+}
+```
+
 ### Mevcut Durumu Alma
 
 ``` dart
-// Get all active connection types
+// Tüm aktif bağlantı türlerini al
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// Okunabilir string al
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None", vb.
 ```
 
-### De&#287;i&#351;iklikleri Dinleme
+### Değişiklikleri Dinleme
 
 ``` dart
 StreamSubscription subscription = NyConnectivity.stream().listen((results) {
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// Bittiğinde iptal etmeyi unutmayın
 @override
 void dispose() {
   subscription.cancel();
@@ -223,10 +216,10 @@ void dispose() {
 }
 ```
 
-### Ko&#351;ullu Y&#252;r&#252;tme
+### Koşullu Yürütme
 
 ``` dart
-// Execute only when online (returns null if offline)
+// Yalnızca çevrimiçiyken çalıştır (çevrimdışıysa null döndürür)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// Duruma göre farklı callback'ler çalıştır
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -244,30 +237,30 @@ final result = await NyConnectivity.when(
 
 <div id="extensions"></div>
 
-## Widget Uzant&#305;lar&#305;
+## Widget Uzantıları
 
-Herhangi bir widget'a h&#305;zla ba&#287;lant&#305; fark&#305;ndal&#305;&#287;&#305; ekleyin:
+Herhangi bir widget'a hızla bağlantı farkındalığı ekleyin:
 
-### &#199;evrimd&#305;&#351;&#305; Alternatif G&#246;sterme
+### Çevrimdışı Alternatif Gösterme
 
 ``` dart
-// Show a different widget when offline
+// Çevrimdışıyken farklı bir widget göster
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
 ```
 
-### Yaln&#305;zca &#199;evrimi&#231;inde G&#246;sterme
+### Yalnızca Çevrimiçinde Gösterme
 
 ``` dart
-// Hide completely when offline
+// Çevrimdışıyken tamamen gizle
 SyncButton().onlyOnline()
 ```
 
-### Yaln&#305;zca &#199;evrimd&#305;&#351;&#305;nda G&#246;sterme
+### Yalnızca Çevrimdışında Gösterme
 
 ``` dart
-// Show only when offline
+// Yalnızca çevrimdışıyken göster
 OfflineMessage().onlyOffline()
 ```
 
@@ -277,40 +270,33 @@ OfflineMessage().onlyOffline()
 
 ### Connective
 
-| Parametre | T&#252;r | Varsay&#305;lan | A&#231;&#305;klama |
+| Parametre | Tür | Varsayılan | Açıklama |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | WiFi'deyken widget |
-| `onMobile` | `Widget?` | - | Mobil verideyken widget |
-| `onEthernet` | `Widget?` | - | Ethernet'teyken widget |
-| `onVpn` | `Widget?` | - | VPN'deyken widget |
-| `onBluetooth` | `Widget?` | - | Bluetooth'tayken widget |
-| `onOther` | `Widget?` | - | Di&#287;er ba&#287;lant&#305;lar i&#231;in widget |
-| `onNone` | `Widget?` | - | &#199;evrimd&#305;&#351;&#305;yken widget |
-| `child` | `Widget?` | - | Varsay&#305;lan widget |
-| `showLoadingOnInit` | `bool` | `false` | Kontrol s&#305;ras&#305;nda y&#252;kleme g&#246;ster |
-| `loadingWidget` | `Widget?` | - | &#214;zel y&#252;kleme widget'&#305; |
-| `onConnectivityChanged` | `Function?` | - | De&#287;i&#351;iklikte callback |
+| `noInternet` | `Widget?` | - | Wifi, mobile ve ethernet hepsi yokken gösterilen widget |
+| `child` | `Widget?` | - | İnternet mevcutken gösterilen widget |
+| `onConnectivityChanged` | `Function?` | - | Değişiklikte callback |
 
 ### OfflineBanner
 
-| Parametre | T&#252;r | Varsay&#305;lan | A&#231;&#305;klama |
+| Parametre | Tür | Varsayılan | Açıklama |
 |-----------|------|---------|-------------|
 | `message` | `String` | `'No internet connection'` | Banner metni |
-| `backgroundColor` | `Color?` | `Colors.red.shade700` | Banner arka plan&#305; |
+| `backgroundColor` | `Color?` | `Colors.red.shade700` | Banner arka planı |
 | `textColor` | `Color?` | `Colors.white` | Metin rengi |
 | `icon` | `IconData?` | `Icons.wifi_off` | Banner simgesi |
-| `height` | `double` | `40` | Banner y&#252;ksekli&#287;i |
-| `animate` | `bool` | `true` | Kayd&#305;rma animasyonu etkinle&#351;tir |
-| `animationDuration` | `Duration` | `300ms` | Animasyon s&#252;resi |
+| `height` | `double` | `40` | Banner yüksekliği |
+| `animate` | `bool` | `true` | Kaydırma animasyonu etkinleştir |
+| `animationDuration` | `Duration` | `300ms` | Animasyon süresi |
 
 ### NyConnectivityState Enum
 
-| De&#287;er | A&#231;&#305;klama |
+| Değer | Açıklama |
 |-------|-------------|
-| `wifi` | WiFi ile ba&#287;l&#305; |
-| `mobile` | Mobil veri ile ba&#287;l&#305; |
-| `ethernet` | Ethernet ile ba&#287;l&#305; |
-| `vpn` | VPN ile ba&#287;l&#305; |
-| `bluetooth` | Bluetooth ile ba&#287;l&#305; |
-| `other` | Di&#287;er ba&#287;lant&#305; t&#252;r&#252; |
-| `none` | Ba&#287;lant&#305; yok |
+| `wifi` | WiFi ile bağlı |
+| `mobile` | Mobil veri ile bağlı |
+| `ethernet` | Ethernet ile bağlı |
+| `vpn` | VPN ile bağlı |
+| `bluetooth` | Bluetooth ile bağlı |
+| `satellite` | Uydu ile bağlı |
+| `other` | Diğer bağlantı türü |
+| `none` | Bağlantı yok |

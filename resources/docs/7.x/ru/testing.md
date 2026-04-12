@@ -30,6 +30,7 @@
 - [Пользовательские матчеры](#custom-matchers "Пользовательские матчеры")
 - [Тестирование состояния](#state-testing "Тестирование состояния")
 - [Отладка](#debugging "Отладка")
+- [Навигация и хелперы взаимодействия](#nav-interaction "Навигация и хелперы взаимодействия")
 - [Примеры](#examples "Практические примеры")
 
 <div id="introduction"></div>
@@ -363,6 +364,13 @@ NyTest.logout();
 expectGuest();
 ```
 
+Используйте `actingAsGuest()` как читаемый псевдоним `logout()` при настройке контекста гостя:
+
+``` dart
+NyTest.actingAsGuest();
+expectGuest();
+```
+
 <div id="time-travel"></div>
 
 ## Путешествие во времени
@@ -505,6 +513,12 @@ nyTest('verify API was called', () async {
   // Получить детали вызовов
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Проверьте, что эндпоинт был вызван с конкретными данными в теле запроса:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Создание мок-ответов
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Утверждения виджетов
+
+``` dart
+// Проверить, что тип виджета появляется определённое количество раз
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Проверить, что текст виден
+expectTextVisible('Welcome');
+
+// Проверить, что текст не виден
+expectTextNotVisible('Error');
+
+// Проверить, что любой виджет виден (использует любой Finder)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Проверить, что виджет не виден
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Утверждения локали
@@ -985,6 +1023,101 @@ NyTest.seedBackpack({
   "auth_token": "test_token",
   "settings": {"theme": "dark"},
 });
+```
+
+<div id="nav-interaction"></div>
+
+## Навигация и хелперы взаимодействия
+
+Расширения `WidgetTester` предоставляют высокоуровневый DSL для написания навигационных потоков и взаимодействий с UI в `nyWidgetTest`.
+
+### visit
+
+Перейти к маршруту и дождаться стабилизации страницы:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Проверить, что действие навигации привело вас к ожидаемому маршруту:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Проверить, что текущий маршрут совпадает с указанным (используется для подтверждения местоположения, а не факта навигации):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Дождаться завершения всех ожидающих анимаций и обратных вызовов кадров:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Извлечь текущий маршрут из стека и дождаться стабилизации:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Найти виджет по тексту, нажать на него и стабилизироваться за один вызов:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Нажать на поле формы, ввести текст и стабилизироваться:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Прокручивать до тех пор, пока виджет не станет видимым, затем стабилизироваться:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Передайте конкретный finder `scrollable` и `delta` для точного управления:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
 ```
 
 <div id="examples"></div>

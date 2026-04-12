@@ -196,7 +196,7 @@ CollectionView<Post>.pullable(
     return PostCard(post: item.data);
   },
   onRefresh: () {
-    print('Daftar telah di-refresh!');
+    print('Daftar telah disegarkan!');
   },
   headerStyle: 'WaterDropHeader', // Gaya indikator pull
 )
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## Memperbarui State
 
-Anda dapat memperbarui atau mereset CollectionView dengan memberikannya `stateName`:
+Anda dapat memperbarui CollectionView secara programatik dengan memberinya `stateName` dan memanggil `CollectionView.stateActions()`:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### Mereset daftar
+Gunakan `stateActions` untuk memanipulasi daftar saat runtime:
 
 ``` dart
-// Mereset dan memuat ulang data dari awal
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// Reset dan muat ulang data dari awal
+actions.reset();
+
+// Segarkan data (mengambil ulang dan mereset paginasi)
+actions.refreshData();
+
+// Tambahkan item ke akhir daftar
+actions.addItem(newTodo);
+
+// Sisipkan item pada indeks tertentu
+actions.insertItem(0, newTodo);
+
+// Hapus item berdasarkan indeks
+actions.removeFromIndex(2);
+
+// Ganti item pada indeks tertentu
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### Menghapus item
-
-``` dart
-// Hapus item di indeks 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### Memicu pembaruan umum
-
-``` dart
-// Menggunakan helper updateState global
-updateState("my_todo_list");
-```
+Semua metode `stateActions` bertahan dengan benar di seluruh rebuild untuk data sinkron maupun asinkron. `refreshData()` juga mereset penghitung iterasi paginasi sehingga daftar pullable dimulai ulang dari halaman 1.
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-----------|
 | `data` | `Function(int iteration)` | Fungsi data terpaginasi |
+| `enablePullDown` | `bool` | Mengaktifkan gestur pull-to-refresh (default: `true`) |
 | `onRefresh` | `Function()?` | Callback saat refresh selesai |
 | `beforeRefresh` | `Function()?` | Callback sebelum refresh |
 | `afterRefresh` | `Function(dynamic)?` | Callback setelah data dimuat |

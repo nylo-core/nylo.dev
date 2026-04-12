@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+すでに `StateActions` インスタンスがある場合（例: ウィジェットの `stateActions()` 静的メソッドから取得したもの）、独立関数を使う代わりにインスタンス上で直接 `action()` を呼び出せます:
+
+``` dart
+// 独立関数を使用
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// StateActions インスタンスメソッドを使用 — 同等、繰り返しが少ない
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 `init` ゲッター内で `whenStateAction` メソッドを使用して State Actions を定義することもできます。
 
 ``` dart
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // このページで State Actions を有効にするには true に設定
 
 @override
 get stateActions => {

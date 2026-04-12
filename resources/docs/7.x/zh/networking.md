@@ -283,22 +283,22 @@ int? status = response.statusCode;
 ```dart
 NyResponse<User> response = await apiService.fetchUser(1);
 
-// Get data or throw if null
+// 获取数据，为空则抛出异常
 User user = response.dataOrThrow('User not found');
 
-// Get data or use a fallback
+// 获取数据，为空则使用回退值
 User user = response.dataOr(User.guest());
 
-// Run callback only if successful
+// 仅在成功时执行回调
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
-// Pattern match on success/failure
+// 根据成功/失败进行模式匹配
 String result = response.when(
   success: (user) => 'Welcome, ${user.name}!',
   failure: (response) => 'Error: ${response.statusMessage}',
 );
 
-// Get a specific header
+// 获取特定请求头
 String? authHeader = response.getHeader('Authorization');
 ```
 
@@ -564,7 +564,7 @@ class ApiService extends NyApiService {
 ```dart
 NetworkLogger(
   filter: (options, args) {
-    // Only log requests to specific endpoints
+    // 只记录特定端点的请求
     return options.path.contains('/api/v1');
   },
 )
@@ -616,7 +616,7 @@ await api<ApiService>(
     // data is the morphed User? instance
   },
   onError: (DioException dioException) {
-    // Handle the error
+    // 处理错误
   },
 );
 ```
@@ -705,14 +705,14 @@ class UserApiService extends NyApiService {
 class ApiService extends NyApiService {
   ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
 
-  // Returns a single User
+  // 返回单个 User
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Returns a List of Users
+  // 返回 User 列表
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -758,10 +758,10 @@ Future<List<Country>> fetchCountries() async {
 ### 清除缓存
 
 ```dart
-// Clear a specific cache key
+// 清除特定缓存键
 await apiService.clearCache("app_countries");
 
-// Clear all API cache
+// 清除所有 API 缓存
 await apiService.clearAllCache();
 ```
 
@@ -850,7 +850,7 @@ Future fetchUsers() async {
     request: (request) => request.get("/users"),
     retry: 3,
     retryIf: (DioException dioException) {
-      // Only retry on server errors
+      // 仅在服务器错误时重试
       return dioException.response?.statusCode == 500;
     },
   );
@@ -911,17 +911,17 @@ apiService.setCheckConnectivityBeforeRequest(true);
 管理和取消待处理的请求。
 
 ```dart
-// Create a managed cancel token
+// 创建托管取消令牌
 final token = apiService.createCancelToken();
 await apiService.get('/endpoint', cancelToken: token);
 
-// Cancel all pending requests (e.g., on logout)
+// 取消所有待处理请求（例如，登出时）
 apiService.cancelAllRequests('User logged out');
 
-// Check active request count
+// 检查活跃请求数量
 int count = apiService.activeRequestCount;
 
-// Clean up a specific token when done
+// 完成后清理特定令牌
 apiService.removeCancelToken(token);
 ```
 
@@ -952,13 +952,13 @@ class ApiService extends NyApiService {
 对于不需要认证的公共端点：
 
 ```dart
-// Per-request
+// 每个请求
 await network(
   request: (request) => request.get("/public-endpoint"),
   shouldSetAuthHeaders: false,
 );
 
-// Service-level
+// 服务级别
 apiService.setShouldSetAuthHeaders(false);
 ```
 
@@ -977,16 +977,16 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Check if the token needs refreshing
+    // 检查令牌是否需要刷新
     return false;
   }
 
   @override
   Future<void> refreshToken(Dio dio) async {
-    // Use the fresh Dio instance (no interceptors) to refresh the token
+    // 使用新的 Dio 实例（无拦截器）刷新令牌
     dynamic response = (await dio.post("https://example.com/refresh-token")).data;
 
-    // Save the new token to storage
+    // 将新令牌保存到存储
     await Auth.set((data) {
       data['token'] = response['token'];
       return data;
@@ -1006,9 +1006,9 @@ class ApiService extends NyApiService {
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
-  ApiService: () => ApiService(), // New instance each time
+  ApiService: () => ApiService(), // 每次创建新实例
 
-  ApiService: ApiService(), // Singleton — same instance always
+  ApiService: ApiService(), // 单例 — 始终使用同一实例
 };
 ```
 

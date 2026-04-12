@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // दिखाएँ/छुपाएँ टॉगल आइकन
+  passwordViewable: true, // यूज़र को विज़िबिलिटी टॉगल करने की अनुमति दें
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 फ़ॉर्मेटेड डेटा जैसे फ़ोन नंबर या क्रेडिट कार्ड के लिए इनपुट मास्क लागू करें:
 
 ``` dart
-// Phone number mask
+// फ़ोन नंबर मास्क
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // बिना मास्क वैल्यू लौटाता है: 1234567890
 )
 
-// Credit card mask
+// क्रेडिट कार्ड मास्क
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // मास्क्ड वैल्यू लौटाता है: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // कस्टम क्लियर आइकन
   onChanged: (value) {
-    // Handle search
+    // सर्च हैंडल करें
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### स्टेट एक्शन्स
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// फ़ील्ड क्लियर करें
+actions.clear();
+
+// एक वैल्यू सेट करें
+actions.setValue("new_value");
+
+// फ़ील्ड पर फोकस मूव करें
+actions.focus();
+
+// फ़ील्ड से फोकस हटाएँ
+actions.unfocus();
+
+// पासवर्ड विज़िबिलिटी टॉगल करें (InputField.password के लिए)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | लेबल टेक्स्ट स्टाइल |
 | `hintStyle` | `TextStyle?` | हिंट टेक्स्ट स्टाइल |
 | `prefixIcon` | `Widget?` | इनपुट से पहले आइकन |
+| `suffixIcon` | `Widget?` | इनपुट के बाद आइकन |
 
 ### मास्किंग पैरामीटर्स
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | पासवर्ड विज़िबिलिटी टॉगल की अनुमति दें |
 | `dummyData` | `String?` | डेवलपमेंट के लिए फ़ेक डेटा |
 | `stateName` | `String?` | स्टेट मैनेजमेंट के लिए नाम |
+| `enableInteractiveSelection` | `bool` | टेक्स्ट सेलेक्शन सक्षम करें (default: `true`) |
 | `onChanged` | `Function(String)?` | वैल्यू बदलने पर कॉल होता है |

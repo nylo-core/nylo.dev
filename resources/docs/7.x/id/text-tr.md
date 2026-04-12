@@ -60,6 +60,8 @@ Widget akan mencari kunci terjemahan di file bahasa Anda (misalnya, `/lang/en.js
 }
 ```
 
+Jika sebuah kunci tidak ada di file locale yang aktif, {{ config('app.name') }} secara otomatis mencarinya di bahasa fallback (dikonfigurasi di `lib/config/localization.dart`) sebelum mengembalikan string kunci mentah. Ini berlaku untuk kunci tingkat atas maupun kunci bersarang dengan notasi titik.
+
 <div id="string-interpolation"></div>
 
 ## Interpolasi String

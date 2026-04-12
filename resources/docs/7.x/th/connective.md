@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [บทนำ](#introduction "บทนำ")
 - [Connective Widget](#connective-widget "Connective Widget")
-    - [Builder ตามสถานะ](#state-builders "Builder ตามสถานะ")
     - [Builder แบบกำหนดเอง](#custom-builder "Builder แบบกำหนดเอง")
 - [OfflineBanner Widget](#offline-banner "OfflineBanner Widget")
 - [ตัวช่วย NyConnectivity](#connectivity-helper "ตัวช่วย NyConnectivity")
@@ -25,39 +24,22 @@
 
 widget `Connective` จะ listen การเปลี่ยนแปลงการเชื่อมต่อและ rebuild ตามสถานะเครือข่ายปัจจุบัน
 
-<div id="state-builders"></div>
-
-### Builder ตามสถานะ
-
-ให้ widget ที่แตกต่างกันสำหรับแต่ละประเภทการเชื่อมต่อ:
+ใช้ `noInternet` เพื่อแสดง widget สำรองเมื่ออุปกรณ์ไม่มีอินเทอร์เน็ต (ไม่มี wifi, mobile, หรือ ethernet เลย):
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // ค่าเริ่มต้นสำหรับสถานะที่ไม่ได้ระบุ
+  child: MyContent(),
 )
 ```
-
-#### สถานะที่ใช้ได้
-
-| คุณสมบัติ | คำอธิบาย |
-|----------|-------------|
-| `onWifi` | Widget เมื่อเชื่อมต่อผ่าน WiFi |
-| `onMobile` | Widget เมื่อเชื่อมต่อผ่านข้อมูลมือถือ |
-| `onEthernet` | Widget เมื่อเชื่อมต่อผ่าน Ethernet |
-| `onVpn` | Widget เมื่อเชื่อมต่อผ่าน VPN |
-| `onBluetooth` | Widget เมื่อเชื่อมต่อผ่าน Bluetooth |
-| `onOther` | Widget สำหรับการเชื่อมต่อประเภทอื่น |
-| `onNone` | Widget เมื่อออฟไลน์ |
-| `child` | Widget เริ่มต้นหากไม่มี handler เฉพาะ |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // แสดงประเภทการเชื่อมต่อ
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 builder จะรับ:
 - `context` - BuildContext
-- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, other, none)
+- `state` - `NyConnectivityState` enum (wifi, mobile, ethernet, vpn, bluetooth, satellite, other, none)
 - `results` - `List<ConnectivityResult>` สำหรับตรวจสอบการเชื่อมต่อหลายรายการ
 
 ### การ Listen การเปลี่ยนแปลง
@@ -117,16 +99,16 @@ Connective(
 
 ## OfflineBanner Widget
 
-แสดงแบนเนอร์ที่ด้านบนของหน้าจอเมื่อออฟไลน์:
+แสดงแบนเนอร์ที่ด้านบนของหน้าจอเมื่อไม่มีอินเทอร์เน็ต (ไม่มี wifi, mobile, หรือ ethernet เลย):
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // เนื้อหาหลักของคุณ
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // แบนเนอร์ออฟไลน์ (ซ่อนอัตโนมัติเมื่อออนไลน์)
       OfflineBanner(),
     ],
   ),
@@ -157,14 +139,14 @@ OfflineBanner(
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // ส่ง API request
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // โหลดจาก cache
   final data = await cache.getData();
 }
 
-// Or check if offline
+// หรือตรวจสอบว่าออฟไลน์
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,34 +156,45 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // ดาวน์โหลดไฟล์ขนาดใหญ่บน WiFi
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // แจ้งเตือนเกี่ยวกับการใช้ข้อมูล
   showDataWarning();
 }
 
-// Other methods:
+// เมธอดอื่นๆ:
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### ตรวจสอบอินเทอร์เน็ต
+
+`hasInternet()` เข้มงวดกว่า `isOnline()` — จะคืนค่า `true` เฉพาะเมื่ออุปกรณ์เชื่อมต่อผ่าน wifi, mobile, หรือ ethernet เท่านั้น การเชื่อมต่อ VPN, bluetooth, และ satellite ถูกยกเว้น
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // ยืนยันการเข้าถึงอินเทอร์เน็ตผ่าน wifi, mobile, หรือ ethernet
+  await syncData();
+}
+```
+
 ### รับสถานะปัจจุบัน
 
 ``` dart
-// Get all active connection types
+// รับประเภทการเชื่อมต่อที่ใช้งานอยู่ทั้งหมด
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// รับสตริงที่อ่านได้
 String type = await NyConnectivity.connectionTypeString();
-print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
+print('Connected via: $type'); // "WiFi", "Mobile", "None" เป็นต้น
 ```
 
 ### Listen การเปลี่ยนแปลง
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// อย่าลืม cancel เมื่อเสร็จสิ้น
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### การดำเนินการแบบมีเงื่อนไข
 
 ``` dart
-// Execute only when online (returns null if offline)
+// ดำเนินการเฉพาะเมื่อออนไลน์ (คืนค่า null หากออฟไลน์)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// ดำเนินการ callback ต่างกันตามสถานะ
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ final result = await NyConnectivity.when(
 ### แสดงทางเลือกเมื่อออฟไลน์
 
 ``` dart
-// Show a different widget when offline
+// แสดง widget ที่แตกต่างกันเมื่อออฟไลน์
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### แสดงเฉพาะเมื่อออนไลน์
 
 ``` dart
-// Hide completely when offline
+// ซ่อนทั้งหมดเมื่อออฟไลน์
 SyncButton().onlyOnline()
 ```
 
 ### แสดงเฉพาะเมื่อออฟไลน์
 
 ``` dart
-// Show only when offline
+// แสดงเฉพาะเมื่อออฟไลน์
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | พารามิเตอร์ | ชนิด | ค่าเริ่มต้น | คำอธิบาย |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | Widget เมื่อเชื่อมต่อ WiFi |
-| `onMobile` | `Widget?` | - | Widget เมื่อเชื่อมต่อข้อมูลมือถือ |
-| `onEthernet` | `Widget?` | - | Widget เมื่อเชื่อมต่อ Ethernet |
-| `onVpn` | `Widget?` | - | Widget เมื่อเชื่อมต่อ VPN |
-| `onBluetooth` | `Widget?` | - | Widget เมื่อเชื่อมต่อ Bluetooth |
-| `onOther` | `Widget?` | - | Widget สำหรับการเชื่อมต่ออื่น |
-| `onNone` | `Widget?` | - | Widget เมื่อออฟไลน์ |
-| `child` | `Widget?` | - | Widget เริ่มต้น |
-| `showLoadingOnInit` | `bool` | `false` | แสดง loading ขณะตรวจสอบ |
-| `loadingWidget` | `Widget?` | - | Widget loading แบบกำหนดเอง |
+| `noInternet` | `Widget?` | - | Widget ที่แสดงเมื่อไม่มี wifi, mobile, และ ethernet เลย |
+| `child` | `Widget?` | - | Widget ที่แสดงเมื่อมีอินเทอร์เน็ต |
 | `onConnectivityChanged` | `Function?` | - | Callback เมื่อเปลี่ยนแปลง |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | เชื่อมต่อผ่าน Ethernet |
 | `vpn` | เชื่อมต่อผ่าน VPN |
 | `bluetooth` | เชื่อมต่อผ่าน Bluetooth |
+| `satellite` | เชื่อมต่อผ่านดาวเทียม |
 | `other` | การเชื่อมต่อประเภทอื่น |
 | `none` | ไม่มีการเชื่อมต่อ |

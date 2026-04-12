@@ -7,7 +7,9 @@
 - Utilizzo
     - [Widget Dropdown](#usage-dropdown "Widget Dropdown")
     - [Modale Bottom Sheet](#usage-bottom-modal "Modale Bottom Sheet")
+- [Stile di Animazione](#animation-style "Stile di Animazione")
 - [Builder Dropdown Personalizzato](#custom-builder "Builder Dropdown Personalizzato")
+- [Azioni sullo Stato](#state-actions "Azioni sullo Stato")
 - [Parametri](#parameters "Parametri")
 - [Metodi Statici](#methods "Metodi Statici")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Aggiungi alla barra dell'app
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Il modale bottom sheet mostra un elenco di lingue con un segno di spunta accanto alla lingua attualmente selezionata.
 
-### Personalizzazione dell'Altezza del Modale
+### Personalizzazione del Modale
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Mostra il modale sopra tutte le route, incluse le tab bar
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Stile di Animazione
+
+Il parametro `animationStyle` controlla le animazioni di transizione sia per il trigger del dropdown che per gli elementi della lista nel modale bottom. Sono disponibili quattro preset:
+
+``` dart
+// Nessuna animazione
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Animazioni sottili e raffinate (consigliate per la maggior parte delle app)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Animazioni vivaci e rimbalzanti
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Dissolvenza fluida con scala delicata
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Puoi anche passare un `LanguageSwitcherAnimationStyle()` personalizzato con parametri individuali, o usare `copyWith` per modificare un preset.
+
+Lo stesso parametro `animationStyle` e' accettato da `LanguageSwitcher.showBottomModal`.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // es., "English"
+        // language['locale'] contiene il codice locale, es., "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Esegui azioni aggiuntive al cambio di lingua
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Azioni sullo Stato
+
+Controlla il `LanguageSwitcher` in modo programmatico usando `stateActions()`:
+
+``` dart
+// Aggiorna l'elenco delle lingue (rilegge le lingue disponibili)
+LanguageSwitcher.stateActions().refresh();
+
+// Passa a una lingua tramite codice locale
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Utile quando vuoi cambiare la lingua dell'app senza interazione utente, ad esempio dopo il login con una preferenza utente.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Mostra il modale di selezione della lingua:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Con opzioni
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Locali Supportati

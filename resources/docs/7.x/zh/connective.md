@@ -5,7 +5,6 @@
 <a name="section-1"></a>
 - [简介](#introduction "简介")
 - [Connective 组件](#connective-widget "Connective 组件")
-    - [基于状态的构建器](#state-builders "基于状态的构建器")
     - [自定义构建器](#custom-builder "自定义构建器")
 - [OfflineBanner 组件](#offline-banner "OfflineBanner 组件")
 - [NyConnectivity 辅助类](#connectivity-helper "NyConnectivity 辅助类")
@@ -25,39 +24,22 @@
 
 `Connective` 组件监听连接变化，并根据当前网络状态重建。
 
-<div id="state-builders"></div>
-
-### 基于状态的构建器
-
-为每种连接类型提供不同的组件：
+使用 `noInternet` 在设备没有网络（wifi、mobile、ethernet 均不存在）时显示回退组件：
 
 ``` dart
 Connective(
-  onWifi: Text('Connected via WiFi'),
-  onMobile: Text('Connected via Mobile Data'),
-  onNone: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.wifi_off, size: 64),
-      Text('No internet connection'),
-    ],
+  noInternet: Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off, size: 64),
+        Text('No internet connection'),
+      ],
+    ),
   ),
-  child: Text('Connected'), // Default for unspecified states
+  child: MyContent(),
 )
 ```
-
-#### 可用状态
-
-| 属性 | 描述 |
-|----------|-------------|
-| `onWifi` | 通过 WiFi 连接时的组件 |
-| `onMobile` | 通过移动数据连接时的组件 |
-| `onEthernet` | 通过以太网连接时的组件 |
-| `onVpn` | 通过 VPN 连接时的组件 |
-| `onBluetooth` | 通过蓝牙连接时的组件 |
-| `onOther` | 其他连接类型的组件 |
-| `onNone` | 离线时的组件 |
-| `child` | 未提供特定处理器时的默认组件 |
 
 <div id="custom-builder"></div>
 
@@ -85,7 +67,7 @@ Connective.builder(
       );
     }
 
-    // Show connection type
+    // 显示连接类型
     return Text('Connected via: ${state.name}');
   },
 )
@@ -93,7 +75,7 @@ Connective.builder(
 
 构建器接收：
 - `context` - BuildContext
-- `state` - `NyConnectivityState` 枚举（wifi、mobile、ethernet、vpn、bluetooth、other、none）
+- `state` - `NyConnectivityState` 枚举（wifi、mobile、ethernet、vpn、bluetooth、satellite、other、none）
 - `results` - `List<ConnectivityResult>`，用于检查多个连接
 
 ### 监听变化
@@ -117,16 +99,16 @@ Connective(
 
 ## OfflineBanner 组件
 
-在离线时在屏幕顶部显示横幅：
+当没有网络（wifi、mobile、ethernet 均不存在）时，在屏幕顶部显示横幅：
 
 ``` dart
 Scaffold(
   body: Stack(
     children: [
-      // Your main content
+      // 主要内容
       MyPageContent(),
 
-      // Offline banner (auto-hides when online)
+      // 离线横幅（在线时自动隐藏）
       OfflineBanner(),
     ],
   ),
@@ -142,7 +124,7 @@ OfflineBanner(
   textColor: Colors.white,
   icon: Icons.signal_wifi_off,
   height: 50,
-  animate: true, // Slide in/out animation
+  animate: true, // 滑入/滑出动画
   animationDuration: Duration(milliseconds: 200),
 )
 ```
@@ -157,14 +139,14 @@ OfflineBanner(
 
 ``` dart
 if (await NyConnectivity.isOnline()) {
-  // Make API request
+  // 发起 API 请求
   final data = await api.fetchData();
 } else {
-  // Load from cache
+  // 从缓存加载
   final data = await cache.getData();
 }
 
-// Or check if offline
+// 或检查是否离线
 if (await NyConnectivity.isOffline()) {
   showOfflineMessage();
 }
@@ -174,32 +156,43 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Download large files on WiFi
+  // 在 WiFi 上下载大文件
   await downloadLargeFile();
 }
 
 if (await NyConnectivity.isMobile()) {
-  // Warn about data usage
+  // 警告流量使用
   showDataWarning();
 }
 
-// Other methods:
+// 其他方法：
 await NyConnectivity.isEthernet();
 await NyConnectivity.isVpn();
 await NyConnectivity.isBluetooth();
 ```
 
+### 检查网络连接
+
+`hasInternet()` 比 `isOnline()` 更严格——仅在通过 wifi、mobile 或 ethernet 连接时返回 `true`。VPN、bluetooth 和卫星连接被排除在外。
+
+``` dart
+if (await NyConnectivity.hasInternet()) {
+  // 已确认通过 wifi、mobile 或 ethernet 访问互联网
+  await syncData();
+}
+```
+
 ### 获取当前状态
 
 ``` dart
-// Get all active connection types
+// 获取所有活跃连接类型
 List<ConnectivityResult> results = await NyConnectivity.status();
 
 if (results.contains(ConnectivityResult.wifi)) {
   print('WiFi is active');
 }
 
-// Get human-readable string
+// 获取可读字符串
 String type = await NyConnectivity.connectionTypeString();
 print('Connected via: $type'); // "WiFi", "Mobile", "None", etc.
 ```
@@ -215,7 +208,7 @@ StreamSubscription subscription = NyConnectivity.stream().listen((results) {
   }
 });
 
-// Don't forget to cancel when done
+// 完成后记得取消
 @override
 void dispose() {
   subscription.cancel();
@@ -226,7 +219,7 @@ void dispose() {
 ### 条件执行
 
 ``` dart
-// Execute only when online (returns null if offline)
+// 仅在线时执行（离线时返回 null）
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -235,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Execute different callbacks based on status
+// 根据状态执行不同的回调
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -251,7 +244,7 @@ final result = await NyConnectivity.when(
 ### 显示离线替代方案
 
 ``` dart
-// Show a different widget when offline
+// 离线时显示不同的组件
 MyContent().connectiveOr(
   offline: Text('Content unavailable offline'),
 )
@@ -260,14 +253,14 @@ MyContent().connectiveOr(
 ### 仅在线时显示
 
 ``` dart
-// Hide completely when offline
+// 离线时完全隐藏
 SyncButton().onlyOnline()
 ```
 
 ### 仅在离线时显示
 
 ``` dart
-// Show only when offline
+// 仅在离线时显示
 OfflineMessage().onlyOffline()
 ```
 
@@ -279,16 +272,8 @@ OfflineMessage().onlyOffline()
 
 | 参数 | 类型 | 默认值 | 描述 |
 |-----------|------|---------|-------------|
-| `onWifi` | `Widget?` | - | WiFi 连接时的组件 |
-| `onMobile` | `Widget?` | - | 移动数据连接时的组件 |
-| `onEthernet` | `Widget?` | - | 以太网连接时的组件 |
-| `onVpn` | `Widget?` | - | VPN 连接时的组件 |
-| `onBluetooth` | `Widget?` | - | 蓝牙连接时的组件 |
-| `onOther` | `Widget?` | - | 其他连接时的组件 |
-| `onNone` | `Widget?` | - | 离线时的组件 |
-| `child` | `Widget?` | - | 默认组件 |
-| `showLoadingOnInit` | `bool` | `false` | 检查时显示加载状态 |
-| `loadingWidget` | `Widget?` | - | 自定义加载组件 |
+| `noInternet` | `Widget?` | - | wifi、mobile 和 ethernet 均不存在时显示的组件 |
+| `child` | `Widget?` | - | 有网络时显示的组件 |
 | `onConnectivityChanged` | `Function?` | - | 变化时的回调 |
 
 ### OfflineBanner
@@ -312,5 +297,6 @@ OfflineMessage().onlyOffline()
 | `ethernet` | 通过以太网连接 |
 | `vpn` | 通过 VPN 连接 |
 | `bluetooth` | 通过蓝牙连接 |
+| `satellite` | 通过卫星连接 |
 | `other` | 其他连接类型 |
 | `none` | 无连接 |

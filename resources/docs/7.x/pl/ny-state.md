@@ -72,7 +72,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
   get init => () async {
-    await sleep(3); // simulate a network call for 3 seconds
+    await sleep(3); // symuluj wywołanie sieciowe przez 3 sekundy
   };
 ```
 
@@ -122,7 +122,7 @@ Przykład poniżej:
 ``` dart
 class _HomePageState extends NyState<HomePage> {
     get init => () async {
-        await sleep(3); // simulate a network call for 3 seconds
+        await sleep(3); // symuluj wywołanie sieciowe przez 3 sekundy
     };
 
     @override
@@ -155,7 +155,7 @@ class _MyWidgetState extends NyState<MyWidget> {
 
   @override
   get init => () async {
-    // handle how you want to initialize the state
+    // określ jak chcesz zainicjalizować stan
   };
 
   @override
@@ -164,7 +164,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // Przykład z danymi
       _userName = user.name;
       setState(() {});
     },
@@ -180,10 +180,10 @@ Następnie możesz wywołać akcję z innej klasy za pomocą metody `stateAction
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Kolejny przykład z danymi
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// Kolejny przykład z danymi
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -192,11 +192,11 @@ Jeśli używasz stateActions z `NyPage`, musisz użyć **ścieżki** strony.
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// Kolejny przykład z danymi
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// Kolejny przykład z danymi
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -279,7 +279,7 @@ class _HomePageState extends NyState<HomePage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                reboot(); // refresh the data
+                reboot(); // odśwież dane
               },
             )
           ],
@@ -301,13 +301,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Usuń bieżącą stronę ze stosu.
 
+Przekaż `rootNavigator: true`, aby pop wykonać z root navigatora zamiast najbliższego lokalnego. Jest to przydatne wewnątrz zakładek Navigation Hub, gdy modal lub nakładka zostały wypchnięte przy użyciu root navigatora.
+
 Przykład
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop z root navigatora (np. aby zamknąć modal na poziomie root)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -536,7 +543,7 @@ Przykład
 ``` dart
 _logout() {
  confirmAction(() {
-    // logout();
+    // wyloguj();
  }, title: "Logout of the app?");
 }
 ```
@@ -747,7 +754,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   get init => () async {
-    _user = await api<ApiService>((request) => request.fetchUser()); // example
+    _user = await api<ApiService>((request) => request.fetchUser()); // przykład
     setState(() {});
   };
 

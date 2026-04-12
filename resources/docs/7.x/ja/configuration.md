@@ -10,6 +10,7 @@
   - [値の取得](#retrieving-values "値の取得")
   - [Config クラスの作成](#creating-config-classes "Config クラスの作成")
   - [変数の型](#variable-types "変数の型")
+  - [変数の補間](#variable-interpolation "変数の補間")
 - [環境フレーバー](#environment-flavours "環境フレーバー")
 - [ビルド時インジェクション](#build-time-injection "ビルド時インジェクション")
 
@@ -94,7 +95,7 @@ metro make:env
 metro make:env
 ```
 
-`--force` フラグは既存の `env.g.dart` を上書きします。
+これは常に既存の `env.g.dart` を上書きします。
 
 <div id="retrieving-values"></div>
 
@@ -200,6 +201,30 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (空文字列) |
 
+
+<div id="variable-interpolation"></div>
+
+## 変数の補間
+
+`.env` ファイルの文字列値は、`${VAR_NAME}` 構文を使用して他の変数を参照できます:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+コードが `getEnv('APP_URL')` を呼び出すと、返される値は `https://myapp.com` です。参照は再帰的に解決されるため、連鎖した参照も期待通りに動作します:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` は `https://example.com/uploads` を返します。
+
+循環参照は保護されています -- 変数が自分自身を（直接またはチェーンを通じて）参照する場合、無限ループを引き起こすのではなく、未解決の `${VAR_NAME}` プレースホルダーが出力に保持されます。
 
 <div id="environment-flavours"></div>
 

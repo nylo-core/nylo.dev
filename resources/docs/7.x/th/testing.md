@@ -30,6 +30,7 @@
 - [Custom Matcher](#custom-matchers "Custom Matcher")
 - [การทดสอบ State](#state-testing "การทดสอบ State")
 - [การดีบัก](#debugging "การดีบัก")
+- [Helper การนำทางและการโต้ตอบ](#nav-interaction "Helper การนำทางและการโต้ตอบ")
 - [ตัวอย่าง](#examples "ตัวอย่างการใช้งานจริง")
 
 <div id="introduction"></div>
@@ -363,6 +364,13 @@ NyTest.logout();
 expectGuest();
 ```
 
+ใช้ `actingAsGuest()` เป็น alias ที่อ่านง่ายสำหรับ `logout()` เมื่อตั้งค่า guest context:
+
+``` dart
+NyTest.actingAsGuest();
+expectGuest();
+```
+
 <div id="time-travel"></div>
 
 ## การเดินทางข้ามเวลา
@@ -505,6 +513,12 @@ nyTest('verify API was called', () async {
   // ดึงรายละเอียดการเรียก
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+ยืนยันว่า endpoint ถูกเรียกด้วยข้อมูล request body ที่ระบุ:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### การสร้าง Mock Response
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Widget Assertion
+
+``` dart
+// ยืนยันว่า widget ประเภทนั้นปรากฏตามจำนวนที่กำหนด
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// ยืนยันว่า text มองเห็นได้
+expectTextVisible('Welcome');
+
+// ยืนยันว่า text ไม่มองเห็น
+expectTextNotVisible('Error');
+
+// ยืนยันว่า widget ใด ๆ มองเห็นได้ (ใช้ Finder ใด ๆ ก็ได้)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// ยืนยันว่า widget ไม่มองเห็น
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Locale Assertion
@@ -873,16 +911,16 @@ expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ใช้ custom matcher กับ `expect()`:
 
 ``` dart
-// Type matcher
+// Matcher ประเภท
 expect(result, isType<User>());
 
-// Route name matcher
+// Matcher ชื่อ route
 expect(widget, hasRouteName('/home'));
 
-// Backpack matcher
+// Matcher Backpack
 expect(true, backpackHas("key", value: "expected"));
 
-// API call matcher
+// Matcher การเรียก API
 expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 ```
 
@@ -985,6 +1023,101 @@ NyTest.seedBackpack({
   "auth_token": "test_token",
   "settings": {"theme": "dark"},
 });
+```
+
+<div id="nav-interaction"></div>
+
+## Helper การนำทางและการโต้ตอบ
+
+Extension ของ `WidgetTester` มี DSL ระดับสูงสำหรับเขียน navigation flow และ UI interaction ใน `nyWidgetTest`
+
+### visit
+
+นำทางไปยัง route และรอให้หน้าเสร็จสิ้น:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+ยืนยันว่า action การนำทางพาคุณไปยัง route ที่คาดหวัง:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+ยืนยันว่า route ปัจจุบันตรงกับ route ที่กำหนด (ใช้เพื่อยืนยันตำแหน่งของคุณ ไม่ใช่ว่าคุณเพิ่งนำทาง):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+รอให้ animation และ frame callback ที่รอดำเนินการทั้งหมดเสร็จสิ้น:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Pop route ปัจจุบันและ settle:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+ค้นหา widget ด้วยข้อความ แตะ และ settle ในการเรียกครั้งเดียว:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+แตะ form field ป้อนข้อความ และ settle:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+เลื่อนจนกว่า widget จะมองเห็น แล้ว settle:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+ส่ง `scrollable` finder และ `delta` เฉพาะเจาะจงเพื่อควบคุมที่แม่นยำ:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
 ```
 
 <div id="examples"></div>

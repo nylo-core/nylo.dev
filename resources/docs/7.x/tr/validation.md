@@ -11,6 +11,7 @@
   - [FormValidator Kullanımı](#using-form-validator "FormValidator Kullanımı")
   - [FormValidator Adlandırılmış Yapıcılar](#form-validator-named-constructors "FormValidator Adlandırılmış Yapıcılar")
   - [Doğrulama Kurallarını Zincirleme](#chaining-validation-rules "Doğrulama Kurallarını Zincirleme")
+  - [İsteğe Bağlı Alanlar](#nullable-fields "İsteğe Bağlı Alanlar")
   - [Özel Doğrulama](#custom-validation "Özel Doğrulama")
   - [FormValidator'ı Alanlarla Kullanma](#form-validator-with-fields "FormValidator'ı Alanlarla Kullanma")
 - [Mevcut Doğrulama Kuralları](#validation-rules "Mevcut Doğrulama Kuralları")
@@ -23,7 +24,7 @@
 {{ config('app.name') }} v7, `FormValidator` sınıfı etrafında oluşturulmuş bir doğrulama sistemi sunar. Sayfalarınızda `check()` metodunu kullanarak verileri doğrulayabilir veya bağımsız ve alan seviyesinde doğrulama için `FormValidator`'ı doğrudan kullanabilirsiniz.
 
 ``` dart
-// Validate data in a NyPage/NyState using check()
+// NyPage/NyState içinde check() ile veri doğrula
 check((validate) {
   validate.that('user@example.com').email();
   validate.that('Anthony')
@@ -33,7 +34,7 @@ check((validate) {
   print("All validations passed!");
 });
 
-// FormValidator with form fields
+// Form alanlarıyla FormValidator
 Field.text("Email", validator: FormValidator.email())
 ```
 
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## İsteğe Bağlı Alanlar
+
+Bir doğrulayıcıyı isteğe bağlı olarak işaretlemek için `.nullable()` kullanın. Nullable olduğunda, null veya boş bir değer doğrulamayı otomatik olarak geçer — diğer tüm kurallar yalnızca değer mevcut olduğunda uygulanır.
+
+``` dart
+// Takma ad isteğe bağlıdır, ancak sağlanırsa 3–20 karakter olmalıdır
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+`.nullable()` olmadan, boş bir alan `minLength` kuralını geçemez. `.nullable()` ile alanı boş bırakmak doğrulamayı geçer.
+
+Bu, isteğe bağlı profil alanları, ikincil iletişim bilgileri veya yalnızca kullanıcı doldurduğunda doğrulanması gereken herhangi bir alan için kullanışlıdır. `nullable()`'ın `Field` widget'larıyla nasıl entegre olduğu için [Formlar belgelerine](/docs/{{ $version }}/forms) bakın.
+
 <div id="custom-validation"></div>
 
 ## Özel Doğrulama
@@ -403,6 +425,7 @@ Field.slider(
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | Regex deseniyle eşleşmelidir |
 | Equals | — | `.equals(otherValue)` | Başka bir değere eşit olmalıdır |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | Özel doğrulama fonksiyonu |
+| Nullable | — | `.nullable()` | Null veya boş değerler otomatik geçer; kurallar yalnızca değer mevcut olduğunda uygulanır |
 
 Tüm kurallar, hata mesajını özelleştirmek için isteğe bağlı bir `message` parametresi kabul eder.
 

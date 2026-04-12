@@ -10,6 +10,7 @@
   - [プレースホルダーのスタイリング](#styling-placeholders "プレースホルダーのスタイリング")
   - [タップコールバック](#tap-callbacks "タップコールバック")
   - [パイプ区切りキー](#pipe-keys "パイプ区切りキー")
+  - [ワイルドカードスタイル](#wildcard-styles "ワイルドカードスタイル")
   - [ローカリゼーションキー](#localization-keys "ローカリゼーションキー")
 - [パラメータ](#parameters "パラメータ")
 - [テキストエクステンション](#text-extensions "テキストエクステンション")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 これにより、3 つすべてのプレースホルダーに同じスタイルとコールバックがマッピングされます。
+
+<div id="wildcard-styles"></div>
+
+### ワイルドカードスタイル
+
+`"*"` をキーとして使用すると、固有のキーを持たないすべてのプレースホルダーにスタイルやタップコールバックを適用できます:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name` と `app` の両方がワイルドカードスタイルを受け取ります。プレースホルダーに明示的なキーもある場合、明示的なキーが `"*"` より優先されます。
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // "cancel" にのみ適用
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // マッチしないプレースホルダーへのタップ
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

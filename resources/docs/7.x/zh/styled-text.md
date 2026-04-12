@@ -10,6 +10,8 @@
   - [样式占位符](#styling-placeholders "样式占位符")
   - [点击回调](#tap-callbacks "点击回调")
   - [管道分隔键](#pipe-keys "管道分隔键")
+  - [通配符样式](#wildcard-styles "通配符样式")
+  - [本地化键](#localization-keys "本地化键")
 - [参数](#parameters "参数")
 - [文本扩展](#text-extensions "文本扩展")
   - [排版样式](#typography-styles "排版样式")
@@ -32,7 +34,7 @@ StyledText 支持两种模式：
 ## 基本用法
 
 ``` dart
-// Children mode - list of Text widgets
+// 子组件模式 - Text 组件列表
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// 模板模式 - 占位符语法
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 这会将相同的样式和回调映射到所有三个占位符。
 
+<div id="wildcard-styles"></div>
+
+### 通配符样式
+
+使用 `"*"` 作为键，可以将样式或点击回调应用于所有没有自定义键的占位符：
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name` 和 `app` 都会接收通配符样式。如果占位符也有明确的键，明确的键优先于 `"*"`。
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // 仅应用于 "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // 点击任意未匹配的占位符
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### 本地化键
+
+使用 `@{{key:text}}` 语法将**查找键**与**显示文本**分开。这对本地化很有用 —— 键在所有语言环境中保持不变，而显示文本随语言变化。
+
+``` dart
+// 在语言环境文件中：
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN 渲染：「Learn Languages, Reading and Speaking in AppName」
+// ES 渲染：「Aprende Idiomas, Lectura y Habla en AppName」
+```
+
+`:` 前面的部分是用于查找样式和点击回调的**键**。`:` 后面的部分是屏幕上渲染的**显示文本**。没有 `:` 时，占位符的行为与以前完全相同 —— 完全向后兼容。
+
+这与所有现有功能兼容，包括[管道分隔键](#pipe-keys)和[点击回调](#tap-callbacks)。
+
 <div id="parameters"></div>
 
 ## 参数
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### 实用方法
 
 ``` dart
-// Font weight
+// 字体粗细
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// 对齐
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// 最大行数
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// 字体系列
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// 字体大小
 Text("Big text").setFontSize(24)
 
-// Custom style
+// 自定义样式
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// 内边距
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// 携带修改内容复制
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

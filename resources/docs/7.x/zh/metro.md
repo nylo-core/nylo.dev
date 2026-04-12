@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 上述命令将在 `lib/resources/widgets/` 目录中创建一个新组件（如果不存在）。
 
+所有 `make:*` 命令支持在名称中使用路径分隔符，将文件放入子目录：
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+这将在 `lib/resources/widgets/login/brand_panel.dart` 创建组件。
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### 强制创建无状态组件
@@ -338,7 +346,7 @@ metro make:stateful_widget product_rating_widget --force
 ``` bash
 metro make:journey_widget product_journey --parent="[NAVIGATION_HUB]"
 
-# Full example if you have a BaseNavigationHub
+# 如果您有 BaseNavigationHub 的完整示例
 metro make:journey_widget welcome,user_dob,user_photos --parent="Base"
 ```
 
@@ -433,6 +441,14 @@ metro make:event login_event
 
 这将在 `lib/app/events` 中创建一个新事件。
 
+使用路径分隔符将事件整理到子目录中：
+
+``` bash
+metro make:event auth/login_event
+```
+
+这将在 `lib/app/events/auth/login_event.dart` 创建事件。
+
 <div id="forcefully-make-an-event"></div>
 
 ### 强制创建事件
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 新创建的 provider 将放置在 `lib/app/providers/` 中。
+
+使用路径分隔符将 provider 整理到子目录中：
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+这将在 `lib/app/providers/integrations/firebase_provider.dart` 创建 provider。
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 这将在 `lib/app/forms` 中创建一个新表单。
 
+使用路径分隔符将表单整理到子目录中：
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+这将在 `lib/app/forms/checkout/car_advert_form.dart` 创建表单。
+
 <div id="forcefully-make-a-form"></div>
 
 ### 强制创建表单
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 这将在 `lib/app/route_guards` 中创建一个新路由守卫。
+
+使用路径分隔符将路由守卫整理到子目录中：
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+这将在 `lib/app/route_guards/subscriptions/premium_content.dart` 创建路由守卫。
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -671,7 +711,7 @@ metro make:navigation_hub dashboard
 | `--force` | `-f` | 如果存在则覆盖 |
 
 ``` bash
-# Create as the initial page
+# 创建为初始页面
 metro make:navigation_hub dashboard --initial
 ```
 
@@ -759,10 +799,10 @@ metro make:key
 | `--file` | `-e` | 目标 .env 文件（默认：`.env`） |
 
 ``` bash
-# Generate key and overwrite existing
+# 生成密钥并覆盖现有密钥
 metro make:key --force
 
-# Generate key for a specific env file
+# 为特定 env 文件生成密钥
 metro make:key --file=.env.production
 ```
 
@@ -805,7 +845,7 @@ metro make:command current_time
 您可以使用 `--category` 选项为命令指定类别：
 
 ```bash
-# Specify a category
+# 指定类别
 metro make:command current_time --category="project"
 ```
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// 当前时间命令
 ///
-/// Usage:
+/// 用法：
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // 获取当前时间
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // 格式化当前时间
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -897,13 +937,13 @@ metro project:install_firebase --help
 @override
 CommandBuilder builder(CommandBuilder command) {
 
-  // Add an option with a default value
+  // 添加带默认值的选项
   command.addOption(
-    'environment',     // option name
-    abbr: 'e',         // short form abbreviation
-    help: 'Target deployment environment', // help text
-    defaultValue: 'development',  // default value
-    allowed: ['development', 'staging', 'production'] // allowed values
+    'environment',     // 选项名称
+    abbr: 'e',         // 缩写形式
+    help: 'Target deployment environment', // 帮助文本
+    defaultValue: 'development',  // 默认值
+    allowed: ['development', 'staging', 'production'] // 允许的值
   );
 
   return command;
@@ -918,7 +958,7 @@ Future<void> handle(CommandResult result) async {
   final environment = result.getString('environment');
   info('Deploying to $environment environment...');
 
-  // Command implementation...
+  // 命令实现...
 }
 ```
 
@@ -941,10 +981,10 @@ metro project:deploy -e production
 CommandBuilder builder(CommandBuilder command) {
 
   command.addFlag(
-    'verbose',       // flag name
-    abbr: 'v',       // short form abbreviation
-    help: 'Enable verbose output', // help text
-    defaultValue: false  // default to off
+    'verbose',       // 标志名称
+    abbr: 'v',       // 缩写形式
+    help: 'Enable verbose output', // 帮助文本
+    defaultValue: false  // 默认关闭
   );
 
   return command;
@@ -960,10 +1000,10 @@ Future<void> handle(CommandResult result) async {
 
   if (verbose) {
     info('Verbose mode enabled');
-    // Additional logging...
+    // 其他日志...
   }
 
-  // Command implementation...
+  // 命令实现...
 }
 ```
 
@@ -1039,13 +1079,13 @@ metro project:deploy -v
 ### 运行外部进程
 
 ```dart
-// Run a process with output displayed in the console
+// 运行进程并在控制台显示输出
 await runProcess('flutter build web --release');
 
-// Run a process silently
+// 静默运行进程
 await runProcess('flutter pub get', silent: true);
 
-// Run a process in a specific directory
+// 在特定目录中运行进程
 await runProcess('git pull', workingDirectory: './my-project');
 ```
 
@@ -1055,13 +1095,13 @@ await runProcess('git pull', workingDirectory: './my-project');
 <div id="custom-command-helper-add-packages"></div>
 
 ```dart
-// Add a package to pubspec.yaml
+// 向 pubspec.yaml 添加包
 addPackage('firebase_core', version: '^2.4.0');
 
-// Add a dev package to pubspec.yaml
+// 向 pubspec.yaml 添加 dev 包
 addPackage('build_runner', dev: true);
 
-// Add multiple packages at once
+// 一次添加多个包
 addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
@@ -1070,11 +1110,11 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ### 输出格式化
 
 ```dart
-// Print status messages with color coding
-info('Processing files...');    // Blue text
-error('Operation failed');      // Red text
-success('Deployment complete'); // Green text
-warning('Outdated package');    // Yellow text
+// 打印带颜色编码的状态消息
+info('Processing files...');    // 蓝色文本
+error('Operation failed');      // 红色文本
+success('Deployment complete'); // 绿色文本
+warning('Outdated package');    // 黄色文本
 ```
 
 <div id="interactive-input-methods"></div>
@@ -1124,10 +1164,10 @@ bool confirm(String question, {bool defaultValue = false})
 **示例：**
 ```dart
 if (confirm('Would you like to continue?', defaultValue: true)) {
-  // User confirmed or pressed Enter (accepting the default)
+  // 用户确认或按下回车键（接受默认值）
   await runProcess('flutter pub get');
 } else {
-  // User declined
+  // 用户拒绝
   info('Operation canceled');
 }
 ```
@@ -1205,7 +1245,7 @@ Future<T?> api<T>(Future<T?> Function(ApiService) request) async
 ### GET 请求
 
 ```dart
-// Fetch data
+// 获取数据
 final userData = await api((request) =>
   request.get('https://api.example.com/users/1')
 );
@@ -1214,7 +1254,7 @@ final userData = await api((request) =>
 ### POST 请求
 
 ```dart
-// Create a resource
+// 创建资源
 final result = await api((request) =>
   request.post(
     'https://api.example.com/items',
@@ -1226,7 +1266,7 @@ final result = await api((request) =>
 ### PUT 请求
 
 ```dart
-// Update a resource
+// 更新资源
 final updateResult = await api((request) =>
   request.put(
     'https://api.example.com/items/42',
@@ -1238,14 +1278,14 @@ final updateResult = await api((request) =>
 ### DELETE 请求
 
 ```dart
-// Delete a resource
+// 删除资源
 final deleteResult = await api((request) => request.delete('https://api.example.com/items/42'));
 ```
 
 ### PATCH 请求
 
 ```dart
-// Partially update a resource
+// 部分更新资源
 final patchResult = await api((request) => request.patch(
     'https://api.example.com/items/42',
     data: {'price': 24.99}
@@ -1256,7 +1296,7 @@ final patchResult = await api((request) => request.patch(
 ### 带查询参数
 
 ```dart
-// Add query parameters
+// 添加查询参数
 final searchResults = await api((request) => request.get(
     'https://api.example.com/search',
     queryParameters: {'q': 'keyword', 'limit': 10}
@@ -1267,11 +1307,11 @@ final searchResults = await api((request) => request.get(
 ### 带 Spinner
 
 ```dart
-// Using with spinner for better UI
+// 配合 spinner 使用以获得更好的 UI
 final data = await withSpinner(
   task: () async {
     final data = await api((request) => request.get('https://api.example.com/config'));
-    // Process the data
+    // 处理数据
   },
   message: 'Loading configuration',
 );
@@ -1315,10 +1355,10 @@ Future<T> withSpinner<T>({
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Run a task with a spinner
+  // 使用 spinner 运行任务
   final projectFiles = await withSpinner(
     task: () async {
-      // Long-running task (e.g., analyzing project files)
+      // 耗时任务（例如，分析项目文件）
       await sleep(2);
       return ['pubspec.yaml', 'lib/main.dart', 'README.md'];
     },
@@ -1327,7 +1367,7 @@ Future<void> handle(CommandResult result) async {
     errorMessage: 'Failed to analyze project',
   );
 
-  // Continue with the results
+  // 继续处理结果
   info('Found ${projectFiles.length} key files');
 }
 ```
@@ -1351,26 +1391,26 @@ ConsoleSpinner createSpinner(String message)
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a spinner instance
+  // 创建 spinner 实例
   final spinner = createSpinner('Deploying to production');
   spinner.start();
 
   try {
-    // First task
+    // 第一个任务
     await runProcess('flutter clean', silent: true);
     spinner.update('Building release version');
 
-    // Second task
+    // 第二个任务
     await runProcess('flutter build web --release', silent: true);
     spinner.update('Uploading to server');
 
-    // Third task
+    // 第三个任务
     await runProcess('./deploy.sh', silent: true);
 
-    // Complete successfully
+    // 成功完成
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
   } catch (e) {
-    // Handle failure
+    // 处理失败
     spinner.stop(completionMessage: 'Deployment failed: $e', success: false);
     rethrow;
   }
@@ -1388,7 +1428,7 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   await withSpinner(
     task: () async {
-      // Install dependencies
+      // 安装依赖
       await runProcess('flutter pub get', silent: true);
       return true;
     },
@@ -1403,19 +1443,19 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // First operation with spinner
+  // 第一个带 spinner 的操作
   await withSpinner(
     task: () => runProcess('flutter clean', silent: true),
     message: 'Cleaning project',
   );
 
-  // Second operation with spinner
+  // 第二个带 spinner 的操作
   await withSpinner(
     task: () => runProcess('flutter pub get', silent: true),
     message: 'Updating dependencies',
   );
 
-  // Third operation with spinner
+  // 第三个带 spinner 的操作
   final buildSuccess = await withSpinner(
     task: () async {
       await runProcess('flutter build apk --release', silent: true);
@@ -1440,7 +1480,7 @@ Future<void> handle(CommandResult result) async {
   spinner.start();
 
   try {
-    // Run multiple steps with status updates
+    // 运行多个步骤并更新状态
     spinner.update('Step 1: Cleaning project');
     await runProcess('flutter clean', silent: true);
 
@@ -1450,7 +1490,7 @@ Future<void> handle(CommandResult result) async {
     spinner.update('Step 3: Building release');
     await runProcess('flutter build web --release', silent: true);
 
-    // Complete the process
+    // 完成流程
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
 
   } catch (e) {
@@ -1583,28 +1623,28 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Print plain text (no color)
+  // 打印纯文本（无颜色）
   line('Processing your request...');
 
-  // Print blank lines
-  newLine();       // one blank line
-  newLine(3);      // three blank lines
+  // 打印空行
+  newLine();       // 一个空行
+  newLine(3);      // 三个空行
 
-  // Print a muted comment (gray text)
+  // 打印静音注释（灰色文本）
   comment('This is a background note');
 
-  // Print a prominent alert box
+  // 打印醒目的警告框
   alert('Important: Please read carefully');
 
-  // Ask is an alias for prompt
+  // ask 是 prompt 的别名
   final name = ask('What is your name?');
 
-  // Hidden input for sensitive data (e.g., passwords, API keys)
+  // 敏感数据的隐藏输入（例如密码、API 密钥）
   final apiKey = promptSecret('Enter your API key:');
 
-  // Abort the command with an error message and exit code
+  // 以错误消息和退出码中止命令
   if (name.isEmpty) {
-    abort('Name is required');  // exits with code 1
+    abort('Name is required');  // 以代码 1 退出
   }
 }
 ```
@@ -1630,38 +1670,38 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Check if a file exists
+  // 检查文件是否存在
   if (fileExists('lib/config/app.dart')) {
     info('Config file found');
   }
 
-  // Check if a directory exists
+  // 检查目录是否存在
   if (directoryExists('lib/app/models')) {
     info('Models directory found');
   }
 
-  // Read a file (async)
+  // 读取文件（异步）
   String content = await readFile('pubspec.yaml');
 
-  // Read a file (sync)
+  // 读取文件（同步）
   String contentSync = readFileSync('pubspec.yaml');
 
-  // Write to a file (async)
+  // 写入文件（异步）
   await writeFile('lib/generated/output.dart', 'class Output {}');
 
-  // Write to a file (sync)
+  // 写入文件（同步）
   writeFileSync('lib/generated/output.dart', 'class Output {}');
 
-  // Append content to a file
+  // 追加内容到文件
   await appendFile('log.txt', 'New log entry\n');
 
-  // Ensure a directory exists (creates it if missing)
+  // 确保目录存在（如果不存在则创建）
   await ensureDirectory('lib/generated');
 
-  // Delete a file
+  // 删除文件
   await deleteFile('lib/generated/output.dart');
 
-  // Copy a file
+  // 复制文件
   await copyFile('lib/config/app.dart', 'lib/config/app.bak.dart');
 }
 ```
@@ -1688,27 +1728,27 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Read a JSON file as a Map
+  // 将 JSON 文件读取为 Map
   Map<String, dynamic> config = await readJson('config.json');
 
-  // Read a JSON file as a List
+  // 将 JSON 文件读取为 List
   List<dynamic> items = await readJsonArray('lib/app/commands/commands.json');
 
-  // Write data to a JSON file (pretty printed by default)
+  // 将数据写入 JSON 文件（默认美化输出）
   await writeJson('output.json', {'name': 'MyApp', 'version': '1.0.0'});
 
-  // Write compact JSON
+  // 写入紧凑 JSON
   await writeJson('output.json', data, pretty: false);
 
-  // Append an item to a JSON array file
-  // If the file contains [{"name": "a"}], this adds to that array
+  // 向 JSON 数组文件追加项
+  // 如果文件包含 [{"name": "a"}]，则追加到该数组
   await appendToJsonArray(
     'lib/app/commands/commands.json',
     {'name': 'my_command', 'category': 'app', 'script': 'my_command.dart'},
-    uniqueKey: 'name',  // prevents duplicates by this key
+    uniqueKey: 'name',  // 通过此键防止重复
   );
 
-  // Read a YAML file as a Map
+  // 将 YAML 文件读取为 Map
   Map<String, dynamic> pubspec = await readYaml('pubspec.yaml');
   info('Project: ${pubspec['name']}');
 }
@@ -1771,7 +1811,7 @@ Future<void> handle(CommandResult result) async {
   info(networkingPath);   // lib/app/networking
   info(themesPath);       // lib/resources/themes
 
-  // Build a custom path relative to the project root
+  // 构建相对于项目根目录的自定义路径
   String customPath = projectPath('lib/app/services/auth_service.dart');
 }
 ```
@@ -1799,7 +1839,7 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Platform checks
+  // 平台检查
   if (isWindows) {
     info('Running on Windows');
   } else if (isMacOS) {
@@ -1808,10 +1848,10 @@ Future<void> handle(CommandResult result) async {
     info('Running on Linux');
   }
 
-  // Current working directory
+  // 当前工作目录
   info('Working in: $workingDirectory');
 
-  // Read system environment variables
+  // 读取系统环境变量
   String home = env('HOME', '/default/path');
 }
 ```
@@ -1833,25 +1873,25 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Format a Dart file or directory
+  // 格式化 Dart 文件或目录
   await dartFormat('lib/app/models/user.dart');
 
-  // Run dart analyze
+  // 运行 dart analyze
   int analyzeResult = await dartAnalyze('lib/');
 
-  // Run flutter pub get
+  // 运行 flutter pub get
   await flutterPubGet();
 
-  // Run flutter clean
+  // 运行 flutter clean
   await flutterClean();
 
-  // Build for a target with additional args
+  // 为目标构建并附加额外参数
   await flutterBuild('apk', args: ['--release', '--split-per-abi']);
   await flutterBuild('web', args: ['--release']);
 
-  // Run flutter test
+  // 运行 flutter test
   await flutterTest();
-  await flutterTest('test/unit/');  // specific directory
+  await flutterTest('test/unit/');  // 特定目录
 }
 ```
 
@@ -1873,26 +1913,26 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Add an import statement to a Dart file (avoids duplicates)
+  // 向 Dart 文件添加导入语句（避免重复）
   await addImport(
     'lib/bootstrap/providers.dart',
     "import '/app/providers/firebase_provider.dart';",
   );
 
-  // Insert code before the last closing brace in a file
-  // Useful for adding entries to registration maps
+  // 在文件最后一个闭合大括号之前插入代码
+  // 用于向注册映射添加条目
   await insertBeforeClosingBrace(
     'lib/bootstrap/providers.dart',
     '  FirebaseProvider(),',
   );
 
-  // Check if a file contains a specific string
+  // 检查文件是否包含特定字符串
   bool hasImport = await fileContains(
     'lib/bootstrap/providers.dart',
     'firebase_provider',
   );
 
-  // Check if a file matches a regex pattern
+  // 检查文件是否匹配正则表达式模式
   bool hasClass = await fileContainsPattern(
     'lib/app/models/user.dart',
     RegExp(r'class User'),
@@ -1916,32 +1956,32 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // List directory contents
+  // 列出目录内容
   var entities = listDirectory('lib/app/models');
   for (var entity in entities) {
     info(entity.path);
   }
 
-  // List recursively
+  // 递归列出
   var allEntities = listDirectory('lib/', recursive: true);
 
-  // Find files matching criteria
+  // 查找匹配条件的文件
   List<File> dartFiles = findFiles(
     'lib/app/models',
     extension: '.dart',
     recursive: true,
   );
 
-  // Find files by name pattern
+  // 按名称模式查找文件
   List<File> testFiles = findFiles(
     'test/',
     namePattern: RegExp(r'_test\.dart$'),
   );
 
-  // Delete a directory recursively
+  // 递归删除目录
   await deleteDirectory('build/');
 
-  // Copy a directory (recursive)
+  // 复制目录（递归）
   await copyDirectory('lib/templates', 'lib/generated');
 }
 ```
@@ -1962,21 +2002,21 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Validate a Dart identifier
+  // 验证 Dart 标识符
   if (!isValidDartIdentifier('MyClass')) {
     error('Invalid Dart identifier');
   }
 
-  // Require a non-empty first argument
+  // 要求非空的第一个参数
   String name = requireArgument(result, message: 'Please provide a name');
 
-  // Clean a class name (PascalCase, remove suffixes)
+  // 清理类名（PascalCase，移除后缀）
   String className = cleanClassName('user_model', removeSuffixes: ['_model']);
-  // Returns: 'User'
+  // 返回：'User'
 
-  // Clean a file name (snake_case with extension)
+  // 清理文件名（snake_case 加扩展名）
   String fileName = cleanFileName('UserModel', extension: '.dart');
-  // Returns: 'user_model.dart'
+  // 返回：'user_model.dart'
 }
 ```
 
@@ -2003,12 +2043,12 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: 实现登录
     return false;
   }
 }
 ''',
-    force: false,  // don't overwrite if exists
+    force: false,  // 如果已存在则不覆盖
     successMessage: 'AuthService created',
   );
 }
@@ -2065,7 +2105,7 @@ Future<void> handle(CommandResult result) async {
     CommandTask(
       'Run tests',
       () => runProcess('flutter test', silent: true),
-      stopOnError: true,  // stop pipeline if this fails (default)
+      stopOnError: true,  // 如果此任务失败则停止流水线（默认）
     ),
   ]);
 }
@@ -2143,13 +2183,13 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a progress bar for 100 items
+  // 为 100 个项目创建进度条
   final progress = progressBar(100, message: 'Processing files');
   progress.start();
 
   for (int i = 0; i < 100; i++) {
     await Future.delayed(Duration(milliseconds: 50));
-    progress.tick();  // increment by 1
+    progress.tick();  // 增加 1
   }
 
   progress.complete('All files processed');
@@ -2163,11 +2203,11 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   final files = findFiles('lib/', extension: '.dart');
 
-  // Process items with automatic progress tracking
+  // 自动跟踪进度处理项目
   final results = await withProgress<File, String>(
     items: files,
     process: (file, index) async {
-      // process each file
+      // 处理每个文件
       return file.path;
     },
     message: 'Analyzing Dart files',
@@ -2188,7 +2228,7 @@ Future<void> handle(CommandResult result) async {
   final results = withProgressSync<String, String>(
     items: items,
     process: (item, index) {
-      // synchronous processing
+      // 同步处理
       return item.toUpperCase();
     },
     message: 'Converting items',

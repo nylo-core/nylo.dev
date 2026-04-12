@@ -72,7 +72,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
   get init => () async {
-    await sleep(3); // simulate a network call for 3 seconds
+    await sleep(3); // จำลองการเรียกเครือข่ายเป็นเวลา 3 วินาที
   };
 ```
 
@@ -93,7 +93,7 @@ class _ProfileImageState extends NyState<ProfileImage> {
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// หรือ
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -107,7 +107,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// same for skeletonizer
+// เหมือนกันสำหรับ skeletonizer
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -123,7 +123,7 @@ LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
 ``` dart
 class _HomePageState extends NyState<HomePage> {
     get init => () async {
-        await sleep(3); // simulate a network call for 3 seconds
+        await sleep(3); // จำลองการเรียกเครือข่ายเป็นเวลา 3 วินาที
     };
 
     @override
@@ -156,7 +156,7 @@ class _MyWidgetState extends NyState<MyWidget> {
 
   @override
   get init => () async {
-    // handle how you want to initialize the state
+    // จัดการวิธีที่คุณต้องการเริ่มต้น state
   };
 
   @override
@@ -165,7 +165,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // ตัวอย่างกับข้อมูล
       _userName = user.name;
       setState(() {});
     },
@@ -181,10 +181,10 @@ class _MyWidgetState extends NyState<MyWidget> {
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// ตัวอย่างอื่นกับข้อมูล
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// ตัวอย่างอื่นกับข้อมูล
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -193,11 +193,11 @@ stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// ตัวอย่างอื่นกับข้อมูล
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// ตัวอย่างอื่นกับข้อมูล
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -280,7 +280,7 @@ class _HomePageState extends NyState<HomePage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                reboot(); // refresh the data
+                reboot(); // รีเฟรชข้อมูล
               },
             )
           ],
@@ -302,13 +302,20 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - ลบหน้าปัจจุบันออกจาก stack
 
+ส่ง `rootNavigator: true` เพื่อ pop จาก root navigator แทน navigator ท้องถิ่นที่ใกล้ที่สุด สิ่งนี้มีประโยชน์ภายใน Navigation Hub tabs เมื่อ modal หรือ overlay ถูก push โดยใช้ root navigator
+
 ตัวอย่าง
 
 ``` dart
 class _HomePageState extends NyState<HomePage> {
-
+  
   popView() {
     pop();
+  }
+
+  // Pop จาก root navigator (เช่น เพื่อปิด modal ระดับ root)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -748,7 +755,7 @@ class _HomePageState extends NyState<HomePage> {
 
   @override
   get init => () async {
-    _user = await api<ApiService>((request) => request.fetchUser()); // example
+    _user = await api<ApiService>((request) => request.fetchUser()); // ตัวอย่าง
     setState(() {});
   };
 

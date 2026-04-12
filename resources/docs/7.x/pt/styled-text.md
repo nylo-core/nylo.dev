@@ -10,6 +10,7 @@
   - [Estilizando Placeholders](#styling-placeholders "Estilizando Placeholders")
   - [Callbacks de Toque](#tap-callbacks "Callbacks de Toque")
   - [Chaves Separadas por Pipe](#pipe-keys "Chaves Separadas por Pipe")
+  - [Estilos Wildcard](#wildcard-styles "Estilos Wildcard")
   - [Chaves de Localização](#localization-keys "Chaves de Localização")
 - [Parâmetros](#parameters "Parâmetros")
 - [Extensões de Texto](#text-extensions "Extensões de Texto")
@@ -33,7 +34,7 @@ O StyledText suporta dois modos:
 ## Uso Básico
 
 ``` dart
-// Children mode - list of Text widgets
+// Modo children - lista de widgets Text
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -41,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Modo template - sintaxe de placeholder
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -173,6 +174,36 @@ StyledText.template(
 
 Isso mapeia o mesmo estilo e callback para todos os três placeholders.
 
+<div id="wildcard-styles"></div>
+
+### Estilos Wildcard
+
+Use `"*"` como chave para aplicar um estilo ou callback de toque a qualquer placeholder que não tenha sua própria chave específica:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Tanto `name` quanto `app` recebem o estilo wildcard. Se um placeholder também tiver uma chave explícita, a chave explícita tem precedência sobre `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // aplica-se apenas a "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // toque em qualquer placeholder sem correspondencia
+  },
+)
+```
+
 <div id="localization-keys"></div>
 
 ### Chaves de Localização
@@ -180,7 +211,7 @@ Isso mapeia o mesmo estilo e callback para todos os três placeholders.
 Use a sintaxe `@{{key:text}}` para separar a **chave de busca** do **texto exibido**. Isso é útil para localização -- a chave permanece a mesma em todos os idiomas enquanto o texto exibido muda por idioma.
 
 ``` dart
-// In your locale files:
+// Nos seus arquivos de locale:
 // en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
 // es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
 
@@ -197,8 +228,8 @@ StyledText.template(
     "app": () => routeTo("/about"),
   },
 )
-// EN renders: "Learn Languages, Reading and Speaking in AppName"
-// ES renders: "Aprende Idiomas, Lectura y Habla en AppName"
+// EN exibe: "Learn Languages, Reading and Speaking in AppName"
+// ES exibe: "Aprende Idiomas, Lectura y Habla en AppName"
 ```
 
 A parte antes de `:` é a **chave** usada para buscar estilos e callbacks de toque. A parte após `:` é o **texto exibido** que é renderizado na tela. Sem `:`, o placeholder se comporta exatamente como antes -- totalmente compatível com versões anteriores.
@@ -303,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Métodos Utilitários
 
 ``` dart
-// Font weight
+// Peso da fonte
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Alinhamento
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Maximo de linhas
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Familia da fonte
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Tamanho da fonte
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Estilo personalizado
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
 // Padding
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Copiar com modificacoes
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

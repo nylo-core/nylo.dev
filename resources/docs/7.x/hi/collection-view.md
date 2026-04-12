@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // आइटम्स के बीच स्पेसिंग जोड़ें
   padding: EdgeInsets.all(16),
 )
 ```
@@ -196,7 +196,7 @@ CollectionView<Post>.pullable(
     return PostCard(post: item.data);
   },
   onRefresh: () {
-    print('List was refreshed!');
+    print('सूची रिफ्रेश हुई!');
   },
   headerStyle: 'WaterDropHeader', // पुल इंडिकेटर स्टाइल
 )
@@ -265,7 +265,7 @@ CollectionView<Item>(
   data: () async => await fetchItems(),
   builder: (context, item) => ItemTile(item: item.data),
   loadingStyle: LoadingStyle.normal(
-    child: Text("Loading items..."),
+    child: Text("आइटम्स लोड हो रहे हैं..."),
   ),
 )
 
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## स्टेट अपडेट करना
 
-आप `stateName` देकर CollectionView को अपडेट या रीसेट कर सकते हैं:
+आप `stateName` देकर और `CollectionView.stateActions()` कॉल करके CollectionView को प्रोग्रामैटिक रूप से अपडेट कर सकते हैं:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### लिस्ट रीसेट करें
+रनटाइम पर लिस्ट को मैनेज करने के लिए `stateActions` का उपयोग करें:
 
 ``` dart
-// डेटा को शुरू से रीसेट और रीलोड करता है
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// डेटा को शुरू से रीसेट और रीलोड करें
+actions.reset();
+
+// डेटा रिफ्रेश करें (री-फेच करता है और पेजिनेशन रीसेट करता है)
+actions.refreshData();
+
+// लिस्ट के अंत में एक आइटम जोड़ें
+actions.addItem(newTodo);
+
+// एक विशिष्ट इंडेक्स पर आइटम डालें
+actions.insertItem(0, newTodo);
+
+// इंडेक्स द्वारा एक आइटम हटाएँ
+actions.removeFromIndex(2);
+
+// एक विशिष्ट इंडेक्स पर आइटम बदलें
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### एक आइटम हटाएँ
-
-``` dart
-// इंडेक्स 2 पर आइटम हटाएँ
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### सामान्य अपडेट ट्रिगर करें
-
-``` dart
-// ग्लोबल updateState हेल्पर का उपयोग करके
-updateState("my_todo_list");
-```
+सभी `stateActions` मेथड synchronous और asynchronous दोनों डेटा के लिए रिबिल्ड के दौरान सही तरीके से काम करते हैं। `refreshData()` पेजिनेशन iteration काउंटर भी रीसेट करता है ताकि pullable लिस्ट पेज 1 से फिर शुरू हो।
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | पैरामीटर | टाइप | विवरण |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | पेजिनेटेड डेटा फ़ंक्शन |
+| `enablePullDown` | `bool` | पुल-टू-रिफ्रेश जेस्चर सक्षम करें (डिफ़ॉल्ट: `true`) |
 | `onRefresh` | `Function()?` | रिफ्रेश पूरा होने पर कॉलबैक |
 | `beforeRefresh` | `Function()?` | रिफ्रेश से पहले कॉलबैक |
 | `afterRefresh` | `Function(dynamic)?` | डेटा लोड होने के बाद कॉलबैक |

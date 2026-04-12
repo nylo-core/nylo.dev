@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // แสดง/ซ่อนไอคอน toggle
+  passwordViewable: true, // อนุญาตให้ผู้ใช้ toggle การมองเห็น
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 ใช้มาสก์สำหรับข้อมูลที่มีรูปแบบ เช่น เบอร์โทรศัพท์หรือบัตรเครดิต:
 
 ``` dart
-// Phone number mask
+// มาสก์หมายเลขโทรศัพท์
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // ส่งค่าไม่มีมาสก์: 1234567890
 )
 
-// Credit card mask
+// มาสก์บัตรเครดิต
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // ส่งค่าที่มีมาสก์: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // ไอคอนล้างที่กำหนดเอง
   onChanged: (value) {
-    // Handle search
+    // จัดการการค้นหา
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### การดำเนินการสถานะ
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// ล้างช่อง
+actions.clear();
+
+// ตั้งค่า
+actions.setValue("new_value");
+
+// ย้าย focus ไปที่ช่อง
+actions.focus();
+
+// ลบ focus ออกจากช่อง
+actions.unfocus();
+
+// Toggle การมองเห็นรหัสผ่าน (สำหรับ InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | สไตล์ข้อความป้ายกำกับ |
 | `hintStyle` | `TextStyle?` | สไตล์ข้อความตัวแทน |
 | `prefixIcon` | `Widget?` | ไอคอนก่อนช่องป้อนข้อมูล |
+| `suffixIcon` | `Widget?` | ไอคอนหลังช่องป้อนข้อมูล |
 
 ### พารามิเตอร์การมาสก์
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | อนุญาตให้สลับการแสดงรหัสผ่าน |
 | `dummyData` | `String?` | ข้อมูลจำลองสำหรับการพัฒนา |
 | `stateName` | `String?` | ชื่อสำหรับการจัดการสถานะ |
+| `enableInteractiveSelection` | `bool` | เปิดใช้การเลือกข้อความ (ค่าเริ่มต้น: `true`) |
 | `onChanged` | `Function(String)?` | เรียกเมื่อค่าเปลี่ยน |

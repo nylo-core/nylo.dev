@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// 상태 액션
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// 레이아웃 빌더
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// 상태 유지 여부
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// 초기 인덱스
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// 내비게이션 페이지
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// 탭 이벤트 처리
   @override
   onTap(int index) {
     super.onTap(index);
@@ -144,7 +144,7 @@ appRouter() => nyRoutes((router) {
     router.add(BaseNavigationHub.path).initialRoute();
 });
 
-// or navigate to the Navigation Hub from anywhere in your app
+// 또는 앱 어디서든 Navigation Hub로 이동
 
 routeTo(BaseNavigationHub.path);
 ```
@@ -189,7 +189,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // 기본 Flutter Material 스타일
 );
 ```
 
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // 초기화 로직을 여기에 작성
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // 내비게이션 버튼
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// 여정이 다음 단계로 계속될 수 있는지 확인
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// 다음 단계로 이동하기 전에 호출
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // 예: 세션에 데이터 저장
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// 여정이 완료될 때 호출 (마지막 단계)
   @override
   Future<void> onComplete() async {}
 }
@@ -669,7 +669,7 @@ onPressed: () => nextStep(force: true),
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // 이미 첫 번째 단계
     }
 },
 ```
@@ -723,7 +723,7 @@ Future<void> onComplete() async {
 ``` dart
 @override
 Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // 예: 세션에 데이터 저장
     // session('onboarding', {
     //   'name': 'Anthony Gordon',
     //   'occupation': 'Software Engineer',
@@ -753,8 +753,8 @@ Future<void> onAfterNext() async {
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // 유효성 검사 로직을 여기에 작성
+    // 여정을 계속할 수 있으면 true, 아니면 false 반환
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// 여정 완료 시 콜백
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // 홈 페이지 또는 다음 목적지로 이동
     routeTo(HomePage.path);
   };
 
@@ -1006,6 +1006,19 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
+탭 내 중첩 네비게이터에서 팝할 때, `rootNavigator: true` 를 사용하면 탭의 로컬 네비게이터가 아닌 루트 네비게이터에서 팝할 수 있습니다.
+
+``` dart
+// 탭의 로컬 네비게이터에서 팝 (기본값)
+pop();
+
+// 루트 네비게이터에서 팝 — 루트 네비게이터를 사용하여
+// 모달이나 오버레이가 푸시된 경우 사용
+pop(rootNavigator: true);
+```
+
+`rootNavigator` 파라미터는 `NyState`, `NyController`, `StateAction.pop()`, 및 `BuildContext` 확장의 `pop()` 에서 사용 가능합니다.
+
 <div id="tabs"></div>
 
 ## 탭
@@ -1085,13 +1098,13 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 프로그래밍 방식으로 배지 카운트를 업데이트할 수도 있습니다.
 
 ``` dart
-/// Increment the badge count
+/// 배지 카운트 증가
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// 배지 카운트 업데이트
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// 배지 카운트 초기화
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 프로그래밍 방식으로 알림을 업데이트할 수도 있습니다.
 
 ``` dart
-/// Enable the alert
+/// 알림 활성화
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// 알림 비활성화
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // 두 번째 탭에서 시작
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // 커스텀 로직 추가
+        // 예: 분석 추적, 확인 표시 등
+        super.onTap(index); // 탭 전환 처리를 위해 항상 super 호출
     }
 }
 ```
@@ -1216,40 +1229,40 @@ State 액션은 앱 어디에서나 Navigation Hub와 상호작용하는 방법�
 사용할 수 있는 State 액션입니다:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// 주어진 인덱스의 탭 초기화
+/// 예: MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// 현재 탭을 프로그래밍 방식으로 변경
+/// 예: MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// 배지 카운트 업데이트
+/// 예: MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// 배지 카운트 증가
+/// 예: MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// 배지 카운트 초기화
+/// 예: MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// 탭의 알림 활성화
+/// 예: MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// 탭의 알림 비활성화
+/// 예: MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// Journey 레이아웃에서 다음 페이지로 이동
+/// 예: await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// Journey 레이아웃에서 이전 페이지로 이동
+/// 예: await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
 ```
 
@@ -1260,9 +1273,9 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // 탭 2로 전환
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: 다음 페이지로 이동
 ```
 
 <div id="loading-style"></div>

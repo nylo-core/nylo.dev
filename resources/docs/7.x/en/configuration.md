@@ -10,6 +10,7 @@
   - [Retrieving Values](#retrieving-values "Retrieving environment values")
   - [Creating Config Classes](#creating-config-classes "Creating config classes")
   - [Variable Types](#variable-types "Environment variable types")
+  - [Variable Interpolation](#variable-interpolation "Variable interpolation")
 - [Environment Flavours](#environment-flavours "Environment flavours")
 - [Build-Time Injection](#build-time-injection "Build-time injection")
 
@@ -94,7 +95,7 @@ When you modify your `.env` file, regenerate the config:
 metro make:env
 ```
 
-The `--force` flag overwrites the existing `env.g.dart`.
+This always overwrites the existing `env.g.dart`.
 
 <div id="retrieving-values"></div>
 
@@ -200,6 +201,30 @@ Values in your `.env` file are automatically parsed:
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (empty string) |
 
+
+<div id="variable-interpolation"></div>
+
+## Variable Interpolation
+
+String values in your `.env` file can reference other variables using the `${VAR_NAME}` syntax:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+When your code calls `getEnv('APP_URL')`, the returned value is `https://myapp.com`. References are resolved recursively, so chained references work as expected:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` returns `https://example.com/uploads`.
+
+Circular references are protected — if a variable references itself (directly or through a chain), the unresolved `${VAR_NAME}` placeholder is kept in the output rather than causing an infinite loop.
 
 <div id="environment-flavours"></div>
 

@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// State-Aktionen
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Layout-Builder
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Soll der State beibehalten werden
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// Der initiale Index
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Navigations-Seiten
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Tap-Ereignis behandeln
   @override
   onTap(int index) {
     super.onTap(index);
@@ -189,7 +189,7 @@ Sie koennen einen vordefinierten Stil auf Ihre untere Navigationsleiste anwenden
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // Standard Flutter Material-Stil
 );
 ```
 
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // Ihre Initialisierungslogik hier
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Navigations-Schaltflaechen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Pruefen, ob die Journey zum naechsten Schritt fortfahren kann
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Wird vor der Navigation zum naechsten Schritt aufgerufen
   @override
   Future<void> onBeforeNext() async {
     // E.g. save data to session
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Wird aufgerufen, wenn die Journey abgeschlossen ist (beim letzten Schritt)
   @override
   Future<void> onComplete() async {}
 }
@@ -669,7 +669,7 @@ Die `previousStep`-Methode navigiert zum vorherigen Schritt. Gibt `true` bei Erf
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // Bereits beim ersten Schritt
     }
 },
 ```
@@ -753,8 +753,8 @@ Die `canContinue`-Methode wird aufgerufen, wenn `nextStep()` ausgeloest wird. Ge
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // Ihre Validierungslogik hier ausfuehren
+    // True zurueckgeben, wenn die Journey fortfahren kann, andernfalls false
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// Callback wenn die Journey abgeschlossen ist
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // Zur Startseite oder naechsten Seite navigieren
     routeTo(HomePage.path);
   };
 
@@ -1006,6 +1006,19 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
+Wenn Sie aus einem verschachtelten Navigator innerhalb eines Tabs herausspringen, verwenden Sie `rootNavigator: true`, um aus dem Root-Navigator statt aus dem lokalen Navigator des Tabs herausspringen:
+
+``` dart
+// Aus dem lokalen Navigator des Tabs herausspringen (Standard)
+pop();
+
+// Aus dem Root-Navigator herausspringen -- verwenden Sie dies, wenn ein Modal oder Overlay
+// ueber den Root-Navigator geoeffnet wurde
+pop(rootNavigator: true);
+```
+
+Der Parameter `rootNavigator` ist fuer `pop()` in `NyState`, `NyController`, `StateAction.pop()` und der `BuildContext`-Erweiterung verfuegbar.
+
 <div id="tabs"></div>
 
 ## Tabs
@@ -1085,13 +1098,13 @@ Im obigen Beispiel haben wir ein Badge zum Chat-Tab mit einer anfaenglichen Anza
 Sie koennen die Badge-Anzahl auch programmatisch aktualisieren.
 
 ``` dart
-/// Increment the badge count
+/// Badge-Anzahl erhoehen
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// Badge-Anzahl aktualisieren
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// Badge-Anzahl zuruecksetzen
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ Dies fuegt dem Chat-Tab einen Alert mit roter Farbe hinzu.
 Sie koennen den Alert auch programmatisch aktualisieren.
 
 ``` dart
-/// Enable the alert
+/// Alert aktivieren
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// Alert deaktivieren
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ Standardmaessig startet der Navigation Hub beim ersten Tab (Index 0). Sie koenne
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // Beim zweiten Tab starten
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // Benutzerdefinierte Logik hier hinzufuegen
+        // Z.B. Analytics verfolgen, Bestaetigung anzeigen usw.
+        super.onTap(index); // Super immer aufrufen, um den Tab-Wechsel zu verarbeiten
     }
 }
 ```
@@ -1216,41 +1229,49 @@ State-Aktionen sind eine Moeglichkeit, von ueberall in Ihrer App mit dem Navigat
 Hier sind die State-Aktionen, die Sie verwenden koennen:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// Tab bei einem bestimmten Index zuruecksetzen
+/// Z.B. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// Den aktuellen Tab programmatisch wechseln
+/// Z.B. MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// Badge-Anzahl aktualisieren
+/// Z.B. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// Badge-Anzahl erhoehen
+/// Z.B. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// Badge-Anzahl zuruecksetzen
+/// Z.B. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// Alert fuer einen Tab aktivieren
+/// Z.B. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// Alert fuer einen Tab deaktivieren
+/// Z.B. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// Zur naechsten Seite in einem Journey-Layout navigieren
+/// Z.B. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// Zur vorherigen Seite in einem Journey-Layout navigieren
+/// Z.B. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Einen bestimmten Tab aktualisieren, sodass er neu aufgebaut wird
+/// Z.B. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Alle Tabs aktualisieren, sodass sie neu aufgebaut werden
+/// Z.B. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Um eine State-Aktion zu verwenden, koennen Sie Folgendes tun:
@@ -1260,9 +1281,13 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // Zum Tab 2 wechseln
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: zur naechsten Seite navigieren
+
+MyNavigationHub.stateActions.refreshTab(0); // Tab 0 zum Neu-Aufbau zwingen
+
+MyNavigationHub.stateActions.refresh(); // Alle Tabs zum Neu-Aufbau zwingen
 ```
 
 <div id="loading-style"></div>

@@ -10,6 +10,7 @@
   - [값 가져오기](#retrieving-values "값 가져오기")
   - [Config 클래스 생성](#creating-config-classes "Config 클래스 생성")
   - [변수 타입](#variable-types "변수 타입")
+  - [변수 보간](#variable-interpolation "변수 보간")
 - [환경 플레이버](#environment-flavours "환경 플레이버")
 - [빌드 타임 주입](#build-time-injection "빌드 타임 주입")
 
@@ -94,7 +95,7 @@ metro make:env
 metro make:env
 ```
 
-`--force` 플래그는 기존 `env.g.dart`를 덮어씁니다.
+이것은 항상 기존 `env.g.dart`를 덮어씁니다.
 
 <div id="retrieving-values"></div>
 
@@ -200,6 +201,30 @@ if (entitlement.identifier == RevenueCatConfig.entitlementId) {
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (빈 문자열) |
 
+
+<div id="variable-interpolation"></div>
+
+## 변수 보간
+
+`.env` 파일의 문자열 값은 `${VAR_NAME}` 구문을 사용하여 다른 변수를 참조할 수 있습니다:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+코드에서 `getEnv('APP_URL')`을 호출하면 반환 값은 `https://myapp.com`입니다. 참조는 재귀적으로 해결되므로 연쇄 참조도 예상대로 작동합니다:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')`는 `https://example.com/uploads`를 반환합니다.
+
+순환 참조는 보호됩니다 -- 변수가 자신을 (직접 또는 체인을 통해) 참조하는 경우, 무한 루프를 일으키는 대신 미해결 `${VAR_NAME}` 플레이스홀더가 출력에 유지됩니다.
 
 <div id="environment-flavours"></div>
 

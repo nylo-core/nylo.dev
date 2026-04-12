@@ -53,12 +53,12 @@ Widget `Cart` yang dikelola state-nya di Nylo akan terlihat seperti ini:
 **Langkah 1:** Definisikan widget dengan nama state statis
 
 ``` dart
-/// The Cart widget
+/// Widget Cart
 class Cart extends StatefulWidget {
 
   Cart({Key? key}) : super(key: key);
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart"; // Pengenal unik untuk state widget ini
 
   @override
   _CartState createState() => _CartState();
@@ -68,23 +68,23 @@ class Cart extends StatefulWidget {
 **Langkah 2:** Buat class state yang meng-extend `NyState`
 
 ``` dart
-/// The state class for the Cart widget
+/// Class state untuk widget Cart
 class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
   _CartState() {
-    stateName = Cart.state; // Register the state name
+    stateName = Cart.state; // Daftarkan nama state
   }
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue(); // Muat data awal
   };
 
   @override
   void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
+    reboot(); // Muat ulang widget saat state diperbarui
   }
 
   @override
@@ -100,15 +100,15 @@ class _CartState extends NyState<Cart> {
 **Langkah 3:** Buat fungsi helper untuk membaca dan memperbarui keranjang
 
 ``` dart
-/// Get the cart value from storage
+/// Dapatkan nilai keranjang dari penyimpanan
 Future<String> getCartValue() async {
   return await storageRead(Keys.cart) ?? "1";
 }
 
-/// Set the cart value and notify the widget
+/// Atur nilai keranjang dan beritahu widget
 Future setCartValue(String value) async {
     await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
+    updateState(Cart.state); // Ini memicu stateUpdated() pada widget
 }
 ```
 
@@ -173,10 +173,10 @@ Gunakan state action ketika Anda perlu:
 - Membuat perilaku widget yang dapat digunakan kembali yang dapat dipanggil dari beberapa tempat
 
 ``` dart
-// Sending an action to the widget
+// Mengirim action ke widget
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Contoh lain dengan data
 stateAction('show_high_score', state: HighScore.state, data: {
   "high_score": 100,
 });
@@ -192,7 +192,7 @@ get stateActions => {
     print('Hello world');
   },
   "reset_data": (data) async {
-    // Example with data
+    // Contoh dengan data
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -204,10 +204,22 @@ Kemudian, Anda dapat memanggil metode `stateAction` dari mana saja di aplikasi A
 
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
-// prints 'Hello world'
+// mencetak 'Hello world'
 
 User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
+```
+
+Jika Anda sudah memiliki instance `StateActions` (misalnya dari metode static `stateActions()` widget), Anda dapat memanggil `action()` langsung padanya alih-alih menggunakan fungsi bebas:
+
+``` dart
+// Menggunakan fungsi bebas
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// Menggunakan metode instance StateActions — setara, lebih sedikit pengulangan
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
 ```
 
 Anda juga dapat mendefinisikan state action menggunakan metode `whenStateAction` di getter `init` Anda.
@@ -218,7 +230,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Reset jumlah badge
       _count = 0;
     }
   });
@@ -248,12 +260,12 @@ class _UserAvatarState extends NyState<UserAvatar> {
 @override
 get stateActions => {
   "reset_avatar": () {
-    // Example
+    // Contoh
     _avatar = null;
     setState(() {});
   },
   "update_user_image": (User user) {
-    // Example
+    // Contoh
     _avatar = user.image;
     setState(() {});
   },
@@ -267,13 +279,13 @@ Akhirnya, Anda dapat mengirim action dari mana saja di aplikasi Anda.
 
 ``` dart
 stateAction('reset_avatar', state: MyWidget.state);
-// prints 'Hello from the widget'
+// mencetak 'Hello from the widget'
 
 stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
+// Reset data di widget
 
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
+// menampilkan toast sukses dengan pesan
 ```
 
 
@@ -306,7 +318,7 @@ get stateActions => {
     print('Hello from the page');
   },
   "reset_data": () {
-    // Example
+    // Contoh
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -321,15 +333,15 @@ Akhirnya, Anda dapat mengirim action dari mana saja di aplikasi Anda.
 
 ``` dart
 stateAction('test_page_action', state: MyPage.path);
-// prints 'Hello from the page'
+// mencetak 'Hello from the page'
 
 stateAction('reset_data', state: MyPage.path);
-// Reset data in page
+// Reset data di halaman
 
 stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
-// shows a success toast with the message
+// menampilkan toast sukses dengan pesan
 ```
 
 Anda juga dapat mendefinisikan state action menggunakan metode `whenStateAction`.
@@ -340,7 +352,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Reset jumlah badge
       _count = 0;
     }
   });
@@ -363,7 +375,7 @@ Anda dapat memperbarui state dengan memanggil metode `updateState()`.
 ``` dart
 updateState(MyStateName.state);
 
-// or with data
+// atau dengan data
 updateState(MyStateName.state, data: "The Data");
 ```
 

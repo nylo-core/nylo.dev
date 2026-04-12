@@ -26,7 +26,7 @@
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // 获取最新数据
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Pullable(
 ### 示例
 
 ``` dart
-// Classic header
+// 经典头部
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// Material 头部
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// 无弹跳效果
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// 自定义头部组件
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Pullable.builder(
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // 经典下拉指示器
+  waterDrop,         // 水滴动画（默认）
+  materialClassic,   // Material Design 经典
+  waterDropMaterial,  // Material 水滴
+  bezier,            // 贝塞尔曲线动画
 }
 ```
 
 通过构造函数或配置设置样式：
 
 ``` dart
-// Via named constructor
+// 通过命名构造函数
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// 通过配置
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // 重置到第 1 页
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // 加载下一页
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// 以编程方式触发刷新
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// 以编程方式触发加载
 _controller.triggerLoading();
 
-// Check state
+// 检查状态
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```

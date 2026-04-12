@@ -14,6 +14,7 @@
 - [カスタムトーストスタイル](#custom-styles "カスタムトーストスタイル")
   - [スタイルの登録](#registering-styles "スタイルの登録")
   - [スタイルファクトリの作成](#creating-a-style-factory "スタイルファクトリの作成")
+  - [データ対応トーストスタイル](#data-aware-toast-styles "データ対応トーストスタイル")
 - [AlertTab](#alert-tab "AlertTab")
 - [使用例](#examples "使用例")
 
@@ -195,8 +196,9 @@ showToastNotification(
 |-----------|------|---------|-------------|
 | `context` | `BuildContext` | 必須 | ビルドコンテキスト |
 | `id` | `String` | `'success'` | トーストスタイル ID |
-| `title` | `String?` | null | デフォルトタイトルを上書き |
+| `title` | `String?` | null | タイトルテキスト。トーストウィジェットにそのまま渡されます |
 | `description` | `String?` | null | 説明テキスト |
+| `data` | `Map<String, dynamic>?` | null | データ対応トーストスタイルに実行時に渡されるキーバリューペア。`title` と `description` は `data` 内の対応するキーより優先されます |
 | `duration` | `Duration?` | null | トーストの表示時間 |
 | `position` | `ToastNotificationPosition?` | null | 画面上の位置 |
 | `action` | `VoidCallback?` | null | タップコールバック |
@@ -388,6 +390,78 @@ static ToastStyleFactory style({
       ],
     ),
   );
+}
+```
+
+<div id="data-aware-toast-styles"></div>
+
+### データ対応トーストスタイル
+
+`ToastStyleDataFactory` を使用して、呼び出し時に実行時データを受け取るトーストスタイルを登録します。これは、ユーザー名やアバターなど、登録時に不明なトーストコンテンツに役立ちます。
+
+``` dart
+typedef ToastStyleDataFactory =
+    ToastStyleFactory Function(Map<String, dynamic> data);
+```
+
+`registerWithData()` でデータ対応スタイルを登録します:
+
+``` dart
+ToastNotificationRegistry.instance.registerWithData(
+  'new_follower',
+  (data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+);
+```
+
+または `AppProvider` で静的スタイルとともに登録します:
+
+``` dart
+nylo.addToastNotifications({
+  ...ToastNotificationConfig.styles,
+  'new_follower': (Map<String, dynamic> data) => (meta, updateMeta) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(backgroundImage: NetworkImage(data['avatar'])),
+          SizedBox(width: 12),
+          Text("${data['name']} followed you"),
+        ],
+      ),
+    );
+  },
+});
+```
+
+実行時に `data` マップとともに呼び出します:
+
+``` dart
+showToastNotification(
+  context,
+  id: 'new_follower',
+  data: {'name': 'Alice', 'avatar': 'https://example.com/alice.jpg'},
+);
+```
+
+`title` または `description` も渡した場合、`data` 内の対応するキーより優先されます。
+
+ウィジェットを自分でビルドする必要がある場合は、`ToastNotificationRegistry.resolve(id, data)` を直接使用します:
+
+``` dart
+final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
+if (factory != null) {
+  final widget = factory(toastMeta, (updated) {});
 }
 ```
 

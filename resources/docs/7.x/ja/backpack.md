@@ -69,11 +69,16 @@ String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "
 int? score = Backpack.instance.read<int>("score");
 ```
 
-型が指定されている場合、Backpack は JSON 文字列を自動的にモデルオブジェクトにデシリアライズします:
+型が指定されている場合、Backpack は JSON 文字列を自動的にモデルオブジェクトにデシリアライズします。これは JSON 文字列と生の `Map<String, dynamic>` 値の両方で機能します:
 
 ``` dart
-// User モデルが JSON として保存されている場合、デシリアライズされます
+// User モデルが JSON 文字列として保存されている場合、デシリアライズされます
 User? user = Backpack.instance.read<User>("current_user");
+
+// 生の Map が保存されている場合（例: NyStorage の syncKeys 経由）も
+// 読み取り時に型付きモデルへ自動的にデシリアライズされます
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // User を返します
 ```
 
 <div id="saving-data"></div>

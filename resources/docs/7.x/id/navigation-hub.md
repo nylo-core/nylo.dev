@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// Aksi state
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Pembangun layout
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Apakah state harus dipertahankan
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// Indeks awal
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Halaman navigasi
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Tangani event tap
   @override
   onTap(int index) {
     super.onTap(index);
@@ -144,7 +144,7 @@ appRouter() => nyRoutes((router) {
     router.add(BaseNavigationHub.path).initialRoute();
 });
 
-// or navigate to the Navigation Hub from anywhere in your app
+// atau navigasikan ke Navigation Hub dari mana saja di aplikasi Anda
 
 routeTo(BaseNavigationHub.path);
 ```
@@ -189,7 +189,7 @@ Anda dapat menerapkan gaya preset ke navigasi bar bawah Anda menggunakan paramet
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // Gaya material Flutter default
 );
 ```
 
@@ -439,7 +439,7 @@ _MyNavigationHubState() : super(() => {
         page: PhoneNumberStep(),
         progressStyle: JourneyProgressStyle(
             indicator: JourneyProgressIndicator.numbered(),
-        ), // overrides the layout default for this tab only
+        ), // menimpa default layout hanya untuk tab ini
     ),
     2: NavigationTab.journey(
         page: AddPhotosStep(),
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // Logika inisialisasi Anda di sini
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Tombol navigasi
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Periksa apakah journey dapat melanjutkan ke langkah berikutnya
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Dipanggil sebelum berpindah ke langkah berikutnya
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Mis. simpan data ke session
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Dipanggil saat journey selesai (di langkah terakhir)
   @override
   Future<void> onComplete() async {}
 }
@@ -647,7 +647,7 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: nextStep, // runs validation then navigates
+            onPressed: nextStep, // menjalankan validasi lalu navigasi
         ),
     );
 }
@@ -669,7 +669,7 @@ Method `previousStep` berpindah ke langkah sebelumnya. Mengembalikan `true` jika
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // Sudah di langkah pertama
     }
 },
 ```
@@ -723,7 +723,7 @@ Contoh: jika Anda ingin menyimpan data sebelum berpindah ke langkah berikutnya, 
 ``` dart
 @override
 Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Mis. simpan data ke session
     // session('onboarding', {
     //   'name': 'Anthony Gordon',
     //   'occupation': 'Software Engineer',
@@ -740,7 +740,7 @@ Method `onAfterNext` dipanggil setelah berpindah ke langkah berikutnya.
 ``` dart
 @override
 Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
+    // print('Berhasil navigasi ke langkah berikutnya');
 }
 ```
 
@@ -753,8 +753,8 @@ Method `canContinue` dipanggil saat `nextStep()` dipicu. Kembalikan `false` untu
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // Lakukan logika validasi Anda di sini
+    // Kembalikan true jika journey dapat dilanjutkan, false jika tidak
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -826,7 +826,7 @@ Method `goToStep` langsung menuju langkah tertentu berdasarkan indeks. Method in
 nextButton: Button.primary(
     text: "Skip to photos",
     onPressed: () {
-        goToStep(2); // jump to step index 2
+        goToStep(2); // langsung ke indeks langkah 2
     },
 ),
 ```
@@ -839,7 +839,7 @@ Method `goToNextStep` langsung menuju langkah berikutnya tanpa validasi. Jika su
 
 ``` dart
 onPressed: () {
-    goToNextStep(); // skip validation and go to next step
+    goToNextStep(); // lewati validasi dan langsung ke langkah berikutnya
 },
 ```
 
@@ -887,7 +887,7 @@ Method `exitJourney` keluar dari journey dengan melakukan pop pada root navigato
 
 ``` dart
 onPressed: () {
-    exitJourney(); // pop the root navigator
+    exitJourney(); // pop root navigator
 },
 ```
 
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// Callback saat journey selesai
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // Navigasikan ke halaman home atau tujuan berikutnya
     routeTo(HomePage.path);
   };
 
@@ -930,7 +930,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
           ...
           Button.primary(
             text: "Get Started",
-            onPressed: onJourneyComplete, // triggers the completion callback
+            onPressed: onJourneyComplete, // memicu callback penyelesaian
           ),
         ],
       ),
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+Saat melakukan pop dari navigator bersarang di dalam tab, gunakan `rootNavigator: true` untuk pop dari root navigator daripada navigator lokal tab:
+
+``` dart
+// Pop dari navigator lokal tab (default)
+pop();
+
+// Pop dari root navigator — gunakan ini saat modal atau overlay
+// dipush menggunakan root navigator
+pop(rootNavigator: true);
+```
+
+Parameter `rootNavigator` tersedia pada `pop()` di `NyState`, `NyController`, `StateAction.pop()`, dan extension `BuildContext`.
 
 <div id="tabs"></div>
 
@@ -1085,13 +1098,13 @@ Pada contoh di atas, kita menambahkan badge ke tab Chat dengan jumlah awal 10.
 Anda juga dapat memperbarui jumlah badge secara programatis.
 
 ``` dart
-/// Increment the badge count
+/// Tingkatkan jumlah badge
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// Perbarui jumlah badge
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// Hapus jumlah badge
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ Ini akan menambahkan alert ke tab Chat dengan warna merah.
 Anda juga dapat memperbarui alert secara programatis.
 
 ``` dart
-/// Enable the alert
+/// Aktifkan alert
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// Nonaktifkan alert
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ Secara default, Navigation Hub dimulai dari tab pertama (indeks 0). Anda dapat m
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // Mulai dari tab kedua
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // Tambahkan logika kustom di sini
+        // Mis. lacak analitik, tampilkan konfirmasi, dll.
+        super.onTap(index); // Selalu panggil super untuk menangani pergantian tab
     }
 }
 ```
@@ -1216,41 +1229,49 @@ Aksi state adalah cara untuk berinteraksi dengan Navigation Hub dari mana saja d
 Berikut aksi state yang dapat Anda gunakan:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// Reset tab pada indeks tertentu
+/// Mis. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// Ubah tab saat ini secara programatis
+/// Mis. MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// Perbarui jumlah badge
+/// Mis. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// Tingkatkan jumlah badge
+/// Mis. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// Hapus jumlah badge
+/// Mis. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// Aktifkan alert untuk sebuah tab
+/// Mis. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// Nonaktifkan alert untuk sebuah tab
+/// Mis. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// Navigasi ke halaman berikutnya dalam layout journey
+/// Mis. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// Navigasi ke halaman sebelumnya dalam layout journey
+/// Mis. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Refresh tab tertentu, memaksanya untuk rebuild
+/// Mis. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Refresh semua tab, memaksa mereka untuk rebuild
+/// Mis. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Untuk menggunakan aksi state, Anda dapat melakukan hal berikut:
@@ -1260,9 +1281,13 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // Pindah ke tab 2
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: pergi ke halaman berikutnya
+
+MyNavigationHub.stateActions.refreshTab(0); // Paksa tab 0 untuk rebuild
+
+MyNavigationHub.stateActions.refresh(); // Paksa semua tab untuk rebuild
 ```
 
 <div id="loading-style"></div>
@@ -1284,7 +1309,7 @@ Anda dapat mengubah gaya loading seperti ini:
 ``` dart
 @override
 LoadingStyle get loadingStyle => LoadingStyle.normal();
-// or
+// atau
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
@@ -1309,7 +1334,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     _MyNavigationHubState() : super(() async {
 
-      await sleep(3); // simulate loading for 3 seconds
+      await sleep(3); // simulasi loading selama 3 detik
 
       return {
         0: NavigationTab.tab(

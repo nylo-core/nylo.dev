@@ -10,6 +10,7 @@
   - [Stylizowanie symboli zastepczych](#styling-placeholders "Stylizowanie symboli zastepczych")
   - [Wywolania zwrotne dotkniec](#tap-callbacks "Wywolania zwrotne dotkniec")
   - [Klucze rozdzielone pionowa kreska](#pipe-keys "Klucze rozdzielone pionowa kreska")
+  - [Style z uzyciem symbolu wieloznacznego](#wildcard-styles "Style z uzyciem symbolu wieloznacznego")
   - [Klucze lokalizacji](#localization-keys "Klucze lokalizacji")
 - [Parametry](#parameters "Parametry")
 - [Rozszerzenia tekstu](#text-extensions "Rozszerzenia tekstu")
@@ -172,6 +173,36 @@ StyledText.template(
 ```
 
 To mapuje ten sam styl i wywolanie zwrotne na wszystkie trzy symbole zastepczye.
+
+<div id="wildcard-styles"></div>
+
+### Style z uzyciem symbolu wieloznacznego
+
+Uzyj `"*"` jako klucza, aby zastosowac styl lub wywolanie zwrotne dotkniecia do kazdego symbolu zastepczego, ktory nie ma wlasnego konkretnego klucza:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Zarowno `name`, jak i `app` otrzymuja styl wieloznaczny. Jesli symbol zastepczy ma rowniez jawny klucz, jawny klucz ma pierwszenstwo przed `"*"`.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // dotyczy tylko "cancel"
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // dotknięcie na dowolny niedopasowany symbol zastepczy
+  },
+)
+```
 
 <div id="localization-keys"></div>
 

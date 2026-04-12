@@ -30,6 +30,7 @@
 - [自定义匹配器](#custom-matchers "自定义匹配器")
 - [状态测试](#state-testing "状态测试")
 - [调试](#debugging "调试")
+- [导航和交互辅助方法](#nav-interaction "导航和交互辅助方法")
 - [示例](#examples "示例")
 
 <div id="introduction"></div>
@@ -87,7 +88,7 @@ nyTest('can save and read from storage', () async {
 
 ``` dart
 nyTest('my test', () async {
-  // test body
+  // 测试主体
 }, skip: false, timeout: Timeout(Duration(seconds: 30)));
 ```
 
@@ -173,20 +174,20 @@ await tester.pumpNyWidgetAndWaitForInit(
   timeout: Duration(seconds: 10),
   useSimpleTheme: true,
 );
-// init() has completed
+// init() 已完成
 expect(find.text('Loaded Data'), findsOneWidget);
 ```
 
 #### 泵送辅助方法
 
 ``` dart
-// Pump frames until a specific widget appears
+// 持续泵送帧直到特定组件出现
 bool found = await tester.pumpUntilFound(
   find.text('Welcome'),
   timeout: Duration(seconds: 5),
 );
 
-// Settle gracefully (won't throw on timeout)
+// 优雅等待稳定（超时不抛出异常）
 await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 ```
 
@@ -198,7 +199,7 @@ await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 await tester.pumpNyWidget(MyPage());
 await tester.simulateLifecycleState(AppLifecycleState.paused);
 await tester.pump();
-// Assert side effects of the paused lifecycle action
+// 断言暂停生命周期动作的副作用
 ```
 
 #### 加载和锁定检查
@@ -206,13 +207,13 @@ await tester.pump();
 检查 `NyPage`/`NyState` Widget 上的命名加载键和锁定：
 
 ``` dart
-// Check if a named loading key is active
+// 检查命名加载键是否活跃
 bool loading = tester.isLoadingNamed(find.byType(MyPage), name: 'fetchUsers');
 
-// Check if a named lock is held
+// 检查命名锁是否被持有
 bool locked = tester.isLockedNamed(find.byType(MyPage), name: 'submit');
 
-// Check for any loading indicator (CircularProgressIndicator or Skeletonizer)
+// 检查是否有任何加载指示器（CircularProgressIndicator 或 Skeletonizer）
 bool isAnyLoading = tester.isLoading();
 ```
 
@@ -252,10 +253,10 @@ testNyPageLoading(
 ``` dart
 class HomePageTest with NyPageTestMixin {
   void runTests(WidgetTester tester) async {
-    // Verify init was called and loading completed
+    // 验证 init 已调用且加载已完成
     await verifyInitCalled(tester, HomePage(), timeout: Duration(seconds: 5));
 
-    // Verify loading state is shown during init
+    // 验证 init 期间显示加载状态
     await verifyLoadingState(tester, HomePage());
   }
 }
@@ -293,19 +294,19 @@ void main() {
   NyTest.init();
 
   nySetUpAll(() {
-    // Runs once before all tests
+    // 在所有测试之前运行一次
   });
 
   nySetUp(() {
-    // Runs before each test
+    // 在每个测试之前运行
   });
 
   nyTearDown(() {
-    // Runs after each test
+    // 在每个测试之后运行
   });
 
   nyTearDownAll(() {
-    // Runs once after all tests
+    // 在所有测试之后运行一次
   });
 }
 ```
@@ -315,19 +316,19 @@ void main() {
 ### 跳过测试和 CI 测试
 
 ``` dart
-// Skip a test with a reason
+// 跳过测试并说明原因
 nySkip('not implemented yet', () async {
   // ...
 }, "Waiting for API update");
 
-// Tests expected to fail
+// 预期失败的测试
 nyFailing('known bug', () async {
   // ...
 });
 
-// CI-only tests (tagged with 'ci')
+// 仅 CI 测试（标记为 'ci'）
 nyCi('integration test', () async {
-  // Only runs in CI environments
+  // 仅在 CI 环境中运行
 });
 ```
 
@@ -339,19 +340,19 @@ nyCi('integration test', () async {
 
 ``` dart
 nyTest('user can access profile', () async {
-  // Simulate a logged-in user
+  // 模拟已登录用户
   NyTest.actingAs<User>(User(name: "Anthony", email: "anthony@example.com"));
 
-  // Verify authenticated
+  // 验证已认证
   expectAuthenticated<User>();
 
-  // Access the acting user
+  // 访问当前用户
   User? user = NyTest.actingUser<User>();
   expect(user?.name, equals("Anthony"));
 });
 
 nyTest('guest cannot access profile', () async {
-  // Verify not authenticated
+  // 验证未认证
   expectGuest();
 });
 ```
@@ -360,6 +361,13 @@ nyTest('guest cannot access profile', () async {
 
 ``` dart
 NyTest.logout();
+expectGuest();
+```
+
+在设置访客上下文时，使用 `actingAsGuest()` 作为 `logout()` 的可读别名：
+
+``` dart
+NyTest.actingAsGuest();
 expectGuest();
 ```
 
@@ -377,27 +385,27 @@ nyTest('time travel to 2025', () async {
 
   expect(NyTime.now().year, equals(2025));
 
-  NyTest.travelBack(); // Reset to real time
+  NyTest.travelBack(); // 重置为真实时间
 });
 ```
 
 ### 前进或后退时间
 
 ``` dart
-NyTest.travelForward(Duration(days: 30)); // Jump 30 days ahead
-NyTest.travelBackward(Duration(hours: 2)); // Go back 2 hours
+NyTest.travelForward(Duration(days: 30)); // 前进 30 天
+NyTest.travelBackward(Duration(hours: 2)); // 后退 2 小时
 ```
 
 ### 冻结时间
 
 ``` dart
-NyTest.freezeTime(); // Freeze at the current moment
+NyTest.freezeTime(); // 在当前时刻冻结时间
 
 DateTime frozen = NyTime.now();
 await Future.delayed(Duration(seconds: 1));
-expect(NyTime.now(), equals(frozen)); // Time hasn't moved
+expect(NyTime.now(), equals(frozen)); // 时间未移动
 
-NyTest.travelBack(); // Unfreeze
+NyTest.travelBack(); // 解冻
 ```
 
 ### 时间边界
@@ -405,10 +413,10 @@ NyTest.travelBack(); // Unfreeze
 ``` dart
 NyTime.travelToStartOfDay();   // 00:00:00.000
 NyTime.travelToEndOfDay();     // 23:59:59.999
-NyTime.travelToStartOfMonth(); // 1st of current month
-NyTime.travelToEndOfMonth();   // Last day of current month
-NyTime.travelToStartOfYear();  // Jan 1st
-NyTime.travelToEndOfYear();    // Dec 31st
+NyTime.travelToStartOfMonth(); // 当月第 1 天
+NyTime.travelToEndOfMonth();   // 当月最后一天
+NyTime.travelToStartOfYear();  // 1 月 1 日
+NyTime.travelToEndOfYear();    // 12 月 31 日
 ```
 
 ### 作用域时间穿越
@@ -419,7 +427,7 @@ NyTime.travelToEndOfYear();    // Dec 31st
 await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
   expect(NyTime.now(), equals(DateTime(2025, 6, 15)));
 });
-// Time is automatically restored after the callback
+// 回调结束后时间自动恢复
 ```
 
 <div id="api-mocking"></div>
@@ -434,16 +442,16 @@ await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
 
 ``` dart
 nyTest('mock API responses', () async {
-  // Exact URL match
+  // 精确 URL 匹配
   NyMockApi.respond('/users/1', {'id': 1, 'name': 'Anthony'});
 
-  // Single segment wildcard (*)
+  // 单段通配符 (*)
   NyMockApi.respond('/users/*', {'id': 1, 'name': 'User'});
 
-  // Multi-segment wildcard (**)
+  // 多段通配符 (**)
   NyMockApi.respond('/api/**', {'status': 'ok'});
 
-  // With status code and headers
+  // 带状态码和请求头
   NyMockApi.respond(
     '/users',
     {'error': 'Unauthorized'},
@@ -452,7 +460,7 @@ nyTest('mock API responses', () async {
     headers: {'X-Error': 'true'},
   );
 
-  // With simulated delay
+  // 带模拟延迟
   NyMockApi.respond(
     '/slow-endpoint',
     {'data': 'loaded'},
@@ -488,23 +496,29 @@ nyTest('mock API service', () async {
 nyTest('verify API was called', () async {
   NyMockApi.setRecordCalls(true);
 
-  // ... perform actions that trigger API calls ...
+  // ... 触发 API 调用的操作 ...
 
-  // Assert endpoint was called
+  // 断言端点已被调用
   expectApiCalled('/users');
 
-  // Assert endpoint was not called
+  // 断言端点未被调用
   expectApiNotCalled('/admin');
 
-  // Assert call count
+  // 断言调用次数
   expectApiCalled('/users', times: 2);
 
-  // Assert specific method
+  // 断言特定请求方法
   expectApiCalled('/users', method: 'POST');
 
-  // Get call details
+  // 获取调用详情
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+断言某个端点被以特定请求体数据调用：
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### 创建模拟响应
@@ -566,19 +580,19 @@ NyFactory.state<User>('premium', (User user, NyFaker faker) {
 ### 创建实例
 
 ``` dart
-// Create a single instance
+// 创建单个实例
 User user = NyFactory.make<User>();
 
-// Create with overrides
+// 带覆盖创建
 User admin = NyFactory.make<User>(overrides: {'name': 'Admin User'});
 
-// Create with states applied
+// 应用状态后创建
 User premiumAdmin = NyFactory.make<User>(states: ['admin', 'premium']);
 
-// Create multiple instances
+// 创建多个实例
 List<User> users = NyFactory.create<User>(count: 5);
 
-// Create a sequence with index-based data
+// 使用基于索引的数据创建序列
 List<User> numbered = NyFactory.sequence<User>(3, (int index, NyFaker faker) {
   return User(name: "User ${index + 1}", email: faker.email());
 });
@@ -640,25 +654,25 @@ NyFaker faker = NyFaker();
 nyTest('cache operations', () async {
   NyTestCache cache = NyTest.cache;
 
-  // Store a value
+  // 存储值
   await cache.put<String>("key", "value");
 
-  // Store with expiration
+  // 带过期时间存储
   await cache.put<String>("temp", "data", seconds: 60);
 
-  // Read a value
+  // 读取值
   String? value = await cache.get<String>("key");
 
-  // Check existence
+  // 检查是否存在
   bool exists = await cache.has("key");
 
-  // Clear a key
+  // 清除某个键
   await cache.clear("key");
 
-  // Flush all
+  // 清除全部
   await cache.flush();
 
-  // Get cache info
+  // 获取缓存信息
   int size = await cache.size();
   List<String> keys = await cache.documents();
 });
@@ -672,9 +686,9 @@ nyTest('cache operations', () async {
 
 ``` dart
 void main() {
-  NyTest.init(); // Automatically sets up mock channels
+  NyTest.init(); // 自动设置模拟通道
 
-  // Or set up manually
+  // 或手动设置
   NyMockChannels.setup();
 }
 ```
@@ -722,7 +736,7 @@ final guard = NyMockRouteGuard.pass();
 ``` dart
 final guard = NyMockRouteGuard.redirect('/login');
 
-// With additional data
+// 带附加数据
 final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ```
 
@@ -731,9 +745,9 @@ final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ``` dart
 final guard = NyMockRouteGuard.custom((context) async {
   if (context.data == null) {
-    return GuardResult.handled; // abort navigation
+    return GuardResult.handled; // 中止导航
   }
-  return GuardResult.next; // allow navigation
+  return GuardResult.next; // 允许导航
 });
 ```
 
@@ -745,10 +759,10 @@ final guard = NyMockRouteGuard.custom((context) async {
 expect(guard.wasCalled, isTrue);
 expect(guard.callCount, 1);
 
-// Access the RouteContext from the last call
+// 访问最后一次调用的 RouteContext
 RouteContext? context = guard.lastContext;
 
-// Reset tracking
+// 重置跟踪
 guard.reset();
 ```
 
@@ -761,33 +775,33 @@ guard.reset();
 ### 路由断言
 
 ``` dart
-expectRoute('/home');           // Assert current route
-expectNotRoute('/login');       // Assert not on route
-expectRouteInHistory('/home');  // Assert route was visited
-expectRouteExists('/profile');  // Assert route is registered
+expectRoute('/home');           // 断言当前路由
+expectNotRoute('/login');       // 断言不在该路由
+expectRouteInHistory('/home');  // 断言路由已被访问
+expectRouteExists('/profile');  // 断言路由已注册
 expectRoutesExist(['/home', '/profile', '/settings']);
 ```
 
 ### 状态断言
 
 ``` dart
-expectBackpackContains("key");                        // Key exists
-expectBackpackContains("key", value: "expected");     // Key has value
-expectBackpackNotContains("key");                     // Key doesn't exist
+expectBackpackContains("key");                        // 键存在
+expectBackpackContains("key", value: "expected");     // 键有值
+expectBackpackNotContains("key");                     // 键不存在
 ```
 
 ### 身份验证断言
 
 ``` dart
-expectAuthenticated<User>();  // User is authenticated
-expectGuest();                // No user authenticated
+expectAuthenticated<User>();  // 用户已认证
+expectGuest();                // 无用户认证
 ```
 
 ### 环境断言
 
 ``` dart
-expectEnv("APP_NAME", "MyApp");  // Env variable equals value
-expectEnvSet("APP_KEY");          // Env variable is set
+expectEnv("APP_NAME", "MyApp");  // 环境变量等于该值
+expectEnvSet("APP_KEY");          // 环境变量已设置
 ```
 
 ### 模式断言
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### 组件断言
+
+``` dart
+// 断言某类型组件出现指定次数
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// 断言文本可见
+expectTextVisible('Welcome');
+
+// 断言文本不可见
+expectTextNotVisible('Error');
+
+// 断言任意组件可见（使用任意 Finder）
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// 断言组件不可见
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### 语言环境断言
@@ -824,7 +862,7 @@ setUp(() {
 
 nyWidgetTest('shows success toast', (tester) async {
   await tester.pumpNyWidget(MyPage());
-  // ... trigger action that shows a toast ...
+  // ... 触发显示 Toast 的操作 ...
 
   expectToastShown(id: 'success');
   expectToastShown(id: 'danger', description: 'Something went wrong');
@@ -835,16 +873,16 @@ nyWidgetTest('shows success toast', (tester) async {
 **NyToastRecorder** 在测试期间跟踪 Toast 通知：
 
 ``` dart
-// Record a toast manually
+// 手动记录 Toast
 NyToastRecorder.record(id: 'success', title: 'Done', description: 'Saved!');
 
-// Check if a toast was shown
+// 检查是否显示了某个 Toast
 bool shown = NyToastRecorder.wasShown(id: 'success');
 
-// Access all recorded toasts
+// 访问所有已记录的 Toast
 List<ToastRecord> toasts = NyToastRecorder.records;
 
-// Clear recorded toasts
+// 清除已记录的 Toast
 NyToastRecorder.clear();
 ```
 
@@ -853,16 +891,16 @@ NyToastRecorder.clear();
 验证 `NyPage`/`NyState` Widget 中的命名锁定和加载状态：
 
 ``` dart
-// Assert a named lock is held
+// 断言命名锁被持有
 expectLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named lock is not held
+// 断言命名锁未被持有
 expectNotLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named loading key is active
+// 断言命名加载键处于活跃状态
 expectLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 
-// Assert a named loading key is not active
+// 断言命名加载键未处于活跃状态
 expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ```
 
@@ -873,16 +911,16 @@ expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 使用自定义匹配器配合 `expect()`：
 
 ``` dart
-// Type matcher
+// 类型匹配器
 expect(result, isType<User>());
 
-// Route name matcher
+// 路由名匹配器
 expect(widget, hasRouteName('/home'));
 
-// Backpack matcher
+// Backpack 匹配器
 expect(true, backpackHas("key", value: "expected"));
 
-// API call matcher
+// API 调用匹配器
 expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 ```
 
@@ -897,7 +935,7 @@ expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 模拟通常来自其他 Widget 或控制器的状态更新：
 
 ``` dart
-// Fire an UpdateState event
+// 触发 UpdateState 事件
 fireStateUpdate('HomePageState', data: {'items': ['a', 'b']});
 await tester.pump();
 expect(find.text('a'), findsOneWidget);
@@ -911,7 +949,7 @@ expect(find.text('a'), findsOneWidget);
 fireStateAction('HomePageState', 'refresh-page');
 await tester.pump();
 
-// With additional data
+// 带附加数据
 fireStateAction('CartState', 'add-item', data: {'id': 42});
 await tester.pump();
 ```
@@ -919,15 +957,15 @@ await tester.pump();
 ### 状态断言
 
 ``` dart
-// Assert a state update was fired
+// 断言状态更新已触发
 expectStateUpdated('HomePageState');
 expectStateUpdated('HomePageState', times: 2);
 
-// Assert a state action was fired
+// 断言状态动作已触发
 expectStateAction('HomePageState', 'refresh-page');
 expectStateAction('CartState', 'add-item', times: 1);
 
-// Assert on the stateData of a NyPage/NyState widget
+// 断言 NyPage/NyState 组件的 stateData
 expectStateData(tester, find.byType(MyWidget), equals(42));
 ```
 
@@ -936,13 +974,13 @@ expectStateData(tester, find.byType(MyWidget), equals(42));
 跟踪和检查触发的状态更新和操作：
 
 ``` dart
-// Get all updates fired to a state
+// 获取向某个状态触发的所有更新
 List updates = NyStateTestHelpers.getUpdatesFor('MyWidget');
 
-// Get all actions fired to a state
+// 获取向某个状态触发的所有动作
 List actions = NyStateTestHelpers.getActionsFor('MyWidget');
 
-// Reset all tracked state updates and actions
+// 重置所有已跟踪的状态更新和动作
 NyStateTestHelpers.reset();
 ```
 
@@ -987,6 +1025,101 @@ NyTest.seedBackpack({
 });
 ```
 
+<div id="nav-interaction"></div>
+
+## 导航和交互辅助方法
+
+`WidgetTester` 扩展提供了一个高层次的 DSL，用于在 `nyWidgetTest` 中编写导航流程和 UI 交互。
+
+### visit
+
+导航到某个路由并等待页面稳定：
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+断言某个导航操作将你带到了预期的路由：
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+断言当前路由与给定路由匹配（用于确认所在位置，而非刚刚导航的动作）：
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+等待所有挂起的动画和帧回调完成：
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+弹出当前路由并等待稳定：
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+通过文本查找组件，点击并在一次调用中等待稳定：
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+点击表单字段、输入文本并等待稳定：
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+滚动直到组件可见，然后等待稳定：
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+传入特定的 `scrollable` 查找器和 `delta` 以进行精确控制：
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
+```
+
 <div id="examples"></div>
 
 ## 示例
@@ -1028,7 +1161,7 @@ void main() {
         ]
       });
 
-      // ... trigger API call ...
+      // ... 触发 API 调用 ...
 
       expectApiCalled('/api/users');
     });
@@ -1038,7 +1171,7 @@ void main() {
     nyTest('subscription expires correctly', () async {
       NyTest.travel(DateTime(2025, 1, 1));
 
-      // Test subscription logic at a known date
+      // 在已知日期测试订阅逻辑
       expect(NyTime.now().year, equals(2025));
 
       NyTest.travelForward(Duration(days: 365));

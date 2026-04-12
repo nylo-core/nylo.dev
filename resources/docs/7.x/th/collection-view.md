@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Add spacing between items
+  spacing: 8.0, // เพิ่มระยะห่างระหว่างรายการ
   padding: EdgeInsets.all(16),
 )
 ```
@@ -187,7 +187,7 @@ CollectionView<Product>.grid(
 ``` dart
 CollectionView<Post>.pullable(
   data: (int iteration) async {
-    // iteration starts at 1 and increments on each load
+    // iteration เริ่มที่ 1 และเพิ่มขึ้นในแต่ละการโหลด
     return await api<ApiService>((request) =>
       request.get('/posts?page=$iteration')
     );
@@ -196,9 +196,9 @@ CollectionView<Post>.pullable(
     return PostCard(post: item.data);
   },
   onRefresh: () {
-    print('List was refreshed!');
+    print('รายการถูกรีเฟรชแล้ว!');
   },
-  headerStyle: 'WaterDropHeader', // Pull indicator style
+  headerStyle: 'WaterDropHeader', // สไตล์ตัวบ่งชี้ pull
 )
 ```
 
@@ -260,16 +260,16 @@ CollectionView<Photo>.pullableGrid(
 ปรับแต่งตัวบ่งชี้การโหลดโดยใช้ `loadingStyle`:
 
 ``` dart
-// Normal loading with custom widget
+// การโหลดปกติพร้อม widget แบบกำหนดเอง
 CollectionView<Item>(
   data: () async => await fetchItems(),
   builder: (context, item) => ItemTile(item: item.data),
   loadingStyle: LoadingStyle.normal(
-    child: Text("Loading items..."),
+    child: Text("กำลังโหลดรายการ..."),
   ),
 )
 
-// Skeletonizer loading effect
+// เอฟเฟกต์การโหลดแบบ skeletonizer
 CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserCard(user: item.data),
@@ -331,7 +331,7 @@ CollectionView<User>(
   data: () async => await fetchUsers(),
   builder: (context, item) => UserTile(user: item.data),
   transform: (List<User> users) {
-    // Filter to only active users
+    // กรองเฉพาะผู้ใช้ที่ใช้งานอยู่
     return users.where((u) => u.isActive).toList();
   },
 )
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## การอัปเดตสถานะ
 
-คุณสามารถอัปเดตหรือรีเซ็ต CollectionView โดยกำหนด `stateName` ให้กับมัน:
+คุณสามารถอัปเดต CollectionView ผ่านโค้ดได้โดยกำหนด `stateName` และเรียก `CollectionView.stateActions()`:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### รีเซ็ตรายการ
+ใช้ `stateActions` เพื่อจัดการรายการในขณะรันไทม์:
 
 ``` dart
-// Resets and reloads data from scratch
-CollectionView.stateReset("my_todo_list");
+final actions = CollectionView.stateActions("my_todo_list");
+
+// รีเซ็ตและโหลดข้อมูลใหม่ตั้งแต่ต้น
+actions.reset();
+
+// รีเฟรชข้อมูล (ดึงข้อมูลใหม่และรีเซ็ตการแบ่งหน้า)
+actions.refreshData();
+
+// เพิ่มรายการไปที่ท้ายรายการ
+actions.addItem(newTodo);
+
+// แทรกรายการที่ตำแหน่งที่ระบุ
+actions.insertItem(0, newTodo);
+
+// ลบรายการตามดัชนี
+actions.removeFromIndex(2);
+
+// แทนที่รายการที่ดัชนีที่ระบุ
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### ลบรายการ
-
-``` dart
-// Remove item at index 2
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### เรียกการอัปเดตทั่วไป
-
-``` dart
-// Using the global updateState helper
-updateState("my_todo_list");
-```
+เมธอด `stateActions` ทั้งหมดทำงานได้ถูกต้องในทุก rebuild สำหรับทั้งข้อมูลแบบ synchronous และ asynchronous `refreshData()` ยังรีเซ็ตตัวนับ iteration การแบ่งหน้าด้วย เพื่อให้รายการ pullable เริ่มต้นจากหน้า 1 ใหม่
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | พารามิเตอร์ | ชนิด | คำอธิบาย |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | ฟังก์ชันข้อมูลแบบแบ่งหน้า |
+| `enablePullDown` | `bool` | เปิดใช้งานท่าทาง pull-to-refresh (ค่าเริ่มต้น: `true`) |
 | `onRefresh` | `Function()?` | Callback เมื่อรีเฟรชเสร็จสิ้น |
 | `beforeRefresh` | `Function()?` | Callback ก่อนรีเฟรช |
 | `afterRefresh` | `Function(dynamic)?` | Callback หลังโหลดข้อมูล |

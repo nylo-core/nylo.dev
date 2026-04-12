@@ -7,7 +7,9 @@
 - Kullanım
     - [Açılır Menü Widget'ı](#usage-dropdown "Açılır Menü Widget'ı")
     - [Alt Sayfa Modalı](#usage-bottom-modal "Alt Sayfa Modalı")
+- [Animasyon Stili](#animation-style "Animasyon Stili")
 - [Özel Açılır Menü Oluşturucu](#custom-builder "Özel Açılır Menü Oluşturucu")
+- [Durum Eylemleri](#state-actions "Durum Eylemleri")
 - [Parametreler](#parameters "Parametreler")
 - [Statik Metotlar](#methods "Statik Metotlar")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Uygulama çubuğuna ekle
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Alt modal, şu anda seçili dilin yanında bir onay işareti ile dillerin listesini görüntüler.
 
-### Modal Yüksekliğini Özelleştirme
+### Modalı Özelleştirme
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Modalı sekme çubukları dahil tüm rotaların üzerinde göster
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Animasyon Stili
+
+`animationStyle` parametresi, hem açılır menü tetikleyicisi hem de alt sayfa modalı liste öğeleri için geçiş animasyonlarını kontrol eder. Dört ön ayar mevcuttur:
+
+``` dart
+// Animasyon yok
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Hafif, rafine animasyonlar (çoğu uygulama için önerilir)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Canlı, yaylı animasyonlar
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Nazik ölçekle yumuşak solma
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Ayrıca bireysel parametrelerle özel bir `LanguageSwitcherAnimationStyle()` geçirebilir veya bir ön ayarı düzenlemek için `copyWith` kullanabilirsiniz.
+
+Aynı `animationStyle` parametresi `LanguageSwitcher.showBottomModal` tarafından da kabul edilir.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // örn. "English"
+        // language['locale'] yerel ayar kodunu içerir, örn. "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Dil değiştiğinde ek eylemler gerçekleştir
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Durum Eylemleri
+
+`stateActions()` kullanarak `LanguageSwitcher`'ı programatik olarak kontrol edin:
+
+``` dart
+// Dil listesini yenile (mevcut dilleri yeniden okur)
+LanguageSwitcher.stateActions().refresh();
+
+// Yerel ayar koduna göre bir dile geç
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Bu, örneğin kullanıcı tercihiyle oturum açtıktan sonra kullanıcı etkileşimi olmadan uygulama dilini değiştirmek istediğinizde kullanışlıdır.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Dil seçim modalını görüntüleyin:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Seçeneklerle
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Desteklenen Yerel Ayarlar

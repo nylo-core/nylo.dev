@@ -26,7 +26,7 @@ Dibangun di atas paket `pull_to_refresh_flutter3`, Pullable menyediakan API yang
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // Ambil data terbaru
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Ketika pengguna menarik ke bawah pada daftar, callback `onRefresh` akan dipanggi
 ### Contoh
 
 ``` dart
-// Classic header
+// Header klasik
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// Header Material
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// Tanpa efek pantulan
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// Widget header kustom
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Pilih dari lima animasi header bawaan:
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // Indikator tarik klasik
+  waterDrop,         // Animasi tetesan air (default)
+  materialClassic,   // Material Design klasik
+  waterDropMaterial,  // Tetesan air Material
+  bezier,            // Animasi kurva Bezier
 }
 ```
 
 Atur gaya melalui konstruktor atau config:
 
 ``` dart
-// Via named constructor
+// Melalui named constructor
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// Melalui config
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // Reset ke halaman 1
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // Muat halaman berikutnya
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// Picu refresh secara programatik
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// Picu loading secara programatik
 _controller.triggerLoading();
 
-// Check state
+// Periksa status
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | Callback data berpaginasi (iterasi dimulai dari 1) |
+| `enablePullDown` | `bool` | Aktifkan gesture tarik-turun-untuk-refresh (default: `true`) |
 | `onRefresh` | `Function()?` | Callback setelah refresh |
 | `beforeRefresh` | `Function()?` | Hook sebelum refresh dimulai |
 | `afterRefresh` | `Function(dynamic)?` | Hook setelah refresh dengan data |
 | `headerStyle` | `String?` | Nama tipe header (misalnya, `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | Indikator loading kustom untuk footer |
+
+Untuk me-refresh `CollectionView.pullable` secara programatik, gunakan `CollectionView.stateActions(stateName).refreshData()`. Ini mengambil ulang data dan mereset iterasi paginasi kembali ke 1 sehingga daftar dimulai kembali dari halaman pertama.
 
 <div id="examples"></div>
 

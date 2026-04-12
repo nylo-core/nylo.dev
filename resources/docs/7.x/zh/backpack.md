@@ -25,13 +25,13 @@ Backpack 被框架内部用于存储关键实例，如 `Nylo` 应用对象、`Ev
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// Save a value
+// 保存值
 Backpack.instance.save("user_name", "Anthony");
 
-// Read a value (synchronous)
+// 读取值（同步）
 String? name = Backpack.instance.read("user_name");
 
-// Delete a value
+// 删除值
 Backpack.instance.delete("user_name");
 ```
 
@@ -42,13 +42,13 @@ Backpack.instance.delete("user_name");
 Backpack 使用**单例模式**——通过 `Backpack.instance` 访问它：
 
 ``` dart
-// Save data
+// 保存数据
 Backpack.instance.save("theme", "dark");
 
-// Read data
+// 读取数据
 String? theme = Backpack.instance.read("theme"); // "dark"
 
-// Check if data exists
+// 检查数据是否存在
 bool hasTheme = Backpack.instance.contains("theme"); // true
 ```
 
@@ -59,21 +59,26 @@ bool hasTheme = Backpack.instance.contains("theme"); // true
 使用 `read<T>()` 方法从 Backpack 中读取值。它支持泛型类型和可选的默认值：
 
 ``` dart
-// Read a String
+// 读取 String
 String? name = Backpack.instance.read<String>("name");
 
-// Read with a default value
+// 使用默认值读取
 String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "Guest";
 
-// Read an int
+// 读取 int
 int? score = Backpack.instance.read<int>("score");
 ```
 
 当提供类型参数时，Backpack 会自动将 JSON 字符串反序列化为模型对象：
 
 ``` dart
-// If a User model is stored as JSON, it will be deserialized
+// 如果 User 模型以 JSON 字符串形式存储，将被反序列化
 User? user = Backpack.instance.read<User>("current_user");
+
+// 如果存储的是原始 Map（例如通过 NyStorage 的 syncKeys），
+// 读取时也会自动反序列化为类型化模型
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // 返回 User
 ```
 
 <div id="saving-data"></div>
@@ -93,11 +98,11 @@ Backpack.instance.save("cart_count", 3);
 使用 `append()` 将值添加到存储在某个键下的列表中：
 
 ``` dart
-// Append to a list
+// 追加到列表
 Backpack.instance.append("recent_searches", "Flutter");
 Backpack.instance.append("recent_searches", "Dart");
 
-// Append with a limit (keeps only the last N items)
+// 带限制地追加（仅保留最后 N 个条目）
 Backpack.instance.append("recent_searches", "Nylo", limit: 10);
 ```
 
@@ -191,14 +196,14 @@ bool isReady = Backpack.instance.isNyloInitialized(); // true
 ### 示例
 
 ``` dart
-// Using helper functions
+// 使用辅助函数
 backpackSave("locale", "en");
 
 String? locale = backpackRead<String>("locale"); // "en"
 
 backpackDelete("locale");
 
-// Access the Nylo instance
+// 访问 Nylo 实例
 Nylo nylo = backpackNylo();
 ```
 
@@ -209,13 +214,13 @@ Nylo nylo = backpackNylo();
 Backpack 与 `NyStorage` 集成，实现持久化存储与内存存储的结合：
 
 ``` dart
-// Save to both NyStorage (persistent) and Backpack (in-memory)
+// 同时保存到 NyStorage（持久化）和 Backpack（内存）
 await NyStorage.save("auth_token", "abc123", inBackpack: true);
 
-// Now accessible synchronously via Backpack
+// 现在可以通过 Backpack 同步访问
 String? token = Backpack.instance.read("auth_token");
 
-// When deleting from NyStorage, also clear from Backpack
+// 从 NyStorage 删除时，同时从 Backpack 清除
 await NyStorage.deleteAll(andFromBackpack: true);
 ```
 
@@ -228,7 +233,7 @@ await NyStorage.deleteAll(andFromBackpack: true);
 ### 为 API 请求存储身份验证令牌
 
 ``` dart
-// In your auth interceptor
+// 在你的身份验证拦截器中
 class BearerAuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -246,24 +251,24 @@ class BearerAuthInterceptor extends Interceptor {
 ### 基于会话的购物车管理
 
 ``` dart
-// Add items to a cart session
+// 向购物车会话添加条目
 Backpack.instance.sessionUpdate("cart", "items", ["item_1", "item_2"]);
 Backpack.instance.sessionUpdate("cart", "total", 49.99);
 
-// Read cart data
+// 读取购物车数据
 Map<String, dynamic>? cart = Backpack.instance.sessionData("cart");
 
-// Clear the cart
+// 清空购物车
 Backpack.instance.sessionFlush("cart");
 ```
 
 ### 快速功能标志
 
 ``` dart
-// Store feature flags in Backpack for fast access
+// 将功能标志存储在 Backpack 中以便快速访问
 backpackSave("feature_dark_mode", true);
 backpackSave("feature_notifications", false);
 
-// Check a feature flag
+// 检查功能标志
 bool darkMode = backpackRead<bool>("feature_dark_mode") ?? false;
 ```

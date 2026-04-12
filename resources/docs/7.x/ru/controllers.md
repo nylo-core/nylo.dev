@@ -35,7 +35,7 @@ class HomeController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Initialize services or fetch data
+    // Инициализировать сервисы или загрузить данные
   }
 
   void onTapProfile() {
@@ -58,12 +58,12 @@ class HomeController extends NyController {
 Используйте Metro CLI для генерации контроллеров:
 
 ``` bash
-# Create a page with a controller
+# Создать страницу с контроллером
 metro make:page dashboard --controller
-# or shorthand
+# или сокращённо
 metro make:page dashboard -c
 
-# Create a controller only
+# Создать только контроллер
 metro make:controller profile_controller
 ```
 
@@ -92,7 +92,7 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   get init => () async {
-    // Access controller methods
+    // Обращение к методам контроллера
     widget.controller.fetchData();
   };
 
@@ -123,17 +123,17 @@ class _HomePageState extends NyPage<HomePage> {
 Передавайте данные между страницами и получайте к ним доступ в контроллере:
 
 ``` dart
-// Navigate with data
+// Перейти с данными
 routeTo(ProfilePage.path, data: {"userId": 123});
 
-// In your controller
+// В вашем контроллере
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get the passed data
+    // Получить переданные данные
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -147,10 +147,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
   get init => () async {
-    // From controller
+    // Из контроллера
     var userData = widget.controller.data();
 
-    // Or from widget directly
+    // Или напрямую из виджета
     var userData = widget.data();
   };
 }
@@ -163,21 +163,21 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 Доступ к параметрам URL-запроса в контроллере:
 
 ``` dart
-// Navigate to: /profile?tab=settings&highlight=true
+// Перейти к: /profile?tab=settings&highlight=true
 routeTo("/profile?tab=settings&highlight=true");
 
-// In your controller
+// В вашем контроллере
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get all query parameters as Map
+    // Получить все параметры запроса как Map
     Map<String, dynamic>? params = queryParameters();
     // {"tab": "settings", "highlight": "true"}
 
-    // Get a specific parameter
+    // Получить конкретный параметр
     String? tab = queryParameters(key: "tab");
     // "settings"
   }
@@ -187,9 +187,9 @@ class ProfileController extends NyController {
 Проверка наличия параметра запроса:
 
 ``` dart
-// In your page
+// На вашей странице
 if (widget.hasQueryParameter("tab")) {
-  // Handle tab parameter
+  // Обработать параметр tab
 }
 ```
 
@@ -206,22 +206,27 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Trigger a setState on the page
+    // Вызвать setState на странице
     setState(setState: () {});
   }
 
   void refresh() {
-    // Refresh the entire page
+    // Обновить всю страницу
     refreshPage();
   }
 
   void goBack() {
-    // Pop the page with optional result
+    // Закрыть страницу с необязательным результатом
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // Закрыть из корневого навигатора (например, для закрытия модального окна верхнего уровня в Navigation Hub)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
-    // Send custom action to page
+    // Отправить пользовательское действие на страницу
     updatePageState("customAction", {"key": "value"});
   }
 }
@@ -237,33 +242,33 @@ class HomeController extends NyController {
 class FormController extends NyController {
 
   void showNotifications() {
-    // Success toast
+    // Уведомление об успехе
     showToastSuccess(description: "Profile updated!");
 
-    // Warning toast
+    // Предупреждающее уведомление
     showToastWarning(description: "Please check your input");
 
-    // Error/Danger toast
+    // Уведомление об ошибке/опасности
     showToastDanger(description: "Failed to save changes");
 
-    // Info toast
+    // Информационное уведомление
     showToastInfo(description: "New features available");
 
-    // Sorry toast
+    // Уведомление с извинениями
     showToastSorry(description: "We couldn't process your request");
 
-    // Oops toast
+    // Уведомление Oops
     showToastOops(description: "Something went wrong");
   }
 
   void showCustomToast() {
-    // Custom toast with title
+    // Пользовательское уведомление с заголовком
     showToastSuccess(
       title: "Great Job!",
       description: "Your changes have been saved",
     );
 
-    // Use custom toast style (registered in Nylo)
+    // Использовать пользовательский стиль уведомления (зарегистрированный в Nylo)
     showToastCustom(
       title: "Custom",
       description: "Using custom style",
@@ -302,18 +307,18 @@ class RegisterController extends NyController {
       showAlert: true,
       alertStyle: 'warning',
       onSuccess: () {
-        // Validation passed
+        // Валидация пройдена
         _performRegistration();
       },
       onFailure: (exception) {
-        // Validation failed
+        // Валидация не пройдена
         print(exception.toString());
       },
     );
   }
 
   void _performRegistration() async {
-    // Handle registration logic
+    // Логика регистрации
     showToastSuccess(description: "Account created!");
   }
 }
@@ -349,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // This code only runs once until the lock is released
+      // Этот код выполняется только один раз до снятия блокировки
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -361,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Don't trigger setState after
+      shouldSetState: false, // Не вызывать setState после
     );
   }
 }
@@ -379,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // User confirmed - perform deletion
+        // Пользователь подтвердил — выполнить удаление
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -405,7 +410,7 @@ class AuthController extends NyController {
   User? currentUser;
 
   Future<void> login(String email, String password) async {
-    // Login logic
+    // Логика входа
     currentUser = await AuthService.login(email, password);
   }
 
@@ -454,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Only runs if all guards pass
+    // Выполняется только если все защитники пропустили
   }
 }
 ```

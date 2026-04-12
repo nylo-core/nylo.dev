@@ -107,7 +107,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// same for skeletonizer
+// Gleiches gilt fuer Skeletonizer
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -165,7 +165,7 @@ class _MyWidgetState extends NyState<MyWidget> {
       print('Hello world');
     },
     "update_user_name": (User user) async {
-      // Example with data
+      // Beispiel mit Daten
       _userName = user.name;
       setState(() {});
     },
@@ -181,10 +181,10 @@ Dann können Sie die Aktion von einer anderen Klasse mit der `stateAction`-Metho
 ``` dart
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Ein weiteres Beispiel mit Daten
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: MyWidget.state, data: user);
-// Another example with data
+// Ein weiteres Beispiel mit Daten
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
 ```
 
@@ -193,11 +193,11 @@ Wenn Sie stateActions mit einem `NyPage` verwenden, müssen Sie den **Pfad** der
 ``` dart
 stateAction('hello_world_in_widget', state: ProfilePage.path);
 
-// Another example with data
+// Ein weiteres Beispiel mit Daten
 User user = User(name: "John Doe");
 stateAction('update_user_name', state: ProfilePage.path, data: user);
 
-// Another example with data
+// Ein weiteres Beispiel mit Daten
 stateAction('show_toast', state: ProfilePage.path, data: "Hello world");
 ```
 
@@ -302,6 +302,8 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Die aktuelle Seite vom Stack entfernen.
 
+Uebergeben Sie `rootNavigator: true`, um vom Root-Navigator statt vom naechsten lokalen Navigator zu poppen. Dies ist in Navigation-Hub-Tabs nuetzlich, wenn ein Modal oder Overlay ueber den Root-Navigator geoeffnet wurde.
+
 Beispiel
 
 ``` dart
@@ -309,6 +311,11 @@ class _HomePageState extends NyState<HomePage> {
 
   popView() {
     pop();
+  }
+
+  // Vom Root-Navigator poppen (z.B. um ein Root-Level-Modal zu schliessen)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override

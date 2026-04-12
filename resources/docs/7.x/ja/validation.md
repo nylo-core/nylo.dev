@@ -11,6 +11,7 @@
   - [FormValidator の使用](#using-form-validator "FormValidator の使用")
   - [FormValidator の名前付きコンストラクタ](#form-validator-named-constructors "FormValidator の名前付きコンストラクタ")
   - [バリデーションルールのチェーン](#chaining-validation-rules "バリデーションルールのチェーン")
+  - [Nullable フィールド](#nullable-fields "Nullable フィールド")
   - [カスタムバリデーション](#custom-validation "カスタムバリデーション")
   - [フィールドでの FormValidator の使用](#form-validator-with-fields "フィールドでの FormValidator の使用")
 - [利用可能なバリデーションルール](#validation-rules "利用可能なバリデーションルール")
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Nullable フィールド
+
+`.nullable()` を使用してバリデーターをオプションとしてマークします。nullable の場合、null または空の値は自動的にバリデーションを通過します — 他のすべてのルールは値が存在する場合にのみ適用されます。
+
+``` dart
+// ニックネームはオプションですが、入力された場合は 3〜20 文字である必要があります
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+`.nullable()` がない場合、空のフィールドは `minLength` ルールで失敗します。`.nullable()` を使用すると、フィールドを空白のままにしてもバリデーションを通過します。
+
+これはオプションのプロフィールフィールド、二次連絡先情報、またはユーザーが入力した場合にのみ検証されるフィールドに便利です。`nullable()` が `Field` ウィジェットとどのように統合されるかについては、[フォームドキュメント](/docs/{{ $version }}/forms) を参照してください。
+
 <div id="custom-validation"></div>
 
 ## カスタムバリデーション
@@ -403,6 +425,7 @@ Field.slider(
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | 正規表現パターンに一致する必要がある |
 | Equals | -- | `.equals(otherValue)` | 別の値と等しい必要がある |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | カスタムバリデーション関数 |
+| Nullable | -- | `.nullable()` | null または空の値は自動的に通過し、値が存在する場合にのみルールが適用される |
 
 すべてのルールは、エラーメッセージをカスタマイズするためのオプションの `message` パラメータを受け付けます。
 

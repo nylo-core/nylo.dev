@@ -30,6 +30,7 @@
   - [Campos de Slider](#slider-fields "Campos de Slider")
   - [Campos de Range Slider](#range-slider-fields "Campos de Range Slider")
   - [Campos Personalizados](#custom-fields "Campos Personalizados")
+  - [Campos de Builder](#builder-fields "Campos de Builder")
   - [Campos de Widget](#widget-fields "Campos de Widget")
 - [FormCollection](#form-collection "FormCollection")
 - [Validação de Formulário](#form-validation "Validação de Formulário")
@@ -596,6 +597,42 @@ Field.custom("My Field",
 ```
 
 O parâmetro `child` requer um widget que estenda `NyFieldStatefulWidget`. Isso lhe dá controle total sobre a renderização e comportamento do campo.
+
+<div id="builder-fields"></div>
+
+### Campos de Builder
+
+Use `Field.builder()` para criar um campo de formulário inline personalizado sem subclassificar `NyFieldStatefulWidget`. A função builder recebe o valor atual, um callback `onChanged` para reportar mudanças de valor ao formulário e um callback `setState` para acionar uma reconstrução da UI.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // reconstruir o widget do campo
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+O terceiro parâmetro é o valor atual do campo e o quarto é `setState`. Se o seu builder não precisar de `setState`, você pode usar a assinatura legada de 3 argumentos (`NyFieldBuilderLegacy`), que ainda é suportada:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
 
 <div id="widget-fields"></div>
 
@@ -1184,4 +1221,5 @@ Métodos que você pode sobrescrever na sua subclasse `NyFormWidget`:
 | `Field.slider()` | -- | Slider de valor único |
 | `Field.rangeSlider()` | -- | Slider de intervalo de valores |
 | `Field.custom()` | `child` (`NyFieldStatefulWidget` obrigatório) | Widget stateful personalizado |
+| `Field.builder()` | `builder` (`NyFieldBuilder` ou `NyFieldBuilderLegacy` obrigatório) | Campo inline personalizado sem subclassificar |
 | `Field.widget()` | `child` (`Widget` obrigatório) | Incorporar qualquer widget (não-campo) |

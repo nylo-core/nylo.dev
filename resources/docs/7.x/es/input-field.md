@@ -112,8 +112,8 @@ InputField.password(
 ``` dart
 InputField.password(
   controller: _passwordController,
-  passwordVisible: true, // Show/hide toggle icon
-  passwordViewable: true, // Allow user to toggle visibility
+  passwordVisible: true, // Icono para mostrar/ocultar
+  passwordViewable: true, // Permitir al usuario alternar la visibilidad
 )
 ```
 
@@ -154,22 +154,22 @@ InputField.capitalizeWords(
 Aplica mascaras de entrada para datos formateados como numeros de telefono o tarjetas de credito:
 
 ``` dart
-// Phone number mask
+// Mascara de numero de telefono
 InputField(
   controller: _phoneController,
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Returns unmasked value: 1234567890
+  maskedReturnValue: false, // Devuelve el valor sin mascara: 1234567890
 )
 
-// Credit card mask
+// Mascara de tarjeta de credito
 InputField(
   controller: _cardController,
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Returns masked value: 1234 5678 9012 3456
+  maskedReturnValue: true, // Devuelve el valor enmascarado: 1234 5678 9012 3456
 )
 ```
 
@@ -212,9 +212,9 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Custom clear icon
+  clearIcon: Icon(Icons.close, size: 20), // Icono de limpiar personalizado
   onChanged: (value) {
-    // Handle search
+    // Manejar busqueda
   },
 )
 ```
@@ -236,14 +236,22 @@ InputField(
 ### Acciones de estado
 
 ``` dart
-// Clear the field
-InputField.stateActions("username_field").clear();
+final actions = InputField.stateActions("username_field");
 
-// Set a value
-updateState("username_field", data: {
-  "action": "setValue",
-  "value": "new_value"
-});
+// Limpiar el campo
+actions.clear();
+
+// Establecer un valor
+actions.setValue("new_value");
+
+// Mover el foco al campo
+actions.focus();
+
+// Quitar el foco del campo
+actions.unfocus();
+
+// Alternar visibilidad de contrasena (para InputField.password)
+actions.toggleObscure();
 ```
 
 <div id="parameters"></div>
@@ -281,6 +289,7 @@ updateState("username_field", data: {
 | `labelStyle` | `TextStyle?` | Estilo del texto de la etiqueta |
 | `hintStyle` | `TextStyle?` | Estilo del texto de sugerencia |
 | `prefixIcon` | `Widget?` | Icono antes de la entrada |
+| `suffixIcon` | `Widget?` | Icono despues de la entrada |
 
 ### Parametros de enmascaramiento
 
@@ -302,4 +311,5 @@ updateState("username_field", data: {
 | `passwordViewable` | `bool?` | Permitir alternador de visibilidad de contrasena |
 | `dummyData` | `String?` | Datos ficticios para desarrollo |
 | `stateName` | `String?` | Nombre para gestion de estado |
+| `enableInteractiveSelection` | `bool` | Habilitar seleccion de texto (predeterminado: `true`) |
 | `onChanged` | `Function(String)?` | Se llama cuando el valor cambia |

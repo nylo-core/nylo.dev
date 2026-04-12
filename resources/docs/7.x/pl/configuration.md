@@ -10,6 +10,7 @@
   - [Pobieranie wartości](#retrieving-values "Pobieranie wartości środowiskowych")
   - [Tworzenie klas konfiguracyjnych](#creating-config-classes "Tworzenie klas konfiguracyjnych")
   - [Typy zmiennych](#variable-types "Typy zmiennych środowiskowych")
+  - [Interpolacja zmiennych](#variable-interpolation "Interpolacja zmiennych")
 - [Warianty środowisk](#environment-flavours "Warianty środowisk")
 - [Wstrzykiwanie w czasie kompilacji](#build-time-injection "Wstrzykiwanie w czasie kompilacji")
 
@@ -94,7 +95,7 @@ Gdy zmodyfikujesz plik `.env`, ponownie wygeneruj konfigurację:
 metro make:env
 ```
 
-Flaga `--force` nadpisuje istniejący `env.g.dart`.
+To zawsze nadpisuje istniejący `env.g.dart`.
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 Następnie w kodzie aplikacji uzyskaj dostęp do wartości przez klasę konfiguracyjną:
 
 ``` dart
-// Anywhere in your app
+// Gdziekolwiek w aplikacji
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ To tworzy nowy plik konfiguracyjny w `lib/config/revenue_cat_config.dart`:
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Dodaj swoje wartości konfiguracyjne tutaj
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Zainicjalizuj RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Sprawdź uprawnienia
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Przyznaj dostęp premium
 }
 ```
 
@@ -200,6 +201,30 @@ Wartości w pliku `.env` są automatycznie parsowane:
 | `VALUE=null` | `null` | `null` |
 | `EMPTY=""` | `String` | `""` (pusty string) |
 
+
+<div id="variable-interpolation"></div>
+
+## Interpolacja zmiennych
+
+Wartości stringów w pliku `.env` mogą odwoływać się do innych zmiennych za pomocą składni `${NAZWA_ZMIENNEJ}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Kiedy kod wywołuje `getEnv('APP_URL')`, zwracana wartość to `https://myapp.com`. Odwołania są rozwiązywane rekurencyjnie, więc powiązane odwołania działają zgodnie z oczekiwaniami:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` zwraca `https://example.com/uploads`.
+
+Odwołania cykliczne są chronione — jeśli zmienna odwołuje się do siebie (bezpośrednio lub przez łańcuch), nierozwiązany placeholder `${NAZWA_ZMIENNEJ}` jest zachowywany w wyniku zamiast powodować nieskończoną pętlę.
 
 <div id="environment-flavours"></div>
 

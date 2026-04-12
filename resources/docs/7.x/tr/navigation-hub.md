@@ -74,31 +74,31 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// Durum eylemleri
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
 class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
-  /// Layout builder
+  /// Duzen olusturucu
   @override
   NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 
-  /// Should the state be maintained
+  /// Durumun korunup korunmayacagi
   @override
   bool get maintainState => true;
 
-  /// The initial index
+  /// Baslangic indeksi
   @override
   int get initialIndex => 0;
 
-  /// Navigation pages
+  /// Navigasyon sayfalari
   _BaseNavigationHubState() : super(() => {
       0: NavigationTab.tab(title: "Home", page: HomeTab()),
       1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
   });
 
-  /// Handle the tap event
+  /// Dokunma olayini isle
   @override
   onTap(int index) {
     super.onTap(index);
@@ -144,7 +144,7 @@ appRouter() => nyRoutes((router) {
     router.add(BaseNavigationHub.path).initialRoute();
 });
 
-// or navigate to the Navigation Hub from anywhere in your app
+// veya uygulamanizin herhangi bir yerinden Navigation Hub'a git
 
 routeTo(BaseNavigationHub.path);
 ```
@@ -189,7 +189,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 ``` dart
 @override
 NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav(
-    style: BottomNavStyle.material(), // Default Flutter material style
+    style: BottomNavStyle.material(), // Varsayilan Flutter material stili
 );
 ```
 
@@ -330,8 +330,8 @@ Journey navigasyon duzenini kullanmak istiyorsaniz, **widget'lariniz** `JourneyS
 
 ``` bash
 metro make:navigation_hub onboarding
-# Select: journey_states
-# Enter: welcome, personal_info, add_photos
+# Sec: journey_states
+# Gir: welcome, personal_info, add_photos
 ```
 
 Bu, hub'i ve tum journey state widget'larini `resources/pages/navigation_hubs/onboarding/states/` altinda olusturacaktir.
@@ -439,7 +439,7 @@ _MyNavigationHubState() : super(() => {
         page: PhoneNumberStep(),
         progressStyle: JourneyProgressStyle(
             indicator: JourneyProgressIndicator.numbered(),
-        ), // overrides the layout default for this tab only
+        ), // yalnizca bu sekme icin duzen varsayilanini gecersiz kilar
     ),
     2: NavigationTab.journey(
         page: AddPhotosStep(),
@@ -486,7 +486,7 @@ class _WelcomeState extends JourneyState<Welcome> {
 
   @override
   get init => () {
-    // Your initialization logic here
+    // Baslangic mantiginizi buraya yazin
   };
 
   @override
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigation buttons
+          // Navigasyon dugmeleri
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,19 +535,19 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Check if the journey can continue to the next step
+  /// Journey'nin bir sonraki adima devam edip edemeyecegini kontrol et
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Called before navigating to the next step
+  /// Bir sonraki adima gecmeden once cagrilan metot
   @override
   Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Orn. oturum verilerini kaydet
   }
 
-  /// Called when the journey is complete (at the last step)
+  /// Journey tamamlandiginda cagrilan metot (son adimda)
   @override
   Future<void> onComplete() async {}
 }
@@ -647,7 +647,7 @@ Widget view(BuildContext context) {
         ),
         nextButton: Button.primary(
             text: isLastStep ? "Get Started" : "Continue",
-            onPressed: nextStep, // runs validation then navigates
+            onPressed: nextStep, // dogrulamayı calistirir, sonra navigate eder
         ),
     );
 }
@@ -669,7 +669,7 @@ onPressed: () => nextStep(force: true),
 onPressed: () async {
     bool success = await previousStep();
     if (!success) {
-      // Already at first step
+      // Zaten ilk adimda
     }
 },
 ```
@@ -723,7 +723,7 @@ Ornegin, sonraki adima gecmeden once veri kaydetmek istiyorsaniz burada yapabili
 ``` dart
 @override
 Future<void> onBeforeNext() async {
-    // E.g. save data to session
+    // Orn. verileri oturuma kaydet
     // session('onboarding', {
     //   'name': 'Anthony Gordon',
     //   'occupation': 'Software Engineer',
@@ -740,7 +740,7 @@ Future<void> onBeforeNext() async {
 ``` dart
 @override
 Future<void> onAfterNext() async {
-    // print('Navigated to the next step');
+    // print('Bir sonraki adima gecildi');
 }
 ```
 
@@ -753,8 +753,8 @@ Future<void> onAfterNext() async {
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Perform your validation logic here
-    // Return true if the journey can continue, false otherwise
+    // Dogrulama mantiginizi buraya yazin
+    // Journey devam edebiliyorsa true, edemiyorsa false dondur
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -826,7 +826,7 @@ LinearProgressIndicator(value: completionPercentage),
 nextButton: Button.primary(
     text: "Skip to photos",
     onPressed: () {
-        goToStep(2); // jump to step index 2
+        goToStep(2); // 2. indeks adimina atla
     },
 ),
 ```
@@ -839,7 +839,7 @@ nextButton: Button.primary(
 
 ``` dart
 onPressed: () {
-    goToNextStep(); // skip validation and go to next step
+    goToNextStep(); // dogrulamayi atla ve bir sonraki adima git
 },
 ```
 
@@ -887,7 +887,7 @@ onPressed: () {
 
 ``` dart
 onPressed: () {
-    exitJourney(); // pop the root navigator
+    exitJourney(); // kok navigatordan cik
 },
 ```
 
@@ -914,10 +914,10 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   _CompleteStepState() : super(
       navigationHubState: OnboardingNavigationHub.path.stateName());
 
-  /// Callback when journey completes
+  /// Journey tamamlandiginda callback
   @override
   void Function()? get onJourneyComplete => () {
-    // Navigate to your home page or next destination
+    // Ana sayfaniza veya bir sonraki hedefe git
     routeTo(HomePage.path);
   };
 
@@ -930,7 +930,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
           ...
           Button.primary(
             text: "Get Started",
-            onPressed: onJourneyComplete, // triggers the completion callback
+            onPressed: onJourneyComplete, // tamamlama callback'ini tetikler
           ),
         ],
       ),
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+Bir sekme icindeki ic icegecmis navigatordan cikis yaparken, sekmenin yerel navigatoru yerine kok navigatordan cikmak icin `rootNavigator: true` kullanin:
+
+``` dart
+// Sekmenin yerel navigatorundan cik (varsayilan)
+pop();
+
+// Kok navigatordan cik - bir modal veya katman
+// kok navigator kullanilarak gonderildiginde bunu kullanin
+pop(rootNavigator: true);
+```
+
+`rootNavigator` parametresi `NyState`, `NyController`, `StateAction.pop()` ve `BuildContext` uzantisindaki `pop()` metodunda kullanilabilir.
 
 <div id="tabs"></div>
 
@@ -1085,13 +1098,13 @@ Yukaridaki ornekte, Chat sekmesine baslangic sayisi 10 olan bir rozet ekledik.
 Rozet sayisini programatik olarak da guncelleyebilirsiniz.
 
 ``` dart
-/// Increment the badge count
+/// Rozet sayisini artir
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
-/// Update the badge count
+/// Rozet sayisini guncelle
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Clear the badge count
+/// Rozet sayisini temizle
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
@@ -1148,10 +1161,10 @@ Bu, Chat sekmesine kirmizi renkte bir uyari ekleyecektir.
 Uyariyi programatik olarak da guncelleyebilirsiniz.
 
 ``` dart
-/// Enable the alert
+/// Uyariyi etkinlestir
 BaseNavigationHub.stateActions.alertEnableTab(tab: 0);
 
-/// Disable the alert
+/// Uyariyi devre disi birak
 BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 ```
 
@@ -1165,7 +1178,7 @@ Varsayilan olarak, Navigation Hub ilk sekmede (indeks 0) baslar. Bunu `initialIn
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
-    int get initialIndex => 1; // Start on the second tab
+    int get initialIndex => 1; // Ikinci sekmeden basla
     ...
 }
 ```
@@ -1200,9 +1213,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Add custom logic here
-        // E.g. track analytics, show confirmation, etc.
-        super.onTap(index); // Always call super to handle the tab switch
+        // Ozel mantiginizi buraya ekleyin
+        // Orn. analitik takibi, onay gosterme vb.
+        super.onTap(index); // Sekme gecisini islemek icin her zaman super'i cagirin
     }
 }
 ```
@@ -1216,41 +1229,49 @@ Durum eylemleri, uygulamanizin herhangi bir yerinden Navigation Hub ile etkilesi
 Kullanabileceginiz durum eylemleri sunlardir:
 
 ``` dart
-/// Reset the tab at a given index
-/// E.g. MyNavigationHub.stateActions.resetTabIndex(0);
+/// Belirli bir indeksteki sekmeyi sifirla
+/// Orn. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
-/// Change the current tab programmatically
-/// E.g. MyNavigationHub.stateActions.currentTabIndex(2);
+/// Mevcut sekmeyi programatik olarak degistir
+/// Orn. MyNavigationHub.stateActions.currentTabIndex(2);
 currentTabIndex(int tabIndex);
 
-/// Update the badge count
-/// E.g. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
+/// Rozet sayisini guncelle
+/// Orn. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Increment the badge count
-/// E.g. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
+/// Rozet sayisini artir
+/// Orn. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Clear the badge count
-/// E.g. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
+/// Rozet sayisini temizle
+/// Orn. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Enable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
+/// Bir sekme icin uyariyi etkinlestir
+/// Orn. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Disable the alert for a tab
-/// E.g. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
+/// Bir sekme icin uyariyi devre disi birak
+/// Orn. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Navigate to the next page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.nextPage();
+/// Journey duzeninde bir sonraki sayfaya git
+/// Orn. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
-/// Navigate to the previous page in a journey layout
-/// E.g. await MyNavigationHub.stateActions.previousPage();
+/// Journey duzeninde bir onceki sayfaya git
+/// Orn. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Belirli bir sekmeyi yenile, yeniden olusturmayi zorla
+/// Orn. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Tum sekmeleri yenile, yeniden olusturmayi zorla
+/// Orn. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Bir durum eylemi kullanmak icin asagidakileri yapabilirsiniz:
@@ -1260,9 +1281,13 @@ MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 
 MyNavigationHub.stateActions.resetTabIndex(0);
 
-MyNavigationHub.stateActions.currentTabIndex(2); // Switch to tab 2
+MyNavigationHub.stateActions.currentTabIndex(2); // 2. sekmeye gec
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: go to next page
+await MyNavigationHub.stateActions.nextPage(); // Journey: bir sonraki sayfaya git
+
+MyNavigationHub.stateActions.refreshTab(0); // 0. sekmeyi yeniden olusturmaya zorla
+
+MyNavigationHub.stateActions.refresh(); // Tum sekmeleri yeniden olusturmaya zorla
 ```
 
 <div id="loading-style"></div>
@@ -1309,7 +1334,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     _MyNavigationHubState() : super(() async {
 
-      await sleep(3); // simulate loading for 3 seconds
+      await sleep(3); // 3 saniye yuklemeyi simule et
 
       return {
         0: NavigationTab.tab(

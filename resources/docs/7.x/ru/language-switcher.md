@@ -7,7 +7,9 @@
 - Использование
     - [Выпадающий виджет](#usage-dropdown "Выпадающий виджет")
     - [Модальное нижнее окно](#usage-bottom-modal "Модальное нижнее окно")
+- [Стиль анимации](#animation-style "Стиль анимации")
 - [Пользовательский построитель выпадающего списка](#custom-builder "Пользовательский построитель выпадающего списка")
+- [Действия над состоянием](#state-actions "Действия над состоянием")
 - [Параметры](#parameters "Параметры")
 - [Статические методы](#methods "Статические методы")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Добавить на панель приложения
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Модальное нижнее окно отображает список языков с галочкой рядом с текущим выбранным языком.
 
-### Настройка высоты модального окна
+### Настройка модального окна
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Показывать модальное окно поверх всех маршрутов, включая вкладки
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Стиль анимации
+
+Параметр `animationStyle` управляет анимациями переходов как для триггера выпадающего списка, так и для элементов списка в модальном нижнем окне. Доступны четыре пресета:
+
+``` dart
+// Без анимаций
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Тонкие, изысканные анимации (рекомендуется для большинства приложений)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Игривые, пружинистые анимации
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Плавное появление с мягким масштабированием
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Также можно передать пользовательский `LanguageSwitcherAnimationStyle()` с отдельными параметрами или использовать `copyWith` для настройки пресета.
+
+Тот же параметр `animationStyle` принимается методом `LanguageSwitcher.showBottomModal`.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // например, "English"
+        // language['locale'] содержит код локали, например, "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Выполнить дополнительные действия при смене языка
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Действия над состоянием
+
+Управляйте `LanguageSwitcher` программно с помощью `stateActions()`:
+
+``` dart
+// Обновить список языков (перечитывает доступные языки)
+LanguageSwitcher.stateActions().refresh();
+
+// Переключиться на язык по коду локали
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Полезно, когда нужно изменить язык приложения без взаимодействия с пользователем, например после входа с пользовательскими предпочтениями.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// С параметрами
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Поддерживаемые локали

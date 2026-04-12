@@ -60,6 +60,8 @@ Widget build(BuildContext context) {
 }
 ```
 
+如果当前区域设置的语言文件中缺少某个键，{{ config('app.name') }} 会在返回原始键字符串之前，自动在备用语言（在 `lib/config/localization.dart` 中配置）中查找。这适用于顶级键和点号表示的嵌套键。
+
 <div id="string-interpolation"></div>
 
 ## 字符串插值

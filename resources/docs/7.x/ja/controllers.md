@@ -220,6 +220,11 @@ class HomeController extends NyController {
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // ルートナビゲーターからポップ（例: Navigation Hub のルートレベルモーダルを閉じる）
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
     // カスタムアクションをページに送信
     updatePageState("customAction", {"key": "value"});

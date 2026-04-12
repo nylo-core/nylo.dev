@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 Perintah di atas akan membuat widget baru jika belum ada di dalam direktori `lib/resources/widgets/`.
 
+Semua perintah `make:*` menerima pemisah path dalam nama untuk menempatkan file ke dalam subdirektori:
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+Perintah ini membuat widget di `lib/resources/widgets/login/brand_panel.dart`.
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Membuat stateless widget secara paksa
@@ -433,6 +441,14 @@ metro make:event login_event
 
 Ini akan membuat event baru di `lib/app/events`.
 
+Gunakan pemisah path untuk mengorganisir event ke dalam subdirektori:
+
+``` bash
+metro make:event auth/login_event
+```
+
+Perintah ini membuat event di `lib/app/events/auth/login_event.dart`.
+
 <div id="forcefully-make-an-event"></div>
 
 ### Membuat event secara paksa
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 Ini akan menempatkan provider yang baru dibuat di `lib/app/providers/`.
+
+Gunakan pemisah path untuk mengorganisir provider ke dalam subdirektori:
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+Perintah ini membuat provider di `lib/app/providers/integrations/firebase_provider.dart`.
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 Ini akan membuat form baru di `lib/app/forms`.
 
+Gunakan pemisah path untuk mengorganisir form ke dalam subdirektori:
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+Perintah ini membuat form di `lib/app/forms/checkout/car_advert_form.dart`.
+
 <div id="forcefully-make-a-form"></div>
 
 ### Membuat form secara paksa
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 Ini akan membuat route guard baru di `lib/app/route_guards`.
+
+Gunakan pemisah path untuk mengorganisir guard ke dalam subdirektori:
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+Perintah ini membuat guard di `lib/app/route_guards/subscriptions/premium_content.dart`.
 
 <div id="forcefully-make-a-route-guard"></div>
 
@@ -816,9 +856,9 @@ import 'package:nylo_framework/metro/ny_cli.dart';
 
 void main(arguments) => _CurrentTimeCommand(arguments).run();
 
-/// Current Time Command
+/// Perintah Waktu Saat Ini
 ///
-/// Usage:
+/// Penggunaan:
 ///   metro app:current_time
 class _CurrentTimeCommand extends NyCustomCommand {
   _CurrentTimeCommand(super.arguments);
@@ -833,11 +873,11 @@ class _CurrentTimeCommand extends NyCustomCommand {
   Future<void> handle(CommandResult result) async {
       final format = result.getString("format");
 
-      // Get the current time
+      // Dapatkan waktu saat ini
       final now = DateTime.now();
       final DateFormat dateFormat = DateFormat(format);
 
-      // Format the current time
+      // Format waktu saat ini
       final formattedTime = dateFormat.format(now);
       info("The current time is " + formattedTime);
   }
@@ -897,13 +937,13 @@ Opsi memungkinkan perintah Anda menerima input tambahan dari pengguna. Anda dapa
 @override
 CommandBuilder builder(CommandBuilder command) {
 
-  // Add an option with a default value
+  // Tambahkan opsi dengan nilai default
   command.addOption(
-    'environment',     // option name
-    abbr: 'e',         // short form abbreviation
-    help: 'Target deployment environment', // help text
-    defaultValue: 'development',  // default value
-    allowed: ['development', 'staging', 'production'] // allowed values
+    'environment',     // nama opsi
+    abbr: 'e',         // singkatan
+    help: 'Target deployment environment', // teks bantuan
+    defaultValue: 'development',  // nilai default
+    allowed: ['development', 'staging', 'production'] // nilai yang diizinkan
   );
 
   return command;
@@ -918,7 +958,7 @@ Future<void> handle(CommandResult result) async {
   final environment = result.getString('environment');
   info('Deploying to $environment environment...');
 
-  // Command implementation...
+  // Implementasi perintah...
 }
 ```
 
@@ -941,10 +981,10 @@ Flag adalah opsi boolean yang dapat diaktifkan atau dinonaktifkan. Tambahkan fla
 CommandBuilder builder(CommandBuilder command) {
 
   command.addFlag(
-    'verbose',       // flag name
-    abbr: 'v',       // short form abbreviation
-    help: 'Enable verbose output', // help text
-    defaultValue: false  // default to off
+    'verbose',       // nama flag
+    abbr: 'v',       // singkatan
+    help: 'Enable verbose output', // teks bantuan
+    defaultValue: false  // default mati
   );
 
   return command;
@@ -960,10 +1000,10 @@ Future<void> handle(CommandResult result) async {
 
   if (verbose) {
     info('Verbose mode enabled');
-    // Additional logging...
+    // Logging tambahan...
   }
 
-  // Command implementation...
+  // Implementasi perintah...
 }
 ```
 
@@ -1039,13 +1079,13 @@ Anda juga dapat menggunakan metode helper berikut untuk mengelola argumen perint
 ### Menjalankan Proses Eksternal
 
 ```dart
-// Run a process with output displayed in the console
+// Jalankan proses dengan output ditampilkan di konsol
 await runProcess('flutter build web --release');
 
-// Run a process silently
+// Jalankan proses secara diam-diam
 await runProcess('flutter pub get', silent: true);
 
-// Run a process in a specific directory
+// Jalankan proses di direktori tertentu
 await runProcess('git pull', workingDirectory: './my-project');
 ```
 
@@ -1055,13 +1095,13 @@ await runProcess('git pull', workingDirectory: './my-project');
 <div id="custom-command-helper-add-packages"></div>
 
 ```dart
-// Add a package to pubspec.yaml
+// Tambahkan paket ke pubspec.yaml
 addPackage('firebase_core', version: '^2.4.0');
 
-// Add a dev package to pubspec.yaml
+// Tambahkan paket dev ke pubspec.yaml
 addPackage('build_runner', dev: true);
 
-// Add multiple packages at once
+// Tambahkan beberapa paket sekaligus
 addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
@@ -1070,11 +1110,11 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ### Format Output
 
 ```dart
-// Print status messages with color coding
-info('Processing files...');    // Blue text
-error('Operation failed');      // Red text
-success('Deployment complete'); // Green text
-warning('Outdated package');    // Yellow text
+// Cetak pesan status dengan kode warna
+info('Processing files...');    // Teks biru
+error('Operation failed');      // Teks merah
+success('Deployment complete'); // Teks hijau
+warning('Outdated package');    // Teks kuning
 ```
 
 <div id="interactive-input-methods"></div>
@@ -1124,10 +1164,10 @@ Mengajukan pertanyaan ya/tidak kepada pengguna dan mengembalikan hasil boolean.
 **Contoh:**
 ```dart
 if (confirm('Would you like to continue?', defaultValue: true)) {
-  // User confirmed or pressed Enter (accepting the default)
+  // Pengguna mengkonfirmasi atau menekan Enter (menerima default)
   await runProcess('flutter pub get');
 } else {
-  // User declined
+  // Pengguna menolak
   info('Operation canceled');
 }
 ```
@@ -1205,7 +1245,7 @@ Future<T?> api<T>(Future<T?> Function(ApiService) request) async
 ### Permintaan GET
 
 ```dart
-// Fetch data
+// Ambil data
 final userData = await api((request) =>
   request.get('https://api.example.com/users/1')
 );
@@ -1214,7 +1254,7 @@ final userData = await api((request) =>
 ### Permintaan POST
 
 ```dart
-// Create a resource
+// Buat resource
 final result = await api((request) =>
   request.post(
     'https://api.example.com/items',
@@ -1226,7 +1266,7 @@ final result = await api((request) =>
 ### Permintaan PUT
 
 ```dart
-// Update a resource
+// Perbarui resource
 final updateResult = await api((request) =>
   request.put(
     'https://api.example.com/items/42',
@@ -1238,14 +1278,14 @@ final updateResult = await api((request) =>
 ### Permintaan DELETE
 
 ```dart
-// Delete a resource
+// Hapus resource
 final deleteResult = await api((request) => request.delete('https://api.example.com/items/42'));
 ```
 
 ### Permintaan PATCH
 
 ```dart
-// Partially update a resource
+// Perbarui resource sebagian
 final patchResult = await api((request) => request.patch(
     'https://api.example.com/items/42',
     data: {'price': 24.99}
@@ -1256,7 +1296,7 @@ final patchResult = await api((request) => request.patch(
 ### Dengan Parameter Query
 
 ```dart
-// Add query parameters
+// Tambahkan parameter query
 final searchResults = await api((request) => request.get(
     'https://api.example.com/search',
     queryParameters: {'q': 'keyword', 'limit': 10}
@@ -1267,11 +1307,11 @@ final searchResults = await api((request) => request.get(
 ### Dengan Spinner
 
 ```dart
-// Using with spinner for better UI
+// Gunakan dengan spinner untuk tampilan yang lebih baik
 final data = await withSpinner(
   task: () async {
     final data = await api((request) => request.get('https://api.example.com/config'));
-    // Process the data
+    // Proses datanya
   },
   message: 'Loading configuration',
 );
@@ -1315,10 +1355,10 @@ Future<T> withSpinner<T>({
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Run a task with a spinner
+  // Jalankan tugas dengan spinner
   final projectFiles = await withSpinner(
     task: () async {
-      // Long-running task (e.g., analyzing project files)
+      // Tugas yang memakan waktu lama (misalnya, menganalisis file proyek)
       await sleep(2);
       return ['pubspec.yaml', 'lib/main.dart', 'README.md'];
     },
@@ -1327,7 +1367,7 @@ Future<void> handle(CommandResult result) async {
     errorMessage: 'Failed to analyze project',
   );
 
-  // Continue with the results
+  // Lanjutkan dengan hasilnya
   info('Found ${projectFiles.length} key files');
 }
 ```
@@ -1351,26 +1391,26 @@ ConsoleSpinner createSpinner(String message)
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a spinner instance
+  // Buat instance spinner
   final spinner = createSpinner('Deploying to production');
   spinner.start();
 
   try {
-    // First task
+    // Tugas pertama
     await runProcess('flutter clean', silent: true);
     spinner.update('Building release version');
 
-    // Second task
+    // Tugas kedua
     await runProcess('flutter build web --release', silent: true);
     spinner.update('Uploading to server');
 
-    // Third task
+    // Tugas ketiga
     await runProcess('./deploy.sh', silent: true);
 
-    // Complete successfully
+    // Selesai dengan sukses
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
   } catch (e) {
-    // Handle failure
+    // Tangani kegagalan
     spinner.stop(completionMessage: 'Deployment failed: $e', success: false);
     rethrow;
   }
@@ -1388,7 +1428,7 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   await withSpinner(
     task: () async {
-      // Install dependencies
+      // Instal dependensi
       await runProcess('flutter pub get', silent: true);
       return true;
     },
@@ -1403,19 +1443,19 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // First operation with spinner
+  // Operasi pertama dengan spinner
   await withSpinner(
     task: () => runProcess('flutter clean', silent: true),
     message: 'Cleaning project',
   );
 
-  // Second operation with spinner
+  // Operasi kedua dengan spinner
   await withSpinner(
     task: () => runProcess('flutter pub get', silent: true),
     message: 'Updating dependencies',
   );
 
-  // Third operation with spinner
+  // Operasi ketiga dengan spinner
   final buildSuccess = await withSpinner(
     task: () async {
       await runProcess('flutter build apk --release', silent: true);
@@ -1440,7 +1480,7 @@ Future<void> handle(CommandResult result) async {
   spinner.start();
 
   try {
-    // Run multiple steps with status updates
+    // Jalankan beberapa langkah dengan pembaruan status
     spinner.update('Step 1: Cleaning project');
     await runProcess('flutter clean', silent: true);
 
@@ -1450,7 +1490,7 @@ Future<void> handle(CommandResult result) async {
     spinner.update('Step 3: Building release');
     await runProcess('flutter build web --release', silent: true);
 
-    // Complete the process
+    // Selesaikan prosesnya
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
 
   } catch (e) {
@@ -1583,28 +1623,28 @@ Selain metode dasar `info`, `error`, `success`, dan `warning`, `NyCustomCommand`
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Print plain text (no color)
+  // Cetak teks biasa (tanpa warna)
   line('Processing your request...');
 
-  // Print blank lines
-  newLine();       // one blank line
-  newLine(3);      // three blank lines
+  // Cetak baris kosong
+  newLine();       // satu baris kosong
+  newLine(3);      // tiga baris kosong
 
-  // Print a muted comment (gray text)
+  // Cetak komentar yang redup (teks abu-abu)
   comment('This is a background note');
 
-  // Print a prominent alert box
+  // Cetak kotak peringatan yang menonjol
   alert('Important: Please read carefully');
 
-  // Ask is an alias for prompt
+  // Ask adalah alias untuk prompt
   final name = ask('What is your name?');
 
-  // Hidden input for sensitive data (e.g., passwords, API keys)
+  // Input tersembunyi untuk data sensitif (misalnya, kata sandi, kunci API)
   final apiKey = promptSecret('Enter your API key:');
 
-  // Abort the command with an error message and exit code
+  // Batalkan perintah dengan pesan error dan kode exit
   if (name.isEmpty) {
-    abort('Name is required');  // exits with code 1
+    abort('Name is required');  // keluar dengan kode 1
   }
 }
 ```
@@ -1630,38 +1670,38 @@ Future<void> handle(CommandResult result) async {
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Check if a file exists
+  // Periksa apakah file ada
   if (fileExists('lib/config/app.dart')) {
     info('Config file found');
   }
 
-  // Check if a directory exists
+  // Periksa apakah direktori ada
   if (directoryExists('lib/app/models')) {
     info('Models directory found');
   }
 
-  // Read a file (async)
+  // Baca file (async)
   String content = await readFile('pubspec.yaml');
 
-  // Read a file (sync)
+  // Baca file (sync)
   String contentSync = readFileSync('pubspec.yaml');
 
-  // Write to a file (async)
+  // Tulis ke file (async)
   await writeFile('lib/generated/output.dart', 'class Output {}');
 
-  // Write to a file (sync)
+  // Tulis ke file (sync)
   writeFileSync('lib/generated/output.dart', 'class Output {}');
 
-  // Append content to a file
+  // Tambahkan konten ke file
   await appendFile('log.txt', 'New log entry\n');
 
-  // Ensure a directory exists (creates it if missing)
+  // Pastikan direktori ada (buat jika belum ada)
   await ensureDirectory('lib/generated');
 
-  // Delete a file
+  // Hapus file
   await deleteFile('lib/generated/output.dart');
 
-  // Copy a file
+  // Salin file
   await copyFile('lib/config/app.dart', 'lib/config/app.bak.dart');
 }
 ```
@@ -1688,27 +1728,27 @@ Baca dan tulis file JSON dan YAML dengan helper bawaan.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Read a JSON file as a Map
+  // Baca file JSON sebagai Map
   Map<String, dynamic> config = await readJson('config.json');
 
-  // Read a JSON file as a List
+  // Baca file JSON sebagai List
   List<dynamic> items = await readJsonArray('lib/app/commands/commands.json');
 
-  // Write data to a JSON file (pretty printed by default)
+  // Tulis data ke file JSON (pretty printed secara default)
   await writeJson('output.json', {'name': 'MyApp', 'version': '1.0.0'});
 
-  // Write compact JSON
+  // Tulis JSON kompak
   await writeJson('output.json', data, pretty: false);
 
-  // Append an item to a JSON array file
-  // If the file contains [{"name": "a"}], this adds to that array
+  // Tambahkan item ke file array JSON
+  // Jika file berisi [{"name": "a"}], ini menambahkan ke array tersebut
   await appendToJsonArray(
     'lib/app/commands/commands.json',
     {'name': 'my_command', 'category': 'app', 'script': 'my_command.dart'},
-    uniqueKey: 'name',  // prevents duplicates by this key
+    uniqueKey: 'name',  // mencegah duplikat berdasarkan kunci ini
   );
 
-  // Read a YAML file as a Map
+  // Baca file YAML sebagai Map
   Map<String, dynamic> pubspec = await readYaml('pubspec.yaml');
   info('Project: ${pubspec['name']}');
 }
@@ -1771,7 +1811,7 @@ Future<void> handle(CommandResult result) async {
   info(networkingPath);   // lib/app/networking
   info(themesPath);       // lib/resources/themes
 
-  // Build a custom path relative to the project root
+  // Buat path kustom relatif terhadap root proyek
   String customPath = projectPath('lib/app/services/auth_service.dart');
 }
 ```
@@ -1799,7 +1839,7 @@ Periksa platform dan akses variabel environment.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Platform checks
+  // Pemeriksaan platform
   if (isWindows) {
     info('Running on Windows');
   } else if (isMacOS) {
@@ -1808,10 +1848,10 @@ Future<void> handle(CommandResult result) async {
     info('Running on Linux');
   }
 
-  // Current working directory
+  // Direktori kerja saat ini
   info('Working in: $workingDirectory');
 
-  // Read system environment variables
+  // Baca variabel environment sistem
   String home = env('HOME', '/default/path');
 }
 ```
@@ -1833,25 +1873,25 @@ Jalankan perintah CLI Dart dan Flutter umum sebagai metode helper. Masing-masing
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Format a Dart file or directory
+  // Format file atau direktori Dart
   await dartFormat('lib/app/models/user.dart');
 
-  // Run dart analyze
+  // Jalankan dart analyze
   int analyzeResult = await dartAnalyze('lib/');
 
-  // Run flutter pub get
+  // Jalankan flutter pub get
   await flutterPubGet();
 
-  // Run flutter clean
+  // Jalankan flutter clean
   await flutterClean();
 
-  // Build for a target with additional args
+  // Build untuk target dengan argumen tambahan
   await flutterBuild('apk', args: ['--release', '--split-per-abi']);
   await flutterBuild('web', args: ['--release']);
 
-  // Run flutter test
+  // Jalankan flutter test
   await flutterTest();
-  await flutterTest('test/unit/');  // specific directory
+  await flutterTest('test/unit/');  // direktori tertentu
 }
 ```
 
@@ -1873,26 +1913,26 @@ Helper untuk mengedit file Dart secara programatik, berguna saat membangun alat 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Add an import statement to a Dart file (avoids duplicates)
+  // Tambahkan pernyataan import ke file Dart (hindari duplikat)
   await addImport(
     'lib/bootstrap/providers.dart',
     "import '/app/providers/firebase_provider.dart';",
   );
 
-  // Insert code before the last closing brace in a file
-  // Useful for adding entries to registration maps
+  // Sisipkan kode sebelum kurung kurawal penutup terakhir di file
+  // Berguna untuk menambahkan entri ke peta registrasi
   await insertBeforeClosingBrace(
     'lib/bootstrap/providers.dart',
     '  FirebaseProvider(),',
   );
 
-  // Check if a file contains a specific string
+  // Periksa apakah file mengandung string tertentu
   bool hasImport = await fileContains(
     'lib/bootstrap/providers.dart',
     'firebase_provider',
   );
 
-  // Check if a file matches a regex pattern
+  // Periksa apakah file cocok dengan pola regex
   bool hasClass = await fileContainsPattern(
     'lib/app/models/user.dart',
     RegExp(r'class User'),
@@ -1916,32 +1956,32 @@ Helper untuk bekerja dengan direktori dan menemukan file.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // List directory contents
+  // Daftar isi direktori
   var entities = listDirectory('lib/app/models');
   for (var entity in entities) {
     info(entity.path);
   }
 
-  // List recursively
+  // Daftar secara rekursif
   var allEntities = listDirectory('lib/', recursive: true);
 
-  // Find files matching criteria
+  // Temukan file yang cocok dengan kriteria
   List<File> dartFiles = findFiles(
     'lib/app/models',
     extension: '.dart',
     recursive: true,
   );
 
-  // Find files by name pattern
+  // Temukan file berdasarkan pola nama
   List<File> testFiles = findFiles(
     'test/',
     namePattern: RegExp(r'_test\.dart$'),
   );
 
-  // Delete a directory recursively
+  // Hapus direktori secara rekursif
   await deleteDirectory('build/');
 
-  // Copy a directory (recursive)
+  // Salin direktori (rekursif)
   await copyDirectory('lib/templates', 'lib/generated');
 }
 ```
@@ -1962,21 +2002,21 @@ Helper untuk memvalidasi dan membersihkan input pengguna untuk pembuatan kode.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Validate a Dart identifier
+  // Validasi identifier Dart
   if (!isValidDartIdentifier('MyClass')) {
     error('Invalid Dart identifier');
   }
 
-  // Require a non-empty first argument
+  // Wajibkan argumen pertama non-kosong
   String name = requireArgument(result, message: 'Please provide a name');
 
-  // Clean a class name (PascalCase, remove suffixes)
+  // Bersihkan nama kelas (PascalCase, hapus sufiks)
   String className = cleanClassName('user_model', removeSuffixes: ['_model']);
-  // Returns: 'User'
+  // Mengembalikan: 'User'
 
-  // Clean a file name (snake_case with extension)
+  // Bersihkan nama file (snake_case dengan ekstensi)
   String fileName = cleanFileName('UserModel', extension: '.dart');
-  // Returns: 'user_model.dart'
+  // Mengembalikan: 'user_model.dart'
 }
 ```
 
@@ -2003,12 +2043,12 @@ Future<void> handle(CommandResult result) async {
     content: '''
 class AuthService {
   Future<bool> login(String email, String password) async {
-    // TODO: implement login
+    // TODO: implementasi login
     return false;
   }
 }
 ''',
-    force: false,  // don't overwrite if exists
+    force: false,  // jangan timpa jika sudah ada
     successMessage: 'AuthService created',
   );
 }
@@ -2065,7 +2105,7 @@ Future<void> handle(CommandResult result) async {
     CommandTask(
       'Run tests',
       () => runProcess('flutter test', silent: true),
-      stopOnError: true,  // stop pipeline if this fails (default)
+      stopOnError: true,  // hentikan pipeline jika ini gagal (default)
     ),
   ]);
 }
@@ -2143,13 +2183,13 @@ Tampilkan progress bar untuk operasi dengan jumlah item yang diketahui.
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Create a progress bar for 100 items
+  // Buat progress bar untuk 100 item
   final progress = progressBar(100, message: 'Processing files');
   progress.start();
 
   for (int i = 0; i < 100; i++) {
     await Future.delayed(Duration(milliseconds: 50));
-    progress.tick();  // increment by 1
+    progress.tick();  // naikkan 1
   }
 
   progress.complete('All files processed');
@@ -2163,11 +2203,11 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   final files = findFiles('lib/', extension: '.dart');
 
-  // Process items with automatic progress tracking
+  // Proses item dengan pelacakan progres otomatis
   final results = await withProgress<File, String>(
     items: files,
     process: (file, index) async {
-      // process each file
+      // proses setiap file
       return file.path;
     },
     message: 'Analyzing Dart files',
@@ -2188,7 +2228,7 @@ Future<void> handle(CommandResult result) async {
   final results = withProgressSync<String, String>(
     items: items,
     process: (item, index) {
-      // synchronous processing
+      // pemrosesan sinkron
       return item.toUpperCase();
     },
     message: 'Converting items',
@@ -2208,5 +2248,3 @@ Kelas `ConsoleProgressBar` menyediakan:
 | `updateMessage(String newMessage)` | Ubah pesan yang ditampilkan |
 | `complete([String? completionMessage])` | Selesaikan dengan pesan opsional |
 | `stop()` | Berhenti tanpa menyelesaikan |
-| `current` | Nilai progress saat ini (getter) |
-| `percentage` | Progress sebagai persentase (getter) |

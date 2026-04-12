@@ -35,7 +35,7 @@ class HomeController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Initialize services or fetch data
+    // सर्विसेज़ इनिशियलाइज़ करें या डेटा फ़ेच करें
   }
 
   void onTapProfile() {
@@ -58,12 +58,12 @@ class HomeController extends NyController {
 कंट्रोलर जेनरेट करने के लिए Metro CLI का उपयोग करें:
 
 ``` bash
-# Create a page with a controller
+# कंट्रोलर के साथ पेज बनाएँ
 metro make:page dashboard --controller
-# or shorthand
+# या शॉर्टहैंड
 metro make:page dashboard -c
 
-# Create a controller only
+# केवल कंट्रोलर बनाएँ
 metro make:controller profile_controller
 ```
 
@@ -92,7 +92,7 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   get init => () async {
-    // Access controller methods
+    // कंट्रोलर मेथड्स एक्सेस करें
     widget.controller.fetchData();
   };
 
@@ -123,17 +123,17 @@ class _HomePageState extends NyPage<HomePage> {
 पेजों के बीच डेटा पास करें और अपने कंट्रोलर में इसे एक्सेस करें:
 
 ``` dart
-// Navigate with data
+// डेटा के साथ नेविगेट करें
 routeTo(ProfilePage.path, data: {"userId": 123});
 
-// In your controller
+// आपके कंट्रोलर में
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get the passed data
+    // पास किया गया डेटा प्राप्त करें
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -147,10 +147,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
   get init => () async {
-    // From controller
+    // कंट्रोलर से
     var userData = widget.controller.data();
 
-    // Or from widget directly
+    // या विजेट से सीधे
     var userData = widget.data();
   };
 }
@@ -163,21 +163,21 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 अपने कंट्रोलर में URL क्वेरी पैरामीटर्स एक्सेस करें:
 
 ``` dart
-// Navigate to: /profile?tab=settings&highlight=true
+// यहाँ नेविगेट करें: /profile?tab=settings&highlight=true
 routeTo("/profile?tab=settings&highlight=true");
 
-// In your controller
+// आपके कंट्रोलर में
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get all query parameters as Map
+    // सभी क्वेरी पैरामीटर्स Map के रूप में प्राप्त करें
     Map<String, dynamic>? params = queryParameters();
     // {"tab": "settings", "highlight": "true"}
 
-    // Get a specific parameter
+    // एक विशिष्ट पैरामीटर प्राप्त करें
     String? tab = queryParameters(key: "tab");
     // "settings"
   }
@@ -187,9 +187,9 @@ class ProfileController extends NyController {
 जाँचें कि क्वेरी पैरामीटर मौजूद है या नहीं:
 
 ``` dart
-// In your page
+// आपके पेज में
 if (widget.hasQueryParameter("tab")) {
-  // Handle tab parameter
+  // tab पैरामीटर हैंडल करें
 }
 ```
 
@@ -206,22 +206,27 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Trigger a setState on the page
+    // पेज पर setState ट्रिगर करें
     setState(setState: () {});
   }
 
   void refresh() {
-    // Refresh the entire page
+    // पूरा पेज रिफ्रेश करें
     refreshPage();
   }
 
   void goBack() {
-    // Pop the page with optional result
+    // वैकल्पिक परिणाम के साथ पेज पॉप करें
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // रूट नेविगेटर से पॉप करें (उदा. Navigation Hub में रूट-स्तर मोडल बंद करने के लिए)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
-    // Send custom action to page
+    // पेज को कस्टम एक्शन भेजें
     updatePageState("customAction", {"key": "value"});
   }
 }
@@ -237,33 +242,33 @@ class HomeController extends NyController {
 class FormController extends NyController {
 
   void showNotifications() {
-    // Success toast
+    // सफलता टोस्ट
     showToastSuccess(description: "Profile updated!");
 
-    // Warning toast
+    // चेतावनी टोस्ट
     showToastWarning(description: "Please check your input");
 
-    // Error/Danger toast
+    // एरर/डेंजर टोस्ट
     showToastDanger(description: "Failed to save changes");
 
-    // Info toast
+    // इन्फो टोस्ट
     showToastInfo(description: "New features available");
 
-    // Sorry toast
+    // सॉरी टोस्ट
     showToastSorry(description: "We couldn't process your request");
 
-    // Oops toast
+    // ऊप्स टोस्ट
     showToastOops(description: "Something went wrong");
   }
 
   void showCustomToast() {
-    // Custom toast with title
+    // टाइटल के साथ कस्टम टोस्ट
     showToastSuccess(
       title: "Great Job!",
       description: "Your changes have been saved",
     );
 
-    // Use custom toast style (registered in Nylo)
+    // कस्टम टोस्ट स्टाइल का उपयोग करें (Nylo में रजिस्टर्ड)
     showToastCustom(
       title: "Custom",
       description: "Using custom style",
@@ -302,18 +307,18 @@ class RegisterController extends NyController {
       showAlert: true,
       alertStyle: 'warning',
       onSuccess: () {
-        // Validation passed
+        // वैलिडेशन पास हुआ
         _performRegistration();
       },
       onFailure: (exception) {
-        // Validation failed
+        // वैलिडेशन फेल हुआ
         print(exception.toString());
       },
     );
   }
 
   void _performRegistration() async {
-    // Handle registration logic
+    // रजिस्ट्रेशन लॉजिक हैंडल करें
     showToastSuccess(description: "Account created!");
   }
 }
@@ -349,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // This code only runs once until the lock is released
+      // यह कोड केवल एक बार चलता है जब तक लॉक रिलीज़ नहीं हो जाता
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -361,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Don't trigger setState after
+      shouldSetState: false, // बाद में setState ट्रिगर न करें
     );
   }
 }
@@ -379,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // User confirmed - perform deletion
+        // यूज़र ने पुष्टि की - डिलीट करें
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -405,7 +410,7 @@ class AuthController extends NyController {
   User? currentUser;
 
   Future<void> login(String email, String password) async {
-    // Login logic
+    // लॉगिन लॉजिक
     currentUser = await AuthService.login(email, password);
   }
 
@@ -454,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Only runs if all guards pass
+    // केवल तभी चलता है जब सभी गार्ड्स पास हों
   }
 }
 ```

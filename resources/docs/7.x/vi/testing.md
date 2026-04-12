@@ -30,6 +30,7 @@
 - [Matcher tùy chỉnh](#custom-matchers "Matcher tùy chỉnh")
 - [Kiểm thử State](#state-testing "Kiểm thử State")
 - [Gỡ lỗi](#debugging "Gỡ lỗi")
+- [Helper Điều hướng và Tương tác](#nav-interaction "Helper Điều hướng và Tương tác")
 - [Ví dụ](#examples "Ví dụ thực tế")
 
 <div id="introduction"></div>
@@ -363,6 +364,13 @@ NyTest.logout();
 expectGuest();
 ```
 
+Dùng `actingAsGuest()` như một alias dễ đọc cho `logout()` khi thiết lập ngữ cảnh khách:
+
+``` dart
+NyTest.actingAsGuest();
+expectGuest();
+```
+
 <div id="time-travel"></div>
 
 ## Du hành thời gian
@@ -505,6 +513,12 @@ nyTest('verify API was called', () async {
   // Lấy chi tiết cuộc gọi
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Khẳng định rằng một endpoint đã được gọi với dữ liệu body request cụ thể:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Tạo phản hồi giả lập
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Xác nhận Widget
+
+``` dart
+// Xác nhận loại widget xuất hiện đúng số lần
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Xác nhận text hiển thị
+expectTextVisible('Welcome');
+
+// Xác nhận text không hiển thị
+expectTextNotVisible('Error');
+
+// Xác nhận bất kỳ widget nào hiển thị (dùng Finder bất kỳ)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Xác nhận widget không hiển thị
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Xác nhận ngôn ngữ
@@ -985,6 +1023,101 @@ NyTest.seedBackpack({
   "auth_token": "test_token",
   "settings": {"theme": "dark"},
 });
+```
+
+<div id="nav-interaction"></div>
+
+## Helper Điều hướng và Tương tác
+
+Extension của `WidgetTester` cung cấp DSL cấp cao để viết navigation flow và UI interaction trong `nyWidgetTest`.
+
+### visit
+
+Điều hướng đến một route và chờ trang ổn định:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Xác nhận rằng action điều hướng đã đưa bạn đến route mong đợi:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Xác nhận rằng route hiện tại khớp với route đã cho (dùng để xác nhận bạn đang ở đâu, không phải là bạn vừa điều hướng):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Chờ tất cả animation và frame callback đang chờ hoàn thành:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Pop route hiện tại và settle:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Tìm widget theo text, nhấn và settle trong một lần gọi:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Nhấn vào trường biểu mẫu, nhập text và settle:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Cuộn cho đến khi widget hiển thị, rồi settle:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Truyền `scrollable` finder và `delta` cụ thể để kiểm soát chính xác:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
 ```
 
 <div id="examples"></div>

@@ -30,6 +30,7 @@
 - [Özel Eşleştiriciler](#custom-matchers "Özel Eşleştiriciler")
 - [Durum Testi](#state-testing "Durum Testi")
 - [Hata Ayıklama](#debugging "Hata Ayıklama")
+- [Navigasyon ve Etkileşim Yardımcıları](#nav-interaction "Navigasyon ve Etkileşim Yardımcıları")
 - [Örnekler](#examples "Örnekler")
 
 <div id="introduction"></div>
@@ -87,7 +88,7 @@ Seçenekler:
 
 ``` dart
 nyTest('my test', () async {
-  // test body
+  // test gövdesi
 }, skip: false, timeout: Timeout(Duration(seconds: 30)));
 ```
 
@@ -173,20 +174,20 @@ await tester.pumpNyWidgetAndWaitForInit(
   timeout: Duration(seconds: 10),
   useSimpleTheme: true,
 );
-// init() has completed
+// init() tamamlandı
 expect(find.text('Loaded Data'), findsOneWidget);
 ```
 
 #### Pompa Yardımcıları
 
 ``` dart
-// Pump frames until a specific widget appears
+// Belirli bir widget görünene kadar kare pompala
 bool found = await tester.pumpUntilFound(
   find.text('Welcome'),
   timeout: Duration(seconds: 5),
 );
 
-// Settle gracefully (won't throw on timeout)
+// Nazikçe yerleş (zaman aşımında hata fırlatmaz)
 await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 ```
 
@@ -198,7 +199,7 @@ Widget ağacındaki herhangi bir `NyPage` üzerinde `AppLifecycleState` değişi
 await tester.pumpNyWidget(MyPage());
 await tester.simulateLifecycleState(AppLifecycleState.paused);
 await tester.pump();
-// Assert side effects of the paused lifecycle action
+// Duraklatılmış yaşam döngüsü aksiyonunun yan etkilerini doğrula
 ```
 
 #### Yükleme ve Kilit Kontrolleri
@@ -206,13 +207,13 @@ await tester.pump();
 `NyPage`/`NyState` widget'larında adlandırılmış yükleme anahtarlarını ve kilitleri kontrol edin:
 
 ``` dart
-// Check if a named loading key is active
+// Adlandırılmış yükleme anahtarının aktif olup olmadığını kontrol et
 bool loading = tester.isLoadingNamed(find.byType(MyPage), name: 'fetchUsers');
 
-// Check if a named lock is held
+// Adlandırılmış kilidin tutulup tutulmadığını kontrol et
 bool locked = tester.isLockedNamed(find.byType(MyPage), name: 'submit');
 
-// Check for any loading indicator (CircularProgressIndicator or Skeletonizer)
+// Herhangi bir yükleme göstergesini kontrol et (CircularProgressIndicator veya Skeletonizer)
 bool isAnyLoading = tester.isLoading();
 ```
 
@@ -252,10 +253,10 @@ Yaygın sayfa test araçları sağlayan bir mixin:
 ``` dart
 class HomePageTest with NyPageTestMixin {
   void runTests(WidgetTester tester) async {
-    // Verify init was called and loading completed
+    // init'in çağrıldığını ve yüklemenin tamamlandığını doğrula
     await verifyInitCalled(tester, HomePage(), timeout: Duration(seconds: 5));
 
-    // Verify loading state is shown during init
+    // init sırasında yükleme durumunun gösterildiğini doğrula
     await verifyLoadingState(tester, HomePage());
   }
 }
@@ -293,19 +294,19 @@ void main() {
   NyTest.init();
 
   nySetUpAll(() {
-    // Runs once before all tests
+    // Tüm testlerden önce bir kez çalışır
   });
 
   nySetUp(() {
-    // Runs before each test
+    // Her testten önce çalışır
   });
 
   nyTearDown(() {
-    // Runs after each test
+    // Her testten sonra çalışır
   });
 
   nyTearDownAll(() {
-    // Runs once after all tests
+    // Tüm testlerden sonra bir kez çalışır
   });
 }
 ```
@@ -315,19 +316,19 @@ void main() {
 ### Testleri Atlama ve CI Testleri
 
 ``` dart
-// Skip a test with a reason
+// Bir testi gerekçeyle atla
 nySkip('not implemented yet', () async {
   // ...
 }, "Waiting for API update");
 
-// Tests expected to fail
+// Başarısız olması beklenen testler
 nyFailing('known bug', () async {
   // ...
 });
 
-// CI-only tests (tagged with 'ci')
+// Yalnızca CI testleri ('ci' etiketiyle)
 nyCi('integration test', () async {
-  // Only runs in CI environments
+  // Yalnızca CI ortamlarında çalışır
 });
 ```
 
@@ -339,19 +340,19 @@ Testlerde kimliği doğrulanmış kullanıcıları simüle edin:
 
 ``` dart
 nyTest('user can access profile', () async {
-  // Simulate a logged-in user
+  // Oturum açmış kullanıcıyı simüle et
   NyTest.actingAs<User>(User(name: "Anthony", email: "anthony@example.com"));
 
-  // Verify authenticated
+  // Kimlik doğrulamayı onayla
   expectAuthenticated<User>();
 
-  // Access the acting user
+  // Aktif kullanıcıya eriş
   User? user = NyTest.actingUser<User>();
   expect(user?.name, equals("Anthony"));
 });
 
 nyTest('guest cannot access profile', () async {
-  // Verify not authenticated
+  // Kimlik doğrulama olmadığını doğrula
   expectGuest();
 });
 ```
@@ -360,6 +361,13 @@ Kullanıcının oturumunu kapatın:
 
 ``` dart
 NyTest.logout();
+expectGuest();
+```
+
+Misafir bağlamı kurarken `logout()` için okunabilir bir takma ad olarak `actingAsGuest()` kullanın:
+
+``` dart
+NyTest.actingAsGuest();
 expectGuest();
 ```
 
@@ -377,27 +385,27 @@ nyTest('time travel to 2025', () async {
 
   expect(NyTime.now().year, equals(2025));
 
-  NyTest.travelBack(); // Reset to real time
+  NyTest.travelBack(); // Gerçek zamana sıfırla
 });
 ```
 
 ### Zamanı İleri veya Geri Alma
 
 ``` dart
-NyTest.travelForward(Duration(days: 30)); // Jump 30 days ahead
-NyTest.travelBackward(Duration(hours: 2)); // Go back 2 hours
+NyTest.travelForward(Duration(days: 30)); // 30 gün ileri atla
+NyTest.travelBackward(Duration(hours: 2)); // 2 saat geri git
 ```
 
 ### Zamanı Dondurma
 
 ``` dart
-NyTest.freezeTime(); // Freeze at the current moment
+NyTest.freezeTime(); // Mevcut anda dondur
 
 DateTime frozen = NyTime.now();
 await Future.delayed(Duration(seconds: 1));
-expect(NyTime.now(), equals(frozen)); // Time hasn't moved
+expect(NyTime.now(), equals(frozen)); // Zaman ilerlemedi
 
-NyTest.travelBack(); // Unfreeze
+NyTest.travelBack(); // Çöz
 ```
 
 ### Zaman Sınırları
@@ -405,10 +413,10 @@ NyTest.travelBack(); // Unfreeze
 ``` dart
 NyTime.travelToStartOfDay();   // 00:00:00.000
 NyTime.travelToEndOfDay();     // 23:59:59.999
-NyTime.travelToStartOfMonth(); // 1st of current month
-NyTime.travelToEndOfMonth();   // Last day of current month
-NyTime.travelToStartOfYear();  // Jan 1st
-NyTime.travelToEndOfYear();    // Dec 31st
+NyTime.travelToStartOfMonth(); // Mevcut ayın 1. günü
+NyTime.travelToEndOfMonth();   // Mevcut ayın son günü
+NyTime.travelToStartOfYear();  // 1 Oca
+NyTime.travelToEndOfYear();    // 31 Ara
 ```
 
 ### Kapsamlı Zaman Yolculuğu
@@ -419,7 +427,7 @@ Dondurulmuş zaman bağlamında kod yürütün:
 await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
   expect(NyTime.now(), equals(DateTime(2025, 6, 15)));
 });
-// Time is automatically restored after the callback
+// Geri çağrı sonrasında zaman otomatik olarak geri yüklenir
 ```
 
 <div id="api-mocking"></div>
@@ -434,16 +442,16 @@ Joker karakter desteğiyle URL kalıplarını kullanarak API yanıtlarını mock
 
 ``` dart
 nyTest('mock API responses', () async {
-  // Exact URL match
+  // Tam URL eşleşmesi
   NyMockApi.respond('/users/1', {'id': 1, 'name': 'Anthony'});
 
-  // Single segment wildcard (*)
+  // Tek segmentli joker karakter (*)
   NyMockApi.respond('/users/*', {'id': 1, 'name': 'User'});
 
-  // Multi-segment wildcard (**)
+  // Çok segmentli joker karakter (**)
   NyMockApi.respond('/api/**', {'status': 'ok'});
 
-  // With status code and headers
+  // Durum kodu ve başlıklarla
   NyMockApi.respond(
     '/users',
     {'error': 'Unauthorized'},
@@ -452,7 +460,7 @@ nyTest('mock API responses', () async {
     headers: {'X-Error': 'true'},
   );
 
-  // With simulated delay
+  // Simüle edilmiş gecikmeyle
   NyMockApi.respond(
     '/slow-endpoint',
     {'data': 'loaded'},
@@ -488,23 +496,29 @@ API çağrılarını takip edin ve doğrulayın:
 nyTest('verify API was called', () async {
   NyMockApi.setRecordCalls(true);
 
-  // ... perform actions that trigger API calls ...
+  // ... API çağrılarını tetikleyen aksiyonları gerçekleştir ...
 
-  // Assert endpoint was called
+  // Endpoint'in çağrıldığını doğrula
   expectApiCalled('/users');
 
-  // Assert endpoint was not called
+  // Endpoint'in çağrılmadığını doğrula
   expectApiNotCalled('/admin');
 
-  // Assert call count
+  // Çağrı sayısını doğrula
   expectApiCalled('/users', times: 2);
 
-  // Assert specific method
+  // Belirli metodu doğrula
   expectApiCalled('/users', method: 'POST');
 
-  // Get call details
+  // Çağrı ayrıntılarını al
   List<ApiCallInfo> calls = NyMockApi.getCallsFor('/users');
 });
+```
+
+Bir endpoint'in belirli istek gövdesi verileriyle çağrıldığını doğrulayın:
+
+``` dart
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
 ```
 
 ### Mock Yanıtları Oluşturma
@@ -566,19 +580,19 @@ NyFactory.state<User>('premium', (User user, NyFaker faker) {
 ### Örnek Oluşturma
 
 ``` dart
-// Create a single instance
+// Tek bir örnek oluştur
 User user = NyFactory.make<User>();
 
-// Create with overrides
+// Geçersiz kılmalarla oluştur
 User admin = NyFactory.make<User>(overrides: {'name': 'Admin User'});
 
-// Create with states applied
+// Durumlar uygulanmış şekilde oluştur
 User premiumAdmin = NyFactory.make<User>(states: ['admin', 'premium']);
 
-// Create multiple instances
+// Birden fazla örnek oluştur
 List<User> users = NyFactory.create<User>(count: 5);
 
-// Create a sequence with index-based data
+// İndeks tabanlı verilerle dizi oluştur
 List<User> numbered = NyFactory.sequence<User>(3, (int index, NyFaker faker) {
   return User(name: "User ${index + 1}", email: faker.email());
 });
@@ -640,25 +654,25 @@ NyFaker faker = NyFaker();
 nyTest('cache operations', () async {
   NyTestCache cache = NyTest.cache;
 
-  // Store a value
+  // Değer sakla
   await cache.put<String>("key", "value");
 
-  // Store with expiration
+  // Son kullanma süresiyle sakla
   await cache.put<String>("temp", "data", seconds: 60);
 
-  // Read a value
+  // Değer oku
   String? value = await cache.get<String>("key");
 
-  // Check existence
+  // Varlığı kontrol et
   bool exists = await cache.has("key");
 
-  // Clear a key
+  // Bir anahtarı temizle
   await cache.clear("key");
 
-  // Flush all
+  // Tümünü temizle
   await cache.flush();
 
-  // Get cache info
+  // Önbellek bilgilerini al
   int size = await cache.size();
   List<String> keys = await cache.documents();
 });
@@ -672,9 +686,9 @@ nyTest('cache operations', () async {
 
 ``` dart
 void main() {
-  NyTest.init(); // Automatically sets up mock channels
+  NyTest.init(); // Mock kanallarını otomatik olarak kurar
 
-  // Or set up manually
+  // Veya manuel olarak kur
   NyMockChannels.setup();
 }
 ```
@@ -722,7 +736,7 @@ final guard = NyMockRouteGuard.pass();
 ``` dart
 final guard = NyMockRouteGuard.redirect('/login');
 
-// With additional data
+// Ek verilerle
 final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ```
 
@@ -731,9 +745,9 @@ final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ``` dart
 final guard = NyMockRouteGuard.custom((context) async {
   if (context.data == null) {
-    return GuardResult.handled; // abort navigation
+    return GuardResult.handled; // navigasyonu iptal et
   }
-  return GuardResult.next; // allow navigation
+  return GuardResult.next; // navigasyona izin ver
 });
 ```
 
@@ -745,10 +759,10 @@ Bir guard çağrıldıktan sonra durumunu inceleyebilirsiniz:
 expect(guard.wasCalled, isTrue);
 expect(guard.callCount, 1);
 
-// Access the RouteContext from the last call
+// Son çağrıdan RouteContext'e eriş
 RouteContext? context = guard.lastContext;
 
-// Reset tracking
+// Takibi sıfırla
 guard.reset();
 ```
 
@@ -761,33 +775,33 @@ guard.reset();
 ### Rota Doğrulamaları
 
 ``` dart
-expectRoute('/home');           // Assert current route
-expectNotRoute('/login');       // Assert not on route
-expectRouteInHistory('/home');  // Assert route was visited
-expectRouteExists('/profile');  // Assert route is registered
+expectRoute('/home');           // Mevcut rotayı doğrula
+expectNotRoute('/login');       // Rotada olmadığını doğrula
+expectRouteInHistory('/home');  // Rotanın ziyaret edildiğini doğrula
+expectRouteExists('/profile');  // Rotanın kayıtlı olduğunu doğrula
 expectRoutesExist(['/home', '/profile', '/settings']);
 ```
 
 ### Durum Doğrulamaları
 
 ``` dart
-expectBackpackContains("key");                        // Key exists
-expectBackpackContains("key", value: "expected");     // Key has value
-expectBackpackNotContains("key");                     // Key doesn't exist
+expectBackpackContains("key");                        // Anahtar mevcut
+expectBackpackContains("key", value: "expected");     // Anahtarın değeri var
+expectBackpackNotContains("key");                     // Anahtar mevcut değil
 ```
 
 ### Kimlik Doğrulama Doğrulamaları
 
 ``` dart
-expectAuthenticated<User>();  // User is authenticated
-expectGuest();                // No user authenticated
+expectAuthenticated<User>();  // Kullanıcı kimlik doğrulandı
+expectGuest();                // Kimlik doğrulanmış kullanıcı yok
 ```
 
 ### Ortam Doğrulamaları
 
 ``` dart
-expectEnv("APP_NAME", "MyApp");  // Env variable equals value
-expectEnvSet("APP_KEY");          // Env variable is set
+expectEnv("APP_NAME", "MyApp");  // Ortam değişkeni değere eşit
+expectEnvSet("APP_KEY");          // Ortam değişkeni ayarlandı
 ```
 
 ### Mod Doğrulamaları
@@ -805,6 +819,30 @@ expectDevelopingMode();
 expectApiCalled('/users');
 expectApiCalled('/users', method: 'POST', times: 2);
 expectApiNotCalled('/admin');
+expectApiCalledWith('/users', method: 'POST', data: {'name': 'John'});
+```
+
+### Widget Doğrulamaları
+
+``` dart
+// Widget türünün belirli sayıda göründüğünü doğrula
+expectWidgetCount(ListTile, 3);
+expectWidgetCount(Icon, 0);
+
+// Metnin görünür olduğunu doğrula
+expectTextVisible('Welcome');
+
+// Metnin görünür olmadığını doğrula
+expectTextNotVisible('Error');
+
+// Herhangi bir widget'ın görünür olduğunu doğrula (herhangi bir Finder kullan)
+expectVisible(find.byType(FloatingActionButton));
+expectVisible(find.byIcon(Icons.notifications));
+expectVisible(find.byKey(Key('submit_btn')));
+
+// Widget'ın görünür olmadığını doğrula
+expectNotVisible(find.byType(ErrorBanner));
+expectNotVisible(find.byKey(Key('loading_spinner')));
 ```
 
 ### Yerel Ayar Doğrulamaları
@@ -835,16 +873,16 @@ nyWidgetTest('shows success toast', (tester) async {
 **NyToastRecorder** testler sırasında toast bildirimlerini takip eder:
 
 ``` dart
-// Record a toast manually
+// Toastı manuel olarak kaydet
 NyToastRecorder.record(id: 'success', title: 'Done', description: 'Saved!');
 
-// Check if a toast was shown
+// Toastın gösterilip gösterilmediğini kontrol et
 bool shown = NyToastRecorder.wasShown(id: 'success');
 
-// Access all recorded toasts
+// Tüm kaydedilmiş toastlara eriş
 List<ToastRecord> toasts = NyToastRecorder.records;
 
-// Clear recorded toasts
+// Kaydedilmiş toastları temizle
 NyToastRecorder.clear();
 ```
 
@@ -853,16 +891,16 @@ NyToastRecorder.clear();
 `NyPage`/`NyState` widget'larında adlandırılmış kilit ve yükleme durumlarını doğrulayın:
 
 ``` dart
-// Assert a named lock is held
+// Adlandırılmış kilidin tutulduğunu doğrula
 expectLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named lock is not held
+// Adlandırılmış kilidin tutulmadığını doğrula
 expectNotLocked(tester, find.byType(MyPage), 'submit');
 
-// Assert a named loading key is active
+// Adlandırılmış yükleme anahtarının aktif olduğunu doğrula
 expectLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 
-// Assert a named loading key is not active
+// Adlandırılmış yükleme anahtarının aktif olmadığını doğrula
 expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ```
 
@@ -873,16 +911,16 @@ expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 `expect()` ile özel eşleştiriciler kullanın:
 
 ``` dart
-// Type matcher
+// Tür eşleştiricisi
 expect(result, isType<User>());
 
-// Route name matcher
+// Rota adı eşleştiricisi
 expect(widget, hasRouteName('/home'));
 
-// Backpack matcher
+// Backpack eşleştiricisi
 expect(true, backpackHas("key", value: "expected"));
 
-// API call matcher
+// API çağrısı eşleştiricisi
 expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 ```
 
@@ -897,7 +935,7 @@ Durum test yardımcılarını kullanarak `NyPage` ve `NyState` widget'larında E
 Normalde başka bir widget veya controller'dan gelecek durum güncellemelerini simüle edin:
 
 ``` dart
-// Fire an UpdateState event
+// UpdateState olayı tetikle
 fireStateUpdate('HomePageState', data: {'items': ['a', 'b']});
 await tester.pump();
 expect(find.text('a'), findsOneWidget);
@@ -911,7 +949,7 @@ Sayfanızda `whenStateAction()` tarafından işlenen durum eylemleri gönderin:
 fireStateAction('HomePageState', 'refresh-page');
 await tester.pump();
 
-// With additional data
+// Ek verilerle
 fireStateAction('CartState', 'add-item', data: {'id': 42});
 await tester.pump();
 ```
@@ -919,15 +957,15 @@ await tester.pump();
 ### Durum Doğrulamaları
 
 ``` dart
-// Assert a state update was fired
+// Durum güncellemesinin tetiklendiğini doğrula
 expectStateUpdated('HomePageState');
 expectStateUpdated('HomePageState', times: 2);
 
-// Assert a state action was fired
+// Durum eyleminin tetiklendiğini doğrula
 expectStateAction('HomePageState', 'refresh-page');
 expectStateAction('CartState', 'add-item', times: 1);
 
-// Assert on the stateData of a NyPage/NyState widget
+// NyPage/NyState widget'ının stateData'sını doğrula
 expectStateData(tester, find.byType(MyWidget), equals(42));
 ```
 
@@ -936,13 +974,13 @@ expectStateData(tester, find.byType(MyWidget), equals(42));
 Tetiklenen durum güncellemelerini ve eylemlerini takip edin ve inceleyin:
 
 ``` dart
-// Get all updates fired to a state
+// Bir duruma tetiklenen tüm güncellemeleri al
 List updates = NyStateTestHelpers.getUpdatesFor('MyWidget');
 
-// Get all actions fired to a state
+// Bir duruma tetiklenen tüm aksiyonları al
 List actions = NyStateTestHelpers.getActionsFor('MyWidget');
 
-// Reset all tracked state updates and actions
+// Takip edilen tüm durum güncellemelerini ve aksiyonlarını sıfırla
 NyStateTestHelpers.reset();
 ```
 
@@ -987,6 +1025,101 @@ NyTest.seedBackpack({
 });
 ```
 
+<div id="nav-interaction"></div>
+
+## Navigasyon ve Etkileşim Yardımcıları
+
+`WidgetTester` uzantıları, `nyWidgetTest` içinde navigasyon akışları ve UI etkileşimleri yazmak için üst düzey bir DSL sağlar.
+
+### visit
+
+Bir rotaya git ve sayfanın yerleşmesini bekle:
+
+``` dart
+nyWidgetTest('loads dashboard', (tester) async {
+  await tester.visit(DashboardPage.path);
+  expectTextVisible('Dashboard');
+});
+```
+
+### assertNavigatedTo
+
+Bir navigasyon aksiyonunun sizi beklenen rotaya götürdüğünü doğrulayın:
+
+``` dart
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### assertOnRoute
+
+Mevcut rotanın verilen rotayla eşleştiğini doğrulayın (nereye yeni gittiğinizi değil, nerede olduğunuzu onaylamak için kullanın):
+
+``` dart
+await tester.visit(DashboardPage.path);
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### settle
+
+Tüm bekleyen animasyonların ve kare geri çağırmalarının tamamlanmasını bekle:
+
+``` dart
+await tester.tap(find.byType(MyButton));
+await tester.settle();
+tester.assertNavigatedTo(ProfilePage.path);
+```
+
+### navigateBack
+
+Mevcut rotadan çık ve yerleş:
+
+``` dart
+await tester.visit(DashboardPage.path);
+await tester.tapText('Profile');
+tester.assertNavigatedTo(ProfilePage.path);
+
+await tester.navigateBack();
+tester.assertOnRoute(DashboardPage.path);
+```
+
+### tapText
+
+Bir widget'ı metne göre bul, dokunup tek bir çağrıda yerleş:
+
+``` dart
+await tester.tapText('Login');
+await tester.tapText('Submit');
+```
+
+### fillField
+
+Bir form alanına dokunun, metin girin ve yerleşin:
+
+``` dart
+await tester.fillField(find.byKey(Key('email')), 'test@example.com');
+await tester.fillField(find.byKey(Key('password')), 'secret123');
+```
+
+### scrollTo
+
+Widget görünür olana kadar kaydırın, ardından yerleşin:
+
+``` dart
+await tester.scrollTo(find.text('Item 50'));
+await tester.tapText('Item 50');
+```
+
+Hassas kontrol için belirli bir `scrollable` finder ve `delta` geçirin:
+
+``` dart
+await tester.scrollTo(
+  find.text('Footer'),
+  scrollable: find.byKey(Key('main_list')),
+  delta: 200,
+);
+```
+
 <div id="examples"></div>
 
 ## Örnekler
@@ -1028,7 +1161,7 @@ void main() {
         ]
       });
 
-      // ... trigger API call ...
+      // ... API çağrısını tetikle ...
 
       expectApiCalled('/api/users');
     });
@@ -1038,7 +1171,7 @@ void main() {
     nyTest('subscription expires correctly', () async {
       NyTest.travel(DateTime(2025, 1, 1));
 
-      // Test subscription logic at a known date
+      // Bilinen bir tarihte abonelik mantığını test et
       expect(NyTime.now().year, equals(2025));
 
       NyTest.travelForward(Duration(days: 365));

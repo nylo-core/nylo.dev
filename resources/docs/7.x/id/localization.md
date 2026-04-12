@@ -319,13 +319,21 @@ Daftar ini digunakan oleh `MaterialApp.supportedLocales` Flutter.
 
 ## Bahasa Fallback
 
-Ketika key terjemahan tidak ditemukan di locale aktif, {{ config('app.name') }} akan kembali ke bahasa yang ditentukan:
+Ketika key terjemahan tidak ditemukan di locale aktif, {{ config('app.name') }} secara otomatis mencarinya di bahasa fallback sebelum mengembalikan key mentah. Bahasa fallback dikonfigurasi di `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-Ini memastikan aplikasi Anda tidak pernah menampilkan key mentah jika terjemahan hilang.
+Resolusi dua langkah ini berlaku untuk key tingkat atas maupun key bersarang dengan notasi titik:
+
+1. Cari key di file locale aktif.
+2. Jika tidak ditemukan, cari di file locale fallback.
+3. Jika masih tidak ditemukan, kembalikan string key mentah.
+
+Misalnya, jika file locale Prancis tidak memiliki key `settings.privacy`, logika fallback mencari `settings.privacy` di file locale Inggris sebelum mengembalikan `"settings.privacy"` apa adanya.
+
+Ini memastikan aplikasi Anda tidak pernah menampilkan key mentah jika terjemahan hanya sebagian selesai.
 
 <div id="rtl-support"></div>
 
@@ -425,6 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Kode bahasa saat ini |
 | `locale` | `Locale` | Objek Locale saat ini |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Delegate lokalisasi Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Injeksi map terjemahan langsung untuk unit test |
 
 <div id="nylocalehelper"></div>
 

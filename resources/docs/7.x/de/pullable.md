@@ -26,7 +26,7 @@ Aufgebaut auf dem `pull_to_refresh_flutter3`-Paket bietet Pullable eine uebersic
 ``` dart
 Pullable(
   onRefresh: () async {
-    // Fetch fresh data
+    // Neue Daten laden
     await fetchData();
   },
   child: ListView(
@@ -76,26 +76,26 @@ Wenn der Benutzer die Liste nach unten zieht, wird der `onRefresh`-Callback ausg
 ### Beispiele
 
 ``` dart
-// Classic header
+// Klassischer Header
 Pullable.classicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Material header
+// Material-Header
 Pullable.materialClassicHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// No bounce effect
+// Kein Abprall-Effekt
 Pullable.noBounce(
   onRefresh: () async => await refreshData(),
   headerType: PullableHeaderType.classic,
   child: myListView,
 )
 
-// Custom header widget
+// Benutzerdefiniertes Header-Widget
 Pullable.custom(
   customHeader: MyCustomRefreshHeader(),
   onRefresh: () async => await refreshData(),
@@ -152,24 +152,24 @@ Waehlen Sie aus fuenf integrierten Header-Animationen:
 
 ``` dart
 enum PullableHeaderType {
-  classic,           // Classic pull indicator
-  waterDrop,         // Water drop animation (default)
-  materialClassic,   // Material Design classic
-  waterDropMaterial,  // Material water drop
-  bezier,            // Bezier curve animation
+  classic,           // Klassischer Zugindikator
+  waterDrop,         // Wassertropfen-Animation (Standard)
+  materialClassic,   // Material Design klassisch
+  waterDropMaterial,  // Material-Wassertropfen
+  bezier,            // Bezier-Kurven-Animation
 }
 ```
 
 Setzen Sie den Stil ueber den Konstruktor oder die Konfiguration:
 
 ``` dart
-// Via named constructor
+// Ueber benannten Konstruktor
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Via config
+// Ueber Konfiguration
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Reset to page 1
+      // Auf Seite 1 zuruecksetzen
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Load next page
+      // Naechste Seite laden
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -251,13 +251,13 @@ Pullable(
   child: myListView,
 )
 
-// Trigger refresh programmatically
+// Aktualisierung programmgesteuert ausloesen
 _controller.triggerRefresh();
 
-// Trigger loading programmatically
+// Laden programmgesteuert ausloesen
 _controller.triggerLoading();
 
-// Check state
+// Status pruefen
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
@@ -344,11 +344,14 @@ CollectionView<Product>.pullableGrid(
 | Parameter | Typ | Beschreibung |
 |-----------|-----|-------------|
 | `data` | `Function(int iteration)` | Paginierter Daten-Callback (Iteration beginnt bei 1) |
+| `enablePullDown` | `bool` | Pull-down-zum-Aktualisieren-Geste aktivieren (Standard: `true`) |
 | `onRefresh` | `Function()?` | Callback nach der Aktualisierung |
 | `beforeRefresh` | `Function()?` | Hook vor Beginn der Aktualisierung |
 | `afterRefresh` | `Function(dynamic)?` | Hook nach der Aktualisierung mit Daten |
 | `headerStyle` | `String?` | Header-Typname (z. B. `'WaterDropHeader'`, `'ClassicHeader'`) |
 | `footerLoadingIcon` | `Widget?` | Benutzerdefinierter Ladeindikator fuer den Footer |
+
+Um ein `CollectionView.pullable` programmatisch zu aktualisieren, verwenden Sie `CollectionView.stateActions(stateName).refreshData()`. Dies laedt die Daten neu und setzt den Paginierungs-Iterator auf 1 zurueck, sodass die Liste von der ersten Seite neu startet.
 
 <div id="examples"></div>
 

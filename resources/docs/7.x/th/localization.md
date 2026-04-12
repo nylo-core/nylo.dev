@@ -319,13 +319,19 @@ static const List<Locale> supportedLocales = [
 
 ## ภาษาสำรอง
 
-เมื่อไม่พบคีย์คำแปลใน locale ที่ใช้งาน {{ config('app.name') }} จะใช้ภาษาสำรองที่ระบุ:
+เมื่อไม่พบคีย์คำแปลใน locale ที่ใช้งาน {{ config('app.name') }} จะค้นหาในภาษาสำรองโดยอัตโนมัติก่อนส่งคืนคีย์ดิบ ภาษาสำรองถูกกำหนดค่าใน `lib/config/localization.dart`:
 
 ``` dart
 static const String fallbackLanguageCode = 'en';
 ```
 
-สิ่งนี้ทำให้แอปของคุณไม่แสดงคีย์ดิบหากคำแปลหายไป
+การแก้ไขสองขั้นตอนนี้ใช้กับทั้งคีย์ระดับบนสุดและคีย์แบบซ้อนด้วยการเขียนแบบจุด:
+
+1. ค้นหาคีย์ในไฟล์ locale ที่ใช้งาน
+2. หากไม่พบ ให้ค้นหาในไฟล์ locale สำรอง
+3. หากยังไม่พบ ให้ส่งคืนสตริงคีย์ดิบ
+
+สิ่งนี้ทำให้แอปของคุณไม่แสดงคีย์ดิบหากคำแปลเสร็จสมบูรณ์เพียงบางส่วน
 
 <div id="rtl-support"></div>
 
@@ -425,6 +431,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | รหัสภาษาปัจจุบัน |
 | `locale` | `Locale` | อ็อบเจกต์ Locale ปัจจุบัน |
 | `delegates` | `Iterable<LocalizationsDelegate>` | ตัวแทนการแปลภาษาของ Flutter |
+| `setValuesForTesting({values, fallbackValues})` | `void` | ฉีด map การแปลโดยตรงสำหรับ unit test |
 
 <div id="nylocalehelper"></div>
 

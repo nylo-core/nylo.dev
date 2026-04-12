@@ -7,7 +7,9 @@
 - Użycie
     - [Widget listy rozwijanej](#usage-dropdown "Widget listy rozwijanej")
     - [Modal dolnego arkusza](#usage-bottom-modal "Modal dolnego arkusza")
+- [Styl animacji](#animation-style "Styl animacji")
 - [Niestandardowy builder listy rozwijanej](#custom-builder "Niestandardowy builder listy rozwijanej")
+- [Akcje stanu](#state-actions "Akcje stanu")
 - [Parametry](#parameters "Parametry")
 - [Metody statyczne](#methods "Metody statyczne")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Dodaj do paska aplikacji
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Modal dolny wyświetla listę języków ze znacznikiem obok aktualnie wybranego języka.
 
-### Personalizacja wysokości modalu
+### Personalizacja modalu
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Wyświetl modal nad wszystkimi trasami, łącznie z paskami zakładek
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Styl animacji
+
+Parametr `animationStyle` kontroluje animacje przejścia zarówno dla wyzwalacza listy rozwijanej, jak i elementów listy modalnej dolnego arkusza. Dostępne są cztery predefiniowane style:
+
+``` dart
+// Brak animacji
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Subtelne, dopracowane animacje (zalecane dla większości aplikacji)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Żywe, sprężynowe animacje
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Płynne pojawianie się z delikatną skalą
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Możesz też przekazać niestandardowy `LanguageSwitcherAnimationStyle()` z indywidualnymi parametrami lub użyć `copyWith`, aby poprawić preset.
+
+Ten sam parametr `animationStyle` jest akceptowany przez `LanguageSwitcher.showBottomModal`.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // np. "English"
+        // language['locale'] zawiera kod lokalizacji, np. "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Wykonaj dodatkowe akcje przy zmianie języka
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Akcje stanu
+
+Steruj `LanguageSwitcher` programowo za pomocą `stateActions()`:
+
+``` dart
+// Odśwież listę języków (ponownie odczytuje dostępne języki)
+LanguageSwitcher.stateActions().refresh();
+
+// Przełącz na język według kodu lokalizacji
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Jest to przydatne, gdy chcesz zmienić język aplikacji bez interakcji użytkownika, na przykład po zalogowaniu z preferencją językową użytkownika.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Wyświetl modal wyboru języka:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Z opcjami
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Obsługiwane lokalizacje

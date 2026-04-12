@@ -11,6 +11,7 @@
   - [FormValidator 사용](#using-form-validator "FormValidator 사용")
   - [FormValidator Named Constructor](#form-validator-named-constructors "FormValidator Named Constructor")
   - [유효성 검사 규칙 체이닝](#chaining-validation-rules "유효성 검사 규칙 체이닝")
+  - [Nullable 필드](#nullable-fields "Nullable 필드")
   - [커스텀 유효성 검사](#custom-validation "커스텀 유효성 검사")
   - [Field에서 FormValidator 사용](#form-validator-with-fields "Field에서 FormValidator 사용")
 - [사용 가능한 유효성 검사 규칙](#validation-rules "사용 가능한 유효성 검사 규칙")
@@ -279,6 +280,27 @@ FormValidator()
     .lowercase(message: "Must be lowercase")
 ```
 
+<div id="nullable-fields"></div>
+
+## Nullable 필드
+
+`.nullable()`을 사용하여 Validator를 선택적으로 표시합니다. nullable로 설정하면 null 또는 빈 값은 자동으로 유효성 검사를 통과합니다 — 다른 모든 규칙은 값이 존재할 때만 적용됩니다.
+
+``` dart
+// 닉네임은 선택 사항이지만, 입력된 경우 3~20자여야 합니다
+Field.text(
+  "Nickname",
+  validator: FormValidator()
+      .minLength(3)
+      .maxLength(20)
+      .nullable(),
+)
+```
+
+`.nullable()` 없이는 빈 필드가 `minLength` 규칙에서 실패합니다. `.nullable()`을 사용하면 필드를 빈 상태로 두어도 유효성 검사를 통과합니다.
+
+이는 선택적 프로필 필드, 보조 연락처 정보, 또는 사용자가 입력할 때만 유효성 검사가 필요한 필드에 유용합니다. `nullable()`이 `Field` 위젯과 어떻게 통합되는지는 [폼 문서](/docs/{{ $version }}/forms)를 참조하세요.
+
 <div id="custom-validation"></div>
 
 ## 커스텀 유효성 검사
@@ -403,6 +425,7 @@ Named Constructor와 체이닝 가능한 메서드로 제공되는 `FormValidato
 | Regex | `FormValidator.regex(r'pattern')` | `.regex(r'pattern')` | 정규식 패턴과 일치해야 함 |
 | Equals | -- | `.equals(otherValue)` | 다른 값과 동일해야 함 |
 | Custom | `FormValidator.custom(validate: fn)` | `.custom(validate: fn)` | 커스텀 유효성 검사 함수 |
+| Nullable | -- | `.nullable()` | null 또는 빈 값은 자동 통과하며 값이 있을 때만 규칙이 적용됨 |
 
 모든 규칙은 오류 메시지를 커스터마이즈하기 위한 선택적 `message` 매개변수를 받습니다.
 

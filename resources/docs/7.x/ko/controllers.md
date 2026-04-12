@@ -35,7 +35,7 @@ class HomeController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Initialize services or fetch data
+    // 서비스 초기화 또는 데이터 가져오기
   }
 
   void onTapProfile() {
@@ -58,12 +58,12 @@ class HomeController extends NyController {
 Metro CLI를 사용하여 Controller를 생성합니다:
 
 ``` bash
-# Create a page with a controller
+# Controller가 포함된 페이지 생성
 metro make:page dashboard --controller
-# or shorthand
+# 또는 약어
 metro make:page dashboard -c
 
-# Create a controller only
+# Controller만 생성
 metro make:controller profile_controller
 ```
 
@@ -92,7 +92,7 @@ class _HomePageState extends NyPage<HomePage> {
 
   @override
   get init => () async {
-    // Access controller methods
+    // Controller 메서드 접근
     widget.controller.fetchData();
   };
 
@@ -123,17 +123,17 @@ class _HomePageState extends NyPage<HomePage> {
 페이지 간 데이터를 전달하고 Controller에서 접근합니다:
 
 ``` dart
-// Navigate with data
+// 데이터와 함께 이동
 routeTo(ProfilePage.path, data: {"userId": 123});
 
-// In your controller
+// Controller 내에서
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get the passed data
+    // 전달된 데이터 가져오기
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -147,10 +147,10 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 
   @override
   get init => () async {
-    // From controller
+    // Controller에서
     var userData = widget.controller.data();
 
-    // Or from widget directly
+    // 또는 위젯에서 직접
     var userData = widget.data();
   };
 }
@@ -163,21 +163,21 @@ class _ProfilePageState extends NyPage<ProfilePage> {
 Controller에서 URL 쿼리 매개변수에 접근합니다:
 
 ``` dart
-// Navigate to: /profile?tab=settings&highlight=true
+// 이동: /profile?tab=settings&highlight=true
 routeTo("/profile?tab=settings&highlight=true");
 
-// In your controller
+// Controller 내에서
 class ProfileController extends NyController {
 
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Get all query parameters as Map
+    // 모든 쿼리 매개변수를 Map으로 가져오기
     Map<String, dynamic>? params = queryParameters();
     // {"tab": "settings", "highlight": "true"}
 
-    // Get a specific parameter
+    // 특정 매개변수 가져오기
     String? tab = queryParameters(key: "tab");
     // "settings"
   }
@@ -187,9 +187,9 @@ class ProfileController extends NyController {
 쿼리 매개변수가 존재하는지 확인합니다:
 
 ``` dart
-// In your page
+// 페이지 내에서
 if (widget.hasQueryParameter("tab")) {
-  // Handle tab parameter
+  // tab 매개변수 처리
 }
 ```
 
@@ -206,22 +206,27 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Trigger a setState on the page
+    // 페이지의 setState 트리거
     setState(setState: () {});
   }
 
   void refresh() {
-    // Refresh the entire page
+    // 전체 페이지 새로고침
     refreshPage();
   }
 
   void goBack() {
-    // Pop the page with optional result
+    // 선택적 결과와 함께 페이지 팝
     pop(result: {"updated": true});
   }
 
+  void goBackFromRoot() {
+    // 루트 네비게이터에서 팝 (예: Navigation Hub의 루트 레벨 모달 닫기)
+    pop(rootNavigator: true);
+  }
+
   void updateCustomState() {
-    // Send custom action to page
+    // 페이지에 커스텀 액션 전송
     updatePageState("customAction", {"key": "value"});
   }
 }
@@ -237,33 +242,33 @@ Controller에는 내장 Toast 알림 메서드가 포함되어 있습니다:
 class FormController extends NyController {
 
   void showNotifications() {
-    // Success toast
+    // 성공 Toast
     showToastSuccess(description: "Profile updated!");
 
-    // Warning toast
+    // 경고 Toast
     showToastWarning(description: "Please check your input");
 
-    // Error/Danger toast
+    // 오류/위험 Toast
     showToastDanger(description: "Failed to save changes");
 
-    // Info toast
+    // 정보 Toast
     showToastInfo(description: "New features available");
 
-    // Sorry toast
+    // Sorry Toast
     showToastSorry(description: "We couldn't process your request");
 
-    // Oops toast
+    // Oops Toast
     showToastOops(description: "Something went wrong");
   }
 
   void showCustomToast() {
-    // Custom toast with title
+    // 제목이 있는 커스텀 Toast
     showToastSuccess(
       title: "Great Job!",
       description: "Your changes have been saved",
     );
 
-    // Use custom toast style (registered in Nylo)
+    // 커스텀 Toast 스타일 사용 (Nylo에 등록됨)
     showToastCustom(
       title: "Custom",
       description: "Using custom style",
@@ -302,18 +307,18 @@ class RegisterController extends NyController {
       showAlert: true,
       alertStyle: 'warning',
       onSuccess: () {
-        // Validation passed
+        // 유효성 검사 통과
         _performRegistration();
       },
       onFailure: (exception) {
-        // Validation failed
+        // 유효성 검사 실패
         print(exception.toString());
       },
     );
   }
 
   void _performRegistration() async {
-    // Handle registration logic
+    // 등록 로직 처리
     showToastSuccess(description: "Account created!");
   }
 }
@@ -349,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // This code only runs once until the lock is released
+      // 이 코드는 잠금이 해제될 때까지 한 번만 실행됩니다
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -361,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Don't trigger setState after
+      shouldSetState: false, // 완료 후 setState 트리거하지 않음
     );
   }
 }
@@ -379,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // User confirmed - perform deletion
+        // 사용자 확인 - 삭제 수행
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -405,7 +410,7 @@ class AuthController extends NyController {
   User? currentUser;
 
   Future<void> login(String email, String password) async {
-    // Login logic
+    // 로그인 로직
     currentUser = await AuthService.login(email, password);
   }
 
@@ -454,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Only runs if all guards pass
+    // 모든 가드를 통과한 경우에만 실행됩니다
   }
 }
 ```

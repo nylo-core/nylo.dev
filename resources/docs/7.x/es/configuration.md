@@ -10,6 +10,7 @@
   - [Recuperar valores](#retrieving-values "Recuperar valores del entorno")
   - [Crear clases de configuracion](#creating-config-classes "Crear clases de configuracion")
   - [Tipos de variables](#variable-types "Tipos de variables de entorno")
+  - [Interpolacion de variables](#variable-interpolation "Interpolacion de variables")
 - [Variantes de entorno](#environment-flavours "Variantes de entorno")
 - [Inyeccion en tiempo de compilacion](#build-time-injection "Inyeccion en tiempo de compilacion")
 
@@ -32,7 +33,7 @@ Este enfoque proporciona:
 El archivo `.env` en la raiz de tu proyecto contiene tus variables de configuracion:
 
 ``` bash
-# Environment configuration
+# Configuracion de entorno
 APP_KEY=your-32-character-secret-key
 APP_NAME="My App"
 APP_ENV="developing"
@@ -94,7 +95,7 @@ Cuando modifiques tu archivo `.env`, regenera la configuracion:
 metro make:env
 ```
 
-La bandera `--force` sobrescribe el `env.g.dart` existente.
+Esto siempre sobreescribe el `env.g.dart` existente.
 
 <div id="retrieving-values"></div>
 
@@ -115,7 +116,7 @@ final class AppConfig {
 Luego en el codigo de tu aplicacion, accede a los valores a traves de la clase de configuracion:
 
 ``` dart
-// Anywhere in your app
+// En cualquier lugar de tu aplicacion
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -137,7 +138,7 @@ Esto crea un nuevo archivo de configuracion en `lib/config/revenue_cat_config.da
 
 ``` dart
 final class RevenueCatConfig {
-  // Add your config values here
+  // Agrega tus valores de configuracion aqui
 }
 ```
 
@@ -173,14 +174,14 @@ metro make:env
 ``` dart
 import '/config/revenue_cat_config.dart';
 
-// Initialize RevenueCat
+// Inicializar RevenueCat
 await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Check entitlements
+// Verificar derechos
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Grant premium access
+  // Otorgar acceso premium
 }
 ```
 
@@ -201,6 +202,30 @@ Los valores en tu archivo `.env` se analizan automaticamente:
 | `EMPTY=""` | `String` | `""` (cadena vacia) |
 
 
+<div id="variable-interpolation"></div>
+
+## Interpolacion de variables
+
+Los valores de cadena en tu archivo `.env` pueden referenciar otras variables usando la sintaxis `${VAR_NAME}`:
+
+``` bash
+APP_DOMAIN="myapp.com"
+APP_URL="https://${APP_DOMAIN}"
+API_BASE_URL="https://api.${APP_DOMAIN}/v1"
+```
+
+Cuando tu codigo llama a `getEnv('APP_URL')`, el valor retornado es `https://myapp.com`. Las referencias se resuelven recursivamente, por lo que las referencias encadenadas funcionan como se espera:
+
+``` bash
+HOST="example.com"
+BASE="https://${HOST}"
+UPLOADS="${BASE}/uploads"
+```
+
+`getEnv('UPLOADS')` retorna `https://example.com/uploads`.
+
+Las referencias circulares estan protegidas — si una variable se referencia a si misma (directa o a traves de una cadena), el marcador de posicion no resuelto `${VAR_NAME}` se mantiene en la salida en lugar de causar un bucle infinito.
+
 <div id="environment-flavours"></div>
 
 ## Variantes de entorno
@@ -212,9 +237,9 @@ Crea diferentes configuraciones para desarrollo, staging y produccion.
 Crea archivos `.env` separados:
 
 ``` bash
-.env                  # Development (default)
+.env                  # Desarrollo (predeterminado)
 .env.staging          # Staging
-.env.production       # Production
+.env.production       # Produccion
 ```
 
 Ejemplo `.env.production`:
@@ -233,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Genera desde un archivo de entorno especifico:
 
 ``` bash
-# For production
+# Para produccion
 metro make:env --file=".env.production"
 
-# For staging
+# Para staging
 metro make:env --file=".env.staging"
 ```
 
@@ -245,10 +270,10 @@ metro make:env --file=".env.staging"
 Compila con la configuracion apropiada:
 
 ``` bash
-# Development
+# Desarrollo
 flutter run
 
-# Production build
+# Build de produccion
 metro make:env --file=".env.production"
 flutter build ios
 flutter build appbundle
@@ -277,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Run
+# Ejecutar
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

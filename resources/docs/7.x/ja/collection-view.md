@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## 状態の更新
 
-`stateName` を指定することで、CollectionView を更新またはリセットできます:
+`stateName` を指定し `CollectionView.stateActions()` を呼び出すことで、CollectionView をプログラムから更新できます:
 
 ``` dart
 CollectionView<Todo>(
@@ -351,26 +351,31 @@ CollectionView<Todo>(
 )
 ```
 
-### リストをリセット
+`stateActions` を使用して実行時にリストを操作します:
 
 ``` dart
+final actions = CollectionView.stateActions("my_todo_list");
+
 // データをリセットして最初から再読み込み
-CollectionView.stateReset("my_todo_list");
+actions.reset();
+
+// データをリフレッシュ（再フェッチしページネーションをリセット）
+actions.refreshData();
+
+// リストの末尾にアイテムを追加
+actions.addItem(newTodo);
+
+// 指定インデックスにアイテムを挿入
+actions.insertItem(0, newTodo);
+
+// インデックスでアイテムを削除
+actions.removeFromIndex(2);
+
+// 指定インデックスのアイテムを置換
+actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-### アイテムを削除
-
-``` dart
-// インデックス 2 のアイテムを削除
-CollectionView.removeFromIndex("my_todo_list", 2);
-```
-
-### 汎用的な更新をトリガー
-
-``` dart
-// グローバル updateState ヘルパーを使用
-updateState("my_todo_list");
-```
+すべての `stateActions` メソッドは同期・非同期データいずれの場合もリビルドをまたいで正しく永続化します。`refreshData()` はページネーションのイテレーションカウンターもリセットするため、pullable リストはページ 1 から再開します。
 
 <div id="parameters"></div>
 
@@ -395,6 +400,7 @@ updateState("my_todo_list");
 | パラメータ | 型 | 説明 |
 |-----------|------|-------------|
 | `data` | `Function(int iteration)` | ページネーションデータ関数 |
+| `enablePullDown` | `bool` | プルリフレッシュジェスチャーを有効化（デフォルト: `true`） |
 | `onRefresh` | `Function()?` | リフレッシュ完了時のコールバック |
 | `beforeRefresh` | `Function()?` | リフレッシュ前のコールバック |
 | `afterRefresh` | `Function(dynamic)?` | データ読み込み後のコールバック |

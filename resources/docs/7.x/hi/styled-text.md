@@ -10,6 +10,8 @@
   - [प्लेसहोल्डर स्टाइलिंग](#styling-placeholders "प्लेसहोल्डर स्टाइलिंग")
   - [टैप कॉलबैक](#tap-callbacks "टैप कॉलबैक")
   - [पाइप-सेपरेटेड कीज़](#pipe-keys "पाइप-सेपरेटेड कीज़")
+  - [वाइल्डकार्ड स्टाइल](#wildcard-styles "वाइल्डकार्ड स्टाइल")
+  - [लोकलाइज़ेशन कीज़](#localization-keys "लोकलाइज़ेशन कीज़")
 - [पैरामीटर](#parameters "पैरामीटर")
 - [टेक्स्ट एक्सटेंशन](#text-extensions "टेक्स्ट एक्सटेंशन")
   - [टाइपोग्राफी स्टाइल](#typography-styles "टाइपोग्राफी स्टाइल")
@@ -32,7 +34,7 @@ StyledText दो मोड का समर्थन करता है:
 ## बुनियादी उपयोग
 
 ``` dart
-// Children mode - list of Text widgets
+// चिल्ड्रन मोड - Text विजेट की सूची
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// टेम्पलेट मोड - प्लेसहोल्डर सिंटैक्स
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -172,6 +174,68 @@ StyledText.template(
 
 यह तीनों प्लेसहोल्डर पर एक ही स्टाइल और कॉलबैक मैप करता है।
 
+<div id="wildcard-styles"></div>
+
+### वाइल्डकार्ड स्टाइल
+
+उन सभी प्लेसहोल्डर पर स्टाइल या टैप कॉलबैक लागू करने के लिए `"*"` का उपयोग करें जिनकी अपनी विशिष्ट कुंजी नहीं है:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+`name` और `app` दोनों को वाइल्डकार्ड स्टाइल मिलती है। यदि किसी प्लेसहोल्डर की स्पष्ट कुंजी भी है, तो स्पष्ट कुंजी `"*"` से प्राथमिकता लेती है।
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // केवल "cancel" पर लागू होता है
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // किसी भी अनमैच्ड प्लेसहोल्डर पर टैप करें
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### लोकलाइज़ेशन कीज़
+
+**लुकअप कुंजी** को **प्रदर्शन टेक्स्ट** से अलग करने के लिए `@{{key:text}}` सिंटैक्स का उपयोग करें। यह लोकलाइज़ेशन के लिए उपयोगी है — कुंजी सभी लोकेल में समान रहती है जबकि प्रदर्शन टेक्स्ट प्रत्येक भाषा के अनुसार बदलता है।
+
+``` dart
+// अपने लोकेल फ़ाइलों में:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN रेंडर करता है: "Learn Languages, Reading and Speaking in AppName"
+// ES रेंडर करता है: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+`:` से पहले का भाग **कुंजी** है जो स्टाइल और टैप कॉलबैक खोजने के लिए उपयोग की जाती है। `:` के बाद का भाग **प्रदर्शन टेक्स्ट** है जो स्क्रीन पर दिखता है। `:` के बिना, प्लेसहोल्डर पहले की तरह व्यवहार करता है — पूरी तरह से पिछड़े-संगत।
+
+यह [पाइप-सेपरेटेड कीज़](#pipe-keys) और [टैप कॉलबैक](#tap-callbacks) सहित सभी मौजूदा फ़ीचर के साथ काम करता है।
+
 <div id="parameters"></div>
 
 ## पैरामीटर
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### यूटिलिटी मेथड
 
 ``` dart
-// Font weight
+// फ़ॉन्ट वज़न
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// अलाइनमेंट
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// अधिकतम पंक्तियाँ
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// फ़ॉन्ट फैमिली
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// फ़ॉन्ट आकार
 Text("Big text").setFontSize(24)
 
-// Custom style
+// कस्टम स्टाइल
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// पैडिंग
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// संशोधनों के साथ कॉपी करें
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

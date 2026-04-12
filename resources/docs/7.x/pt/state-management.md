@@ -53,12 +53,12 @@ Um widget `Cart` gerenciado por estado no Nylo ficaria assim:
 **Passo 1:** Defina o widget com um nome de estado estático
 
 ``` dart
-/// The Cart widget
+/// O widget Cart
 class Cart extends StatefulWidget {
 
   Cart({Key? key}) : super(key: key);
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart"; // Identificador unico para o estado deste widget
 
   @override
   _CartState createState() => _CartState();
@@ -68,23 +68,23 @@ class Cart extends StatefulWidget {
 **Passo 2:** Crie a classe de estado estendendo `NyState`
 
 ``` dart
-/// The state class for the Cart widget
+/// A classe de estado para o widget Cart
 class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
   _CartState() {
-    stateName = Cart.state; // Register the state name
+    stateName = Cart.state; // Registrar o nome do estado
   }
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue(); // Carregar dados iniciais
   };
 
   @override
   void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
+    reboot(); // Recarregar o widget quando o estado for atualizado
   }
 
   @override
@@ -100,15 +100,15 @@ class _CartState extends NyState<Cart> {
 **Passo 3:** Crie funções auxiliares para ler e atualizar o carrinho
 
 ``` dart
-/// Get the cart value from storage
+/// Obter o valor do carrinho do armazenamento
 Future<String> getCartValue() async {
   return await storageRead(Keys.cart) ?? "1";
 }
 
-/// Set the cart value and notify the widget
+/// Definir o valor do carrinho e notificar o widget
 Future setCartValue(String value) async {
     await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
+    updateState(Cart.state); // Isso aciona stateUpdated() no widget
 }
 ```
 
@@ -173,10 +173,10 @@ Use ações de estado quando precisar:
 - Criar comportamentos de widget reutilizáveis que podem ser invocados de múltiplos lugares
 
 ``` dart
-// Sending an action to the widget
+// Enviando uma acao para o widget
 stateAction('hello_world_in_widget', state: MyWidget.state);
 
-// Another example with data
+// Outro exemplo com dados
 stateAction('show_high_score', state: HighScore.state, data: {
   "high_score": 100,
 });
@@ -192,7 +192,7 @@ get stateActions => {
     print('Hello world');
   },
   "reset_data": (data) async {
-    // Example with data
+    // Exemplo com dados
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -210,6 +210,18 @@ User user = User(name: "John Doe", age: 30);
 stateAction('update_user_info', state: MyWidget.state, data: user);
 ```
 
+Se você já tem uma instância de `StateActions` (por ex. do método estático `stateActions()` de um widget), pode chamar `action()` diretamente nela em vez de usar a função livre:
+
+``` dart
+// Usando a funcao livre
+stateAction('reset_avatar', state: UserAvatar.state);
+
+// Usando o metodo da instancia StateActions — equivalente, menos repeticao
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action('reset_avatar');
+actions.action('update_user_image', data: user);
+```
+
 Você também pode definir suas ações de estado usando o método `whenStateAction` no seu getter `init`.
 
 ``` dart
@@ -218,7 +230,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Redefinir a contagem do badge
       _count = 0;
     }
   });
@@ -248,12 +260,12 @@ class _UserAvatarState extends NyState<UserAvatar> {
 @override
 get stateActions => {
   "reset_avatar": () {
-    // Example
+    // Exemplo
     _avatar = null;
     setState(() {});
   },
   "update_user_image": (User user) {
-    // Example
+    // Exemplo
     _avatar = user.image;
     setState(() {});
   },
@@ -270,10 +282,10 @@ stateAction('reset_avatar', state: MyWidget.state);
 // prints 'Hello from the widget'
 
 stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
+// Redefinir dados no widget
 
 stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
+// exibe um toast de sucesso com a mensagem
 ```
 
 
@@ -298,7 +310,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // definir como true para habilitar acoes de estado nesta pagina
 
 @override
 get stateActions => {
@@ -306,7 +318,7 @@ get stateActions => {
     print('Hello from the page');
   },
   "reset_data": () {
-    // Example
+    // Exemplo
     _textController.clear();
     _myData = null;
     setState(() {});
@@ -324,12 +336,12 @@ stateAction('test_page_action', state: MyPage.path);
 // prints 'Hello from the page'
 
 stateAction('reset_data', state: MyPage.path);
-// Reset data in page
+// Redefinir dados na pagina
 
 stateAction('show_toast', state: MyPage.path, data: {
   "message": "Hello from the page"
 });
-// shows a success toast with the message
+// exibe um toast de sucesso com a mensagem
 ```
 
 Você também pode definir suas ações de estado usando o método `whenStateAction`.
@@ -340,7 +352,7 @@ get init => () async {
   ...
   whenStateAction({
     "reset_badge": () {
-      // Reset the badge count
+      // Redefinir a contagem do badge
       _count = 0;
     }
   });
@@ -363,7 +375,7 @@ Você pode atualizar um estado chamando o método `updateState()`.
 ``` dart
 updateState(MyStateName.state);
 
-// or with data
+// ou com dados
 updateState(MyStateName.state, data: "The Data");
 ```
 

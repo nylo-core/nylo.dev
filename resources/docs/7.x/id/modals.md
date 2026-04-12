@@ -142,11 +142,11 @@ Panggil dari mana saja:
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// Dengan callback kustom
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // Logika logout kustom
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget header di bagian atas |
 | `useSafeArea` | `bool` | `true` | Membungkus konten dalam SafeArea |
 | `isScrollControlled` | `bool` | `false` | Mengizinkan modal dapat di-scroll |
+| `isDismissible` | `bool` | `true` | Mengizinkan penutupan dengan mengetuk di luar |
+| `enableDrag` | `bool` | `true` | Mengizinkan gestur seret untuk menutup |
 | `showCloseButton` | `bool` | `false` | Menampilkan tombol tutup X |
 | `headerPadding` | `EdgeInsets?` | null | Padding saat header ada |
+| `contentPadding` | `EdgeInsets?` | null | Padding di sekitar konten utama |
+| `actionsPadding` | `EdgeInsets?` | null | Padding di sekitar bagian aksi |
 | `backgroundColor` | `Color?` | null | Warna latar belakang modal |
 | `showHandle` | `bool` | `true` | Menampilkan handle tarik di bagian atas |
 | `closeButtonColor` | `Color?` | null | Warna latar belakang tombol tutup |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// Penggunaan
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // hapus item ini
 }
 ```
 

@@ -10,6 +10,8 @@
   - [Yer Tutucuları Stillendirme](#styling-placeholders "Yer Tutucuları Stillendirme")
   - [Dokunma Geri Çağırmaları](#tap-callbacks "Dokunma Geri Çağırmaları")
   - [Pipe ile Ayrılmış Anahtarlar](#pipe-keys "Pipe ile Ayrılmış Anahtarlar")
+  - [Joker Karakter Stilleri](#wildcard-styles "Joker Karakter Stilleri")
+  - [Yerelleştirme Anahtarları](#localization-keys "Yerelleştirme Anahtarları")
 - [Parametreler](#parameters "Parametreler")
 - [Text Extension'ları](#text-extensions "Text Extension'ları")
   - [Tipografi Stilleri](#typography-styles "Tipografi Stilleri")
@@ -32,7 +34,7 @@ StyledText iki modu destekler:
 ## Temel Kullanım
 
 ``` dart
-// Children mode - list of Text widgets
+// Children modu - Text widget'larının listesi
 StyledText(
   children: [
     Text("Hello ", style: TextStyle(color: Colors.black)),
@@ -40,7 +42,7 @@ StyledText(
   ],
 )
 
-// Template mode - placeholder syntax
+// Şablon modu - yer tutucu sözdizimi
 StyledText.template(
   "Welcome to @{{Nylo}}!",
   styles: {
@@ -77,10 +79,10 @@ Temel `style`, kendi stili olmayan tüm alt öğelere uygulanır.
 ``` dart
 StyledText(
   onEnter: (Text text, PointerEnterEvent event) {
-    print("Hovering over: ${text.data}");
+    print("Üzerine gelindi: ${text.data}");
   },
   onExit: (Text text, PointerExitEvent event) {
-    print("Left: ${text.data}");
+    print("Ayrıldı: ${text.data}");
   },
   children: [
     Text("Hover me", style: TextStyle(color: Colors.blue)),
@@ -171,6 +173,68 @@ StyledText.template(
 ```
 
 Bu, aynı stili ve geri çağırmayı her üç yer tutucuya da eşler.
+
+<div id="wildcard-styles"></div>
+
+### Joker Karakter Stilleri
+
+Belirli bir anahtarı olmayan her yer tutucuya bir stil veya dokunma geri çağırması uygulamak için `"*"` anahtarını kullanın:
+
+``` dart
+StyledText.template(
+  "Hello @{{name}}, welcome to @{{app}}!",
+  styles: {
+    "*": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+  },
+)
+```
+
+Hem `name` hem de `app` joker karakter stilini alır. Bir yer tutucunun ayrıca açık bir anahtarı varsa, açık anahtar `"*"` üzerinde önceliğe sahiptir.
+
+``` dart
+StyledText.template(
+  "Click @{{here}} or @{{cancel}}.",
+  styles: {
+    "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+    "*": TextStyle(color: Colors.grey), // yalnızca "cancel" için geçerli
+  },
+  onTap: {
+    "*": () => Navigator.pop(context), // eşleşmeyen herhangi bir yer tutucuya dokunma
+  },
+)
+```
+
+<div id="localization-keys"></div>
+
+### Yerelleştirme Anahtarları
+
+**Arama anahtarını** **görüntülenen metinden** ayırmak için `@{{anahtar:metin}}` sözdizimini kullanın. Bu, yerelleştirme için kullanışlıdır -- anahtar tüm yerel ayarlarda aynı kalırken görüntülenen metin dile göre değişir.
+
+``` dart
+// Yerelleştirme dosyalarında:
+// en.json → "learn_skills": "Learn @{{lang:Languages}}, @{{read:Reading}} and @{{speak:Speaking}} in @{{app:AppName}}"
+// es.json → "learn_skills": "Aprende @{{lang:Idiomas}}, @{{read:Lectura}} y @{{speak:Habla}} en @{{app:AppName}}"
+
+StyledText.template(
+  "learn_skills".tr(),
+  styles: {
+    "lang|read|speak": TextStyle(
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    ),
+    "app": TextStyle(color: Colors.green),
+  },
+  onTap: {
+    "app": () => routeTo("/about"),
+  },
+)
+// EN şunu render eder: "Learn Languages, Reading and Speaking in AppName"
+// ES şunu render eder: "Aprende Idiomas, Lectura y Habla en AppName"
+```
+
+`:` öncesindeki kısım, stilleri ve dokunma geri çağırmalarını aramak için kullanılan **anahtar**dır. `:` sonrasındaki kısım ise ekranda render edilen **görüntülenen metin**dir. `:` olmadan, yer tutucu daha önce olduğu gibi davranır -- tamamen geriye dönük uyumludur.
+
+Bu, [pipe ile ayrılmış anahtarlar](#pipe-keys) ve [dokunma geri çağırmaları](#tap-callbacks) dahil tüm mevcut özelliklerle çalışır.
 
 <div id="parameters"></div>
 
@@ -270,31 +334,31 @@ Text("Welcome").headingLarge(
 ### Yardımcı Metotlar
 
 ``` dart
-// Font weight
+// Yazı kalınlığı
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
-// Alignment
+// Hizalama
 Text("Left aligned").alignLeft()
 Text("Center aligned").alignCenter()
 Text("Right aligned").alignRight()
 
-// Max lines
+// Maksimum satır sayısı
 Text("Long text...").setMaxLines(2)
 
-// Font family
+// Yazı tipi ailesi
 Text("Custom font").setFontFamily("Roboto")
 
-// Font size
+// Yazı boyutu
 Text("Big text").setFontSize(24)
 
-// Custom style
+// Özel stil
 Text("Styled").setStyle(TextStyle(color: Colors.red))
 
-// Padding
+// Dolgu
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Copy with modifications
+// Değişikliklerle kopyala
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

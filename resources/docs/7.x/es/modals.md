@@ -47,9 +47,9 @@ Esto genera dos cosas:
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// Modal de Opciones de Pago
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// Usado en BottomSheetModal.showPaymentOptions()
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **Un método estático** agregado a tu clase `BottomSheetModal` en `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart`:
 
 ``` dart
-/// Show Payment Options modal
+/// Mostrar modal de Opciones de Pago
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// Mostrar modal de Cierre de sesion
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Widget de encabezado en la parte superior |
 | `useSafeArea` | `bool` | `true` | Envolver contenido en SafeArea |
 | `isScrollControlled` | `bool` | `false` | Permitir que el modal sea desplazable |
+| `isDismissible` | `bool` | `true` | Permitir cierre al tocar fuera |
+| `enableDrag` | `bool` | `true` | Permitir gesto de arrastre para cerrar |
 | `showCloseButton` | `bool` | `false` | Mostrar un botón X de cerrar |
 | `headerPadding` | `EdgeInsets?` | null | Relleno cuando hay encabezado |
+| `contentPadding` | `EdgeInsets?` | null | Relleno alrededor del contenido principal |
+| `actionsPadding` | `EdgeInsets?` | null | Relleno alrededor de la seccion de acciones |
 | `backgroundColor` | `Color?` | null | Color de fondo del modal |
 | `showHandle` | `bool` | `true` | Mostrar el indicador de arrastre en la parte superior |
 | `closeButtonColor` | `Color?` | null | Color de fondo del botón de cerrar |

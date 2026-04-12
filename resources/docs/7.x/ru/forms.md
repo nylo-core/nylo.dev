@@ -30,6 +30,7 @@
   - [Поля ползунков](#slider-fields "Поля ползунков")
   - [Поля диапазонных ползунков](#range-slider-fields "Поля диапазонных ползунков")
   - [Пользовательские поля](#custom-fields "Пользовательские поля")
+  - [Поля-построители](#builder-fields "Поля-построители")
   - [Поля виджетов](#widget-fields "Поля виджетов")
 - [FormCollection](#form-collection "FormCollection")
 - [Валидация формы](#form-validation "Валидация формы")
@@ -596,6 +597,43 @@ Field.custom("My Field",
 ```
 
 Параметр `child` требует виджет, наследующий `NyFieldStatefulWidget`. Это даёт вам полный контроль над отрисовкой и поведением поля.
+
+<div id="builder-fields"></div>
+
+<!-- uncertain: new Nylo-specific term "NyFieldBuilderLegacy" — not seen in existing locale file -->
+### Поля-построители
+
+Используйте `Field.builder()` для создания пользовательского встроенного поля формы без наследования `NyFieldStatefulWidget`. Функция-построитель получает текущее значение, callback `onChanged` для передачи изменений значения в форму и callback `setState` для принудительного перестроения интерфейса.
+
+``` dart
+Field.builder(
+  "Favorite Color",
+  builder: (context, onChanged, value, setState) {
+    return ColorPicker(
+      selected: value,
+      onColorChanged: (color) {
+        onChanged(color);
+        setState(); // перестроить виджет поля
+      },
+    );
+  },
+  value: Colors.blue,
+)
+```
+
+Третий параметр — текущее значение поля, четвёртый — `setState`. Если построитель не нуждается в `setState`, можно использовать устаревшую сигнатуру с 3 аргументами (`NyFieldBuilderLegacy`), которая по-прежнему поддерживается:
+
+``` dart
+Field.builder(
+  "Rating",
+  builder: (context, onChanged, value) {
+    return StarRatingWidget(
+      rating: value ?? 0,
+      onRatingChanged: onChanged,
+    );
+  },
+)
+```
 
 <div id="widget-fields"></div>
 
@@ -1184,4 +1222,5 @@ LoginForm.actions.submit(
 | `Field.slider()` | — | Ползунок одного значения |
 | `Field.rangeSlider()` | — | Ползунок диапазона значений |
 | `Field.custom()` | `child` (обязательный `NyFieldStatefulWidget`) | Пользовательский stateful-виджет |
+| `Field.builder()` | `builder` (обязательный `NyFieldBuilder` или `NyFieldBuilderLegacy`) | Встроенное пользовательское поле без наследования |
 | `Field.widget()` | `child` (обязательный `Widget`) | Встраивание любого виджета (не поле) |

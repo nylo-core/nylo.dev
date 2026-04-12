@@ -69,11 +69,16 @@ String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "
 int? score = Backpack.instance.read<int>("score");
 ```
 
-Backpack automatically deserializes JSON strings to model objects when a type is provided:
+Backpack automatically deserializes stored values to model objects when a type is provided. This works for both JSON strings and raw `Map<String, dynamic>` values:
 
 ``` dart
-// If a User model is stored as JSON, it will be deserialized
+// If a User model is stored as a JSON string, it will be deserialized
 User? user = Backpack.instance.read<User>("current_user");
+
+// If a raw Map was stored (e.g. via syncKeys from NyStorage), it is also
+// automatically deserialized into the typed model on read
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // returns a User
 ```
 
 <div id="saving-data"></div>

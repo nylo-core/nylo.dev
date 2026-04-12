@@ -7,7 +7,9 @@
 - 사용법
     - [드롭다운 위젯](#usage-dropdown "드롭다운 위젯")
     - [하단 시트 모달](#usage-bottom-modal "하단 시트 모달")
+- [애니메이션 스타일](#animation-style "애니메이션 스타일")
 - [커스텀 드롭다운 빌더](#custom-builder "커스텀 드롭다운 빌더")
+- [상태 액션](#state-actions "상태 액션")
 - [매개변수](#parameters "매개변수")
 - [정적 메서드](#methods "정적 메서드")
 
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 하단 모달은 현재 선택된 언어 옆에 체크 표시와 함께 언어 목록을 표시합니다.
 
-### 모달 높이 커스터마이징
+### 모달 커스터마이징
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // 커스텀 높이
+  height: 300,
+  useRootNavigator: true, // 탭 바를 포함한 모든 라우트 위에 모달을 표시
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## 애니메이션 스타일
+
+`animationStyle` 매개변수는 드롭다운 트리거와 하단 모달 목록 아이템 모두의 전환 애니메이션을 제어합니다. 네 가지 프리셋을 사용할 수 있습니다:
+
+``` dart
+// 애니메이션 없음
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// 섬세하고 정제된 애니메이션 (대부분의 앱에 권장)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// 유쾌하고 탄력 있는 애니메이션
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// 부드러운 스케일과 함께하는 페이드인
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+개별 매개변수와 함께 커스텀 `LanguageSwitcherAnimationStyle()`을 전달하거나, `copyWith`를 사용하여 프리셋을 조정할 수도 있습니다.
+
+동일한 `animationStyle` 매개변수가 `LanguageSwitcher.showBottomModal`에서도 지원됩니다.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // 예: "English"
+        // language['locale']에는 로케일 코드가 포함됩니다 (예: "en")
       ],
     );
   },
@@ -116,6 +154,23 @@ LanguageSwitcher(
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## 상태 액션
+
+`stateActions()`를 사용하여 `LanguageSwitcher`를 프로그래밍 방식으로 제어합니다:
+
+``` dart
+// 언어 목록 새로고침 (사용 가능한 언어 재읽기)
+LanguageSwitcher.stateActions().refresh();
+
+// 로케일 코드로 언어 전환
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+이는 사용자 상호작용 없이 앱 언어를 변경하고 싶을 때, 예를 들어 사용자 기본 설정으로 로그인 후에 유용합니다.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ List<Map<String, String>> languages = await LanguageSwitcher.getLanguageList();
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// 커스텀 높이로
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// 옵션과 함께
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## 지원되는 로케일

@@ -74,7 +74,7 @@ class BaseNavigationHub extends NyStatefulWidget with BottomNavPageControls {
             child: () => _BaseNavigationHubState(),
             stateName: path.stateName());
 
-  /// State actions
+  /// ステートアクション
   static NavigationHubStateActions stateActions = NavigationHubStateActions(path.stateName());
 }
 
@@ -1005,6 +1005,19 @@ _HomeTabState extends State<HomeTab> {
     ...
 }
 ```
+
+タブ内のネストされたナビゲーターからポップする場合、`rootNavigator: true` を使用することで、タブのローカルナビゲーターではなくルートナビゲーターからポップできます。
+
+``` dart
+// タブのローカルナビゲーターからポップ（デフォルト）
+pop();
+
+// ルートナビゲーターからポップ — モーダルやオーバーレイが
+// ルートナビゲーターを使ってプッシュされた場合に使用
+pop(rootNavigator: true);
+```
+
+`rootNavigator` パラメーターは `NyState`、`NyController`、`StateAction.pop()`、および `BuildContext` 拡張の `pop()` で利用できます。
 
 <div id="tabs"></div>
 

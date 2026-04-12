@@ -25,13 +25,13 @@ Backpack digunakan secara internal oleh framework untuk menyimpan instance penti
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
 
-// Save a value
+// Simpan sebuah nilai
 Backpack.instance.save("user_name", "Anthony");
 
-// Read a value (synchronous)
+// Baca sebuah nilai (sinkron)
 String? name = Backpack.instance.read("user_name");
 
-// Delete a value
+// Hapus sebuah nilai
 Backpack.instance.delete("user_name");
 ```
 
@@ -42,13 +42,13 @@ Backpack.instance.delete("user_name");
 Backpack menggunakan **pola singleton** -- akses melalui `Backpack.instance`:
 
 ``` dart
-// Save data
+// Simpan data
 Backpack.instance.save("theme", "dark");
 
-// Read data
+// Baca data
 String? theme = Backpack.instance.read("theme"); // "dark"
 
-// Check if data exists
+// Periksa apakah data ada
 bool hasTheme = Backpack.instance.contains("theme"); // true
 ```
 
@@ -59,21 +59,26 @@ bool hasTheme = Backpack.instance.contains("theme"); // true
 Baca nilai dari Backpack menggunakan metode `read<T>()`. Metode ini mendukung tipe generik dan nilai default opsional:
 
 ``` dart
-// Read a String
+// Baca sebuah String
 String? name = Backpack.instance.read<String>("name");
 
-// Read with a default value
+// Baca dengan nilai default
 String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "Guest";
 
-// Read an int
+// Baca sebuah int
 int? score = Backpack.instance.read<int>("score");
 ```
 
-Backpack secara otomatis melakukan deserialisasi string JSON ke objek model ketika tipe disediakan:
+Backpack secara otomatis melakukan deserialisasi nilai yang tersimpan ke objek model ketika tipe disediakan. Ini bekerja untuk string JSON maupun nilai `Map<String, dynamic>` mentah:
 
 ``` dart
-// If a User model is stored as JSON, it will be deserialized
+// Jika model User tersimpan sebagai string JSON, akan dideserialisasi
 User? user = Backpack.instance.read<User>("current_user");
+
+// Jika Map mentah tersimpan (misalnya melalui syncKeys dari NyStorage), ia juga
+// otomatis dideserialisasi ke model bertipe saat dibaca
+Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
+User? user = Backpack.instance.read<User>("current_user"); // mengembalikan User
 ```
 
 <div id="saving-data"></div>
@@ -93,11 +98,11 @@ Backpack.instance.save("cart_count", 3);
 Gunakan `append()` untuk menambahkan nilai ke daftar yang tersimpan pada sebuah key:
 
 ``` dart
-// Append to a list
+// Tambahkan ke daftar
 Backpack.instance.append("recent_searches", "Flutter");
 Backpack.instance.append("recent_searches", "Dart");
 
-// Append with a limit (keeps only the last N items)
+// Tambahkan dengan batas (hanya menyimpan N item terakhir)
 Backpack.instance.append("recent_searches", "Nylo", limit: 10);
 ```
 
@@ -191,14 +196,14 @@ bool isReady = Backpack.instance.isNyloInitialized(); // true
 ### Contoh
 
 ``` dart
-// Using helper functions
+// Menggunakan fungsi helper
 backpackSave("locale", "en");
 
 String? locale = backpackRead<String>("locale"); // "en"
 
 backpackDelete("locale");
 
-// Access the Nylo instance
+// Akses instance Nylo
 Nylo nylo = backpackNylo();
 ```
 
@@ -209,13 +214,13 @@ Nylo nylo = backpackNylo();
 Backpack terintegrasi dengan `NyStorage` untuk penyimpanan gabungan persisten + dalam memori:
 
 ``` dart
-// Save to both NyStorage (persistent) and Backpack (in-memory)
+// Simpan ke NyStorage (persisten) dan Backpack (dalam memori) sekaligus
 await NyStorage.save("auth_token", "abc123", inBackpack: true);
 
-// Now accessible synchronously via Backpack
+// Kini dapat diakses secara sinkron melalui Backpack
 String? token = Backpack.instance.read("auth_token");
 
-// When deleting from NyStorage, also clear from Backpack
+// Saat menghapus dari NyStorage, hapus juga dari Backpack
 await NyStorage.deleteAll(andFromBackpack: true);
 ```
 
@@ -228,7 +233,7 @@ Pola ini berguna untuk data seperti token autentikasi yang membutuhkan baik pers
 ### Menyimpan Token Auth untuk Permintaan API
 
 ``` dart
-// In your auth interceptor
+// Di auth interceptor Anda
 class BearerAuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -246,24 +251,24 @@ class BearerAuthInterceptor extends Interceptor {
 ### Manajemen Keranjang Berbasis Sesi
 
 ``` dart
-// Add items to a cart session
+// Tambahkan item ke sesi keranjang
 Backpack.instance.sessionUpdate("cart", "items", ["item_1", "item_2"]);
 Backpack.instance.sessionUpdate("cart", "total", 49.99);
 
-// Read cart data
+// Baca data keranjang
 Map<String, dynamic>? cart = Backpack.instance.sessionData("cart");
 
-// Clear the cart
+// Kosongkan keranjang
 Backpack.instance.sessionFlush("cart");
 ```
 
 ### Feature Flag Cepat
 
 ``` dart
-// Store feature flags in Backpack for fast access
+// Simpan feature flag di Backpack untuk akses cepat
 backpackSave("feature_dark_mode", true);
 backpackSave("feature_notifications", false);
 
-// Check a feature flag
+// Periksa sebuah feature flag
 bool darkMode = backpackRead<bool>("feature_dark_mode") ?? false;
 ```

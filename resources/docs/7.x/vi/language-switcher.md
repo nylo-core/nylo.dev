@@ -7,7 +7,9 @@
 - Cách sử dụng
     - [Widget Dropdown](#usage-dropdown "Widget Dropdown")
     - [Bottom Sheet Modal](#usage-bottom-modal "Bottom Sheet Modal")
+- [Kiểu hoạt ảnh](#animation-style "Kiểu hoạt ảnh")
 - [Builder Dropdown tùy chỉnh](#custom-builder "Builder Dropdown tùy chỉnh")
+- [Hành động trạng thái](#state-actions "Hành động trạng thái")
 - [Tham số](#parameters "Tham số")
 - [Phương thức tĩnh](#methods "Phương thức tĩnh")
 
@@ -40,7 +42,7 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: Text("Settings"),
       actions: [
-        LanguageSwitcher(), // Add to the app bar
+        LanguageSwitcher(), // Thêm vào thanh ứng dụng
       ],
     ),
     body: Center(
@@ -76,14 +78,50 @@ Widget build(BuildContext context) {
 
 Bottom modal hiển thị danh sách ngôn ngữ với dấu kiểm bên cạnh ngôn ngữ hiện đang được chọn.
 
-### Tùy chỉnh chiều cao Modal
+### Tùy chỉnh Modal
 
 ``` dart
 LanguageSwitcher.showBottomModal(
   context,
-  height: 300, // Custom height
+  height: 300,
+  useRootNavigator: true, // Hiển thị modal trên tất cả các route, kể cả tab bar
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
 );
 ```
+
+<div id="animation-style"></div>
+
+## Kiểu hoạt ảnh
+
+Tham số `animationStyle` kiểm soát các hoạt ảnh chuyển tiếp cho nút kích hoạt dropdown và các mục trong danh sách bottom modal. Có bốn preset:
+
+``` dart
+// Không có hoạt ảnh
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.none(),
+)
+
+// Hoạt ảnh tinh tế (khuyến nghị cho hầu hết ứng dụng)
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+)
+
+// Hoạt ảnh vui tươi, nảy bật
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.bouncy(),
+)
+
+// Fade-in mượt mà với scale nhẹ nhàng
+LanguageSwitcher(
+  animationStyle: LanguageSwitcherAnimationStyle.fadeIn(),
+)
+```
+
+Bạn cũng có thể truyền `LanguageSwitcherAnimationStyle()` tùy chỉnh với các tham số riêng lẻ, hoặc dùng `copyWith` để điều chỉnh preset.
+
+Cùng tham số `animationStyle` cũng được `LanguageSwitcher.showBottomModal` chấp nhận.
 
 <div id="custom-builder"></div>
 
@@ -98,8 +136,8 @@ LanguageSwitcher(
       children: [
         Icon(Icons.language),
         SizedBox(width: 8),
-        Text(language['name']), // e.g., "English"
-        // language['locale'] contains the locale code, e.g., "en"
+        Text(language['name']), // ví dụ, "English"
+        // language['locale'] chứa mã locale, ví dụ "en"
       ],
     );
   },
@@ -112,10 +150,27 @@ LanguageSwitcher(
 LanguageSwitcher(
   onLanguageChange: (Map<String, dynamic> language) {
     print('Language changed to: ${language['name']}');
-    // Perform additional actions when language changes
+    // Thực hiện các hành động bổ sung khi ngôn ngữ thay đổi
   },
 )
 ```
+
+<div id="state-actions"></div>
+
+## Hành động trạng thái
+
+Điều khiển `LanguageSwitcher` theo chương trình bằng `stateActions()`:
+
+``` dart
+// Làm mới danh sách ngôn ngữ (đọc lại các ngôn ngữ có sẵn)
+LanguageSwitcher.stateActions().refresh();
+
+// Chuyển sang ngôn ngữ theo mã locale
+LanguageSwitcher.stateActions().setLanguage("es");
+LanguageSwitcher.stateActions().setLanguage("fr");
+```
+
+Điều này hữu ích khi bạn muốn thay đổi ngôn ngữ ứng dụng mà không cần tương tác của người dùng, ví dụ sau khi đăng nhập với tùy chọn ngôn ngữ của người dùng.
 
 <div id="parameters"></div>
 
@@ -199,8 +254,16 @@ Hiển thị modal chọn ngôn ngữ:
 ``` dart
 await LanguageSwitcher.showBottomModal(context);
 
-// With custom height
-await LanguageSwitcher.showBottomModal(context, height: 400);
+// Với các tùy chọn
+await LanguageSwitcher.showBottomModal(
+  context,
+  height: 400,
+  useRootNavigator: true,
+  onLanguageChange: (String languageKey) {
+    print('Language changed to: $languageKey');
+  },
+  animationStyle: LanguageSwitcherAnimationStyle.subtle(),
+);
 ```
 
 ## Các Locale được hỗ trợ

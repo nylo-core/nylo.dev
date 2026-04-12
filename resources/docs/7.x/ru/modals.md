@@ -47,9 +47,9 @@ metro make:bottom_sheet_modal payment_options
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// Модальное окно опций оплаты
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// Используется в BottomSheetModal.showPaymentOptions()
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **Статический метод**, добавленный в ваш класс `BottomSheetModal` в `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart`:
 
 ``` dart
-/// Show Payment Options modal
+/// Показать модальное окно опций оплаты
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// Показать модальное окно выхода
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | Виджет заголовка сверху |
 | `useSafeArea` | `bool` | `true` | Оборачивать содержимое в SafeArea |
 | `isScrollControlled` | `bool` | `false` | Разрешить прокрутку модального окна |
+| `isDismissible` | `bool` | `true` | Разрешить закрытие касанием снаружи |
+| `enableDrag` | `bool` | `true` | Разрешить жест перетаскивания для закрытия |
 | `showCloseButton` | `bool` | `false` | Показать кнопку закрытия X |
 | `headerPadding` | `EdgeInsets?` | null | Отступы при наличии заголовка |
+| `contentPadding` | `EdgeInsets?` | null | Отступы вокруг основного содержимого |
+| `actionsPadding` | `EdgeInsets?` | null | Отступы вокруг секции действий |
 | `backgroundColor` | `Color?` | null | Цвет фона модального окна |
 | `showHandle` | `bool` | `true` | Показать ручку перетаскивания сверху |
 | `closeButtonColor` | `Color?` | null | Цвет фона кнопки закрытия |

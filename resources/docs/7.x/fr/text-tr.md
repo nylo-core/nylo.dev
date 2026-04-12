@@ -60,6 +60,8 @@ Le widget recherchera la cle de traduction dans vos fichiers de langue (par exem
 }
 ```
 
+Si une cle est absente du fichier de la locale active, {{ config('app.name') }} la recherche automatiquement dans la langue de secours (configuree dans `lib/config/localization.dart`) avant de renvoyer la chaine de la cle brute. Cela s'applique aussi bien aux cles de niveau superieur qu'aux cles imbriquees en notation pointee.
+
 <div id="string-interpolation"></div>
 
 ## Interpolation de chaines

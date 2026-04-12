@@ -47,9 +47,9 @@ metro make:bottom_sheet_modal payment_options
 ``` dart
 import 'package:flutter/material.dart';
 
-/// Payment Options Modal
+/// 支付选项模态框
 ///
-/// Used in BottomSheetModal.showPaymentOptions()
+/// 在 BottomSheetModal.showPaymentOptions() 中使用
 class PaymentOptionsModal extends StatelessWidget {
   const PaymentOptionsModal({super.key});
 
@@ -67,7 +67,7 @@ class PaymentOptionsModal extends StatelessWidget {
 2. **一个静态方法**，添加到 `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart` 中的 `BottomSheetModal` 类：
 
 ``` dart
-/// Show Payment Options modal
+/// 显示支付选项模态框
 static Future<void> showPaymentOptions(BuildContext context) {
   return displayModal(
     context,
@@ -112,7 +112,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 class BottomSheetModal extends NyBaseModal {
   static ModalShowFunction get displayModal => displayModal;
 
-  /// Show Logout modal
+  /// 显示登出模态框
   static Future<void> showLogout(
     BuildContext context, {
     Function()? onLogoutPressed,
@@ -142,11 +142,11 @@ class BottomSheetModal extends NyBaseModal {
 ``` dart
 BottomSheetModal.showLogout(context);
 
-// With custom callbacks
+// 使用自定义回调
 BottomSheetModal.showLogout(
   context,
   onLogoutPressed: () {
-    // Custom logout logic
+    // 自定义登出逻辑
   },
   onCancelPressed: () {
     Navigator.pop(context);
@@ -174,8 +174,12 @@ BottomSheetModal.showLogout(
 | `header` | `Widget?` | null | 顶部的头部组件 |
 | `useSafeArea` | `bool` | `true` | 使用 SafeArea 包裹内容 |
 | `isScrollControlled` | `bool` | `false` | 允许模态框可滚动 |
+| `isDismissible` | `bool` | `true` | 允许点击外部关闭 |
+| `enableDrag` | `bool` | `true` | 允许拖拽关闭手势 |
 | `showCloseButton` | `bool` | `false` | 显示 X 关闭按钮 |
 | `headerPadding` | `EdgeInsets?` | null | 头部存在时的内边距 |
+| `contentPadding` | `EdgeInsets?` | null | 主内容周围的内边距 |
+| `actionsPadding` | `EdgeInsets?` | null | 操作区域周围的内边距 |
 | `backgroundColor` | `Color?` | null | 模态框背景颜色 |
 | `showHandle` | `bool` | `true` | 显示顶部拖拽手柄 |
 | `closeButtonColor` | `Color?` | null | 关闭按钮背景颜色 |
@@ -346,13 +350,13 @@ static Future<bool?> showConfirm(
   );
 }
 
-// Usage
+// 使用示例
 bool? confirmed = await BottomSheetModal.showConfirm(
   context,
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // delete the item
+  // 删除该项目
 }
 ```
 

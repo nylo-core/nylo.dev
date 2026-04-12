@@ -279,6 +279,14 @@ metro make:stateless_widget product_rating_widget
 
 上記のコマンドにより、`lib/resources/widgets/` ディレクトリ内に新しいウィジェットが存在しない場合に作成されます。
 
+すべての `make:*` コマンドはパスセパレーターをサポートし、ファイルをサブディレクトリに配置できます。
+
+``` bash
+metro make:stateless_widget login/BrandPanel
+```
+
+これにより `lib/resources/widgets/login/brand_panel.dart` にウィジェットが作成されます。
+
 <div id="forcefully-make-a-stateless-widget"></div>
 
 ### Stateless ウィジェットの強制作成
@@ -433,6 +441,14 @@ metro make:event login_event
 
 これにより、`lib/app/events` に新しいイベントが作成されます。
 
+パスセパレーターを使用してイベントをサブディレクトリに整理できます。
+
+``` bash
+metro make:event auth/login_event
+```
+
+これにより `lib/app/events/auth/login_event.dart` にイベントが作成されます。
+
 <div id="forcefully-make-an-event"></div>
 
 ### イベントの強制作成
@@ -463,6 +479,14 @@ metro make:provider firebase_provider
 ```
 
 新しく作成されたプロバイダは `lib/app/providers/` に配置されます。
+
+パスセパレーターを使用してプロバイダをサブディレクトリに整理できます。
+
+``` bash
+metro make:provider integrations/firebase_provider
+```
+
+これにより `lib/app/providers/integrations/firebase_provider.dart` にプロバイダが作成されます。
 
 <div id="forcefully-make-a-provider"></div>
 
@@ -526,6 +550,14 @@ metro make:form car_advert_form
 
 これにより、`lib/app/forms` に新しいフォームが作成されます。
 
+パスセパレーターを使用してフォームをサブディレクトリに整理できます。
+
+``` bash
+metro make:form checkout/car_advert_form
+```
+
+これにより `lib/app/forms/checkout/car_advert_form.dart` にフォームが作成されます。
+
 <div id="forcefully-make-a-form"></div>
 
 ### フォームの強制作成
@@ -556,6 +588,14 @@ metro make:route_guard premium_content
 ```
 
 これにより、`lib/app/route_guards` に新しいルートガードが作成されます。
+
+パスセパレーターを使用してルートガードをサブディレクトリに整理できます。
+
+``` bash
+metro make:route_guard subscriptions/premium_content
+```
+
+これにより `lib/app/route_guards/subscriptions/premium_content.dart` にルートガードが作成されます。
 
 <div id="forcefully-make-a-route-guard"></div>
 
