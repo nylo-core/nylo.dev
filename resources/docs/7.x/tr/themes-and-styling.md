@@ -11,6 +11,7 @@
   - [Tema renkleri](#theme-colors "Tema renkleri")
   - [Renkleri kullanma](#using-colors "Renkleri kullanma")
   - [Temel stiller](#base-styles "Temel stiller")
+  - [Renk stillerini genişletme](#extending-color-styles "Renk stillerini genişletme")
   - [Tema değiştirme](#switching-theme "Tema değiştirme")
   - [Yazı tipleri](#fonts "Yazı tipleri")
   - [Tasarım](#design "Tasarım")
@@ -33,10 +34,14 @@ Cihaz <b>'açık/koyu'</b> moda girerse tema da güncellenecektir.
 
 ## Açık ve Koyu temalar
 
-- Açık tema - `lib/resources/themes/light_theme.dart`
-- Koyu tema - `lib/resources/themes/dark_theme.dart`
+Her tema, `lib/resources/themes/` altındaki kendi alt dizininde bulunur:
 
-Bu dosyaların içinde, önceden tanımlanmış ThemeData ve ThemeStyle bulacaksınız.
+- Açık tema – `lib/resources/themes/light/light_theme.dart`
+- Açık renkler – `lib/resources/themes/light/light_theme_colors.dart`
+- Koyu tema – `lib/resources/themes/dark/dark_theme.dart`
+- Koyu renkler – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+Her iki tema da `lib/resources/themes/base_theme.dart` konumundaki ortak bir oluşturucuyu ve `lib/resources/themes/color_styles.dart` konumundaki `ColorStyles` arayüzünü paylaşır.
 
 
 
@@ -49,102 +54,81 @@ Uygulamanız için birden fazla tema istiyorsanız, bunu yapmanın kolay bir yol
 İlk olarak, terminalden aşağıdaki komutu çalıştırın
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>Not:</b> **bright_theme** yerine yeni temanızın adını yazın.
 
-Bu, `/resources/themes/` dizininizde yeni bir tema ve ayrıca `/resources/themes/styles/` dizininde bir tema renkleri dosyası oluşturur.
+Bu, hem `bright_theme.dart` hem de `bright_theme_colors.dart` dosyalarını içeren `lib/resources/themes/bright/` konumunda yeni bir tema dizini oluşturur ve ardından bunu `lib/bootstrap/theme.dart` dosyasına kaydeder.
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // new theme automatically added
-    id: 'Bright Theme',
-    description: "Bright Theme",
+  BaseThemeConfig<ColorStyles>( // yeni tema otomatik olarak eklendi
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-Yeni temanızın renklerini **/resources/themes/styles/bright_theme_colors.dart** dosyasında değiştirebilirsiniz.
+Yeni temanızın renklerini **lib/resources/themes/bright/bright_theme_colors.dart** dosyasında değiştirebilirsiniz.
 
 <div id="theme-colors"></div>
 
 ## Tema Renkleri
 
-Projenizdeki tema renklerini yönetmek için `lib/resources/themes/styles` dizinine bakın.
-Bu dizin, light_theme_colors.dart ve dark_theme_colors.dart için stil renklerini içerir.
+Projenizdeki tema renklerini yönetmek için `lib/resources/themes/light/` ve `lib/resources/themes/dark/` dizinlerine bakın. Her biri kendi teması için renk dosyasını içerir — `light_theme_colors.dart` ve `dark_theme_colors.dart`.
 
-Bu dosyada, aşağıdakine benzer bir şey bulmalısınız.
+Renk değerleri, framework tarafından tanımlanan gruplara (`general`, `appBar`, `bottomTabBar`) göre düzenlenir. Temanızın renk sınıfı `ColorStyles` sınıfını genişletir ve her grubun bir örneğini sağlar:
 
 ``` dart
-// e.g Light Theme colors
-class LightThemeColors implements ColorStyles {
-  // general
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// Genel kullanım için renkler.
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// Uygulama çubuğu için renkler.
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // app bar
+  /// Alt sekme çubuğu için renkler.
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // buttons
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // toast notification
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,136 @@ class LightThemeColors implements ColorStyles {
 
 ## Widget'larda renkleri kullanma
 
+Aktif temanın renklerini okumak için `nyColorStyle<T>(context)` yardımcısını kullanın. Çağrının tam olarak türlendirilmesi için projenizin `ColorStyles` türünü geçirin:
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// gets the light/dark background colour depending on the theme
-ThemeColor.get(context).background
+// bir widget build metodu içinde:
+final colors = nyColorStyle<ColorStyles>(context);
 
-// e.g. of using the "ThemeColor" class
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// or
+// aktif temanın arka plan rengi
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
+    color: colors.general.content,
   ),
 ),
+
+// Belirli bir temadan renkleri okuma (hangisi aktif olursa olsun):
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## Temel stiller
 
-Temel stiller, kodunuzun tek bir alanından çeşitli widget renklerini özelleştirmenize olanak tanır.
+Temel stiller, her temayı tek bir arayüz aracılığıyla tanımlamanıza olanak tanır. {{ config('app.name') }}, hem `light_theme_colors.dart` hem de `dark_theme_colors.dart` tarafından uygulanan sözleşme olan `lib/resources/themes/color_styles.dart` dosyasıyla birlikte gelir.
 
-{{ config('app.name') }}, projeniz için `lib/resources/themes/styles/color_styles.dart` konumunda önceden yapılandırılmış temel stillerle birlikte gelir.
-
-Bu stiller, `light_theme_colors.dart` ve `dart_theme_colors.dart` dosyalarındaki tema renkleriniz için bir arayüz sağlar.
+`ColorStyles`, frameworkten `ThemeColor` sınıfını genişletir; bu sınıf üç önceden tanımlanmış renk grubu sunar: `GeneralColors`, `AppBarColors` ve `BottomTabBarColors`. Temel tema oluşturucusu (`lib/resources/themes/base_theme.dart`), `ThemeData` oluşturulurken bu grupları okur; bu nedenle bunlara koyduğunuz her şey otomatik olarak eşleşen widget'lara bağlanır.
 
 <br>
 
-Dosya `lib/resources/themes/styles/color_styles.dart`
+Dosya `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // general
+abstract class ColorStyles extends ThemeColor {
+  /// Genel kullanım için renkler.
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// Uygulama çubuğu için renkler.
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // app bar
+  /// Alt sekme çubuğu için renkler.
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // toast notification
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-Buraya ek stiller ekleyebilir ve ardından renkleri temanızda uygulayabilirsiniz.
+Üç grup şu alanları sunar:
+
+- `GeneralColors` – `background`, `content`, `primaryAccent`, `surface`, `surfaceContent`
+- `AppBarColors` – `background`, `content`
+- `BottomTabBarColors` – `background`, `iconSelected`, `iconUnselected`, `labelSelected`, `labelUnselected`
+
+Bu varsayılanların ötesinde alanlar eklemek için — kendi düğmeleriniz, simgeleriniz, rozetleriniz vb. — bkz. [Renk stillerini genişletme](#extending-color-styles).
+
+<div id="extending-color-styles"></div>
+
+## Renk stillerini genişletme
+
+<!-- uncertain: new section "extending-color-styles" — no prior locale paragraphs in this file to draw register from -->
+Üç varsayılan grup (`general`, `appBar`, `bottomTabBar`) bir başlangıç noktasıdır, katı bir sınır değildir. `lib/resources/themes/color_styles.dart` dosyası sizindir — varsayılanların üzerine yeni renk grupları (veya tek alanlar) ekleyin, ardından her temanın renk sınıfında bunları uygulayın.
+
+**1. Özel bir renk grubu tanımlayın**
+
+İlgili renkleri küçük, değişmez bir sınıfta gruplandırın:
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. `ColorStyles`'a ekleyin**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // Özel gruplar
+  IconColors get icons;
+}
+```
+
+**3. Her temanın renk sınıfında uygulayın**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...mevcut geçersiz kılmalar...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+Aynı `icons` geçersiz kılmasını koyu mod değerleriyle `dark_theme_colors.dart` dosyasında tekrarlayın.
+
+**4. Widget'larınızda kullanın**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,23 +278,23 @@ Buraya ek stiller ekleyebilir ve ardından renkleri temanızda uygulayabilirsini
 Aşağıdakileri yaparak bunu destekleyebilirsiniz:
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
 
-    // set theme to use the "dark theme"
+    // "koyu tema"yı kullanmak için temayı ayarla
     NyTheme.set(context, id: "dark_theme");
     setState(() { });
 
   }, child: Text("Dark Theme")
 ),
 
-// or
+// veya
 
 TextButton(onPressed: () {
 
-    // set theme to use the "light theme"
+    // "açık tema"yı kullanmak için temayı ayarla
     NyTheme.set(context, id: "light_theme");
     setState(() { });
 
@@ -286,47 +307,47 @@ TextButton(onPressed: () {
 
 ## Yazı tipleri
 
-{{ config('app.name') }}'da uygulama genelinde birincil yazı tipinizi güncellemek kolaydır. `lib/config/design.dart` dosyasını açın ve aşağıdakini güncelleyin.
+{{ config('app.name') }}'da uygulama genelinde birincil yazı tipinizi güncellemek kolaydır. `lib/config/design.dart` dosyasını açın ve `DesignConfig.appFont`'u güncelleyin.
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-Depoda <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> kütüphanesini dahil ediyoruz, böylece tüm yazı tiplerini az çabayla kullanmaya başlayabilirsiniz.
-Yazı tipini başka bir şeyle güncellemek için aşağıdakileri yapabilirsiniz:
+Depoda <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> kütüphanesini dahil ediyoruz, böylece tüm yazı tiplerini az çabayla kullanmaya başlayabilirsiniz. Farklı bir Google Yazı Tipine geçmek için çağrıyı değiştirin:
+
 ``` dart
-// OLD
-// final TextStyle appThemeFont = GoogleFonts.lato();
-
-// NEW
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
-Daha fazlasını anlamak için resmi <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> kütüphanesindeki yazı tiplerine göz atın
+Daha fazlasını anlamak için resmi <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> kütüphanesindeki yazı tiplerine göz atın.
 
 Özel bir yazı tipi mi kullanmanız gerekiyor? Bu kılavuza bakın - https://flutter.dev/docs/cookbook/design/fonts
 
 Yazı tipinizi ekledikten sonra, değişkeni aşağıdaki örnekteki gibi değiştirin.
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo özel yazı tipi için örnek olarak kullanılmıştır
 ```
 
 <div id="design"></div>
 
 ## Tasarım
 
-**config/design.dart** dosyası, uygulamanız için tasarım öğelerini yönetmek için kullanılır.
+**lib/config/design.dart** dosyası, uygulamanız için tasarım öğelerini yönetmek için kullanılır. Her şey `DesignConfig` sınıfı aracılığıyla sunulur:
 
-`appFont` değişkeni uygulamanızın yazı tipini içerir.
+`DesignConfig.appFont` uygulamanızın yazı tipini içerir.
 
-`logo` değişkeni uygulamanızın Logosunu görüntülemek için kullanılır.
+`DesignConfig.logo` uygulamanızın Logosunu görüntülemek için kullanılır.
 
-Logonuzu nasıl görüntülemek istediğinizi özelleştirmek için **resources/widgets/logo_widget.dart** dosyasını değiştirebilirsiniz.
+Logonuzu nasıl görüntülemek istediğinizi özelleştirmek için **lib/resources/widgets/logo_widget.dart** dosyasını değiştirebilirsiniz.
 
-`loader` değişkeni bir yükleyici görüntülemek için kullanılır. {{ config('app.name') }}, bazı yardımcı metotlarda bu değişkeni varsayılan yükleyici widget'ı olarak kullanacaktır.
+`DesignConfig.loader` bir yükleyici görüntülemek için kullanılır. {{ config('app.name') }}, bazı yardımcı metotlarda bu değişkeni varsayılan yükleyici widget'ı olarak kullanacaktır.
 
-Yükleyicinizi nasıl görüntülemek istediğinizi özelleştirmek için **resources/widgets/loader_widget.dart** dosyasını değiştirebilirsiniz.
+Yükleyicinizi nasıl görüntülemek istediğinizi özelleştirmek için **lib/resources/widgets/loader_widget.dart** dosyasını değiştirebilirsiniz.
 
 <div id="text-extensions"></div>
 
@@ -504,7 +525,7 @@ Text("Hello World").fontWeightLight()
 
 ``` dart
 Text("Hello World").setColor(context, (color) => colors.content)
-// Color from your colorStyles
+// colorStyles'ınızdan renk
 ```
 
 <div id="text-extension-align-left"></div>

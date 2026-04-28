@@ -11,6 +11,7 @@
   - [สีของธีม](#theme-colors "สีของธีม")
   - [การใช้สี](#using-colors "การใช้สี")
   - [สไตล์พื้นฐาน](#base-styles "สไตล์พื้นฐาน")
+  - [การขยายสไตล์สี](#extending-color-styles "การขยายสไตล์สี")
   - [การเปลี่ยนธีม](#switching-theme "การเปลี่ยนธีม")
   - [ฟอนต์](#fonts "ฟอนต์")
   - [การออกแบบ](#design "การออกแบบ")
@@ -33,10 +34,14 @@
 
 ## ธีม Light & Dark
 
-- Light theme - `lib/resources/themes/light_theme.dart`
-- Dark theme - `lib/resources/themes/dark_theme.dart`
+แต่ละธีมอยู่ในไดเรกทอรีย่อยของตัวเองภายใต้ `lib/resources/themes/`:
 
-ภายในไฟล์เหล่านี้ คุณจะพบ ThemeData และ ThemeStyle ที่กำหนดค่าไว้ล่วงหน้า
+- Light theme – `lib/resources/themes/light/light_theme.dart`
+- Light colors – `lib/resources/themes/light/light_theme_colors.dart`
+- Dark theme – `lib/resources/themes/dark/dark_theme.dart`
+- Dark colors – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+ทั้งสองธีมใช้ builder ร่วมกันที่ `lib/resources/themes/base_theme.dart` และ interface `ColorStyles` ที่ `lib/resources/themes/color_styles.dart`
 
 
 
@@ -49,102 +54,81 @@
 ก่อนอื่น รันคำสั่งด้านล่างจาก terminal
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>หมายเหตุ:</b> แทนที่ **bright_theme** ด้วยชื่อธีมใหม่ของคุณ
 
-สิ่งนี้จะสร้างธีมใหม่ในไดเรกทอรี `/resources/themes/` และสร้างไฟล์สีของธีมใน `/resources/themes/styles/` ด้วย
+สิ่งนี้จะสร้างไดเรกทอรีธีมใหม่ที่ `lib/resources/themes/bright/` ซึ่งประกอบด้วยทั้ง `bright_theme.dart` และ `bright_theme_colors.dart` จากนั้นลงทะเบียนใน `lib/bootstrap/theme.dart`
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
   BaseThemeConfig<ColorStyles>( // new theme automatically added
-    id: 'Bright Theme',
-    description: "Bright Theme",
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-คุณสามารถแก้ไขสีสำหรับธีมใหม่ของคุณในไฟล์ **/resources/themes/styles/bright_theme_colors.dart**
+คุณสามารถแก้ไขสีสำหรับธีมใหม่ของคุณในไฟล์ **lib/resources/themes/bright/bright_theme_colors.dart**
 
 <div id="theme-colors"></div>
 
 ## สีของธีม
 
-ในการจัดการสีของธีมในโปรเจกต์ ให้ดูที่ไดเรกทอรี `lib/resources/themes/styles`
-ไดเรกทอรีนี้ประกอบด้วยสีของสไตล์สำหรับ light_theme_colors.dart และ dark_theme_colors.dart
+ในการจัดการสีของธีมในโปรเจกต์ ให้ดูที่ไดเรกทอรี `lib/resources/themes/light/` และ `lib/resources/themes/dark/` แต่ละไดเรกทอรีมีไฟล์สีสำหรับธีมของตัวเอง — `light_theme_colors.dart` และ `dark_theme_colors.dart`
 
-ในไฟล์นี้ คุณควรมีสิ่งที่คล้ายกับด้านล่าง
+ค่าสีถูกจัดระเบียบเป็นกลุ่ม (`general`, `appBar`, `bottomTabBar`) ที่กำหนดโดย framework คลาสสีของธีมของคุณขยาย `ColorStyles` และจัดหา instance ของแต่ละกลุ่ม:
 
 ``` dart
-// e.g Light Theme colors
-class LightThemeColors implements ColorStyles {
-  // general
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// สีสำหรับการใช้งานทั่วไป
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// สีสำหรับ app bar
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // app bar
+  /// สีสำหรับ bottom tab bar
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // buttons
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // toast notification
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,136 @@ class LightThemeColors implements ColorStyles {
 
 ## การใช้สีใน widget
 
+ใช้ helper `nyColorStyle<T>(context)` เพื่ออ่านสีของธีมที่ใช้งานอยู่ ส่งชนิด `ColorStyles` ของโปรเจกต์เพื่อให้การเรียกมี type อย่างสมบูรณ์:
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// ดึงสีพื้นหลัง light/dark ขึ้นอยู่กับธีม
-ThemeColor.get(context).background
+// ภายใน widget build:
+final colors = nyColorStyle<ColorStyles>(context);
 
-// ตัวอย่างการใช้คลาส "ThemeColor"
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// หรือ
+// สีพื้นหลังของธีมที่ใช้งานอยู่
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
+    color: colors.general.content,
   ),
 ),
+
+// อ่านสีจากธีมเฉพาะ (โดยไม่คำนึงถึงธีมที่ใช้งานอยู่):
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## สไตล์พื้นฐาน
 
-สไตล์พื้นฐานช่วยให้คุณปรับแต่งสีของ widget ต่างๆ ได้จากจุดเดียวในโค้ดของคุณ
+สไตล์พื้นฐานช่วยให้คุณอธิบายทุกธีมผ่าน interface เดียว {{ config('app.name') }} มาพร้อม `lib/resources/themes/color_styles.dart` ซึ่งเป็นสัญญาที่ทั้ง `light_theme_colors.dart` และ `dark_theme_colors.dart` ต้องปฏิบัติตาม
 
-{{ config('app.name') }} มาพร้อมสไตล์พื้นฐานที่กำหนดค่าไว้ล่วงหน้าสำหรับโปรเจกต์ของคุณที่ `lib/resources/themes/styles/color_styles.dart`
-
-สไตล์เหล่านี้เป็น interface สำหรับสีของธีมใน `light_theme_colors.dart` และ `dart_theme_colors.dart`
+`ColorStyles` ขยาย `ThemeColor` จาก framework ซึ่งเปิดเผยสามกลุ่มสีที่กำหนดไว้ล่วงหน้า: `GeneralColors`, `AppBarColors` และ `BottomTabBarColors` builder ธีมพื้นฐาน (`lib/resources/themes/base_theme.dart`) อ่านกลุ่มเหล่านี้เมื่อสร้าง `ThemeData` ดังนั้นสิ่งที่คุณใส่ลงไปจะถูกเชื่อมต่อเข้ากับ widget ที่ตรงกันโดยอัตโนมัติ
 
 <br>
 
-ไฟล์ `lib/resources/themes/styles/color_styles.dart`
+ไฟล์ `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // general
+abstract class ColorStyles extends ThemeColor {
+  /// สีสำหรับการใช้งานทั่วไป
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// สีสำหรับ app bar
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // app bar
+  /// สีสำหรับ bottom tab bar
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // toast notification
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-คุณสามารถเพิ่มสไตล์เพิ่มเติมที่นี่ แล้ว implement สีในธีมของคุณ
+สามกลุ่มเปิดเผยฟิลด์ต่อไปนี้:
+
+- `GeneralColors` – `background`, `content`, `primaryAccent`, `surface`, `surfaceContent`
+- `AppBarColors` – `background`, `content`
+- `BottomTabBarColors` – `background`, `iconSelected`, `iconUnselected`, `labelSelected`, `labelUnselected`
+
+หากต้องการเพิ่มฟิลด์นอกเหนือจากค่าเริ่มต้นเหล่านี้ — ปุ่ม, ไอคอน, ป้าย ฯลฯ ของคุณ — ดู [การขยายสไตล์สี](#extending-color-styles)
+
+<div id="extending-color-styles"></div>
+
+## การขยายสไตล์สี
+
+<!-- uncertain: new section "Extending color styles" — not present in existing th locale file -->
+สามกลุ่มเริ่มต้น (`general`, `appBar`, `bottomTabBar`) เป็นจุดเริ่มต้น ไม่ใช่ขีดจำกัดแบบตายตัว `lib/resources/themes/color_styles.dart` เป็นของคุณที่จะแก้ไข — เพิ่มกลุ่มสีใหม่ (หรือฟิลด์เดี่ยว) บนค่าเริ่มต้น จากนั้น implement ในคลาสสีของแต่ละธีม
+
+**1. กำหนดกลุ่มสีที่กำหนดเอง**
+
+จัดกลุ่มสีที่เกี่ยวข้องเป็นคลาสที่ไม่เปลี่ยนแปลงขนาดเล็ก:
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. เพิ่มใน `ColorStyles`**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // กลุ่มที่กำหนดเอง
+  IconColors get icons;
+}
+```
+
+**3. Implement ในคลาสสีของแต่ละธีม**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...override ที่มีอยู่...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+ทำซ้ำ override `icons` เดียวกันใน `dark_theme_colors.dart` ด้วยค่า dark-mode
+
+**4. ใช้งานใน widget ของคุณ**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,7 +278,7 @@ abstract class ColorStyles {
 คุณสามารถรองรับสิ่งนี้ได้โดยทำตามด้านล่าง:
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
@@ -286,20 +307,20 @@ TextButton(onPressed: () {
 
 ## ฟอนต์
 
-การอัปเดตฟอนต์หลักทั่วทั้งแอปทำได้ง่ายใน {{ config('app.name') }} เปิดไฟล์ `lib/config/design.dart` แล้วอัปเดตตามด้านล่าง
+การอัปเดตฟอนต์หลักทั่วทั้งแอปทำได้ง่ายใน {{ config('app.name') }} เปิดไฟล์ `lib/config/design.dart` แล้วอัปเดต `DesignConfig.appFont`
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-เรารวมไลบรารี <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> ไว้ใน repository ดังนั้นคุณจึงสามารถเริ่มใช้ฟอนต์ทั้งหมดได้อย่างง่ายดาย
-ในการอัปเดตฟอนต์เป็นแบบอื่น คุณสามารถทำดังนี้:
-``` dart
-// OLD
-// final TextStyle appThemeFont = GoogleFonts.lato();
+เรารวมไลบรารี <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> ไว้ใน repository ดังนั้นคุณจึงสามารถเริ่มใช้ฟอนต์ทั้งหมดได้อย่างง่ายดาย หากต้องการเปลี่ยนเป็น Google Font อื่น เพียงเปลี่ยน call:
 
-// NEW
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+``` dart
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
 ดูฟอนต์ได้ที่ไลบรารี <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> อย่างเป็นทางการเพื่อเรียนรู้เพิ่มเติม
@@ -309,24 +330,24 @@ final TextStyle appThemeFont = GoogleFonts.montserrat();
 เมื่อคุณเพิ่มฟอนต์แล้ว เปลี่ยนตัวแปรตามตัวอย่างด้านล่าง
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo ใช้เป็นตัวอย่างสำหรับฟอนต์กำหนดเอง
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo ใช้เป็นตัวอย่างสำหรับฟอนต์กำหนดเอง
 ```
 
 <div id="design"></div>
 
 ## การออกแบบ
 
-ไฟล์ **config/design.dart** ใช้สำหรับจัดการองค์ประกอบการออกแบบสำหรับแอปของคุณ
+ไฟล์ **lib/config/design.dart** ใช้สำหรับจัดการองค์ประกอบการออกแบบสำหรับแอปของคุณ ทุกอย่างถูกเปิดเผยผ่านคลาส `DesignConfig`:
 
-ตัวแปร `appFont` มีฟอนต์สำหรับแอปของคุณ
+`DesignConfig.appFont` มีฟอนต์สำหรับแอปของคุณ
 
-ตัวแปร `logo` ใช้สำหรับแสดงโลโก้ของแอป
+`DesignConfig.logo` ใช้สำหรับแสดงโลโก้ของแอป
 
-คุณสามารถแก้ไข **resources/widgets/logo_widget.dart** เพื่อปรับแต่งวิธีแสดงโลโก้ของคุณ
+คุณสามารถแก้ไข **lib/resources/widgets/logo_widget.dart** เพื่อปรับแต่งวิธีแสดงโลโก้ของคุณ
 
-ตัวแปร `loader` ใช้สำหรับแสดงตัวโหลด {{ config('app.name') }} จะใช้ตัวแปรนี้ในเมธอดช่วยเหลือบางตัวเป็น loader widget เริ่มต้น
+`DesignConfig.loader` ใช้สำหรับแสดงตัวโหลด {{ config('app.name') }} จะใช้ตัวแปรนี้ในเมธอดช่วยเหลือบางตัวเป็น loader widget เริ่มต้น
 
-คุณสามารถแก้ไข **resources/widgets/loader_widget.dart** เพื่อปรับแต่งวิธีแสดงตัวโหลดของคุณ
+คุณสามารถแก้ไข **lib/resources/widgets/loader_widget.dart** เพื่อปรับแต่งวิธีแสดงตัวโหลดของคุณ
 
 <div id="text-extensions"></div>
 

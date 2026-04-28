@@ -11,6 +11,7 @@
   - [主题颜色](#theme-colors "主题颜色")
   - [使用颜色](#using-colors "使用颜色")
   - [基础样式](#base-styles "基础样式")
+  - [扩展颜色样式](#extending-color-styles "扩展颜色样式")
   - [切换主题](#switching-theme "切换主题")
   - [字体](#fonts "字体")
   - [设计](#design "设计")
@@ -33,10 +34,14 @@
 
 ## 明暗主题
 
-- 明亮主题 - `lib/resources/themes/light_theme.dart`
-- 暗黑主题 - `lib/resources/themes/dark_theme.dart`
+每个主题位于 `lib/resources/themes/` 下各自的子目录中：
 
-在这些文件中，您将找到预定义的 ThemeData 和 ThemeStyle。
+- 明亮主题 – `lib/resources/themes/light/light_theme.dart`
+- 明亮颜色 – `lib/resources/themes/light/light_theme_colors.dart`
+- 暗黑主题 – `lib/resources/themes/dark/dark_theme.dart`
+- 暗黑颜色 – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+两个主题共享 `lib/resources/themes/base_theme.dart` 的公共构建器以及 `lib/resources/themes/color_styles.dart` 的 `ColorStyles` 接口。
 
 
 
@@ -49,102 +54,81 @@
 首先，在终端运行以下命令
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>注意：</b>将 **bright_theme** 替换为您新主题的名称。
 
-这将在 `/resources/themes/` 目录中创建一个新主题，同时在 `/resources/themes/styles/` 中创建一个主题颜色文件。
+这将在 `lib/resources/themes/bright/` 创建一个新的主题目录，包含 `bright_theme.dart` 和 `bright_theme_colors.dart`，并在 `lib/bootstrap/theme.dart` 中注册。
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // new theme automatically added
-    id: 'Bright Theme',
-    description: "Bright Theme",
+  BaseThemeConfig<ColorStyles>( // 新主题自动添加
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-您可以在 **/resources/themes/styles/bright_theme_colors.dart** 文件中修改新主题的颜色。
+您可以在 **lib/resources/themes/bright/bright_theme_colors.dart** 文件中修改新主题的颜色。
 
 <div id="theme-colors"></div>
 
 ## 主题颜色
 
-要管理项目中的主题颜色，请查看 `lib/resources/themes/styles` 目录。
-该目录包含 light_theme_colors.dart 和 dark_theme_colors.dart 的样式颜色。
+要管理项目中的主题颜色，请查看 `lib/resources/themes/light/` 和 `lib/resources/themes/dark/` 目录。每个目录包含其主题的颜色文件——`light_theme_colors.dart` 和 `dark_theme_colors.dart`。
 
-在该文件中，您应该看到类似以下的内容。
+颜色值按框架定义的组（`general`、`appBar`、`bottomTabBar`）进行组织。主题的颜色类扩展 `ColorStyles` 并提供每个组的实例：
 
 ``` dart
-// e.g Light Theme colors
-class LightThemeColors implements ColorStyles {
-  // general
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// 通用颜色
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// 应用栏颜色
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // app bar
+  /// 底部标签栏颜色
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // buttons
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // toast notification
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,135 @@ class LightThemeColors implements ColorStyles {
 
 ## 在组件中使用颜色
 
+使用 `nyColorStyle<T>(context)` 帮助函数读取活动主题的颜色。传入项目的 `ColorStyles` 类型以实现完整的类型推导：
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// gets the light/dark background colour depending on the theme
-ThemeColor.get(context).background
+// 在 widget 构建内部:
+final colors = nyColorStyle<ColorStyles>(context);
 
-// e.g. of using the "ThemeColor" class
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// or
+// 活动主题的背景颜色
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
+    color: colors.general.content,
   ),
 ),
+
+// 读取特定主题的颜色（无论哪个主题处于活动状态）:
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## 基础样式
 
-基础样式允许您从代码中的一个位置自定义各种组件颜色。
+基础样式允许您通过单一接口描述所有主题。{{ config('app.name') }} 附带 `lib/resources/themes/color_styles.dart`，这是 `light_theme_colors.dart` 和 `dark_theme_colors.dart` 都实现的契约。
 
-{{ config('app.name') }} 附带了预配置的基础样式，位于 `lib/resources/themes/styles/color_styles.dart`。
-
-这些样式为 `light_theme_colors.dart` 和 `dart_theme_colors.dart` 中的主题颜色提供接口。
+`ColorStyles` 扩展自框架的 `ThemeColor`，公开了三个预定义的颜色组：`GeneralColors`、`AppBarColors` 和 `BottomTabBarColors`。基础主题构建器（`lib/resources/themes/base_theme.dart`）在构建 `ThemeData` 时读取这些组，因此您放入其中的任何内容都会自动连接到对应的 widget。
 
 <br>
 
-文件 `lib/resources/themes/styles/color_styles.dart`
+文件 `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // general
+abstract class ColorStyles extends ThemeColor {
+  /// 通用颜色
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// 应用栏颜色
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // app bar
+  /// 底部标签栏颜色
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // toast notification
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-您可以在此处添加额外的样式，然后在主题中实现颜色。
+三个组公开以下字段：
+
+- `GeneralColors` – `background`、`content`、`primaryAccent`、`surface`、`surfaceContent`
+- `AppBarColors` – `background`、`content`
+- `BottomTabBarColors` – `background`、`iconSelected`、`iconUnselected`、`labelSelected`、`labelUnselected`
+
+要添加这些默认值以外的字段——您自己的按钮、图标、徽章等——请参阅[扩展颜色样式](#extending-color-styles)。
+
+<div id="extending-color-styles"></div>
+
+## 扩展颜色样式
+
+三个默认组（`general`、`appBar`、`bottomTabBar`）是起点，而非硬性限制。`lib/resources/themes/color_styles.dart` 由您自由修改——在默认值之上添加新的颜色组（或单个字段），然后在每个主题的颜色类中实现它们。
+
+**1. 定义自定义颜色组**
+
+将相关颜色组织成一个小型不可变类：
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. 将其添加到 `ColorStyles`**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // 自定义组
+  IconColors get icons;
+}
+```
+
+**3. 在每个主题的颜色类中实现**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...现有的覆盖...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+在 `dark_theme_colors.dart` 中使用暗黑模式值重复相同的 `icons` 覆盖。
+
+**4. 在 widget 中使用**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,23 +277,23 @@ abstract class ColorStyles {
 您可以通过以下方式实现：
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
 
-    // set theme to use the "dark theme"
+    // 将主题设置为使用"暗黑主题"
     NyTheme.set(context, id: "dark_theme");
     setState(() { });
 
   }, child: Text("Dark Theme")
 ),
 
-// or
+// 或
 
 TextButton(onPressed: () {
 
-    // set theme to use the "light theme"
+    // 将主题设置为使用"明亮主题"
     NyTheme.set(context, id: "light_theme");
     setState(() { });
 
@@ -286,47 +306,47 @@ TextButton(onPressed: () {
 
 ## 字体
 
-在 {{ config('app.name') }} 中，更新整个应用的主要字体很简单。打开 `lib/config/design.dart` 文件并更新以下内容。
+在 {{ config('app.name') }} 中，更新整个应用的主要字体很简单。打开 `lib/config/design.dart` 并更新 `DesignConfig.appFont`。
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-我们在仓库中包含了 <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> 库，因此您可以轻松开始使用所有字体。
-要更新为其他字体，您可以执行以下操作：
+我们在仓库中包含了 <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> 库，因此您可以轻松开始使用所有字体。要切换到不同的 Google 字体，只需更改调用：
+
 ``` dart
-// OLD
-// final TextStyle appThemeFont = GoogleFonts.lato();
-
-// NEW
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
-查看官方 <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> 库上的字体以了解更多信息
+查看官方 <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> 库上的字体以了解更多信息。
 
 需要使用自定义字体？请查看此指南 - https://flutter.dev/docs/cookbook/design/fonts
 
 添加字体后，像下面的示例一样更改变量。
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo 作为自定义字体的示例使用
 ```
 
 <div id="design"></div>
 
 ## 设计
 
-**config/design.dart** 文件用于管理应用的设计元素。
+**lib/config/design.dart** 文件用于管理应用的设计元素。所有内容通过 `DesignConfig` 类公开：
 
-`appFont` 变量包含应用的字体。
+`DesignConfig.appFont` 包含应用的字体。
 
-`logo` 变量用于显示应用的 Logo。
+`DesignConfig.logo` 用于显示应用的 Logo。
 
-您可以修改 **resources/widgets/logo_widget.dart** 来自定义 Logo 的显示方式。
+您可以修改 **lib/resources/widgets/logo_widget.dart** 来自定义 Logo 的显示方式。
 
-`loader` 变量用于显示加载器。{{ config('app.name') }} 将在某些辅助方法中使用此变量作为默认加载器组件。
+`DesignConfig.loader` 用于显示加载器。{{ config('app.name') }} 将在某些辅助方法中使用此变量作为默认加载器组件。
 
-您可以修改 **resources/widgets/loader_widget.dart** 来自定义加载器的显示方式。
+您可以修改 **lib/resources/widgets/loader_widget.dart** 来自定义加载器的显示方式。
 
 <div id="text-extensions"></div>
 
@@ -504,7 +524,7 @@ Text("Hello World").fontWeightLight()
 
 ``` dart
 Text("Hello World").setColor(context, (color) => colors.content)
-// Color from your colorStyles
+// 来自您的 colorStyles 的颜色
 ```
 
 <div id="text-extension-align-left"></div>

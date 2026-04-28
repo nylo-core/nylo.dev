@@ -11,6 +11,7 @@
   - [Warna tema](#theme-colors "Warna tema")
   - [Menggunakan warna](#using-colors "Menggunakan warna")
   - [Style dasar](#base-styles "Style dasar")
+  - [Memperluas style warna](#extending-color-styles "Memperluas style warna")
   - [Mengganti tema](#switching-theme "Mengganti tema")
   - [Font](#fonts "Font")
   - [Desain](#design "Desain")
@@ -33,10 +34,14 @@ Tema juga akan diperbarui jika perangkat memasuki mode <b>'terang/gelap'</b>.
 
 ## Tema terang & gelap
 
-- Tema terang - `lib/resources/themes/light_theme.dart`
-- Tema gelap - `lib/resources/themes/dark_theme.dart`
+Setiap tema berada di subdirektori miliknya sendiri di bawah `lib/resources/themes/`:
 
-Di dalam file-file ini, Anda akan menemukan ThemeData dan ThemeStyle yang sudah didefinisikan.
+- Tema terang – `lib/resources/themes/light/light_theme.dart`
+- Warna terang – `lib/resources/themes/light/light_theme_colors.dart`
+- Tema gelap – `lib/resources/themes/dark/dark_theme.dart`
+- Warna gelap – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+Kedua tema berbagi builder bersama di `lib/resources/themes/base_theme.dart` dan interface `ColorStyles` di `lib/resources/themes/color_styles.dart`.
 
 
 
@@ -49,102 +54,81 @@ Jika Anda ingin memiliki beberapa tema untuk aplikasi Anda, kami memiliki cara m
 Pertama, jalankan perintah di bawah ini dari terminal
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>Catatan:</b> ganti **bright_theme** dengan nama tema baru Anda.
 
-Ini membuat tema baru di direktori `/resources/themes/` Anda dan juga file warna tema di `/resources/themes/styles/`.
+Ini membuat direktori tema baru di `lib/resources/themes/bright/` yang berisi `bright_theme.dart` dan `bright_theme_colors.dart`, kemudian mendaftarkannya di `lib/bootstrap/theme.dart`.
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
   BaseThemeConfig<ColorStyles>( // new theme automatically added
-    id: 'Bright Theme',
-    description: "Bright Theme",
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-Anda dapat memodifikasi warna untuk tema baru Anda di file **/resources/themes/styles/bright_theme_colors.dart**.
+Anda dapat memodifikasi warna untuk tema baru Anda di file **lib/resources/themes/bright/bright_theme_colors.dart**.
 
 <div id="theme-colors"></div>
 
 ## Warna Tema
 
-Untuk mengelola warna tema di proyek Anda, lihat direktori `lib/resources/themes/styles`.
-Direktori ini berisi style warna untuk light_theme_colors.dart dan dark_theme_colors.dart.
+Untuk mengelola warna tema di proyek Anda, lihat direktori `lib/resources/themes/light/` dan `lib/resources/themes/dark/`. Masing-masing berisi file warna untuk temanya — `light_theme_colors.dart` dan `dark_theme_colors.dart`.
 
-Di file ini, Anda seharusnya memiliki sesuatu yang mirip dengan di bawah ini.
+Nilai warna diorganisir ke dalam grup (`general`, `appBar`, `bottomTabBar`) yang didefinisikan oleh framework. Kelas warna tema Anda memperluas `ColorStyles` dan menyediakan instance dari setiap grup:
 
 ``` dart
-// e.g Light Theme colors
-class LightThemeColors implements ColorStyles {
-  // general
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// Warna untuk penggunaan umum.
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// Warna untuk app bar.
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // app bar
+  /// Warna untuk bottom tab bar.
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // buttons
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // toast notification
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,136 @@ class LightThemeColors implements ColorStyles {
 
 ## Menggunakan warna di widget
 
+Gunakan helper `nyColorStyle<T>(context)` untuk membaca warna tema yang aktif. Berikan tipe `ColorStyles` proyek Anda agar pemanggilan sepenuhnya bertipe:
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// gets the light/dark background colour depending on the theme
-ThemeColor.get(context).background
+// di dalam widget build:
+final colors = nyColorStyle<ColorStyles>(context);
 
-// e.g. of using the "ThemeColor" class
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// or
+// warna latar belakang tema yang aktif
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
+    color: colors.general.content,
   ),
 ),
+
+// Baca warna dari tema tertentu (tanpa memperhatikan tema yang aktif):
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## Style dasar
 
-Style dasar memungkinkan Anda menyesuaikan berbagai warna widget dari satu area di kode Anda.
+Style dasar memungkinkan Anda mendeskripsikan setiap tema melalui satu interface. {{ config('app.name') }} dilengkapi dengan `lib/resources/themes/color_styles.dart`, yang merupakan kontrak yang diimplementasikan oleh `light_theme_colors.dart` dan `dark_theme_colors.dart`.
 
-{{ config('app.name') }} disertai dengan style dasar yang sudah dikonfigurasi untuk proyek Anda yang terletak di `lib/resources/themes/styles/color_styles.dart`.
-
-Style ini menyediakan antarmuka untuk warna tema Anda di `light_theme_colors.dart` dan `dart_theme_colors.dart`.
+`ColorStyles` memperluas `ThemeColor` dari framework, yang mengekspos tiga grup warna yang sudah didefinisikan: `GeneralColors`, `AppBarColors`, dan `BottomTabBarColors`. Builder tema dasar (`lib/resources/themes/base_theme.dart`) membaca grup-grup ini saat membangun `ThemeData`, sehingga apa pun yang Anda masukkan ke dalamnya secara otomatis terhubung ke widget yang sesuai.
 
 <br>
 
-File `lib/resources/themes/styles/color_styles.dart`
+File `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // general
+abstract class ColorStyles extends ThemeColor {
+  /// Warna untuk penggunaan umum.
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// Warna untuk app bar.
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // app bar
+  /// Warna untuk bottom tab bar.
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // toast notification
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-Anda dapat menambahkan style tambahan di sini dan kemudian mengimplementasikan warna di tema Anda.
+Tiga grup mengekspos field berikut:
+
+- `GeneralColors` – `background`, `content`, `primaryAccent`, `surface`, `surfaceContent`
+- `AppBarColors` – `background`, `content`
+- `BottomTabBarColors` – `background`, `iconSelected`, `iconUnselected`, `labelSelected`, `labelUnselected`
+
+Untuk menambahkan field di luar default ini — tombol, ikon, lencana, dll. milik Anda — lihat [Memperluas style warna](#extending-color-styles).
+
+<div id="extending-color-styles"></div>
+
+## Memperluas style warna
+
+<!-- uncertain: new section "Extending color styles" — not present in existing id locale file -->
+Tiga grup default (`general`, `appBar`, `bottomTabBar`) adalah titik awal, bukan batas keras. `lib/resources/themes/color_styles.dart` adalah milik Anda untuk dimodifikasi — tambahkan grup warna baru (atau field tunggal) di atas default, lalu implementasikan di kelas warna setiap tema.
+
+**1. Definisikan grup warna kustom**
+
+Kelompokkan warna terkait ke dalam kelas kecil yang tidak dapat diubah:
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. Tambahkan ke `ColorStyles`**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // Grup kustom
+  IconColors get icons;
+}
+```
+
+**3. Implementasikan di kelas warna setiap tema**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...override yang sudah ada...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+Ulangi override `icons` yang sama di `dark_theme_colors.dart` dengan nilai dark-mode.
+
+**4. Gunakan di widget Anda**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,7 +278,7 @@ Misalnya, Jika Anda perlu mengganti tema jika pengguna mengetuk tombol untuk men
 Anda dapat mendukung itu dengan melakukan hal berikut:
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
@@ -286,47 +307,47 @@ TextButton(onPressed: () {
 
 ## Font
 
-Memperbarui font utama di seluruh aplikasi mudah dilakukan di {{ config('app.name') }}. Buka file `lib/config/design.dart` dan perbarui yang di bawah ini.
+Memperbarui font utama di seluruh aplikasi mudah dilakukan di {{ config('app.name') }}. Buka file `lib/config/design.dart` dan perbarui `DesignConfig.appFont`.
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-Kami menyertakan library <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> di repositori, sehingga Anda dapat mulai menggunakan semua font dengan sedikit usaha.
-Untuk memperbarui font ke yang lain, Anda dapat melakukan hal berikut:
+Kami menyertakan library <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> di repositori, sehingga Anda dapat mulai menggunakan semua font dengan sedikit usaha. Untuk beralih ke Google Font yang berbeda, cukup ubah pemanggilan:
+
 ``` dart
-// OLD
-// final TextStyle appThemeFont = GoogleFonts.lato();
-
-// NEW
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
-Lihat font di library <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> resmi untuk memahami lebih lanjut
+Lihat font di library <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> resmi untuk memahami lebih lanjut.
 
 Perlu menggunakan font kustom? Lihat panduan ini - https://flutter.dev/docs/cookbook/design/fonts
 
 Setelah Anda menambahkan font Anda, ubah variabel seperti contoh di bawah ini.
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
 ```
 
 <div id="design"></div>
 
 ## Desain
 
-File **config/design.dart** digunakan untuk mengelola elemen desain untuk aplikasi Anda.
+File **lib/config/design.dart** digunakan untuk mengelola elemen desain untuk aplikasi Anda. Semuanya diekspos melalui kelas `DesignConfig`:
 
-Variabel `appFont` berisi font untuk aplikasi Anda.
+`DesignConfig.appFont` berisi font untuk aplikasi Anda.
 
-Variabel `logo` digunakan untuk menampilkan Logo aplikasi Anda.
+`DesignConfig.logo` digunakan untuk menampilkan Logo aplikasi Anda.
 
-Anda dapat memodifikasi **resources/widgets/logo_widget.dart** untuk menyesuaikan cara Anda ingin menampilkan Logo Anda.
+Anda dapat memodifikasi **lib/resources/widgets/logo_widget.dart** untuk menyesuaikan cara Anda ingin menampilkan Logo Anda.
 
-Variabel `loader` digunakan untuk menampilkan loader. {{ config('app.name') }} akan menggunakan variabel ini di beberapa metode helper sebagai widget loader default.
+`DesignConfig.loader` digunakan untuk menampilkan loader. {{ config('app.name') }} akan menggunakan variabel ini di beberapa metode helper sebagai widget loader default.
 
-Anda dapat memodifikasi **resources/widgets/loader_widget.dart** untuk menyesuaikan cara Anda ingin menampilkan Loader Anda.
+Anda dapat memodifikasi **lib/resources/widgets/loader_widget.dart** untuk menyesuaikan cara Anda ingin menampilkan Loader Anda.
 
 <div id="text-extensions"></div>
 

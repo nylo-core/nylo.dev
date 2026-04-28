@@ -11,6 +11,7 @@
   - [テーマカラー](#theme-colors "テーマカラー")
   - [カラーの使用](#using-colors "カラーの使用")
   - [ベーススタイル](#base-styles "ベーススタイル")
+  - [カラースタイルの拡張](#extending-color-styles "カラースタイルの拡張")
   - [テーマの切り替え](#switching-theme "テーマの切り替え")
   - [フォント](#fonts "フォント")
   - [デザイン](#design "デザイン")
@@ -33,10 +34,14 @@
 
 ## ライト＆ダークテーマ
 
-- ライトテーマ - `lib/resources/themes/light_theme.dart`
-- ダークテーマ - `lib/resources/themes/dark_theme.dart`
+各テーマは `lib/resources/themes/` 以下の独自のサブディレクトリに配置されます：
 
-これらのファイル内に、ThemeData と ThemeStyle が事前定義されています。
+- ライトテーマ – `lib/resources/themes/light/light_theme.dart`
+- ライトカラー – `lib/resources/themes/light/light_theme_colors.dart`
+- ダークテーマ – `lib/resources/themes/dark/dark_theme.dart`
+- ダークカラー – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+両テーマは `lib/resources/themes/base_theme.dart` の共通ビルダーと、`lib/resources/themes/color_styles.dart` の `ColorStyles` インターフェースを共有します。
 
 
 
@@ -49,102 +54,81 @@
 まず、ターミナルで以下のコマンドを実行します
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>注意:</b> **bright_theme** を新しいテーマの名前に置き換えてください。
 
-これにより `/resources/themes/` ディレクトリに新しいテーマが作成され、`/resources/themes/styles/` にテーマカラーファイルも作成されます。
+これにより `lib/resources/themes/bright/` に `bright_theme.dart` と `bright_theme_colors.dart` の両方を含む新しいテーマディレクトリが作成され、`lib/bootstrap/theme.dart` に登録されます。
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
   BaseThemeConfig<ColorStyles>( // 新しいテーマが自動的に追加
-    id: 'Bright Theme',
-    description: "Bright Theme",
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-新しいテーマのカラーは **/resources/themes/styles/bright_theme_colors.dart** ファイルで変更できます。
+新しいテーマのカラーは **lib/resources/themes/bright/bright_theme_colors.dart** ファイルで変更できます。
 
 <div id="theme-colors"></div>
 
 ## テーマカラー
 
-プロジェクトのテーマカラーを管理するには、`lib/resources/themes/styles` ディレクトリを確認してください。
-このディレクトリには light_theme_colors.dart と dark_theme_colors.dart のスタイルカラーが含まれています。
+プロジェクトのテーマカラーを管理するには、`lib/resources/themes/light/` と `lib/resources/themes/dark/` ディレクトリを確認してください。それぞれにテーマのカラーファイル（`light_theme_colors.dart` と `dark_theme_colors.dart`）が含まれています。
 
-このファイルでは、以下のような内容があります。
+カラー値は、フレームワークによって定義されたグループ（`general`、`appBar`、`bottomTabBar`）に整理されています。テーマのカラークラスは `ColorStyles` を継承し、各グループのインスタンスを提供します：
 
 ``` dart
-// 例: ライトテーマのカラー
-class LightThemeColors implements ColorStyles {
-  // 全般
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// 汎用カラー
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// アプリバーのカラー
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // アプリバー
+  /// ボトムタブバーのカラー
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // ボタン
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // ボトムタブバー
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // ボトムタブバー - アイコン
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // ボトムタブバー - ラベル
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // トースト通知
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,135 @@ class LightThemeColors implements ColorStyles {
 
 ## ウィジェットでのカラーの使用
 
+`nyColorStyle<T>(context)` ヘルパーを使用して、アクティブなテーマのカラーを読み取ります。完全な型付けを行うために、プロジェクトの `ColorStyles` 型を渡します：
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// テーマに応じてライト/ダークの背景色を取得
-ThemeColor.get(context).background
+// ウィジェットのビルド内:
+final colors = nyColorStyle<ColorStyles>(context);
 
-// "ThemeColor" クラスの使用例
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// または
+// アクティブなテーマの背景色
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // ライトテーマのカラー - プライマリコンテンツ
+    color: colors.general.content,
   ),
 ),
+
+// 特定のテーマのカラーを読み取る（アクティブなテーマに関わらず）:
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## ベーススタイル
 
-ベーススタイルにより、コードの一箇所から様々なウィジェットのカラーをカスタマイズできます。
+ベーススタイルにより、すべてのテーマを単一のインターフェースで記述できます。{{ config('app.name') }} には `lib/resources/themes/color_styles.dart` が含まれており、これは `light_theme_colors.dart` と `dark_theme_colors.dart` の両方が実装するコントラクトです。
 
-{{ config('app.name') }} にはプロジェクト用の事前設定されたベーススタイルが `lib/resources/themes/styles/color_styles.dart` にあります。
-
-これらのスタイルは、`light_theme_colors.dart` と `dart_theme_colors.dart` のテーマカラーのインターフェースを提供します。
+`ColorStyles` はフレームワークの `ThemeColor` を継承し、3 つの事前定義されたカラーグループ（`GeneralColors`、`AppBarColors`、`BottomTabBarColors`）を公開します。ベーステーマビルダー（`lib/resources/themes/base_theme.dart`）は `ThemeData` を構築する際にこれらのグループを読み取るため、これらに追加したカラーは対応するウィジェットに自動的に適用されます。
 
 <br>
 
-ファイル `lib/resources/themes/styles/color_styles.dart`
+ファイル `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // 全般
+abstract class ColorStyles extends ThemeColor {
+  /// 汎用カラー
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// アプリバーのカラー
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // アプリバー
+  /// ボトムタブバーのカラー
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // ボトムタブバー
-  @override
-  Color get bottomTabBarBackground;
-
-  // ボトムタブバー - アイコン
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // ボトムタブバー - ラベル
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // トースト通知
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-ここにスタイルを追加し、テーマにカラーを実装できます。
+3 つのグループは以下のフィールドを公開します：
+
+- `GeneralColors` – `background`、`content`、`primaryAccent`、`surface`、`surfaceContent`
+- `AppBarColors` – `background`、`content`
+- `BottomTabBarColors` – `background`、`iconSelected`、`iconUnselected`、`labelSelected`、`labelUnselected`
+
+これらのデフォルト以外のフィールド（ボタン、アイコン、バッジなど）を追加するには、[カラースタイルの拡張](#extending-color-styles)をご覧ください。
+
+<div id="extending-color-styles"></div>
+
+## カラースタイルの拡張
+
+3 つのデフォルトグループ（`general`、`appBar`、`bottomTabBar`）は出発点であり、制限ではありません。`lib/resources/themes/color_styles.dart` は自由に変更できます。デフォルトの上に新しいカラーグループ（または単一のフィールド）を追加し、各テーマのカラークラスで実装してください。
+
+**1. カスタムカラーグループの定義**
+
+関連するカラーを小さなイミュータブルクラスにまとめます：
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. `ColorStyles` に追加**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // カスタムグループ
+  IconColors get icons;
+}
+```
+
+**3. 各テーマのカラークラスで実装**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...既存のオーバーライド...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+`dark_theme_colors.dart` でも同じ `icons` オーバーライドをダークモードの値で実装してください。
+
+**4. ウィジェットで使用**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,7 +277,7 @@ abstract class ColorStyles {
 以下のようにして対応できます:
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
@@ -286,20 +306,20 @@ TextButton(onPressed: () {
 
 ## フォント
 
-{{ config('app.name') }} では、アプリ全体のプライマリフォントの更新が簡単です。`lib/config/design.dart` ファイルを開いて以下を更新してください。
+{{ config('app.name') }} では、アプリ全体のプライマリフォントの更新が簡単です。`lib/config/design.dart` を開いて `DesignConfig.appFont` を更新してください。
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-リポジトリには <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> ライブラリが含まれているので、すべてのフォントを簡単に使い始めることができます。
-フォントを別のものに更新するには、以下のようにします:
-``` dart
-// 旧
-// final TextStyle appThemeFont = GoogleFonts.lato();
+リポジトリには <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> ライブラリが含まれているので、すべてのフォントを簡単に使い始めることができます。別の Google フォントに切り替えるには、呼び出しを変更するだけです：
 
-// 新
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+``` dart
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
 詳しくは公式 <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> ライブラリをご覧ください。
@@ -309,24 +329,24 @@ final TextStyle appThemeFont = GoogleFonts.montserrat();
 フォントを追加したら、以下の例のように変数を変更してください。
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo はカスタムフォントの例として使用
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo はカスタムフォントの例として使用
 ```
 
 <div id="design"></div>
 
 ## デザイン
 
-**config/design.dart** ファイルは、アプリのデザイン要素を管理するために使用されます。
+**lib/config/design.dart** ファイルは、アプリのデザイン要素を管理するために使用されます。すべては `DesignConfig` クラスを通じて公開されます：
 
-`appFont` 変数にはアプリのフォントが含まれています。
+`DesignConfig.appFont` にはアプリのフォントが含まれています。
 
-`logo` 変数はアプリのロゴを表示するために使用されます。
+`DesignConfig.logo` はアプリのロゴを表示するために使用されます。
 
-**resources/widgets/logo_widget.dart** を変更してロゴの表示方法をカスタマイズできます。
+**lib/resources/widgets/logo_widget.dart** を変更してロゴの表示方法をカスタマイズできます。
 
-`loader` 変数はローダーを表示するために使用されます。{{ config('app.name') }} は一部のヘルパーメソッドでこの変数をデフォルトのローダーウィジェットとして使用します。
+`DesignConfig.loader` はローダーを表示するために使用されます。{{ config('app.name') }} は一部のヘルパーメソッドでこの変数をデフォルトのローダーウィジェットとして使用します。
 
-**resources/widgets/loader_widget.dart** を変更してローダーの表示方法をカスタマイズできます。
+**lib/resources/widgets/loader_widget.dart** を変更してローダーの表示方法をカスタマイズできます。
 
 <div id="text-extensions"></div>
 

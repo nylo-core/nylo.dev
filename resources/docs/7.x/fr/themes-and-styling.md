@@ -11,6 +11,7 @@
   - [Couleurs du theme](#theme-colors "Couleurs du theme")
   - [Utiliser les couleurs](#using-colors "Utiliser les couleurs")
   - [Styles de base](#base-styles "Styles de base")
+  - [Etendre les styles de couleur](#extending-color-styles "Etendre les styles de couleur")
   - [Changer de theme](#switching-theme "Changer de theme")
   - [Polices](#fonts "Polices")
   - [Design](#design "Design")
@@ -25,7 +26,7 @@ Vous pouvez gerer les styles d'interface de votre application en utilisant les t
 
 Si vous etes nouveau avec les themes, les exemples sur le site web de Flutter vous aideront a commencer <a href="https://docs.flutter.dev/cookbook/design/themes#creating-an-app-theme" target="_BLANK">ici</a>.
 
-Par defaut, {{ config('app.name') }} inclut des themes preconfigures pour le `mode clair` et le `mode sombre`.
+Par defaut, {{ config('app.name') }} inclut des themes preconfigures pour le `Light mode` et le `Dark mode`.
 
 Le theme se mettra egalement a jour si l'appareil passe en mode <b>'clair/sombre'</b>.
 
@@ -33,10 +34,14 @@ Le theme se mettra egalement a jour si l'appareil passe en mode <b>'clair/sombre
 
 ## Themes clair et sombre
 
-- Theme clair - `lib/resources/themes/light_theme.dart`
-- Theme sombre - `lib/resources/themes/dark_theme.dart`
+Chaque theme se trouve dans son propre sous-repertoire sous `lib/resources/themes/` :
 
-Dans ces fichiers, vous trouverez le ThemeData et le ThemeStyle predefinis.
+- Theme clair – `lib/resources/themes/light/light_theme.dart`
+- Couleurs claires – `lib/resources/themes/light/light_theme_colors.dart`
+- Theme sombre – `lib/resources/themes/dark/dark_theme.dart`
+- Couleurs sombres – `lib/resources/themes/dark/dark_theme_colors.dart`
+
+Les deux themes partagent un builder commun dans `lib/resources/themes/base_theme.dart` et l'interface `ColorStyles` dans `lib/resources/themes/color_styles.dart`.
 
 
 
@@ -49,102 +54,81 @@ Si vous souhaitez avoir plusieurs themes pour votre application, nous avons un m
 Tout d'abord, executez la commande ci-dessous depuis le terminal
 
 ``` bash
-metro make:theme bright_theme
+dart run nylo_framework:main make:theme bright_theme
 ```
 
 <b>Note :</b> remplacez **bright_theme** par le nom de votre nouveau theme.
 
-Cela cree un nouveau theme dans votre repertoire `/resources/themes/` ainsi qu'un fichier de couleurs de theme dans `/resources/themes/styles/`.
+Cela cree un nouveau repertoire de theme dans `lib/resources/themes/bright/` contenant `bright_theme.dart` et `bright_theme_colors.dart`, puis l'enregistre dans `lib/bootstrap/theme.dart`.
 
 ``` dart
-// App Themes
+// lib/bootstrap/theme.dart
 final List<BaseThemeConfig<ColorStyles>> appThemes = [
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('LIGHT_THEME_ID'),
-    description: "Light theme",
+    id: 'light_theme',
     theme: lightTheme,
     colors: LightThemeColors(),
+    type: NyThemeType.light,
   ),
   BaseThemeConfig<ColorStyles>(
-    id: getEnv('DARK_THEME_ID'),
-    description: "Dark theme",
+    id: 'dark_theme',
     theme: darkTheme,
     colors: DarkThemeColors(),
+    type: NyThemeType.dark,
   ),
 
   BaseThemeConfig<ColorStyles>( // new theme automatically added
-    id: 'Bright Theme',
-    description: "Bright Theme",
+    id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
+    type: NyThemeType.light,
   ),
 ];
 ```
 
-Vous pouvez modifier les couleurs de votre nouveau theme dans le fichier **/resources/themes/styles/bright_theme_colors.dart**.
+Vous pouvez modifier les couleurs de votre nouveau theme dans le fichier **lib/resources/themes/bright/bright_theme_colors.dart**.
 
 <div id="theme-colors"></div>
 
 ## Couleurs du theme
 
-Pour gerer les couleurs du theme dans votre projet, consultez le repertoire `lib/resources/themes/styles`.
-Ce repertoire contient les couleurs de style pour light_theme_colors.dart et dark_theme_colors.dart.
+Pour gerer les couleurs du theme dans votre projet, consultez les repertoires `lib/resources/themes/light/` et `lib/resources/themes/dark/`. Chacun contient le fichier de couleurs de son theme — `light_theme_colors.dart` et `dark_theme_colors.dart`.
 
-Dans ce fichier, vous devriez avoir quelque chose de similaire a ce qui suit.
+Les valeurs de couleur sont organisees en groupes (`general`, `appBar`, `bottomTabBar`) definis par le framework. La classe de couleurs de votre theme etend `ColorStyles` et fournit une instance de chaque groupe :
 
 ``` dart
-// e.g Light Theme colors
-class LightThemeColors implements ColorStyles {
-  // general
-  @override
-  Color get background => const Color(0xFFFFFFFF);
+// lib/resources/themes/light/light_theme_colors.dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 
+class LightThemeColors extends ColorStyles {
+  /// Couleurs pour usage general.
   @override
-  Color get content => const Color(0xFF000000);
-  @override
-  Color get primaryAccent => const Color(0xFF0045a0);
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFFFF),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFF0045a0),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
 
+  /// Couleurs pour la barre d'application.
   @override
-  Color get surfaceBackground => Colors.white;
-  @override
-  Color get surfaceContent => Colors.black;
+  AppBarColors get appBar => const AppBarColors(
+        background: Colors.white,
+        content: Colors.black,
+      );
 
-  // app bar
+  /// Couleurs pour la barre d'onglets inferieure.
   @override
-  Color get appBarBackground => Colors.blue;
-  @override
-  Color get appBarPrimaryContent => Colors.white;
-
-  // buttons
-  @override
-  Color get buttonBackground => Colors.blue;
-  @override
-  Color get buttonContent => Colors.white;
-
-  @override
-  Color get buttonSecondaryBackground => const Color(0xff151925);
-  @override
-  Color get buttonSecondaryContent => Colors.white.withAlpha((255.0 * 0.9).round());
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground => Colors.white;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected => Colors.blue;
-  @override
-  Color get bottomTabBarIconUnselected => Colors.black54;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected => Colors.black45;
-  @override
-  Color get bottomTabBarLabelSelected => Colors.black;
-
-  // toast notification
-  @override
-  Color get toastNotificationBackground => Colors.white;
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Colors.blue,
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
 }
 ```
 
@@ -152,99 +136,136 @@ class LightThemeColors implements ColorStyles {
 
 ## Utiliser les couleurs dans les widgets
 
+Utilisez le helper `nyColorStyle<T>(context)` pour lire les couleurs du theme actif. Passez le type `ColorStyles` de votre projet afin que l'appel soit entierement type :
+
 ``` dart
-import 'package:flutter_app/config/theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+import '/resources/themes/color_styles.dart';
 ...
 
-// gets the light/dark background colour depending on the theme
-ThemeColor.get(context).background
+// dans le build d'un widget :
+final colors = nyColorStyle<ColorStyles>(context);
 
-// e.g. of using the "ThemeColor" class
-Text(
-  "Hello World",
-  style: TextStyle(
-      color:  ThemeColor.get(context).content // Color - content
-  ),
-),
-
-// or
+// la couleur de fond du theme actif
+colors.general.background
 
 Text(
   "Hello World",
   style: TextStyle(
-      color:  ThemeConfig.light().colors.content // Light theme colors - primary content
+    color: colors.general.content,
   ),
 ),
+
+// Lire les couleurs d'un theme specifique (quel que soit celui qui est actif) :
+final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
+Container(color: dark.general.background);
 ```
 
 <div id="base-styles"></div>
 
 ## Styles de base
 
-Les styles de base vous permettent de personnaliser les couleurs de divers widgets depuis un seul endroit dans votre code.
+Les styles de base vous permettent de decrire chaque theme via une seule interface. {{ config('app.name') }} est livre avec `lib/resources/themes/color_styles.dart`, qui est le contrat qu'implementent a la fois `light_theme_colors.dart` et `dark_theme_colors.dart`.
 
-{{ config('app.name') }} est livre avec des styles de base preconfigures pour votre projet situes dans `lib/resources/themes/styles/color_styles.dart`.
-
-Ces styles fournissent une interface pour les couleurs de votre theme dans `light_theme_colors.dart` et `dart_theme_colors.dart`.
+`ColorStyles` etend `ThemeColor` du framework, qui expose trois groupes de couleurs predefinis : `GeneralColors`, `AppBarColors` et `BottomTabBarColors`. Le builder de theme de base (`lib/resources/themes/base_theme.dart`) lit ces groupes lors de la construction de `ThemeData`, de sorte que tout ce que vous y placez est automatiquement relie aux widgets correspondants.
 
 <br>
 
-Fichier `lib/resources/themes/styles/color_styles.dart`
+Fichier `lib/resources/themes/color_styles.dart`
 
 ``` dart
-abstract class ColorStyles {
+import 'package:nylo_framework/nylo_framework.dart';
 
-  // general
+abstract class ColorStyles extends ThemeColor {
+  /// Couleurs pour usage general.
   @override
-  Color get background;
-  @override
-  Color get content;
-  @override
-  Color get primaryAccent;
+  GeneralColors get general;
 
+  /// Couleurs pour la barre d'application.
   @override
-  Color get surfaceBackground;
-  @override
-  Color get surfaceContent;
+  AppBarColors get appBar;
 
-  // app bar
+  /// Couleurs pour la barre d'onglets inferieure.
   @override
-  Color get appBarBackground;
-  @override
-  Color get appBarPrimaryContent;
-
-  @override
-  Color get buttonBackground;
-  @override
-  Color get buttonContent;
-
-  @override
-  Color get buttonSecondaryBackground;
-  @override
-  Color get buttonSecondaryContent;
-
-  // bottom tab bar
-  @override
-  Color get bottomTabBarBackground;
-
-  // bottom tab bar - icons
-  @override
-  Color get bottomTabBarIconSelected;
-  @override
-  Color get bottomTabBarIconUnselected;
-
-  // bottom tab bar - label
-  @override
-  Color get bottomTabBarLabelUnselected;
-  @override
-  Color get bottomTabBarLabelSelected;
-
-  // toast notification
-  Color get toastNotificationBackground;
+  BottomTabBarColors get bottomTabBar;
 }
 ```
 
-Vous pouvez ajouter des styles supplementaires ici puis implementer les couleurs dans votre theme.
+Les trois groupes exposent les champs suivants :
+
+- `GeneralColors` – `background`, `content`, `primaryAccent`, `surface`, `surfaceContent`
+- `AppBarColors` – `background`, `content`
+- `BottomTabBarColors` – `background`, `iconSelected`, `iconUnselected`, `labelSelected`, `labelUnselected`
+
+Pour ajouter des champs au-dela de ces valeurs par defaut — vos propres boutons, icones, badges, etc. — voir [Etendre les styles de couleur](#extending-color-styles).
+
+<div id="extending-color-styles"></div>
+
+## Etendre les styles de couleur
+
+<!-- uncertain: new section "Extending color styles" not present in previous locale file -->
+Les trois groupes par defaut (`general`, `appBar`, `bottomTabBar`) sont un point de depart, pas une limite absolue. `lib/resources/themes/color_styles.dart` vous appartient pour modification — ajoutez de nouveaux groupes de couleurs (ou des champs individuels) en plus des valeurs par defaut, puis implementez-les dans la classe de couleurs de chaque theme.
+
+**1. Definir un groupe de couleurs personnalise**
+
+Regroupez les couleurs liees dans une petite classe immuable :
+
+``` dart
+import 'package:flutter/material.dart';
+
+class IconColors {
+  final Color iconBackground;
+  final Color iconBackground1;
+
+  const IconColors({
+    required this.iconBackground,
+    required this.iconBackground1,
+  });
+}
+```
+
+**2. L'ajouter a `ColorStyles`**
+
+``` dart
+// lib/resources/themes/color_styles.dart
+import 'package:nylo_framework/nylo_framework.dart';
+
+abstract class ColorStyles extends ThemeColor {
+  @override
+  GeneralColors get general;
+  @override
+  AppBarColors get appBar;
+  @override
+  BottomTabBarColors get bottomTabBar;
+
+  // Groupes personnalises
+  IconColors get icons;
+}
+```
+
+**3. L'implementer dans la classe de couleurs de chaque theme**
+
+``` dart
+// lib/resources/themes/light/light_theme_colors.dart
+class LightThemeColors extends ColorStyles {
+  // ...surcharges existantes...
+
+  @override
+  IconColors get icons => const IconColors(
+        iconBackground: Color(0xFFEFEFEF),
+        iconBackground1: Color(0xFFDADADA),
+      );
+}
+```
+
+Repetez la meme surcharge `icons` dans `dark_theme_colors.dart` avec les valeurs du mode sombre.
+
+**4. L'utiliser dans vos widgets**
+
+``` dart
+final colors = nyColorStyle<ColorStyles>(context);
+Container(color: colors.icons.iconBackground);
+```
 
 <div id="switching-theme"></div>
 
@@ -257,7 +278,7 @@ Par exemple, si vous devez changer le theme lorsqu'un utilisateur appuie sur un 
 Vous pouvez le faire de la maniere suivante :
 
 ``` dart
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
+import 'package:nylo_framework/nylo_framework.dart';
 ...
 
 TextButton(onPressed: () {
@@ -286,47 +307,47 @@ TextButton(onPressed: () {
 
 ## Polices
 
-Mettre a jour votre police principale dans toute l'application est facile dans {{ config('app.name') }}. Ouvrez le fichier `lib/config/design.dart` et mettez a jour ce qui suit.
+Mettre a jour votre police principale dans toute l'application est facile dans {{ config('app.name') }}. Ouvrez `lib/config/design.dart` et mettez a jour `DesignConfig.appFont`.
 
 ``` dart
-final TextStyle appThemeFont = GoogleFonts.lato();
+// lib/config/design.dart
+final class DesignConfig {
+  static final TextStyle appFont = GoogleFonts.outfit();
+  // ...
+}
 ```
 
-Nous incluons la bibliotheque <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> dans le depot, vous pouvez donc commencer a utiliser toutes les polices avec peu d'effort.
-Pour changer la police pour autre chose, vous pouvez faire ce qui suit :
+Nous incluons la bibliotheque <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a> dans le depot, vous pouvez donc commencer a utiliser toutes les polices avec peu d'effort. Pour passer a une autre police Google, changez simplement l'appel :
+
 ``` dart
-// OLD
-// final TextStyle appThemeFont = GoogleFonts.lato();
-
-// NEW
-final TextStyle appThemeFont = GoogleFonts.montserrat();
+static final TextStyle appFont = GoogleFonts.montserrat();
 ```
 
-Consultez les polices sur la bibliotheque officielle <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> pour en savoir plus
+Consultez les polices sur la bibliotheque officielle <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a> pour en savoir plus.
 
 Besoin d'utiliser une police personnalisee ? Consultez ce guide - https://flutter.dev/docs/cookbook/design/fonts
 
 Une fois que vous avez ajoute votre police, changez la variable comme dans l'exemple ci-dessous.
 
 ``` dart
-final TextStyle appThemeFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
+static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
 ```
 
 <div id="design"></div>
 
 ## Design
 
-Le fichier **config/design.dart** est utilise pour gerer les elements de design de votre application.
+Le fichier **lib/config/design.dart** est utilise pour gerer les elements de design de votre application. Tout est expose via la classe `DesignConfig` :
 
-La variable `appFont` contient la police de votre application.
+`DesignConfig.appFont` contient la police de votre application.
 
-La variable `logo` est utilisee pour afficher le logo de votre application.
+`DesignConfig.logo` est utilise pour afficher le logo de votre application.
 
-Vous pouvez modifier **resources/widgets/logo_widget.dart** pour personnaliser la facon dont vous souhaitez afficher votre logo.
+Vous pouvez modifier **lib/resources/widgets/logo_widget.dart** pour personnaliser la facon dont vous souhaitez afficher votre logo.
 
-La variable `loader` est utilisee pour afficher un chargeur. {{ config('app.name') }} utilisera cette variable dans certaines methodes helper comme widget de chargement par defaut.
+`DesignConfig.loader` est utilise pour afficher un chargeur. {{ config('app.name') }} utilisera cette variable dans certaines methodes helper comme widget de chargement par defaut.
 
-Vous pouvez modifier **resources/widgets/loader_widget.dart** pour personnaliser la facon dont vous souhaitez afficher votre chargeur.
+Vous pouvez modifier **lib/resources/widgets/loader_widget.dart** pour personnaliser la facon dont vous souhaitez afficher votre chargeur.
 
 <div id="text-extensions"></div>
 
