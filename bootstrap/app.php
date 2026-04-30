@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -50,9 +49,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'locale' => \App\Http\Middleware\SetLocaleMiddleware::class,
             'llm_markdown' => \App\Http\Middleware\ServeMarkdownForLlmMiddleware::class,
         ]);
-    })
-    ->withSchedule(function (Schedule $schedule) {
-        $schedule->command('sitemap:generate')->daily();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->dontFlash([
