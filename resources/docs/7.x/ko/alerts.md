@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Warning 토스트
 showToastWarning(description: "Your session is about to expire");
 
-// Info 토스트
-showToastInfo(description: "New version available");
+// Info 토스트 — description은 선택 사항
+showToastInfo();
 
-// Danger 토스트
-showToastDanger(description: "Failed to save item");
+// Danger 토스트 (사용자 정의 표시 시간 포함)
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 또는 스타일 ID와 함께 전역 함수를 사용합니다:
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Success — description은 선택 사항
     showToastSuccess(description: "Saved!");
 
     // 커스텀 제목 포함
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
-    showToastWarning(description: "Check your input");
+    // 사용자 정의 표시 시간이 있는 Warning
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Info
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Info — description이 필요하지 않음
+    showToastInfo();
 
-    // Danger
-    showToastDanger(description: "Something went wrong");
+    // 데이터 페이로드가 있는 Danger (데이터 인식 스타일로 전달)
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (danger 스타일 사용)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-사용 가능한 메서드: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+사용 가능한 메서드: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. 모두 선택적 `description`, `duration`(`Duration?`), `data`(`Map<String, dynamic>?`) 매개변수를 받습니다.
 
 <div id="show-toast-notification"></div>
 

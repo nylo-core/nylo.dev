@@ -50,18 +50,22 @@
 
 Виджет `Cart` с управляемым состоянием в Nylo будет выглядеть примерно так:
 
-**Шаг 1:** Определите виджет со статическим именем состояния
+**Шаг 1:** Определите виджет, расширяющий `NyStateManaged`
 
 ``` dart
 /// Виджет Cart
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Уникальный идентификатор состояния этого виджета
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Зарегистрировать имя состояния
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Перезагрузить виджет при обновлении состояния
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 Разберём это по шагам.
 
-1. Виджет `Cart` --- это `StatefulWidget`.
+1. Виджет `Cart` расширяет `NyStateManaged` (не `StatefulWidget` напрямую).
 
-2. `_CartState` расширяет `NyState<Cart>`.
+2. Параметр конструктора `stateName` передаётся через `super(child: () => _CartState(stateName))`, позволяя создавать несколько изолированных экземпляров одного виджета.
 
-3. Вам нужно определить имя для `state` --- оно используется для идентификации состояния.
+3. Вспомогательный метод `_stateFor(String? state)` генерирует ключ состояния с пространством имён, например `"cart_sidebar"`, для именованных экземпляров.
 
-4. Метод `boot()` вызывается при первой загрузке виджета.
+4. `_CartState` расширяет `NyState<Cart>` и получает `stateName` для регистрации правильного изолированного состояния.
 
-5. Методы `stateUpdate()` обрабатывают то, что происходит при обновлении состояния.
+5. Карта `stateActions` определяет именованные команды, которые вы можете вызывать на виджете из любого места вашего приложения.
 
 Если вы хотите попробовать этот пример в вашем проекте {{ config('app.name') }}, создайте новый виджет с именем `Cart`.
 

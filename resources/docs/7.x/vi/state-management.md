@@ -50,18 +50,22 @@ Hãy gọi widget này là `Cart()`.
 
 Widget `Cart` được quản lý state trong Nylo sẽ trông như thế này:
 
-**Bước 1:** Định nghĩa widget với tên state tĩnh
+**Bước 1:** Định nghĩa widget kế thừa `NyStateManaged`
 
 ``` dart
 /// Widget Cart
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Định danh duy nhất cho state của widget này
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Đăng ký tên state
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Tải lại widget khi state cập nhật
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 Hãy phân tích điều này.
 
-1. Widget `Cart` là một `StatefulWidget`.
+1. Widget `Cart` kế thừa `NyStateManaged` (không phải `StatefulWidget` trực tiếp).
 
-2. `_CartState` kế thừa `NyState<Cart>`.
+2. Tham số constructor `stateName` được chuyển tiếp qua `super(child: () => _CartState(stateName))`, cho phép nhiều instance độc lập của cùng một widget.
 
-3. Bạn cần định nghĩa tên cho `state`, được sử dụng để xác định state.
+3. Helper `_stateFor(String? state)` tạo ra khóa state có namespace như `"cart_sidebar"` cho các instance được đặt tên.
 
-4. Phương thức `boot()` được gọi khi widget được tải lần đầu.
+4. `_CartState` kế thừa `NyState<Cart>` và nhận `stateName` để đăng ký state độc lập đúng.
 
-5. Các phương thức `stateUpdate()` xử lý những gì xảy ra khi state được cập nhật.
+5. Map `stateActions` định nghĩa các lệnh có tên mà bạn có thể gọi trên widget từ bất kỳ đâu trong ứng dụng.
 
 Nếu bạn muốn thử ví dụ này trong dự án {{ config('app.name') }}, hãy tạo widget mới gọi là `Cart`.
 
@@ -310,7 +321,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // set to true to enable state actions on this page
 
 @override
 get stateActions => {

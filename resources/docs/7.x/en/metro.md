@@ -15,7 +15,6 @@
   - [Make API Service](#make-api-service "Make a new API Service")
   - [Make Event](#make-event "Make a new Event")
   - [Make Provider](#make-provider "Make a new provider")
-  - [Make Theme](#make-theme "Make a new theme")
   - [Make Forms](#make-forms "Make a new form")
   - [Make Route Guard](#make-route-guard "Make a new route guard")
   - [Make Config File](#make-config-file "Make a new config file")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ Using the `--force` or `-f` flag will overwrite an existing provider if it alrea
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Make theme
-
-- [Making a new theme](#making-a-new-theme "Make a new theme with Metro")
-- [Forcefully make a theme](#forcefully-make-a-theme "Forcefully make a new theme with Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Making a new theme
-
-You can make themes by running the below in the terminal.
-
-``` bash
-metro make:theme bright_theme
-```
-
-This will create a new theme in `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Forcefully make a theme
-
-**Arguments:**
-
-Using the `--force` or `-f` flag will overwrite an existing theme if it already exists.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Make Forms
@@ -682,7 +649,51 @@ You can make a new state managed widget by running the below in the terminal.
 metro make:state_managed_widget product_rating_widget
 ```
 
-The above will create a new widget in `lib/resources/widgets/`.
+The above will create a new widget in `lib/resources/widgets/`. The generated widget extends `NyStateManaged`, which supports multi-instance isolation via a `stateName` constructor parameter.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Using the `--force` or `-f` flag will overwrite an existing widget if it already exists.
 

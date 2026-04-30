@@ -49,17 +49,54 @@ Beide Themes teilen sich einen gemeinsamen Builder unter `lib/resources/themes/b
 
 ## Ein Theme erstellen
 
-Wenn Sie mehrere Themes fuer Ihre App haben moechten, bieten wir Ihnen einen einfachen Weg dafuer. Wenn Sie neu bei Themes sind, folgen Sie der Anleitung.
+Wenn Sie mehrere Themes fuer Ihre App haben moechten, erstellen Sie die Theme-Dateien manuell unter `lib/resources/themes/`. Die folgenden Schritte verwenden `bright` als Beispiel — ersetzen Sie es durch Ihren Theme-Namen.
 
-Fuehren Sie zuerst den folgenden Befehl im Terminal aus
+**Schritt 1:** Erstellen Sie die Theme-Datei unter `lib/resources/themes/bright/bright_theme.dart`:
 
-``` bash
-dart run nylo_framework:main make:theme bright_theme
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/base_theme.dart';
+import '/resources/themes/color_styles.dart';
+
+ThemeData brightTheme(ColorStyles color) =>
+    buildAppTheme(color, brightness: Brightness.light);
 ```
 
-<b>Hinweis:</b> Ersetzen Sie **bright_theme** durch den Namen Ihres neuen Themes.
+**Schritt 2:** Erstellen Sie die Farbdatei unter `lib/resources/themes/bright/bright_theme_colors.dart`:
 
-Dadurch wird ein neues Theme-Verzeichnis unter `lib/resources/themes/bright/` erstellt, das sowohl `bright_theme.dart` als auch `bright_theme_colors.dart` enthaelt, und anschliessend in `lib/bootstrap/theme.dart` registriert.
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/color_styles.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class BrightThemeColors extends ColorStyles {
+  @override
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFDE7),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFFFBC02D),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
+
+  @override
+  AppBarColors get appBar => const AppBarColors(
+        background: Color(0xFFFBC02D),
+        content: Colors.white,
+      );
+
+  @override
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Color(0xFFFBC02D),
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
+}
+```
+
+**Schritt 3:** Registrieren Sie das neue Theme in `lib/bootstrap/theme.dart`.
 
 ``` dart
 // lib/bootstrap/theme.dart
@@ -77,7 +114,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
     type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // new theme automatically added
+  BaseThemeConfig<ColorStyles>(
     id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
@@ -86,7 +123,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 ];
 ```
 
-Sie koennen die Farben fuer Ihr neues Theme in der Datei **lib/resources/themes/bright/bright_theme_colors.dart** aendern.
+Sie koennen die Farben in `bright_theme_colors.dart` an Ihr Design anpassen.
 
 <div id="theme-colors"></div>
 

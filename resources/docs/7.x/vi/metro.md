@@ -15,7 +15,6 @@
   - [Tạo API Service](#make-api-service "Tạo API Service mới")
   - [Tạo Event](#make-event "Tạo Event mới")
   - [Tạo Provider](#make-provider "Tạo provider mới")
-  - [Tạo Theme](#make-theme "Tạo theme mới")
   - [Tạo Forms](#make-forms "Tạo form mới")
   - [Tạo Route Guard](#make-route-guard "Tạo route guard mới")
   - [Tạo Config File](#make-config-file "Tạo config file mới")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ Sử dụng cờ `--force` hoặc `-f` sẽ ghi đè provider hiện có nếu n
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Tạo theme
-
-- [Tạo theme mới](#making-a-new-theme "Tạo theme mới với Metro")
-- [Buộc tạo theme](#forcefully-make-a-theme "Buộc tạo theme mới với Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Tạo theme mới
-
-Bạn có thể tạo theme bằng cách chạy lệnh sau trong terminal.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Lệnh này sẽ tạo theme mới trong `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Buộc tạo theme
-
-**Tham số:**
-
-Sử dụng cờ `--force` hoặc `-f` sẽ ghi đè theme hiện có nếu nó đã tồn tại.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Tạo Forms
@@ -682,7 +649,51 @@ Bạn có thể tạo state managed widget mới bằng cách chạy lệnh sau 
 metro make:state_managed_widget product_rating_widget
 ```
 
-Lệnh trên sẽ tạo widget mới trong `lib/resources/widgets/`.
+Lệnh trên sẽ tạo widget mới trong `lib/resources/widgets/`. Widget được tạo ra kế thừa `NyStateManaged`, hỗ trợ cô lập đa instance thông qua tham số constructor `stateName`.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Sử dụng cờ `--force` hoặc `-f` sẽ ghi đè widget hiện có nếu nó đã tồn tại.
 

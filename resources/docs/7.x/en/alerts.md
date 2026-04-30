@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Warning toast
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
-showToastInfo(description: "New version available");
+// Info toast — description is optional
+showToastInfo();
 
-// Danger toast
-showToastDanger(description: "Failed to save item");
+// Danger toast with custom duration
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Or use the global function with a style ID:
@@ -104,20 +104,20 @@ In any page extending `NyState` or `NyBaseState`, use these convenience methods:
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Success — description is optional
     showToastSuccess(description: "Saved!");
 
     // With custom title
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
-    showToastWarning(description: "Check your input");
+    // Warning with custom duration
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Info
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Info — no description required
+    showToastInfo();
 
-    // Danger
-    showToastDanger(description: "Something went wrong");
+    // Danger with a data payload forwarded to data-aware styles
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (uses danger style)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Available methods: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Available methods: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. All accept optional `description`, `duration` (`Duration?`), and `data` (`Map<String, dynamic>?`) parameters.
 
 <div id="show-toast-notification"></div>
 

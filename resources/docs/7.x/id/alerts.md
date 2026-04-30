@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Toast peringatan
 showToastWarning(description: "Your session is about to expire");
 
-// Toast info
-showToastInfo(description: "New version available");
+// Toast info — description bersifat opsional
+showToastInfo();
 
-// Toast bahaya
-showToastDanger(description: "Failed to save item");
+// Toast bahaya dengan durasi kustom
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Atau gunakan fungsi global dengan ID gaya:
@@ -104,20 +104,20 @@ Di halaman mana pun yang meng-extend `NyState` atau `NyBaseState`, gunakan metod
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Sukses
+    // Sukses — description bersifat opsional
     showToastSuccess(description: "Saved!");
 
     // Dengan judul kustom
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Peringatan
-    showToastWarning(description: "Check your input");
+    // Peringatan dengan durasi kustom
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Info
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Info — tidak memerlukan description
+    showToastInfo();
 
-    // Bahaya
-    showToastDanger(description: "Something went wrong");
+    // Bahaya dengan payload data yang diteruskan ke gaya toast berbasis data
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (menggunakan gaya danger)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Metode yang tersedia: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Metode yang tersedia: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Semua menerima parameter opsional `description`, `duration` (`Duration?`), dan `data` (`Map<String, dynamic>?`).
 
 <div id="show-toast-notification"></div>
 

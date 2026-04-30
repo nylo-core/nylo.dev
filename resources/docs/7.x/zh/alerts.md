@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // 警告 toast
 showToastWarning(description: "Your session is about to expire");
 
-// 信息 toast
-showToastInfo(description: "New version available");
+// 信息 toast — description 是可选的
+showToastInfo();
 
-// 危险 toast
-showToastDanger(description: "Failed to save item");
+// 危险 toast（自定义显示时长）
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 或使用全局函数并指定样式 ID：
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // 成功
+    // 成功 — description 是可选的
     showToastSuccess(description: "Saved!");
 
     // 自定义标题
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // 警告
-    showToastWarning(description: "Check your input");
+    // 带自定义时长的警告
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // 信息
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // 信息 — 不需要 description
+    showToastInfo();
 
-    // 危险
-    showToastDanger(description: "Something went wrong");
+    // 带数据负载的危险（转发给数据感知样式）
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops（使用 danger 样式）
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-可用方法：`showToastSuccess`、`showToastWarning`、`showToastInfo`、`showToastDanger`、`showToastOops`、`showToastSorry`、`showToastCustom`。
+可用方法：`showToastSuccess`、`showToastWarning`、`showToastInfo`、`showToastDanger`、`showToastOops`、`showToastSorry`、`showToastCustom`。所有方法均接受可选的 `description`、`duration`（`Duration?`）和 `data`（`Map<String, dynamic>?`）参数。
 
 <div id="show-toast-notification"></div>
 

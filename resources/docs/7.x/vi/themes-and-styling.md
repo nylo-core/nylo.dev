@@ -49,17 +49,54 @@ Cả hai theme dùng chung builder tại `lib/resources/themes/base_theme.dart` 
 
 ## Tạo theme
 
-Nếu bạn muốn có nhiều theme cho ứng dụng, chúng tôi có cách dễ dàng để bạn thực hiện. Nếu bạn mới làm quen với theme, hãy theo dõi.
+Nếu bạn muốn có nhiều theme cho ứng dụng, hãy tạo các tệp theme thủ công trong `lib/resources/themes/`. Các bước dưới đây sử dụng `bright` làm ví dụ — thay thế bằng tên theme của bạn.
 
-Đầu tiên, chạy lệnh dưới đây từ terminal
+**Bước 1:** Tạo tệp theme tại `lib/resources/themes/bright/bright_theme.dart`:
 
-``` bash
-dart run nylo_framework:main make:theme bright_theme
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/base_theme.dart';
+import '/resources/themes/color_styles.dart';
+
+ThemeData brightTheme(ColorStyles color) =>
+    buildAppTheme(color, brightness: Brightness.light);
 ```
 
-<b>Lưu ý:</b> thay thế **bright_theme** bằng tên theme mới của bạn.
+**Bước 2:** Tạo tệp màu tại `lib/resources/themes/bright/bright_theme_colors.dart`:
 
-Lệnh này tạo thư mục theme mới tại `lib/resources/themes/bright/` chứa cả `bright_theme.dart` và `bright_theme_colors.dart`, sau đó đăng ký nó trong `lib/bootstrap/theme.dart`.
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/color_styles.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class BrightThemeColors extends ColorStyles {
+  @override
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFDE7),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFFFBC02D),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
+
+  @override
+  AppBarColors get appBar => const AppBarColors(
+        background: Color(0xFFFBC02D),
+        content: Colors.white,
+      );
+
+  @override
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Color(0xFFFBC02D),
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
+}
+```
+
+**Bước 3:** Đăng ký theme mới trong `lib/bootstrap/theme.dart`.
 
 ``` dart
 // lib/bootstrap/theme.dart
@@ -77,7 +114,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
     type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // theme mới được thêm tự động
+  BaseThemeConfig<ColorStyles>(
     id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
@@ -86,7 +123,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 ];
 ```
 
-Bạn có thể sửa đổi màu cho theme mới trong tệp **lib/resources/themes/bright/bright_theme_colors.dart**.
+Bạn có thể điều chỉnh màu trong `bright_theme_colors.dart` cho phù hợp với thiết kế của bạn.
 
 <div id="theme-colors"></div>
 

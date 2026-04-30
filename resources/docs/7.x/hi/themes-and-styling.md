@@ -49,17 +49,54 @@
 
 ## थीम बनाना
 
-यदि आप अपने ऐप के लिए एकाधिक थीम्स रखना चाहते हैं, तो हमारे पास इसके लिए एक आसान तरीका है। यदि आप थीम्स में नए हैं, तो साथ चलें।
+यदि आप अपने ऐप के लिए एकाधिक थीम्स रखना चाहते हैं, तो थीम फ़ाइलें `lib/resources/themes/` के अंतर्गत मैन्युअल रूप से बनाएं। नीचे दिए गए चरण `bright` को उदाहरण के रूप में उपयोग करते हैं — इसे अपने थीम नाम से बदलें।
 
-सबसे पहले, टर्मिनल से नीचे दिया गया कमांड चलाएँ
+**चरण 1:** `lib/resources/themes/bright/bright_theme.dart` पर थीम फ़ाइल बनाएं:
 
-``` bash
-dart run nylo_framework:main make:theme bright_theme
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/base_theme.dart';
+import '/resources/themes/color_styles.dart';
+
+ThemeData brightTheme(ColorStyles color) =>
+    buildAppTheme(color, brightness: Brightness.light);
 ```
 
-<b>नोट:</b> **bright_theme** को अपनी नई थीम के नाम से बदलें।
+**चरण 2:** `lib/resources/themes/bright/bright_theme_colors.dart` पर कलर्स फ़ाइल बनाएं:
 
-यह `lib/resources/themes/bright/` पर एक नई थीम डायरेक्टरी बनाता है जिसमें `bright_theme.dart` और `bright_theme_colors.dart` दोनों होते हैं, फिर इसे `lib/bootstrap/theme.dart` में पंजीकृत करता है।
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/color_styles.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class BrightThemeColors extends ColorStyles {
+  @override
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFDE7),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFFFBC02D),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
+
+  @override
+  AppBarColors get appBar => const AppBarColors(
+        background: Color(0xFFFBC02D),
+        content: Colors.white,
+      );
+
+  @override
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Color(0xFFFBC02D),
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
+}
+```
+
+**चरण 3:** नई थीम को `lib/bootstrap/theme.dart` में पंजीकृत करें।
 
 ``` dart
 // lib/bootstrap/theme.dart
@@ -77,7 +114,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
     type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // नई थीम स्वचालित रूप से जोड़ी गई
+  BaseThemeConfig<ColorStyles>(
     id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
@@ -86,7 +123,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 ];
 ```
 
-आप **lib/resources/themes/bright/bright_theme_colors.dart** फ़ाइल में अपनी नई थीम के कलर्स संशोधित कर सकते हैं।
+आप `bright_theme_colors.dart` में कलर्स को अपने डिज़ाइन के अनुसार समायोजित कर सकते हैं।
 
 <div id="theme-colors"></div>
 

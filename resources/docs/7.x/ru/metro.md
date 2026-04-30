@@ -15,7 +15,6 @@
   - [Создание API-сервиса](#make-api-service "Создание нового API-сервиса")
   - [Создание события](#make-event "Создание нового события")
   - [Создание провайдера](#make-provider "Создание нового провайдера")
-  - [Создание темы](#make-theme "Создание новой темы")
   - [Создание формы](#make-forms "Создание новой формы")
   - [Создание защиты маршрута](#make-route-guard "Создание новой защиты маршрута")
   - [Создание файла конфигурации](#make-config-file "Создание нового файла конфигурации")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Создание темы
-
-- [Создание новой темы](#making-a-new-theme "Создание новой темы с Metro")
-- [Принудительное создание темы](#forcefully-make-a-theme "Принудительное создание темы с Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Создание новой темы
-
-Вы можете создавать темы, выполнив следующую команду в терминале.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Это создаст новую тему в `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Принудительное создание темы
-
-**Аргументы:**
-
-Использование флага `--force` или `-f` перезапишет существующую тему, если она уже существует.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Создание формы
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-Это создаст новый виджет в `lib/resources/widgets/`.
+Приведённая выше команда создаст новый виджет в `lib/resources/widgets/`. Сгенерированный виджет расширяет `NyStateManaged`, который поддерживает изоляцию нескольких экземпляров через параметр конструктора `stateName`.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // логика инициализации здесь
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Вызов действий из любого места приложения
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Использование флага `--force` или `-f` перезапишет существующий виджет, если он уже существует.
 

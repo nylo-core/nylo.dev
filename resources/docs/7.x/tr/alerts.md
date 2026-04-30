@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Uyarı toastı
 showToastWarning(description: "Your session is about to expire");
 
-// Bilgi toastı
-showToastInfo(description: "New version available");
+// Bilgi toastı — açıklama isteğe bağlıdır
+showToastInfo();
 
-// Tehlike toastı
-showToastDanger(description: "Failed to save item");
+// Özel süre ile tehlike toastı
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Veya bir stil ID'si ile global fonksiyonu kullanın:
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Başarı
+    // Başarı — açıklama isteğe bağlıdır
     showToastSuccess(description: "Saved!");
 
     // Özel başlık ile
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Uyarı
-    showToastWarning(description: "Check your input");
+    // Özel süre ile uyarı
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Bilgi
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Bilgi — açıklama gerekli değildir
+    showToastInfo();
 
-    // Tehlike
-    showToastDanger(description: "Something went wrong");
+    // Veriye duyarlı stillere iletilen veri yükü ile tehlike
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (tehlike stilini kullanır)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Kullanılabilir metotlar: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Kullanılabilir metotlar: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Tümü isteğe bağlı `description`, `duration` (`Duration?`) ve `data` (`Map<String, dynamic>?`) parametrelerini kabul eder.
 
 <div id="show-toast-notification"></div>
 

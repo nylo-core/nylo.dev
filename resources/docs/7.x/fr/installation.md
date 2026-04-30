@@ -106,7 +106,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -132,7 +131,6 @@ All commands:
 | `make:api_service` | Creer un service API |
 | `make:controller` | Creer un controleur |
 | `make:event` | Creer un evenement |
-| `make:theme` | Creer un theme |
 | `make:route_guard` | Creer un garde de route |
 | `make:config` | Creer un fichier de configuration |
 | `make:interceptor` | Creer un intercepteur reseau |

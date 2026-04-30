@@ -15,7 +15,6 @@
   - [Tworzenie API Service](#make-api-service "Tworzenie nowego API Service")
   - [Tworzenie zdarzenia](#make-event "Tworzenie nowego zdarzenia")
   - [Tworzenie providera](#make-provider "Tworzenie nowego providera")
-  - [Tworzenie motywu](#make-theme "Tworzenie nowego motywu")
   - [Tworzenie formularza](#make-forms "Tworzenie nowego formularza")
   - [Tworzenie strażnika trasy](#make-route-guard "Tworzenie nowego strażnika trasy")
   - [Tworzenie pliku konfiguracji](#make-config-file "Tworzenie nowego pliku konfiguracji")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ Użycie flagi `--force` lub `-f` nadpisze istniejącego providera, jeśli już i
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Tworzenie motywu
-
-- [Tworzenie nowego motywu](#making-a-new-theme "Tworzenie nowego motywu z Metro")
-- [Wymuszenie tworzenia motywu](#forcefully-make-a-theme "Wymuszenie tworzenia nowego motywu z Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Tworzenie nowego motywu
-
-Możesz tworzyć motywy, uruchamiając poniższe polecenie w terminalu.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Spowoduje to utworzenie nowego motywu w `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Wymuszenie tworzenia motywu
-
-**Argumenty:**
-
-Użycie flagi `--force` lub `-f` nadpisze istniejący motyw, jeśli już istnieje.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Tworzenie formularzy
@@ -682,7 +649,51 @@ Możesz utworzyć nowy widget zarządzany stanem, uruchamiając poniższe polece
 metro make:state_managed_widget product_rating_widget
 ```
 
-Powyższe polecenie utworzy nowy widget w `lib/resources/widgets/`.
+Powyższe polecenie utworzy nowy widget w `lib/resources/widgets/`. Wygenerowany widget rozszerza `NyStateManaged`, co obsługuje izolację wielu instancji za pomocą parametru konstruktora `stateName`.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // logika inicjalizacji tutaj
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Wywoluj akcje z dowolnego miejsca w aplikacji
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Użycie flagi `--force` lub `-f` nadpisze istniejący widget, jeśli już istnieje.
 

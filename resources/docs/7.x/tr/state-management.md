@@ -50,18 +50,22 @@ Bu widget'a `Cart()` diyelim.
 
 Nylo'da durum yönetimli bir `Cart` widget'ı şöyle görünecektir:
 
-**Adım 1:** Widget'ı statik bir durum adıyla tanımlayın
+**Adım 1:** `NyStateManaged`'ı genişleten widget'ı tanımlayın
 
 ``` dart
 /// Cart widget'ı
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Bu widget'ın durumu için benzersiz tanımlayıcı
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Durum adını kaydet
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Durum güncellendiğinde widget'ı yeniden yükle
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 Bunu inceleyelim.
 
-1. `Cart` widget'ı bir `StatefulWidget`'tır.
+1. `Cart` widget'ı doğrudan `StatefulWidget` yerine `NyStateManaged`'ı genişletir.
 
-2. `_CartState`, `NyState<Cart>` sınıfını genişletir.
+2. `stateName` constructor parametresi `super(child: () => _CartState(stateName))` aracılığıyla iletilir; bu, aynı widget'ın birden fazla izole örneğinin oluşturulmasını sağlar.
 
-3. `state` için bir ad tanımlamanız gerekir, bu durumu tanımlamak için kullanılır.
+3. `_stateFor(String? state)` yardımcısı, adlandırılmış örnekler için `"cart_sidebar"` gibi namespace'li bir durum anahtarı üretir.
 
-4. `boot()` metodu, widget ilk yüklendiğinde çağrılır.
+4. `_CartState`, `NyState<Cart>` sınıfını genişletir ve doğru izole durumu kaydetmek için `stateName` alır.
 
-5. `stateUpdate()` metotları, durum güncellendiğinde ne olacağını yönetir.
+5. `stateActions` haritası, uygulamanızın herhangi bir yerinden widget üzerinde çağırabileceğiniz adlandırılmış komutları tanımlar.
 
 Bu örneği {{ config('app.name') }} projenizde denemek isterseniz, `Cart` adında yeni bir widget oluşturun.
 

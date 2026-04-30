@@ -15,7 +15,6 @@
   - [API Servisi olusturma](#make-api-service "API Servisi olusturma")
   - [Event olusturma](#make-event "Event olusturma")
   - [Provider olusturma](#make-provider "Provider olusturma")
-  - [Tema olusturma](#make-theme "Tema olusturma")
   - [Form olusturma](#make-forms "Form olusturma")
   - [Route Guard olusturma](#make-route-guard "Route Guard olusturma")
   - [Config dosyasi olusturma](#make-config-file "Config dosyasi olusturma")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ Bu, provider'ı `lib/app/providers/integrations/firebase_provider.dart` konumund
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Tema olusturma
-
-- [Yeni bir tema olusturma](#making-a-new-theme "Metro ile yeni bir tema olusturma")
-- [Zorunlu tema olusturma](#forcefully-make-a-theme "Metro ile zorunlu tema olusturma")
-
-<div id="making-a-new-theme"></div>
-
-### Yeni bir tema olusturma
-
-Terminalde asagidaki komutu calistirarak tema olusturabilirsiniz.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Bu, `lib/resources/themes/` dizininde yeni bir tema olusturacaktir.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Zorunlu tema olusturma
-
-**Argumenler:**
-
-`--force` veya `-f` bayragi kullanildiginda, mevcut bir tema varsa uzerine yazilacaktir.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Form olusturma
@@ -682,7 +649,51 @@ Terminalde asagidaki komutu calistirarak yeni bir state managed widget olusturab
 metro make:state_managed_widget product_rating_widget
 ```
 
-Yukaridaki komut `lib/resources/widgets/` dizininde yeni bir widget olusturacaktir.
+Yukaridaki komut `lib/resources/widgets/` dizininde yeni bir widget olusturacaktir. Olusturulan widget `NyStateManaged`'i genisletir; bu, `stateName` constructor parametresi araciligiyla coklu ornek izolasyonunu destekler.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // baslangic mantigi buraya
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Uygulamanizin herhangi bir yerinden aksiyonlari cagiriniz
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 `--force` veya `-f` bayragi kullanildiginda, mevcut bir widget varsa uzerine yazilacaktir.
 

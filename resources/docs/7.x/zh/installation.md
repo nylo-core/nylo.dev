@@ -106,7 +106,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -132,7 +131,6 @@ All commands:
 | `make:api_service` | 创建 API 服务 |
 | `make:controller` | 创建控制器 |
 | `make:event` | 创建事件 |
-| `make:theme` | 创建主题 |
 | `make:route_guard` | 创建路由守卫 |
 | `make:config` | 创建配置文件 |
 | `make:interceptor` | 创建网络拦截器 |

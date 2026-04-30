@@ -15,7 +15,6 @@
   - [Make API Service](#make-api-service "สร้าง API Service ใหม่")
   - [Make Event](#make-event "สร้าง Event ใหม่")
   - [Make Provider](#make-provider "สร้าง provider ใหม่")
-  - [Make Theme](#make-theme "สร้างธีมใหม่")
   - [Make Forms](#make-forms "สร้างฟอร์มใหม่")
   - [Make Route Guard](#make-route-guard "สร้าง route guard ใหม่")
   - [Make Config File](#make-config-file "สร้างไฟล์ config ใหม่")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Make theme
-
-- [การสร้างธีมใหม่](#making-a-new-theme "สร้างธีมใหม่ด้วย Metro")
-- [บังคับสร้างธีม](#forcefully-make-a-theme "บังคับสร้างธีมใหม่ด้วย Metro")
-
-<div id="making-a-new-theme"></div>
-
-### การสร้างธีมใหม่
-
-คุณสามารถสร้างธีมโดยรันคำสั่งด้านล่างใน terminal
-
-``` bash
-metro make:theme bright_theme
-```
-
-สิ่งนี้จะสร้างธีมใหม่ใน `lib/resources/themes/`
-
-<div id="forcefully-make-a-theme"></div>
-
-### บังคับสร้างธีม
-
-**อาร์กิวเมนต์:**
-
-การใช้ flag `--force` หรือ `-f` จะเขียนทับธีมที่มีอยู่แล้วหากมันมีอยู่
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Make Forms
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-คำสั่งด้านบนจะสร้าง widget ใหม่ใน `lib/resources/widgets/`
+คำสั่งด้านบนจะสร้าง widget ใหม่ใน `lib/resources/widgets/` widget ที่สร้างขึ้นจะ extend จาก `NyStateManaged` ซึ่งรองรับการแยก instance หลายตัวผ่านพารามิเตอร์ constructor `stateName`
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 การใช้ flag `--force` หรือ `-f` จะเขียนทับ widget ที่มีอยู่แล้วหากมันมีอยู่
 

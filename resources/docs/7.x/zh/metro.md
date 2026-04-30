@@ -15,7 +15,6 @@
   - [生成 API 服务](#make-api-service "生成 API 服务")
   - [生成事件](#make-event "生成事件")
   - [生成 Provider](#make-provider "生成 Provider")
-  - [生成主题](#make-theme "生成主题")
   - [生成表单](#make-forms "生成表单")
   - [生成路由守卫](#make-route-guard "生成路由守卫")
   - [生成配置文件](#make-config-file "生成配置文件")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## 生成主题
-
-- [创建新主题](#making-a-new-theme "使用 Metro 创建新主题")
-- [强制创建主题](#forcefully-make-a-theme "使用 Metro 强制创建新主题")
-
-<div id="making-a-new-theme"></div>
-
-### 创建新主题
-
-您可以通过在终端中运行以下命令来创建主题。
-
-``` bash
-metro make:theme bright_theme
-```
-
-这将在 `lib/resources/themes/` 中创建一个新主题。
-
-<div id="forcefully-make-a-theme"></div>
-
-### 强制创建主题
-
-**参数：**
-
-使用 `--force` 或 `-f` 标志将覆盖已存在的主题。
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## 生成表单
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-上述命令将在 `lib/resources/widgets/` 中创建一个新组件。
+上述命令将在 `lib/resources/widgets/` 中创建一个新组件。生成的组件继承 `NyStateManaged`，通过 `stateName` 构造函数参数支持多实例隔离。
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // 在此处编写初始化逻辑
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // 可从应用的任何位置调用此动作
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 使用 `--force` 或 `-f` 标志将覆盖已存在的组件。
 
@@ -795,13 +806,9 @@ metro make:key
 
 | 标志 / 选项 | 简写 | 描述 |
 |---------------|-------|-------------|
-| `--force` | `-f` | 覆盖现有 APP_KEY |
 | `--file` | `-e` | 目标 .env 文件（默认：`.env`） |
 
 ``` bash
-# 生成密钥并覆盖现有密钥
-metro make:key --force
-
 # 为特定 env 文件生成密钥
 metro make:key --file=.env.production
 ```

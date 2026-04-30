@@ -50,18 +50,22 @@ Let's call this widget `Cart()`.
 
 A state managed `Cart` widget in Nylo would look something like this:
 
-**Step 1:** Define the widget with a static state name
+**Step 1:** Define the widget extending `NyStateManaged`
 
 ``` dart
 /// The Cart widget
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Unique identifier for this widget's state
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Register the state name
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Reload the widget when state updates
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 Let's break this down.
 
-1. The `Cart` widget is a `StatefulWidget`.
+1. The `Cart` widget extends `NyStateManaged` (not `StatefulWidget` directly).
 
-2. `_CartState` extends `NyState<Cart>`.
+2. The `stateName` constructor parameter is forwarded via `super(child: () => _CartState(stateName))`, enabling multiple isolated instances of the same widget.
 
-3. You need to define a name for the `state`, this is used to identify the state.
+3. The `_stateFor(String? state)` helper produces a namespaced state key like `"cart_sidebar"` for named instances.
 
-4. The `boot()` method is called when the widget is first loaded.
+4. `_CartState` extends `NyState<Cart>` and receives `stateName` to register the correct isolated state.
 
-5. The `stateUpdate()` methods handle what happens when the state is updated.
+5. The `stateActions` map defines named commands you can invoke on the widget from anywhere in your app.
 
 If you want to try this example in your {{ config('app.name') }} project, create a new widget called `Cart`. 
 

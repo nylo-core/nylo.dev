@@ -50,18 +50,22 @@ State management ช่วยให้คุณอัปเดตส่วนเ
 
 Widget `Cart` ที่จัดการ state ใน Nylo จะมีลักษณะดังนี้:
 
-**ขั้นตอนที่ 1:** กำหนด widget พร้อมชื่อ state แบบ static
+**ขั้นตอนที่ 1:** กำหนด widget ที่ extend จาก `NyStateManaged`
 
 ``` dart
 /// Widget Cart
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // ตัวระบุเฉพาะสำหรับ state ของ widget นี้
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // ลงทะเบียนชื่อ state
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // โหลด widget ใหม่เมื่อ state ถูกอัปเดต
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 มาวิเคราะห์กัน
 
-1. Widget `Cart` เป็น `StatefulWidget`
+1. Widget `Cart` extend จาก `NyStateManaged` (ไม่ใช่ `StatefulWidget` โดยตรง)
 
-2. `_CartState` extend จาก `NyState<Cart>`
+2. พารามิเตอร์ constructor `stateName` ถูกส่งต่อผ่าน `super(child: () => _CartState(stateName))` ทำให้สามารถสร้าง instance อิสระหลายตัวของ widget เดียวกันได้
 
-3. คุณต้องกำหนดชื่อสำหรับ `state` ซึ่งใช้เพื่อระบุ state
+3. Helper `_stateFor(String? state)` สร้าง state key แบบ namespace เช่น `"cart_sidebar"` สำหรับ instance ที่มีชื่อ
 
-4. เมธอด `boot()` จะถูกเรียกเมื่อ widget ถูกโหลดครั้งแรก
+4. `_CartState` extend จาก `NyState<Cart>` และรับ `stateName` เพื่อลงทะเบียน state อิสระที่ถูกต้อง
 
-5. เมธอด `stateUpdate()` จัดการสิ่งที่เกิดขึ้นเมื่อ state ถูกอัปเดต
+5. Map `stateActions` กำหนดคำสั่งที่มีชื่อซึ่งคุณสามารถเรียกใช้บน widget จากที่ใดก็ได้ในแอปของคุณ
 
 หากคุณต้องการลองตัวอย่างนี้ในโปรเจกต์ {{ config('app.name') }} ของคุณ ให้สร้าง widget ใหม่ชื่อ `Cart`
 
@@ -310,7 +321,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // set to true to enable state actions on this page
 
 @override
 get stateActions => {

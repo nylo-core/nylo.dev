@@ -15,7 +15,6 @@
   - [Membuat API Service](#make-api-service "Membuat API Service")
   - [Membuat Event](#make-event "Membuat Event")
   - [Membuat Provider](#make-provider "Membuat Provider")
-  - [Membuat Theme](#make-theme "Membuat Theme")
   - [Membuat Forms](#make-forms "Membuat Forms")
   - [Membuat Route Guard](#make-route-guard "Membuat Route Guard")
   - [Membuat Config File](#make-config-file "Membuat Config File")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ Menggunakan flag `--force` atau `-f` akan menimpa provider yang sudah ada jika s
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Membuat theme
-
-- [Membuat theme baru](#making-a-new-theme "Membuat theme baru dengan Metro")
-- [Membuat theme secara paksa](#forcefully-make-a-theme "Membuat theme baru secara paksa dengan Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Membuat theme baru
-
-Anda dapat membuat theme dengan menjalankan perintah berikut di terminal.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Ini akan membuat theme baru di `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Membuat theme secara paksa
-
-**Argumen:**
-
-Menggunakan flag `--force` atau `-f` akan menimpa theme yang sudah ada jika sudah ada.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Membuat Forms
@@ -682,7 +649,51 @@ Anda dapat membuat state managed widget baru dengan menjalankan perintah berikut
 metro make:state_managed_widget product_rating_widget
 ```
 
-Perintah di atas akan membuat widget baru di `lib/resources/widgets/`.
+Perintah di atas akan membuat widget baru di `lib/resources/widgets/`. Widget yang dihasilkan meng-extend `NyStateManaged`, yang mendukung isolasi multi-instance melalui parameter constructor `stateName`.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Menggunakan flag `--force` atau `-f` akan menimpa widget yang sudah ada jika sudah ada.
 

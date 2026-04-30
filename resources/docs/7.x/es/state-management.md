@@ -50,18 +50,22 @@ Llamemos a este widget `Cart()`.
 
 Un widget `Cart` gestionado por estado en Nylo se veria algo asi:
 
-**Paso 1:** Define el widget con un nombre de estado estatico
+**Paso 1:** Define el widget extendiendo `NyStateManaged`
 
 ``` dart
 /// El widget Cart
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Identificador unico para el estado de este widget
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Registrar el nombre del estado
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Recargar el widget cuando el estado se actualiza
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,16 @@ Future setCartValue(String value) async {
 
 Desglosemos esto.
 
-1. El widget `Cart` es un `StatefulWidget`.
+1. El widget `Cart` extiende `NyStateManaged` (no `StatefulWidget` directamente).
 
-2. `_CartState` extiende `NyState<Cart>`.
+2. El parametro de constructor `stateName` se reenvía via `super(child: () => _CartState(stateName))`, habilitando multiples instancias aisladas del mismo widget.
 
-3. Necesitas definir un nombre para el `state`, esto se usa para identificar el estado.
+<!-- uncertain: new Nylo-specific term "_stateFor" helper method — describes multi-instance isolation pattern new in v7.1.13 -->
+3. El helper `_stateFor(String? state)` produce una clave de estado con espacio de nombres como `"cart_sidebar"` para instancias con nombre.
 
-4. El metodo `boot()` se llama cuando el widget se carga por primera vez.
+4. `_CartState` extiende `NyState<Cart>` y recibe `stateName` para registrar el estado aislado correcto.
 
-5. Los metodos `stateUpdate()` manejan lo que sucede cuando el estado se actualiza.
+5. El mapa `stateActions` define comandos con nombre que puedes invocar en el widget desde cualquier parte de tu aplicacion.
 
 Si quieres probar este ejemplo en tu proyecto de {{ config('app.name') }}, crea un nuevo widget llamado `Cart`.
 

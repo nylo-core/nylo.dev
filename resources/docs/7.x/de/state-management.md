@@ -50,18 +50,22 @@ Nennen wir dieses Widget `Cart()`.
 
 Ein state-verwaltetes `Cart`-Widget in Nylo wuerde etwa so aussehen:
 
-**Schritt 1:** Definieren Sie das Widget mit einem statischen State-Namen
+**Schritt 1:** Definieren Sie das Widget mit der Erweiterung von `NyStateManaged`
 
 ``` dart
 /// Das Cart-Widget
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Eindeutiger Bezeichner fuer den State dieses Widgets
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // State-Namen registrieren
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Widget neu laden, wenn State aktualisiert wird
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,16 @@ Future setCartValue(String value) async {
 
 Lassen Sie uns das aufschluesseln.
 
-1. Das `Cart`-Widget ist ein `StatefulWidget`.
+1. Das `Cart`-Widget erweitert `NyStateManaged` (nicht direkt `StatefulWidget`).
 
-2. `_CartState` erweitert `NyState<Cart>`.
+2. Der Konstruktorparameter `stateName` wird ueber `super(child: () => _CartState(stateName))` weitergeleitet, was mehrere isolierte Instanzen desselben Widgets ermoeglicht.
 
-3. Sie muessen einen Namen fuer den `state` definieren, dieser wird verwendet, um den State zu identifizieren.
+<!-- uncertain: new Nylo-specific term "_stateFor" helper method — describes multi-instance isolation pattern new in v7.1.13 -->
+3. Der `_stateFor(String? state)`-Helfer erzeugt einen Namespace-State-Schluessel wie `"cart_sidebar"` fuer benannte Instanzen.
 
-4. Die `boot()`-Methode wird aufgerufen, wenn das Widget zum ersten Mal geladen wird.
+4. `_CartState` erweitert `NyState<Cart>` und empfaengt `stateName`, um den korrekten isolierten State zu registrieren.
 
-5. Die `stateUpdate()`-Methoden behandeln, was passiert, wenn der State aktualisiert wird.
+5. Die `stateActions`-Map definiert benannte Befehle, die Sie von ueberall in Ihrer App aufrufen koennen.
 
 Wenn Sie dieses Beispiel in Ihrem {{ config('app.name') }}-Projekt ausprobieren moechten, erstellen Sie ein neues Widget namens `Cart`.
 

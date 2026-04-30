@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Warning toast
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
-showToastInfo(description: "New version available");
+// Info toast — la description e' opzionale
+showToastInfo();
 
-// Danger toast
-showToastDanger(description: "Failed to save item");
+// Danger toast con durata personalizzata
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Oppure usa la funzione globale con un ID di stile:
@@ -104,20 +104,20 @@ In qualsiasi pagina che estende `NyState` o `NyBaseState`, usa questi metodi di 
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Success — la description e' opzionale
     showToastSuccess(description: "Saved!");
 
     // With custom title
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
-    showToastWarning(description: "Check your input");
+    // Warning con durata personalizzata
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Info
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Info — nessuna description richiesta
+    showToastInfo();
 
-    // Danger
-    showToastDanger(description: "Something went wrong");
+    // Danger con payload di dati inoltrato agli stili con dati
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (uses danger style)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Metodi disponibili: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Metodi disponibili: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Tutti accettano i parametri opzionali `description`, `duration` (`Duration?`) e `data` (`Map<String, dynamic>?`).
 
 <div id="show-toast-notification"></div>
 

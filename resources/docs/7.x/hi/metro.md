@@ -15,7 +15,6 @@
   - [API सर्विस बनाना](#make-api-service "API सर्विस बनाना")
   - [इवेंट बनाना](#make-event "इवेंट बनाना")
   - [प्रोवाइडर बनाना](#make-provider "प्रोवाइडर बनाना")
-  - [थीम बनाना](#make-theme "थीम बनाना")
   - [फ़ॉर्म बनाना](#make-forms "फ़ॉर्म बनाना")
   - [रूट गार्ड बनाना](#make-route-guard "रूट गार्ड बनाना")
   - [कॉन्फ़िग फ़ाइल बनाना](#make-config-file "कॉन्फ़िग फ़ाइल बनाना")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## थीम बनाना
-
-- [नई थीम बनाना](#making-a-new-theme "Metro से नई थीम बनाएँ")
-- [ज़बरदस्ती थीम बनाना](#forcefully-make-a-theme "Metro से ज़बरदस्ती नई थीम बनाएँ")
-
-<div id="making-a-new-theme"></div>
-
-### नई थीम बनाना
-
-आप टर्मिनल में नीचे दी गई कमांड चलाकर थीम बना सकते हैं।
-
-``` bash
-metro make:theme bright_theme
-```
-
-यह `lib/resources/themes/` में एक नई थीम बनाएगा।
-
-<div id="forcefully-make-a-theme"></div>
-
-### ज़बरदस्ती थीम बनाना
-
-**आर्गुमेंट्स:**
-
-`--force` या `-f` फ़्लैग का उपयोग करने से मौजूदा थीम ओवरराइट हो जाएगी अगर वह पहले से मौजूद है।
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## फ़ॉर्म बनाना
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-ऊपर दी गई कमांड `lib/resources/widgets/` में एक नया विजेट बनाएगी।
+ऊपर दी गई कमांड `lib/resources/widgets/` में एक नया विजेट बनाएगी। जेनरेट किया गया विजेट `NyStateManaged` को एक्सटेंड करता है, जो `stateName` कंस्ट्रक्टर पैरामीटर के माध्यम से मल्टी-इंस्टेंस आइसोलेशन को सपोर्ट करता है।
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 `--force` या `-f` फ़्लैग का उपयोग करने से मौजूदा विजेट ओवरराइट हो जाएगा अगर वह पहले से मौजूद है।
 

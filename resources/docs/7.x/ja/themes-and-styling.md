@@ -49,17 +49,54 @@
 
 ## テーマの作成
 
-アプリに複数のテーマを持たせたい場合、簡単に作成できます。テーマが初めての方は、以下の手順に従ってください。
+アプリに複数のテーマを持たせたい場合、`lib/resources/themes/` 以下に手動でテーマファイルを作成してください。以下の手順では `bright` を例として使用しています。テーマ名はご自身のものに置き換えてください。
 
-まず、ターミナルで以下のコマンドを実行します
+**ステップ 1:** `lib/resources/themes/bright/bright_theme.dart` にテーマファイルを作成します:
 
-``` bash
-dart run nylo_framework:main make:theme bright_theme
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/base_theme.dart';
+import '/resources/themes/color_styles.dart';
+
+ThemeData brightTheme(ColorStyles color) =>
+    buildAppTheme(color, brightness: Brightness.light);
 ```
 
-<b>注意:</b> **bright_theme** を新しいテーマの名前に置き換えてください。
+**ステップ 2:** `lib/resources/themes/bright/bright_theme_colors.dart` にカラーファイルを作成します:
 
-これにより `lib/resources/themes/bright/` に `bright_theme.dart` と `bright_theme_colors.dart` の両方を含む新しいテーマディレクトリが作成され、`lib/bootstrap/theme.dart` に登録されます。
+``` dart
+import 'package:flutter/material.dart';
+import '/resources/themes/color_styles.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class BrightThemeColors extends ColorStyles {
+  @override
+  GeneralColors get general => const GeneralColors(
+        background: Color(0xFFFFFDE7),
+        content: Color(0xFF000000),
+        primaryAccent: Color(0xFFFBC02D),
+        surface: Colors.white,
+        surfaceContent: Colors.black,
+      );
+
+  @override
+  AppBarColors get appBar => const AppBarColors(
+        background: Color(0xFFFBC02D),
+        content: Colors.white,
+      );
+
+  @override
+  BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
+        background: Colors.white,
+        iconSelected: Color(0xFFFBC02D),
+        iconUnselected: Colors.black54,
+        labelSelected: Colors.black,
+        labelUnselected: Colors.black45,
+      );
+}
+```
+
+**ステップ 3:** `lib/bootstrap/theme.dart` に新しいテーマを登録します。
 
 ``` dart
 // lib/bootstrap/theme.dart
@@ -77,7 +114,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
     type: NyThemeType.dark,
   ),
 
-  BaseThemeConfig<ColorStyles>( // 新しいテーマが自動的に追加
+  BaseThemeConfig<ColorStyles>(
     id: 'bright_theme',
     theme: brightTheme,
     colors: BrightThemeColors(),
@@ -86,7 +123,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 ];
 ```
 
-新しいテーマのカラーは **lib/resources/themes/bright/bright_theme_colors.dart** ファイルで変更できます。
+`bright_theme_colors.dart` のカラーはデザインに合わせて変更できます。
 
 <div id="theme-colors"></div>
 

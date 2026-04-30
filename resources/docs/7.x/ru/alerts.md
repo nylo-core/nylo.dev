@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Warning toast
 showToastWarning(description: "Your session is about to expire");
 
-// Info toast
-showToastInfo(description: "New version available");
+// Info toast — description необязательный
+showToastInfo();
 
-// Danger toast
-showToastDanger(description: "Failed to save item");
+// Danger toast с настраиваемой длительностью
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Или используйте глобальную функцию с идентификатором стиля:
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Success
+    // Success — description необязательный
     showToastSuccess(description: "Saved!");
 
     // With custom title
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Warning
-    showToastWarning(description: "Check your input");
+    // Warning с настраиваемой длительностью
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Info
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Info — description не требуется
+    showToastInfo();
 
-    // Danger
-    showToastDanger(description: "Something went wrong");
+    // Danger с полезной нагрузкой данных для стилей с данными
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (uses danger style)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Доступные методы: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Доступные методы: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Все принимают необязательные параметры `description`, `duration` (`Duration?`) и `data` (`Map<String, dynamic>?`).
 
 <div id="show-toast-notification"></div>
 

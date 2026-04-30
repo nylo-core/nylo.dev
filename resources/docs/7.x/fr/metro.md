@@ -15,7 +15,7 @@
   - [Creer un service API](#make-api-service "Creer un service API")
   - [Creer un evenement](#make-event "Creer un evenement")
   - [Creer un provider](#make-provider "Creer un provider")
-  - [Creer un theme](#make-theme "Creer un theme")
+
   - [Creer des formulaires](#make-forms "Creer des formulaires")
   - [Creer un garde de route](#make-route-guard "Creer un garde de route")
   - [Creer un fichier de configuration](#make-config-file "Creer un fichier de configuration")
@@ -101,7 +101,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -499,37 +498,6 @@ L'utilisation du flag `--force` ou `-f` ecrasera un provider existant s'il exist
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Creer un theme
-
-- [Creer un nouveau theme](#making-a-new-theme "Creer un nouveau theme avec Metro")
-- [Forcer la creation d'un theme](#forcefully-make-a-theme "Forcer la creation d'un theme avec Metro")
-
-<div id="making-a-new-theme"></div>
-
-### Creer un nouveau theme
-
-Vous pouvez creer des themes en executant la commande suivante dans le terminal.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Cela creera un nouveau theme dans `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Forcer la creation d'un theme
-
-**Arguments :**
-
-L'utilisation du flag `--force` ou `-f` ecrasera un theme existant s'il existe deja.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Creer des formulaires
@@ -681,7 +649,51 @@ Vous pouvez creer un nouveau widget a etat gere en executant la commande suivant
 metro make:state_managed_widget product_rating_widget
 ```
 
-La commande ci-dessus creera un nouveau widget dans `lib/resources/widgets/`.
+La commande ci-dessus creera un nouveau widget dans `lib/resources/widgets/`. Le widget genere etend `NyStateManaged`, qui prend en charge l'isolation multi-instance via un parametre de constructeur `stateName`.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // logique d'initialisation ici
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoquer des actions depuis n'importe ou dans l'application
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 L'utilisation du flag `--force` ou `-f` ecrasera un widget existant s'il existe deja.
 

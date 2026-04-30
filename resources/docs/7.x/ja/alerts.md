@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // 警告トースト
 showToastWarning(description: "Your session is about to expire");
 
-// 情報トースト
-showToastInfo(description: "New version available");
+// 情報トースト — description は省略可能
+showToastInfo();
 
-// 危険トースト
-showToastDanger(description: "Failed to save item");
+// 危険トースト（カスタム表示時間付き）
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 またはスタイル ID を指定してグローバル関数を使用します:
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // 成功
+    // 成功 — description は省略可能
     showToastSuccess(description: "Saved!");
 
     // カスタムタイトル付き
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // 警告
-    showToastWarning(description: "Check your input");
+    // カスタム表示時間付き警告
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // 情報
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // 情報 — description は不要
+    showToastInfo();
 
-    // 危険
-    showToastDanger(description: "Something went wrong");
+    // データペイロード付き危険（データ対応スタイルに転送）
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops（danger スタイルを使用）
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-利用可能なメソッド: `showToastSuccess`、`showToastWarning`、`showToastInfo`、`showToastDanger`、`showToastOops`、`showToastSorry`、`showToastCustom`。
+利用可能なメソッド: `showToastSuccess`、`showToastWarning`、`showToastInfo`、`showToastDanger`、`showToastOops`、`showToastSorry`、`showToastCustom`。すべてのメソッドはオプションの `description`、`duration`（`Duration?`）、`data`（`Map<String, dynamic>?`）パラメータを受け付けます。
 
 <div id="show-toast-notification"></div>
 

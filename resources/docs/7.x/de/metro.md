@@ -15,7 +15,7 @@
   - [API Service erstellen](#make-api-service "API Service erstellen")
   - [Event erstellen](#make-event "Event erstellen")
   - [Provider erstellen](#make-provider "Provider erstellen")
-  - [Theme erstellen](#make-theme "Theme erstellen")
+
   - [Formulare erstellen](#make-forms "Formulare erstellen")
   - [Route Guard erstellen](#make-route-guard "Route Guard erstellen")
   - [Config-Datei erstellen](#make-config-file "Config-Datei erstellen")
@@ -101,7 +101,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -499,37 +498,6 @@ Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Provider ueberschrieben, 
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Theme erstellen
-
-- [Ein neues Theme erstellen](#making-a-new-theme "Ein neues Theme mit Metro erstellen")
-- [Theme erzwungen erstellen](#forcefully-make-a-theme "Ein Theme erzwungen mit Metro erstellen")
-
-<div id="making-a-new-theme"></div>
-
-### Ein neues Theme erstellen
-
-Sie koennen Themes erstellen, indem Sie Folgendes im Terminal ausfuehren.
-
-``` bash
-metro make:theme bright_theme
-```
-
-Dies erstellt ein neues Theme in `lib/resources/themes/`.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Theme erzwungen erstellen
-
-**Argumente:**
-
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Theme ueberschrieben, falls es bereits existiert.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Formulare erstellen
@@ -681,7 +649,51 @@ Sie koennen ein neues State Managed Widget erstellen, indem Sie Folgendes im Ter
 metro make:state_managed_widget product_rating_widget
 ```
 
-Das obige erstellt ein neues Widget in `lib/resources/widgets/`.
+Das obige erstellt ein neues Widget in `lib/resources/widgets/`. Das generierte Widget erweitert `NyStateManaged`, das Multi-Instance-Isolation ueber einen `stateName`-Konstruktorparameter unterstuetzt.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // Initialisierungslogik hier
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Aktionen von ueberall in der App aufrufen
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget ueberschrieben, falls es bereits existiert.
 

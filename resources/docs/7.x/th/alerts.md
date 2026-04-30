@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Toast เตือน
 showToastWarning(description: "Your session is about to expire");
 
-// Toast ข้อมูล
-showToastInfo(description: "New version available");
+// Toast ข้อมูล — description เป็นตัวเลือก
+showToastInfo();
 
-// Toast อันตราย
-showToastDanger(description: "Failed to save item");
+// Toast อันตรายพร้อม duration แบบกำหนดเอง
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 หรือใช้ฟังก์ชันแบบ global พร้อม style ID:
@@ -104,20 +104,20 @@ class ToastNotificationConfig {
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // สำเร็จ
+    // สำเร็จ — description เป็นตัวเลือก
     showToastSuccess(description: "Saved!");
 
     // พร้อมชื่อเรื่องแบบกำหนดเอง
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // เตือน
-    showToastWarning(description: "Check your input");
+    // เตือนพร้อม duration แบบกำหนดเอง
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // ข้อมูล
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // ข้อมูล — ไม่จำเป็นต้องมี description
+    showToastInfo();
 
-    // อันตราย
-    showToastDanger(description: "Something went wrong");
+    // อันตรายพร้อม data payload ที่ส่งต่อไปยังสไตล์แบบรับข้อมูลจากรันไทม์
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // อ๊ะ (ใช้สไตล์ danger)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-เมธอดที่ใช้ได้: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`
+เมธอดที่ใช้ได้: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom` ทั้งหมดรับพารามิเตอร์ตัวเลือก `description`, `duration` (`Duration?`) และ `data` (`Map<String, dynamic>?`)
 
 <div id="show-toast-notification"></div>
 

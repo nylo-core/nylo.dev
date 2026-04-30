@@ -50,18 +50,22 @@ Mari kita sebut widget ini `Cart()`.
 
 Widget `Cart` yang dikelola state-nya di Nylo akan terlihat seperti ini:
 
-**Langkah 1:** Definisikan widget dengan nama state statis
+**Langkah 1:** Definisikan widget yang meng-extend `NyStateManaged`
 
 ``` dart
 /// Widget Cart
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // Pengenal unik untuk state widget ini
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // Daftarkan nama state
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // Muat ulang widget saat state diperbarui
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 Mari kita uraikan ini.
 
-1. Widget `Cart` adalah `StatefulWidget`.
+1. Widget `Cart` meng-extend `NyStateManaged` (bukan `StatefulWidget` secara langsung).
 
-2. `_CartState` meng-extend `NyState<Cart>`.
+2. Parameter constructor `stateName` diteruskan melalui `super(child: () => _CartState(stateName))`, memungkinkan beberapa instance terisolasi dari widget yang sama.
 
-3. Anda perlu mendefinisikan nama untuk `state`, ini digunakan untuk mengidentifikasi state.
+3. Helper `_stateFor(String? state)` menghasilkan kunci state yang memiliki namespace seperti `"cart_sidebar"` untuk instance bernama.
 
-4. Metode `boot()` dipanggil ketika widget pertama kali dimuat.
+4. `_CartState` meng-extend `NyState<Cart>` dan menerima `stateName` untuk mendaftarkan state terisolasi yang benar.
 
-5. Metode `stateUpdate()` menangani apa yang terjadi ketika state diperbarui.
+5. Map `stateActions` mendefinisikan perintah bernama yang dapat Anda panggil pada widget dari mana saja di aplikasi Anda.
 
 Jika Anda ingin mencoba contoh ini di proyek {{ config('app.name') }} Anda, buat widget baru bernama `Cart`.
 
@@ -310,7 +321,7 @@ class _MyPageState extends NyPage<MyPage> {
 ...
 
 @override
-bool get stateManaged => true;
+bool get stateManaged => false; // set to true to enable state actions on this page
 
 @override
 get stateActions => {

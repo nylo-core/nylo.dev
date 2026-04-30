@@ -39,11 +39,11 @@ showToastSuccess(description: "Item saved successfully");
 // Toast d'avertissement
 showToastWarning(description: "Your session is about to expire");
 
-// Toast d'information
-showToastInfo(description: "New version available");
+// Toast d'information — la description est optionnelle
+showToastInfo();
 
-// Toast de danger
-showToastDanger(description: "Failed to save item");
+// Toast de danger avec duree personnalisee
+showToastDanger(description: "Failed to save item", duration: Duration(seconds: 5));
 ```
 
 Ou utilisez la fonction globale avec un identifiant de style :
@@ -104,20 +104,20 @@ Dans toute page etendant `NyState` ou `NyBaseState`, utilisez ces methodes prati
 class _MyPageState extends NyState<MyPage> {
 
   void onSave() {
-    // Succes
+    // Succes — la description est optionnelle
     showToastSuccess(description: "Saved!");
 
     // Avec titre personnalise
     showToastSuccess(title: "Done", description: "Your profile was updated.");
 
-    // Avertissement
-    showToastWarning(description: "Check your input");
+    // Avertissement avec duree personnalisee
+    showToastWarning(description: "Check your input", duration: Duration(seconds: 4));
 
-    // Information
-    showToastInfo(description: "Tip: Swipe left to delete");
+    // Information — aucune description requise
+    showToastInfo();
 
-    // Danger
-    showToastDanger(description: "Something went wrong");
+    // Danger avec une charge utile de donnees transmise aux styles dependants des donnees
+    showToastDanger(description: "Something went wrong", data: {"code": "ERR_500"});
 
     // Oops (utilise le style danger)
     showToastOops(description: "That didn't work");
@@ -161,7 +161,7 @@ class ProfileController extends NyController {
 }
 ```
 
-Methodes disponibles : `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`.
+Methodes disponibles : `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Toutes acceptent des parametres optionnels `description`, `duration` (`Duration?`) et `data` (`Map<String, dynamic>?`).
 
 <div id="show-toast-notification"></div>
 

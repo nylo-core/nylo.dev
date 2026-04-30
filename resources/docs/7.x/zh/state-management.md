@@ -50,18 +50,22 @@ Flutter 中的一切都是组件，它们只是可以组合成完整应用的 UI
 
 在 Nylo 中，一个状态管理的 `Cart` 组件如下所示：
 
-**步骤 1：** 定义带有静态状态名称的组件
+**步骤 1：** 定义继承 `NyStateManaged` 的组件
 
 ``` dart
 /// Cart 组件
-class Cart extends StatefulWidget {
-
-  Cart({Key? key}) : super(key: key);
+class Cart extends NyStateManaged {
+  Cart({super.key, super.stateName})
+      : super(child: () => _CartState(stateName));
 
   static String state = "cart"; // 此组件状态的唯一标识符
 
-  @override
-  _CartState createState() => _CartState();
+  static String _stateFor(String? state) =>
+      state == null ? Cart.state : "${Cart.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
 }
 ```
 
@@ -73,8 +77,8 @@ class _CartState extends NyState<Cart> {
 
   String? _cartValue;
 
-  _CartState() {
-    stateName = Cart.state; // 注册状态名称
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
   }
 
   @override
@@ -83,9 +87,16 @@ class _CartState extends NyState<Cart> {
   };
 
   @override
-  void stateUpdated(data) {
-    reboot(); // 状态更新时重新加载组件
-  }
+  Map<String, Function> get stateActions => {
+    "reload_cart": (data) async {
+      _cartValue = await getCartValue();
+      setState(() {});
+    },
+    "clear_cart": () {
+      _cartValue = null;
+      setState(() {});
+    },
+  };
 
   @override
   Widget view(BuildContext context) {
@@ -114,15 +125,15 @@ Future setCartValue(String value) async {
 
 让我们分解一下。
 
-1. `Cart` 组件是一个 `StatefulWidget`。
+1. `Cart` 组件继承 `NyStateManaged`（而非直接继承 `StatefulWidget`）。
 
-2. `_CartState` 扩展了 `NyState<Cart>`。
+2. `stateName` 构造函数参数通过 `super(child: () => _CartState(stateName))` 转发，从而支持同一组件的多个独立实例。
 
-3. 您需要为 `state` 定义一个名称，用于标识状态。
+3. `_stateFor(String? state)` 辅助方法为命名实例生成类似 `"cart_sidebar"` 的命名空间状态键。
 
-4. `boot()` 方法在组件首次加载时调用。
+4. `_CartState` 继承 `NyState<Cart>`，并接收 `stateName` 以注册正确的隔离状态。
 
-5. `stateUpdate()` 方法处理状态更新时发生的事情。
+5. `stateActions` 映射定义了可以从应用的任何位置调用的命名命令。
 
 如果您想在 {{ config('app.name') }} 项目中尝试此示例，请创建一个名为 `Cart` 的新组件。
 

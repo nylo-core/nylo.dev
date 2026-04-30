@@ -15,7 +15,6 @@
   - [API Service 생성](#make-api-service "API Service 생성")
   - [Event 생성](#make-event "Event 생성")
   - [Provider 생성](#make-provider "Provider 생성")
-  - [Theme 생성](#make-theme "Theme 생성")
   - [Form 생성](#make-forms "Form 생성")
   - [Route Guard 생성](#make-route-guard "Route Guard 생성")
   - [Config 파일 생성](#make-config-file "Config 파일 생성")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## Theme 생성
-
-- [새 Theme 만들기](#making-a-new-theme "Make a new theme with Metro")
-- [Theme 강제 생성](#forcefully-make-a-theme "Forcefully make a new theme with Metro")
-
-<div id="making-a-new-theme"></div>
-
-### 새 Theme 만들기
-
-터미널에서 아래 명령어를 실행하여 Theme를 생성할 수 있습니다.
-
-``` bash
-metro make:theme bright_theme
-```
-
-`lib/resources/themes/`에 새 Theme가 생성됩니다.
-
-<div id="forcefully-make-a-theme"></div>
-
-### Theme 강제 생성
-
-**인수:**
-
-`--force` 또는 `-f` 플래그를 사용하면 이미 존재하는 Theme를 덮어씁니다.
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## Form 생성
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-위 명령어는 `lib/resources/widgets/`에 새 위젯을 생성합니다.
+위 명령어는 `lib/resources/widgets/`에 새 위젯을 생성합니다. 생성된 위젯은 `NyStateManaged`를 확장하며, `stateName` 생성자 매개변수를 통한 다중 인스턴스 격리를 지원합니다.
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // 초기화 로직을 여기에 작성
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // 앱 어디서나 액션 호출 가능
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 `--force` 또는 `-f` 플래그를 사용하면 이미 존재하는 위젯을 덮어씁니다.
 
@@ -795,13 +806,9 @@ metro make:key
 
 | 플래그 / 옵션 | 약어 | 설명 |
 |---------------|-------|-------------|
-| `--force` | `-f` | 기존 APP_KEY 덮어쓰기 |
 | `--file` | `-e` | 대상 .env 파일 (기본값: `.env`) |
 
 ``` bash
-# Key 생성 및 기존 키 덮어쓰기
-metro make:key --force
-
 # 특정 env 파일에 Key 생성
 metro make:key --file=.env.production
 ```

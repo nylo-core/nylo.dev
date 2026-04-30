@@ -15,7 +15,6 @@
   - [API Service の作成](#make-api-service "API Service の作成")
   - [イベントの作成](#make-event "イベントの作成")
   - [プロバイダの作成](#make-provider "プロバイダの作成")
-  - [テーマの作成](#make-theme "テーマの作成")
   - [フォームの作成](#make-forms "フォームの作成")
   - [ルートガードの作成](#make-route-guard "ルートガードの作成")
   - [設定ファイルの作成](#make-config-file "設定ファイルの作成")
@@ -101,7 +100,6 @@ All commands:
   make:api_service
   make:controller
   make:event
-  make:theme
   make:route_guard
   make:config
   make:interceptor
@@ -500,37 +498,6 @@ metro make:provider integrations/firebase_provider
 metro make:provider firebase_provider --force
 ```
 
-<div id="make-theme"></div>
-
-## テーマの作成
-
-- [新しいテーマの作成](#making-a-new-theme "新しいテーマの作成")
-- [テーマの強制作成](#forcefully-make-a-theme "テーマの強制作成")
-
-<div id="making-a-new-theme"></div>
-
-### 新しいテーマの作成
-
-ターミナルで以下を実行してテーマを作成できます。
-
-``` bash
-metro make:theme bright_theme
-```
-
-これにより、`lib/resources/themes/` に新しいテーマが作成されます。
-
-<div id="forcefully-make-a-theme"></div>
-
-### テーマの強制作成
-
-**引数:**
-
-`--force` または `-f` フラグを使用すると、既存のテーマが存在する場合でも上書きします。
-
-``` bash
-metro make:theme bright_theme --force
-```
-
 <div id="make-forms"></div>
 
 ## フォームの作成
@@ -682,7 +649,51 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-上記のコマンドにより、`lib/resources/widgets/` に新しいウィジェットが作成されます。
+上記のコマンドにより、`lib/resources/widgets/` に新しいウィジェットが作成されます。生成されるウィジェットは `NyStateManaged` を継承し、`stateName` コンストラクタパラメータによる複数インスタンスの独立管理をサポートします。
+
+``` dart
+class ProductRatingWidget extends NyStateManaged {
+  ProductRatingWidget({super.key, super.stateName})
+      : super(child: () => _ProductRatingWidgetState(stateName));
+
+  static String state = "product_rating_widget";
+
+  static String _stateFor(String? state) =>
+      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
+
+  static action(String action, {dynamic data, String? stateName}) {
+    return stateAction(action, data: data, state: _stateFor(stateName));
+  }
+}
+
+class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
+  _ProductRatingWidgetState(String? stateName) {
+    this.stateName = ProductRatingWidget._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+   // 初期化ロジックをここに記述
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // アプリのどこからでもアクションを呼び出せます
+      // ProductRatingWidget.action("my_action", data: "hello world");
+      // ProductRatingWidget.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
+```
 
 `--force` または `-f` フラグを使用すると、既存のウィジェットが存在する場合でも上書きします。
 
@@ -795,13 +806,9 @@ metro make:key
 
 | フラグ / オプション | 短縮形 | 説明 |
 |---------------|-------|-------------|
-| `--force` | `-f` | 既存の APP_KEY を上書き |
 | `--file` | `-e` | 対象の .env ファイル（デフォルト: `.env`） |
 
 ``` bash
-# キーを生成して既存のものを上書き
-metro make:key --force
-
 # 特定の env ファイル用のキーを生成
 metro make:key --file=.env.production
 ```
