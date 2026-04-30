@@ -488,7 +488,7 @@
                 });
             },
             searchParameters: {
-                facetFilters: ['version:latest'],
+                facetFilters: ['version:latest', 'language:{{ app()->getLocale() }}'],
             },
             debug: false
         });
