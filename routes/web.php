@@ -11,6 +11,11 @@ Route::get('/', [LandingController::class, 'index'])
     ->middleware('locale')
     ->name('landing.home');
 
+// Canonicalize /en/docs/... to the non-localized canonical form
+Route::get('en/docs/{version}/{page?}', function (string $version, string $page = 'installation') {
+    return redirect("/docs/{$version}/{$page}", 301);
+})->where(['version' => '[\w.]+', 'page' => '[\w-]+']);
+
 // Localized landing pages
 Route::prefix('{locale}')
     ->middleware('locale')

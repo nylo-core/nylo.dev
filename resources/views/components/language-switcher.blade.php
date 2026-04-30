@@ -57,8 +57,21 @@
                         'landing.home' => 'landing.index',
                     ];
 
-                    // If current route has a localized version, use it
-                    if (isset($localizedRouteMap[$routeName])) {
+                    // Docs has a canonical (landing.docs.default) + localized (landing.docs) pair.
+                    // English uses the canonical route; other locales use the localized route.
+                    if (in_array($routeName, ['landing.docs', 'landing.docs.default'], true)) {
+                        $docParams = [
+                            'version' => $currentParams['version'] ?? '',
+                            'page' => $currentParams['page'] ?? 'installation',
+                        ];
+                        if ($code === 'en') {
+                            $targetRoute = 'landing.docs.default';
+                            $routeParams = $docParams;
+                        } else {
+                            $targetRoute = 'landing.docs';
+                            $routeParams = array_merge($docParams, ['locale' => $code]);
+                        }
+                    } elseif (isset($localizedRouteMap[$routeName])) {
                         $targetRoute = $localizedRouteMap[$routeName];
                         $routeParams = ['locale' => $code];
                     } else {
