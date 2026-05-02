@@ -1,64 +1,395 @@
-# 状态管理
+# 状态管理组件
 
 ---
 
 <a name="section-1"></a>
 - [简介](#introduction "简介")
-- [何时使用状态管理](#when-to-use-state-management "何时使用状态管理")
-- [生命周期](#lifecycle "生命周期")
+- [选择您的模式](#choose-your-pattern "选择您的模式")
 - [状态动作](#state-actions "状态动作")
-  - [NyState - 状态动作](#state-actions-nystate "NyState - 状态动作")
-  - [NyPage - 状态动作](#state-actions-nypage "NyPage - 状态动作")
-- [更新状态](#updating-a-state "更新状态")
-- [构建您的第一个组件](#building-your-first-widget "构建您的第一个组件")
+  - [定义处理器](#defining-handlers "定义处理器")
+  - [触发动作](#triggering-actions "触发动作")
+  - [有无数据的处理器](#handlers-with-and-without-data "有无数据的处理器")
+  - [使用 StateActions 实例](#using-a-state-actions-instance "使用 StateActions 实例")
+- [模式：状态管理页面 (NyPage)](#pattern-ny-page "模式：状态管理页面")
+- [模式：有状态组件 (NyState)](#pattern-ny-state "模式：有状态组件")
+- [模式：状态管理组件 (NyStateManaged)](#pattern-ny-state-managed "模式：状态管理组件")
+  - [高级：多个隔离实例](#advanced-multiple-isolated-instances "高级：多个隔离实例")
+- [生命周期参考](#lifecycle "生命周期参考")
 
 <div id="introduction"></div>
 
 ## 简介
 
-状态管理让您可以更新 UI 的特定部分，而无需重建整个页面。在 {{ config('app.name') }} v7 中，您可以构建在整个应用中相互通信和更新的组件。
+状态管理组件让您无需重建整个页面，即可从应用的任何位置更新 UI 的特定部分。在 {{ config('app.name') }} v7 中，您可以对目标组件或页面触发命名的**状态动作**，相应的处理器随即执行。
 
-{{ config('app.name') }} 提供两个用于状态管理的类：
-- **`NyState`** — 用于构建可重用的组件（如购物车徽章、通知计数器或状态指示器）
-- **`NyPage`** — 用于构建应用中的页面（扩展 `NyState` 并添加页面特定功能）
+其核心模型很简单：
 
-在以下情况下使用状态管理：
-- 需要从应用的不同部分更新组件
-- 需要保持组件与共享数据同步
-- 需要避免在只有部分 UI 变化时重建整个页面
+- 每个状态管理组件或页面都有一个唯一的**状态键**（字符串）
+- 它定义了一个已知如何处理的**命名动作**映射
+- 在应用的任何位置，您可以调用
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### 首先了解状态管理
-
-Flutter 中的一切都是组件，它们只是可以组合成完整应用的 UI 小块。
-
-当您开始构建复杂页面时，需要管理组件的状态。这意味着当某些东西发生变化时（例如数据），您可以更新该组件而无需重建整个页面。
-
-这很重要的原因有很多，但主要原因是性能。如果您有一个不断变化的组件，您不希望每次变化时都重建整个页面。
-
-这就是状态管理的用武之地，它允许您管理应用中组件的状态。
+构建状态管理 UI 有三种模式。它们都共享相同的 `stateAction` 机制——唯一的区别是您要管理的 UI 类型。
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### 何时使用状态管理
+## 选择您的模式
 
-当您有一个需要更新而不重建整个页面的组件时，应使用状态管理。
+| 您想要... | 使用 | 脚手架命令 |
+|---|---|---|
+| 对整个页面进行状态管理 | `NyPage` | `metro make:page my_page` |
+| 对单实例组件进行状态管理 | `NyState` | `metro make:stateful_widget my_widget` |
+| 对具有多个隔离实例的组件进行状态管理 | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-例如，假设您创建了一个电商应用。您构建了一个组件来显示用户购物车中的商品总数。
-我们称这个组件为 `Cart()`。
+请先阅读 [状态动作](#state-actions) 章节——它解释了每种模式使用的 API。然后跳转到适合您场景的模式。
 
-在 Nylo 中，一个状态管理的 `Cart` 组件如下所示：
 
-**步骤 1：** 定义继承 `NyStateManaged` 的组件
+<div id="state-actions"></div>
+
+## 状态动作
+
+状态动作是组件或页面知道如何处理的命名命令。您定义动作名称到处理器函数的映射，并在应用的任何位置按名称触发它们。
+
+在以下情况下使用状态动作：
+- 需要在组件或页面上触发特定行为（不仅仅是通用刷新）
+- 需要向组件传递数据并让它以定义的方式响应
+- 需要构建可从多个调用位置调用的可复用组件行为
+
+<div id="defining-handlers"></div>
+
+### 定义处理器
+
+处理器存在于 `NyState` 或 `NyPage` 类的 `stateActions` getter 中。映射的键是动作名称；值是该动作被触发时运行的函数。
 
 ``` dart
-/// Cart 组件
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+如果处理器希望组件重建，则由处理器自身负责调用 `setState`。
+
+上面的 `apply_discount` 处理器接受一个 `code` 参数——当您的处理器需要通过以下方式传递的载荷时，声明单个位置参数
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+当动作不携带载荷时，使用无参数形式 `()`。
+
+
+<div id="triggering-actions"></div>
+
+### 触发动作
+
+使用顶层 `stateAction` 函数从任何位置触发动作——另一个组件、控制器、事件处理器、API 回调等。
+
+``` dart
+// 不带数据触发动作
+stateAction("clear_cart", state: Cart.state);
+
+// 带数据触发动作
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+`state:` 参数是目标的**状态键**：
+- 对于组件 — `MyWidget.state`（字符串）
+- 对于页面 — `MyPage.path`（路由）
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### 有无数据的处理器
+
+处理器可以是同步或异步的，可以带或不带 `data` 参数定义：
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // 无数据 — 处理器按原样运行
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // 带数据 — 接收通过 `data:` 参数传递的内容
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // 支持异步 — 框架会 await 处理器
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+如果您向 `stateAction` 传递了 `data:`，但您的处理器不接受参数，则数据会被简单忽略。
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### 使用 StateActions 实例
+
+如果组件公开了一个类型化的 `StateActions` 实例（通常通过 `stateActions(stateName)` 静态方法），您可以直接在其上调用 `.action(...)`，而不是使用自由函数。当向同一目标触发多个动作时，这种方式更简洁：
+
+``` dart
+// 使用自由函数
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// 使用 StateActions 实例 — 等价，减少重复
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+几个内置组件（`InputField`、`CollectionView`、`LanguageSwitcher`、`NyForm*` 系列）附带类型化的 `StateActions` 类，其中包含 `.clear()`、`.setValue(...)`、`.refresh()` 等命名方法——请查阅各组件文档了解可用内容。
+
+
+<div id="pattern-ny-page"></div>
+
+## 模式：状态管理页面 (NyPage)
+
+当您希望从应用的其他位置对整个页面触发行为时使用——例如，在事件触发时刷新页面，或从子组件清除表单状态。
+
+**第 1 步：** 生成一个页面脚手架。
+
+``` bash
+metro make:page my_page
+```
+
+这会在 `lib/resources/pages/` 中生成一个 `NyPage`：
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**第 2 步：** 将 `stateManaged` 切换为 `true`。
+
+默认情况下，页面**不**订阅状态事件——这避免了在不需要的页面上产生不必要的监听器。要在页面上启用状态动作，请更改 getter：
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**第 3 步：** 添加 `stateActions` 映射。
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**第 4 步：** 使用页面的 `path` 从任何位置触发动作。
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> 页面以 `MyPage.path` 为键，组件以 `MyWidget.state` 为键。这是调用端的唯一区别。
+
+
+<div id="pattern-ny-state"></div>
+
+## 模式：有状态组件 (NyState)
+
+用于每个页面以单个实例存在的可复用组件——个人资料卡、标题栏、状态指示器。如果您一次只渲染一个组件实例，这是正确的模式。
+
+**第 1 步：** 生成一个有状态组件脚手架。
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+这会在 `lib/resources/widgets/` 中生成以下内容：
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+脚手架为您提供了一个可工作的 `NyState` 组件——但它**尚未进行状态管理**。要让它响应状态动作，您需要添加四件事：
+
+1. 组件类上的 `state` 键——应用其他部分将以此为目标的唯一字符串
+2. 接收状态键并将其转发给状态类的构造函数参数
+3. 分配 `stateName` 的状态类构造函数
+4. 定义处理器的 `stateActions` 映射
+
+**第 2 步：** 将脚手架转换为状态管理组件。
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ 从应用的任何位置调用此方法以触发下面的处理器
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+变更说明：
+- `static String get state => "profile_card";` 定义公共状态键
+- `createState() => _ProfileCardState(state)` 将键传入状态类
+- `_ProfileCardState(String? state) { this.stateName = state; }` 在该键下注册此状态实例，使框架知道将动作投递给哪个组件
+- `stateActions` 声明命名处理器
+
+**第 3 步：** 从任何位置触发。
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+您可以根据需要添加任意数量的处理器，带或不带数据：
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## 模式：状态管理组件 (NyStateManaged)
+
+当您需要同时在屏幕上显示**同一组件的多个独立实例**时使用——例如，标题中的购物车徽章和侧边栏中的另一个徽章，它们应当独立更新。
+
+`NyStateManaged` 添加了一个 `stateName` 参数，使每个实例可以单独寻址。如果您只渲染组件的一个实例，请优先使用更简单的 `NyState`。
+
+**第 1 步：** 生成一个状态管理组件脚手架。
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+这会在 `lib/resources/widgets/` 中生成以下内容：
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // 此组件状态的唯一标识符
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // 初始化逻辑在此处
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // 从应用的任何位置调用动作
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**步骤 2：** 创建扩展 `NyState` 的状态类
+**第 2 步：** 充实状态——在 `init` 中加载数据，定义处理器，并进行渲染。
 
 ``` dart
-/// Cart 组件的状态类
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // 加载初始数据
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**步骤 3：** 创建用于读取和更新购物车的辅助函数
+**第 3 步：** 使用生成的静态 `action()` 辅助方法触发动作。
 
 ``` dart
-/// 从存储中获取购物车的值
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// 设置购物车的值并通知组件
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // 这会触发组件的 stateUpdated()
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-让我们分解一下。
+这等价于 `stateAction("reload_cart", state: Cart.state)`——静态辅助方法只是去除了样板代码。
 
-1. `Cart` 组件继承 `NyStateManaged`（而非直接继承 `StatefulWidget`）。
 
-2. `stateName` 构造函数参数通过 `super(child: () => _CartState(stateName))` 转发，从而支持同一组件的多个独立实例。
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. `_stateFor(String? state)` 辅助方法为命名实例生成类似 `"cart_sidebar"` 的命名空间状态键。
+### 高级：多个隔离实例
 
-4. `_CartState` 继承 `NyState<Cart>`，并接收 `stateName` 以注册正确的隔离状态。
+`NyStateManaged` 存在的原因是支持同一组件的多个独立实例。每个实例获得自己的 `stateName`，从而生成命名空间化的状态键。
 
-5. `stateActions` 映射定义了可以从应用的任何位置调用的命名命令。
+渲染两个具有不同名称的购物车：
 
-如果您想在 {{ config('app.name') }} 项目中尝试此示例，请创建一个名为 `Cart` 的新组件。
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-然后您可以复制上面的示例并在项目中尝试。
+现在您可以独立更新其中任意一个：
 
-现在，要更新购物车，您可以调用以下方法。
+``` dart
+// 仅重新加载标题购物车
+Cart.action("reload_cart", stateName: "header");
 
-```dart
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// 仅重新加载侧边栏购物车
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// 无 stateName — 以默认无名实例为目标
+Cart.action("reload_cart");
 ```
+
+`_stateFor` 辅助方法处理命名空间：`Cart(stateName: "header")` 在键 `"cart_header"` 下注册，而 `Cart.action(..., stateName: "header")` 以该确切键为目标。
 
 
 <div id="lifecycle"></div>
 
-## 生命周期
+## 生命周期参考
 
-`NyState` 组件的生命周期如下：
+状态管理组件和页面共享两个关键生命周期钩子：
 
-1. `init()` - 在状态初始化时调用此方法。
+1. **`init()`** — 在状态首次创建时调用一次。用于加载初始数据。
 
-2. `stateUpdated(data)` - 在状态更新时调用此方法。
+2. **`stateUpdated(data)`** — 每当针对此状态触发状态动作时调用。`data` 参数是完整载荷（包括动作名称和动作数据）。如果您需要响应*每一个*状态动作，请覆盖它——但大多数情况下，在 `stateActions` 中定义处理器才是您真正需要的。
 
-    如果您调用 `updateState(MyStateName.state, data: "The Data")`，它将触发 **stateUpdated(data)** 被调用。
-
-状态首次初始化后，您需要实现如何管理状态。
-
-
-<div id="state-actions"></div>
-
-## 状态动作
-
-状态动作让您可以从应用的任何位置触发组件上的特定方法。将它们视为可以发送给组件的命名命令。
-
-在以下情况下使用状态动作：
-- 需要在组件上触发特定行为（不仅仅是刷新它）
-- 需要向组件传递数据并让它以特定方式响应
-- 需要创建可从多个位置调用的可重用组件行为
-
-``` dart
-// 向组件发送动作
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// 另一个带数据的示例
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-在您的组件中，您可以定义要处理的动作。
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // 带数据的示例
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-然后，您可以从应用的任何位置调用 `stateAction` 方法。
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// 打印 'Hello world'
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-如果您已经有一个 `StateActions` 实例（例如来自组件的 `stateActions()` 静态方法），可以直接在其上调用 `action()`，而不是使用独立函数：
-
-``` dart
-// 使用独立函数
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// 使用 StateActions 实例方法 — 等价，减少重复
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-您也可以在 `init` getter 中使用 `whenStateAction` 方法定义状态动作。
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // 重置徽章计数
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - 状态动作
-
-首先，创建一个有状态组件。
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-示例：metro make:stateful_widget user_avatar
-
-这将在 `lib/resources/widgets/` 目录中创建一个新组件。
-
-如果您打开该文件，就可以定义状态动作。
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // 示例
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // 示例
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-最后，您可以从应用的任何位置发送动作。
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// 打印 'Hello from the widget'
-
-stateAction('reset_data', state: MyWidget.state);
-// 重置组件中的数据
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// 显示带消息的成功提示
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - 状态动作
-
-页面也可以接收状态动作。当您想要从组件或其他页面触发页面级别的行为时，这非常有用。
-
-首先，创建状态管理页面。
-
-``` bash
-metro make:page my_page
-```
-
-这将在 `lib/resources/pages/` 目录中创建一个名为 `MyPage` 的新状态管理页面。
-
-如果您打开该文件，就可以定义状态动作。
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // 设置为 true 以在此页面启用状态动作
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // 示例
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-最后，您可以从应用的任何位置发送动作。
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// 打印 'Hello from the page'
-
-stateAction('reset_data', state: MyPage.path);
-// 重置页面中的数据
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// 显示带消息的成功提示
-```
-
-您也可以使用 `whenStateAction` 方法定义状态动作。
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // 重置徽章计数
-      _count = 0;
-    }
-  });
-}
-```
-
-然后您可以从应用的任何位置发送动作。
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## 更新状态
-
-您可以通过调用 `updateState()` 方法来更新状态。
-
-``` dart
-updateState(MyStateName.state);
-
-// 或携带数据
-updateState(MyStateName.state, data: "The Data");
-```
-
-这可以在应用的任何位置调用。
-
-**另请参阅：** [NyState](/docs/{{ $version }}/ny-state) 获取有关状态管理辅助方法和生命周期方法的更多详细信息。
-
-
-<div id="building-your-first-widget"></div>
-
-## 构建您的第一个组件
-
-在您的 Nylo 项目中，运行以下命令创建一个新组件。
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-这将创建一个名为 `TodoList` 的新 `NyState` 组件。
-
-> 注意：新组件将在 `lib/resources/widgets/` 目录中创建。
+**另请参阅：** [NyState](/docs/{{ $version }}/ny-state) 获取状态辅助方法和生命周期方法的完整集合。

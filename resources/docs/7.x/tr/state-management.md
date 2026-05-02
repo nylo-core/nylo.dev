@@ -1,64 +1,395 @@
-# Durum Yönetimi
+# Durumu Yönetilen Widget'lar
 
 ---
 
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
-- [Durum Yönetimi Ne Zaman Kullanılmalı](#when-to-use-state-management "Durum Yönetimi Ne Zaman Kullanılmalı")
-- [Yaşam Döngüsü](#lifecycle "Yaşam Döngüsü")
+- [Deseninizi Seçin](#choose-your-pattern "Deseninizi Seçin")
 - [Durum Aksiyonları](#state-actions "Durum Aksiyonları")
-  - [NyState - Durum Aksiyonları](#state-actions-nystate "NyState - Durum Aksiyonları")
-  - [NyPage - Durum Aksiyonları](#state-actions-nypage "NyPage - Durum Aksiyonları")
-- [Bir Durumu Güncelleme](#updating-a-state "Bir Durumu Güncelleme")
-- [İlk Widget'ınızı Oluşturma](#building-your-first-widget "İlk Widget'ınızı Oluşturma")
+  - [Handler Tanımlama](#defining-handlers "Handler Tanımlama")
+  - [Aksiyonları Tetikleme](#triggering-actions "Aksiyonları Tetikleme")
+  - [Verisiz ve Verili Handler'lar](#handlers-with-and-without-data "Verisiz ve Verili Handler'lar")
+  - [StateActions Örneği Kullanma](#using-a-state-actions-instance "StateActions Örneği Kullanma")
+- [Desen: Durumu Yönetilen Sayfalar (NyPage)](#pattern-ny-page "Desen: Durumu Yönetilen Sayfalar")
+- [Desen: Stateful Widget'lar (NyState)](#pattern-ny-state "Desen: Stateful Widget'lar")
+- [Desen: Durumu Yönetilen Widget'lar (NyStateManaged)](#pattern-ny-state-managed "Desen: Durumu Yönetilen Widget'lar")
+  - [Gelişmiş: Birden Fazla İzole Örnek](#advanced-multiple-isolated-instances "Gelişmiş: Birden Fazla İzole Örnek")
+- [Yaşam Döngüsü Referansı](#lifecycle "Yaşam Döngüsü Referansı")
 
 <div id="introduction"></div>
 
 ## Giriş
 
-Durum yönetimi, tüm sayfaları yeniden oluşturmadan UI'nizin belirli bölümlerini güncellemenize olanak tanır. {{ config('app.name') }} v7'de, uygulamanız genelinde iletişim kuran ve birbirini güncelleyen widget'lar oluşturabilirsiniz.
+Durumu yönetilen widget'lar, uygulamanızın herhangi bir yerinden tüm sayfaları yeniden oluşturmadan UI'nizin belirli bölümlerini güncellemenizi sağlar. {{ config('app.name') }} v7'de, hedef widget veya sayfa üzerinde adlandırılmış **durum aksiyonları** tetiklersiniz ve eşleşen handler çalışır.
 
-{{ config('app.name') }} durum yönetimi için iki sınıf sunar:
-- **`NyState`** — Yeniden kullanılabilir widget'lar oluşturmak için (sepet rozeti, bildirim sayacı veya durum göstergesi gibi)
-- **`NyPage`** — Uygulamanızda sayfalar oluşturmak için (`NyState`'i sayfaya özel özelliklerle genişletir)
+Zihinsel model basittir:
 
-Durum yönetimini şu durumlarda kullanın:
-- Uygulamanızın farklı bir yerinden bir widget'ı güncellemeniz gerektiğinde
-- Widget'ları paylaşılan verilerle senkronize tutmanız gerektiğinde
-- UI'nin yalnızca bir kısmı değiştiğinde tüm sayfaları yeniden oluşturmaktan kaçınmak istediğinizde
+- Her durumu yönetilen widget veya sayfanın benzersiz bir **durum anahtarı** (string) vardır
+- İşleyebileceği **adlandırılmış aksiyonlar** haritasını tanımlar
+- Uygulamanızın herhangi bir yerinden şunu çağırabilirsiniz
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### Önce Durum Yönetimini Anlayalım
-
-Flutter'da her şey bir widget'tır, bunlar tam bir uygulama oluşturmak için birleştirebileceğiniz küçük UI parçalarıdır.
-
-Karmaşık sayfalar oluşturmaya başladığınızda, widget'larınızın durumunu yönetmeniz gerekecektir. Bu, bir şey değiştiğinde, örneğin veri, tüm sayfayı yeniden oluşturmak zorunda kalmadan o widget'ı güncelleyebileceğiniz anlamına gelir.
-
-Bunun önemli olmasının birçok nedeni vardır, ancak ana neden performanstır. Sürekli değişen bir widget'ınız varsa, her değişikliğinde tüm sayfayı yeniden oluşturmak istemezsiniz.
-
-İşte Durum Yönetimi burada devreye girer, uygulamanızdaki bir widget'ın durumunu yönetmenize olanak tanır.
+Durumu yönetilen UI oluşturmak için üç desen vardır. Hepsi aynı `stateAction` mekanizmasını paylaşır — tek fark yönettiğiniz UI türüdür.
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### Durum Yönetimi Ne Zaman Kullanılmalı
+## Deseninizi Seçin
 
-Tüm sayfayı yeniden oluşturmadan güncellenmesi gereken bir widget'ınız olduğunda Durum Yönetimi kullanmalısınız.
+| Ne yapmak istiyorsunuz... | Kullanın | Scaffold komutu |
+|---|---|---|
+| Tam bir sayfayı state ile yönetin | `NyPage` | `metro make:page my_page` |
+| Tek örnekli bir widget'ı state ile yönetin | `NyState` | `metro make:stateful_widget my_widget` |
+| Birden fazla izole örnekli bir widget'ı state ile yönetin | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-Örneğin, bir e-ticaret uygulaması oluşturduğunuzu hayal edin. Kullanıcıların sepetindeki toplam ürün sayısını gösteren bir widget oluşturdunuz.
-Bu widget'a `Cart()` diyelim.
+Önce [Durum Aksiyonları](#state-actions) bölümünü okuyun — her desenin kullandığı API'yi açıklar. Ardından durumunuza uyan desene geçin.
 
-Nylo'da durum yönetimli bir `Cart` widget'ı şöyle görünecektir:
 
-**Adım 1:** `NyStateManaged`'ı genişleten widget'ı tanımlayın
+<div id="state-actions"></div>
+
+## Durum Aksiyonları
+
+Durum aksiyonları, bir widget veya sayfanın nasıl işleyeceğini bildiği adlandırılmış komutlardır. Aksiyon adlarını handler fonksiyonlara eşleyen bir harita tanımlarsınız ve bunları uygulamanızın herhangi bir yerinden ada göre tetiklersiniz.
+
+Durum aksiyonlarını şu durumlarda kullanın:
+- Bir widget veya sayfada belirli bir davranışı tetiklemeniz gerektiğinde (yalnızca genel yenileme değil)
+- Bir widget'a veri gönderip tanımlanmış bir şekilde yanıt vermesini sağlamak istediğinizde
+- Birden fazla çağrı noktasından çağrılabilen yeniden kullanılabilir widget davranışları oluşturmak istediğinizde
+
+<div id="defining-handlers"></div>
+
+### Handler Tanımlama
+
+Handler'lar, `NyState` veya `NyPage` sınıfınızdaki `stateActions` getter'ında bulunur. Harita anahtarları aksiyon adlarıdır; değerler, o aksiyon tetiklendiğinde çalışacak fonksiyonlardır.
 
 ``` dart
-/// Cart widget'ı
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+Widget'ı yeniden oluşturmak istiyorlarsa handler'lar `setState`'i kendileri çağırmaktan sorumludur.
+
+Yukarıdaki `apply_discount` handler'ı bir `code` argümanı alır — handler'ınızın şu şekilde iletilen yükü alması gerektiğinde tek bir konumsal parametre tanımlayın:
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+Aksiyon yük taşımıyorsa `()` argümansız formu kullanın.
+
+
+<div id="triggering-actions"></div>
+
+### Aksiyonları Tetikleme
+
+Herhangi bir yerden — başka bir widget, kontrolör, olay işleyici, API callback'i vb. — aksiyon tetiklemek için üst düzey `stateAction` fonksiyonunu kullanın.
+
+``` dart
+// Veri olmadan aksiyon tetikleme
+stateAction("clear_cart", state: Cart.state);
+
+// Veriyle aksiyon tetikleme
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+`state:` argümanı hedefin **durum anahtarıdır**:
+- Widget'lar için — `MyWidget.state` (string)
+- Sayfalar için — `MyPage.path` (rota)
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### Verisiz ve Verili Handler'lar
+
+Handler'lar senkron veya asenkron olabilir ve `data` argümanıyla veya onsuz tanımlanabilir:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // Veri yok — handler olduğu gibi çalışır
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // Veriyle — `data:` argümanı aracılığıyla iletilen her şeyi alır
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // Async desteklenir — framework handler'ı bekler
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+`stateAction`'a `data:` iletirseniz ancak handler'ınız argüman almıyorsa, veri yalnızca yok sayılır.
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### StateActions Örneği Kullanma
+
+Bir widget tiplenmiş bir `StateActions` örneği sunuyorsa (genellikle statik bir `stateActions(stateName)` metodu aracılığıyla), serbest fonksiyon yerine doğrudan üzerinde `.action(...)` çağırabilirsiniz. Bu, aynı hedefe birkaç aksiyon gönderirken daha temizdir:
+
+``` dart
+// Serbest fonksiyon kullanarak
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// StateActions örneği kullanarak — eşdeğer, daha az tekrar
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+Birçok yerleşik widget (`InputField`, `CollectionView`, `LanguageSwitcher`, `NyForm*` ailesi) `.clear()`, `.setValue(...)`, `.refresh()` gibi adlandırılmış metodlara sahip tiplenmiş `StateActions` sınıflarıyla birlikte gelir — nelerin mevcut olduğunu öğrenmek için widget belgelerine bakın.
+
+
+<div id="pattern-ny-page"></div>
+
+## Desen: Durumu Yönetilen Sayfalar (NyPage)
+
+Uygulamanızın başka bir yerinden tam bir sayfada davranış tetiklemek istediğinizde kullanın — örneğin bir olay tetiklendiğinde sayfayı yenilemek veya bir alt widget'tan form durumunu temizlemek için.
+
+**Adım 1:** Scaffold ile bir sayfa oluşturun.
+
+``` bash
+metro make:page my_page
+```
+
+Bu, `lib/resources/pages/` konumunda bir `NyPage` oluşturur:
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**Adım 2:** `stateManaged`'ı `true` olarak değiştirin.
+
+Varsayılan olarak, sayfalar durum olaylarına **abone olmaz** — bu, bunlara ihtiyaç duymayan sayfalardaki gereksiz dinleyicilerden kaçınır. Bir sayfada durum aksiyonlarını etkinleştirmek için getter'ı değiştirin:
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**Adım 3:** `stateActions` haritası ekleyin.
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**Adım 4:** Sayfanın `path`'ini kullanarak herhangi bir yerden aksiyonu tetikleyin.
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> Sayfalar `MyPage.path`'e göre, widget'lar ise `MyWidget.state`'e göre tanımlanır. Bu, çağrı tarafındaki tek farktır.
+
+
+<div id="pattern-ny-state"></div>
+
+## Desen: Stateful Widget'lar (NyState)
+
+Sayfa başına tek örnek olarak var olan yeniden kullanılabilir widget'lar için kullanın — profil kartı, başlık çubuğu, durum göstergesi. Widget'ın aynı anda yalnızca bir örneğini render ediyorsanız, bu doğru desendir.
+
+**Adım 1:** Scaffold ile bir stateful widget oluşturun.
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+Bu, `lib/resources/widgets/` konumunda aşağıdakini oluşturur:
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Scaffold size çalışan bir `NyState` widget'ı verir — ancak **henüz durum yönetimine sahip değildir**. Durum aksiyonlarına yanıt vermesi için dört şey eklemeniz gerekir:
+
+1. Widget sınıfında bir `state` anahtarı — uygulamanızın diğer bölümlerinin hedefleyeceği benzersiz string
+2. Durum anahtarını alan ve durum sınıfına ileten bir constructor parametresi
+3. `stateName` atayan durum sınıfında bir constructor
+4. Handler'ları tanımlayan bir `stateActions` haritası
+
+**Adım 2:** Scaffold'u durumu yönetilen widget'a dönüştürün.
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ bunu uygulamanızın herhangi bir yerinden çağırın — aşağıdaki handler'ı tetikler
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Ne değişti:
+- `static String get state => "profile_card";` genel durum anahtarını tanımlar
+- `createState() => _ProfileCardState(state)` anahtarı durum sınıfına aktarır
+- `_ProfileCardState(String? state) { this.stateName = state; }` bu durum örneğini o anahtar altında kaydeder, böylece framework hangi widget'a aksiyonu iletmesi gerektiğini bilir
+- `stateActions` adlandırılmış handler'ları bildirir
+
+**Adım 3:** Herhangi bir yerden tetikleyin.
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+Veriyle veya veri olmaksızın istediğiniz kadar handler ekleyebilirsiniz:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## Desen: Durumu Yönetilen Widget'lar (NyStateManaged)
+
+Ekranda aynı anda **aynı widget'ın birden fazla bağımsız örneğine** ihtiyaç duyduğunuzda kullanın — örneğin, başlıktaki ve bağımsız olarak güncellenebilmesi gereken kenar çubuğundaki sepet rozeti.
+
+`NyStateManaged`, her örneğin ayrı ayrı adreslenebildiği bir `stateName` parametresi ekler. Widget'ın yalnızca bir örneğini render ediyorsanız, `NyState`'i tercih edin — daha basittir.
+
+**Adım 1:** Scaffold ile durumu yönetilen bir widget oluşturun.
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+Bu, `lib/resources/widgets/` konumunda aşağıdakini oluşturur:
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // Bu widget'ın durumu için benzersiz tanımlayıcı
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // başlatma mantığı burada
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Uygulamanızın herhangi bir yerinden aksiyonları çağırın
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**Adım 2:** `NyState`'i genişleten durum sınıfını oluşturun
+**Adım 2:** Durumu doldurun — `init`'te veri yükleyin, handler'ları tanımlayın ve render edin.
 
 ``` dart
-/// Cart widget'ı için durum sınıfı
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Başlangıç verilerini yükle
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**Adım 3:** Sepeti okumak ve güncellemek için yardımcı fonksiyonlar oluşturun
+**Adım 3:** Oluşturulan statik `action()` yardımcısını kullanarak aksiyonları tetikleyin.
 
 ``` dart
-/// Sepet değerini depodan al
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// Sepet değerini ayarla ve widget'ı bilgilendir
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // Bu, widget üzerinde stateUpdated() metodunu tetikler
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-Bunu inceleyelim.
+Bu, `stateAction("reload_cart", state: Cart.state)` ile eşdeğerdir — statik yardımcı yalnızca standart kodu kaldırır.
 
-1. `Cart` widget'ı doğrudan `StatefulWidget` yerine `NyStateManaged`'ı genişletir.
 
-2. `stateName` constructor parametresi `super(child: () => _CartState(stateName))` aracılığıyla iletilir; bu, aynı widget'ın birden fazla izole örneğinin oluşturulmasını sağlar.
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. `_stateFor(String? state)` yardımcısı, adlandırılmış örnekler için `"cart_sidebar"` gibi namespace'li bir durum anahtarı üretir.
+### Gelişmiş: Birden Fazla İzole Örnek
 
-4. `_CartState`, `NyState<Cart>` sınıfını genişletir ve doğru izole durumu kaydetmek için `stateName` alır.
+`NyStateManaged`'ın var olma nedeni, aynı widget'ın birden fazla bağımsız örneğini desteklemektir. Her örnek kendi `stateName`'ini alır ve bu, ad alanı içeren bir durum anahtarı üretir.
 
-5. `stateActions` haritası, uygulamanızın herhangi bir yerinden widget üzerinde çağırabileceğiniz adlandırılmış komutları tanımlar.
+Farklı adlarla iki sepet render edin:
 
-Bu örneği {{ config('app.name') }} projenizde denemek isterseniz, `Cart` adında yeni bir widget oluşturun.
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-Ardından yukarıdaki örneği kopyalayıp projenizde deneyebilirsiniz.
+Artık her birini bağımsız olarak güncelleyebilirsiniz:
 
-Şimdi, sepeti güncellemek için aşağıdakini çağırabilirsiniz.
+``` dart
+// Yalnızca başlık sepetini yenile
+Cart.action("reload_cart", stateName: "header");
 
-```dart
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// Yalnızca kenar çubuğu sepetini yenile
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// stateName yok — varsayılan adsız örneği hedefler
+Cart.action("reload_cart");
 ```
+
+`_stateFor` yardımcısı ad alanını işler: `Cart(stateName: "header")` `"cart_header"` anahtarı altında kaydedilir ve `Cart.action(..., stateName: "header")` tam olarak o anahtarı hedefler.
 
 
 <div id="lifecycle"></div>
 
-## Yaşam Döngüsü
+## Yaşam Döngüsü Referansı
 
-Bir `NyState` widget'ının yaşam döngüsü şu şekildedir:
+Durumu yönetilen widget'lar ve sayfalar iki temel yaşam döngüsü hook'unu paylaşır:
 
-1. `init()` - Bu metot, durum başlatıldığında çağrılır.
+1. **`init()`** — durum ilk oluşturulduğunda bir kez çağrılır. Başlangıç verilerini yüklemek için kullanın.
 
-2. `stateUpdated(data)` - Bu metot, durum güncellendiğinde çağrılır.
+2. **`stateUpdated(data)`** — bu duruma karşı bir durum aksiyonu tetiklendiğinde çağrılır. `data` argümanı tam yüktür (aksiyon adı ve aksiyonun verisi dahil). *Her* durum aksiyonuna tepki vermeniz gerekiyorsa geçersiz kılın — çoğu zaman `stateActions`'da handler tanımlamak istediğiniz şeydir.
 
-    `updateState(MyStateName.state, data: "The Data")` çağırırsanız, **stateUpdated(data)** çağrılmasını tetikler.
-
-Durum ilk kez başlatıldıktan sonra, durumu nasıl yönetmek istediğinizi uygulamanız gerekecektir.
-
-
-<div id="state-actions"></div>
-
-## Durum Aksiyonları
-
-Durum aksiyonları, uygulamanızın herhangi bir yerinden bir widget üzerinde belirli metotları tetiklemenize olanak tanır. Bunları bir widget'a gönderebileceğiniz adlandırılmış komutlar olarak düşünün.
-
-Durum aksiyonlarını şu durumlarda kullanın:
-- Bir widget üzerinde belirli bir davranışı tetiklemek istediğinizde (sadece yenilemek değil)
-- Bir widget'a veri göndermek ve belirli bir şekilde yanıt vermesini sağlamak istediğinizde
-- Birden fazla yerden çağrılabilecek yeniden kullanılabilir widget davranışları oluşturmak istediğinizde
-
-``` dart
-// Widget'a bir aksiyon gönderme
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// Veriyle başka bir örnek
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-Widget'ınızda, işlemek istediğiniz aksiyonları tanımlayabilirsiniz.
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // Veriyle örnek
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-Ardından, uygulamanızın herhangi bir yerinden `stateAction` metodunu çağırabilirsiniz.
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// 'Hello world' yazdırır
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-Zaten bir `StateActions` örneğiniz varsa (örneğin bir widget'ın `stateActions()` statik metodundan), serbest fonksiyon yerine doğrudan üzerinde `action()` çağırabilirsiniz:
-
-``` dart
-// Serbest fonksiyonu kullanarak
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// StateActions örnek metodunu kullanarak — eşdeğer, daha az tekrar
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-Durum aksiyonlarınızı `init` getter'ınızda `whenStateAction` metodunu kullanarak da tanımlayabilirsiniz.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Rozet sayısını sıfırla
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - Durum Aksiyonları
-
-İlk olarak, bir stateful widget oluşturun.
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-Örnek: metro make:stateful_widget user_avatar
-
-Bu, `lib/resources/widgets/` dizininde yeni bir widget oluşturur.
-
-O dosyayı açarsanız, durum aksiyonlarınızı tanımlayabileceksiniz.
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // Örnek
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // Örnek
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Son olarak, uygulamanızın herhangi bir yerinden aksiyonu gönderebilirsiniz.
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// 'Hello from the widget' yazdırır
-
-stateAction('reset_data', state: MyWidget.state);
-// Widget'taki verileri sıfırlar
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// Mesajla birlikte başarı tostu gösterir
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - Durum Aksiyonları
-
-Sayfalar da durum aksiyonları alabilir. Bu, widget'lardan veya diğer sayfalardan sayfa düzeyinde davranışları tetiklemek istediğinizde kullanışlıdır.
-
-İlk olarak, durum yönetimli sayfanızı oluşturun.
-
-``` bash
-metro make:page my_page
-```
-
-Bu, `lib/resources/pages/` dizininde `MyPage` adında yeni bir durum yönetimli sayfa oluşturur.
-
-O dosyayı açarsanız, durum aksiyonlarınızı tanımlayabileceksiniz.
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // bu sayfada durum aksiyonlarını etkinleştirmek için true olarak ayarlayın
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // Örnek
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Son olarak, uygulamanızın herhangi bir yerinden aksiyonu gönderebilirsiniz.
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// 'Hello from the page' yazdırır
-
-stateAction('reset_data', state: MyPage.path);
-// Sayfadaki verileri sıfırlar
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// Mesajla birlikte başarı tostu gösterir
-```
-
-Durum aksiyonlarınızı `whenStateAction` metodunu kullanarak da tanımlayabilirsiniz.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Rozet sayısını sıfırla
-      _count = 0;
-    }
-  });
-}
-```
-
-Ardından uygulamanızın herhangi bir yerinden aksiyonu gönderebilirsiniz.
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## Bir Durumu Güncelleme
-
-`updateState()` metodunu çağırarak bir durumu güncelleyebilirsiniz.
-
-``` dart
-updateState(MyStateName.state);
-
-// veya veriyle
-updateState(MyStateName.state, data: "The Data");
-```
-
-Bu, uygulamanızın herhangi bir yerinden çağrılabilir.
-
-**Ayrıca bakınız:** [NyState](/docs/{{ $version }}/ny-state) durum yönetimi yardımcıları ve yaşam döngüsü metotları hakkında daha fazla bilgi için.
-
-
-<div id="building-your-first-widget"></div>
-
-## İlk Widget'ınızı Oluşturma
-
-Nylo projenizde, yeni bir widget oluşturmak için aşağıdaki komutu çalıştırın.
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-Bu, `TodoList` adında yeni bir `NyState` widget'ı oluşturur.
-
-> Not: Yeni widget, `lib/resources/widgets/` dizininde oluşturulacaktır.
+**Ayrıca bakınız:** [NyState](/docs/{{ $version }}/ny-state) tam durum yardımcıları ve yaşam döngüsü metodları için.

@@ -1,64 +1,395 @@
-# State Management
+# Widget Quản lý State
 
 ---
 
 <a name="section-1"></a>
 - [Giới thiệu](#introduction "Giới thiệu")
-- [Khi nào sử dụng quản lý State](#when-to-use-state-management "Khi nào sử dụng quản lý State")
-- [Vòng đời](#lifecycle "Vòng đời")
+- [Chọn mẫu của bạn](#choose-your-pattern "Chọn mẫu của bạn")
 - [State Actions](#state-actions "State Actions")
-  - [NyState - State Actions](#state-actions-nystate "NyState - State Actions")
-  - [NyPage - State Actions](#state-actions-nypage "NyPage - State Actions")
-- [Cập nhật State](#updating-a-state "Cập nhật State")
-- [Xây dựng Widget đầu tiên](#building-your-first-widget "Xây dựng Widget đầu tiên")
+  - [Định nghĩa Handler](#defining-handlers "Định nghĩa Handler")
+  - [Kích hoạt Actions](#triggering-actions "Kích hoạt Actions")
+  - [Handler có và không có dữ liệu](#handlers-with-and-without-data "Handler có và không có dữ liệu")
+  - [Sử dụng Instance StateActions](#using-a-state-actions-instance "Sử dụng Instance StateActions")
+- [Mẫu: Trang quản lý State (NyPage)](#pattern-ny-page "Mẫu: Trang quản lý State")
+- [Mẫu: Stateful Widgets (NyState)](#pattern-ny-state "Mẫu: Stateful Widgets")
+- [Mẫu: Widget quản lý State (NyStateManaged)](#pattern-ny-state-managed "Mẫu: Widget quản lý State")
+  - [Nâng cao: Nhiều instance độc lập](#advanced-multiple-isolated-instances "Nâng cao: Nhiều instance độc lập")
+- [Tham chiếu Vòng đời](#lifecycle "Tham chiếu Vòng đời")
 
 <div id="introduction"></div>
 
 ## Giới thiệu
 
-Quản lý state cho phép bạn cập nhật các phần cụ thể của UI mà không cần rebuild toàn bộ trang. Trong {{ config('app.name') }} v7, bạn có thể xây dựng các widget giao tiếp và cập nhật lẫn nhau trong ứng dụng.
+Widget quản lý state cho phép bạn cập nhật các phần cụ thể của UI từ bất kỳ đâu trong ứng dụng — mà không cần rebuild toàn bộ trang. Trong {{ config('app.name') }} v7, bạn kích hoạt các **state action** được đặt tên trên widget hoặc trang đích, và handler tương ứng sẽ chạy.
 
-{{ config('app.name') }} cung cấp hai class cho quản lý state:
-- **`NyState`** -- Để xây dựng widget tái sử dụng (như huy hiệu giỏ hàng, bộ đếm thông báo, hoặc chỉ báo trạng thái)
-- **`NyPage`** -- Để xây dựng các trang trong ứng dụng (mở rộng `NyState` với các tính năng dành riêng cho trang)
+Mô hình tư duy rất đơn giản:
 
-Sử dụng quản lý state khi bạn cần:
-- Cập nhật widget từ phần khác của ứng dụng
-- Giữ đồng bộ widget với dữ liệu chung
-- Tránh rebuild toàn bộ trang khi chỉ một phần UI thay đổi
+- Mỗi widget hoặc trang được quản lý state có một **state key** duy nhất (một string)
+- Nó định nghĩa một map các **action được đặt tên** mà nó biết cách xử lý
+- Từ bất kỳ đâu trong ứng dụng, bạn có thể gọi
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### Hãy hiểu quản lý State trước
-
-Mọi thứ trong Flutter đều là widget, chúng chỉ là những phần nhỏ của UI mà bạn có thể kết hợp để tạo thành ứng dụng hoàn chỉnh.
-
-Khi bạn bắt đầu xây dựng các trang phức tạp, bạn sẽ cần quản lý state của widget. Điều này có nghĩa là khi có thay đổi, ví dụ dữ liệu, bạn có thể cập nhật widget đó mà không cần rebuild toàn bộ trang.
-
-Có rất nhiều lý do tại sao điều này quan trọng, nhưng lý do chính là hiệu suất. Nếu bạn có widget liên tục thay đổi, bạn không muốn rebuild toàn bộ trang mỗi khi nó thay đổi.
-
-Đây là lúc quản lý State phát huy tác dụng, nó cho phép bạn quản lý state của widget trong ứng dụng.
+Có ba mẫu để xây dựng UI được quản lý state. Tất cả đều dùng chung cơ chế `stateAction` — sự khác biệt duy nhất là loại UI bạn đang quản lý.
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### Khi nào sử dụng quản lý State
+## Chọn mẫu của bạn
 
-Bạn nên sử dụng quản lý State khi có widget cần được cập nhật mà không cần rebuild toàn bộ trang.
+| Bạn muốn... | Sử dụng | Lệnh scaffold |
+|---|---|---|
+| Quản lý state một trang đầy đủ | `NyPage` | `metro make:page my_page` |
+| Quản lý state widget một instance | `NyState` | `metro make:stateful_widget my_widget` |
+| Quản lý state widget với nhiều instance độc lập | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-Ví dụ, hãy tưởng tượng bạn đã tạo ứng dụng thương mại điện tử. Bạn đã xây dựng widget hiển thị tổng số mặt hàng trong giỏ hàng của người dùng.
-Hãy gọi widget này là `Cart()`.
+Đọc phần [State Actions](#state-actions) trước — phần này giải thích API mà mọi mẫu đều sử dụng. Sau đó chuyển đến mẫu phù hợp với trường hợp của bạn.
 
-Widget `Cart` được quản lý state trong Nylo sẽ trông như thế này:
 
-**Bước 1:** Định nghĩa widget kế thừa `NyStateManaged`
+<div id="state-actions"></div>
+
+## State Actions
+
+State action là các lệnh được đặt tên mà một widget hoặc trang biết cách xử lý. Bạn định nghĩa một map từ tên action đến các hàm handler, và kích hoạt chúng theo tên từ bất kỳ đâu trong ứng dụng.
+
+Sử dụng state action khi bạn cần:
+- Kích hoạt một hành vi cụ thể trên widget hoặc trang (không chỉ là refresh chung)
+- Truyền dữ liệu đến widget và để nó phản hồi theo cách đã định nghĩa
+- Xây dựng hành vi widget có thể tái sử dụng có thể được gọi từ nhiều điểm
+
+<div id="defining-handlers"></div>
+
+### Định nghĩa Handler
+
+Handler nằm trong getter `stateActions` trên class `NyState` hoặc `NyPage` của bạn. Các khóa map là tên action; các giá trị là hàm chạy khi action đó được kích hoạt.
 
 ``` dart
-/// Widget Cart
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+Handler tự chịu trách nhiệm gọi `setState` nếu muốn widget rebuild.
+
+Handler `apply_discount` ở trên nhận một đối số `code` — khai báo một tham số vị trí duy nhất khi handler cần payload được truyền qua
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+Dùng dạng không có đối số `()` khi action không mang payload.
+
+
+<div id="triggering-actions"></div>
+
+### Kích hoạt Actions
+
+Dùng hàm cấp cao nhất `stateAction` để kích hoạt một action từ bất kỳ đâu — widget khác, controller, event handler, API callback, v.v.
+
+``` dart
+// Kích hoạt action không có dữ liệu
+stateAction("clear_cart", state: Cart.state);
+
+// Kích hoạt action có dữ liệu
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+Đối số `state:` là **state key** của mục tiêu:
+- Đối với widget — `MyWidget.state` (một string)
+- Đối với trang — `MyPage.path` (route)
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### Handler có và không có dữ liệu
+
+Handler có thể đồng bộ hoặc bất đồng bộ, và có thể được định nghĩa có hoặc không có đối số `data`:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // Không có dữ liệu — handler chạy như bình thường
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // Có dữ liệu — nhận bất cứ thứ gì được truyền qua đối số `data:`
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // Async được hỗ trợ — framework chờ handler
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+Nếu bạn truyền `data:` vào `stateAction` nhưng handler không nhận đối số, dữ liệu sẽ đơn giản bị bỏ qua.
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### Sử dụng Instance StateActions
+
+Nếu một widget cung cấp instance `StateActions` có kiểu (thường qua phương thức static `stateActions(stateName)`), bạn có thể gọi `.action(...)` trực tiếp trên nó thay vì dùng hàm tự do. Điều này gọn hơn khi gửi nhiều action đến cùng một mục tiêu:
+
+``` dart
+// Sử dụng hàm tự do
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// Sử dụng instance StateActions — tương đương, ít lặp lại hơn
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+Một số widget tích hợp sẵn (`InputField`, `CollectionView`, `LanguageSwitcher`, họ `NyForm*`) đi kèm với các class `StateActions` có kiểu và các phương thức được đặt tên như `.clear()`, `.setValue(...)`, `.refresh()` — kiểm tra tài liệu của widget để biết những gì có sẵn.
+
+
+<div id="pattern-ny-page"></div>
+
+## Mẫu: Trang quản lý State (NyPage)
+
+Sử dụng mẫu này khi bạn muốn kích hoạt hành vi trên toàn bộ trang từ nơi khác trong ứng dụng — ví dụ: refresh trang khi một sự kiện xảy ra, hoặc xóa state form từ widget con.
+
+**Bước 1:** Scaffold một trang.
+
+``` bash
+metro make:page my_page
+```
+
+Lệnh này tạo một `NyPage` trong `lib/resources/pages/`:
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**Bước 2:** Đặt `stateManaged` thành `true`.
+
+Theo mặc định, các trang **không** đăng ký nhận state event — điều này tránh các listener không cần thiết trên các trang không cần chúng. Để bật state action trên một trang, thay đổi getter:
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**Bước 3:** Thêm map `stateActions`.
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**Bước 4:** Kích hoạt action từ bất kỳ đâu bằng `path` của trang.
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> Trang dùng `MyPage.path` làm key, widget dùng `MyWidget.state`. Đây là sự khác biệt duy nhất ở phía gọi.
+
+
+<div id="pattern-ny-state"></div>
+
+## Mẫu: Stateful Widgets (NyState)
+
+Sử dụng mẫu này cho các widget có thể tái sử dụng tồn tại như một instance duy nhất trên trang — thẻ hồ sơ, thanh tiêu đề, chỉ báo trạng thái. Nếu bạn chỉ render một instance của widget tại một thời điểm, đây là mẫu phù hợp.
+
+**Bước 1:** Scaffold một stateful widget.
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+Lệnh này tạo ra trong `lib/resources/widgets/`:
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Scaffold cho bạn một widget `NyState` hoạt động được — nhưng **chưa được quản lý state**. Để nó phản hồi với state action, bạn cần thêm bốn thứ:
+
+1. Khóa `state` trên class widget — string duy nhất mà các phần khác của ứng dụng sẽ nhắm đến
+2. Tham số constructor nhận state key và chuyển tiếp nó đến class state
+3. Constructor trên class state gán `stateName`
+4. Map `stateActions` định nghĩa các handler
+
+**Bước 2:** Chuyển đổi scaffold thành widget được quản lý state.
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ gọi điều này từ bất kỳ đâu trong ứng dụng để kích hoạt handler bên dưới
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Những gì đã thay đổi:
+- `static String get state => "profile_card";` định nghĩa state key công khai
+- `createState() => _ProfileCardState(state)` truyền key vào class state
+- `_ProfileCardState(String? state) { this.stateName = state; }` đăng ký instance state này dưới key đó, để framework biết widget nào sẽ nhận action
+- `stateActions` khai báo các handler được đặt tên
+
+**Bước 3:** Kích hoạt từ bất kỳ đâu.
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+Bạn có thể thêm bao nhiêu handler tùy thích, có hoặc không có dữ liệu:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## Mẫu: Widget quản lý State (NyStateManaged)
+
+Sử dụng mẫu này khi bạn cần **nhiều instance độc lập của cùng một widget** trên màn hình cùng một lúc — ví dụ, badge giỏ hàng ở header và một cái khác ở sidebar cần cập nhật độc lập.
+
+`NyStateManaged` thêm tham số `stateName` để mỗi instance có thể được địa chỉ hóa riêng. Nếu bạn chỉ render một instance của widget, hãy ưu tiên `NyState` — đơn giản hơn.
+
+**Bước 1:** Scaffold một widget được quản lý state.
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+Lệnh này tạo ra trong `lib/resources/widgets/`:
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // Định danh duy nhất cho state của widget này
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // logic khởi tạo ở đây
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Gọi action từ bất kỳ đâu trong ứng dụng
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**Bước 2:** Tạo class state kế thừa `NyState`
+**Bước 2:** Hoàn thiện state — tải dữ liệu trong `init`, định nghĩa handler, và render.
 
 ``` dart
-/// Class state cho widget Cart
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Tải dữ liệu ban đầu
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**Bước 3:** Tạo hàm trợ giúp để đọc và cập nhật giỏ hàng
+**Bước 3:** Kích hoạt action bằng helper static `action()` được tạo sẵn.
 
 ``` dart
-/// Lấy giá trị giỏ hàng từ storage
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// Đặt giá trị giỏ hàng và thông báo widget
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // Kích hoạt stateUpdated() trên widget
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-Hãy phân tích điều này.
+Điều này tương đương với `stateAction("reload_cart", state: Cart.state)` — helper static chỉ loại bỏ boilerplate.
 
-1. Widget `Cart` kế thừa `NyStateManaged` (không phải `StatefulWidget` trực tiếp).
 
-2. Tham số constructor `stateName` được chuyển tiếp qua `super(child: () => _CartState(stateName))`, cho phép nhiều instance độc lập của cùng một widget.
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. Helper `_stateFor(String? state)` tạo ra khóa state có namespace như `"cart_sidebar"` cho các instance được đặt tên.
+### Nâng cao: Nhiều instance độc lập
 
-4. `_CartState` kế thừa `NyState<Cart>` và nhận `stateName` để đăng ký state độc lập đúng.
+Lý do `NyStateManaged` tồn tại là để hỗ trợ nhiều instance độc lập của cùng một widget. Mỗi instance nhận `stateName` riêng, tạo ra state key có namespace.
 
-5. Map `stateActions` định nghĩa các lệnh có tên mà bạn có thể gọi trên widget từ bất kỳ đâu trong ứng dụng.
+Render hai giỏ hàng với tên khác nhau:
 
-Nếu bạn muốn thử ví dụ này trong dự án {{ config('app.name') }}, hãy tạo widget mới gọi là `Cart`.
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-Sau đó bạn có thể sao chép ví dụ trên và thử trong dự án của mình.
+Giờ bạn có thể cập nhật từng cái độc lập:
 
-Bây giờ, để cập nhật giỏ hàng, bạn có thể gọi như sau.
+``` dart
+// Chỉ reload giỏ hàng header
+Cart.action("reload_cart", stateName: "header");
 
-```dart
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// Chỉ reload giỏ hàng sidebar
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// Không có stateName — nhắm đến instance mặc định không tên
+Cart.action("reload_cart");
 ```
+
+Helper `_stateFor` xử lý namespace: `Cart(stateName: "header")` đăng ký dưới key `"cart_header"`, và `Cart.action(..., stateName: "header")` nhắm đến đúng key đó.
 
 
 <div id="lifecycle"></div>
 
-## Vòng đời
+## Tham chiếu Vòng đời
 
-Vòng đời của widget `NyState` như sau:
+Widget và trang được quản lý state chia sẻ hai hook vòng đời quan trọng:
 
-1. `init()` - Phương thức này được gọi khi state được khởi tạo.
+1. **`init()`** — được gọi một lần khi state được tạo lần đầu. Dùng để tải dữ liệu ban đầu.
 
-2. `stateUpdated(data)` - Phương thức này được gọi khi state được cập nhật.
+2. **`stateUpdated(data)`** — được gọi mỗi khi một state action được kích hoạt đối với state này. Đối số `data` là toàn bộ payload (bao gồm tên action và dữ liệu của action). Ghi đè nó nếu bạn cần phản hồi với *mọi* state action — hầu hết thời gian, định nghĩa handler trong `stateActions` là điều bạn muốn.
 
-    Nếu bạn gọi `updateState(MyStateName.state, data: "The Data")`, nó sẽ kích hoạt **stateUpdated(data)** được gọi.
-
-Khi state được khởi tạo lần đầu, bạn sẽ cần triển khai cách bạn muốn quản lý state.
-
-
-<div id="state-actions"></div>
-
-## State Actions
-
-State actions cho phép bạn kích hoạt các phương thức cụ thể trên widget từ bất kỳ đâu trong ứng dụng. Hãy nghĩ về chúng như các lệnh được đặt tên mà bạn có thể gửi đến widget.
-
-Sử dụng state actions khi bạn cần:
-- Kích hoạt hành vi cụ thể trên widget (không chỉ làm mới nó)
-- Truyền dữ liệu đến widget và khiến nó phản hồi theo cách cụ thể
-- Tạo hành vi widget có thể tái sử dụng có thể được gọi từ nhiều nơi
-
-``` dart
-// Gửi action đến widget
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// Ví dụ khác với dữ liệu
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-Trong widget, bạn có thể định nghĩa các actions muốn xử lý.
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // Ví dụ với dữ liệu
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-Sau đó, bạn có thể gọi phương thức `stateAction` từ bất kỳ đâu trong ứng dụng.
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// in ra 'Hello world'
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-Nếu bạn đã có một instance `StateActions` (ví dụ từ phương thức static `stateActions()` của widget), bạn có thể gọi `action()` trực tiếp trên nó thay vì dùng hàm tự do:
-
-``` dart
-// Sử dụng hàm tự do
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// Sử dụng phương thức instance StateActions — tương đương, ít lặp lại hơn
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-Bạn cũng có thể định nghĩa state actions bằng phương thức `whenStateAction` trong getter `init`.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Đặt lại số đếm huy hiệu
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - State Actions
-
-Đầu tiên, tạo widget stateful.
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-Ví dụ: metro make:stateful_widget user_avatar
-
-Lệnh này sẽ tạo widget mới trong thư mục `lib/resources/widgets/`.
-
-Nếu bạn mở tệp đó, bạn có thể định nghĩa state actions.
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // Ví dụ
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // Ví dụ
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Cuối cùng, bạn có thể gửi action từ bất kỳ đâu trong ứng dụng.
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// in ra 'Hello from the widget'
-
-stateAction('reset_data', state: MyWidget.state);
-// Đặt lại dữ liệu trong widget
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// hiển thị toast thành công với thông báo
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - State Actions
-
-Các trang cũng có thể nhận state actions. Điều này hữu ích khi bạn muốn kích hoạt hành vi cấp trang từ widget hoặc trang khác.
-
-Đầu tiên, tạo trang được quản lý state.
-
-``` bash
-metro make:page my_page
-```
-
-Lệnh này sẽ tạo trang mới được quản lý state gọi là `MyPage` trong thư mục `lib/resources/pages/`.
-
-Nếu bạn mở tệp đó, bạn có thể định nghĩa state actions.
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // set to true to enable state actions on this page
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // Ví dụ
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Cuối cùng, bạn có thể gửi action từ bất kỳ đâu trong ứng dụng.
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// in ra 'Hello from the page'
-
-stateAction('reset_data', state: MyPage.path);
-// Đặt lại dữ liệu trong trang
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// hiển thị toast thành công với thông báo
-```
-
-Bạn cũng có thể định nghĩa state actions bằng phương thức `whenStateAction`.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Đặt lại số đếm huy hiệu
-      _count = 0;
-    }
-  });
-}
-```
-
-Sau đó bạn có thể gửi action từ bất kỳ đâu trong ứng dụng.
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## Cập nhật State
-
-Bạn có thể cập nhật state bằng cách gọi phương thức `updateState()`.
-
-``` dart
-updateState(MyStateName.state);
-
-// hoặc với dữ liệu
-updateState(MyStateName.state, data: "The Data");
-```
-
-Có thể gọi từ bất kỳ đâu trong ứng dụng.
-
-**Xem thêm:** [NyState](/docs/{{ $version }}/ny-state) để biết thêm chi tiết về các phương thức trợ giúp quản lý state và vòng đời.
-
-
-<div id="building-your-first-widget"></div>
-
-## Xây dựng Widget đầu tiên
-
-Trong dự án Nylo của bạn, chạy lệnh sau để tạo widget mới.
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-Lệnh này sẽ tạo widget `NyState` mới gọi là `TodoList`.
-
-> Lưu ý: Widget mới sẽ được tạo trong thư mục `lib/resources/widgets/`.
+**Xem thêm:** [NyState](/docs/{{ $version }}/ny-state) để biết toàn bộ bộ trợ giúp state và các phương thức vòng đời.

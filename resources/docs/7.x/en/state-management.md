@@ -1,64 +1,395 @@
-# State Management
+# State Managed Widgets
 
 ---
 
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
-- [When to Use State Management](#when-to-use-state-management "When to Use State Management")
-- [Lifecycle](#lifecycle "Lifecycle")
+- [Choose Your Pattern](#choose-your-pattern "Choose Your Pattern")
 - [State Actions](#state-actions "State Actions")
-  - [NyState - State Actions](#state-actions-nystate "NyState - State Actions")
-  - [NyPage - State Actions](#state-actions-nypage "NyPage - State Actions")
-- [Updating a State](#updating-a-state "Updating a State")
-- [Building Your First Widget](#building-your-first-widget "Building Your First Widget")
+  - [Defining Handlers](#defining-handlers "Defining Handlers")
+  - [Triggering Actions](#triggering-actions "Triggering Actions")
+  - [Handlers With and Without Data](#handlers-with-and-without-data "Handlers With and Without Data")
+  - [Using a StateActions Instance](#using-a-state-actions-instance "Using a StateActions Instance")
+- [Pattern: State Managed Pages (NyPage)](#pattern-ny-page "Pattern: State Managed Pages")
+- [Pattern: Stateful Widgets (NyState)](#pattern-ny-state "Pattern: Stateful Widgets")
+- [Pattern: State Managed Widgets (NyStateManaged)](#pattern-ny-state-managed "Pattern: State Managed Widgets")
+  - [Advanced: Multiple Isolated Instances](#advanced-multiple-isolated-instances "Advanced: Multiple Isolated Instances")
+- [Lifecycle Reference](#lifecycle "Lifecycle Reference")
 
 <div id="introduction"></div>
 
 ## Introduction
 
-State management lets you update specific parts of your UI without rebuilding entire pages. In {{ config('app.name') }} v7, you can build widgets that communicate and update each other across your app.
+State managed widgets let you update specific parts of your UI from anywhere in your app — without rebuilding entire pages. In {{ config('app.name') }} v7, you trigger named **state actions** on a target widget or page, and the matching handler runs.
 
-{{ config('app.name') }} provides two classes for state management:
-- **`NyState`** — For building reusable widgets (like a cart badge, notification counter, or status indicator)
-- **`NyPage`** — For building pages in your application (extends `NyState` with page-specific features)
+The mental model is simple:
 
-Use state management when you need to:
-- Update a widget from a different part of your app
-- Keep widgets in sync with shared data
-- Avoid rebuilding entire pages when only part of the UI changes
+- Each state managed widget or page has a unique **state key** (a string)
+- It defines a map of **named actions** it knows how to handle
+- Anywhere in your app, you can call 
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### Let's first understand State Management
-
-Everything in Flutter is a widget, they are just tiny chunks of UI that you can combine to make a complete app.
-
-When you start building complex pages, you will need to manage the state of your widgets. This means when something changes, e.g. data, you can update that widget without having to rebuild the entire page.
-
-There are a lot of reasons why this is important, but the main reason is performance. If you have a widget that is constantly changing, you don't want to rebuild the entire page every time it changes.
-
-This is where State Management comes in, it allows you to manage the state of a widget in your application.
+There are three patterns for building state managed UI. They all share the same `stateAction` mechanic — the only difference is what kind of UI you're managing.
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### When to Use State Management
+## Choose Your Pattern
 
-You should use State Management when you have a widget that needs to be updated without rebuilding the entire page.
+| You want to... | Use | Scaffold command |
+|---|---|---|
+| State-manage a full page | `NyPage` | `metro make:page my_page` |
+| State-manage a single-instance widget | `NyState` | `metro make:stateful_widget my_widget` |
+| State-manage a widget with multiple isolated instances | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-For example, let's imagine you have created an ecommerce app. You have built a widget to display the total amount of items in the users' cart.
-Let's call this widget `Cart()`.
+Read the [State Actions](#state-actions) section first — it explains the API every pattern uses. Then jump to the pattern that fits your case.
 
-A state managed `Cart` widget in Nylo would look something like this:
 
-**Step 1:** Define the widget extending `NyStateManaged`
+<div id="state-actions"></div>
+
+## State Actions
+
+State actions are named commands a widget or page knows how to handle. You define a map of action names to handler functions, and trigger them by name from anywhere in your app.
+
+Use state actions when you need to:
+- Trigger a specific behavior on a widget or page (not just a generic refresh)
+- Pass data to a widget and have it respond in a defined way
+- Build reusable widget behaviors that can be invoked from multiple call sites
+
+<div id="defining-handlers"></div>
+
+### Defining Handlers
+
+Handlers live in the `stateActions` getter on your `NyState` or `NyPage` class. The map keys are action names; the values are functions to run when that action is triggered.
 
 ``` dart
-/// The Cart widget
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+Handlers are responsible for calling `setState` themselves if they want the widget to rebuild.
+
+The `apply_discount` handler above takes a `code` argument — declare a single positional parameter when your handler needs the payload passed via 
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+Use the no-arg form `()` when the action carries no payload.
+
+
+<div id="triggering-actions"></div>
+
+### Triggering Actions
+
+Use the top-level `stateAction` function to fire an action from anywhere — another widget, a controller, an event handler, an API callback, etc.
+
+``` dart
+// Fire an action with no data
+stateAction("clear_cart", state: Cart.state);
+
+// Fire an action with data
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+The `state:` argument is the **state key** of the target:
+- For widgets — `MyWidget.state` (a string)
+- For pages — `MyPage.path` (the route)
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### Handlers With and Without Data
+
+Handlers can be sync or async, and can be defined with or without a `data` argument:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // No data — handler runs as-is
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // With data — receives whatever was passed via the `data:` arg
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // Async is supported — the framework awaits the handler
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+If you pass `data:` to `stateAction` but your handler takes no arguments, the data is simply ignored.
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### Using a StateActions Instance
+
+If a widget exposes a typed `StateActions` instance (often via a `stateActions(stateName)` static method), you can call `.action(...)` on it directly instead of the free function. This is cleaner when firing several actions at the same target:
+
+``` dart
+// Using the free function
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// Using a StateActions instance — equivalent, less repetition
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+Several built-in widgets (`InputField`, `CollectionView`, `LanguageSwitcher`, the `NyForm*` family) ship typed `StateActions` classes with named methods like `.clear()`, `.setValue(...)`, `.refresh()` — check the widget's docs for what's available.
+
+
+<div id="pattern-ny-page"></div>
+
+## Pattern: State Managed Pages (NyPage)
+
+Use this when you want to trigger behavior on a full page from elsewhere in your app — for example, refreshing a page when an event fires, or clearing form state from a child widget.
+
+**Step 1:** Scaffold a page.
+
+``` bash
+metro make:page my_page
+```
+
+This generates a `NyPage` in `lib/resources/pages/`:
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**Step 2:** Flip `stateManaged` to `true`.
+
+By default, pages do **not** subscribe to state events — this avoids unnecessary listeners on pages that don't need them. To enable state actions on a page, change the getter:
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**Step 3:** Add a `stateActions` map.
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**Step 4:** Trigger the action from anywhere using the page's `path`.
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> Pages key off `MyPage.path`, widgets key off `MyWidget.state`. This is the only difference at the call site.
+
+
+<div id="pattern-ny-state"></div>
+
+## Pattern: Stateful Widgets (NyState)
+
+Use this for reusable widgets that exist as a single instance per page — a profile card, a header bar, a status indicator. If you only render one instance of the widget at a time, this is the right pattern.
+
+**Step 1:** Scaffold a stateful widget.
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+This generates the following in `lib/resources/widgets/`:
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+The scaffold gives you a working `NyState` widget — but it's **not yet state managed**. To make it respond to state actions, you need to add four things:
+
+1. A `state` key on the widget class — the unique string other parts of your app will target
+2. A constructor parameter that receives the state key and forwards it to the state class
+3. A constructor on the state class that assigns `stateName`
+4. A `stateActions` map defining the handlers
+
+**Step 2:** Convert the scaffold into a state managed widget.
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ call this from anywhere in your app to trigger the handler below
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+What changed:
+- `static String get state => "profile_card";` defines the public state key
+- `createState() => _ProfileCardState(state)` passes the key into the state class
+- `_ProfileCardState(String? state) { this.stateName = state; }` registers this state instance under that key, so the framework knows which widget to deliver the action to
+- `stateActions` declares the named handlers
+
+**Step 3:** Trigger from anywhere.
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+You can add as many handlers as you need, with or without data:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## Pattern: State Managed Widgets (NyStateManaged)
+
+Use this when you need **multiple independent instances of the same widget** on screen at once — for example, a cart badge in the header and another in a sidebar that should both update independently.
+
+`NyStateManaged` adds a `stateName` parameter so each instance can be addressed separately. If you only ever render one instance of the widget, prefer `NyState` instead — it's simpler.
+
+**Step 1:** Scaffold a state managed widget.
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+This generates the following in `lib/resources/widgets/`:
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // Unique identifier for this widget's state
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // initialization logic here
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Invoke actions from anywhere in your app
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**Step 2:** Create the state class extending `NyState`
+**Step 2:** Flesh out the state — load data in `init`, define handlers, and render.
 
 ``` dart
-/// The state class for the Cart widget
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Load initial data
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**Step 3:** Create helper functions to read and update the cart
+**Step 3:** Trigger actions using the generated static `action()` helper.
 
 ``` dart
-/// Get the cart value from storage
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// Set the cart value and notify the widget
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // This triggers stateUpdated() on the widget
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-Let's break this down.
+This is equivalent to `stateAction("reload_cart", state: Cart.state)` — the static helper just removes the boilerplate.
 
-1. The `Cart` widget extends `NyStateManaged` (not `StatefulWidget` directly).
 
-2. The `stateName` constructor parameter is forwarded via `super(child: () => _CartState(stateName))`, enabling multiple isolated instances of the same widget.
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. The `_stateFor(String? state)` helper produces a namespaced state key like `"cart_sidebar"` for named instances.
+### Advanced: Multiple Isolated Instances
 
-4. `_CartState` extends `NyState<Cart>` and receives `stateName` to register the correct isolated state.
+The reason `NyStateManaged` exists is to support multiple independent instances of the same widget. Each instance gets its own `stateName`, which produces a namespaced state key.
 
-5. The `stateActions` map defines named commands you can invoke on the widget from anywhere in your app.
+Render two carts with distinct names:
 
-If you want to try this example in your {{ config('app.name') }} project, create a new widget called `Cart`. 
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-Then you can copy the example above and try it in your project.
+Now you can update either one independently:
 
-Now, to update the cart, you can call the following.
+``` dart
+// Reload only the header cart
+Cart.action("reload_cart", stateName: "header");
 
-```dart 
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// Reload only the sidebar cart
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// No stateName — targets the default unnamed instance
+Cart.action("reload_cart");
 ```
+
+The `_stateFor` helper handles the namespacing: `Cart(stateName: "header")` registers under the key `"cart_header"`, and `Cart.action(..., stateName: "header")` targets that exact key.
 
 
 <div id="lifecycle"></div>
 
-## Lifecycle
+## Lifecycle Reference
 
-The lifecycle of a `NyState` widget is as follows:
+State managed widgets and pages share two key lifecycle hooks:
 
-1. `init()` - This method is called when the state is initialized.
+1. **`init()`** — called once when the state is first created. Use it to load initial data.
 
-2. `stateUpdated(data)` - This method is called when the state is updated.
+2. **`stateUpdated(data)`** — called whenever a state action is fired against this state. The `data` argument is the full payload (including the action name and the action's data). Override it if you need to react to *every* state action — most of the time, defining handlers in `stateActions` is what you want instead.
 
-    If you call `updateState(MyStateName.state, data: "The Data")`, it will trigger **stateUpdated(data)** to be called. 
-
-Once the state is first initialized, you will need to implement how you want to manage the state.
-
-
-<div id="state-actions"></div>
-
-## State Actions
-
-State actions let you trigger specific methods on a widget from anywhere in your app. Think of them as named commands you can send to a widget.
-
-Use state actions when you need to:
-- Trigger a specific behavior on a widget (not just refresh it)
-- Pass data to a widget and have it respond in a particular way
-- Create reusable widget behaviors that can be invoked from multiple places
-
-``` dart
-// Sending an action to the widget
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// Another example with data
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-In your widget, you can define the actions you want to handle.
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // Example with data
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-Then, you can call `stateAction` method from anywhere in your application.
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// prints 'Hello world'
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-If you already have a `StateActions` instance (e.g. from a widget's `stateActions()` static method), you can call `action()` on it directly instead of using the free function:
-
-``` dart
-// Using the free function
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// Using the StateActions instance method — equivalent, less repetition
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-You can also define your state actions using the `whenStateAction` method in your `init` getter.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Reset the badge count
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - State Actions
-
-First, create a stateful widget.
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-Example: metro make:stateful_widget user_avatar
-
-This will create a new widget in the `lib/resources/widgets/` directory.
-
-If you open that file, you'll be able to define your state actions.
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // Example
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // Example
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Finally, you can send the action from anywhere in your application.
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// prints 'Hello from the widget'
-
-stateAction('reset_data', state: MyWidget.state);
-// Reset data in widget
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// shows a success toast with the message
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - State Actions
-
-Pages can also receive state actions. This is useful when you want to trigger page-level behaviors from widgets or other pages.
-
-First, create your state managed page.
-
-``` bash
-metro make:page my_page
-```
-
-This will create a new state managed page called `MyPage` in the `lib/resources/pages/` directory.
-
-If you open that file, you'll be able to define your state actions.
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // set to true to enable state actions on this page
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // Example
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Finally, you can send the action from anywhere in your application.
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// prints 'Hello from the page'
-
-stateAction('reset_data', state: MyPage.path);
-// Reset data in page
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// shows a success toast with the message
-```
-
-You can also define your state actions using the `whenStateAction` method.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Reset the badge count
-      _count = 0;
-    }
-  });
-}
-```
-
-Then you can send the action from anywhere in your application.
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## Updating a State
-
-You can update a state by calling the `updateState()` method.
-
-``` dart
-updateState(MyStateName.state);
-
-// or with data
-updateState(MyStateName.state, data: "The Data");
-```
-
-This can be called anywhere in your application.
-
-**See also:** [NyState](/docs/{{ $version }}/ny-state) for more details on state management helpers and lifecycle methods.
-
-
-<div id="building-your-first-widget"></div>
-
-## Building Your First Widget
-
-In your Nylo project, run the following command to create a new widget.
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-This will create a new `NyState` widget called `TodoList`.
-
-> Note: The new widget will be created in the `lib/resources/widgets/` directory.
+**See also:** [NyState](/docs/{{ $version }}/ny-state) for the full set of state helpers and lifecycle methods.

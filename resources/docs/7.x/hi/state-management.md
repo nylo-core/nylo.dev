@@ -1,64 +1,395 @@
-# स्टेट मैनेजमेंट
+# स्टेट मैनेज्ड विजेट्स
 
 ---
 
 <a name="section-1"></a>
 - [परिचय](#introduction "परिचय")
-- [स्टेट मैनेजमेंट कब उपयोग करें](#when-to-use-state-management "स्टेट मैनेजमेंट कब उपयोग करें")
-- [लाइफ़साइकिल](#lifecycle "लाइफ़साइकिल")
-- [स्टेट एक्शन्स](#state-actions "स्टेट एक्शन्स")
-  - [NyState - स्टेट एक्शन्स](#state-actions-nystate "NyState - स्टेट एक्शन्स")
-  - [NyPage - स्टेट एक्शन्स](#state-actions-nypage "NyPage - स्टेट एक्शन्स")
-- [स्टेट अपडेट करना](#updating-a-state "स्टेट अपडेट करना")
-- [अपना पहला विजेट बनाना](#building-your-first-widget "अपना पहला विजेट बनाना")
+- [अपना पैटर्न चुनें](#choose-your-pattern "अपना पैटर्न चुनें")
+- [State Actions](#state-actions "State Actions")
+  - [हैंडलर्स परिभाषित करना](#defining-handlers "हैंडलर्स परिभाषित करना")
+  - [एक्शन ट्रिगर करना](#triggering-actions "एक्शन ट्रिगर करना")
+  - [डेटा के साथ और बिना हैंडलर्स](#handlers-with-and-without-data "डेटा के साथ और बिना हैंडलर्स")
+  - [StateActions इंस्टेंस का उपयोग](#using-a-state-actions-instance "StateActions इंस्टेंस का उपयोग")
+- [पैटर्न: स्टेट मैनेज्ड पेजेज (NyPage)](#pattern-ny-page "पैटर्न: स्टेट मैनेज्ड पेजेज")
+- [पैटर्न: Stateful विजेट्स (NyState)](#pattern-ny-state "पैटर्न: Stateful विजेट्स")
+- [पैटर्न: स्टेट मैनेज्ड विजेट्स (NyStateManaged)](#pattern-ny-state-managed "पैटर्न: स्टेट मैनेज्ड विजेट्स")
+  - [एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज](#advanced-multiple-isolated-instances "एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज")
+- [लाइफ़साइकिल रेफरेंस](#lifecycle "लाइफ़साइकिल रेफरेंस")
 
 <div id="introduction"></div>
 
 ## परिचय
 
-स्टेट मैनेजमेंट आपको पूरे पेज को फिर से बनाए बिना अपने UI के विशिष्ट भागों को अपडेट करने देता है। {{ config('app.name') }} v7 में, आप ऐसे विजेट्स बना सकते हैं जो आपके पूरे ऐप में संवाद करते हैं और एक-दूसरे को अपडेट करते हैं।
+स्टेट मैनेज्ड विजेट्स आपको पूरे पेज को फिर से बनाए बिना अपने ऐप में कहीं से भी UI के विशिष्ट भागों को अपडेट करने देते हैं। {{ config('app.name') }} v7 में, आप किसी लक्ष्य विजेट या पेज पर नामित **state actions** ट्रिगर करते हैं, और मिलान करने वाला हैंडलर चलता है।
 
-{{ config('app.name') }} स्टेट मैनेजमेंट के लिए दो क्लासेस प्रदान करता है:
-- **`NyState`** — पुन: प्रयोज्य विजेट्स बनाने के लिए (जैसे कार्ट बैज, नोटिफ़िकेशन काउंटर, या स्टेटस इंडिकेटर)
-- **`NyPage`** — आपके एप्लिकेशन में पेज बनाने के लिए (`NyState` को पेज-विशिष्ट सुविधाओं के साथ एक्सटेंड करता है)
+मॉडल सरल है:
 
-स्टेट मैनेजमेंट का उपयोग करें जब आपको:
-- अपने ऐप के किसी अन्य भाग से विजेट अपडेट करना हो
-- साझा डेटा के साथ विजेट्स को सिंक में रखना हो
-- UI का केवल एक भाग बदलने पर पूरे पेज को फिर से बनाने से बचना हो
+- प्रत्येक स्टेट मैनेज्ड विजेट या पेज का एक अद्वितीय **स्टेट की** (एक स्ट्रिंग) होती है
+- यह **नामित एक्शन्स** का एक मैप परिभाषित करता है जिन्हें वह हैंडल करना जानता है
+- आपके ऐप में कहीं से भी, आप कॉल कर सकते हैं
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### पहले स्टेट मैनेजमेंट को समझते हैं
-
-Flutter में सब कुछ एक विजेट है, ये UI के छोटे-छोटे टुकड़े हैं जिन्हें आप एक पूरा ऐप बनाने के लिए जोड़ सकते हैं।
-
-जब आप जटिल पेज बनाना शुरू करते हैं, तो आपको अपने विजेट्स के स्टेट को मैनेज करने की आवश्यकता होगी। इसका मतलब है कि जब कुछ बदलता है, जैसे डेटा, तो आप पूरे पेज को फिर से बनाए बिना उस विजेट को अपडेट कर सकते हैं।
-
-इसके कई कारण हैं कि यह महत्वपूर्ण है, लेकिन मुख्य कारण प्रदर्शन है। यदि आपके पास एक विजेट है जो लगातार बदल रहा है, तो आप हर बार बदलने पर पूरे पेज को फिर से नहीं बनाना चाहेंगे।
-
-यहीं स्टेट मैनेजमेंट काम आता है, यह आपको अपने एप्लिकेशन में किसी विजेट के स्टेट को मैनेज करने की अनुमति देता है।
+स्टेट मैनेज्ड UI बनाने के तीन पैटर्न हैं। वे सभी एक ही `stateAction` मैकेनिक साझा करते हैं — केवल अंतर यह है कि आप किस प्रकार की UI मैनेज कर रहे हैं।
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### स्टेट मैनेजमेंट कब उपयोग करें
+## अपना पैटर्न चुनें
 
-आपको स्टेट मैनेजमेंट का उपयोग तब करना चाहिए जब आपके पास कोई विजेट हो जिसे पूरे पेज को फिर से बनाए बिना अपडेट करने की आवश्यकता हो।
+| आप चाहते हैं... | उपयोग करें | स्कैफोल्ड कमांड |
+|---|---|---|
+| एक पूरे पेज को स्टेट-मैनेज करना | `NyPage` | `metro make:page my_page` |
+| एक सिंगल-इंस्टेंस विजेट को स्टेट-मैनेज करना | `NyState` | `metro make:stateful_widget my_widget` |
+| एकाधिक अलग-अलग इंस्टेंसेज वाले विजेट को स्टेट-मैनेज करना | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-उदाहरण के लिए, मान लीजिए आपने एक ई-कॉमर्स ऐप बनाया है। आपने यूज़र के कार्ट में आइटम्स की कुल संख्या प्रदर्शित करने के लिए एक विजेट बनाया है।
-इस विजेट को `Cart()` कहते हैं।
+पहले [State Actions](#state-actions) सेक्शन पढ़ें — यह उस API को समझाता है जिसे प्रत्येक पैटर्न उपयोग करता है। फिर अपने केस के लिए उचित पैटर्न पर जाएं।
 
-Nylo में एक स्टेट मैनेज्ड `Cart` विजेट कुछ इस तरह दिखेगा:
 
-**चरण 1:** `NyStateManaged` को एक्सटेंड करते हुए विजेट परिभाषित करें
+<div id="state-actions"></div>
+
+## State Actions
+
+State Actions वे नामित कमांड हैं जिन्हें एक विजेट या पेज हैंडल करना जानता है। आप एक्शन नामों से हैंडलर फंक्शन्स का मैप परिभाषित करते हैं, और उन्हें अपने ऐप में कहीं से भी नाम से ट्रिगर करते हैं।
+
+State Actions तब उपयोग करें जब आपको:
+- किसी विजेट या पेज पर एक विशिष्ट व्यवहार ट्रिगर करना हो (सिर्फ एक जेनेरिक रिफ्रेश नहीं)
+- किसी विजेट को डेटा पास करना हो और उसे एक परिभाषित तरीके से प्रतिक्रिया करवानी हो
+- पुन: प्रयोज्य विजेट व्यवहार बनाने हों जो कई कॉल साइट्स से इनवोक किए जा सकें
+
+<div id="defining-handlers"></div>
+
+### हैंडलर्स परिभाषित करना
+
+हैंडलर्स आपके `NyState` या `NyPage` क्लास पर `stateActions` गेटर में रहते हैं। मैप की keys एक्शन नाम हैं; values वे फंक्शन हैं जो उस एक्शन के ट्रिगर होने पर चलते हैं।
 
 ``` dart
-/// Cart विजेट
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+हैंडलर्स खुद `setState` कॉल करने के लिए जिम्मेदार हैं यदि वे विजेट को फिर से बनाना चाहते हैं।
+
+ऊपर का `apply_discount` हैंडलर एक `code` आर्ग्यूमेंट लेता है — एक सिंगल पोजिशनल पैरामीटर घोषित करें जब आपके हैंडलर को निम्नलिखित के माध्यम से पास किया गया पेलोड चाहिए
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+नो-आर्ग फॉर्म `()` तब उपयोग करें जब एक्शन कोई पेलोड नहीं ले जाता।
+
+
+<div id="triggering-actions"></div>
+
+### एक्शन ट्रिगर करना
+
+कहीं से भी एक्शन फायर करने के लिए टॉप-लेवल `stateAction` फंक्शन का उपयोग करें — दूसरे विजेट, कंट्रोलर, इवेंट हैंडलर, API कॉलबैक आदि से।
+
+``` dart
+// बिना डेटा के एक्शन फायर करें
+stateAction("clear_cart", state: Cart.state);
+
+// डेटा के साथ एक्शन फायर करें
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+`state:` आर्ग्यूमेंट टार्गेट की **स्टेट की** है:
+- विजेट्स के लिए — `MyWidget.state` (एक स्ट्रिंग)
+- पेजेज के लिए — `MyPage.path` (रूट)
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### डेटा के साथ और बिना हैंडलर्स
+
+हैंडलर्स sync या async हो सकते हैं, और `data` आर्ग्यूमेंट के साथ या बिना परिभाषित किए जा सकते हैं:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // डेटा नहीं — हैंडलर ज्यों का त्यों चलता है
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // डेटा के साथ — `data:` आर्ग्यूमेंट के माध्यम से जो पास किया गया वह प्राप्त करता है
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // Async समर्थित है — फ्रेमवर्क हैंडलर को await करता है
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+यदि आप `stateAction` को `data:` पास करते हैं लेकिन आपका हैंडलर कोई आर्ग्यूमेंट नहीं लेता, तो डेटा बस अनदेखा कर दिया जाता है।
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### StateActions इंस्टेंस का उपयोग
+
+यदि कोई विजेट एक टाइप्ड `StateActions` इंस्टेंस (अक्सर `stateActions(stateName)` स्टैटिक मेथड के माध्यम से) एक्सपोज करता है, तो आप फ्री फंक्शन के बजाय उस पर सीधे `.action(...)` कॉल कर सकते हैं। यह तब साफ होता है जब एक ही टार्गेट पर कई एक्शन्स फायर की जाती हैं:
+
+``` dart
+// फ्री फंक्शन का उपयोग करना
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// StateActions इंस्टेंस का उपयोग करना — समकक्ष, कम दोहराव
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+कई बिल्ट-इन विजेट्स (`InputField`, `CollectionView`, `LanguageSwitcher`, `NyForm*` फैमिली) `.clear()`, `.setValue(...)`, `.refresh()` जैसी नामित मेथड्स के साथ टाइप्ड `StateActions` क्लासेज के साथ आते हैं — उपलब्ध चीज़ों के लिए विजेट के डॉक्स चेक करें।
+
+
+<div id="pattern-ny-page"></div>
+
+## पैटर्न: स्टेट मैनेज्ड पेजेज (NyPage)
+
+जब आप कहीं से किसी पूरे पेज पर व्यवहार ट्रिगर करना चाहते हों तो इसका उपयोग करें — उदाहरण के लिए, कोई इवेंट फायर होने पर पेज रिफ्रेश करना, या किसी चाइल्ड विजेट से फॉर्म स्टेट क्लियर करना।
+
+**स्टेप 1:** एक पेज स्कैफोल्ड करें।
+
+``` bash
+metro make:page my_page
+```
+
+यह `lib/resources/pages/` में एक `NyPage` जनरेट करता है:
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**स्टेप 2:** `stateManaged` को `true` पर स्विच करें।
+
+डिफ़ॉल्ट रूप से, पेजेज स्टेट इवेंट्स को सब्सक्राइब **नहीं** करते — यह उन पेजेज पर अनावश्यक लिस्नर्स से बचाता है जिन्हें उनकी जरूरत नहीं है। किसी पेज पर state actions सक्षम करने के लिए, गेटर बदलें:
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**स्टेप 3:** एक `stateActions` मैप जोड़ें।
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**स्टेप 4:** पेज के `path` का उपयोग करके कहीं से भी एक्शन ट्रिगर करें।
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> पेजेज `MyPage.path` से की ऑफ करते हैं, विजेट्स `MyWidget.state` से की ऑफ करते हैं। कॉल साइट पर यही एकमात्र अंतर है।
+
+
+<div id="pattern-ny-state"></div>
+
+## पैटर्न: Stateful विजेट्स (NyState)
+
+ऐसे पुन: प्रयोज्य विजेट्स के लिए उपयोग करें जो प्रति पेज एक ही इंस्टेंस के रूप में मौजूद हों — एक प्रोफाइल कार्ड, हेडर बार, स्टेटस इंडिकेटर। यदि आप एक समय में विजेट का केवल एक इंस्टेंस रेंडर करते हैं, तो यह सही पैटर्न है।
+
+**स्टेप 1:** एक stateful विजेट स्कैफोल्ड करें।
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+यह `lib/resources/widgets/` में निम्नलिखित जनरेट करता है:
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+स्कैफोल्ड आपको एक काम करने वाला `NyState` विजेट देता है — लेकिन यह **अभी तक स्टेट मैनेज्ड नहीं है**। इसे state actions पर प्रतिक्रिया देने के लिए, आपको चार चीजें जोड़नी होंगी:
+
+1. विजेट क्लास पर एक `state` की — वह अद्वितीय स्ट्रिंग जिसे आपके ऐप के अन्य भाग टार्गेट करेंगे
+2. एक कंस्ट्रक्टर पैरामीटर जो स्टेट की प्राप्त करता है और उसे स्टेट क्लास को फॉरवर्ड करता है
+3. स्टेट क्लास पर एक कंस्ट्रक्टर जो `stateName` असाइन करता है
+4. हैंडलर्स परिभाषित करने वाला एक `stateActions` मैप
+
+**स्टेप 2:** स्कैफोल्ड को स्टेट मैनेज्ड विजेट में बदलें।
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ इसे अपने ऐप में कहीं से भी कॉल करें नीचे के हैंडलर को ट्रिगर करने के लिए
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+क्या बदला:
+- `static String get state => "profile_card";` पब्लिक स्टेट की परिभाषित करता है
+- `createState() => _ProfileCardState(state)` की को स्टेट क्लास में पास करता है
+- `_ProfileCardState(String? state) { this.stateName = state; }` उस की के नीचे इस स्टेट इंस्टेंस को रजिस्टर करता है, ताकि फ्रेमवर्क जान सके कि एक्शन किस विजेट को डिलीवर करनी है
+- `stateActions` नामित हैंडलर्स घोषित करता है
+
+**स्टेप 3:** कहीं से भी ट्रिगर करें।
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+आप डेटा के साथ या बिना जितने चाहें उतने हैंडलर जोड़ सकते हैं:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## पैटर्न: स्टेट मैनेज्ड विजेट्स (NyStateManaged)
+
+जब आपको स्क्रीन पर **एक ही विजेट के एकाधिक स्वतंत्र इंस्टेंसेज** की जरूरत हो तो इसका उपयोग करें — उदाहरण के लिए, हेडर में कार्ट बैज और साइडबार में एक और बैज जो दोनों स्वतंत्र रूप से अपडेट होने चाहिए।
+
+`NyStateManaged` एक `stateName` पैरामीटर जोड़ता है ताकि प्रत्येक इंस्टेंस को अलग से एड्रेस किया जा सके। यदि आप विजेट का केवल एक इंस्टेंस रेंडर करते हैं, तो `NyState` को प्राथमिकता दें — यह सरल है।
+
+**स्टेप 1:** एक स्टेट मैनेज्ड विजेट स्कैफोल्ड करें।
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+यह `lib/resources/widgets/` में निम्नलिखित जनरेट करता है:
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // इस विजेट के state का यूनीक आइडेंटिफायर
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // यहाँ इनिशियलाइज़ेशन लॉजिक है
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // अपने ऐप में कहीं से भी एक्शन्स इनवोक करें
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**चरण 2:** `NyState` को एक्सटेंड करते हुए स्टेट क्लास बनाएँ
+**स्टेप 2:** स्टेट को पूरा करें — `init` में डेटा लोड करें, हैंडलर्स परिभाषित करें, और रेंडर करें।
 
 ``` dart
-/// Cart विजेट की state क्लास
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // प्रारंभिक डेटा लोड करें
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**चरण 3:** कार्ट पढ़ने और अपडेट करने के लिए हेल्पर फ़ंक्शन बनाएँ
+**स्टेप 3:** जनरेट किए गए स्टैटिक `action()` हेल्पर का उपयोग करके एक्शन्स ट्रिगर करें।
 
 ``` dart
-/// स्टोरेज से cart की वैल्यू प्राप्त करें
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// cart की वैल्यू सेट करें और विजेट को नोटिफाई करें
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // यह विजेट पर stateUpdated() ट्रिगर करता है
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-इसे समझते हैं।
+यह `stateAction("reload_cart", state: Cart.state)` के समकक्ष है — स्टैटिक हेल्पर बस बॉयलरप्लेट हटाता है।
 
-1. `Cart` विजेट `NyStateManaged` को एक्सटेंड करता है (सीधे `StatefulWidget` नहीं)।
 
-2. `stateName` कंस्ट्रक्टर पैरामीटर `super(child: () => _CartState(stateName))` के माध्यम से फॉरवर्ड किया जाता है, जो एक ही विजेट के कई अलग-अलग इंस्टेंस को सक्षम करता है।
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. `_stateFor(String? state)` हेल्पर नामांकित इंस्टेंस के लिए `"cart_sidebar"` जैसी नेमस्पेस्ड स्टेट की बनाता है।
+### एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज
 
-4. `_CartState` `NyState<Cart>` को एक्सटेंड करता है और सही अलग-अलग स्टेट रजिस्टर करने के लिए `stateName` प्राप्त करता है।
+`NyStateManaged` के अस्तित्व का कारण एक ही विजेट के एकाधिक स्वतंत्र इंस्टेंसेज को सपोर्ट करना है। प्रत्येक इंस्टेंस को अपना `stateName` मिलता है, जो एक नेमस्पेस्ड स्टेट की बनाता है।
 
-5. `stateActions` मैप ऐसे नामित कमांड्स परिभाषित करता है जिन्हें आप अपने ऐप में कहीं से भी विजेट पर इनवोक कर सकते हैं।
+अलग-अलग नामों से दो कार्ट रेंडर करें:
 
-यदि आप इस उदाहरण को अपने {{ config('app.name') }} प्रोजेक्ट में आज़माना चाहते हैं, तो `Cart` नाम का एक नया विजेट बनाएँ।
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-फिर आप ऊपर दिए गए उदाहरण को कॉपी करके अपने प्रोजेक्ट में आज़मा सकते हैं।
+अब आप किसी भी एक को स्वतंत्र रूप से अपडेट कर सकते हैं:
 
-अब, कार्ट अपडेट करने के लिए, आप निम्नलिखित कॉल कर सकते हैं।
+``` dart
+// केवल हेडर कार्ट रीलोड करें
+Cart.action("reload_cart", stateName: "header");
 
-```dart
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// केवल साइडबार कार्ट रीलोड करें
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// stateName नहीं — डिफ़ॉल्ट अनाम इंस्टेंस को टार्गेट करता है
+Cart.action("reload_cart");
 ```
+
+`_stateFor` हेल्पर नेमस्पेसिंग को हैंडल करता है: `Cart(stateName: "header")` की `"cart_header"` के नीचे रजिस्टर होता है, और `Cart.action(..., stateName: "header")` उस सटीक की को टार्गेट करता है।
 
 
 <div id="lifecycle"></div>
 
-## लाइफ़साइकिल
+## लाइफ़साइकिल रेफरेंस
 
-`NyState` विजेट का लाइफ़साइकिल इस प्रकार है:
+स्टेट मैनेज्ड विजेट्स और पेजेज दो प्रमुख लाइफ़साइकिल हुक्स साझा करते हैं:
 
-1. `init()` - यह मेथड स्टेट के इनिशियलाइज़ होने पर कॉल होता है।
+1. **`init()`** — एक बार जब स्टेट पहली बार बनाई जाती है तब कॉल होती है। प्रारंभिक डेटा लोड करने के लिए इसका उपयोग करें।
 
-2. `stateUpdated(data)` - यह मेथड स्टेट अपडेट होने पर कॉल होता है।
+2. **`stateUpdated(data)`** — जब भी इस स्टेट के विरुद्ध कोई state action फायर होती है तब कॉल होती है। `data` आर्ग्यूमेंट पूरा पेलोड है (जिसमें एक्शन नाम और एक्शन का डेटा शामिल है)। इसे ओवरराइड करें यदि आपको *हर* state action पर प्रतिक्रिया देनी है — अधिकांश समय, `stateActions` में हैंडलर्स परिभाषित करना ही सही तरीका है।
 
-    यदि आप `updateState(MyStateName.state, data: "The Data")` कॉल करते हैं, तो यह **stateUpdated(data)** को ट्रिगर करेगा।
-
-एक बार स्टेट पहली बार इनिशियलाइज़ हो जाने के बाद, आपको यह लागू करना होगा कि आप स्टेट को कैसे मैनेज करना चाहते हैं।
-
-
-<div id="state-actions"></div>
-
-## स्टेट एक्शन्स
-
-स्टेट एक्शन्स आपको अपने ऐप में कहीं से भी किसी विजेट पर विशिष्ट मेथड्स ट्रिगर करने देते हैं। इन्हें नामित कमांड्स समझें जो आप किसी विजेट को भेज सकते हैं।
-
-स्टेट एक्शन्स का उपयोग करें जब आपको:
-- किसी विजेट पर एक विशिष्ट व्यवहार ट्रिगर करना हो (सिर्फ रिफ्रेश नहीं)
-- किसी विजेट को डेटा पास करना हो और उसे एक विशेष तरीके से प्रतिक्रिया करवानी हो
-- पुन: प्रयोज्य विजेट व्यवहार बनाने हों जो कई स्थानों से इनवोक किए जा सकें
-
-``` dart
-// विजेट को एक्शन भेजना
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// डेटा के साथ एक और उदाहरण
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-अपने विजेट में, आप उन एक्शन्स को परिभाषित कर सकते हैं जिन्हें आप हैंडल करना चाहते हैं।
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // डेटा के साथ उदाहरण
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-फिर, आप अपने एप्लिकेशन में कहीं से भी `stateAction` मेथड कॉल कर सकते हैं।
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// 'Hello world' प्रिंट करता है
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-यदि आपके पास पहले से कोई `StateActions` इंस्टेंस है (उदा. किसी विजेट के `stateActions()` स्टैटिक मेथड से), तो फ्री फंक्शन का उपयोग करने के बजाय आप उस पर सीधे `action()` कॉल कर सकते हैं:
-
-``` dart
-// फ्री फंक्शन का उपयोग करते हुए
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// StateActions इंस्टेंस मेथड का उपयोग करते हुए — समकक्ष, कम पुनरावृत्ति
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-आप अपने `init` गेटर में `whenStateAction` मेथड का उपयोग करके भी अपने स्टेट एक्शन्स परिभाषित कर सकते हैं।
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // बैज काउंट रीसेट करें
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - स्टेट एक्शन्स
-
-सबसे पहले, एक stateful विजेट बनाएँ।
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-उदाहरण: metro make:stateful_widget user_avatar
-
-यह `lib/resources/widgets/` डायरेक्टरी में एक नया विजेट बनाएगा।
-
-यदि आप वह फ़ाइल खोलते हैं, तो आप अपने स्टेट एक्शन्स परिभाषित कर पाएँगे।
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // उदाहरण
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // उदाहरण
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-अंत में, आप अपने एप्लिकेशन में कहीं से भी एक्शन भेज सकते हैं।
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// 'Hello from the widget' प्रिंट करता है
-
-stateAction('reset_data', state: MyWidget.state);
-// विजेट में डेटा रीसेट करें
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// संदेश के साथ एक सफलता टोस्ट दिखाता है
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - स्टेट एक्शन्स
-
-पेज भी स्टेट एक्शन्स प्राप्त कर सकते हैं। यह तब उपयोगी है जब आप विजेट्स या अन्य पेज से पेज-स्तरीय व्यवहार ट्रिगर करना चाहते हैं।
-
-सबसे पहले, अपना स्टेट मैनेज्ड पेज बनाएँ।
-
-``` bash
-metro make:page my_page
-```
-
-यह `lib/resources/pages/` डायरेक्टरी में `MyPage` नाम का एक नया स्टेट मैनेज्ड पेज बनाएगा।
-
-यदि आप वह फ़ाइल खोलते हैं, तो आप अपने स्टेट एक्शन्स परिभाषित कर पाएँगे।
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // set to true to enable state actions on this page
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // उदाहरण
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-अंत में, आप अपने एप्लिकेशन में कहीं से भी एक्शन भेज सकते हैं।
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// 'Hello from the page' प्रिंट करता है
-
-stateAction('reset_data', state: MyPage.path);
-// पेज में डेटा रीसेट करें
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// संदेश के साथ एक सफलता टोस्ट दिखाता है
-```
-
-आप `whenStateAction` मेथड का उपयोग करके भी अपने स्टेट एक्शन्स परिभाषित कर सकते हैं।
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // बैज काउंट रीसेट करें
-      _count = 0;
-    }
-  });
-}
-```
-
-फिर आप अपने एप्लिकेशन में कहीं से भी एक्शन भेज सकते हैं।
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## स्टेट अपडेट करना
-
-आप `updateState()` मेथड कॉल करके स्टेट अपडेट कर सकते हैं।
-
-``` dart
-updateState(MyStateName.state);
-
-// या डेटा के साथ
-updateState(MyStateName.state, data: "The Data");
-```
-
-इसे आपके एप्लिकेशन में कहीं से भी कॉल किया जा सकता है।
-
-**यह भी देखें:** [NyState](/docs/{{ $version }}/ny-state) स्टेट मैनेजमेंट हेल्पर्स और लाइफ़साइकिल मेथड्स के बारे में अधिक जानकारी के लिए।
-
-
-<div id="building-your-first-widget"></div>
-
-## अपना पहला विजेट बनाना
-
-अपने Nylo प्रोजेक्ट में, एक नया विजेट बनाने के लिए निम्नलिखित कमांड चलाएँ।
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-यह `TodoList` नाम का एक नया `NyState` विजेट बनाएगा।
-
-> नोट: नया विजेट `lib/resources/widgets/` डायरेक्टरी में बनाया जाएगा।
+**यह भी देखें:** स्टेट हेल्पर्स और लाइफ़साइकिल मेथड्स के पूरे सेट के लिए [NyState](/docs/{{ $version }}/ny-state)।

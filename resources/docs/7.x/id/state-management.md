@@ -1,64 +1,395 @@
-# State Management
+# Widget Berstate Terkelola
 
 ---
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Kapan Menggunakan State Management](#when-to-use-state-management "Kapan Menggunakan State Management")
-- [Siklus Hidup](#lifecycle "Siklus Hidup")
+- [Pilih Pola Anda](#choose-your-pattern "Pilih Pola Anda")
 - [State Action](#state-actions "State Action")
-  - [NyState - State Action](#state-actions-nystate "NyState - State Action")
-  - [NyPage - State Action](#state-actions-nypage "NyPage - State Action")
-- [Memperbarui State](#updating-a-state "Memperbarui State")
-- [Membangun Widget Pertama Anda](#building-your-first-widget "Membangun Widget Pertama Anda")
+  - [Mendefinisikan Handler](#defining-handlers "Mendefinisikan Handler")
+  - [Memicu Aksi](#triggering-actions "Memicu Aksi")
+  - [Handler Dengan dan Tanpa Data](#handlers-with-and-without-data "Handler Dengan dan Tanpa Data")
+  - [Menggunakan Instance StateActions](#using-a-state-actions-instance "Menggunakan Instance StateActions")
+- [Pola: Halaman Berstate Terkelola (NyPage)](#pattern-ny-page "Pola: Halaman Berstate Terkelola")
+- [Pola: Stateful Widgets (NyState)](#pattern-ny-state "Pola: Stateful Widgets")
+- [Pola: Widget Berstate Terkelola (NyStateManaged)](#pattern-ny-state-managed "Pola: Widget Berstate Terkelola")
+  - [Lanjutan: Beberapa Instance Terisolasi](#advanced-multiple-isolated-instances "Lanjutan: Beberapa Instance Terisolasi")
+- [Referensi Siklus Hidup](#lifecycle "Referensi Siklus Hidup")
 
 <div id="introduction"></div>
 
 ## Pengantar
 
-State management memungkinkan Anda memperbarui bagian tertentu dari UI tanpa membangun ulang seluruh halaman. Di {{ config('app.name') }} v7, Anda dapat membangun widget yang berkomunikasi dan saling memperbarui di seluruh aplikasi Anda.
+Widget berstate terkelola memungkinkan Anda memperbarui bagian tertentu dari UI dari mana saja di aplikasi Anda — tanpa membangun ulang seluruh halaman. Di {{ config('app.name') }} v7, Anda memicu **state action** bernama pada widget atau halaman target, dan handler yang cocok akan dijalankan.
 
-{{ config('app.name') }} menyediakan dua class untuk state management:
-- **`NyState`** — Untuk membangun widget yang dapat digunakan kembali (seperti badge keranjang, penghitung notifikasi, atau indikator status)
-- **`NyPage`** — Untuk membangun halaman di aplikasi Anda (meng-extend `NyState` dengan fitur khusus halaman)
+Model mentalnya sederhana:
 
-Gunakan state management ketika Anda perlu:
-- Memperbarui widget dari bagian lain aplikasi Anda
-- Menjaga widget tetap sinkron dengan data bersama
-- Menghindari membangun ulang seluruh halaman ketika hanya sebagian UI yang berubah
+- Setiap widget atau halaman berstate terkelola memiliki **state key** unik (sebuah string)
+- Widget/halaman tersebut mendefinisikan map **aksi bernama** yang dapat dihandlenya
+- Dari mana saja di aplikasi Anda, Anda dapat memanggil
+```
+stateAction("action_name", state: TargetWidget.state)
+``` 
 
-
-### Mari kita pahami State Management terlebih dahulu
-
-Semua yang ada di Flutter adalah widget, mereka hanyalah potongan kecil UI yang dapat Anda gabungkan untuk membuat aplikasi lengkap.
-
-Ketika Anda mulai membangun halaman yang kompleks, Anda perlu mengelola state widget Anda. Ini berarti ketika sesuatu berubah, misalnya data, Anda dapat memperbarui widget tersebut tanpa harus membangun ulang seluruh halaman.
-
-Ada banyak alasan mengapa ini penting, tetapi alasan utamanya adalah performa. Jika Anda memiliki widget yang terus berubah, Anda tidak ingin membangun ulang seluruh halaman setiap kali berubah.
-
-Di sinilah State Management berperan, memungkinkan Anda mengelola state widget di aplikasi Anda.
+Ada tiga pola untuk membangun UI berstate terkelola. Semuanya berbagi mekanisme `stateAction` yang sama — satu-satunya perbedaan adalah jenis UI yang Anda kelola.
 
 
-<div id="when-to-use-state-management"></div>
+<div id="choose-your-pattern"></div>
 
-### Kapan Menggunakan State Management
+## Pilih Pola Anda
 
-Anda harus menggunakan State Management ketika Anda memiliki widget yang perlu diperbarui tanpa membangun ulang seluruh halaman.
+| Anda ingin... | Gunakan | Perintah scaffold |
+|---|---|---|
+| Mengelola state halaman penuh | `NyPage` | `metro make:page my_page` |
+| Mengelola state widget dengan satu instance | `NyState` | `metro make:stateful_widget my_widget` |
+| Mengelola state widget dengan beberapa instance terisolasi | `NyStateManaged` | `metro make:state_managed_widget my_widget` |
 
-Misalnya, bayangkan Anda telah membuat aplikasi ecommerce. Anda telah membuat widget untuk menampilkan jumlah total item di keranjang pengguna.
-Mari kita sebut widget ini `Cart()`.
+Baca bagian [State Action](#state-actions) terlebih dahulu — ini menjelaskan API yang digunakan setiap pola. Kemudian lompat ke pola yang sesuai dengan kasus Anda.
 
-Widget `Cart` yang dikelola state-nya di Nylo akan terlihat seperti ini:
 
-**Langkah 1:** Definisikan widget yang meng-extend `NyStateManaged`
+<div id="state-actions"></div>
+
+## State Action
+
+State action adalah perintah bernama yang diketahui cara handlenya oleh sebuah widget atau halaman. Anda mendefinisikan map nama aksi ke fungsi handler, dan memicunya berdasarkan nama dari mana saja di aplikasi Anda.
+
+Gunakan state action ketika Anda perlu:
+- Memicu perilaku spesifik pada widget atau halaman (bukan hanya refresh umum)
+- Meneruskan data ke widget dan membuatnya merespons dengan cara yang telah ditentukan
+- Membangun perilaku widget yang dapat digunakan kembali yang dapat dipanggil dari beberapa titik
+
+<div id="defining-handlers"></div>
+
+### Mendefinisikan Handler
+
+Handler berada di getter `stateActions` pada class `NyState` atau `NyPage` Anda. Kunci map adalah nama aksi; nilainya adalah fungsi yang dijalankan ketika aksi tersebut dipicu.
 
 ``` dart
-/// Widget Cart
+@override
+Map<String, Function> get stateActions => {
+  "reload_cart": () async {
+    _cartValue = await getCartValue();
+    setState(() {});
+  },
+  "clear_cart": () {
+    _cartValue = null;
+    setState(() {});
+  },
+  "apply_discount": (code) async {
+    _discount = await validateDiscount(code);
+    setState(() {});
+  },
+};
+```
+
+Handler bertanggung jawab memanggil `setState` sendiri jika ingin widget melakukan rebuild.
+
+Handler `apply_discount` di atas menerima argumen `code` — deklarasikan satu parameter posisional ketika handler Anda membutuhkan payload yang diteruskan melalui
+```
+stateAction("reload_cart", state: TargetWidget.state);
+stateAction("clear_cart", state: TargetWidget.state);
+stateAction("apply_discount", state: TargetWidget.state, data: "promo_code_123");
+```
+
+Gunakan bentuk tanpa argumen `()` ketika aksi tidak membawa payload.
+
+
+<div id="triggering-actions"></div>
+
+### Memicu Aksi
+
+Gunakan fungsi tingkat atas `stateAction` untuk memicu aksi dari mana saja — widget lain, controller, event handler, API callback, dll.
+
+``` dart
+// Memicu aksi tanpa data
+stateAction("clear_cart", state: Cart.state);
+
+// Memicu aksi dengan data
+stateAction("show_toast", state: Cart.state, data: {
+  "message": "Item added",
+});
+```
+
+Argumen `state:` adalah **state key** dari target:
+- Untuk widget — `MyWidget.state` (sebuah string)
+- Untuk halaman — `MyPage.path` (route)
+
+
+<div id="handlers-with-and-without-data"></div>
+
+### Handler Dengan dan Tanpa Data
+
+Handler bisa sinkron atau asinkron, dan bisa didefinisikan dengan atau tanpa argumen `data`:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  // Tanpa data — handler berjalan apa adanya
+  "reset": () {
+    _value = null;
+    setState(() {});
+  },
+
+  // Dengan data — menerima apapun yang diteruskan melalui argumen `data:`
+  "set_value": (data) {
+    _value = data;
+    setState(() {});
+  },
+
+  // Async didukung — framework menunggu handler selesai
+  "reload": (data) async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+};
+```
+
+Jika Anda meneruskan `data:` ke `stateAction` tetapi handler Anda tidak menerima argumen, data tersebut akan diabaikan begitu saja.
+
+
+<div id="using-a-state-actions-instance"></div>
+
+### Menggunakan Instance StateActions
+
+Jika sebuah widget mengekspos instance `StateActions` bertipe (seringkali melalui metode static `stateActions(stateName)`), Anda dapat memanggil `.action(...)` langsung padanya alih-alih menggunakan fungsi bebas. Ini lebih bersih ketika memicu beberapa aksi pada target yang sama:
+
+``` dart
+// Menggunakan fungsi bebas
+stateAction("reset_avatar", state: UserAvatar.state);
+stateAction("update_user_image", state: UserAvatar.state, data: user);
+
+// Menggunakan instance StateActions — setara, lebih sedikit pengulangan
+final actions = UserAvatar.stateActions(UserAvatar.state);
+actions.action("reset_avatar");
+actions.action("update_user_image", data: user);
+```
+
+Beberapa widget bawaan (`InputField`, `CollectionView`, `LanguageSwitcher`, keluarga `NyForm*`) dilengkapi dengan class `StateActions` bertipe dengan metode bernama seperti `.clear()`, `.setValue(...)`, `.refresh()` — periksa dokumentasi widget untuk mengetahui apa yang tersedia.
+
+
+<div id="pattern-ny-page"></div>
+
+## Pola: Halaman Berstate Terkelola (NyPage)
+
+Gunakan ini ketika Anda ingin memicu perilaku pada halaman penuh dari tempat lain di aplikasi Anda — misalnya, me-refresh halaman ketika sebuah event dipicu, atau menghapus state form dari widget anak.
+
+**Langkah 1:** Scaffold sebuah halaman.
+
+``` bash
+metro make:page my_page
+```
+
+Ini menghasilkan `NyPage` di `lib/resources/pages/`:
+
+``` dart
+class MyPage extends NyStatefulWidget {
+
+  static RouteView path = ("/my-page", (_) => MyPage());
+
+  MyPage({super.key}) : super(child: () => _MyPageState());
+}
+
+class _MyPageState extends NyPage<MyPage> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  bool get stateManaged => false;
+
+  @override
+  Widget view(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page")
+      ),
+      body: SafeArea(
+         child: Container(),
+      ),
+    );
+  }
+}
+```
+
+**Langkah 2:** Ubah `stateManaged` menjadi `true`.
+
+Secara default, halaman **tidak** berlangganan state event — ini menghindari listener yang tidak perlu pada halaman yang tidak membutuhkannya. Untuk mengaktifkan state action pada sebuah halaman, ubah getter-nya:
+
+``` dart
+@override
+bool get stateManaged => true;
+```
+
+**Langkah 3:** Tambahkan map `stateActions`.
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh_data": () async {
+    _items = await fetchItems();
+    setState(() {});
+  },
+  "show_toast": (data) {
+    showToastSuccess(description: data["message"]);
+  },
+};
+```
+
+**Langkah 4:** Picu aksi dari mana saja menggunakan `path` halaman.
+
+``` dart
+stateAction("refresh_data", state: MyPage.path);
+
+stateAction("show_toast", state: MyPage.path, data: {
+  "message": "Welcome back",
+});
+```
+
+> Halaman menggunakan `MyPage.path` sebagai kunci, widget menggunakan `MyWidget.state`. Inilah satu-satunya perbedaan di sisi pemanggil.
+
+
+<div id="pattern-ny-state"></div>
+
+## Pola: Stateful Widgets (NyState)
+
+Gunakan ini untuk widget yang dapat digunakan kembali yang ada sebagai satu instance per halaman — kartu profil, bilah header, indikator status. Jika Anda hanya merender satu instance widget pada satu waktu, inilah pola yang tepat.
+
+**Langkah 1:** Scaffold sebuah stateful widget.
+
+``` bash
+metro make:stateful_widget profile_card
+```
+
+Ini menghasilkan berikut di `lib/resources/widgets/`:
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  @override
+  createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  @override
+  get init => () {
+
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Scaffold memberi Anda widget `NyState` yang berfungsi — tetapi **belum dikelola statenya**. Untuk membuatnya merespons state action, Anda perlu menambahkan empat hal:
+
+1. Kunci `state` pada class widget — string unik yang akan ditarget oleh bagian lain aplikasi Anda
+2. Parameter constructor yang menerima state key dan meneruskannya ke class state
+3. Constructor pada class state yang menetapkan `stateName`
+4. Map `stateActions` yang mendefinisikan handler
+
+**Langkah 2:** Konversi scaffold menjadi widget berstate terkelola.
+
+``` dart
+import 'package:flutter/material.dart';
+import 'package:nylo_framework/nylo_framework.dart';
+
+class ProfileCard extends StatefulWidget {
+
+  const ProfileCard({super.key});
+
+  static String get state => "profile_card";
+
+  @override
+  createState() => _ProfileCardState(state);
+}
+
+class _ProfileCardState extends NyState<ProfileCard> {
+
+  _ProfileCardState(String? state) {
+    this.stateName = state;
+  }
+
+  @override
+  get init => () {
+    // stateAction("hello_world", state: ProfileCard.state);
+    // ^ panggil ini dari mana saja di aplikasi Anda untuk memicu handler di bawah
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "hello_world": () {
+      print("Hello World");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+Yang berubah:
+- `static String get state => "profile_card";` mendefinisikan state key publik
+- `createState() => _ProfileCardState(state)` meneruskan kunci ke class state
+- `_ProfileCardState(String? state) { this.stateName = state; }` mendaftarkan instance state ini di bawah kunci tersebut, sehingga framework tahu widget mana yang akan menerima aksi
+- `stateActions` mendeklarasikan handler bernama
+
+**Langkah 3:** Picu dari mana saja.
+
+``` dart
+stateAction("hello_world", state: ProfileCard.state);
+```
+
+Anda dapat menambahkan handler sebanyak yang Anda butuhkan, dengan atau tanpa data:
+
+``` dart
+@override
+Map<String, Function> get stateActions => {
+  "refresh": () async {
+    _user = await loadUser();
+    setState(() {});
+  },
+  "update_avatar": (User user) {
+    _avatarUrl = user.avatarUrl;
+    setState(() {});
+  },
+};
+```
+
+
+<div id="pattern-ny-state-managed"></div>
+
+## Pola: Widget Berstate Terkelola (NyStateManaged)
+
+Gunakan ini ketika Anda membutuhkan **beberapa instance independen dari widget yang sama** di layar sekaligus — misalnya, badge keranjang di header dan satu lagi di sidebar yang keduanya harus diperbarui secara independen.
+
+`NyStateManaged` menambahkan parameter `stateName` sehingga setiap instance dapat dialamatkan secara terpisah. Jika Anda hanya merender satu instance widget, gunakan `NyState` — lebih sederhana.
+
+**Langkah 1:** Scaffold widget berstate terkelola.
+
+``` bash
+metro make:state_managed_widget cart
+```
+
+Ini menghasilkan berikut di `lib/resources/widgets/`:
+
+``` dart
 class Cart extends NyStateManaged {
   Cart({super.key, super.stateName})
       : super(child: () => _CartState(stateName));
 
-  static String state = "cart"; // Pengenal unik untuk state widget ini
+  static String state = "cart";
 
   static String _stateFor(String? state) =>
       state == null ? Cart.state : "${Cart.state}_$state";
@@ -67,14 +398,40 @@ class Cart extends NyStateManaged {
     return stateAction(action, data: data, state: _stateFor(stateName));
   }
 }
+
+class _CartState extends NyState<Cart> {
+  _CartState(String? stateName) {
+    this.stateName = Cart._stateFor(stateName);
+  }
+
+  @override
+  get init => () {
+    // logika inisialisasi di sini
+  };
+
+  @override
+  Map<String, Function> get stateActions => {
+    "my_action": (data) {},
+    "clear_data": () {
+      // Panggil aksi dari mana saja di aplikasi Anda
+      // Cart.action("my_action", data: "hello world");
+      // Cart.action("clear_data");
+    },
+  };
+
+  @override
+  Widget view(BuildContext context) {
+    return Container(
+      child: Text("My Widget").bodyMedium(),
+    );
+  }
+}
 ```
 
-**Langkah 2:** Buat class state yang meng-extend `NyState`
+**Langkah 2:** Lengkapi state — muat data di `init`, definisikan handler, dan render.
 
 ``` dart
-/// Class state untuk widget Cart
 class _CartState extends NyState<Cart> {
-
   String? _cartValue;
 
   _CartState(String? stateName) {
@@ -83,17 +440,21 @@ class _CartState extends NyState<Cart> {
 
   @override
   get init => () async {
-    _cartValue = await getCartValue(); // Muat data awal
+    _cartValue = await getCartValue();
   };
 
   @override
   Map<String, Function> get stateActions => {
-    "reload_cart": (data) async {
+    "reload_cart": () async {
       _cartValue = await getCartValue();
       setState(() {});
     },
     "clear_cart": () {
       _cartValue = null;
+      setState(() {});
+    },
+    "set_quantity": (quantity) {
+      _cartValue = quantity.toString();
       setState(() {});
     },
   };
@@ -102,309 +463,63 @@ class _CartState extends NyState<Cart> {
   Widget view(BuildContext context) {
     return Badge(
       child: Icon(Icons.shopping_cart),
-      label: Text(_cartValue ?? "1"),
+      label: Text(_cartValue ?? "0"),
     );
   }
 }
 ```
 
-**Langkah 3:** Buat fungsi helper untuk membaca dan memperbarui keranjang
+**Langkah 3:** Picu aksi menggunakan helper static `action()` yang dihasilkan.
 
 ``` dart
-/// Dapatkan nilai keranjang dari penyimpanan
-Future<String> getCartValue() async {
-  return await storageRead(Keys.cart) ?? "1";
-}
-
-/// Atur nilai keranjang dan beritahu widget
-Future setCartValue(String value) async {
-    await storageSave(Keys.cart, value);
-    updateState(Cart.state); // Ini memicu stateUpdated() pada widget
-}
+Cart.action("reload_cart");
+Cart.action("clear_cart");
 ```
 
-Mari kita uraikan ini.
+Ini setara dengan `stateAction("reload_cart", state: Cart.state)` — helper static hanya menghilangkan boilerplate.
 
-1. Widget `Cart` meng-extend `NyStateManaged` (bukan `StatefulWidget` secara langsung).
 
-2. Parameter constructor `stateName` diteruskan melalui `super(child: () => _CartState(stateName))`, memungkinkan beberapa instance terisolasi dari widget yang sama.
+<div id="advanced-multiple-isolated-instances"></div>
 
-3. Helper `_stateFor(String? state)` menghasilkan kunci state yang memiliki namespace seperti `"cart_sidebar"` untuk instance bernama.
+### Lanjutan: Beberapa Instance Terisolasi
 
-4. `_CartState` meng-extend `NyState<Cart>` dan menerima `stateName` untuk mendaftarkan state terisolasi yang benar.
+Alasan `NyStateManaged` ada adalah untuk mendukung beberapa instance independen dari widget yang sama. Setiap instance mendapatkan `stateName` sendiri, yang menghasilkan state key bernamespace.
 
-5. Map `stateActions` mendefinisikan perintah bernama yang dapat Anda panggil pada widget dari mana saja di aplikasi Anda.
+Render dua keranjang dengan nama berbeda:
 
-Jika Anda ingin mencoba contoh ini di proyek {{ config('app.name') }} Anda, buat widget baru bernama `Cart`.
-
-``` bash
-metro make:state_managed_widget cart
+``` dart
+Column(
+  children: [
+    Cart(stateName: "header"),
+    Cart(stateName: "sidebar"),
+  ],
+)
 ```
 
-Kemudian Anda dapat menyalin contoh di atas dan mencobanya di proyek Anda.
+Sekarang Anda dapat memperbarui keduanya secara independen:
 
-Sekarang, untuk memperbarui keranjang, Anda dapat memanggil yang berikut ini.
+``` dart
+// Reload hanya keranjang header
+Cart.action("reload_cart", stateName: "header");
 
-```dart
-_updateCart() async {
-  String count = await getCartValue();
-  String countIncremented = (int.parse(count) + 1).toString();
+// Reload hanya keranjang sidebar
+Cart.action("reload_cart", stateName: "sidebar");
 
-  await storageSave(Keys.cart, countIncremented);
-
-  updateState(Cart.state);
-}
+// Tanpa stateName — menarget instance default yang tidak bernama
+Cart.action("reload_cart");
 ```
+
+Helper `_stateFor` menangani namespace: `Cart(stateName: "header")` mendaftar di bawah kunci `"cart_header"`, dan `Cart.action(..., stateName: "header")` menarget kunci tersebut secara tepat.
 
 
 <div id="lifecycle"></div>
 
-## Siklus Hidup
+## Referensi Siklus Hidup
 
-Siklus hidup widget `NyState` adalah sebagai berikut:
+Widget dan halaman berstate terkelola berbagi dua hook siklus hidup utama:
 
-1. `init()` - Metode ini dipanggil ketika state diinisialisasi.
+1. **`init()`** — dipanggil sekali ketika state pertama kali dibuat. Gunakan untuk memuat data awal.
 
-2. `stateUpdated(data)` - Metode ini dipanggil ketika state diperbarui.
+2. **`stateUpdated(data)`** — dipanggil setiap kali state action dipicu terhadap state ini. Argumen `data` adalah payload lengkap (termasuk nama aksi dan data aksi). Override ini jika Anda perlu bereaksi terhadap *setiap* state action — sebagian besar waktu, mendefinisikan handler di `stateActions` adalah yang Anda inginkan.
 
-    Jika Anda memanggil `updateState(MyStateName.state, data: "The Data")`, itu akan memicu **stateUpdated(data)** untuk dipanggil.
-
-Setelah state pertama kali diinisialisasi, Anda perlu mengimplementasikan cara Anda ingin mengelola state.
-
-
-<div id="state-actions"></div>
-
-## State Action
-
-State action memungkinkan Anda memicu metode tertentu pada widget dari mana saja di aplikasi Anda. Anggap saja sebagai perintah bernama yang dapat Anda kirim ke widget.
-
-Gunakan state action ketika Anda perlu:
-- Memicu perilaku tertentu pada widget (bukan hanya me-refresh-nya)
-- Mengirim data ke widget dan membuatnya merespons dengan cara tertentu
-- Membuat perilaku widget yang dapat digunakan kembali yang dapat dipanggil dari beberapa tempat
-
-``` dart
-// Mengirim action ke widget
-stateAction('hello_world_in_widget', state: MyWidget.state);
-
-// Contoh lain dengan data
-stateAction('show_high_score', state: HighScore.state, data: {
-  "high_score": 100,
-});
-```
-
-Di widget Anda, Anda dapat mendefinisikan action yang ingin ditangani.
-
-``` dart
-...
-@override
-get stateActions => {
-  "hello_world_in_widget": () {
-    print('Hello world');
-  },
-  "reset_data": (data) async {
-    // Contoh dengan data
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-};
-```
-
-Kemudian, Anda dapat memanggil metode `stateAction` dari mana saja di aplikasi Anda.
-
-``` dart
-stateAction('hello_world_in_widget', state: MyWidget.state);
-// mencetak 'Hello world'
-
-User user = User(name: "John Doe", age: 30);
-stateAction('update_user_info', state: MyWidget.state, data: user);
-```
-
-Jika Anda sudah memiliki instance `StateActions` (misalnya dari metode static `stateActions()` widget), Anda dapat memanggil `action()` langsung padanya alih-alih menggunakan fungsi bebas:
-
-``` dart
-// Menggunakan fungsi bebas
-stateAction('reset_avatar', state: UserAvatar.state);
-
-// Menggunakan metode instance StateActions — setara, lebih sedikit pengulangan
-final actions = UserAvatar.stateActions(UserAvatar.state);
-actions.action('reset_avatar');
-actions.action('update_user_image', data: user);
-```
-
-Anda juga dapat mendefinisikan state action menggunakan metode `whenStateAction` di getter `init` Anda.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Reset jumlah badge
-      _count = 0;
-    }
-  });
-}
-```
-
-
-<div id="state-actions-nystate"></div>
-
-### NyState - State Action
-
-Pertama, buat stateful widget.
-
-``` bash
-metro make:stateful_widget [widget_name]
-```
-Contoh: metro make:stateful_widget user_avatar
-
-Ini akan membuat widget baru di direktori `lib/resources/widgets/`.
-
-Jika Anda membuka file tersebut, Anda akan dapat mendefinisikan state action Anda.
-
-``` dart
-class _UserAvatarState extends NyState<UserAvatar> {
-...
-
-@override
-get stateActions => {
-  "reset_avatar": () {
-    // Contoh
-    _avatar = null;
-    setState(() {});
-  },
-  "update_user_image": (User user) {
-    // Contoh
-    _avatar = user.image;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Akhirnya, Anda dapat mengirim action dari mana saja di aplikasi Anda.
-
-``` dart
-stateAction('reset_avatar', state: MyWidget.state);
-// mencetak 'Hello from the widget'
-
-stateAction('reset_data', state: MyWidget.state);
-// Reset data di widget
-
-stateAction('show_toast', state: MyWidget.state, data: "Hello world");
-// menampilkan toast sukses dengan pesan
-```
-
-
-<div id="state-actions-nypage"></div>
-
-### NyPage - State Action
-
-Halaman juga dapat menerima state action. Ini berguna ketika Anda ingin memicu perilaku tingkat halaman dari widget atau halaman lain.
-
-Pertama, buat halaman yang dikelola state-nya.
-
-``` bash
-metro make:page my_page
-```
-
-Ini akan membuat halaman baru yang dikelola state-nya bernama `MyPage` di direktori `lib/resources/pages/`.
-
-Jika Anda membuka file tersebut, Anda akan dapat mendefinisikan state action Anda.
-
-``` dart
-class _MyPageState extends NyPage<MyPage> {
-...
-
-@override
-bool get stateManaged => false; // set to true to enable state actions on this page
-
-@override
-get stateActions => {
-  "test_page_action": () {
-    print('Hello from the page');
-  },
-  "reset_data": () {
-    // Contoh
-    _textController.clear();
-    _myData = null;
-    setState(() {});
-  },
-  "show_toast": (data) {
-    showSuccessToast(description: data['message']);
-  },
-};
-```
-
-Akhirnya, Anda dapat mengirim action dari mana saja di aplikasi Anda.
-
-``` dart
-stateAction('test_page_action', state: MyPage.path);
-// mencetak 'Hello from the page'
-
-stateAction('reset_data', state: MyPage.path);
-// Reset data di halaman
-
-stateAction('show_toast', state: MyPage.path, data: {
-  "message": "Hello from the page"
-});
-// menampilkan toast sukses dengan pesan
-```
-
-Anda juga dapat mendefinisikan state action menggunakan metode `whenStateAction`.
-
-``` dart
-@override
-get init => () async {
-  ...
-  whenStateAction({
-    "reset_badge": () {
-      // Reset jumlah badge
-      _count = 0;
-    }
-  });
-}
-```
-
-Kemudian Anda dapat mengirim action dari mana saja di aplikasi Anda.
-
-``` dart
-stateAction('reset_badge', state: MyWidget.state);
-```
-
-
-<div id="updating-a-state"></div>
-
-## Memperbarui State
-
-Anda dapat memperbarui state dengan memanggil metode `updateState()`.
-
-``` dart
-updateState(MyStateName.state);
-
-// atau dengan data
-updateState(MyStateName.state, data: "The Data");
-```
-
-Ini dapat dipanggil dari mana saja di aplikasi Anda.
-
-**Lihat juga:** [NyState](/docs/{{ $version }}/ny-state) untuk detail lebih lanjut tentang helper state management dan metode siklus hidup.
-
-
-<div id="building-your-first-widget"></div>
-
-## Membangun Widget Pertama Anda
-
-Di proyek Nylo Anda, jalankan perintah berikut untuk membuat widget baru.
-
-``` bash
-metro make:stateful_widget todo_list
-```
-
-Ini akan membuat widget `NyState` baru bernama `TodoList`.
-
-> Catatan: Widget baru akan dibuat di direktori `lib/resources/widgets/`.
+**Lihat juga:** [NyState](/docs/{{ $version }}/ny-state) untuk set lengkap helper state dan metode siklus hidup.
