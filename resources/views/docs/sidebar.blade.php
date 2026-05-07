@@ -7,10 +7,7 @@
     </button>
     
     @foreach(config('project.doc-index.versions')[$version] as $key => $docLinks)
-    @php
-        $sectionHasActiveLink = collect($docLinks)->contains(fn($link) => Request::is('*/docs/' . $version . '/' . $link));
-    @endphp
-    <li x-data="{ open: {{ $sectionHasActiveLink ? 'true' : 'false' }} }" {!! $loop->first ? '' : 'class="mt-2"' !!}>
+    <li x-data="{ open: {{ $key === $section ? 'true' : 'false' }} }" {!! $loop->first ? '' : 'class="mt-2"' !!}>
         <button 
             @click="open = !open" 
             class="flex items-center justify-between w-full py-2 px-3 rounded-lg text-left font-semibold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-150"
@@ -35,7 +32,7 @@
             @foreach($docLinks as $docLink)
             <li>
                 @php
-                    $isActive = Request::is('*/docs/' . $version . '/' . $docLink);
+                    $isActive = $docLink === $page;
                 @endphp
                 <a class="block py-1.5 px-3 rounded-lg text-sm transition-all duration-150 {!! $isActive ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200' !!}"
                     href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'page' => $docLink, 'version' => $version]) }}"

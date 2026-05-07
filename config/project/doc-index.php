@@ -311,6 +311,7 @@ return [
                 'assets',
                 'ny-state',
                 'alerts',
+                'helpers',
             ],
 
             'widgets' => [
