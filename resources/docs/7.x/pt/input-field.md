@@ -65,7 +65,7 @@ Use o parametro `formValidator` para adicionar regras de validacao:
 InputField(
   controller: _controller,
   labelText: "Email",
-  formValidator: FormValidator.rule("email|not_empty"),
+  formValidator: FormValidator().email().notEmpty(),
   validateOnFocusChange: true,
 )
 ```
@@ -80,7 +80,7 @@ Trate erros de validacao programaticamente:
 InputField(
   controller: _controller,
   labelText: "Username",
-  formValidator: FormValidator.rule("not_empty|min:3"),
+  formValidator: FormValidator().notEmpty().minLength(3),
   handleValidationError: (FormValidationResult result) {
     if (!result.isValid) {
       print("Error: ${result.getFirstErrorMessage()}");
@@ -103,7 +103,7 @@ final TextEditingController _passwordController = TextEditingController();
 InputField.password(
   controller: _passwordController,
   labelText: "Password",
-  formValidator: FormValidator.rule("not_empty|min:8"),
+  formValidator: FormValidator().notEmpty().minLength(8),
 )
 ```
 
@@ -128,7 +128,7 @@ final TextEditingController _emailController = TextEditingController();
 
 InputField.emailAddress(
   controller: _emailController,
-  formValidator: FormValidator.rule("email|not_empty"),
+  formValidator: FormValidator().email().notEmpty(),
 )
 ```
 
