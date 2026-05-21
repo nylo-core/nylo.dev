@@ -18,8 +18,8 @@
     - [buildJourneyPage](#build-journey-page "buildJourneyPage")
 - [Innerhalb eines Tabs navigieren](#navigating-within-a-tab "Innerhalb eines Tabs navigieren")
 - [Tabs](#tabs "Tabs")
-  - [Badges zu Tabs hinzufuegen](#adding-badges-to-tabs "Badges zu Tabs hinzufuegen")
-  - [Alerts zu Tabs hinzufuegen](#adding-alerts-to-tabs "Alerts zu Tabs hinzufuegen")
+  - [Badges zu Tabs hinzufügen](#adding-badges-to-tabs "Badges zu Tabs hinzufügen")
+  - [Alerts zu Tabs hinzufügen](#adding-alerts-to-tabs "Alerts zu Tabs hinzufügen")
 - [Initialer Index](#initial-index "Initialer Index")
 - [State beibehalten](#maintaining-state "State beibehalten")
 - [onTap](#on-tap "onTap")
@@ -30,33 +30,33 @@
 
 ## Einleitung
 
-Navigation Hubs sind ein zentraler Ort, an dem Sie die Navigation fuer all Ihre Widgets **verwalten** koennen.
-Standardmaessig koennen Sie in Sekundenschnelle untere, obere und Journey-Navigations-Layouts erstellen.
+Navigation Hubs sind ein zentraler Ort, an dem Sie die Navigation für all Ihre Widgets **verwalten** können.
+Standardmäßig können Sie in Sekundenschnelle untere, obere und Journey-Navigations-Layouts erstellen.
 
-Stellen wir uns **vor**, Sie haben eine App und moechten eine untere Navigationsleiste hinzufuegen, die es den Benutzern ermoeglicht, zwischen verschiedenen Tabs in Ihrer App zu navigieren.
+Stellen wir uns **vor**, Sie haben eine App und möchten eine untere Navigationsleiste hinzufügen, die es den Benutzern ermöglicht, zwischen verschiedenen Tabs in Ihrer App zu navigieren.
 
-Sie koennen einen Navigation Hub verwenden, um dies umzusetzen.
+Sie können einen Navigation Hub verwenden, um dies umzusetzen.
 
-Schauen wir uns an, wie Sie einen Navigation Hub in Ihrer App verwenden koennen.
+Schauen wir uns an, wie Sie einen Navigation Hub in Ihrer App verwenden können.
 
 <div id="basic-usage"></div>
 
 ## Grundlegende Verwendung
 
-Sie koennen einen Navigation Hub mit dem folgenden Befehl erstellen.
+Sie können einen Navigation Hub mit dem folgenden Befehl erstellen.
 
 ``` bash
 metro make:navigation_hub base
 ```
 
-Der Befehl fuehrt Sie durch ein interaktives Setup:
+Der Befehl führt Sie durch ein interaktives Setup:
 
-1. **Layout-Typ waehlen** - Waehlen Sie zwischen `navigation_tabs` (untere Navigation) oder `journey_states` (sequenzieller Ablauf).
-2. **Tab-/State-Namen eingeben** - Geben Sie kommagetrennte Namen fuer Ihre Tabs oder Journey-States an.
+1. **Layout-Typ wählen** - Wählen Sie zwischen `navigation_tabs` (untere Navigation) oder `journey_states` (sequenzieller Ablauf).
+2. **Tab-/State-Namen eingeben** - Geben Sie kommagetrennte Namen für Ihre Tabs oder Journey-States an.
 
 Dadurch werden Dateien unter Ihrem `resources/pages/navigation_hubs/base/`-Verzeichnis erstellt:
 - `base_navigation_hub.dart` - Das Haupt-Hub-Widget
-- `tabs/` oder `states/` - Enthaelt die untergeordneten Widgets fuer jeden Tab oder Journey-State
+- `tabs/` oder `states/` - Enthält die untergeordneten Widgets für jeden Tab oder Journey-State
 
 So sieht ein generierter Navigation Hub aus:
 
@@ -108,23 +108,23 @@ class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
 
 Sie sehen, dass der Navigation Hub **zwei** Tabs hat: Home und Settings.
 
-Die `layout`-Methode gibt den Layout-Typ fuer den Hub zurueck. Sie erhaelt einen `BuildContext`, sodass Sie beim Konfigurieren Ihres Layouts auf Theme-Daten und Media Queries zugreifen koennen.
+Die `layout`-Methode gibt den Layout-Typ für den Hub zurück. Sie erhält einen `BuildContext`, sodass Sie beim Konfigurieren Ihres Layouts auf Theme-Daten und Media Queries zugreifen können.
 
-Sie koennen weitere Tabs erstellen, indem Sie `NavigationTab`s zum Navigation Hub hinzufuegen.
+Sie können weitere Tabs erstellen, indem Sie `NavigationTab`s zum Navigation Hub hinzufügen.
 
-Zuerst muessen Sie ein neues Widget mit Metro erstellen.
+Zuerst müssen Sie ein neues Widget mit Metro erstellen.
 
 ``` bash
 metro make:stateful_widget news_tab
 ```
 
-Sie koennen auch mehrere Widgets gleichzeitig erstellen.
+Sie können auch mehrere Widgets gleichzeitig erstellen.
 
 ``` bash
 metro make:stateful_widget news_tab,notifications_tab
 ```
 
-Dann koennen Sie das neue Widget zum Navigation Hub hinzufuegen.
+Dann können Sie das neue Widget zum Navigation Hub hinzufügen.
 
 ``` dart
 _BaseNavigationHubState() : super(() => {
@@ -134,7 +134,7 @@ _BaseNavigationHubState() : super(() => {
 });
 ```
 
-Um den Navigation Hub zu verwenden, fuegen Sie ihn als initiale Route zu Ihrem Router hinzu:
+Um den Navigation Hub zu verwenden, fügen Sie ihn als initiale Route zu Ihrem Router hinzu:
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -149,13 +149,13 @@ appRouter() => nyRoutes((router) {
 routeTo(BaseNavigationHub.path);
 ```
 
-Es gibt **noch viel mehr**, was Sie mit einem Navigation Hub machen koennen. Schauen wir uns einige der Funktionen an.
+Es gibt **noch viel mehr**, was Sie mit einem Navigation Hub machen können. Schauen wir uns einige der Funktionen an.
 
 <div id="bottom-navigation"></div>
 
 ### Untere Navigation
 
-Sie koennen das Layout auf eine untere Navigationsleiste setzen, indem Sie `NavigationHubLayout.bottomNav` aus der `layout`-Methode zurueckgeben.
+Sie können das Layout auf eine untere Navigationsleiste setzen, indem Sie `NavigationHubLayout.bottomNav` aus der `layout`-Methode zurückgeben.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -164,7 +164,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomNav();
 ```
 
-Sie koennen die untere Navigationsleiste anpassen, indem Sie Eigenschaften wie folgt setzen:
+Sie können die untere Navigationsleiste anpassen, indem Sie Eigenschaften wie folgt setzen:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -184,7 +184,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-Sie koennen einen vordefinierten Stil auf Ihre untere Navigationsleiste anwenden, indem Sie den Parameter `style` verwenden.
+Sie können einen vordefinierten Stil auf Ihre untere Navigationsleiste anwenden, indem Sie den Parameter `style` verwenden.
 
 ``` dart
 @override
@@ -197,9 +197,9 @@ NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.bottomN
 
 ### Benutzerdefinierter Nav-Bar-Builder
 
-Fuer die vollstaendige Kontrolle ueber Ihre Navigationsleiste koennen Sie den Parameter `navBarBuilder` verwenden.
+Für die vollständige Kontrolle über Ihre Navigationsleiste können Sie den Parameter `navBarBuilder` verwenden.
 
-Dies ermoeglicht es Ihnen, ein beliebiges benutzerdefiniertes Widget zu erstellen und dabei die Navigationsdaten zu erhalten.
+Dies ermöglicht es Ihnen, ein beliebiges benutzerdefiniertes Widget zu erstellen und dabei die Navigationsdaten zu erhalten.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -216,15 +216,15 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-Das `NavBarData`-Objekt enthaelt:
+Das `NavBarData`-Objekt enthält:
 
 | Eigenschaft | Typ | Beschreibung |
 | --- | --- | --- |
 | `items` | `List<BottomNavigationBarItem>` | Die Navigationsleisten-Elemente |
-| `currentIndex` | `int` | Der aktuell ausgewaehlte Index |
+| `currentIndex` | `int` | Der aktuell ausgewählte Index |
 | `onTap` | `ValueChanged<int>` | Callback wenn ein Tab angetippt wird |
 
-Hier ist ein Beispiel fuer eine vollstaendig benutzerdefinierte Glass-Navigationsleiste:
+Hier ist ein Beispiel für eine vollständig benutzerdefinierte Glass-Navigationsleiste:
 
 ``` dart
 NavigationHubLayout.bottomNav(
@@ -261,7 +261,7 @@ NavigationHubLayout.bottomNav(
 
 ### Obere Navigation
 
-Sie koennen das Layout auf eine obere Navigationsleiste aendern, indem Sie `NavigationHubLayout.topNav` aus der `layout`-Methode zurueckgeben.
+Sie können das Layout auf eine obere Navigationsleiste ändern, indem Sie `NavigationHubLayout.topNav` aus der `layout`-Methode zurückgeben.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -270,7 +270,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.topNav();
 ```
 
-Sie koennen die obere Navigationsleiste anpassen, indem Sie Eigenschaften wie folgt setzen:
+Sie können die obere Navigationsleiste anpassen, indem Sie Eigenschaften wie folgt setzen:
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -291,9 +291,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ### Journey-Navigation
 
-Sie koennen das Layout auf eine Journey-Navigation aendern, indem Sie `NavigationHubLayout.journey` aus der `layout`-Methode zurueckgeben.
+Sie können das Layout auf eine Journey-Navigation ändern, indem Sie `NavigationHubLayout.journey` aus der `layout`-Methode zurückgeben.
 
-Dies eignet sich hervorragend fuer Onboarding-Flows oder mehrstufige Formulare.
+Dies eignet sich hervorragend für Onboarding-Flows oder mehrstufige Formulare.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -306,7 +306,7 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-Sie koennen auch einen `backgroundGradient` fuer das Journey-Layout setzen:
+Sie können auch einen `backgroundGradient` für das Journey-Layout setzen:
 
 ``` dart
 @override
@@ -324,9 +324,9 @@ NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey
 
 > **Hinweis:** Wenn `backgroundGradient` gesetzt ist, hat es Vorrang vor `backgroundColor`.
 
-Wenn Sie das Journey-Navigations-Layout verwenden moechten, sollten Ihre **Widgets** `JourneyState` verwenden, da es viele Hilfsmethoden zur Verwaltung der Journey enthaelt.
+Wenn Sie das Journey-Navigations-Layout verwenden möchten, sollten Ihre **Widgets** `JourneyState` verwenden, da es viele Hilfsmethoden zur Verwaltung der Journey enthält.
 
-Sie koennen die gesamte Journey mit dem Befehl `make:navigation_hub` und dem Layout `journey_states` erstellen:
+Sie können die gesamte Journey mit dem Befehl `make:navigation_hub` und dem Layout `journey_states` erstellen:
 
 ``` bash
 metro make:navigation_hub onboarding
@@ -336,13 +336,13 @@ metro make:navigation_hub onboarding
 
 Dadurch werden der Hub und alle Journey-State-Widgets unter `resources/pages/navigation_hubs/onboarding/states/` erstellt.
 
-Alternativ koennen Sie einzelne Journey-Widgets erstellen mit:
+Alternativ können Sie einzelne Journey-Widgets erstellen mit:
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
 ```
 
-Anschliessend koennen Sie die neuen Widgets zum Navigation Hub hinzufuegen.
+Anschließend können Sie die neuen Widgets zum Navigation Hub hinzufügen.
 
 ``` dart
 _MyNavigationHubState() : super(() => {
@@ -362,7 +362,7 @@ _MyNavigationHubState() : super(() => {
 
 ### Journey-Fortschrittsstile
 
-Sie koennen den Fortschrittsanzeige-Stil mit der Klasse `JourneyProgressStyle` anpassen.
+Sie können den Fortschrittsanzeige-Stil mit der Klasse `JourneyProgressStyle` anpassen.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -379,14 +379,14 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     );
 ```
 
-Sie koennen die folgenden Fortschrittsindikatoren verwenden:
+Sie können die folgenden Fortschrittsindikatoren verwenden:
 
-- `JourneyProgressIndicator.none()`: Rendert nichts -- nuetzlich, um den Indikator bei einem bestimmten Tab auszublenden.
+- `JourneyProgressIndicator.none()`: Rendert nichts -- nützlich, um den Indikator bei einem bestimmten Tab auszublenden.
 - `JourneyProgressIndicator.linear()`: Linearer Fortschrittsbalken.
 - `JourneyProgressIndicator.dots()`: Punkte-basierter Fortschrittsindikator.
 - `JourneyProgressIndicator.numbered()`: Nummerierter Schritt-Fortschrittsindikator.
 - `JourneyProgressIndicator.segments()`: Segmentierter Fortschrittsbalken-Stil.
-- `JourneyProgressIndicator.circular()`: Kreisfoermiger Fortschrittsindikator.
+- `JourneyProgressIndicator.circular()`: Kreisförmiger Fortschrittsindikator.
 - `JourneyProgressIndicator.timeline()`: Timeline-artiger Fortschrittsindikator.
 - `JourneyProgressIndicator.custom()`: Benutzerdefinierter Fortschrittsindikator mit einer Builder-Funktion.
 
@@ -408,7 +408,7 @@ NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey
 );
 ```
 
-Sie koennen die Position und den Abstand des Fortschrittsindikators innerhalb des `JourneyProgressStyle` anpassen:
+Sie können die Position und den Abstand des Fortschrittsindikators innerhalb des `JourneyProgressStyle` anpassen:
 
 ``` dart
 @override
@@ -421,14 +421,14 @@ NavigationHubLayout? layout(BuildContext context) => NavigationHubLayout.journey
 );
 ```
 
-Sie koennen die folgenden Positionen fuer den Fortschrittsindikator verwenden:
+Sie können die folgenden Positionen für den Fortschrittsindikator verwenden:
 
 - `ProgressIndicatorPosition.top`: Fortschrittsindikator oben auf dem Bildschirm.
 - `ProgressIndicatorPosition.bottom`: Fortschrittsindikator unten auf dem Bildschirm.
 
-#### Pro-Tab Fortschrittsstil-Ueberschreibung
+#### Pro-Tab Fortschrittsstil-Überschreibung
 
-Sie koennen den `progressStyle` auf Layout-Ebene fuer einzelne Tabs ueberschreiben, indem Sie `NavigationTab.journey(progressStyle: ...)` verwenden. Tabs ohne eigenen `progressStyle` erben den Layout-Standard. Tabs ohne Layout-Standard und ohne eigenen Stil zeigen keinen Fortschrittsindikator an.
+Sie können den `progressStyle` auf Layout-Ebene für einzelne Tabs überschreiben, indem Sie `NavigationTab.journey(progressStyle: ...)` verwenden. Tabs ohne eigenen `progressStyle` erben den Layout-Standard. Tabs ohne Layout-Standard und ohne eigenen Stil zeigen keinen Fortschrittsindikator an.
 
 ``` dart
 _MyNavigationHubState() : super(() => {
@@ -451,15 +451,15 @@ _MyNavigationHubState() : super(() => {
 
 ### JourneyState
 
-Die `JourneyState`-Klasse erweitert `NyState` um Journey-spezifische Funktionalitaet und erleichtert die Erstellung von Onboarding-Flows und mehrstufigen Journeys.
+Die `JourneyState`-Klasse erweitert `NyState` um Journey-spezifische Funktionalität und erleichtert die Erstellung von Onboarding-Flows und mehrstufigen Journeys.
 
-Um einen neuen `JourneyState` zu erstellen, koennen Sie den folgenden Befehl verwenden.
+Um einen neuen `JourneyState` zu erstellen, können Sie den folgenden Befehl verwenden.
 
 ``` bash
 metro make:journey_widget onboard_user_dob
 ```
 
-Oder wenn Sie mehrere Widgets gleichzeitig erstellen moechten, koennen Sie den folgenden Befehl verwenden.
+Oder wenn Sie mehrere Widgets gleichzeitig erstellen möchten, können Sie den folgenden Befehl verwenden.
 
 ``` bash
 metro make:journey_widget welcome,phone_number_step,add_photos_step
@@ -508,7 +508,7 @@ class _WelcomeState extends JourneyState<Welcome> {
             ),
           ),
 
-          // Navigations-Schaltflaechen
+          // Navigations-Schaltflächen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -535,13 +535,13 @@ class _WelcomeState extends JourneyState<Welcome> {
     );
   }
 
-  /// Pruefen, ob die Journey zum naechsten Schritt fortfahren kann
+  /// Prüfen, ob die Journey zum nächsten Schritt fortfahren kann
   @override
   Future<bool> canContinue() async {
     return true;
   }
 
-  /// Wird vor der Navigation zum naechsten Schritt aufgerufen
+  /// Wird vor der Navigation zum nächsten Schritt aufgerufen
   @override
   Future<void> onBeforeNext() async {
     // E.g. save data to session
@@ -553,11 +553,11 @@ class _WelcomeState extends JourneyState<Welcome> {
 }
 ```
 
-Sie werden bemerken, dass die **JourneyState**-Klasse `nextStep` verwendet, um vorwaerts zu navigieren, und `onBackPressed`, um zurueckzugehen.
+Sie werden bemerken, dass die **JourneyState**-Klasse `nextStep` verwendet, um vorwärts zu navigieren, und `onBackPressed`, um zurückzugehen.
 
-Die `nextStep`-Methode durchlaeuft den vollstaendigen Validierungs-Lebenszyklus: `canContinue()` -> `onBeforeNext()` -> Navigation (oder `onComplete()` beim letzten Schritt) -> `onAfterNext()`.
+Die `nextStep`-Methode durchläuft den vollständigen Validierungs-Lebenszyklus: `canContinue()` -> `onBeforeNext()` -> Navigation (oder `onComplete()` beim letzten Schritt) -> `onAfterNext()`.
 
-Sie koennen auch `buildJourneyContent` verwenden, um ein strukturiertes Layout mit optionalen Navigations-Buttons zu erstellen:
+Sie können auch `buildJourneyContent` verwenden, um ein strukturiertes Layout mit optionalen Navigations-Buttons zu erstellen:
 
 ``` dart
 @override
@@ -584,14 +584,14 @@ Widget view(BuildContext context) {
 }
 ```
 
-Hier sind die Eigenschaften, die Sie in der `buildJourneyContent`-Methode verwenden koennen.
+Hier sind die Eigenschaften, die Sie in der `buildJourneyContent`-Methode verwenden können.
 
 | Eigenschaft | Typ | Beschreibung |
 | --- | --- | --- |
 | `content` | `Widget` | Der Hauptinhalt der Seite. |
 | `nextButton` | `Widget?` | Das Weiter-Button-Widget. |
-| `backButton` | `Widget?` | Das Zurueck-Button-Widget. |
-| `contentPadding` | `EdgeInsetsGeometry` | Der Abstand fuer den Inhalt. |
+| `backButton` | `Widget?` | Das Zurück-Button-Widget. |
+| `contentPadding` | `EdgeInsetsGeometry` | Der Abstand für den Inhalt. |
 | `header` | `Widget?` | Das Header-Widget. |
 | `footer` | `Widget?` | Das Footer-Widget. |
 | `crossAxisAlignment` | `CrossAxisAlignment` | Die Querachsen-Ausrichtung des Inhalts. |
@@ -600,30 +600,30 @@ Hier sind die Eigenschaften, die Sie in der `buildJourneyContent`-Methode verwen
 
 ### JourneyState-Hilfsmethoden
 
-Die `JourneyState`-Klasse verfuegt ueber Hilfsmethoden und Eigenschaften, mit denen Sie das Verhalten Ihrer Journey anpassen koennen.
+Die `JourneyState`-Klasse verfügt über Hilfsmethoden und Eigenschaften, mit denen Sie das Verhalten Ihrer Journey anpassen können.
 
 | Methode / Eigenschaft | Beschreibung |
 | --- | --- |
-| [`nextStep()`](#next-step) | Navigiert zum naechsten Schritt mit Validierung. Gibt `Future<bool>` zurueck. |
-| [`previousStep()`](#previous-step) | Navigiert zum vorherigen Schritt. Gibt `Future<bool>` zurueck. |
+| [`nextStep()`](#next-step) | Navigiert zum nächsten Schritt mit Validierung. Gibt `Future<bool>` zurück. |
+| [`previousStep()`](#previous-step) | Navigiert zum vorherigen Schritt. Gibt `Future<bool>` zurück. |
 | [`onBackPressed()`](#on-back-pressed) | Einfacher Helfer zum Navigieren zum vorherigen Schritt. |
 | [`onComplete()`](#on-complete) | Wird aufgerufen, wenn die Journey abgeschlossen ist (am letzten Schritt). |
-| [`onBeforeNext()`](#on-before-next) | Wird aufgerufen, bevor zum naechsten Schritt navigiert wird. |
-| [`onAfterNext()`](#on-after-next) | Wird aufgerufen, nachdem zum naechsten Schritt navigiert wurde. |
-| [`canContinue()`](#can-continue) | Validierungspruefung vor dem Navigieren zum naechsten Schritt. |
-| [`isFirstStep`](#is-first-step) | Gibt true zurueck, wenn dies der erste Schritt in der Journey ist. |
-| [`isLastStep`](#is-last-step) | Gibt true zurueck, wenn dies der letzte Schritt in der Journey ist. |
-| [`currentStep`](#current-step) | Gibt den aktuellen Schritt-Index zurueck (0-basiert). |
-| [`totalSteps`](#total-steps) | Gibt die Gesamtanzahl der Schritte zurueck. |
-| [`completionPercentage`](#completion-percentage) | Gibt den Fortschritt in Prozent zurueck (0.0 bis 1.0). |
+| [`onBeforeNext()`](#on-before-next) | Wird aufgerufen, bevor zum nächsten Schritt navigiert wird. |
+| [`onAfterNext()`](#on-after-next) | Wird aufgerufen, nachdem zum nächsten Schritt navigiert wurde. |
+| [`canContinue()`](#can-continue) | Validierungsprüfung vor dem Navigieren zum nächsten Schritt. |
+| [`isFirstStep`](#is-first-step) | Gibt true zurück, wenn dies der erste Schritt in der Journey ist. |
+| [`isLastStep`](#is-last-step) | Gibt true zurück, wenn dies der letzte Schritt in der Journey ist. |
+| [`currentStep`](#current-step) | Gibt den aktuellen Schritt-Index zurück (0-basiert). |
+| [`totalSteps`](#total-steps) | Gibt die Gesamtanzahl der Schritte zurück. |
+| [`completionPercentage`](#completion-percentage) | Gibt den Fortschritt in Prozent zurück (0.0 bis 1.0). |
 | [`goToStep(int index)`](#go-to-step) | Springt zu einem bestimmten Schritt anhand des Index. |
-| [`goToNextStep()`](#go-to-next-step) | Springt zum naechsten Schritt (ohne Validierung). |
+| [`goToNextStep()`](#go-to-next-step) | Springt zum nächsten Schritt (ohne Validierung). |
 | [`goToPreviousStep()`](#go-to-previous-step) | Springt zum vorherigen Schritt (ohne Validierung). |
 | [`goToFirstStep()`](#go-to-first-step) | Springt zum ersten Schritt. |
 | [`goToLastStep()`](#go-to-last-step) | Springt zum letzten Schritt. |
-| [`exitJourney()`](#exit-journey) | Verlaesst die Journey durch Pop des Root-Navigators. |
-| [`resetCurrentStep()`](#reset-current-step) | Setzt den State des aktuellen Schritts zurueck. |
-| [`onJourneyComplete`](#on-journey-complete) | Callback wenn die Journey abgeschlossen wird (im letzten Schritt ueberschreiben). |
+| [`exitJourney()`](#exit-journey) | Verlässt die Journey durch Pop des Root-Navigators. |
+| [`resetCurrentStep()`](#reset-current-step) | Setzt den State des aktuellen Schritts zurück. |
+| [`onJourneyComplete`](#on-journey-complete) | Callback wenn die Journey abgeschlossen wird (im letzten Schritt überschreiben). |
 | [`buildJourneyPage()`](#build-journey-page) | Erstellt eine Vollbild-Journey-Seite mit Scaffold. |
 
 
@@ -631,9 +631,9 @@ Die `JourneyState`-Klasse verfuegt ueber Hilfsmethoden und Eigenschaften, mit de
 
 #### nextStep
 
-Die `nextStep`-Methode navigiert mit vollstaendiger Validierung zum naechsten Schritt. Sie durchlaeuft den Lebenszyklus: `canContinue()` -> `onBeforeNext()` -> Navigation oder `onComplete()` -> `onAfterNext()`.
+Die `nextStep`-Methode navigiert mit vollständiger Validierung zum nächsten Schritt. Sie durchläuft den Lebenszyklus: `canContinue()` -> `onBeforeNext()` -> Navigation oder `onComplete()` -> `onAfterNext()`.
 
-Sie koennen `force: true` uebergeben, um die Validierung zu umgehen und direkt zu navigieren.
+Sie können `force: true` übergeben, um die Validierung zu umgehen und direkt zu navigieren.
 
 ``` dart
 @override
@@ -653,7 +653,7 @@ Widget view(BuildContext context) {
 }
 ```
 
-Um die Validierung zu ueberspringen:
+Um die Validierung zu überspringen:
 
 ``` dart
 onPressed: () => nextStep(force: true),
@@ -663,7 +663,7 @@ onPressed: () => nextStep(force: true),
 
 #### previousStep
 
-Die `previousStep`-Methode navigiert zum vorherigen Schritt. Gibt `true` bei Erfolg zurueck, `false` wenn bereits beim ersten Schritt.
+Die `previousStep`-Methode navigiert zum vorherigen Schritt. Gibt `true` bei Erfolg zurück, `false` wenn bereits beim ersten Schritt.
 
 ``` dart
 onPressed: () async {
@@ -703,7 +703,7 @@ Widget view(BuildContext context) {
 
 #### onComplete
 
-Die `onComplete`-Methode wird aufgerufen, wenn `nextStep()` beim letzten Schritt ausgeloest wird (nachdem die Validierung bestanden wurde).
+Die `onComplete`-Methode wird aufgerufen, wenn `nextStep()` beim letzten Schritt ausgelöst wird (nachdem die Validierung bestanden wurde).
 
 ``` dart
 @override
@@ -716,9 +716,9 @@ Future<void> onComplete() async {
 
 #### onBeforeNext
 
-Die `onBeforeNext`-Methode wird aufgerufen, bevor zum naechsten Schritt navigiert wird.
+Die `onBeforeNext`-Methode wird aufgerufen, bevor zum nächsten Schritt navigiert wird.
 
-Z.B. wenn Sie Daten speichern moechten, bevor zum naechsten Schritt navigiert wird, koennen Sie dies hier tun.
+Z.B. wenn Sie Daten speichern möchten, bevor zum nächsten Schritt navigiert wird, können Sie dies hier tun.
 
 ``` dart
 @override
@@ -735,7 +735,7 @@ Future<void> onBeforeNext() async {
 
 #### onAfterNext
 
-Die `onAfterNext`-Methode wird aufgerufen, nachdem zum naechsten Schritt navigiert wurde.
+Die `onAfterNext`-Methode wird aufgerufen, nachdem zum nächsten Schritt navigiert wurde.
 
 ``` dart
 @override
@@ -748,13 +748,13 @@ Future<void> onAfterNext() async {
 
 #### canContinue
 
-Die `canContinue`-Methode wird aufgerufen, wenn `nextStep()` ausgeloest wird. Geben Sie `false` zurueck, um die Navigation zu verhindern.
+Die `canContinue`-Methode wird aufgerufen, wenn `nextStep()` ausgelöst wird. Geben Sie `false` zurück, um die Navigation zu verhindern.
 
 ``` dart
 @override
 Future<bool> canContinue() async {
-    // Ihre Validierungslogik hier ausfuehren
-    // True zurueckgeben, wenn die Journey fortfahren kann, andernfalls false
+    // Ihre Validierungslogik hier ausführen
+    // True zurückgeben, wenn die Journey fortfahren kann, andernfalls false
     if (nameController.text.isEmpty) {
         showToastSorry(description: "Please enter your name");
         return false;
@@ -767,7 +767,7 @@ Future<bool> canContinue() async {
 
 #### isFirstStep
 
-Die `isFirstStep`-Eigenschaft gibt true zurueck, wenn dies der erste Schritt in der Journey ist.
+Die `isFirstStep`-Eigenschaft gibt true zurück, wenn dies der erste Schritt in der Journey ist.
 
 ``` dart
 backButton: isFirstStep ? null : Button.textOnly(
@@ -781,7 +781,7 @@ backButton: isFirstStep ? null : Button.textOnly(
 
 #### isLastStep
 
-Die `isLastStep`-Eigenschaft gibt true zurueck, wenn dies der letzte Schritt in der Journey ist.
+Die `isLastStep`-Eigenschaft gibt true zurück, wenn dies der letzte Schritt in der Journey ist.
 
 ``` dart
 nextButton: Button.primary(
@@ -794,7 +794,7 @@ nextButton: Button.primary(
 
 #### currentStep
 
-Die `currentStep`-Eigenschaft gibt den aktuellen Schritt-Index zurueck (0-basiert).
+Die `currentStep`-Eigenschaft gibt den aktuellen Schritt-Index zurück (0-basiert).
 
 ``` dart
 Text("Step ${currentStep + 1} of $totalSteps"),
@@ -804,13 +804,13 @@ Text("Step ${currentStep + 1} of $totalSteps"),
 
 #### totalSteps
 
-Die `totalSteps`-Eigenschaft gibt die Gesamtanzahl der Schritte in der Journey zurueck.
+Die `totalSteps`-Eigenschaft gibt die Gesamtanzahl der Schritte in der Journey zurück.
 
 <div id="completion-percentage"></div>
 
 #### completionPercentage
 
-Die `completionPercentage`-Eigenschaft gibt den Fortschritt als Wert von 0.0 bis 1.0 zurueck.
+Die `completionPercentage`-Eigenschaft gibt den Fortschritt als Wert von 0.0 bis 1.0 zurück.
 
 ``` dart
 LinearProgressIndicator(value: completionPercentage),
@@ -820,7 +820,7 @@ LinearProgressIndicator(value: completionPercentage),
 
 #### goToStep
 
-Die `goToStep`-Methode springt direkt zu einem bestimmten Schritt anhand des Index. Dies loest **keine** Validierung aus.
+Die `goToStep`-Methode springt direkt zu einem bestimmten Schritt anhand des Index. Dies löst **keine** Validierung aus.
 
 ``` dart
 nextButton: Button.primary(
@@ -835,7 +835,7 @@ nextButton: Button.primary(
 
 #### goToNextStep
 
-Die `goToNextStep`-Methode springt ohne Validierung zum naechsten Schritt. Wenn bereits beim letzten Schritt, passiert nichts.
+Die `goToNextStep`-Methode springt ohne Validierung zum nächsten Schritt. Wenn bereits beim letzten Schritt, passiert nichts.
 
 ``` dart
 onPressed: () {
@@ -883,7 +883,7 @@ onPressed: () {
 
 #### exitJourney
 
-Die `exitJourney`-Methode verlaesst die Journey durch Pop des Root-Navigators.
+Die `exitJourney`-Methode verlässt die Journey durch Pop des Root-Navigators.
 
 ``` dart
 onPressed: () {
@@ -895,7 +895,7 @@ onPressed: () {
 
 #### resetCurrentStep
 
-Die `resetCurrentStep`-Methode setzt den State des aktuellen Schritts zurueck.
+Die `resetCurrentStep`-Methode setzt den State des aktuellen Schritts zurück.
 
 ``` dart
 onPressed: () {
@@ -907,7 +907,7 @@ onPressed: () {
 
 ### onJourneyComplete
 
-Der `onJourneyComplete`-Getter kann im **letzten Schritt** Ihrer Journey ueberschrieben werden, um festzulegen, was passiert, wenn der Benutzer den Flow abschliesst.
+Der `onJourneyComplete`-Getter kann im **letzten Schritt** Ihrer Journey überschrieben werden, um festzulegen, was passiert, wenn der Benutzer den Flow abschließt.
 
 ``` dart
 class _CompleteStepState extends JourneyState<CompleteStep> {
@@ -917,7 +917,7 @@ class _CompleteStepState extends JourneyState<CompleteStep> {
   /// Callback wenn die Journey abgeschlossen ist
   @override
   void Function()? get onJourneyComplete => () {
-    // Zur Startseite oder naechsten Seite navigieren
+    // Zur Startseite oder nächsten Seite navigieren
     routeTo(HomePage.path);
   };
 
@@ -968,8 +968,8 @@ Widget view(BuildContext context) {
 | --- | --- | --- |
 | `content` | `Widget` | Der Hauptinhalt der Seite. |
 | `nextButton` | `Widget?` | Das Weiter-Button-Widget. |
-| `backButton` | `Widget?` | Das Zurueck-Button-Widget. |
-| `contentPadding` | `EdgeInsetsGeometry` | Der Abstand fuer den Inhalt. |
+| `backButton` | `Widget?` | Das Zurück-Button-Widget. |
+| `contentPadding` | `EdgeInsetsGeometry` | Der Abstand für den Inhalt. |
 | `header` | `Widget?` | Das Header-Widget. |
 | `footer` | `Widget?` | Das Footer-Widget. |
 | `backgroundColor` | `Color?` | Die Hintergrundfarbe des Scaffold. |
@@ -980,9 +980,9 @@ Widget view(BuildContext context) {
 
 ## Innerhalb eines Tabs zu Widgets navigieren
 
-Sie koennen innerhalb eines Tabs zu Widgets navigieren, indem Sie den `pushTo`-Helfer verwenden.
+Sie können innerhalb eines Tabs zu Widgets navigieren, indem Sie den `pushTo`-Helfer verwenden.
 
-Innerhalb Ihres Tabs koennen Sie den `pushTo`-Helfer verwenden, um zu einem anderen Widget zu navigieren.
+Innerhalb Ihres Tabs können Sie den `pushTo`-Helfer verwenden, um zu einem anderen Widget zu navigieren.
 
 ``` dart
 _HomeTabState extends State<HomeTab> {
@@ -994,7 +994,7 @@ _HomeTabState extends State<HomeTab> {
 }
 ```
 
-Sie koennen auch Daten an das Widget uebergeben, zu dem Sie navigieren.
+Sie können auch Daten an das Widget übergeben, zu dem Sie navigieren.
 
 ``` dart
 _HomeTabState extends State<HomeTab> {
@@ -1013,11 +1013,11 @@ Wenn Sie aus einem verschachtelten Navigator innerhalb eines Tabs herausspringen
 pop();
 
 // Aus dem Root-Navigator herausspringen -- verwenden Sie dies, wenn ein Modal oder Overlay
-// ueber den Root-Navigator geoeffnet wurde
+// über den Root-Navigator geöffnet wurde
 pop(rootNavigator: true);
 ```
 
-Der Parameter `rootNavigator` ist fuer `pop()` in `NyState`, `NyController`, `StateAction.pop()` und der `BuildContext`-Erweiterung verfuegbar.
+Der Parameter `rootNavigator` ist für `pop()` in `NyState`, `NyController`, `StateAction.pop()` und der `BuildContext`-Erweiterung verfügbar.
 
 <div id="tabs"></div>
 
@@ -1025,7 +1025,7 @@ Der Parameter `rootNavigator` ist fuer `pop()` in `NyState`, `NyController`, `St
 
 Tabs sind die Hauptbausteine eines Navigation Hub.
 
-Sie koennen Tabs zu einem Navigation Hub hinzufuegen, indem Sie die `NavigationTab`-Klasse und ihre benannten Konstruktoren verwenden.
+Sie können Tabs zu einem Navigation Hub hinzufügen, indem Sie die `NavigationTab`-Klasse und ihre benannten Konstruktoren verwenden.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1049,26 +1049,26 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     });
 ```
 
-Im obigen Beispiel haben wir zwei Tabs zum Navigation Hub hinzugefuegt: Home und Settings.
+Im obigen Beispiel haben wir zwei Tabs zum Navigation Hub hinzugefügt: Home und Settings.
 
-Sie koennen verschiedene Arten von Tabs verwenden:
+Sie können verschiedene Arten von Tabs verwenden:
 
 - `NavigationTab.tab()` - Ein Standard-Navigations-Tab.
-- `NavigationTab.badge()` - Ein Tab mit Badge-Zaehler.
+- `NavigationTab.badge()` - Ein Tab mit Badge-Zähler.
 - `NavigationTab.alert()` - Ein Tab mit Alert-Indikator.
-- `NavigationTab.journey()` - Ein Tab fuer Journey-Navigations-Layouts.
+- `NavigationTab.journey()` - Ein Tab für Journey-Navigations-Layouts.
 
 <div id="adding-badges-to-tabs"></div>
 
-## Badges zu Tabs hinzufuegen
+## Badges zu Tabs hinzufügen
 
-Wir haben es einfach gemacht, Badges zu Ihren Tabs hinzuzufuegen.
+Wir haben es einfach gemacht, Badges zu Ihren Tabs hinzuzufügen.
 
-Badges sind eine grossartige Moeglichkeit, Benutzern zu zeigen, dass es etwas Neues in einem Tab gibt.
+Badges sind eine großartige Möglichkeit, Benutzern zu zeigen, dass es etwas Neues in einem Tab gibt.
 
-Wenn Sie beispielsweise eine Chat-App haben, koennen Sie die Anzahl ungelesener Nachrichten im Chat-Tab anzeigen.
+Wenn Sie beispielsweise eine Chat-App haben, können Sie die Anzahl ungelesener Nachrichten im Chat-Tab anzeigen.
 
-Um ein Badge zu einem Tab hinzuzufuegen, koennen Sie den Konstruktor `NavigationTab.badge` verwenden.
+Um ein Badge zu einem Tab hinzuzufügen, können Sie den Konstruktor `NavigationTab.badge` verwenden.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1093,22 +1093,22 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     });
 ```
 
-Im obigen Beispiel haben wir ein Badge zum Chat-Tab mit einer anfaenglichen Anzahl von 10 hinzugefuegt.
+Im obigen Beispiel haben wir ein Badge zum Chat-Tab mit einer anfänglichen Anzahl von 10 hinzugefügt.
 
-Sie koennen die Badge-Anzahl auch programmatisch aktualisieren.
+Sie können die Badge-Anzahl auch programmatisch aktualisieren.
 
 ``` dart
-/// Badge-Anzahl erhoehen
+/// Badge-Anzahl erhöhen
 BaseNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 
 /// Badge-Anzahl aktualisieren
 BaseNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 5);
 
-/// Badge-Anzahl zuruecksetzen
+/// Badge-Anzahl zurücksetzen
 BaseNavigationHub.stateActions.clearBadgeCount(tab: 0);
 ```
 
-Standardmaessig wird die Badge-Anzahl gespeichert. Wenn Sie die Badge-Anzahl bei jeder Sitzung **zuruecksetzen** moechten, koennen Sie `rememberCount` auf `false` setzen.
+Standardmäßig wird die Badge-Anzahl gespeichert. Wenn Sie die Badge-Anzahl bei jeder Sitzung **zurücksetzen** möchten, können Sie `rememberCount` auf `false` setzen.
 
 ``` dart
 0: NavigationTab.badge(
@@ -1123,13 +1123,13 @@ Standardmaessig wird die Badge-Anzahl gespeichert. Wenn Sie die Badge-Anzahl bei
 
 <div id="adding-alerts-to-tabs"></div>
 
-## Alerts zu Tabs hinzufuegen
+## Alerts zu Tabs hinzufügen
 
-Sie koennen Alerts zu Ihren Tabs hinzufuegen.
+Sie können Alerts zu Ihren Tabs hinzufügen.
 
-Manchmal moechten Sie keine Badge-Anzahl anzeigen, sondern dem Benutzer lediglich einen Alert-Indikator anzeigen.
+Manchmal möchten Sie keine Badge-Anzahl anzeigen, sondern dem Benutzer lediglich einen Alert-Indikator anzeigen.
 
-Um einen Alert zu einem Tab hinzuzufuegen, koennen Sie den Konstruktor `NavigationTab.alert` verwenden.
+Um einen Alert zu einem Tab hinzuzufügen, können Sie den Konstruktor `NavigationTab.alert` verwenden.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1156,9 +1156,9 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     });
 ```
 
-Dies fuegt dem Chat-Tab einen Alert mit roter Farbe hinzu.
+Dies fügt dem Chat-Tab einen Alert mit roter Farbe hinzu.
 
-Sie koennen den Alert auch programmatisch aktualisieren.
+Sie können den Alert auch programmatisch aktualisieren.
 
 ``` dart
 /// Alert aktivieren
@@ -1172,7 +1172,7 @@ BaseNavigationHub.stateActions.alertDisableTab(tab: 0);
 
 ## Initialer Index
 
-Standardmaessig startet der Navigation Hub beim ersten Tab (Index 0). Sie koennen dies aendern, indem Sie den `initialIndex`-Getter ueberschreiben.
+Standardmäßig startet der Navigation Hub beim ersten Tab (Index 0). Sie können dies ändern, indem Sie den `initialIndex`-Getter überschreiben.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1187,11 +1187,11 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ## State beibehalten
 
-Standardmaessig wird der State des Navigation Hub beibehalten.
+Standardmäßig wird der State des Navigation Hub beibehalten.
 
 Das bedeutet, dass wenn Sie zu einem Tab navigieren, der State des Tabs erhalten bleibt.
 
-Wenn Sie den State des Tabs bei jedem Navigieren zuruecksetzen moechten, koennen Sie `maintainState` auf `false` setzen.
+Wenn Sie den State des Tabs bei jedem Navigieren zurücksetzen möchten, können Sie `maintainState` auf `false` setzen.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
@@ -1206,15 +1206,15 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ## onTap
 
-Sie koennen die `onTap`-Methode ueberschreiben, um benutzerdefinierte Logik hinzuzufuegen, wenn ein Tab angetippt wird.
+Sie können die `onTap`-Methode überschreiben, um benutzerdefinierte Logik hinzuzufügen, wenn ein Tab angetippt wird.
 
 ``` dart
 class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
     ...
     @override
     onTap(int index) {
-        // Benutzerdefinierte Logik hier hinzufuegen
-        // Z.B. Analytics verfolgen, Bestaetigung anzeigen usw.
+        // Benutzerdefinierte Logik hier hinzufügen
+        // Z.B. Analytics verfolgen, Bestätigung anzeigen usw.
         super.onTap(index); // Super immer aufrufen, um den Tab-Wechsel zu verarbeiten
     }
 }
@@ -1224,12 +1224,12 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ## State-Aktionen
 
-State-Aktionen sind eine Moeglichkeit, von ueberall in Ihrer App mit dem Navigation Hub zu interagieren.
+State-Aktionen sind eine Möglichkeit, von überall in Ihrer App mit dem Navigation Hub zu interagieren.
 
-Hier sind die State-Aktionen, die Sie verwenden koennen:
+Hier sind die State-Aktionen, die Sie verwenden können:
 
 ``` dart
-/// Tab bei einem bestimmten Index zuruecksetzen
+/// Tab bei einem bestimmten Index zurücksetzen
 /// Z.B. MyNavigationHub.stateActions.resetTabIndex(0);
 resetTabIndex(int tabIndex);
 
@@ -1241,23 +1241,23 @@ currentTabIndex(int tabIndex);
 /// Z.B. MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
 updateBadgeCount({required int tab, required int count});
 
-/// Badge-Anzahl erhoehen
+/// Badge-Anzahl erhöhen
 /// Z.B. MyNavigationHub.stateActions.incrementBadgeCount(tab: 0);
 incrementBadgeCount({required int tab});
 
-/// Badge-Anzahl zuruecksetzen
+/// Badge-Anzahl zurücksetzen
 /// Z.B. MyNavigationHub.stateActions.clearBadgeCount(tab: 0);
 clearBadgeCount({required int tab});
 
-/// Alert fuer einen Tab aktivieren
+/// Alert für einen Tab aktivieren
 /// Z.B. MyNavigationHub.stateActions.alertEnableTab(tab: 0);
 alertEnableTab({required int tab});
 
-/// Alert fuer einen Tab deaktivieren
+/// Alert für einen Tab deaktivieren
 /// Z.B. MyNavigationHub.stateActions.alertDisableTab(tab: 0);
 alertDisableTab({required int tab});
 
-/// Zur naechsten Seite in einem Journey-Layout navigieren
+/// Zur nächsten Seite in einem Journey-Layout navigieren
 /// Z.B. await MyNavigationHub.stateActions.nextPage();
 Future<bool> nextPage();
 
@@ -1274,7 +1274,7 @@ void refreshTab(int tabIndex);
 void refresh();
 ```
 
-Um eine State-Aktion zu verwenden, koennen Sie Folgendes tun:
+Um eine State-Aktion zu verwenden, können Sie Folgendes tun:
 
 ``` dart
 MyNavigationHub.stateActions.updateBadgeCount(tab: 0, count: 2);
@@ -1283,7 +1283,7 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 
 MyNavigationHub.stateActions.currentTabIndex(2); // Zum Tab 2 wechseln
 
-await MyNavigationHub.stateActions.nextPage(); // Journey: zur naechsten Seite navigieren
+await MyNavigationHub.stateActions.nextPage(); // Journey: zur nächsten Seite navigieren
 
 MyNavigationHub.stateActions.refreshTab(0); // Tab 0 zum Neu-Aufbau zwingen
 
@@ -1294,9 +1294,9 @@ MyNavigationHub.stateActions.refresh(); // Alle Tabs zum Neu-Aufbau zwingen
 
 ## Ladestil
 
-Standardmaessig zeigt der Navigation Hub Ihr **Standard**-Lade-Widget (resources/widgets/loader_widget.dart) an, wenn der Tab geladen wird.
+Standardmäßig zeigt der Navigation Hub Ihr **Standard**-Lade-Widget (resources/widgets/loader_widget.dart) an, wenn der Tab geladen wird.
 
-Sie koennen den `loadingStyle` anpassen, um den Ladestil zu aendern.
+Sie können den `loadingStyle` anpassen, um den Ladestil zu ändern.
 
 | Stil | Beschreibung |
 | --- | --- |
@@ -1304,7 +1304,7 @@ Sie koennen den `loadingStyle` anpassen, um den Ladestil zu aendern.
 | skeletonizer | Skeleton-Ladestil |
 | none | Kein Ladestil |
 
-Sie koennen den Ladestil wie folgt aendern:
+Sie können den Ladestil wie folgt ändern:
 
 ``` dart
 @override
@@ -1314,7 +1314,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal();
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer();
 ```
 
-Wenn Sie das Lade-Widget in einem der Stile aendern moechten, koennen Sie ein `child` an den `LoadingStyle` uebergeben.
+Wenn Sie das Lade-Widget in einem der Stile ändern möchten, können Sie ein `child` an den `LoadingStyle` übergeben.
 
 ``` dart
 @override
@@ -1362,12 +1362,12 @@ class _MyNavigationHubState extends NavigationHub<MyNavigationHub> {
 
 ## Einen Navigation Hub erstellen
 
-Um einen Navigation Hub zu erstellen, koennen Sie [Metro](/docs/{{$version}}/metro) verwenden. Nutzen Sie den folgenden Befehl.
+Um einen Navigation Hub zu erstellen, können Sie [Metro](/docs/{{$version}}/metro) verwenden. Nutzen Sie den folgenden Befehl.
 
 ``` bash
 metro make:navigation_hub base
 ```
 
-Der Befehl fuehrt Sie durch ein interaktives Setup, bei dem Sie den Layout-Typ waehlen und Ihre Tabs oder Journey-States definieren koennen.
+Der Befehl führt Sie durch ein interaktives Setup, bei dem Sie den Layout-Typ wählen und Ihre Tabs oder Journey-States definieren können.
 
 Dadurch wird eine `base_navigation_hub.dart`-Datei in Ihrem `resources/pages/navigation_hubs/base/`-Verzeichnis erstellt, mit untergeordneten Widgets in den Unterordnern `tabs/` oder `states/`.

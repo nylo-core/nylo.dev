@@ -114,7 +114,7 @@
 
 ใช้รายการตรวจสอบนี้เพื่อติดตามความคืบหน้าการย้ายระบบ:
 
-- [ ] อัปเดต `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.24.0, nylo_framework: ^7.0.0)
+- [ ] อัปเดต `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
 - [ ] รัน `flutter pub get`
 - [ ] รัน `metro make:key` เพื่อสร้าง APP_KEY
 - [ ] รัน `metro make:env` เพื่อสร้าง environment ที่เข้ารหัส
@@ -150,7 +150,7 @@
 ``` yaml
 environment:
   sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.24.0"
+  flutter: ">=3.38.4"
 
 dependencies:
   nylo_framework: ^7.0.0

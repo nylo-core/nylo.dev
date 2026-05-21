@@ -57,7 +57,7 @@ git clone https://github.com/YOUR-USERNAME/support
 
 | Требование | Минимальная версия |
 |-------------|-----------------|
-| Flutter | 3.24.0 или выше |
+| Flutter | 3.38.4 или выше |
 | Dart SDK | 3.10.7 или выше |
 
 ### Подключение локальных пакетов
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

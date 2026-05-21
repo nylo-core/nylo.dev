@@ -240,7 +240,6 @@ abstract class ColorStyles extends ThemeColor {
 
 ## Расширение стилей цветов
 
-<!-- uncertain: new section "Extending color styles" with new anchor #extending-color-styles — not present in the previous locale file -->
 Три группы по умолчанию (`general`, `appBar`, `bottomTabBar`) — это отправная точка, а не жёсткое ограничение. `lib/resources/themes/color_styles.dart` открыт для ваших изменений — добавляйте новые группы цветов (или отдельные поля) поверх стандартных, а затем реализуйте их в классе цветов каждой темы.
 
 **1. Определите пользовательскую группу цветов**

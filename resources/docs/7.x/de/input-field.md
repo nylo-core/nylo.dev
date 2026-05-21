@@ -160,7 +160,7 @@ InputField(
   labelText: "Phone Number",
   mask: "(###) ###-####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: false, // Gibt unmaskierten Wert zurueck: 1234567890
+  maskedReturnValue: false, // Gibt unmaskierten Wert zurück: 1234567890
 )
 
 // Kreditkarten-Maske
@@ -169,7 +169,7 @@ InputField(
   labelText: "Card Number",
   mask: "#### #### #### ####",
   maskMatch: r'[0-9]',
-  maskedReturnValue: true, // Gibt maskierten Wert zurueck: 1234 5678 9012 3456
+  maskedReturnValue: true, // Gibt maskierten Wert zurück: 1234 5678 9012 3456
 )
 ```
 
@@ -212,7 +212,7 @@ InputField(
   controller: _searchController,
   labelText: "Search",
   clearable: true,
-  clearIcon: Icon(Icons.close, size: 20), // Benutzerdefiniertes Loeschsymbol
+  clearIcon: Icon(Icons.close, size: 20), // Benutzerdefiniertes Löschsymbol
   onChanged: (value) {
     // Suche verarbeiten
   },
@@ -250,7 +250,7 @@ actions.focus();
 // Fokus vom Feld entfernen
 actions.unfocus();
 
-// Passwort-Sichtbarkeit umschalten (fuer InputField.password)
+// Passwort-Sichtbarkeit umschalten (für InputField.password)
 actions.toggleObscure();
 ```
 

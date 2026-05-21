@@ -31,15 +31,15 @@
   - [App-Icons erstellen](#build-app-icons "App-Icons erstellen")
 - Benutzerdefinierte Commands
   - [Benutzerdefinierte Commands erstellen](#creating-custom-commands "Benutzerdefinierte Commands erstellen")
-  - [Benutzerdefinierte Commands ausfuehren](#running-custom-commands "Benutzerdefinierte Commands ausfuehren")
-  - [Optionen zu Commands hinzufuegen](#adding-options-to-custom-commands "Optionen zu Commands hinzufuegen")
-  - [Flags zu Commands hinzufuegen](#adding-flags-to-custom-commands "Flags zu Commands hinzufuegen")
+  - [Benutzerdefinierte Commands ausführen](#running-custom-commands "Benutzerdefinierte Commands ausführen")
+  - [Optionen zu Commands hinzufügen](#adding-options-to-custom-commands "Optionen zu Commands hinzufügen")
+  - [Flags zu Commands hinzufügen](#adding-flags-to-custom-commands "Flags zu Commands hinzufügen")
   - [Hilfsmethoden](#custom-command-helper-methods "Hilfsmethoden")
   - [Interaktive Eingabemethoden](#interactive-input-methods "Interaktive Eingabemethoden")
   - [Ausgabeformatierung](#output-formatting "Ausgabeformatierung")
   - [Dateisystem-Helfer](#file-system-helpers "Dateisystem-Helfer")
   - [JSON- und YAML-Helfer](#json-yaml-helpers "JSON- und YAML-Helfer")
-  - [Gross-/Kleinschreibungs-Konvertierungshelfer](#case-conversion-helpers "Gross-/Kleinschreibungs-Konvertierungshelfer")
+  - [Groß-/Kleinschreibungs-Konvertierungshelfer](#case-conversion-helpers "Groß-/Kleinschreibungs-Konvertierungshelfer")
   - [Projektpfad-Helfer](#project-path-helpers "Projektpfad-Helfer")
   - [Plattform-Helfer](#platform-helpers "Plattform-Helfer")
   - [Dart- und Flutter-Befehle](#dart-flutter-commands "Dart- und Flutter-Befehle")
@@ -63,15 +63,15 @@ Es bietet viele hilfreiche Werkzeuge zur Beschleunigung der Entwicklung.
 
 ## Installieren
 
-Wenn Sie ein neues Nylo-Projekt mit `nylo init` erstellen, wird der `metro`-Befehl automatisch fuer Ihr Terminal konfiguriert. Sie koennen ihn sofort in jedem Nylo-Projekt verwenden.
+Wenn Sie ein neues Nylo-Projekt mit `nylo init` erstellen, wird der `metro`-Befehl automatisch für Ihr Terminal konfiguriert. Sie können ihn sofort in jedem Nylo-Projekt verwenden.
 
-Fuehren Sie `metro` aus Ihrem Projektverzeichnis aus, um alle verfuegbaren Befehle zu sehen:
+Führen Sie `metro` aus Ihrem Projektverzeichnis aus, um alle verfügbaren Befehle zu sehen:
 
 ``` bash
 metro
 ```
 
-Sie sollten eine Ausgabe aehnlich der folgenden sehen.
+Sie sollten eine Ausgabe ähnlich der folgenden sehen.
 
 ``` bash
 Metro - Nylo's Companion to Build Flutter apps by Anthony Gordon
@@ -119,7 +119,7 @@ All commands:
 
 ### Einen neuen Controller erstellen
 
-Sie koennen einen neuen Controller erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen Controller erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:controller profile_controller
@@ -133,7 +133,7 @@ Dies erstellt einen neuen Controller, falls er noch nicht im Verzeichnis `lib/ap
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Controller ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Controller überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:controller profile_controller --force
@@ -150,7 +150,7 @@ metro make:controller profile_controller --force
 
 ### Ein neues Model erstellen
 
-Sie koennen ein neues Model erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Model erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:model product
@@ -170,7 +170,7 @@ Mit dem `--json`- oder `-j`-Flag wird ein neues Model aus einer JSON-Nutzlast er
 metro make:model product --json
 ```
 
-Dann koennen Sie Ihr JSON in das Terminal einfuegen und es wird ein Model fuer Sie generiert.
+Dann können Sie Ihr JSON in das Terminal einfügen und es wird ein Model für Sie generiert.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -178,7 +178,7 @@ Dann koennen Sie Ihr JSON in das Terminal einfuegen und es wird ein Model fuer S
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Model ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Model überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:model product --force
@@ -198,7 +198,7 @@ metro make:model product --force
 
 ### Eine neue Seite erstellen
 
-Sie koennen eine neue Seite erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue Seite erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:page product_page
@@ -210,7 +210,7 @@ Dies erstellt eine neue Seite, falls sie noch nicht im Verzeichnis `lib/resource
 
 ### Eine Seite mit Controller erstellen
 
-Sie koennen eine neue Seite mit einem Controller erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue Seite mit einem Controller erstellen, indem Sie Folgendes im Terminal ausführen.
 
 **Argumente:**
 
@@ -224,7 +224,7 @@ metro make:page product_page -c
 
 ### Eine Auth-Seite erstellen
 
-Sie koennen eine neue Auth-Seite erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue Auth-Seite erstellen, indem Sie Folgendes im Terminal ausführen.
 
 **Argumente:**
 
@@ -238,7 +238,7 @@ metro make:page login_page -a
 
 ### Eine initiale Seite erstellen
 
-Sie koennen eine neue initiale Seite erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue initiale Seite erstellen, indem Sie Folgendes im Terminal ausführen.
 
 **Argumente:**
 
@@ -254,7 +254,7 @@ metro make:page home_page -i
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird eine vorhandene Seite ueberschrieben, falls sie bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird eine vorhandene Seite überschrieben, falls sie bereits existiert.
 
 ``` bash
 metro make:page product_page --force
@@ -270,7 +270,7 @@ metro make:page product_page --force
 
 ### Ein neues Stateless Widget erstellen
 
-Sie koennen ein neues Stateless Widget erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Stateless Widget erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:stateless_widget product_rating_widget
@@ -292,7 +292,7 @@ Dadurch wird das Widget unter `lib/resources/widgets/login/brand_panel.dart` ers
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:stateless_widget product_rating_widget --force
@@ -309,7 +309,7 @@ metro make:stateless_widget product_rating_widget --force
 
 ### Ein neues Stateful Widget erstellen
 
-Sie koennen ein neues Stateful Widget erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Stateful Widget erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:stateful_widget product_rating_widget
@@ -323,7 +323,7 @@ Das obige erstellt ein neues Widget, falls es noch nicht im Verzeichnis `lib/res
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:stateful_widget product_rating_widget --force
@@ -340,7 +340,7 @@ metro make:stateful_widget product_rating_widget --force
 
 ### Ein neues Journey Widget erstellen
 
-Sie koennen ein neues Journey Widget erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Journey Widget erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:journey_widget product_journey --parent="[NAVIGATION_HUB]"
@@ -351,7 +351,7 @@ metro make:journey_widget welcome,user_dob,user_photos --parent="Base"
 
 Das obige erstellt ein neues Widget, falls es noch nicht im Verzeichnis `lib/resources/widgets/` existiert.
 
-Das `--parent`-Argument wird verwendet, um das uebergeordnete Widget anzugeben, zu dem das neue Journey Widget hinzugefuegt wird.
+Das `--parent`-Argument wird verwendet, um das übergeordnete Widget anzugeben, zu dem das neue Journey Widget hinzugefügt wird.
 
 Beispiel
 
@@ -359,7 +359,7 @@ Beispiel
 metro make:navigation_hub onboarding
 ```
 
-Fuegen Sie als Naechstes die neuen Journey Widgets hinzu.
+Fügen Sie als Nächstes die neuen Journey Widgets hinzu.
 ``` bash
 metro make:journey_widget welcome,user_dob,user_photos --parent="onboarding"
 ```
@@ -368,7 +368,7 @@ metro make:journey_widget welcome,user_dob,user_photos --parent="onboarding"
 
 ### Journey Widget erzwungen erstellen
 **Argumente:**
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:journey_widget product_journey --force --parent="[YOUR_NAVIGATION_HUB]"
@@ -386,7 +386,7 @@ metro make:journey_widget product_journey --force --parent="[YOUR_NAVIGATION_HUB
 
 ### Einen neuen API Service erstellen
 
-Sie koennen einen neuen API Service erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen API Service erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:api_service user_api_service
@@ -398,7 +398,7 @@ Der neu erstellte API Service wird in `lib/app/networking/` abgelegt.
 
 ### Einen neuen API Service mit Model erstellen
 
-Sie koennen einen neuen API Service mit einem Model erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen API Service mit einem Model erstellen, indem Sie Folgendes im Terminal ausführen.
 
 **Argumente:**
 
@@ -414,7 +414,7 @@ Der neu erstellte API Service wird in `lib/app/networking/` abgelegt.
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener API Service ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener API Service überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:api_service user --force
@@ -431,7 +431,7 @@ metro make:api_service user --force
 
 ### Ein neues Event erstellen
 
-Sie koennen ein neues Event erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Event erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:event login_event
@@ -453,7 +453,7 @@ Dadurch wird das Event unter `lib/app/events/auth/login_event.dart` erstellt.
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Event ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Event überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:event login_event --force
@@ -492,7 +492,7 @@ Dadurch wird der Provider unter `lib/app/providers/integrations/firebase_provide
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Provider ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Provider überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:provider firebase_provider --force
@@ -509,7 +509,7 @@ metro make:provider firebase_provider --force
 
 ### Ein neues Formular erstellen
 
-Sie koennen ein neues Formular erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Formular erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:form car_advert_form
@@ -531,7 +531,7 @@ Dadurch wird das Formular unter `lib/app/forms/checkout/car_advert_form.dart` er
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Formular ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Formular überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:form login_form --force
@@ -548,7 +548,7 @@ metro make:form login_form --force
 
 ### Einen neuen Route Guard erstellen
 
-Sie koennen einen Route Guard erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen Route Guard erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:route_guard premium_content
@@ -570,7 +570,7 @@ Dadurch wird der Guard unter `lib/app/route_guards/subscriptions/premium_content
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Route Guard ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Route Guard überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:route_guard premium_content --force
@@ -587,7 +587,7 @@ metro make:route_guard premium_content --force
 
 ### Eine neue Config-Datei erstellen
 
-Sie koennen eine neue Config-Datei erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue Config-Datei erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:config shopping_settings
@@ -601,7 +601,7 @@ Dies erstellt eine neue Config-Datei in `lib/app/config`.
 
 **Argumente:**
 
-Mit dem `--force`- oder `-f`-Flag wird eine vorhandene Config-Datei ueberschrieben, falls sie bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird eine vorhandene Config-Datei überschrieben, falls sie bereits existiert.
 
 ``` bash
 metro make:config app_config --force
@@ -619,7 +619,7 @@ metro make:config app_config --force
 
 ### Einen neuen Command erstellen
 
-Sie koennen einen neuen Command erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen Command erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:command my_command
@@ -632,7 +632,7 @@ Dies erstellt einen neuen Command in `lib/app/commands`.
 ### Command erzwungen erstellen
 
 **Argumente:**
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Command ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Command überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:command my_command --force
@@ -643,13 +643,13 @@ metro make:command my_command --force
 
 ## State Managed Widget erstellen
 
-Sie koennen ein neues State Managed Widget erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues State Managed Widget erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:state_managed_widget product_rating_widget
 ```
 
-Das obige erstellt ein neues Widget in `lib/resources/widgets/`. Das generierte Widget erweitert `NyStateManaged`, das Multi-Instance-Isolation ueber einen `stateName`-Konstruktorparameter unterstuetzt.
+Das obige erstellt ein neues Widget in `lib/resources/widgets/`. Das generierte Widget erweitert `NyStateManaged`, das Multi-Instance-Isolation über einen `stateName`-Konstruktorparameter unterstützt.
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
@@ -680,7 +680,7 @@ class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
   Map<String, Function> get stateActions => {
     "my_action": (data) {},
     "clear_data": () {
-      // Aktionen von ueberall in der App aufrufen
+      // Aktionen von überall in der App aufrufen
       // ProductRatingWidget.action("my_action", data: "hello world");
       // ProductRatingWidget.action("clear_data");
     },
@@ -695,7 +695,7 @@ class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
 }
 ```
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Widget überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:state_managed_widget product_rating_widget --force
@@ -705,13 +705,13 @@ metro make:state_managed_widget product_rating_widget --force
 
 ## Navigation Hub erstellen
 
-Sie koennen einen neuen Navigation Hub erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen Navigation Hub erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:navigation_hub dashboard
 ```
 
-Dies erstellt einen neuen Navigation Hub in `lib/resources/pages/` und fuegt die Route automatisch hinzu.
+Dies erstellt einen neuen Navigation Hub in `lib/resources/pages/` und fügt die Route automatisch hinzu.
 
 **Argumente:**
 
@@ -719,7 +719,7 @@ Dies erstellt einen neuen Navigation Hub in `lib/resources/pages/` und fuegt die
 |------|-------|-------------|
 | `--auth` | `-a` | Als Auth-Seite erstellen |
 | `--initial` | `-i` | Als initiale Seite erstellen |
-| `--force` | `-f` | Ueberschreiben, falls vorhanden |
+| `--force` | `-f` | Überschreiben, falls vorhanden |
 
 ``` bash
 # Create as the initial page
@@ -730,7 +730,7 @@ metro make:navigation_hub dashboard --initial
 
 ## Bottom Sheet Modal erstellen
 
-Sie koennen ein neues Bottom Sheet Modal erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Bottom Sheet Modal erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:bottom_sheet_modal payment_options
@@ -738,7 +738,7 @@ metro make:bottom_sheet_modal payment_options
 
 Dies erstellt ein neues Bottom Sheet Modal in `lib/resources/widgets/`.
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Modal ueberschrieben, falls es bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandenes Modal überschrieben, falls es bereits existiert.
 
 ``` bash
 metro make:bottom_sheet_modal payment_options --force
@@ -748,7 +748,7 @@ metro make:bottom_sheet_modal payment_options --force
 
 ## Button erstellen
 
-Sie koennen ein neues Button-Widget erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können ein neues Button-Widget erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:button checkout_button
@@ -756,7 +756,7 @@ metro make:button checkout_button
 
 Dies erstellt ein neues Button-Widget in `lib/resources/widgets/`.
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Button ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Button überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:button checkout_button --force
@@ -766,7 +766,7 @@ metro make:button checkout_button --force
 
 ## Interceptor erstellen
 
-Sie koennen einen neuen Netzwerk-Interceptor erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können einen neuen Netzwerk-Interceptor erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:interceptor auth_interceptor
@@ -774,7 +774,7 @@ metro make:interceptor auth_interceptor
 
 Dies erstellt einen neuen Interceptor in `lib/app/networking/dio/interceptors/`.
 
-Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Interceptor ueberschrieben, falls er bereits existiert.
+Mit dem `--force`- oder `-f`-Flag wird ein vorhandener Interceptor überschrieben, falls er bereits existiert.
 
 ``` bash
 metro make:interceptor auth_interceptor --force
@@ -784,7 +784,7 @@ metro make:interceptor auth_interceptor --force
 
 ## Env-Datei erstellen
 
-Sie koennen eine neue Umgebungsdatei erstellen, indem Sie Folgendes im Terminal ausfuehren.
+Sie können eine neue Umgebungsdatei erstellen, indem Sie Folgendes im Terminal ausführen.
 
 ``` bash
 metro make:env .env.staging
@@ -796,7 +796,7 @@ Dies erstellt eine neue `.env`-Datei in Ihrem Projektstammverzeichnis.
 
 ## Key generieren
 
-Generieren Sie einen sicheren `APP_KEY` fuer die Umgebungsverschluesselung. Dieser wird fuer verschluesselte `.env`-Dateien in v7 verwendet.
+Generieren Sie einen sicheren `APP_KEY` für die Umgebungsverschlüsselung. Dieser wird für verschlüsselte `.env`-Dateien in v7 verwendet.
 
 ``` bash
 metro make:key
@@ -806,7 +806,7 @@ metro make:key
 
 | Flag / Option | Kurz | Beschreibung |
 |---------------|-------|-------------|
-| `--force` | `-f` | Vorhandenen APP_KEY ueberschreiben |
+| `--force` | `-f` | Vorhandenen APP_KEY überschreiben |
 | `--file` | `-e` | Ziel-.env-Datei (Standard: `.env`) |
 
 ``` bash
@@ -821,7 +821,7 @@ metro make:key --file=.env.production
 
 ## App-Icons erstellen
 
-Sie koennen alle App-Icons fuer iOS und Android generieren, indem Sie den folgenden Befehl ausfuehren.
+Sie können alle App-Icons für iOS und Android generieren, indem Sie den folgenden Befehl ausführen.
 
 ``` bash
 dart run flutter_launcher_icons:main
@@ -833,27 +833,27 @@ Dies verwendet die <b>flutter_icons</b>-Konfiguration in Ihrer `pubspec.yaml`-Da
 
 ## Benutzerdefinierte Commands
 
-Benutzerdefinierte Commands ermoeglichen es Ihnen, die CLI von Nylo mit Ihren eigenen projektspezifischen Befehlen zu erweitern. Diese Funktion ermoeglicht es Ihnen, wiederkehrende Aufgaben zu automatisieren, Deployment-Workflows zu implementieren oder beliebige benutzerdefinierte Funktionalitaet direkt in die Befehlszeilentools Ihres Projekts einzufuegen.
+Benutzerdefinierte Commands ermöglichen es Ihnen, die CLI von Nylo mit Ihren eigenen projektspezifischen Befehlen zu erweitern. Diese Funktion ermöglicht es Ihnen, wiederkehrende Aufgaben zu automatisieren, Deployment-Workflows zu implementieren oder beliebige benutzerdefinierte Funktionalität direkt in die Befehlszeilentools Ihres Projekts einzufügen.
 
 - [Benutzerdefinierte Commands erstellen](#creating-custom-commands)
-- [Benutzerdefinierte Commands ausfuehren](#running-custom-commands)
-- [Optionen zu Commands hinzufuegen](#adding-options-to-custom-commands)
-- [Flags zu Commands hinzufuegen](#adding-flags-to-custom-commands)
+- [Benutzerdefinierte Commands ausführen](#running-custom-commands)
+- [Optionen zu Commands hinzufügen](#adding-options-to-custom-commands)
+- [Flags zu Commands hinzufügen](#adding-flags-to-custom-commands)
 - [Hilfsmethoden](#custom-command-helper-methods)
 
-> **Hinweis:** Sie koennen derzeit nicht nylo_framework.dart in Ihren benutzerdefinierten Commands importieren, verwenden Sie stattdessen bitte ny_cli.dart.
+> **Hinweis:** Sie können derzeit nicht nylo_framework.dart in Ihren benutzerdefinierten Commands importieren, verwenden Sie stattdessen bitte ny_cli.dart.
 
 <div id="creating-custom-commands"></div>
 
 ## Benutzerdefinierte Commands erstellen
 
-Um einen neuen benutzerdefinierten Command zu erstellen, koennen Sie die `make:command`-Funktion verwenden:
+Um einen neuen benutzerdefinierten Command zu erstellen, können Sie die `make:command`-Funktion verwenden:
 
 ```bash
 metro make:command current_time
 ```
 
-Sie koennen mit der `--category`-Option eine Kategorie fuer Ihren Command angeben:
+Sie können mit der `--category`-Option eine Kategorie für Ihren Command angeben:
 
 ```bash
 # Specify a category
@@ -895,7 +895,7 @@ class _CurrentTimeCommand extends NyCustomCommand {
 }
 ```
 
-Der Command wird automatisch in der Datei `lib/app/commands/commands.json` registriert, die eine Liste aller registrierten Commands enthaelt:
+Der Command wird automatisch in der Datei `lib/app/commands/commands.json` registriert, die eine Liste aller registrierten Commands enthält:
 
 ```json
 [
@@ -914,15 +914,15 @@ Der Command wird automatisch in der Datei `lib/app/commands/commands.json` regis
 
 <div id="running-custom-commands"></div>
 
-## Benutzerdefinierte Commands ausfuehren
+## Benutzerdefinierte Commands ausführen
 
-Nach der Erstellung koennen Sie Ihren benutzerdefinierten Command entweder mit der Metro-Kurzform oder dem vollstaendigen Dart-Befehl ausfuehren:
+Nach der Erstellung können Sie Ihren benutzerdefinierten Command entweder mit der Metro-Kurzform oder dem vollständigen Dart-Befehl ausführen:
 
 ```bash
 metro app:current_time
 ```
 
-Wenn Sie `metro` ohne Argumente ausfuehren, sehen Sie Ihre benutzerdefinierten Commands im Menue unter dem Abschnitt "Custom Commands":
+Wenn Sie `metro` ohne Argumente ausführen, sehen Sie Ihre benutzerdefinierten Commands im Menü unter dem Abschnitt "Custom Commands":
 
 ```
 [Custom Commands]
@@ -932,7 +932,7 @@ Wenn Sie `metro` ohne Argumente ausfuehren, sehen Sie Ihre benutzerdefinierten C
   project:deploy
 ```
 
-Um Hilfe-Informationen fuer Ihren Command anzuzeigen, verwenden Sie das `--help`- oder `-h`-Flag:
+Um Hilfe-Informationen für Ihren Command anzuzeigen, verwenden Sie das `--help`- oder `-h`-Flag:
 
 ```bash
 metro project:install_firebase --help
@@ -940,18 +940,18 @@ metro project:install_firebase --help
 
 <div id="adding-options-to-custom-commands"></div>
 
-## Optionen zu Commands hinzufuegen
+## Optionen zu Commands hinzufügen
 
-Optionen ermoeglichen es Ihrem Command, zusaetzliche Eingaben von Benutzern zu akzeptieren. Sie koennen Optionen in der `builder`-Methode hinzufuegen:
+Optionen ermöglichen es Ihrem Command, zusätzliche Eingaben von Benutzern zu akzeptieren. Sie können Optionen in der `builder`-Methode hinzufügen:
 
 ```dart
 @override
 CommandBuilder builder(CommandBuilder command) {
 
-  // Option mit Standardwert hinzufuegen
+  // Option mit Standardwert hinzufügen
   command.addOption(
     'environment',     // Optionsname
-    abbr: 'e',         // Kurzform-Abkuerzung
+    abbr: 'e',         // Kurzform-Abkürzung
     help: 'Target deployment environment', // Hilfetext
     defaultValue: 'development',  // Standardwert
     allowed: ['development', 'staging', 'production'] // erlaubte Werte
@@ -983,9 +983,9 @@ metro project:deploy -e production
 
 <div id="adding-flags-to-custom-commands"></div>
 
-## Flags zu Commands hinzufuegen
+## Flags zu Commands hinzufügen
 
-Flags sind boolesche Optionen, die ein- oder ausgeschaltet werden koennen. Fuegen Sie Flags mit der `addFlag`-Methode hinzu:
+Flags sind boolesche Optionen, die ein- oder ausgeschaltet werden können. Fügen Sie Flags mit der `addFlag`-Methode hinzu:
 
 ```dart
 @override
@@ -993,16 +993,16 @@ CommandBuilder builder(CommandBuilder command) {
 
   command.addFlag(
     'verbose',       // Flag-Name
-    abbr: 'v',       // Kurzform-Abkuerzung
+    abbr: 'v',       // Kurzform-Abkürzung
     help: 'Enable verbose output', // Hilfetext
-    defaultValue: false  // standardmaessig deaktiviert
+    defaultValue: false  // standardmäßig deaktiviert
   );
 
   return command;
 }
 ```
 
-Pruefen Sie dann den Flag-Status in der `handle`-Methode Ihres Commands:
+Prüfen Sie dann den Flag-Status in der `handle`-Methode Ihres Commands:
 
 ```dart
 @override
@@ -1011,7 +1011,7 @@ Future<void> handle(CommandResult result) async {
 
   if (verbose) {
     info('Verbose mode enabled');
-    // Zusaetzliches Logging...
+    // Zusätzliches Logging...
   }
 
   // Command-Implementierung...
@@ -1030,7 +1030,7 @@ metro project:deploy -v
 
 ## Hilfsmethoden
 
-Die Basisklasse `NyCustomCommand` bietet mehrere Hilfsmethoden fuer gaengige Aufgaben:
+Die Basisklasse `NyCustomCommand` bietet mehrere Hilfsmethoden für gängige Aufgaben:
 
 #### Nachrichten ausgeben
 
@@ -1040,63 +1040,63 @@ Hier sind einige Methoden zum Ausgeben von Nachrichten in verschiedenen Farben:
 |-------------|-------------|
 | [`info`](#custom-command-helper-formatting)      | Eine Info-Nachricht in blauem Text ausgeben |
 | [`error`](#custom-command-helper-formatting)     | Eine Fehlernachricht in rotem Text ausgeben |
-| [`success`](#custom-command-helper-formatting)   | Eine Erfolgsnachricht in gruenem Text ausgeben |
+| [`success`](#custom-command-helper-formatting)   | Eine Erfolgsnachricht in grünem Text ausgeben |
 | [`warning`](#custom-command-helper-formatting)   | Eine Warnungsnachricht in gelbem Text ausgeben |
 
-#### Prozesse ausfuehren
+#### Prozesse ausführen
 
-Prozesse ausfuehren und ihre Ausgabe in der Konsole anzeigen:
+Prozesse ausführen und ihre Ausgabe in der Konsole anzeigen:
 
 | |  |
 |-------------|-------------|
-| [`addPackage`](#custom-command-helper-add-package) | Ein Paket zur `pubspec.yaml` hinzufuegen |
-| [`addPackages`](#custom-command-helper-add-packages) | Mehrere Pakete zur `pubspec.yaml` hinzufuegen |
-| [`runProcess`](#custom-command-helper-run-process) | Einen externen Prozess ausfuehren und Ausgabe in der Konsole anzeigen |
+| [`addPackage`](#custom-command-helper-add-package) | Ein Paket zur `pubspec.yaml` hinzufügen |
+| [`addPackages`](#custom-command-helper-add-packages) | Mehrere Pakete zur `pubspec.yaml` hinzufügen |
+| [`runProcess`](#custom-command-helper-run-process) | Einen externen Prozess ausführen und Ausgabe in der Konsole anzeigen |
 | [`prompt`](#custom-command-helper-prompt)    | Benutzereingabe als Text erfassen |
-| [`confirm`](#custom-command-helper-confirm)   | Eine Ja/Nein-Frage stellen und ein boolesches Ergebnis zurueckgeben |
-| [`select`](#custom-command-helper-select)    | Eine Liste von Optionen praesentieren und den Benutzer eine auswaehlen lassen |
-| [`multiSelect`](#custom-command-helper-multi-select) | Den Benutzer mehrere Optionen aus einer Liste auswaehlen lassen |
+| [`confirm`](#custom-command-helper-confirm)   | Eine Ja/Nein-Frage stellen und ein boolesches Ergebnis zurückgeben |
+| [`select`](#custom-command-helper-select)    | Eine Liste von Optionen präsentieren und den Benutzer eine auswählen lassen |
+| [`multiSelect`](#custom-command-helper-multi-select) | Den Benutzer mehrere Optionen aus einer Liste auswählen lassen |
 
 #### Netzwerkanfragen
 
-Netzwerkanfragen ueber die Konsole stellen:
+Netzwerkanfragen über die Konsole stellen:
 
 | |  |
 |-------------|-------------|
-| [`api`](#custom-command-helper-multi-select) | Einen API-Aufruf mit dem Nylo API-Client durchfuehren |
+| [`api`](#custom-command-helper-multi-select) | Einen API-Aufruf mit dem Nylo API-Client durchführen |
 
 
 #### Ladeanzeige
 
-Eine Ladeanzeige waehrend der Ausfuehrung einer Funktion anzeigen:
+Eine Ladeanzeige während der Ausführung einer Funktion anzeigen:
 
 | |  |
 |-------------|-------------|
-| [`withSpinner`](#using-with-spinner) | Eine Ladeanzeige waehrend der Ausfuehrung einer Funktion anzeigen |
-| [`createSpinner`](#manual-spinner-control) | Eine Spinner-Instanz fuer manuelle Steuerung erstellen |
+| [`withSpinner`](#using-with-spinner) | Eine Ladeanzeige während der Ausführung einer Funktion anzeigen |
+| [`createSpinner`](#manual-spinner-control) | Eine Spinner-Instanz für manuelle Steuerung erstellen |
 
-#### Helfer fuer benutzerdefinierte Commands
+#### Helfer für benutzerdefinierte Commands
 
-Sie koennen auch die folgenden Hilfsmethoden verwenden, um Command-Argumente zu verwalten:
+Sie können auch die folgenden Hilfsmethoden verwenden, um Command-Argumente zu verwalten:
 
 | |  |
 |-------------|-------------|
 | [`getString`](#custom-command-helper-get-string) | Einen String-Wert aus den Command-Argumenten abrufen |
 | [`getBool`](#custom-command-helper-get-bool)   | Einen booleschen Wert aus den Command-Argumenten abrufen |
 | [`getInt`](#custom-command-helper-get-int)    | Einen Integer-Wert aus den Command-Argumenten abrufen |
-| [`sleep`](#custom-command-helper-sleep) | Die Ausfuehrung fuer eine bestimmte Dauer pausieren |
+| [`sleep`](#custom-command-helper-sleep) | Die Ausführung für eine bestimmte Dauer pausieren |
 
 
-### Externe Prozesse ausfuehren
+### Externe Prozesse ausführen
 
 ```dart
-// Prozess mit Ausgabe in der Konsole ausfuehren
+// Prozess mit Ausgabe in der Konsole ausführen
 await runProcess('flutter build web --release');
 
-// Prozess lautlos ausfuehren
+// Prozess lautlos ausführen
 await runProcess('flutter pub get', silent: true);
 
-// Prozess in einem bestimmten Verzeichnis ausfuehren
+// Prozess in einem bestimmten Verzeichnis ausführen
 await runProcess('git pull', workingDirectory: './my-project');
 ```
 
@@ -1106,13 +1106,13 @@ await runProcess('git pull', workingDirectory: './my-project');
 <div id="custom-command-helper-add-packages"></div>
 
 ```dart
-// Paket zu pubspec.yaml hinzufuegen
+// Paket zu pubspec.yaml hinzufügen
 addPackage('firebase_core', version: '^2.4.0');
 
-// Entwicklungspaket zu pubspec.yaml hinzufuegen
+// Entwicklungspaket zu pubspec.yaml hinzufügen
 addPackage('build_runner', dev: true);
 
-// Mehrere Pakete auf einmal hinzufuegen
+// Mehrere Pakete auf einmal hinzufügen
 addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 ```
 
@@ -1124,7 +1124,7 @@ addPackages(['firebase_auth', 'firebase_storage', 'quickalert']);
 // Statusmeldungen mit Farbkodierung ausgeben
 info('Processing files...');    // Blauer Text
 error('Operation failed');      // Roter Text
-success('Deployment complete'); // Gruener Text
+success('Deployment complete'); // Grüner Text
 warning('Outdated package');    // Gelber Text
 ```
 
@@ -1132,7 +1132,7 @@ warning('Outdated package');    // Gelber Text
 
 ## Interaktive Eingabemethoden
 
-Die Basisklasse `NyCustomCommand` bietet mehrere Methoden zum Erfassen von Benutzereingaben im Terminal. Diese Methoden erleichtern die Erstellung interaktiver Befehlszeilen-Interfaces fuer Ihre benutzerdefinierten Commands.
+Die Basisklasse `NyCustomCommand` bietet mehrere Methoden zum Erfassen von Benutzereingaben im Terminal. Diese Methoden erleichtern die Erstellung interaktiver Befehlszeilen-Interfaces für Ihre benutzerdefinierten Commands.
 
 <div id="custom-command-helper-prompt"></div>
 
@@ -1146,9 +1146,9 @@ Zeigt dem Benutzer eine Frage an und erfasst seine Textantwort.
 
 **Parameter:**
 - `question`: Die anzuzeigende Frage oder Aufforderung
-- `defaultValue`: Optionaler Standardwert, wenn der Benutzer nur Enter drueckt
+- `defaultValue`: Optionaler Standardwert, wenn der Benutzer nur Enter drückt
 
-**Rueckgabe:** Die Eingabe des Benutzers als String oder der Standardwert, wenn keine Eingabe erfolgte
+**Rückgabe:** Die Eingabe des Benutzers als String oder der Standardwert, wenn keine Eingabe erfolgte
 
 **Beispiel:**
 ```dart
@@ -1158,24 +1158,24 @@ final description = prompt('Enter a project description:');
 
 <div id="custom-command-helper-confirm"></div>
 
-### Bestaetigung
+### Bestätigung
 
 ```dart
 bool confirm(String question, {bool defaultValue = false})
 ```
 
-Stellt dem Benutzer eine Ja/Nein-Frage und gibt ein boolesches Ergebnis zurueck.
+Stellt dem Benutzer eine Ja/Nein-Frage und gibt ein boolesches Ergebnis zurück.
 
 **Parameter:**
 - `question`: Die Ja/Nein-Frage
-- `defaultValue`: Die Standardantwort (true fuer Ja, false fuer Nein)
+- `defaultValue`: Die Standardantwort (true für Ja, false für Nein)
 
-**Rueckgabe:** `true`, wenn der Benutzer mit Ja geantwortet hat, `false`, wenn er mit Nein geantwortet hat
+**Rückgabe:** `true`, wenn der Benutzer mit Ja geantwortet hat, `false`, wenn er mit Nein geantwortet hat
 
 **Beispiel:**
 ```dart
 if (confirm('Would you like to continue?', defaultValue: true)) {
-  // Benutzer hat bestaetigt oder Enter gedrueckt (Standardwert akzeptiert)
+  // Benutzer hat bestätigt oder Enter gedrückt (Standardwert akzeptiert)
   await runProcess('flutter pub get');
 } else {
   // Benutzer hat abgelehnt
@@ -1191,14 +1191,14 @@ if (confirm('Would you like to continue?', defaultValue: true)) {
 String select(String question, List<String> options, {String? defaultOption})
 ```
 
-Praesentiert eine Liste von Optionen und laesst den Benutzer eine auswaehlen.
+Präsentiert eine Liste von Optionen und lässt den Benutzer eine auswählen.
 
 **Parameter:**
 - `question`: Die Auswahlaufforderung
-- `options`: Liste der verfuegbaren Optionen
+- `options`: Liste der verfügbaren Optionen
 - `defaultOption`: Optionale Standardauswahl
 
-**Rueckgabe:** Die ausgewaehlte Option als String
+**Rückgabe:** Die ausgewählte Option als String
 
 **Beispiel:**
 ```dart
@@ -1219,13 +1219,13 @@ info('Deploying to $environment environment...');
 List<String> multiSelect(String question, List<String> options)
 ```
 
-Ermoeglicht dem Benutzer, mehrere Optionen aus einer Liste auszuwaehlen.
+Ermöglicht dem Benutzer, mehrere Optionen aus einer Liste auszuwählen.
 
 **Parameter:**
 - `question`: Die Auswahlaufforderung
-- `options`: Liste der verfuegbaren Optionen
+- `options`: Liste der verfügbaren Optionen
 
-**Rueckgabe:** Eine Liste der ausgewaehlten Optionen
+**Rückgabe:** Eine Liste der ausgewählten Optionen
 
 **Beispiel:**
 ```dart
@@ -1289,7 +1289,7 @@ final updateResult = await api((request) =>
 ### DELETE-Anfrage
 
 ```dart
-// Ressource loeschen
+// Ressource löschen
 final deleteResult = await api((request) => request.delete('https://api.example.com/items/42'));
 ```
 
@@ -1307,7 +1307,7 @@ final patchResult = await api((request) => request.patch(
 ### Mit Query-Parametern
 
 ```dart
-// Query-Parameter hinzufuegen
+// Query-Parameter hinzufügen
 final searchResults = await api((request) => request.get(
     'https://api.example.com/search',
     queryParameters: {'q': 'keyword', 'limit': 10}
@@ -1318,7 +1318,7 @@ final searchResults = await api((request) => request.get(
 ### Mit Spinner
 
 ```dart
-// Mit Spinner fuer bessere Benutzeroberflaechenerfahrung verwenden
+// Mit Spinner für bessere Benutzeroberflächenerfahrung verwenden
 final data = await withSpinner(
   task: () async {
     final data = await api((request) => request.get('https://api.example.com/config'));
@@ -1331,9 +1331,9 @@ final data = await withSpinner(
 
 <div id="using-spinners"></div>
 
-## Spinner-Funktionalitaet
+## Spinner-Funktionalität
 
-Spinner bieten visuelles Feedback waehrend lang laufender Operationen in Ihren benutzerdefinierten Commands. Sie zeigen einen animierten Indikator zusammen mit einer Nachricht an, waehrend Ihr Command asynchrone Aufgaben ausfuehrt, und verbessern die Benutzererfahrung durch Anzeige von Fortschritt und Status.
+Spinner bieten visuelles Feedback während lang laufender Operationen in Ihren benutzerdefinierten Commands. Sie zeigen einen animierten Indikator zusammen mit einer Nachricht an, während Ihr Command asynchrone Aufgaben ausführt, und verbessern die Benutzererfahrung durch Anzeige von Fortschritt und Status.
 
 - [Mit Spinner verwenden](#using-with-spinner)
 - [Manuelle Spinner-Steuerung](#manual-spinner-control)
@@ -1343,7 +1343,7 @@ Spinner bieten visuelles Feedback waehrend lang laufender Operationen in Ihren b
 
 ## Mit Spinner verwenden
 
-Die `withSpinner`-Methode ermoeglicht es Ihnen, eine asynchrone Aufgabe mit einer Spinner-Animation zu umschliessen, die automatisch startet, wenn die Aufgabe beginnt, und stoppt, wenn sie abgeschlossen ist oder fehlschlaegt:
+Die `withSpinner`-Methode ermöglicht es Ihnen, eine asynchrone Aufgabe mit einer Spinner-Animation zu umschließen, die automatisch startet, wenn die Aufgabe beginnt, und stoppt, wenn sie abgeschlossen ist oder fehlschlägt:
 
 ```dart
 Future<T> withSpinner<T>({
@@ -1355,21 +1355,21 @@ Future<T> withSpinner<T>({
 ```
 
 **Parameter:**
-- `task`: Die auszufuehrende asynchrone Funktion
-- `message`: Text, der waehrend des Spinner-Laufs angezeigt wird
+- `task`: Die auszuführende asynchrone Funktion
+- `message`: Text, der während des Spinner-Laufs angezeigt wird
 - `successMessage`: Optionale Nachricht bei erfolgreichem Abschluss
 - `errorMessage`: Optionale Nachricht bei Fehlschlag der Aufgabe
 
-**Rueckgabe:** Das Ergebnis der Task-Funktion
+**Rückgabe:** Das Ergebnis der Task-Funktion
 
 **Beispiel:**
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Aufgabe mit Spinner ausfuehren
+  // Aufgabe mit Spinner ausführen
   final projectFiles = await withSpinner(
     task: () async {
-      // Lang laufende Aufgabe (z.B. Projektdateien analysieren)
+      // Lang laufende Aufgabe (z. B. Projektdateien analysieren)
       await sleep(2);
       return ['pubspec.yaml', 'lib/main.dart', 'README.md'];
     },
@@ -1387,16 +1387,16 @@ Future<void> handle(CommandResult result) async {
 
 ## Manuelle Spinner-Steuerung
 
-Fuer komplexere Szenarien, in denen Sie den Spinner-Status manuell steuern muessen, koennen Sie eine Spinner-Instanz erstellen:
+Für komplexere Szenarien, in denen Sie den Spinner-Status manuell steuern müssen, können Sie eine Spinner-Instanz erstellen:
 
 ```dart
 ConsoleSpinner createSpinner(String message)
 ```
 
 **Parameter:**
-- `message`: Text, der waehrend des Spinner-Laufs angezeigt wird
+- `message`: Text, der während des Spinner-Laufs angezeigt wird
 
-**Rueckgabe:** Eine `ConsoleSpinner`-Instanz, die Sie manuell steuern koennen
+**Rückgabe:** Eine `ConsoleSpinner`-Instanz, die Sie manuell steuern können
 
 **Beispiel mit manueller Steuerung:**
 ```dart
@@ -1418,7 +1418,7 @@ Future<void> handle(CommandResult result) async {
     // Dritte Aufgabe
     await runProcess('./deploy.sh', silent: true);
 
-    // Erfolgreich abschliessen
+    // Erfolgreich abschließen
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
   } catch (e) {
     // Fehler behandeln
@@ -1439,7 +1439,7 @@ Future<void> handle(CommandResult result) async {
 Future<void> handle(CommandResult result) async {
   await withSpinner(
     task: () async {
-      // Abhaengigkeiten installieren
+      // Abhängigkeiten installieren
       await runProcess('flutter pub get', silent: true);
       return true;
     },
@@ -1491,7 +1491,7 @@ Future<void> handle(CommandResult result) async {
   spinner.start();
 
   try {
-    // Mehrere Schritte mit Statusaktualisierungen ausfuehren
+    // Mehrere Schritte mit Statusaktualisierungen ausführen
     spinner.update('Step 1: Cleaning project');
     await runProcess('flutter clean', silent: true);
 
@@ -1501,7 +1501,7 @@ Future<void> handle(CommandResult result) async {
     spinner.update('Step 3: Building release');
     await runProcess('flutter build web --release', silent: true);
 
-    // Prozess abschliessen
+    // Prozess abschließen
     spinner.stop(completionMessage: 'Deployment completed successfully', success: true);
 
   } catch (e) {
@@ -1510,7 +1510,7 @@ Future<void> handle(CommandResult result) async {
 }
 ```
 
-Die Verwendung von Spinnern in Ihren benutzerdefinierten Commands bietet klares visuelles Feedback fuer Benutzer waehrend lang laufender Operationen und schafft ein professionelleres Befehlszeilenerlebnis.
+Die Verwendung von Spinnern in Ihren benutzerdefinierten Commands bietet klares visuelles Feedback für Benutzer während lang laufender Operationen und schafft ein professionelleres Befehlszeilenerlebnis.
 
 <div id="custom-command-helper-get-string"></div>
 
@@ -1525,7 +1525,7 @@ String getString(String name, {String defaultValue = ''})
 - `name`: Der Name der abzurufenden Option
 - `defaultValue`: Optionaler Standardwert, wenn die Option nicht angegeben wurde
 
-**Rueckgabe:** Der Wert der Option als String
+**Rückgabe:** Der Wert der Option als String
 
 **Beispiel:**
 ```dart
@@ -1553,7 +1553,7 @@ bool getBool(String name, {bool defaultValue = false})
 - `name`: Der Name der abzurufenden Option
 - `defaultValue`: Optionaler Standardwert, wenn die Option nicht angegeben wurde
 
-**Rueckgabe:** Der Wert der Option als Boolean
+**Rückgabe:** Der Wert der Option als Boolean
 
 
 **Beispiel:**
@@ -1586,7 +1586,7 @@ int getInt(String name, {int defaultValue = 0})
 - `name`: Der Name der abzurufenden Option
 - `defaultValue`: Optionaler Standardwert, wenn die Option nicht angegeben wurde
 
-**Rueckgabe:** Der Wert der Option als Integer
+**Rückgabe:** Der Wert der Option als Integer
 
 **Beispiel:**
 ```dart
@@ -1604,7 +1604,7 @@ Future<void> handle(CommandResult result) async {
 
 <div id="custom-command-helper-sleep"></div>
 
-### Fuer eine bestimmte Dauer pausieren
+### Für eine bestimmte Dauer pausieren
 
 ```dart
 void sleep(int seconds)
@@ -1613,7 +1613,7 @@ void sleep(int seconds)
 **Parameter:**
 - `seconds`: Die Anzahl der Sekunden zum Pausieren
 
-**Rueckgabe:** Keine
+**Rückgabe:** Keine
 
 **Beispiel:**
 ```dart
@@ -1629,7 +1629,7 @@ Future<void> handle(CommandResult result) async {
 
 ## Ausgabeformatierung
 
-Ueber die grundlegenden `info`-, `error`-, `success`- und `warning`-Methoden hinaus bietet `NyCustomCommand` zusaetzliche Ausgabe-Helfer:
+Über die grundlegenden `info`-, `error`-, `success`- und `warning`-Methoden hinaus bietet `NyCustomCommand` zusätzliche Ausgabe-Helfer:
 
 ```dart
 @override
@@ -1641,16 +1641,16 @@ Future<void> handle(CommandResult result) async {
   newLine();       // eine Leerzeile
   newLine(3);      // drei Leerzeilen
 
-  // Gedaempften Kommentar ausgeben (grauer Text)
+  // Gedämpften Kommentar ausgeben (grauer Text)
   comment('This is a background note');
 
-  // Auffaelligen Alarmkasten ausgeben
+  // Auffälligen Alarmkasten ausgeben
   alert('Important: Please read carefully');
 
-  // Ask ist ein Alias fuer prompt
+  // Ask ist ein Alias für prompt
   final name = ask('What is your name?');
 
-  // Versteckte Eingabe fuer sensible Daten (z.B. Passwoerter, API-Schluessels)
+  // Versteckte Eingabe für sensible Daten (z. B. Passwörter, API-Schlüssel)
   final apiKey = promptSecret('Enter your API key:');
 
   // Command mit Fehlermeldung und Exit-Code abbrechen
@@ -1664,29 +1664,29 @@ Future<void> handle(CommandResult result) async {
 |---------|-------------|
 | `line(String message)` | Einfachen Text ohne Farbe ausgeben |
 | `newLine([int count = 1])` | Leerzeilen ausgeben |
-| `comment(String message)` | Gedaempften/grauen Text ausgeben |
-| `alert(String message)` | Einen auffaelligen Alarmkasten ausgeben |
-| `ask(String question, {String defaultValue})` | Alias fuer `prompt` |
-| `promptSecret(String question)` | Versteckte Eingabe fuer sensible Daten |
+| `comment(String message)` | Gedämpften/grauen Text ausgeben |
+| `alert(String message)` | Einen auffälligen Alarmkasten ausgeben |
+| `ask(String question, {String defaultValue})` | Alias für `prompt` |
+| `promptSecret(String question)` | Versteckte Eingabe für sensible Daten |
 | `abort([String? message, int exitCode = 1])` | Den Command mit einem Fehler beenden |
 
 <div id="file-system-helpers"></div>
 
 ## Dateisystem-Helfer
 
-`NyCustomCommand` enthaelt eingebaute Dateisystem-Helfer, sodass Sie `dart:io` nicht manuell fuer gaengige Operationen importieren muessen.
+`NyCustomCommand` enthält eingebaute Dateisystem-Helfer, sodass Sie `dart:io` nicht manuell für gängige Operationen importieren müssen.
 
 ### Dateien lesen und schreiben
 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Pruefen, ob eine Datei existiert
+  // Prüfen, ob eine Datei existiert
   if (fileExists('lib/config/app.dart')) {
     info('Config file found');
   }
 
-  // Pruefen, ob ein Verzeichnis existiert
+  // Prüfen, ob ein Verzeichnis existiert
   if (directoryExists('lib/app/models')) {
     info('Models directory found');
   }
@@ -1703,13 +1703,13 @@ Future<void> handle(CommandResult result) async {
   // In eine Datei schreiben (synchron)
   writeFileSync('lib/generated/output.dart', 'class Output {}');
 
-  // Inhalt an eine Datei anhaengen
+  // Inhalt an eine Datei anhängen
   await appendFile('log.txt', 'New log entry\n');
 
   // Sicherstellen, dass ein Verzeichnis existiert (erstellt es, falls nicht vorhanden)
   await ensureDirectory('lib/generated');
 
-  // Eine Datei loeschen
+  // Eine Datei löschen
   await deleteFile('lib/generated/output.dart');
 
   // Eine Datei kopieren
@@ -1719,15 +1719,15 @@ Future<void> handle(CommandResult result) async {
 
 | Methode | Beschreibung |
 |---------|-------------|
-| `fileExists(String path)` | Gibt `true` zurueck, wenn die Datei existiert |
-| `directoryExists(String path)` | Gibt `true` zurueck, wenn das Verzeichnis existiert |
+| `fileExists(String path)` | Gibt `true` zurück, wenn die Datei existiert |
+| `directoryExists(String path)` | Gibt `true` zurück, wenn das Verzeichnis existiert |
 | `readFile(String path)` | Datei als String lesen (async) |
 | `readFileSync(String path)` | Datei als String lesen (sync) |
 | `writeFile(String path, String content)` | Inhalt in Datei schreiben (async) |
 | `writeFileSync(String path, String content)` | Inhalt in Datei schreiben (sync) |
-| `appendFile(String path, String content)` | Inhalt an Datei anhaengen |
+| `appendFile(String path, String content)` | Inhalt an Datei anhängen |
 | `ensureDirectory(String path)` | Verzeichnis erstellen, falls nicht vorhanden |
-| `deleteFile(String path)` | Eine Datei loeschen |
+| `deleteFile(String path)` | Eine Datei löschen |
 | `copyFile(String source, String destination)` | Eine Datei kopieren |
 
 <div id="json-yaml-helpers"></div>
@@ -1745,14 +1745,14 @@ Future<void> handle(CommandResult result) async {
   // JSON-Datei als Liste lesen
   List<dynamic> items = await readJsonArray('lib/app/commands/commands.json');
 
-  // Daten in eine JSON-Datei schreiben (standardmaessig als pretty-print)
+  // Daten in eine JSON-Datei schreiben (standardmäßig als pretty-print)
   await writeJson('output.json', {'name': 'MyApp', 'version': '1.0.0'});
 
   // Kompaktes JSON schreiben
   await writeJson('output.json', data, pretty: false);
 
-  // Ein Element an eine JSON-Array-Datei anhaengen
-  // Falls die Datei [{"name": "a"}] enthaelt, wird dies dem Array hinzugefuegt
+  // Ein Element an eine JSON-Array-Datei anhängen
+  // Falls die Datei [{"name": "a"}] enthält, wird dies dem Array hinzugefügt
   await appendToJsonArray(
     'lib/app/commands/commands.json',
     {'name': 'my_command', 'category': 'app', 'script': 'my_command.dart'},
@@ -1770,14 +1770,14 @@ Future<void> handle(CommandResult result) async {
 | `readJson(String path)` | JSON-Datei als `Map<String, dynamic>` lesen |
 | `readJsonArray(String path)` | JSON-Datei als `List<dynamic>` lesen |
 | `writeJson(String path, dynamic data, {bool pretty = true})` | Daten als JSON schreiben |
-| `appendToJsonArray(String path, Map item, {String? uniqueKey})` | An eine JSON-Array-Datei anhaengen |
+| `appendToJsonArray(String path, Map item, {String? uniqueKey})` | An eine JSON-Array-Datei anhängen |
 | `readYaml(String path)` | YAML-Datei als `Map<String, dynamic>` lesen |
 
 <div id="case-conversion-helpers"></div>
 
-## Gross-/Kleinschreibungs-Konvertierungshelfer
+## Groß-/Kleinschreibungs-Konvertierungshelfer
 
-Strings zwischen Namenskonventionen konvertieren, ohne das `recase`-Paket importieren zu muessen.
+Strings zwischen Namenskonventionen konvertieren, ohne das `recase`-Paket importieren zu müssen.
 
 ```dart
 @override
@@ -1806,7 +1806,7 @@ Future<void> handle(CommandResult result) async {
 
 ## Projektpfad-Helfer
 
-Getter fuer Standard-{{ config('app.name') }}-Projektverzeichnisse. Diese geben Pfade relativ zum Projektstamm zurueck.
+Getter für Standard-{{ config('app.name') }}-Projektverzeichnisse. Diese geben Pfade relativ zum Projektstamm zurück.
 
 ```dart
 @override
@@ -1839,18 +1839,18 @@ Future<void> handle(CommandResult result) async {
 | `eventsPath` | `lib/app/events` |
 | `networkingPath` | `lib/app/networking` |
 | `themesPath` | `lib/resources/themes` |
-| `projectPath(String relativePath)` | Einen relativen Pfad innerhalb des Projekts aufloesen |
+| `projectPath(String relativePath)` | Einen relativen Pfad innerhalb des Projekts auflösen |
 
 <div id="platform-helpers"></div>
 
 ## Plattform-Helfer
 
-Plattform pruefen und auf Umgebungsvariablen zugreifen.
+Plattform prüfen und auf Umgebungsvariablen zugreifen.
 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Plattform-Pruefungen
+  // Plattform-Prüfungen
   if (isWindows) {
     info('Running on Windows');
   } else if (isMacOS) {
@@ -1869,9 +1869,9 @@ Future<void> handle(CommandResult result) async {
 
 | Eigenschaft / Methode | Beschreibung |
 |----------------------|-------------|
-| `isWindows` | `true`, wenn auf Windows ausgefuehrt |
-| `isMacOS` | `true`, wenn auf macOS ausgefuehrt |
-| `isLinux` | `true`, wenn auf Linux ausgefuehrt |
+| `isWindows` | `true`, wenn auf Windows ausgeführt |
+| `isMacOS` | `true`, wenn auf macOS ausgeführt |
+| `isLinux` | `true`, wenn auf Linux ausgeführt |
 | `workingDirectory` | Aktueller Arbeitsverzeichnispfad |
 | `env(String key, [String defaultValue = ''])` | System-Umgebungsvariable lesen |
 
@@ -1879,7 +1879,7 @@ Future<void> handle(CommandResult result) async {
 
 ## Dart- und Flutter-Befehle
 
-Gaengige Dart- und Flutter-CLI-Befehle als Hilfsmethoden ausfuehren. Jede gibt den Prozess-Exit-Code zurueck.
+Gängige Dart- und Flutter-CLI-Befehle als Hilfsmethoden ausführen. Jede gibt den Prozess-Exit-Code zurück.
 
 ```dart
 @override
@@ -1887,20 +1887,20 @@ Future<void> handle(CommandResult result) async {
   // Eine Dart-Datei oder ein Verzeichnis formatieren
   await dartFormat('lib/app/models/user.dart');
 
-  // dart analyze ausfuehren
+  // dart analyze ausführen
   int analyzeResult = await dartAnalyze('lib/');
 
-  // flutter pub get ausfuehren
+  // flutter pub get ausführen
   await flutterPubGet();
 
-  // flutter clean ausfuehren
+  // flutter clean ausführen
   await flutterClean();
 
-  // Fuer ein Ziel mit zusaetzlichen Argumenten bauen
+  // Für ein Ziel mit zusätzlichen Argumenten bauen
   await flutterBuild('apk', args: ['--release', '--split-per-abi']);
   await flutterBuild('web', args: ['--release']);
 
-  // flutter test ausfuehren
+  // flutter test ausführen
   await flutterTest();
   await flutterTest('test/unit/');  // bestimmtes Verzeichnis
 }
@@ -1908,42 +1908,42 @@ Future<void> handle(CommandResult result) async {
 
 | Methode | Beschreibung |
 |---------|-------------|
-| `dartFormat(String path)` | `dart format` auf eine Datei oder ein Verzeichnis ausfuehren |
-| `dartAnalyze([String? path])` | `dart analyze` ausfuehren |
-| `flutterPubGet()` | `flutter pub get` ausfuehren |
-| `flutterClean()` | `flutter clean` ausfuehren |
-| `flutterBuild(String target, {List<String> args})` | `flutter build <target>` ausfuehren |
-| `flutterTest([String? path])` | `flutter test` ausfuehren |
+| `dartFormat(String path)` | `dart format` auf eine Datei oder ein Verzeichnis ausführen |
+| `dartAnalyze([String? path])` | `dart analyze` ausführen |
+| `flutterPubGet()` | `flutter pub get` ausführen |
+| `flutterClean()` | `flutter clean` ausführen |
+| `flutterBuild(String target, {List<String> args})` | `flutter build <target>` ausführen |
+| `flutterTest([String? path])` | `flutter test` ausführen |
 
 <div id="dart-file-manipulation"></div>
 
 ## Dart-Dateimanipulation
 
-Helfer zum programmatischen Bearbeiten von Dart-Dateien, nuetzlich beim Erstellen von Scaffolding-Tools.
+Helfer zum programmatischen Bearbeiten von Dart-Dateien, nützlich beim Erstellen von Scaffolding-Tools.
 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Import-Anweisung zu einer Dart-Datei hinzufuegen (vermeidet Duplikate)
+  // Import-Anweisung zu einer Dart-Datei hinzufügen (vermeidet Duplikate)
   await addImport(
     'lib/bootstrap/providers.dart',
     "import '/app/providers/firebase_provider.dart';",
   );
 
-  // Code vor der letzten schliessenden Klammer in einer Datei einfuegen
-  // Nuetzlich zum Hinzufuegen von Eintraegen in Registrierungs-Maps
+  // Code vor der letzten schließenden Klammer in einer Datei einfügen
+  // Nützlich zum Hinzufügen von Einträgen in Registrierungs-Maps
   await insertBeforeClosingBrace(
     'lib/bootstrap/providers.dart',
     '  FirebaseProvider(),',
   );
 
-  // Pruefen, ob eine Datei einen bestimmten String enthaelt
+  // Prüfen, ob eine Datei einen bestimmten String enthält
   bool hasImport = await fileContains(
     'lib/bootstrap/providers.dart',
     'firebase_provider',
   );
 
-  // Pruefen, ob eine Datei einem Regex-Pattern entspricht
+  // Prüfen, ob eine Datei einem Regex-Pattern entspricht
   bool hasClass = await fileContainsPattern(
     'lib/app/models/user.dart',
     RegExp(r'class User'),
@@ -1953,16 +1953,16 @@ Future<void> handle(CommandResult result) async {
 
 | Methode | Beschreibung |
 |---------|-------------|
-| `addImport(String filePath, String importStatement)` | Import zu Dart-Datei hinzufuegen (ueberspringt, wenn bereits vorhanden) |
-| `insertBeforeClosingBrace(String filePath, String code)` | Code vor letzter `}` in Datei einfuegen |
-| `fileContains(String filePath, String identifier)` | Pruefen, ob Datei einen String enthaelt |
-| `fileContainsPattern(String filePath, Pattern pattern)` | Pruefen, ob Datei einem Pattern entspricht |
+| `addImport(String filePath, String importStatement)` | Import zu Dart-Datei hinzufügen (überspringt, wenn bereits vorhanden) |
+| `insertBeforeClosingBrace(String filePath, String code)` | Code vor letzter `}` in Datei einfügen |
+| `fileContains(String filePath, String identifier)` | Prüfen, ob Datei einen String enthält |
+| `fileContainsPattern(String filePath, Pattern pattern)` | Prüfen, ob Datei einem Pattern entspricht |
 
 <div id="directory-helpers"></div>
 
 ## Verzeichnis-Helfer
 
-Helfer fuer die Arbeit mit Verzeichnissen und das Finden von Dateien.
+Helfer für die Arbeit mit Verzeichnissen und das Finden von Dateien.
 
 ```dart
 @override
@@ -1989,7 +1989,7 @@ Future<void> handle(CommandResult result) async {
     namePattern: RegExp(r'_test\.dart$'),
   );
 
-  // Verzeichnis rekursiv loeschen
+  // Verzeichnis rekursiv löschen
   await deleteDirectory('build/');
 
   // Verzeichnis kopieren (rekursiv)
@@ -2001,14 +2001,14 @@ Future<void> handle(CommandResult result) async {
 |---------|-------------|
 | `listDirectory(String path, {bool recursive = false})` | Verzeichnisinhalte auflisten |
 | `findFiles(String directory, {String? extension, Pattern? namePattern, bool recursive = true})` | Dateien nach Kriterien finden |
-| `deleteDirectory(String path)` | Verzeichnis rekursiv loeschen |
+| `deleteDirectory(String path)` | Verzeichnis rekursiv löschen |
 | `copyDirectory(String source, String destination)` | Verzeichnis rekursiv kopieren |
 
 <div id="validation-helpers"></div>
 
 ## Validierungs-Helfer
 
-Helfer zum Validieren und Bereinigen von Benutzereingaben fuer die Code-Generierung.
+Helfer zum Validieren und Bereinigen von Benutzereingaben für die Code-Generierung.
 
 ```dart
 @override
@@ -2023,11 +2023,11 @@ Future<void> handle(CommandResult result) async {
 
   // Klassenname bereinigen (PascalCase, Suffixe entfernen)
   String className = cleanClassName('user_model', removeSuffixes: ['_model']);
-  // Gibt zurueck: 'User'
+  // Gibt zurück: 'User'
 
   // Dateiname bereinigen (snake_case mit Erweiterung)
   String fileName = cleanFileName('UserModel', extension: '.dart');
-  // Gibt zurueck: 'user_model.dart'
+  // Gibt zurück: 'user_model.dart'
 }
 ```
 
@@ -2035,7 +2035,7 @@ Future<void> handle(CommandResult result) async {
 |---------|-------------|
 | `isValidDartIdentifier(String name)` | Einen Dart-Bezeichnernamen validieren |
 | `requireArgument(CommandResult result, {String? message})` | Nicht-leeres erstes Argument erfordern oder abbrechen |
-| `cleanClassName(String name, {List<String> removeSuffixes})` | Einen Klassennamen bereinigen und in PascalCase konvertieren |
+| `cleanClassName(String name, {List<String> removeSuffixes})` | Einen Klassennamen bereinigen und in PascalCase umwandeln |
 | `cleanFileName(String name, {String extension = '.dart'})` | Einen Dateinamen bereinigen und in snake_case konvertieren |
 
 <div id="file-scaffolding"></div>
@@ -2097,7 +2097,7 @@ Die `ScaffoldFile`-Klasse akzeptiert:
 
 ## Task-Runner
 
-Eine Reihe benannter Aufgaben mit automatischer Statusausgabe ausfuehren.
+Eine Reihe benannter Aufgaben mit automatischer Statusausgabe ausführen.
 
 ### Grundlegender Task-Runner
 
@@ -2148,8 +2148,8 @@ Die `CommandTask`-Klasse akzeptiert:
 | Eigenschaft | Typ | Standard | Beschreibung |
 |------------|------|---------|-------------|
 | `name` | `String` | erforderlich | In der Ausgabe angezeigter Aufgabenname |
-| `action` | `Future<void> Function()` | erforderlich | Auszufuehrende asynchrone Funktion |
-| `stopOnError` | `bool` | `true` | Ob verbleibende Aufgaben gestoppt werden sollen, wenn diese fehlschlaegt |
+| `action` | `Future<void> Function()` | erforderlich | Auszuführende asynchrone Funktion |
+| `stopOnError` | `bool` | `true` | Ob verbleibende Aufgaben gestoppt werden sollen, wenn diese fehlschlägt |
 
 <div id="table-output"></div>
 
@@ -2187,20 +2187,20 @@ Ausgabe:
 
 ## Fortschrittsbalken
 
-Einen Fortschrittsbalken fuer Operationen mit bekannter Elementanzahl anzeigen.
+Einen Fortschrittsbalken für Operationen mit bekannter Elementanzahl anzeigen.
 
 ### Manueller Fortschrittsbalken
 
 ```dart
 @override
 Future<void> handle(CommandResult result) async {
-  // Fortschrittsbalken fuer 100 Elemente erstellen
+  // Fortschrittsbalken für 100 Elemente erstellen
   final progress = progressBar(100, message: 'Processing files');
   progress.start();
 
   for (int i = 0; i < 100; i++) {
     await Future.delayed(Duration(milliseconds: 50));
-    progress.tick();  // um 1 erhoehen
+    progress.tick();  // um 1 erhöhen
   }
 
   progress.complete('All files processed');
@@ -2254,10 +2254,10 @@ Die `ConsoleProgressBar`-Klasse bietet:
 | Methode | Beschreibung |
 |---------|-------------|
 | `start()` | Den Fortschrittsbalken starten |
-| `tick([int amount = 1])` | Fortschritt erhoehen |
+| `tick([int amount = 1])` | Fortschritt erhöhen |
 | `update(int value)` | Fortschritt auf einen bestimmten Wert setzen |
-| `updateMessage(String newMessage)` | Die angezeigte Nachricht aendern |
-| `complete([String? completionMessage])` | Mit optionaler Nachricht abschliessen |
+| `updateMessage(String newMessage)` | Die angezeigte Nachricht ändern |
+| `complete([String? completionMessage])` | Mit optionaler Nachricht abschließen |
 | `stop()` | Ohne Abschluss stoppen |
 | `current` | Aktueller Fortschrittswert (Getter) |
 | `percentage` | Fortschritt als Prozentsatz (Getter) |

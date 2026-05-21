@@ -240,7 +240,6 @@ Bu varsayılanların ötesinde alanlar eklemek için — kendi düğmeleriniz, s
 
 ## Renk stillerini genişletme
 
-<!-- uncertain: new section "extending-color-styles" — no prior locale paragraphs in this file to draw register from -->
 Üç varsayılan grup (`general`, `appBar`, `bottomTabBar`) bir başlangıç noktasıdır, katı bir sınır değildir. `lib/resources/themes/color_styles.dart` dosyası sizindir — varsayılanların üzerine yeni renk grupları (veya tek alanlar) ekleyin, ardından her temanın renk sınıfında bunları uygulayın.
 
 **1. Özel bir renk grubu tanımlayın**

@@ -397,7 +397,6 @@ static ToastStyleFactory style({
 
 ### สไตล์ Toast แบบรับข้อมูลจากรันไทม์
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 ใช้ `ToastStyleDataFactory` เพื่อลงทะเบียนสไตล์ toast ที่รับข้อมูลจากรันไทม์ในขณะที่ถูกเรียก ซึ่งเป็นประโยชน์เมื่อเนื้อหา toast — เช่น ชื่อหรือรูปโปรไฟล์ของผู้ใช้ — ยังไม่ทราบในเวลาลงทะเบียน
 
 ``` dart

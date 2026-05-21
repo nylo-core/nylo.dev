@@ -114,7 +114,7 @@ v6과 v7 사이의 변경 사항 비교를 보려면, GitHub에서 비교를 확
 
 이 체크리스트를 사용하여 마이그레이션 진행 상황을 추적하세요:
 
-- [ ] `pubspec.yaml` 업데이트 (Dart >=3.10.7, Flutter >=3.24.0, nylo_framework: ^7.0.0)
+- [ ] `pubspec.yaml` 업데이트 (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
 - [ ] `flutter pub get` 실행
 - [ ] `metro make:key` 실행하여 APP_KEY 생성
 - [ ] `metro make:env` 실행하여 암호화된 환경 생성
@@ -150,7 +150,7 @@ v6과 v7 사이의 변경 사항 비교를 보려면, GitHub에서 비교를 확
 ``` yaml
 environment:
   sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.24.0"
+  flutter: ">=3.38.4"
 
 dependencies:
   nylo_framework: ^7.0.0

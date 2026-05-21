@@ -11,7 +11,7 @@
   - [Widget-Test-Hilfsmittel](#widget-testing-utilities "Widget-Test-Hilfsmittel")
   - [nyGroup](#ny-group "nyGroup")
   - [Test-Lebenszyklus](#test-lifecycle "Test-Lebenszyklus")
-  - [Tests ueberspringen und CI-Tests](#skipping-tests "Tests ueberspringen und CI-Tests")
+  - [Tests überspringen und CI-Tests](#skipping-tests "Tests überspringen und CI-Tests")
 - [Authentifizierung](#authentication "Authentifizierung")
 - [Zeitreisen](#time-travel "Zeitreisen")
 - [API-Mocking](#api-mocking "API-Mocking")
@@ -20,7 +20,7 @@
   - [Aufrufverlauf und Assertions](#call-history "Aufrufverlauf und Assertions")
 - [Factories](#factories "Factories")
   - [Factories definieren](#defining-factories "Factories definieren")
-  - [Factory-Zustaende](#factory-states "Factory-Zustaende")
+  - [Factory-Zustände](#factory-states "Factory-Zustände")
   - [Instanzen erstellen](#creating-instances "Instanzen erstellen")
 - [NyFaker](#ny-faker "NyFaker")
 - [Test-Cache](#test-cache "Test-Cache")
@@ -37,15 +37,15 @@
 
 ## Einleitung
 
-{{ config('app.name') }} v7 enthaelt ein umfassendes Test-Framework, inspiriert von Laravels Test-Utilities. Es bietet:
+{{ config('app.name') }} v7 enthält ein umfassendes Test-Framework, inspiriert von Laravels Test-Utilities. Es bietet:
 
 - **Testfunktionen** mit automatischem Setup/Teardown (`nyTest`, `nyWidgetTest`, `nyGroup`)
-- **Authentifizierungssimulation** ueber `NyTest.actingAs<T>()`
+- **Authentifizierungssimulation** über `NyTest.actingAs<T>()`
 - **Zeitreisen** zum Einfrieren oder Manipulieren der Zeit in Tests
 - **API-Mocking** mit URL-Musterabgleich und Aufrufverfolgung
 - **Factories** mit einem integrierten Fake-Datengenerator (`NyFaker`)
-- **Platform-Channel-Mocking** fuer Secure Storage, Path Provider und mehr
-- **Benutzerdefinierte Assertions** fuer Routen, Backpack, Authentifizierung und Umgebung
+- **Platform-Channel-Mocking** für Secure Storage, Path Provider und mehr
+- **Benutzerdefinierte Assertions** für Routen, Backpack, Authentifizierung und Umgebung
 
 <div id="getting-started"></div>
 
@@ -65,7 +65,7 @@ void main() {
 }
 ```
 
-`NyTest.init()` richtet die Testumgebung ein und aktiviert das automatische Zuruecksetzen des Zustands zwischen Tests, wenn `autoReset: true` (Standardeinstellung).
+`NyTest.init()` richtet die Testumgebung ein und aktiviert das automatische Zurücksetzen des Zustands zwischen Tests, wenn `autoReset: true` (Standardeinstellung).
 
 <div id="writing-tests"></div>
 
@@ -75,7 +75,7 @@ void main() {
 
 ### nyTest
 
-Die primaere Funktion zum Schreiben von Tests:
+Die primäre Funktion zum Schreiben von Tests:
 
 ``` dart
 nyTest('can save and read from storage', () async {
@@ -117,7 +117,7 @@ nyWidgetTest('renders a button', (WidgetTester tester) async {
 
 ### Widget-Test-Hilfsmittel
 
-Die Klasse `NyWidgetTest` und die `WidgetTester`-Erweiterungen bieten Hilfsfunktionen zum Pumpen von Nylo-Widgets mit korrekter Theme-Unterstuetzung, zum Warten auf den Abschluss von `init()` und zum Testen von Ladezustaenden.
+Die Klasse `NyWidgetTest` und die `WidgetTester`-Erweiterungen bieten Hilfsfunktionen zum Pumpen von Nylo-Widgets mit korrekter Theme-Unterstützung, zum Warten auf den Abschluss von `init()` und zum Testen von Ladezuständen.
 
 #### Testumgebung konfigurieren
 
@@ -130,9 +130,9 @@ nySetUpAll(() async {
 });
 ```
 
-Sie koennen die Konfiguration mit `NyWidgetTest.reset()` zuruecksetzen.
+Sie können die Konfiguration mit `NyWidgetTest.reset()` zurücksetzen.
 
-Zwei integrierte Themes sind fuer schriftfreies Testen verfuegbar:
+Zwei integrierte Themes sind für schriftfreies Testen verfügbar:
 
 ``` dart
 ThemeData light = NyWidgetTest.simpleTestTheme;
@@ -141,7 +141,7 @@ ThemeData dark = NyWidgetTest.simpleDarkTestTheme;
 
 #### Nylo-Widgets pumpen
 
-Verwenden Sie `pumpNyWidget`, um ein Widget in eine `MaterialApp` mit Theme-Unterstuetzung einzubetten:
+Verwenden Sie `pumpNyWidget`, um ein Widget in eine `MaterialApp` mit Theme-Unterstützung einzubetten:
 
 ``` dart
 nyWidgetTest('renders page', (tester) async {
@@ -158,7 +158,7 @@ nyWidgetTest('renders page', (tester) async {
 });
 ```
 
-Fuer schnelles Pumpen mit einem schriftfreien Theme:
+Für schnelles Pumpen mit einem schriftfreien Theme:
 
 ``` dart
 await tester.pumpNyWidgetSimple(HomePage());
@@ -193,33 +193,33 @@ await tester.pumpAndSettleGracefully(timeout: Duration(seconds: 5));
 
 #### Lebenszyklus-Simulation
 
-Simulieren Sie `AppLifecycleState`-Aenderungen bei jedem `NyPage` im Widget-Baum:
+Simulieren Sie `AppLifecycleState`-Änderungen bei jedem `NyPage` im Widget-Baum:
 
 ``` dart
 await tester.pumpNyWidget(MyPage());
 await tester.simulateLifecycleState(AppLifecycleState.paused);
 await tester.pump();
-// Nebenwirkungen der pausierten Lebenszyklus-Aktion pruefen
+// Nebenwirkungen der pausierten Lebenszyklus-Aktion prüfen
 ```
 
-#### Lade- und Sperr-Ueberpruefungen
+#### Lade- und Sperr-Überprüfungen
 
-Ueberpruefen Sie benannte Ladeschluessel und Sperren auf `NyPage`/`NyState`-Widgets:
+Überprüfen Sie benannte Ladeschlüssel und Sperren auf `NyPage`/`NyState`-Widgets:
 
 ``` dart
-// Pruefen, ob ein benannter Ladeschluessel aktiv ist
+// Prüfen, ob ein benannter Ladeschlüssel aktiv ist
 bool loading = tester.isLoadingNamed(find.byType(MyPage), name: 'fetchUsers');
 
-// Pruefen, ob eine benannte Sperre gehalten wird
+// Prüfen, ob eine benannte Sperre gehalten wird
 bool locked = tester.isLockedNamed(find.byType(MyPage), name: 'submit');
 
-// Pruefen, ob ein Ladeindikator vorhanden ist (CircularProgressIndicator oder Skeletonizer)
+// Prüfen, ob ein Ladeindikator vorhanden ist (CircularProgressIndicator oder Skeletonizer)
 bool isAnyLoading = tester.isLoading();
 ```
 
 #### testNyPage-Hilfsfunktion
 
-Eine praktische Funktion, die ein `NyPage` pumpt, auf die Initialisierung wartet und dann Ihre Erwartungen ausfuehrt:
+Eine praktische Funktion, die ein `NyPage` pumpt, auf die Initialisierung wartet und dann Ihre Erwartungen ausführt:
 
 ``` dart
 testNyPage(
@@ -236,7 +236,7 @@ testNyPage(
 
 #### testNyPageLoading-Hilfsfunktion
 
-Testen Sie, dass eine Seite waehrend `init()` einen Ladeindikator anzeigt:
+Testen Sie, dass eine Seite während `init()` einen Ladeindikator anzeigt:
 
 ``` dart
 testNyPageLoading(
@@ -248,15 +248,15 @@ testNyPageLoading(
 
 #### NyPageTestMixin
 
-Ein Mixin mit gaengigen Seitentest-Hilfsmitteln:
+Ein Mixin mit gängigen Seitentest-Hilfsmitteln:
 
 ``` dart
 class HomePageTest with NyPageTestMixin {
   void runTests(WidgetTester tester) async {
-    // Pruefen, ob init aufgerufen wurde und Laden abgeschlossen ist
+    // Prüfen, ob init aufgerufen wurde und Laden abgeschlossen ist
     await verifyInitCalled(tester, HomePage(), timeout: Duration(seconds: 5));
 
-    // Pruefen, ob der Ladezustand waehrend init angezeigt wird
+    // Prüfen, ob der Ladezustand während init angezeigt wird
     await verifyLoadingState(tester, HomePage());
   }
 }
@@ -266,7 +266,7 @@ class HomePageTest with NyPageTestMixin {
 
 ### nyGroup
 
-Zusammengehoerige Tests gruppieren:
+Zusammengehörige Tests gruppieren:
 
 ``` dart
 nyGroup('Authentication', () {
@@ -294,29 +294,29 @@ void main() {
   NyTest.init();
 
   nySetUpAll(() {
-    // Wird einmal vor allen Tests ausgefuehrt
+    // Wird einmal vor allen Tests ausgeführt
   });
 
   nySetUp(() {
-    // Wird vor jedem Test ausgefuehrt
+    // Wird vor jedem Test ausgeführt
   });
 
   nyTearDown(() {
-    // Wird nach jedem Test ausgefuehrt
+    // Wird nach jedem Test ausgeführt
   });
 
   nyTearDownAll(() {
-    // Wird einmal nach allen Tests ausgefuehrt
+    // Wird einmal nach allen Tests ausgeführt
   });
 }
 ```
 
 <div id="skipping-tests"></div>
 
-### Tests ueberspringen und CI-Tests
+### Tests überspringen und CI-Tests
 
 ``` dart
-// Einen Test mit einer Begruendung ueberspringen
+// Einen Test mit einer Begründung überspringen
 nySkip('not implemented yet', () async {
   // ...
 }, "Waiting for API update");
@@ -328,7 +328,7 @@ nyFailing('known bug', () async {
 
 // Nur-CI-Tests (mit 'ci' markiert)
 nyCi('integration test', () async {
-  // Wird nur in CI-Umgebungen ausgefuehrt
+  // Wird nur in CI-Umgebungen ausgeführt
 });
 ```
 
@@ -343,7 +343,7 @@ nyTest('user can access profile', () async {
   // Einen angemeldeten Benutzer simulieren
   NyTest.actingAs<User>(User(name: "Anthony", email: "anthony@example.com"));
 
-  // Authentifizierung pruefen
+  // Authentifizierung prüfen
   expectAuthenticated<User>();
 
   // Den agierenden Benutzer abrufen
@@ -352,7 +352,7 @@ nyTest('user can access profile', () async {
 });
 
 nyTest('guest cannot access profile', () async {
-  // Pruefen, dass nicht authentifiziert
+  // Prüfen, dass nicht authentifiziert
   expectGuest();
 });
 ```
@@ -364,7 +364,7 @@ NyTest.logout();
 expectGuest();
 ```
 
-Verwenden Sie `actingAsGuest()` als lesbaren Alias fuer `logout()`, wenn ein Gast-Kontext eingerichtet wird:
+Verwenden Sie `actingAsGuest()` als lesbaren Alias für `logout()`, wenn ein Gast-Kontext eingerichtet wird:
 
 ``` dart
 NyTest.actingAsGuest();
@@ -385,15 +385,15 @@ nyTest('time travel to 2025', () async {
 
   expect(NyTime.now().year, equals(2025));
 
-  NyTest.travelBack(); // Zur echten Zeit zuruecksetzen
+  NyTest.travelBack(); // Zur echten Zeit zurücksetzen
 });
 ```
 
-### Zeit vor- oder zurueckspulen
+### Zeit vor- oder zurückspulen
 
 ``` dart
 NyTest.travelForward(Duration(days: 30)); // 30 Tage vorspulen
-NyTest.travelBackward(Duration(hours: 2)); // 2 Stunden zurueckgehen
+NyTest.travelBackward(Duration(hours: 2)); // 2 Stunden zurückgehen
 ```
 
 ### Zeit einfrieren
@@ -419,9 +419,9 @@ NyTime.travelToStartOfYear();  // 1. Januar
 NyTime.travelToEndOfYear();    // 31. Dezember
 ```
 
-### Zeitreisen mit begrenztem Gueltigkeitsbereich
+### Zeitreisen mit begrenztem Gültigkeitsbereich
 
-Code innerhalb eines eingefrorenen Zeitkontexts ausfuehren:
+Code innerhalb eines eingefrorenen Zeitkontexts ausführen:
 
 ``` dart
 await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
@@ -438,11 +438,11 @@ await NyTime.withFrozenTime<void>(DateTime(2025, 6, 15), () async {
 
 ### Mocking nach URL-Muster
 
-API-Antworten mit URL-Mustern und Wildcard-Unterstuetzung mocken:
+API-Antworten mit URL-Mustern und Wildcard-Unterstützung mocken:
 
 ``` dart
 nyTest('mock API responses', () async {
-  // Exakte URL-Uebereinstimmung
+  // Exakte URL-Übereinstimmung
   NyMockApi.respond('/users/1', {'id': 1, 'name': 'Anthony'});
 
   // Einzelsegment-Wildcard (*)
@@ -460,7 +460,7 @@ nyTest('mock API responses', () async {
     headers: {'X-Error': 'true'},
   );
 
-  // Mit simulierter Verzoegerung
+  // Mit simulierter Verzögerung
   NyMockApi.respond(
     '/slow-endpoint',
     {'data': 'loaded'},
@@ -490,13 +490,13 @@ nyTest('mock API service', () async {
 
 ### Aufrufverlauf und Assertions
 
-API-Aufrufe verfolgen und ueberpruefen:
+API-Aufrufe verfolgen und überprüfen:
 
 ``` dart
 nyTest('verify API was called', () async {
   NyMockApi.setRecordCalls(true);
 
-  // ... Aktionen durchfuehren, die API-Aufrufe ausloesen ...
+  // ... Aktionen durchführen, die API-Aufrufe auslösen ...
 
   // Behaupten, dass Endpunkt aufgerufen wurde
   expectApiCalled('/users');
@@ -549,7 +549,7 @@ NyFactory.define<User>((NyFaker faker) => User(
 ));
 ```
 
-Mit Unterstuetzung fuer Ueberschreibungen:
+Mit Unterstützung für Überschreibungen:
 
 ``` dart
 NyFactory.defineWithOverrides<User>((NyFaker faker, Map<String, dynamic> attributes) => User(
@@ -561,7 +561,7 @@ NyFactory.defineWithOverrides<User>((NyFaker faker, Map<String, dynamic> attribu
 
 <div id="factory-states"></div>
 
-### Factory-Zustaende
+### Factory-Zustände
 
 Variationen einer Factory definieren:
 
@@ -583,10 +583,10 @@ NyFactory.state<User>('premium', (User user, NyFaker faker) {
 // Eine einzelne Instanz erstellen
 User user = NyFactory.make<User>();
 
-// Mit Ueberschreibungen erstellen
+// Mit Überschreibungen erstellen
 User admin = NyFactory.make<User>(overrides: {'name': 'Admin User'});
 
-// Mit angewendeten Zustaenden erstellen
+// Mit angewendeten Zuständen erstellen
 User premiumAdmin = NyFactory.make<User>(states: ['admin', 'premium']);
 
 // Mehrere Instanzen erstellen
@@ -602,53 +602,53 @@ List<User> numbered = NyFactory.sequence<User>(3, (int index, NyFaker faker) {
 
 ## NyFaker
 
-`NyFaker` generiert realistische Testdaten. Es ist innerhalb von Factory-Definitionen verfuegbar und kann auch direkt instanziiert werden.
+`NyFaker` generiert realistische Testdaten. Es ist innerhalb von Factory-Definitionen verfügbar und kann auch direkt instanziiert werden.
 
 ``` dart
 NyFaker faker = NyFaker();
 ```
 
-### Verfuegbare Methoden
+### Verfügbare Methoden
 
-| Kategorie | Methode | Rueckgabetyp | Beschreibung |
+| Kategorie | Methode | Rückgabetyp | Beschreibung |
 |-----------|---------|-------------|-------------|
-| **Namen** | `faker.firstName()` | `String` | Zufaelliger Vorname |
-| | `faker.lastName()` | `String` | Zufaelliger Nachname |
-| | `faker.name()` | `String` | Vollstaendiger Name (Vor- + Nachname) |
+| **Namen** | `faker.firstName()` | `String` | Zufälliger Vorname |
+| | `faker.lastName()` | `String` | Zufälliger Nachname |
+| | `faker.name()` | `String` | Vollständiger Name (Vor- + Nachname) |
 | | `faker.username()` | `String` | Benutzername |
 | **Kontakt** | `faker.email()` | `String` | E-Mail-Adresse |
 | | `faker.phone()` | `String` | Telefonnummer |
 | | `faker.company()` | `String` | Firmenname |
-| **Zahlen** | `faker.randomInt(min, max)` | `int` | Zufaellige Ganzzahl im Bereich |
-| | `faker.randomDouble(min, max)` | `double` | Zufaellige Gleitkommazahl im Bereich |
-| | `faker.randomBool()` | `bool` | Zufaelliger Wahrheitswert |
+| **Zahlen** | `faker.randomInt(min, max)` | `int` | Zufällige Ganzzahl im Bereich |
+| | `faker.randomDouble(min, max)` | `double` | Zufällige Gleitkommazahl im Bereich |
+| | `faker.randomBool()` | `bool` | Zufälliger Wahrheitswert |
 | **Bezeichner** | `faker.uuid()` | `String` | UUID-v4-String |
-| **Datum** | `faker.date()` | `DateTime` | Zufaelliges Datum |
+| **Datum** | `faker.date()` | `DateTime` | Zufälliges Datum |
 | | `faker.pastDate()` | `DateTime` | Datum in der Vergangenheit |
 | | `faker.futureDate()` | `DateTime` | Datum in der Zukunft |
-| **Text** | `faker.lorem()` | `String` | Lorem-ipsum-Woerter |
-| | `faker.sentences()` | `String` | Mehrere Saetze |
-| | `faker.paragraphs()` | `String` | Mehrere Absaetze |
+| **Text** | `faker.lorem()` | `String` | Lorem-ipsum-Wörter |
+| | `faker.sentences()` | `String` | Mehrere Sätze |
+| | `faker.paragraphs()` | `String` | Mehrere Absätze |
 | | `faker.slug()` | `String` | URL-Slug |
 | **Web** | `faker.url()` | `String` | URL-String |
 | | `faker.imageUrl()` | `String` | Bild-URL (via picsum.photos) |
 | | `faker.ipAddress()` | `String` | IPv4-Adresse |
 | | `faker.macAddress()` | `String` | MAC-Adresse |
-| **Standort** | `faker.address()` | `String` | Strassenadresse |
+| **Standort** | `faker.address()` | `String` | Straßenadresse |
 | | `faker.city()` | `String` | Stadtname |
-| | `faker.state()` | `String` | US-Bundesstaatabkuerzung |
+| | `faker.state()` | `String` | US-Bundesstaatabkürzung |
 | | `faker.zipCode()` | `String` | Postleitzahl |
-| | `faker.country()` | `String` | Laendername |
+| | `faker.country()` | `String` | Ländername |
 | **Sonstiges** | `faker.hexColor()` | `String` | Hex-Farbcode |
 | | `faker.creditCardNumber()` | `String` | Kreditkartennummer |
-| | `faker.randomElement(list)` | `T` | Zufaelliges Element aus einer Liste |
-| | `faker.randomElements(list, count)` | `List<T>` | Zufaellige Elemente aus einer Liste |
+| | `faker.randomElement(list)` | `T` | Zufälliges Element aus einer Liste |
+| | `faker.randomElements(list, count)` | `List<T>` | Zufällige Elemente aus einer Liste |
 
 <div id="test-cache"></div>
 
 ## Test-Cache
 
-`NyTestCache` bietet einen In-Memory-Cache zum Testen von Cache-bezogener Funktionalitaet:
+`NyTestCache` bietet einen In-Memory-Cache zum Testen von Cache-bezogener Funktionalität:
 
 ``` dart
 nyTest('cache operations', () async {
@@ -663,10 +663,10 @@ nyTest('cache operations', () async {
   // Einen Wert lesen
   String? value = await cache.get<String>("key");
 
-  // Existenz pruefen
+  // Existenz prüfen
   bool exists = await cache.has("key");
 
-  // Einen Schluessel loeschen
+  // Einen Schlüssel löschen
   await cache.clear("key");
 
   // Alles leeren
@@ -682,11 +682,11 @@ nyTest('cache operations', () async {
 
 ## Platform-Channel-Mocking
 
-`NyMockChannels` mockt automatisch gaengige Platform-Channels, damit Tests nicht abstuerzen:
+`NyMockChannels` mockt automatisch gängige Platform-Channels, damit Tests nicht abstürzen:
 
 ``` dart
 void main() {
-  NyTest.init(); // Richtet Mock-Kanaele automatisch ein
+  NyTest.init(); // Richtet Mock-Kanäle automatisch ein
 
   // Oder manuell einrichten
   NyMockChannels.setup();
@@ -695,13 +695,13 @@ void main() {
 
 ### Gemockte Channels
 
-- **path_provider** -- Dokumente, temporaere Dateien, Application-Support, Bibliothek und Cache-Verzeichnisse
+- **path_provider** -- Dokumente, temporäre Dateien, Application-Support, Bibliothek und Cache-Verzeichnisse
 - **flutter_secure_storage** -- In-Memory-Secure-Storage
 - **flutter_timezone** -- Zeitzonendaten
 - **flutter_local_notifications** -- Benachrichtigungskanal
 - **sqflite** -- Datenbankoperationen
 
-### Pfade ueberschreiben
+### Pfade überschreiben
 
 ``` dart
 NyMockChannels.overridePathProvider(
@@ -723,9 +723,9 @@ NyMockChannels.clearSecureStorage();
 
 ## Route-Guard-Mocking
 
-`NyMockRouteGuard` ermoeglicht es Ihnen, das Verhalten von Route Guards ohne echte Authentifizierung oder Netzwerkaufrufe zu testen. Es erweitert `NyRouteGuard` und bietet Factory-Konstruktoren fuer gaengige Szenarien.
+`NyMockRouteGuard` ermöglicht es Ihnen, das Verhalten von Route Guards ohne echte Authentifizierung oder Netzwerkaufrufe zu testen. Es erweitert `NyRouteGuard` und bietet Factory-Konstruktoren für gängige Szenarien.
 
-### Guard, der immer durchlaesst
+### Guard, der immer durchlässt
 
 ``` dart
 final guard = NyMockRouteGuard.pass();
@@ -736,7 +736,7 @@ final guard = NyMockRouteGuard.pass();
 ``` dart
 final guard = NyMockRouteGuard.redirect('/login');
 
-// Mit zusaetzlichen Daten
+// Mit zusätzlichen Daten
 final guard = NyMockRouteGuard.redirect('/error', data: {'code': 403});
 ```
 
@@ -753,7 +753,7 @@ final guard = NyMockRouteGuard.custom((context) async {
 
 ### Guard-Aufrufe verfolgen
 
-Nachdem ein Guard aufgerufen wurde, koennen Sie seinen Zustand ueberpruefen:
+Nachdem ein Guard aufgerufen wurde, können Sie seinen Zustand überprüfen:
 
 ``` dart
 expect(guard.wasCalled, isTrue);
@@ -762,7 +762,7 @@ expect(guard.callCount, 1);
 // Den RouteContext des letzten Aufrufs abrufen
 RouteContext? context = guard.lastContext;
 
-// Verfolgung zuruecksetzen
+// Verfolgung zurücksetzen
 guard.reset();
 ```
 
@@ -785,9 +785,9 @@ expectRoutesExist(['/home', '/profile', '/settings']);
 ### Zustands-Assertions
 
 ``` dart
-expectBackpackContains("key");                        // Schluessel existiert
-expectBackpackContains("key", value: "expected");     // Schluessel hat Wert
-expectBackpackNotContains("key");                     // Schluessel existiert nicht
+expectBackpackContains("key");                        // Schlüssel existiert
+expectBackpackContains("key", value: "expected");     // Schlüssel hat Wert
+expectBackpackNotContains("key");                     // Schlüssel existiert nicht
 ```
 
 ### Auth-Assertions
@@ -853,7 +853,7 @@ expectLocale("en");
 
 ### Toast-Assertions
 
-Ueberpruefen Sie Toast-Benachrichtigungen, die waehrend eines Tests aufgezeichnet wurden. Erfordert `NyToastRecorder.setup()` in Ihrem Test-setUp:
+Überprüfen Sie Toast-Benachrichtigungen, die während eines Tests aufgezeichnet wurden. Erfordert `NyToastRecorder.setup()` in Ihrem Test-setUp:
 
 ``` dart
 setUp(() {
@@ -862,7 +862,7 @@ setUp(() {
 
 nyWidgetTest('shows success toast', (tester) async {
   await tester.pumpNyWidget(MyPage());
-  // ... Aktion ausloesen, die einen Toast anzeigt ...
+  // ... Aktion auslösen, die einen Toast anzeigt ...
 
   expectToastShown(id: 'success');
   expectToastShown(id: 'danger', description: 'Something went wrong');
@@ -870,25 +870,25 @@ nyWidgetTest('shows success toast', (tester) async {
 });
 ```
 
-**NyToastRecorder** verfolgt Toast-Benachrichtigungen waehrend der Tests:
+**NyToastRecorder** verfolgt Toast-Benachrichtigungen während der Tests:
 
 ``` dart
 // Einen Toast manuell aufzeichnen
 NyToastRecorder.record(id: 'success', title: 'Done', description: 'Saved!');
 
-// Pruefen, ob ein Toast angezeigt wurde
+// Prüfen, ob ein Toast angezeigt wurde
 bool shown = NyToastRecorder.wasShown(id: 'success');
 
 // Alle aufgezeichneten Toasts abrufen
 List<ToastRecord> toasts = NyToastRecorder.records;
 
-// Aufgezeichnete Toasts loeschen
+// Aufgezeichnete Toasts löschen
 NyToastRecorder.clear();
 ```
 
 ### Sperr- und Lade-Assertions
 
-Ueberpruefen Sie benannte Sperr- und Ladezustaende in `NyPage`/`NyState`-Widgets:
+Überprüfen Sie benannte Sperr- und Ladezustände in `NyPage`/`NyState`-Widgets:
 
 ``` dart
 // Behaupten, dass eine benannte Sperre gehalten wird
@@ -897,10 +897,10 @@ expectLocked(tester, find.byType(MyPage), 'submit');
 // Behaupten, dass eine benannte Sperre nicht gehalten wird
 expectNotLocked(tester, find.byType(MyPage), 'submit');
 
-// Behaupten, dass ein benannter Ladeschluessel aktiv ist
+// Behaupten, dass ein benannter Ladeschlüssel aktiv ist
 expectLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 
-// Behaupten, dass ein benannter Ladeschluessel nicht aktiv ist
+// Behaupten, dass ein benannter Ladeschlüssel nicht aktiv ist
 expectNotLoadingNamed(tester, find.byType(MyPage), 'fetchUsers');
 ```
 
@@ -930,18 +930,18 @@ expect(true, apiWasCalled('/users', method: 'GET', times: 1));
 
 Testen Sie EventBus-gesteuerte Zustandsverwaltung in `NyPage`- und `NyState`-Widgets mit State-Test-Hilfsfunktionen.
 
-### State-Updates ausloesen
+### State-Updates auslösen
 
-Simulieren Sie State-Updates, die normalerweise von einem anderen Widget oder Controller kommen wuerden:
+Simulieren Sie State-Updates, die normalerweise von einem anderen Widget oder Controller kommen würden:
 
 ``` dart
-// Ein UpdateState-Ereignis ausloesen
+// Ein UpdateState-Ereignis auslösen
 fireStateUpdate('HomePageState', data: {'items': ['a', 'b']});
 await tester.pump();
 expect(find.text('a'), findsOneWidget);
 ```
 
-### State-Actions ausloesen
+### State-Actions auslösen
 
 Senden Sie State-Actions, die von `whenStateAction()` in Ihrer Seite verarbeitet werden:
 
@@ -949,7 +949,7 @@ Senden Sie State-Actions, die von `whenStateAction()` in Ihrer Seite verarbeitet
 fireStateAction('HomePageState', 'refresh-page');
 await tester.pump();
 
-// Mit zusaetzlichen Daten
+// Mit zusätzlichen Daten
 fireStateAction('CartState', 'add-item', data: {'id': 42});
 await tester.pump();
 ```
@@ -957,11 +957,11 @@ await tester.pump();
 ### State-Assertions
 
 ``` dart
-// Behaupten, dass ein State-Update ausgeloest wurde
+// Behaupten, dass ein State-Update ausgelöst wurde
 expectStateUpdated('HomePageState');
 expectStateUpdated('HomePageState', times: 2);
 
-// Behaupten, dass eine State-Action ausgeloest wurde
+// Behaupten, dass eine State-Action ausgelöst wurde
 expectStateAction('HomePageState', 'refresh-page');
 expectStateAction('CartState', 'add-item', times: 1);
 
@@ -971,7 +971,7 @@ expectStateData(tester, find.byType(MyWidget), equals(42));
 
 ### NyStateTestHelpers
 
-Verfolgen und ueberpruefen Sie ausgeloeste State-Updates und Actions:
+Verfolgen und überprüfen Sie ausgelöste State-Updates und Actions:
 
 ``` dart
 // Alle Updates abrufen, die an einen State gesendet wurden
@@ -980,7 +980,7 @@ List updates = NyStateTestHelpers.getUpdatesFor('MyWidget');
 // Alle Actions abrufen, die an einen State gesendet wurden
 List actions = NyStateTestHelpers.getActionsFor('MyWidget');
 
-// Alle verfolgten State-Updates und Actions zuruecksetzen
+// Alle verfolgten State-Updates und Actions zurücksetzen
 NyStateTestHelpers.reset();
 ```
 
@@ -1006,16 +1006,16 @@ NyTest.dd();
 
 ### Testzustandsspeicher
 
-Werte waehrend eines Tests speichern und abrufen:
+Werte während eines Tests speichern und abrufen:
 
 ``` dart
 NyTest.set("step", "completed");
 String? step = NyTest.get<String>("step");
 ```
 
-### Backpack mit Testdaten befuellen
+### Backpack mit Testdaten befüllen
 
-Backpack mit Testdaten vorab befuellen:
+Backpack mit Testdaten vorab befüllen:
 
 ``` dart
 NyTest.seedBackpack({
@@ -1029,14 +1029,14 @@ NyTest.seedBackpack({
 
 ## Navigation- und Interaktions-Helfer
 
-`WidgetTester`-Erweiterungen bieten eine High-Level-DSL fuer das Schreiben von Navigationsablaeufen und UI-Interaktionen in `nyWidgetTest`.
+`WidgetTester`-Erweiterungen bieten eine High-Level-DSL für das Schreiben von Navigationsabläufen und UI-Interaktionen in `nyWidgetTest`.
 
 ### visit
 
 Zu einer Route navigieren und warten, bis die Seite stabil ist:
 
 ``` dart
-nyWidgetTest('laedt Dashboard', (tester) async {
+nyWidgetTest('lädt Dashboard', (tester) async {
   await tester.visit(DashboardPage.path);
   expectTextVisible('Dashboard');
 });
@@ -1044,7 +1044,7 @@ nyWidgetTest('laedt Dashboard', (tester) async {
 
 ### assertNavigatedTo
 
-Behaupten, dass eine Navigationsaktion Sie zur erwarteten Route gefuehrt hat:
+Behaupten, dass eine Navigationsaktion Sie zur erwarteten Route geführt hat:
 
 ``` dart
 await tester.tapText('Profile');
@@ -1053,7 +1053,7 @@ tester.assertNavigatedTo(ProfilePage.path);
 
 ### assertOnRoute
 
-Behaupten, dass die aktuelle Route mit der angegebenen Route uebereinstimmt (verwenden Sie dies, um zu bestaetigen, wo Sie sich befinden, nicht dass Sie gerade navigiert haben):
+Behaupten, dass die aktuelle Route mit der angegebenen Route übereinstimmt (verwenden Sie dies, um zu bestätigen, wo Sie sich befinden, nicht dass Sie gerade navigiert haben):
 
 ``` dart
 await tester.visit(DashboardPage.path);
@@ -1110,7 +1110,7 @@ await tester.scrollTo(find.text('Item 50'));
 await tester.tapText('Item 50');
 ```
 
-Einen spezifischen `scrollable`-Finder und `delta` fuer praezise Steuerung uebergeben:
+Einen spezifischen `scrollable`-Finder und `delta` für präzise Steuerung übergeben:
 
 ``` dart
 await tester.scrollTo(
@@ -1124,7 +1124,7 @@ await tester.scrollTo(
 
 ## Beispiele
 
-### Vollstaendige Testdatei
+### Vollständige Testdatei
 
 ``` dart
 import 'package:flutter_test/flutter_test.dart';
@@ -1161,7 +1161,7 @@ void main() {
         ]
       });
 
-      // ... API-Aufruf ausloesen ...
+      // ... API-Aufruf auslösen ...
 
       expectApiCalled('/api/users');
     });

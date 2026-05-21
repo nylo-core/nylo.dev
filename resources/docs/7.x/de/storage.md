@@ -7,17 +7,17 @@
 - NyStorage
   - [Werte speichern](#save-values "Werte speichern")
   - [Werte lesen](#read-values "Werte lesen")
-  - [Werte loeschen](#delete-values "Werte loeschen")
+  - [Werte löschen](#delete-values "Werte löschen")
   - [Storage Keys](#storage-keys "Storage Keys")
   - [JSON speichern/lesen](#save-json "JSON speichern/lesen")
   - [TTL (Time-to-Live)](#ttl-storage "TTL (Time-to-Live)")
   - [Batch-Operationen](#batch-operations "Batch-Operationen")
 - Collections
   - [Einleitung](#introduction-to-collections "Einleitung")
-  - [Zu einer Collection hinzufuegen](#add-to-a-collection "Zu einer Collection hinzufuegen")
+  - [Zu einer Collection hinzufügen](#add-to-a-collection "Zu einer Collection hinzufügen")
   - [Collection lesen](#read-a-collection "Collection lesen")
   - [Collection aktualisieren](#update-collection "Collection aktualisieren")
-  - [Aus Collection loeschen](#delete-from-collection "Aus Collection loeschen")
+  - [Aus Collection löschen](#delete-from-collection "Aus Collection löschen")
 - Backpack
   - [Einleitung](#backpack-storage "Einleitung")
   - [Daten mit Backpack persistieren](#persist-data-with-backpack "Daten mit Backpack persistieren")
@@ -33,7 +33,7 @@
 
 ## Einleitung
 
-{{ config('app.name') }} v7 bietet ein leistungsstarkes Speichersystem ueber die Klasse `NyStorage`. Es verwendet unter der Haube <a href="https://pub.dev/packages/flutter_secure_storage" target="_BLANK">flutter_secure_storage</a>, um Daten sicher auf dem Geraet des Benutzers zu speichern.
+{{ config('app.name') }} v7 bietet ein leistungsstarkes Speichersystem über die Klasse `NyStorage`. Es verwendet unter der Haube <a href="https://pub.dev/packages/flutter_secure_storage" target="_BLANK">flutter_secure_storage</a>, um Daten sicher auf dem Gerät des Benutzers zu speichern.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -100,7 +100,7 @@ int? score = await storageRead<int>('score');
 
 <div id="delete-values"></div>
 
-## Werte loeschen
+## Werte löschen
 
 ``` dart
 // Delete a single key
@@ -121,7 +121,7 @@ await NyStorage.deleteAll(excludeKeys: ['auth_token']);
 
 ## Storage Keys
 
-Organisieren Sie Ihre Speicherschluessel in `lib/config/storage_keys.dart`:
+Organisieren Sie Ihre Speicherschlüssel in `lib/config/storage_keys.dart`:
 
 ``` dart
 final class StorageKeysConfig {
@@ -144,7 +144,7 @@ final class StorageKeysConfig {
 
 ### StorageKey-Extensions verwenden
 
-`StorageKey` ist ein Typedef fuer `String` und verfuegt ueber eine leistungsstarke Sammlung von Extension-Methoden:
+`StorageKey` ist ein Typedef für `String` und verfügt über eine leistungsstarke Sammlung von Extension-Methoden:
 
 ``` dart
 // Save
@@ -201,7 +201,7 @@ print(userData?['name']); // "Anthony"
 
 ## TTL (Time-to-Live)
 
-{{ config('app.name') }} v7 unterstuetzt das Speichern von Werten mit automatischem Ablauf:
+{{ config('app.name') }} v7 unterstützt das Speichern von Werten mit automatischem Ablauf:
 
 ``` dart
 // Save with 1 hour expiration
@@ -254,7 +254,7 @@ await NyStorage.deleteMultiple(['temp_1', 'temp_2', 'temp_3']);
 
 ## Einleitung zu Collections
 
-Collections ermoeglichen es Ihnen, Listen von Elementen unter einem einzelnen Schluessel zu speichern:
+Collections ermöglichen es Ihnen, Listen von Elementen unter einem einzelnen Schlüssel zu speichern:
 
 ``` dart
 // Add items to a collection
@@ -268,7 +268,7 @@ List<String> favorites = await NyStorage.readCollection<String>("favorites");
 
 <div id="add-to-a-collection"></div>
 
-## Zu einer Collection hinzufuegen
+## Zu einer Collection hinzufügen
 
 ``` dart
 // Add item (allows duplicates by default)
@@ -322,7 +322,7 @@ await NyStorage.updateCollectionWhere<Map<String, dynamic>>(
 
 <div id="delete-from-collection"></div>
 
-## Aus Collection loeschen
+## Aus Collection löschen
 
 ``` dart
 // Delete by index
@@ -348,7 +348,7 @@ await NyStorage.delete("favorites");
 
 ## Backpack-Speicher
 
-`Backpack` ist eine leichtgewichtige In-Memory-Speicherklasse fuer schnellen synchronen Zugriff waehrend der Benutzersitzung. Daten werden **nicht persistiert**, wenn die App geschlossen wird.
+`Backpack` ist eine leichtgewichtige In-Memory-Speicherklasse für schnellen synchronen Zugriff während der Benutzersitzung. Daten werden **nicht persistiert**, wenn die App geschlossen wird.
 
 ### In Backpack speichern
 
@@ -372,7 +372,7 @@ User? user = backpackRead<User>('user');
 var settings = Backpack.instance.read('settings');
 ```
 
-### Aus Backpack loeschen
+### Aus Backpack löschen
 
 ``` dart
 backpackDelete('user_token');
@@ -435,7 +435,7 @@ await NyStorage.syncToBackpack(overwrite: true);
 
 ## Sessions
 
-Sessions bieten benannten, In-Memory-Speicher zum Gruppieren zusammengehoeriger Daten (nicht persistiert):
+Sessions bieten benannten, In-Memory-Speicher zum Gruppieren zusammengehöriger Daten (nicht persistiert):
 
 ``` dart
 // Create/access a session and add data
@@ -468,7 +468,7 @@ session('checkout').flush();
 
 ### Sessions persistieren
 
-Sessions koennen mit dem persistenten Speicher synchronisiert werden:
+Sessions können mit dem persistenten Speicher synchronisiert werden:
 
 ``` dart
 // Save session to storage
@@ -478,12 +478,12 @@ await session('checkout').syncToStorage();
 await session('checkout').syncFromStorage();
 ```
 
-### Anwendungsfaelle fuer Sessions
+### Anwendungsfälle für Sessions
 
-Sessions sind ideal fuer:
+Sessions sind ideal für:
 - Mehrstufige Formulare (Onboarding, Checkout)
-- Temporaere Benutzereinstellungen
-- Wizard-/Journey-Ablaeufe
+- Temporäre Benutzereinstellungen
+- Wizard-/Journey-Abläufe
 - Warenkorb-Daten
 
 <div id="model-save"></div>
@@ -528,7 +528,7 @@ await user.save();
 await user.save(inBackpack: true);
 ```
 
-### Ein Model zuruecklesen
+### Ein Model zurücklesen
 
 ``` dart
 User? user = await NyStorage.read<User>(User.key);
@@ -536,7 +536,7 @@ User? user = await NyStorage.read<User>(User.key);
 
 ### Mit Backpack synchronisieren
 
-Laden Sie ein Model aus dem Speicher in Backpack fuer synchronen Zugriff:
+Laden Sie ein Model aus dem Speicher in Backpack für synchronen Zugriff:
 
 ``` dart
 bool found = await User().syncToBackpack();
@@ -568,22 +568,22 @@ List<User> users = await NyStorage.readCollection<User>(User.key);
 
 ## StorageKey Extension-Referenz
 
-`StorageKey` ist ein Typedef fuer `String`. Die `NyStorageKeyExt`-Extension bietet folgende Methoden:
+`StorageKey` ist ein Typedef für `String`. Die `NyStorageKeyExt`-Extension bietet folgende Methoden:
 
-| Methode | Rueckgabetyp | Beschreibung |
+| Methode | Rückgabetyp | Beschreibung |
 |---------|-------------|-------------|
 | `save(value, {inBackpack})` | `Future` | Wert im Speicher speichern |
 | `saveJson(value, {inBackpack})` | `Future` | JSON-Wert im Speicher speichern |
 | `read<T>({defaultValue})` | `Future<T?>` | Wert aus dem Speicher lesen |
 | `readJson<T>({defaultValue})` | `Future<T?>` | JSON-Wert aus dem Speicher lesen |
-| `fromStorage<T>({defaultValue})` | `Future<T?>` | Alias fuer read |
+| `fromStorage<T>({defaultValue})` | `Future<T?>` | Alias für read |
 | `fromBackpack<T>({defaultValue})` | `T?` | Aus Backpack lesen (synchron) |
 | `toModel<T>()` | `T` | JSON-String in Model konvertieren |
-| `addToCollection<T>(value, {allowDuplicates})` | `Future` | Element zur Collection hinzufuegen |
+| `addToCollection<T>(value, {allowDuplicates})` | `Future` | Element zur Collection hinzufügen |
 | `readCollection<T>()` | `Future<List<T>>` | Collection lesen |
-| `deleteFromStorage({andFromBackpack})` | `Future` | Aus dem Speicher loeschen |
-| `flush({andFromBackpack})` | `Future` | Alias fuer deleteFromStorage |
-| `defaultValue<T>(value)` | `Future Function(bool)?` | Standardwert setzen, wenn Schluessel leer ist (verwendet in syncedOnBoot) |
+| `deleteFromStorage({andFromBackpack})` | `Future` | Aus dem Speicher löschen |
+| `flush({andFromBackpack})` | `Future` | Alias für deleteFromStorage |
+| `defaultValue<T>(value)` | `Future Function(bool)?` | Standardwert setzen, wenn Schlüssel leer ist (verwendet in syncedOnBoot) |
 
 <div id="storage-exceptions"></div>
 
@@ -593,11 +593,11 @@ List<User> users = await NyStorage.readCollection<User>(User.key);
 
 | Ausnahme | Beschreibung |
 |----------|-------------|
-| `StorageException` | Basis-Ausnahme mit Nachricht und optionalem Schluessel |
-| `StorageSerializationException` | Serialisierung des Objekts fuer den Speicher fehlgeschlagen |
+| `StorageException` | Basis-Ausnahme mit Nachricht und optionalem Schlüssel |
+| `StorageSerializationException` | Serialisierung des Objekts für den Speicher fehlgeschlagen |
 | `StorageDeserializationException` | Deserialisierung der gespeicherten Daten fehlgeschlagen |
-| `StorageKeyNotFoundException` | Speicherschluessel wurde nicht gefunden |
-| `StorageTimeoutException` | Speicheroperation hat das Zeitlimit ueberschritten |
+| `StorageKeyNotFoundException` | Speicherschlüssel wurde nicht gefunden |
+| `StorageTimeoutException` | Speicheroperation hat das Zeitlimit überschritten |
 
 ``` dart
 try {
@@ -612,7 +612,7 @@ try {
 
 ## Legacy-Migration
 
-{{ config('app.name') }} v7 verwendet ein neues Envelope-Speicherformat. Wenn Sie von v6 aktualisieren, koennen Sie alte Daten migrieren:
+{{ config('app.name') }} v7 verwendet ein neues Envelope-Speicherformat. Wenn Sie von v6 aktualisieren, können Sie alte Daten migrieren:
 
 ``` dart
 // Call during app initialization
@@ -620,4 +620,4 @@ int migrated = await NyStorage.migrateToEnvelopeFormat();
 print('Migrated $migrated keys to new format');
 ```
 
-Dies konvertiert das Legacy-Format (separate `_runtime_type`-Schluessel) in das neue Envelope-Format. Die Migration kann sicher mehrfach ausgefuehrt werden - bereits migrierte Schluessel werden uebersprungen.
+Dies konvertiert das Legacy-Format (separate `_runtime_type`-Schlüssel) in das neue Envelope-Format. Die Migration kann sicher mehrfach ausgeführt werden - bereits migrierte Schlüssel werden übersprungen.

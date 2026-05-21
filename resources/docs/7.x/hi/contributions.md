@@ -57,7 +57,7 @@ git clone https://github.com/YOUR-USERNAME/support
 
 | आवश्यकता | न्यूनतम संस्करण |
 |-------------|-----------------|
-| Flutter | 3.24.0 या उच्चतर |
+| Flutter | 3.38.4 या उच्चतर |
 | Dart SDK | 3.10.7 या उच्चतर |
 
 ### लोकल पैकेज लिंक करें
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

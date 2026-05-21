@@ -240,7 +240,6 @@ Untuk menambahkan field di luar default ini — tombol, ikon, lencana, dll. mili
 
 ## Memperluas style warna
 
-<!-- uncertain: new section "Extending color styles" — not present in existing id locale file -->
 Tiga grup default (`general`, `appBar`, `bottomTabBar`) adalah titik awal, bukan batas keras. `lib/resources/themes/color_styles.dart` adalah milik Anda untuk dimodifikasi — tambahkan grup warna baru (atau field tunggal) di atas default, lalu implementasikan di kelas warna setiap tema.
 
 **1. Definisikan grup warna kustom**

@@ -1,5 +1,4 @@
 # Yardımcı Fonksiyonlar
-<!-- uncertain: newly created translation; needs full human review -->
 
 ---
 

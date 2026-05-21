@@ -397,7 +397,6 @@ Untuk kontrol penuh atas widget toast:
 
 ### Gaya Toast Berbasis Data
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 Gunakan `ToastStyleDataFactory` untuk mendaftarkan gaya toast yang menerima data saat dipanggil. Ini berguna ketika konten toast — seperti nama atau avatar pengguna — belum diketahui saat pendaftaran.
 
 ``` dart

@@ -5,7 +5,7 @@
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
 - [Grundlegende Verwendung](#basic-usage "Grundlegende Verwendung")
-- [Verfuegbare Button-Typen](#button-types "Verfuegbare Button-Typen")
+- [Verfügbare Button-Typen](#button-types "Verfügbare Button-Typen")
     - [Primary](#primary "Primary")
     - [Secondary](#secondary "Secondary")
     - [Outlined](#outlined "Outlined")
@@ -27,7 +27,7 @@
     - [Shake](#anim-shake "Shake")
 - [Splash-Stile](#splash-styles "Splash-Stile")
 - [Ladestile](#loading-styles "Ladestile")
-- [Formularuebermittlung](#form-submission "Formularuebermittlung")
+- [Formularübermittlung](#form-submission "Formularübermittlung")
 - [Buttons anpassen](#customizing-buttons "Buttons anpassen")
 - [Parameter-Referenz](#parameters "Parameter-Referenz")
 
@@ -36,20 +36,20 @@
 
 ## Einleitung
 
-{{ config('app.name') }} stellt eine `Button`-Klasse mit acht vorgefertigten Button-Stilen bereit. Jeder Button bietet integrierte Unterstuetzung fuer:
+{{ config('app.name') }} stellt eine `Button`-Klasse mit acht vorgefertigten Button-Stilen bereit. Jeder Button bietet integrierte Unterstützung für:
 
-- **Asynchrone Ladezustaende** -- geben Sie ein `Future` von `onPressed` zurueck und der Button zeigt automatisch einen Ladeindikator an
-- **Animationsstile** -- waehlen Sie aus Clickable, Bounce, Pulse, Squeeze, Jelly, Shine, Ripple, Morph und Shake-Effekten
-- **Splash-Stile** -- fuegen Sie Ripple-, Highlight-, Glow- oder Ink-Touch-Feedback hinzu
-- **Formularuebermittlung** -- verbinden Sie einen Button direkt mit einer `NyFormData`-Instanz
+- **Asynchrone Ladezustände** -- geben Sie ein `Future` von `onPressed` zurück und der Button zeigt automatisch einen Ladeindikator an
+- **Animationsstile** -- wählen Sie aus Clickable, Bounce, Pulse, Squeeze, Jelly, Shine, Ripple, Morph und Shake-Effekten
+- **Splash-Stile** -- fügen Sie Ripple-, Highlight-, Glow- oder Ink-Touch-Feedback hinzu
+- **Formularübermittlung** -- verbinden Sie einen Button direkt mit einer `NyFormData`-Instanz
 
-Sie finden die Button-Definitionen Ihrer App in `lib/resources/widgets/buttons/buttons.dart`. Diese Datei enthaelt eine `Button`-Klasse mit statischen Methoden fuer jeden Button-Typ, die es einfach machen, die Standardwerte fuer Ihr Projekt anzupassen.
+Sie finden die Button-Definitionen Ihrer App in `lib/resources/widgets/buttons/buttons.dart`. Diese Datei enthält eine `Button`-Klasse mit statischen Methoden für jeden Button-Typ, die es einfach machen, die Standardwerte für Ihr Projekt anzupassen.
 
 <div id="basic-usage"></div>
 
 ## Grundlegende Verwendung
 
-Verwenden Sie die `Button`-Klasse ueberall in Ihren Widgets. Hier ist ein einfaches Beispiel innerhalb einer Seite:
+Verwenden Sie die `Button`-Klasse überall in Ihren Widgets. Hier ist ein einfaches Beispiel innerhalb einer Seite:
 
 ``` dart
 @override
@@ -92,19 +92,19 @@ Widget build(BuildContext context) {
 }
 ```
 
-Jeder Button-Typ folgt demselben Muster -- uebergeben Sie ein `text`-Label und einen `onPressed`-Callback.
+Jeder Button-Typ folgt demselben Muster -- übergeben Sie ein `text`-Label und einen `onPressed`-Callback.
 
 <div id="button-types"></div>
 
-## Verfuegbare Button-Typen
+## Verfügbare Button-Typen
 
-Alle Buttons werden ueber die `Button`-Klasse mit statischen Methoden aufgerufen.
+Alle Buttons werden über die `Button`-Klasse mit statischen Methoden aufgerufen.
 
 <div id="primary"></div>
 
 ### Primary
 
-Ein gefuellter Button mit Schatten, der die Primaerfarbe Ihres Themes verwendet. Am besten fuer Haupt-Call-to-Action-Elemente geeignet.
+Ein gefüllter Button mit Schatten, der die Primärfarbe Ihres Themes verwendet. Am besten für Haupt-Call-to-Action-Elemente geeignet.
 
 ``` dart
 Button.primary(
@@ -119,7 +119,7 @@ Button.primary(
 
 ### Secondary
 
-Ein gefuellter Button mit einer weicheren Oberflaechenfarbe und dezentem Schatten. Gut fuer sekundaere Aktionen neben einem primaeren Button.
+Ein gefüllter Button mit einer weicheren Oberflächenfarbe und dezentem Schatten. Gut für sekundäre Aktionen neben einem primären Button.
 
 ``` dart
 Button.secondary(
@@ -134,7 +134,7 @@ Button.secondary(
 
 ### Outlined
 
-Ein transparenter Button mit einem Rahmen. Nuetzlich fuer weniger prominente Aktionen oder Abbrechen-Buttons.
+Ein transparenter Button mit einem Rahmen. Nützlich für weniger prominente Aktionen oder Abbrechen-Buttons.
 
 ``` dart
 Button.outlined(
@@ -145,7 +145,7 @@ Button.outlined(
 )
 ```
 
-Sie koennen die Rahmen- und Textfarben anpassen:
+Sie können die Rahmen- und Textfarben anpassen:
 
 ``` dart
 Button.outlined(
@@ -160,7 +160,7 @@ Button.outlined(
 
 ### Text Only
 
-Ein minimaler Button ohne Hintergrund oder Rahmen. Ideal fuer Inline-Aktionen oder Links.
+Ein minimaler Button ohne Hintergrund oder Rahmen. Ideal für Inline-Aktionen oder Links.
 
 ``` dart
 Button.textOnly(
@@ -171,7 +171,7 @@ Button.textOnly(
 )
 ```
 
-Sie koennen die Textfarbe anpassen:
+Sie können die Textfarbe anpassen:
 
 ``` dart
 Button.textOnly(
@@ -185,7 +185,7 @@ Button.textOnly(
 
 ### Icon
 
-Ein gefuellter Button, der ein Symbol neben dem Text anzeigt. Das Symbol erscheint standardmaessig vor dem Text.
+Ein gefüllter Button, der ein Symbol neben dem Text anzeigt. Das Symbol erscheint standardmäßig vor dem Text.
 
 ``` dart
 Button.icon(
@@ -197,7 +197,7 @@ Button.icon(
 )
 ```
 
-Sie koennen die Hintergrundfarbe anpassen:
+Sie können die Hintergrundfarbe anpassen:
 
 ``` dart
 Button.icon(
@@ -212,7 +212,7 @@ Button.icon(
 
 ### Gradient
 
-Ein Button mit linearem Farbverlauf als Hintergrund. Verwendet standardmaessig die Primaer- und Tertiaerfarben Ihres Themes.
+Ein Button mit linearem Farbverlauf als Hintergrund. Verwendet standardmäßig die Primär- und Tertiärfarben Ihres Themes.
 
 ``` dart
 Button.gradient(
@@ -223,7 +223,7 @@ Button.gradient(
 )
 ```
 
-Sie koennen benutzerdefinierte Verlaufsfarben angeben:
+Sie können benutzerdefinierte Verlaufsfarben angeben:
 
 ``` dart
 Button.gradient(
@@ -237,7 +237,7 @@ Button.gradient(
 
 ### Rounded
 
-Ein pillenfoermiger Button mit vollstaendig abgerundeten Ecken. Der Rahmenradius ist standardmaessig die Haelfte der Button-Hoehe.
+Ein pillenförmiger Button mit vollständig abgerundeten Ecken. Der Rahmenradius ist standardmäßig die Hälfte der Button-Höhe.
 
 ``` dart
 Button.rounded(
@@ -248,7 +248,7 @@ Button.rounded(
 )
 ```
 
-Sie koennen die Hintergrundfarbe und den Rahmenradius anpassen:
+Sie können die Hintergrundfarbe und den Rahmenradius anpassen:
 
 ``` dart
 Button.rounded(
@@ -263,7 +263,7 @@ Button.rounded(
 
 ### Transparency
 
-Ein Button im Milchglas-Stil mit Unschaerfe-Effekt. Funktioniert gut, wenn er ueber Bildern oder farbigen Hintergruenden platziert wird.
+Ein Button im Milchglas-Stil mit Unschärfe-Effekt. Funktioniert gut, wenn er über Bildern oder farbigen Hintergründen platziert wird.
 
 ``` dart
 Button.transparency(
@@ -274,7 +274,7 @@ Button.transparency(
 )
 ```
 
-Sie koennen die Textfarbe anpassen:
+Sie können die Textfarbe anpassen:
 
 ``` dart
 Button.transparency(
@@ -288,7 +288,7 @@ Button.transparency(
 
 ## Asynchroner Ladezustand
 
-Eine der leistungsfaehigsten Funktionen der {{ config('app.name') }}-Buttons ist die **automatische Ladezustandsverwaltung**. Wenn Ihr `onPressed`-Callback ein `Future` zurueckgibt, zeigt der Button automatisch einen Ladeindikator an und deaktiviert die Interaktion, bis die Operation abgeschlossen ist.
+Eine der leistungsfähigsten Funktionen der {{ config('app.name') }}-Buttons ist die **automatische Ladezustandsverwaltung**. Wenn Ihr `onPressed`-Callback ein `Future` zurückgibt, zeigt der Button automatisch einen Ladeindikator an und deaktiviert die Interaktion, bis die Operation abgeschlossen ist.
 
 ``` dart
 Button.primary(
@@ -299,9 +299,9 @@ Button.primary(
 )
 ```
 
-Waehrend der asynchronen Operation zeigt der Button einen Skeleton-Ladeeffekt an (standardmaessig). Sobald das `Future` abgeschlossen ist, kehrt der Button in seinen normalen Zustand zurueck.
+Während der asynchronen Operation zeigt der Button einen Skeleton-Ladeeffekt an (standardmäßig). Sobald das `Future` abgeschlossen ist, kehrt der Button in seinen normalen Zustand zurück.
 
-Dies funktioniert mit jeder asynchronen Operation -- API-Aufrufe, Datenbankschreibvorgaenge, Datei-Uploads oder alles, was ein `Future` zurueckgibt:
+Dies funktioniert mit jeder asynchronen Operation -- API-Aufrufe, Datenbankschreibvorgänge, Datei-Uploads oder alles, was ein `Future` zurückgibt:
 
 ``` dart
 Button.primary(
@@ -325,28 +325,28 @@ Button.secondary(
 )
 ```
 
-Es ist nicht noetig, `isLoading`-Zustandsvariablen zu verwalten, `setState` aufzurufen oder etwas in ein `StatefulWidget` zu wrappen -- {{ config('app.name') }} erledigt alles fuer Sie.
+Es ist nicht nötig, `isLoading`-Zustandsvariablen zu verwalten, `setState` aufzurufen oder etwas in ein `StatefulWidget` zu wrappen -- {{ config('app.name') }} erledigt alles für Sie.
 
 ### Funktionsweise
 
-Wenn der Button erkennt, dass `onPressed` ein `Future` zurueckgibt, verwendet er den `lockRelease`-Mechanismus, um:
+Wenn der Button erkennt, dass `onPressed` ein `Future` zurückgibt, verwendet er den `lockRelease`-Mechanismus, um:
 
 1. Einen Ladeindikator anzuzeigen (gesteuert durch `LoadingStyle`)
 2. Den Button zu deaktivieren, um doppelte Taps zu verhindern
 3. Auf den Abschluss des `Future` zu warten
-4. Den Button in seinen normalen Zustand zurueckzuversetzen
+4. Den Button in seinen normalen Zustand zurückzuversetzen
 
 <div id="animation-styles"></div>
 
 ## Animationsstile
 
-Buttons unterstuetzen Druckanimationen ueber `ButtonAnimationStyle`. Diese Animationen bieten visuelles Feedback, wenn ein Benutzer mit einem Button interagiert. Sie koennen den Animationsstil festlegen, wenn Sie Ihre Buttons in `lib/resources/widgets/buttons/buttons.dart` anpassen.
+Buttons unterstützen Druckanimationen über `ButtonAnimationStyle`. Diese Animationen bieten visuelles Feedback, wenn ein Benutzer mit einem Button interagiert. Sie können den Animationsstil festlegen, wenn Sie Ihre Buttons in `lib/resources/widgets/buttons/buttons.dart` anpassen.
 
 <div id="anim-clickable"></div>
 
 ### Clickable
 
-Ein Duolingo-artiger 3D-Druckeffekt. Der Button bewegt sich beim Druecken nach unten und springt beim Loslassen zurueck. Am besten fuer primaere Aktionen und spielaehnliche UX.
+Ein Duolingo-artiger 3D-Druckeffekt. Der Button bewegt sich beim Drücken nach unten und springt beim Loslassen zurück. Am besten für primäre Aktionen und spielähnliche UX.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.clickable()
@@ -367,7 +367,7 @@ ButtonAnimationStyle.clickable(
 
 ### Bounce
 
-Skaliert den Button beim Druecken herunter und springt beim Loslassen zurueck. Am besten fuer In-den-Warenkorb-, Like- und Favoriten-Buttons.
+Skaliert den Button beim Drücken herunter und springt beim Loslassen zurück. Am besten für In-den-Warenkorb-, Like- und Favoriten-Buttons.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.bounce()
@@ -388,7 +388,7 @@ ButtonAnimationStyle.bounce(
 
 ### Pulse
 
-Ein subtiler kontinuierlicher Skalierungspuls, waehrend der Button gehalten wird. Am besten fuer Langdruck-Aktionen oder um Aufmerksamkeit zu erregen.
+Ein subtiler kontinuierlicher Skalierungspuls, während der Button gehalten wird. Am besten für Langdruck-Aktionen oder um Aufmerksamkeit zu erregen.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.pulse()
@@ -408,7 +408,7 @@ ButtonAnimationStyle.pulse(
 
 ### Squeeze
 
-Komprimiert den Button horizontal und dehnt ihn vertikal beim Druecken aus. Am besten fuer verspielte und interaktive UIs.
+Komprimiert den Button horizontal und dehnt ihn vertikal beim Drücken aus. Am besten für verspielte und interaktive UIs.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.squeeze()
@@ -429,7 +429,7 @@ ButtonAnimationStyle.squeeze(
 
 ### Jelly
 
-Ein wackeliger elastischer Verformungseffekt. Am besten fuer lustige, lassige oder Unterhaltungs-Apps.
+Ein wackeliger elastischer Verformungseffekt. Am besten für lustige, lässige oder Unterhaltungs-Apps.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.jelly()
@@ -450,7 +450,7 @@ ButtonAnimationStyle.jelly(
 
 ### Shine
 
-Ein glaenzendes Highlight, das beim Druecken ueber den Button gleitet. Am besten fuer Premium-Funktionen oder CTAs, auf die Sie aufmerksam machen moechten.
+Ein glänzendes Highlight, das beim Drücken über den Button gleitet. Am besten für Premium-Funktionen oder CTAs, auf die Sie aufmerksam machen möchten.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.shine()
@@ -470,7 +470,7 @@ ButtonAnimationStyle.shine(
 
 ### Ripple
 
-Ein verbesserter Welleneffekt, der sich vom Beruehrungspunkt aus ausbreitet. Am besten fuer Material-Design-Betonung.
+Ein verbesserter Welleneffekt, der sich vom Berührungspunkt aus ausbreitet. Am besten für Material-Design-Betonung.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.ripple()
@@ -491,7 +491,7 @@ ButtonAnimationStyle.ripple(
 
 ### Morph
 
-Der Rahmenradius des Buttons vergroessert sich beim Druecken und erzeugt einen Formwandel-Effekt. Am besten fuer subtiles, elegantes Feedback.
+Der Rahmenradius des Buttons vergrößert sich beim Drücken und erzeugt einen Formwandel-Effekt. Am besten für subtiles, elegantes Feedback.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.morph()
@@ -511,7 +511,7 @@ ButtonAnimationStyle.morph(
 
 ### Shake
 
-Eine horizontale Schuettel-Animation. Am besten fuer Fehlerzustaende oder ungueltige Aktionen -- schuetteln Sie den Button, um zu signalisieren, dass etwas schiefgelaufen ist.
+Eine horizontale Schüttel-Animation. Am besten für Fehlerzustände oder ungültige Aktionen -- schütteln Sie den Button, um zu signalisieren, dass etwas schiefgelaufen ist.
 
 ``` dart
 animationStyle: ButtonAnimationStyle.shake()
@@ -536,9 +536,9 @@ Um einen Button ohne Animation zu verwenden:
 animationStyle: ButtonAnimationStyle.none()
 ```
 
-### Standard-Animation aendern
+### Standard-Animation ändern
 
-Um die Standard-Animation fuer einen Button-Typ zu aendern, bearbeiten Sie Ihre `lib/resources/widgets/buttons/buttons.dart`-Datei:
+Um die Standard-Animation für einen Button-Typ zu ändern, bearbeiten Sie Ihre `lib/resources/widgets/buttons/buttons.dart`-Datei:
 
 ``` dart
 class Button {
@@ -560,18 +560,18 @@ class Button {
 
 ## Splash-Stile
 
-Splash-Effekte bieten visuelles Touch-Feedback auf Buttons. Konfigurieren Sie sie ueber `ButtonSplashStyle`. Splash-Stile koennen mit Animationsstilen fuer geschichtetes Feedback kombiniert werden.
+Splash-Effekte bieten visuelles Touch-Feedback auf Buttons. Konfigurieren Sie sie über `ButtonSplashStyle`. Splash-Stile können mit Animationsstilen für geschichtetes Feedback kombiniert werden.
 
-### Verfuegbare Splash-Stile
+### Verfügbare Splash-Stile
 
 | Splash | Factory | Beschreibung |
 |--------|---------|-------------|
-| Ripple | `ButtonSplashStyle.ripple()` | Standard-Material-Ripple vom Beruehrungspunkt |
+| Ripple | `ButtonSplashStyle.ripple()` | Standard-Material-Ripple vom Berührungspunkt |
 | Highlight | `ButtonSplashStyle.highlight()` | Dezentes Highlight ohne Ripple-Animation |
-| Glow | `ButtonSplashStyle.glow()` | Sanftes Leuchten vom Beruehrungspunkt |
+| Glow | `ButtonSplashStyle.glow()` | Sanftes Leuchten vom Berührungspunkt |
 | Ink | `ButtonSplashStyle.ink()` | Schneller Tintenklecks, schneller und reaktionsfreudiger |
 | None | `ButtonSplashStyle.none()` | Kein Splash-Effekt |
-| Custom | `ButtonSplashStyle.custom()` | Volle Kontrolle ueber die Splash-Factory |
+| Custom | `ButtonSplashStyle.custom()` | Volle Kontrolle über die Splash-Factory |
 
 ### Beispiel
 
@@ -592,7 +592,7 @@ class Button {
 }
 ```
 
-Sie koennen Splash-Farben und Deckkraft anpassen:
+Sie können Splash-Farben und Deckkraft anpassen:
 
 ``` dart
 ButtonSplashStyle.ripple(
@@ -607,11 +607,11 @@ ButtonSplashStyle.ripple(
 
 ## Ladestile
 
-Der Ladeindikator, der waehrend asynchroner Operationen angezeigt wird, wird durch `LoadingStyle` gesteuert. Sie koennen ihn pro Button-Typ in Ihrer Buttons-Datei festlegen.
+Der Ladeindikator, der während asynchroner Operationen angezeigt wird, wird durch `LoadingStyle` gesteuert. Sie können ihn pro Button-Typ in Ihrer Buttons-Datei festlegen.
 
 ### Skeletonizer (Standard)
 
-Zeigt einen Shimmer-Skeleton-Effekt ueber dem Button an:
+Zeigt einen Shimmer-Skeleton-Effekt über dem Button an:
 
 ``` dart
 loadingStyle: LoadingStyle.skeletonizer()
@@ -619,7 +619,7 @@ loadingStyle: LoadingStyle.skeletonizer()
 
 ### Normal
 
-Zeigt ein Lade-Widget an (standardmaessig der App-Loader):
+Zeigt ein Lade-Widget an (standardmäßig der App-Loader):
 
 ``` dart
 loadingStyle: LoadingStyle.normal(
@@ -629,7 +629,7 @@ loadingStyle: LoadingStyle.normal(
 
 ### None
 
-Haelt den Button sichtbar, deaktiviert aber die Interaktion waehrend des Ladens:
+Hält den Button sichtbar, deaktiviert aber die Interaktion während des Ladens:
 
 ``` dart
 loadingStyle: LoadingStyle.none()
@@ -637,9 +637,9 @@ loadingStyle: LoadingStyle.none()
 
 <div id="form-submission"></div>
 
-## Formularuebermittlung
+## Formularübermittlung
 
-Alle Buttons unterstuetzen den `submitForm`-Parameter, der den Button mit einem `NyForm` verbindet. Beim Antippen validiert der Button das Formular und ruft Ihren Erfolgshandler mit den Formulardaten auf.
+Alle Buttons unterstützen den `submitForm`-Parameter, der den Button mit einem `NyForm` verbindet. Beim Antippen validiert der Button das Formular und ruft Ihren Erfolgshandler mit den Formulardaten auf.
 
 ``` dart
 Button.primary(
@@ -657,9 +657,9 @@ Button.primary(
 
 Der `submitForm`-Parameter akzeptiert einen Record mit zwei Werten:
 1. Eine `NyFormData`-Instanz (oder Formularname als `String`)
-2. Einen Callback, der die validierten Daten empfaengt
+2. Einen Callback, der die validierten Daten empfängt
 
-Standardmaessig ist `showToastError` `true`, was eine Toast-Benachrichtigung anzeigt, wenn die Formularvalidierung fehlschlaegt. Setzen Sie es auf `false`, um Fehler stillschweigend zu behandeln:
+Standardmäßig ist `showToastError` `true`, was eine Toast-Benachrichtigung anzeigt, wenn die Formularvalidierung fehlschlägt. Setzen Sie es auf `false`, um Fehler stillschweigend zu behandeln:
 
 ``` dart
 Button.primary(
@@ -674,7 +674,7 @@ Button.primary(
 )
 ```
 
-Wenn der `submitForm`-Callback ein `Future` zurueckgibt, zeigt der Button automatisch einen Ladezustand an, bis die asynchrone Operation abgeschlossen ist.
+Wenn der `submitForm`-Callback ein `Future` zurückgibt, zeigt der Button automatisch einen Ladezustand an, bis die asynchrone Operation abgeschlossen ist.
 
 <div id="customizing-buttons"></div>
 
@@ -682,9 +682,9 @@ Wenn der `submitForm`-Callback ein `Future` zurueckgibt, zeigt der Button automa
 
 Alle Button-Standardwerte sind in Ihrem Projekt unter `lib/resources/widgets/buttons/buttons.dart` definiert. Jeder Button-Typ hat eine entsprechende Widget-Klasse in `lib/resources/widgets/buttons/partials/`.
 
-### Standardstile aendern
+### Standardstile ändern
 
-Um das Standard-Erscheinungsbild eines Buttons zu aendern, bearbeiten Sie die `Button`-Klasse:
+Um das Standard-Erscheinungsbild eines Buttons zu ändern, bearbeiten Sie die `Button`-Klasse:
 
 ``` dart
 class Button {
@@ -714,7 +714,7 @@ class Button {
 
 ### Ein Button-Widget anpassen
 
-Um das visuelle Erscheinungsbild eines Button-Typs zu aendern, bearbeiten Sie das entsprechende Widget in `lib/resources/widgets/buttons/partials/`. Um beispielsweise den Rahmenradius oder Schatten des primaeren Buttons zu aendern:
+Um das visuelle Erscheinungsbild eines Button-Typs zu ändern, bearbeiten Sie das entsprechende Widget in `lib/resources/widgets/buttons/partials/`. Um beispielsweise den Rahmenradius oder Schatten des primären Buttons zu ändern:
 
 ``` dart
 // lib/resources/widgets/buttons/partials/primary_button_widget.dart
@@ -752,11 +752,11 @@ class PrimaryButton extends StatefulAppButton {
 
 ### Einen neuen Button-Typ erstellen
 
-Um einen neuen Button-Typ hinzuzufuegen:
+Um einen neuen Button-Typ hinzuzufügen:
 
 1. Erstellen Sie eine neue Widget-Datei in `lib/resources/widgets/buttons/partials/`, die `StatefulAppButton` erweitert.
 2. Implementieren Sie die `buildButton`-Methode.
-3. Fuegen Sie eine statische Methode in der `Button`-Klasse hinzu.
+3. Fügen Sie eine statische Methode in der `Button`-Klasse hinzu.
 
 ``` dart
 // lib/resources/widgets/buttons/partials/danger_button_widget.dart
@@ -837,11 +837,11 @@ class Button {
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
 | `text` | `String` | erforderlich | Der Button-Label-Text |
-| `onPressed` | `VoidCallback?` | `null` | Callback beim Antippen des Buttons. Geben Sie ein `Future` zurueck fuer automatischen Ladezustand |
-| `submitForm` | `(dynamic, Function(dynamic))?` | `null` | Formularuebermittlungs-Record (Formularinstanz, Erfolgs-Callback) |
-| `onFailure` | `Function(dynamic)?` | `null` | Wird aufgerufen, wenn die Formularvalidierung fehlschlaegt |
+| `onPressed` | `VoidCallback?` | `null` | Callback beim Antippen des Buttons. Geben Sie ein `Future` zurück für automatischen Ladezustand |
+| `submitForm` | `(dynamic, Function(dynamic))?` | `null` | Formularübermittlungs-Record (Formularinstanz, Erfolgs-Callback) |
+| `onFailure` | `Function(dynamic)?` | `null` | Wird aufgerufen, wenn die Formularvalidierung fehlschlägt |
 | `showToastError` | `bool` | `true` | Toast-Benachrichtigung bei Formularvalidierungsfehler anzeigen |
-| `width` | `double?` | `null` | Button-Breite (standardmaessig volle Breite) |
+| `width` | `double?` | `null` | Button-Breite (standardmäßig volle Breite) |
 
 ### Typspezifische Parameter
 
@@ -850,33 +850,33 @@ class Button {
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
 | `borderColor` | `Color?` | Theme-Rahmenfarbe | Rahmenfarbe |
-| `textColor` | `Color?` | Theme-Primaerfarbe | Textfarbe |
+| `textColor` | `Color?` | Theme-Primärfarbe | Textfarbe |
 
 #### Button.textOnly
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
-| `textColor` | `Color?` | Theme-Primaerfarbe | Textfarbe |
+| `textColor` | `Color?` | Theme-Primärfarbe | Textfarbe |
 
 #### Button.icon
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
 | `icon` | `Widget` | erforderlich | Das anzuzeigende Symbol-Widget |
-| `color` | `Color?` | Theme-Primaerfarbe | Hintergrundfarbe |
+| `color` | `Color?` | Theme-Primärfarbe | Hintergrundfarbe |
 
 #### Button.gradient
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
-| `gradientColors` | `List<Color>?` | Primaer- und Tertiaerfarben | Farbverlaufs-Stopps |
+| `gradientColors` | `List<Color>?` | Primär- und Tertiärfarben | Farbverlaufs-Stopps |
 
 #### Button.rounded
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
 | `backgroundColor` | `Color?` | Theme Primary Container Farbe | Hintergrundfarbe |
-| `borderRadius` | `BorderRadius?` | Pillenform (Hoehe / 2) | Eckenradius |
+| `borderRadius` | `BorderRadius?` | Pillenform (Höhe / 2) | Eckenradius |
 
 #### Button.transparency
 
@@ -890,14 +890,14 @@ class Button {
 |-----------|-----|---------|-------------|
 | `duration` | `Duration` | Variiert pro Typ | Animationsdauer |
 | `curve` | `Curve` | Variiert pro Typ | Animationskurve |
-| `enableHapticFeedback` | `bool` | Variiert pro Typ | Haptisches Feedback beim Druecken ausloesen |
+| `enableHapticFeedback` | `bool` | Variiert pro Typ | Haptisches Feedback beim Drücken auslösen |
 | `translateY` | `double` | `4.0` | Clickable: vertikale Druckdistanz |
 | `shadowOffset` | `double` | `4.0` | Clickable: Schattentiefe |
-| `scaleMin` | `double` | `0.92` | Bounce: minimale Skalierung beim Druecken |
-| `pulseScale` | `double` | `1.05` | Pulse: maximale Skalierung waehrend des Pulses |
+| `scaleMin` | `double` | `0.92` | Bounce: minimale Skalierung beim Drücken |
+| `pulseScale` | `double` | `1.05` | Pulse: maximale Skalierung während des Pulses |
 | `squeezeX` | `double` | `0.95` | Squeeze: horizontale Kompression |
 | `squeezeY` | `double` | `1.05` | Squeeze: vertikale Ausdehnung |
-| `jellyStrength` | `double` | `0.15` | Jelly: Wackel-Intensitaet |
+| `jellyStrength` | `double` | `0.15` | Jelly: Wackel-Intensität |
 | `shineColor` | `Color` | `Colors.white` | Shine: Highlight-Farbe |
 | `shineWidth` | `double` | `0.3` | Shine: Breite des Glanzstreifens |
 | `rippleScale` | `double` | `2.0` | Ripple: Ausbreitungsskala |
@@ -909,8 +909,8 @@ class Button {
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
-| `splashColor` | `Color?` | Theme-Oberflaechenfarbe | Splash-Effekt-Farbe |
-| `highlightColor` | `Color?` | Theme-Oberflaechenfarbe | Highlight-Effekt-Farbe |
+| `splashColor` | `Color?` | Theme-Oberflächenfarbe | Splash-Effekt-Farbe |
+| `highlightColor` | `Color?` | Theme-Oberflächenfarbe | Highlight-Effekt-Farbe |
 | `splashOpacity` | `double` | `0.12` | Deckkraft des Splash |
 | `highlightOpacity` | `double` | `0.06` | Deckkraft des Highlights |
 | `borderRadius` | `BorderRadius?` | `null` | Splash-Clip-Radius |

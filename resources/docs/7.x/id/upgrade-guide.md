@@ -114,7 +114,7 @@ Jika Anda tertarik melihat diff perubahan antara v6 dan v7, Anda dapat melihat p
 
 Gunakan daftar periksa ini untuk melacak progres migrasi Anda:
 
-- [ ] Perbarui `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.24.0, nylo_framework: ^7.0.0)
+- [ ] Perbarui `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
 - [ ] Jalankan `flutter pub get`
 - [ ] Jalankan `metro make:key` untuk menghasilkan APP_KEY
 - [ ] Jalankan `metro make:env` untuk menghasilkan environment terenkripsi
@@ -150,7 +150,7 @@ Perbarui `pubspec.yaml` Anda:
 ``` yaml
 environment:
   sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.24.0"
+  flutter: ">=3.38.4"
 
 dependencies:
   nylo_framework: ^7.0.0

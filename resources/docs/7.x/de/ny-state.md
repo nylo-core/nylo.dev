@@ -107,7 +107,7 @@ LoadingStyle get loadingStyle => LoadingStyle.normal(
         child: Text("Loading..."),
     ),
 );
-// Gleiches gilt fuer Skeletonizer
+// Gleiches gilt für Skeletonizer
 @override
 LoadingStyle get loadingStyle => LoadingStyle.skeletonizer(
     child: Container(
@@ -302,7 +302,7 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - Die aktuelle Seite vom Stack entfernen.
 
-Uebergeben Sie `rootNavigator: true`, um vom Root-Navigator statt vom naechsten lokalen Navigator zu poppen. Dies ist in Navigation-Hub-Tabs nuetzlich, wenn ein Modal oder Overlay ueber den Root-Navigator geoeffnet wurde.
+Übergeben Sie `rootNavigator: true`, um vom Root-Navigator statt vom nächsten lokalen Navigator zu poppen. Dies ist in Navigation-Hub-Tabs nützlich, wenn ein Modal oder Overlay über den Root-Navigator geöffnet wurde.
 
 Beispiel
 
@@ -313,7 +313,7 @@ class _HomePageState extends NyState<HomePage> {
     pop();
   }
 
-  // Vom Root-Navigator poppen (z.B. um ein Root-Level-Modal zu schliessen)
+  // Vom Root-Navigator poppen (z.B. um ein Root-Level-Modal zu schließen)
   popViewFromRoot() {
     pop(rootNavigator: true);
   }

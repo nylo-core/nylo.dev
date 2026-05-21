@@ -19,9 +19,9 @@
 
 ## Einleitung
 
-Das **Pullable**-Widget fuegt Pull-to-Refresh- und Nachladen-Funktionalitaet zu jedem scrollbaren Inhalt hinzu. Es umschliesst Ihr Child-Widget mit gestengesteuertem Aktualisierungs- und Paginierungsverhalten und unterstuetzt mehrere Header-Animationsstile.
+Das **Pullable**-Widget fügt Pull-to-Refresh- und Nachladen-Funktionalität zu jedem scrollbaren Inhalt hinzu. Es umschließt Ihr Child-Widget mit gestengesteuertem Aktualisierungs- und Paginierungsverhalten und unterstützt mehrere Header-Animationsstile.
 
-Aufgebaut auf dem `pull_to_refresh_flutter3`-Paket bietet Pullable eine uebersichtliche API mit benannten Konstruktoren fuer gaengige Konfigurationen.
+Aufgebaut auf dem `pull_to_refresh_flutter3`-Paket bietet Pullable eine übersichtliche API mit benannten Konstruktoren für gängige Konfigurationen.
 
 ``` dart
 Pullable(
@@ -39,7 +39,7 @@ Pullable(
 
 ## Grundlegende Verwendung
 
-Umschliessen Sie jedes scrollbare Widget mit `Pullable`:
+Umschließen Sie jedes scrollbare Widget mit `Pullable`:
 
 ``` dart
 Pullable(
@@ -53,13 +53,13 @@ Pullable(
 )
 ```
 
-Wenn der Benutzer die Liste nach unten zieht, wird der `onRefresh`-Callback ausgeloest. Der Aktualisierungsindikator wird automatisch abgeschlossen, wenn der Callback fertig ist.
+Wenn der Benutzer die Liste nach unten zieht, wird der `onRefresh`-Callback ausgelöst. Der Aktualisierungsindikator wird automatisch abgeschlossen, wenn der Callback fertig ist.
 
 <div id="constructors"></div>
 
 ## Konstruktoren
 
-`Pullable` bietet benannte Konstruktoren fuer gaengige Konfigurationen:
+`Pullable` bietet benannte Konstruktoren für gängige Konfigurationen:
 
 | Konstruktor | Header-Stil | Beschreibung |
 |-------------|-------------|-------------|
@@ -71,7 +71,7 @@ Wenn der Benutzer die Liste nach unten zieht, wird der `onRefresh`-Callback ausg
 | `Pullable.bezierHeader()` | Bezier | Bezier-Kurven-Animation |
 | `Pullable.noBounce()` | Konfigurierbar | Reduzierter Bounce mit `ClampingScrollPhysics` |
 | `Pullable.custom()` | Benutzerdefiniertes Widget | Eigene Header-/Footer-Widgets verwenden |
-| `Pullable.builder()` | Konfigurierbar | Vollstaendige `PullableConfig`-Kontrolle |
+| `Pullable.builder()` | Konfigurierbar | Vollständige `PullableConfig`-Kontrolle |
 
 ### Beispiele
 
@@ -107,7 +107,7 @@ Pullable.custom(
 
 ## PullableConfig
 
-Fuer detaillierte Kontrolle verwenden Sie `PullableConfig` mit dem `Pullable.builder()`-Konstruktor:
+Für detaillierte Kontrolle verwenden Sie `PullableConfig` mit dem `Pullable.builder()`-Konstruktor:
 
 ``` dart
 Pullable.builder(
@@ -137,9 +137,9 @@ Pullable.builder(
 | `headerType` | `PullableHeaderType` | `waterDrop` | Header-Animationsstil |
 | `customHeader` | `Widget?` | null | Benutzerdefiniertes Header-Widget |
 | `customFooter` | `Widget?` | null | Benutzerdefiniertes Footer-Widget |
-| `refreshCompleteDelay` | `Duration` | `Duration.zero` | Verzoegerung vor Abschluss der Aktualisierung |
-| `loadCompleteDelay` | `Duration` | `Duration.zero` | Verzoegerung vor Abschluss des Nachladens |
-| `enableOverScroll` | `bool` | `true` | Ueber-Scroll-Effekt erlauben |
+| `refreshCompleteDelay` | `Duration` | `Duration.zero` | Verzögerung vor Abschluss der Aktualisierung |
+| `loadCompleteDelay` | `Duration` | `Duration.zero` | Verzögerung vor Abschluss des Nachladens |
+| `enableOverScroll` | `bool` | `true` | Über-Scroll-Effekt erlauben |
 | `cacheExtent` | `double?` | null | Scroll-Cache-Ausdehnung |
 | `semanticChildCount` | `int?` | null | Semantische Kindanzahl |
 | `dragStartBehavior` | `DragStartBehavior` | `start` | Wie Ziehgesten beginnen |
@@ -148,7 +148,7 @@ Pullable.builder(
 
 ## Header-Stile
 
-Waehlen Sie aus fuenf integrierten Header-Animationen:
+Wählen Sie aus fünf integrierten Header-Animationen:
 
 ``` dart
 enum PullableHeaderType {
@@ -160,16 +160,16 @@ enum PullableHeaderType {
 }
 ```
 
-Setzen Sie den Stil ueber den Konstruktor oder die Konfiguration:
+Setzen Sie den Stil über den Konstruktor oder die Konfiguration:
 
 ``` dart
-// Ueber benannten Konstruktor
+// Über benannten Konstruktor
 Pullable.bezierHeader(
   onRefresh: () async => await refreshData(),
   child: myListView,
 )
 
-// Ueber Konfiguration
+// Über Konfiguration
 Pullable.builder(
   config: PullableConfig(
     headerType: PullableHeaderType.bezier,
@@ -191,13 +191,13 @@ Pullable.builder(
     enablePullDown: true,
     enablePullUp: true,
     onRefresh: () async {
-      // Auf Seite 1 zuruecksetzen
+      // Auf Seite 1 zurücksetzen
       page = 1;
       items = await fetchItems(page: page);
       setState(() {});
     },
     onLoading: () async {
-      // Naechste Seite laden
+      // Nächste Seite laden
       page++;
       List<Item> more = await fetchItems(page: page);
       items.addAll(more);
@@ -240,7 +240,7 @@ Pullable.custom(
 
 ## Controller
 
-Verwenden Sie einen `RefreshController` fuer programmatische Steuerung:
+Verwenden Sie einen `RefreshController` für programmatische Steuerung:
 
 ``` dart
 final RefreshController _controller = RefreshController();
@@ -251,23 +251,23 @@ Pullable(
   child: myListView,
 )
 
-// Aktualisierung programmgesteuert ausloesen
+// Aktualisierung programmgesteuert auslösen
 _controller.triggerRefresh();
 
-// Laden programmgesteuert ausloesen
+// Laden programmgesteuert auslösen
 _controller.triggerLoading();
 
-// Status pruefen
+// Status prüfen
 bool refreshing = _controller.isRefreshing;
 bool loading = _controller.isLoading;
 ```
 
 ### Erweiterungsmethoden auf RefreshController
 
-| Methode/Getter | Rueckgabetyp | Beschreibung |
+| Methode/Getter | Rückgabetyp | Beschreibung |
 |----------------|-------------|-------------|
-| `triggerRefresh()` | `void` | Aktualisierung manuell ausloesen |
-| `triggerLoading()` | `void` | Nachladen manuell ausloesen |
+| `triggerRefresh()` | `void` | Aktualisierung manuell auslösen |
+| `triggerLoading()` | `void` | Nachladen manuell auslösen |
 | `isRefreshing` | `bool` | Ob eine Aktualisierung aktiv ist |
 | `isLoading` | `bool` | Ob ein Nachladevorgang aktiv ist |
 
@@ -349,9 +349,9 @@ CollectionView<Product>.pullableGrid(
 | `beforeRefresh` | `Function()?` | Hook vor Beginn der Aktualisierung |
 | `afterRefresh` | `Function(dynamic)?` | Hook nach der Aktualisierung mit Daten |
 | `headerStyle` | `String?` | Header-Typname (z. B. `'WaterDropHeader'`, `'ClassicHeader'`) |
-| `footerLoadingIcon` | `Widget?` | Benutzerdefinierter Ladeindikator fuer den Footer |
+| `footerLoadingIcon` | `Widget?` | Benutzerdefinierter Ladeindikator für den Footer |
 
-Um ein `CollectionView.pullable` programmatisch zu aktualisieren, verwenden Sie `CollectionView.stateActions(stateName).refreshData()`. Dies laedt die Daten neu und setzt den Paginierungs-Iterator auf 1 zurueck, sodass die Liste von der ersten Seite neu startet.
+Um ein `CollectionView.pullable` programmatisch zu aktualisieren, verwenden Sie `CollectionView.stateActions(stateName).refreshData()`. Dies lädt die Daten neu und setzt den Paginierungs-Iterator auf 1 zurück, sodass die Liste von der ersten Seite neu startet.
 
 <div id="examples"></div>
 

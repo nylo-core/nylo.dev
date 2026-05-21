@@ -17,7 +17,7 @@
 
 | Gereksinim | Minimum S&#252;r&#252;m |
 |-------------|-----------------|
-| **Flutter** | 3.24.0 veya &#252;zeri |
+| **Flutter** | 3.38.4 veya &#252;zeri |
 | **Dart SDK** | 3.10.7 veya &#252;zeri |
 
 ### Platform Deste&#287;i
@@ -56,13 +56,13 @@ flutter --version
 &#350;una benzer bir &#231;&#305;kt&#305; g&#246;rmelisiniz:
 
 ```
-Flutter 3.24.0 • channel stable
+Flutter 3.38.4 • channel stable
 Dart SDK version: 3.10.7
 ```
 
 ### Flutter'&#305; G&#252;ncelleme (gerekirse)
 
-Flutter s&#252;r&#252;m&#252;n&#252;z 3.24.0'&#305;n alt&#305;ndaysa, en son kararl&#305; s&#252;r&#252;me y&#252;kseltin:
+Flutter s&#252;r&#252;m&#252;n&#252;z 3.38.4'&#305;n alt&#305;ndaysa, en son kararl&#305; s&#252;r&#252;me y&#252;kseltin:
 
 ``` bash
 flutter channel stable

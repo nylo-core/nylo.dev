@@ -240,7 +240,6 @@ abstract class ColorStyles extends ThemeColor {
 
 ## การขยายสไตล์สี
 
-<!-- uncertain: new section "Extending color styles" — not present in existing th locale file -->
 สามกลุ่มเริ่มต้น (`general`, `appBar`, `bottomTabBar`) เป็นจุดเริ่มต้น ไม่ใช่ขีดจำกัดแบบตายตัว `lib/resources/themes/color_styles.dart` เป็นของคุณที่จะแก้ไข — เพิ่มกลุ่มสีใหม่ (หรือฟิลด์เดี่ยว) บนค่าเริ่มต้น จากนั้น implement ในคลาสสีของแต่ละธีม
 
 **1. กำหนดกลุ่มสีที่กำหนดเอง**

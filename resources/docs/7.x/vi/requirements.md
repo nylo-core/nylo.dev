@@ -17,7 +17,7 @@
 
 | Yêu cầu | Phiên bản tối thiểu |
 |-------------|-----------------|
-| **Flutter** | 3.24.0 trở lên |
+| **Flutter** | 3.38.4 trở lên |
 | **Dart SDK** | 3.10.7 trở lên |
 
 ### Hỗ trợ nền tảng
@@ -56,13 +56,13 @@ flutter --version
 Bạn sẽ thấy đầu ra tương tự như:
 
 ```
-Flutter 3.24.0 • channel stable
+Flutter 3.38.4 • channel stable
 Dart SDK version: 3.10.7
 ```
 
 ### Cập nhật Flutter (nếu cần)
 
-Nếu phiên bản Flutter của bạn thấp hơn 3.24.0, hãy nâng cấp lên bản phát hành ổn định mới nhất:
+Nếu phiên bản Flutter của bạn thấp hơn 3.38.4, hãy nâng cấp lên bản phát hành ổn định mới nhất:
 
 ``` bash
 flutter channel stable

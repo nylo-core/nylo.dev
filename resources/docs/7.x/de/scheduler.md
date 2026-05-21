@@ -6,23 +6,23 @@
 - [Einleitung](#introduction "Einleitung")
 - [Einmalig planen](#schedule-once "Einmalig planen")
 - [Einmalig nach Datum planen](#schedule-once-after-date "Einmalig nach Datum planen")
-- [Einmalig taeglich planen](#schedule-once-daily "Einmalig taeglich planen")
+- [Einmalig täglich planen](#schedule-once-daily "Einmalig täglich planen")
 
 <div id="introduction"></div>
 
 ## Einleitung
 
-Nylo ermoeglicht es Ihnen, Aufgaben in Ihrer App zu planen, die einmalig, taeglich oder nach einem bestimmten Datum ausgefuehrt werden.
+Nylo ermöglicht es Ihnen, Aufgaben in Ihrer App zu planen, die einmalig, täglich oder nach einem bestimmten Datum ausgeführt werden.
 
-Nach dem Lesen dieser Dokumentation werden Sie wissen, wie Sie Aufgaben in Ihrer App planen koennen.
+Nach dem Lesen dieser Dokumentation werden Sie wissen, wie Sie Aufgaben in Ihrer App planen können.
 
 <div id="schedule-once"></div>
 
 ## Einmalig planen
 
-Sie koennen eine Aufgabe zur einmaligen Ausfuehrung mit der Methode `Nylo.scheduleOnce` planen.
+Sie können eine Aufgabe zur einmaligen Ausführung mit der Methode `Nylo.scheduleOnce` planen.
 
-Ein einfaches Beispiel fuer die Verwendung dieser Methode:
+Ein einfaches Beispiel für die Verwendung dieser Methode:
 
 ```dart
 Nylo.scheduleOnce('onboarding_info', () {
@@ -34,9 +34,9 @@ Nylo.scheduleOnce('onboarding_info', () {
 
 ## Einmalig nach Datum planen
 
-Sie koennen eine Aufgabe zur einmaligen Ausfuehrung nach einem bestimmten Datum mit der Methode `Nylo.scheduleOnceAfterDate` planen.
+Sie können eine Aufgabe zur einmaligen Ausführung nach einem bestimmten Datum mit der Methode `Nylo.scheduleOnceAfterDate` planen.
 
-Ein einfaches Beispiel fuer die Verwendung dieser Methode:
+Ein einfaches Beispiel für die Verwendung dieser Methode:
 
 ```dart
 Nylo.scheduleOnceAfterDate('app_review_rating', () {
@@ -46,11 +46,11 @@ Nylo.scheduleOnceAfterDate('app_review_rating', () {
 
 <div id="schedule-once-daily"></div>
 
-## Einmalig taeglich planen
+## Einmalig täglich planen
 
-Sie koennen eine Aufgabe zur einmal taeglichen Ausfuehrung mit der Methode `Nylo.scheduleOnceDaily` planen.
+Sie können eine Aufgabe zur einmal täglichen Ausführung mit der Methode `Nylo.scheduleOnceDaily` planen.
 
-Ein einfaches Beispiel fuer die Verwendung dieser Methode:
+Ein einfaches Beispiel für die Verwendung dieser Methode:
 
 ```dart
 Nylo.scheduleOnceDaily('free_daily_coins', () {

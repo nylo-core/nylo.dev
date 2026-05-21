@@ -240,7 +240,6 @@ Ba nhóm cung cấp các trường sau:
 
 ## Mở rộng kiểu màu
 
-<!-- uncertain: new section "Extending color styles" — not present in existing vi locale file -->
 Ba nhóm mặc định (`general`, `appBar`, `bottomTabBar`) là điểm khởi đầu, không phải giới hạn cứng. `lib/resources/themes/color_styles.dart` là của bạn để sửa đổi — thêm các nhóm màu mới (hoặc các trường đơn lẻ) trên các mặc định, sau đó thực hiện chúng trong lớp màu của mỗi theme.
 
 **1. Định nghĩa một nhóm màu tùy chỉnh**

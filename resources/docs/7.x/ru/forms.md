@@ -600,7 +600,6 @@ Field.custom("My Field",
 
 <div id="builder-fields"></div>
 
-<!-- uncertain: new Nylo-specific term "NyFieldBuilderLegacy" — not seen in existing locale file -->
 ### Поля-построители
 
 Используйте `Field.builder()` для создания пользовательского встроенного поля формы без наследования `NyFieldStatefulWidget`. Функция-построитель получает текущее значение, callback `onChanged` для передачи изменений значения в форму и callback `setState` для принудительного перестроения интерфейса.
@@ -659,6 +658,9 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### Создание FormCollection
 
 ``` dart
+// Пустая коллекция (полезна как заглушка до загрузки параметров)
+const FormCollection.empty()
+
 // Из списка строк (значение и метка совпадают)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -741,6 +743,11 @@ Field.number("Age",
       return age != null && age >= 18 && age <= 100;
     },
   )
+)
+
+// Nullable — валидация проходит, когда поле пустое
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
 )
 ```
 

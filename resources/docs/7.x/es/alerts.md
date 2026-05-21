@@ -397,7 +397,6 @@ Para control total sobre el widget del toast:
 
 ### Estilos de toast con datos
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 Usa `ToastStyleDataFactory` para registrar estilos de toast que reciben datos en tiempo de ejecucion. Esto es util cuando el contenido del toast -- como el nombre o avatar de un usuario -- no se conoce en el momento del registro.
 
 ``` dart
@@ -405,7 +404,6 @@ typedef ToastStyleDataFactory =
     ToastStyleFactory Function(Map<String, dynamic> data);
 ```
 
-<!-- uncertain: new method "registerWithData()" — not seen in existing locale file -->
 Registra un estilo con datos usando `registerWithData()`:
 
 ``` dart

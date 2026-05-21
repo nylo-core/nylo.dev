@@ -14,7 +14,7 @@
 
 ## Einleitung
 
-Das **TextTr**-Widget ist ein praktischer Wrapper um Flutters `Text`-Widget, der seinen Inhalt automatisch mithilfe des Lokalisierungssystems von {{ config('app.name') }} uebersetzt.
+Das **TextTr**-Widget ist ein praktischer Wrapper um Flutters `Text`-Widget, der seinen Inhalt automatisch mithilfe des Lokalisierungssystems von {{ config('app.name') }} übersetzt.
 
 Anstatt zu schreiben:
 
@@ -22,13 +22,13 @@ Anstatt zu schreiben:
 Text("hello_world".tr())
 ```
 
-Koennen Sie schreiben:
+Können Sie schreiben:
 
 ``` dart
 TextTr("hello_world")
 ```
 
-Dies macht Ihren Code sauberer und besser lesbar, besonders wenn Sie mit vielen uebersetzten Strings arbeiten.
+Dies macht Ihren Code sauberer und besser lesbar, besonders wenn Sie mit vielen übersetzten Strings arbeiten.
 
 <div id="basic-usage"></div>
 
@@ -51,7 +51,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-Das Widget sucht den Uebersetzungsschluessel in Ihren Sprachdateien (z.B. `/lang/en.json`):
+Das Widget sucht den Übersetzungsschlüssel in Ihren Sprachdateien (z.B. `/lang/en.json`):
 
 ``` json
 {
@@ -60,13 +60,13 @@ Das Widget sucht den Uebersetzungsschluessel in Ihren Sprachdateien (z.B. `/lang
 }
 ```
 
-Wenn ein Schluessel in der Datei des aktiven Locale fehlt, sucht {{ config('app.name') }} ihn automatisch in der Fallback-Sprache (konfiguriert in `lib/config/localization.dart`), bevor der rohe Schluessel-String zurueckgegeben wird. Dies gilt sowohl fuer Schluessel auf oberster Ebene als auch fuer punktnotierte verschachtelte Schluessel.
+Wenn ein Schlüssel in der Datei des aktiven Locale fehlt, sucht {{ config('app.name') }} ihn automatisch in der Fallback-Sprache (konfiguriert in `lib/config/localization.dart`), bevor der rohe Schlüssel-String zurückgegeben wird. Dies gilt sowohl für Schlüssel auf oberster Ebene als auch für punktnotierte verschachtelte Schlüssel.
 
 <div id="string-interpolation"></div>
 
 ## String-Interpolation
 
-Verwenden Sie den Parameter `arguments`, um dynamische Werte in Ihre Uebersetzungen einzufuegen:
+Verwenden Sie den Parameter `arguments`, um dynamische Werte in Ihre Übersetzungen einzufügen:
 
 ``` dart
 TextTr(
@@ -169,19 +169,19 @@ Widget build(BuildContext context) {
 
 ## Parameter
 
-`TextTr` unterstuetzt alle Standard-Parameter des `Text`-Widgets:
+`TextTr` unterstützt alle Standard-Parameter des `Text`-Widgets:
 
 | Parameter | Typ | Beschreibung |
 |-----------|-----|-------------|
-| `data` | `String` | Der nachzuschlagende Uebersetzungsschluessel |
-| `arguments` | `Map<String, String>?` | Schluessel-Wert-Paare fuer die String-Interpolation |
+| `data` | `String` | Der nachzuschlagende Übersetzungsschlüssel |
+| `arguments` | `Map<String, String>?` | Schlüssel-Wert-Paare für die String-Interpolation |
 | `style` | `TextStyle?` | Textstil |
 | `textAlign` | `TextAlign?` | Wie der Text ausgerichtet werden soll |
 | `maxLines` | `int?` | Maximale Zeilenanzahl |
-| `overflow` | `TextOverflow?` | Wie Ueberlauf behandelt werden soll |
-| `softWrap` | `bool?` | Ob Text an weichen Umbruechen umbrechen soll |
+| `overflow` | `TextOverflow?` | Wie Überlauf behandelt werden soll |
+| `softWrap` | `bool?` | Ob Text an weichen Umbrüchen umbrechen soll |
 | `textDirection` | `TextDirection?` | Richtung des Textes |
-| `locale` | `Locale?` | Locale fuer die Textdarstellung |
+| `locale` | `Locale?` | Locale für die Textdarstellung |
 | `semanticsLabel` | `String?` | Barrierefreiheits-Label |
 
 ## Vergleich

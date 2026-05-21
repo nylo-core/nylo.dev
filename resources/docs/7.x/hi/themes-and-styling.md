@@ -240,7 +240,6 @@ abstract class ColorStyles extends ThemeColor {
 
 ## कलर स्टाइल्स विस्तारित करें
 
-<!-- uncertain: new section "Extending color styles" — not present in existing hi locale file -->
 तीन डिफ़ॉल्ट समूह (`general`, `appBar`, `bottomTabBar`) एक शुरुआती बिंदु हैं, कोई कठोर सीमा नहीं। `lib/resources/themes/color_styles.dart` आपका है संशोधित करने के लिए — डिफ़ॉल्ट के ऊपर नए कलर समूह (या एकल फ़ील्ड्स) जोड़ें, फिर प्रत्येक थीम की कलर्स क्लास में उन्हें लागू करें।
 
 **1. एक कस्टम कलर समूह परिभाषित करें**

@@ -602,7 +602,6 @@ Field.custom("My Field",
 
 ### Builder Alanları
 
-<!-- uncertain: new Nylo-specific term "Field.builder()" with 4-argument signature including setState — not seen in existing locale file -->
 `NyFieldStatefulWidget` alt sınıfı oluşturmadan özel bir form alanı inline oluşturmak için `Field.builder()` kullanın. Builder işlevi, mevcut değeri, forma değer değişikliklerini bildiren bir `onChanged` callback'ini ve UI'yı yeniden oluşturmayı tetikleyen bir `setState` callback'ini alır.
 
 ``` dart

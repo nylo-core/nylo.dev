@@ -57,7 +57,7 @@ Certifique-se de ter os seguintes itens instalados:
 
 | Requisito | Versão Mínima |
 |-------------|-----------------|
-| Flutter | 3.24.0 ou superior |
+| Flutter | 3.38.4 ou superior |
 | Dart SDK | 3.10.7 ou superior |
 
 ### Vincular Pacotes Locais
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

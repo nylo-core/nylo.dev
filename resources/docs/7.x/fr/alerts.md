@@ -397,7 +397,6 @@ Pour un controle total sur le widget toast :
 
 ### Styles de toast dependants des donnees
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 Utilisez `ToastStyleDataFactory` pour enregistrer des styles de toast qui recoivent des donnees au moment de l'appel. Cela est utile lorsque le contenu du toast -- comme le nom ou l'avatar d'un utilisateur -- n'est pas connu au moment de l'enregistrement.
 
 ``` dart
@@ -405,7 +404,6 @@ typedef ToastStyleDataFactory =
     ToastStyleFactory Function(Map<String, dynamic> data);
 ```
 
-<!-- uncertain: new method "registerWithData()" — not seen in existing locale file -->
 Enregistrez un style dependant des donnees avec `registerWithData()` :
 
 ``` dart

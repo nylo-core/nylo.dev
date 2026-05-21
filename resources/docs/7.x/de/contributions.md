@@ -57,7 +57,7 @@ Stellen Sie sicher, dass Folgendes installiert ist:
 
 | Voraussetzung | Mindestversion |
 |---------------|----------------|
-| Flutter | 3.24.0 oder höher |
+| Flutter | 3.38.4 oder höher |
 | Dart SDK | 3.10.7 oder höher |
 
 ### Lokale Pakete verknüpfen
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

@@ -240,7 +240,6 @@ Para adicionar campos além desses padrões — seus próprios botões, ícones,
 
 ## Estendendo estilos de cor
 
-<!-- uncertain: new section "Extending color styles" with new anchor #extending-color-styles — not present in the previous locale file -->
 Os três grupos padrão (`general`, `appBar`, `bottomTabBar`) são um ponto de partida, não um limite rígido. `lib/resources/themes/color_styles.dart` é seu para modificar — adicione novos grupos de cores (ou campos individuais) além dos padrões, e então implemente-os na classe de cores de cada tema.
 
 **1. Defina um grupo de cores personalizado**

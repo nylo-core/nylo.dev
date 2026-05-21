@@ -397,7 +397,6 @@ Toast widget'ı üzerinde tam kontrol için:
 
 ### Veriye Duyarlı Toast Stilleri
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 Çağrı anında çalışma zamanı verisi alan toast stillerini kaydetmek için `ToastStyleDataFactory` kullanın. Bu, kullanıcının adı veya avatarı gibi kayıt anında bilinmeyen toast içerikleri için kullanışlıdır.
 
 ``` dart

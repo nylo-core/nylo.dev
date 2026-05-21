@@ -344,7 +344,7 @@ Dies stellt sicher, dass Ihre App niemals rohe Schlüssel anzeigt, wenn eine Üb
 ``` dart
 static const List<String> rtlLanguages = ['ar', 'he', 'fa', 'ur'];
 
-// Pruefen, ob die aktuelle Sprache RTL ist
+// Prüfen, ob die aktuelle Sprache RTL ist
 if (LocalizationConfig.isRtl(currentLanguageCode)) {
   // RTL-Layout behandeln
 }
@@ -433,7 +433,7 @@ var delegates = NyLocalization.instance.delegates;
 | `languageCode` | `String` | Aktueller Sprachcode |
 | `locale` | `Locale` | Aktuelles Locale-Objekt |
 | `delegates` | `Iterable<LocalizationsDelegate>` | Flutter-Lokalisierungs-Delegates |
-| `setValuesForTesting({values, fallbackValues})` | `void` | Übersetzungs-Maps direkt fuer Unit-Tests einschleusen |
+| `setValuesForTesting({values, fallbackValues})` | `void` | Übersetzungs-Maps direkt für Unit-Tests einschleusen |
 
 <div id="nylocalehelper"></div>
 
@@ -445,11 +445,11 @@ var delegates = NyLocalization.instance.delegates;
 // Aktuelle System-Locale abrufen
 Locale locale = NyLocaleHelper.getCurrentLocale(context: context);
 
-// Sprach- und Laendercodes abrufen
+// Sprach- und Ländercodes abrufen
 String langCode = NyLocaleHelper.getLanguageCode(context: context);  // 'en'
 String? countryCode = NyLocaleHelper.getCountryCode(context: context);  // 'US' oder null
 
-// Pruefen, ob aktuelle Locale uebereinstimmt
+// Prüfen, ob aktuelle Locale übereinstimmt
 bool isEnglish = NyLocaleHelper.matchesLocale(context, 'en');
 bool isUsEnglish = NyLocaleHelper.matchesLocale(context, 'en', 'US');
 

@@ -602,7 +602,6 @@ Parameter `child` memerlukan widget yang meng-extend `NyFieldStatefulWidget`. In
 
 ### Field Builder
 
-<!-- uncertain: new Nylo-specific term "NyFieldBuilder" dan "NyFieldBuilderLegacy" — not seen in existing locale file -->
 Gunakan `Field.builder()` untuk membuat field form inline kustom tanpa men-subclass `NyFieldStatefulWidget`. Fungsi builder menerima nilai saat ini, callback `onChanged` untuk melaporkan perubahan nilai ke form, dan callback `setState` untuk memicu rebuild UI.
 
 ``` dart
@@ -659,6 +658,9 @@ Field picker, radio, dan chip memerlukan `FormCollection` untuk opsi mereka. `Fo
 ### Membuat FormCollection
 
 ``` dart
+// Koleksi kosong (berguna sebagai placeholder sebelum opsi dimuat)
+const FormCollection.empty()
+
 // Dari daftar string (value dan label sama)
 FormCollection.from(["Red", "Green", "Blue"])
 

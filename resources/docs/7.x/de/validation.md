@@ -14,14 +14,14 @@
   - [Nullable-Felder](#nullable-fields "Nullable-Felder")
   - [Benutzerdefinierte Validierung](#custom-validation "Benutzerdefinierte Validierung")
   - [FormValidator mit Feldern verwenden](#form-validator-with-fields "FormValidator mit Feldern verwenden")
-- [Verfuegbare Validierungsregeln](#validation-rules "Verfuegbare Validierungsregeln")
+- [Verfügbare Validierungsregeln](#validation-rules "Verfügbare Validierungsregeln")
 - [Benutzerdefinierte Validierungsregeln erstellen](#creating-custom-validation-rules "Benutzerdefinierte Validierungsregeln erstellen")
 
 <div id="introduction"></div>
 
 ## Einleitung
 
-{{ config('app.name') }} v7 bietet ein Validierungssystem, das auf der Klasse `FormValidator` aufgebaut ist. Sie koennen Daten innerhalb von Seiten mit der `check()`-Methode validieren oder `FormValidator` direkt fuer eigenstaendige und feldbasierte Validierung verwenden.
+{{ config('app.name') }} v7 bietet ein Validierungssystem, das auf der Klasse `FormValidator` aufgebaut ist. Sie können Daten innerhalb von Seiten mit der `check()`-Methode validieren oder `FormValidator` direkt für eigenständige und feldbasierte Validierung verwenden.
 
 ``` dart
 // Daten in einer NyPage/NyState mit check() validieren
@@ -42,7 +42,7 @@ Field.text("Email", validator: FormValidator.email())
 
 ## Daten mit check() validieren
 
-Verwenden Sie innerhalb jeder `NyPage` die `check()`-Methode, um Daten zu validieren. Sie akzeptiert einen Callback, der eine Liste von Validatoren erhaelt. Verwenden Sie `.that()`, um Daten hinzuzufuegen und Regeln zu verketten:
+Verwenden Sie innerhalb jeder `NyPage` die `check()`-Methode, um Daten zu validieren. Sie akzeptiert einen Callback, der eine Liste von Validatoren erhält. Verwenden Sie `.that()`, um Daten hinzuzufügen und Regeln zu verketten:
 
 ``` dart
 class _RegisterPageState extends NyPage<RegisterPage> {
@@ -67,9 +67,9 @@ class _RegisterPageState extends NyPage<RegisterPage> {
 ### Wie check() funktioniert
 
 1. `check()` erstellt eine leere `List<FormValidator>`
-2. Ihr Callback verwendet `.that(data)`, um einen neuen `FormValidator` mit Daten zur Liste hinzuzufuegen
-3. Jedes `.that()` gibt einen `FormValidator` zurueck, an den Sie Regeln verketten koennen
-4. Nach dem Callback wird jeder Validator in der Liste geprueft
+2. Ihr Callback verwendet `.that(data)`, um einen neuen `FormValidator` mit Daten zur Liste hinzuzufügen
+3. Jedes `.that()` gibt einen `FormValidator` zurück, an den Sie Regeln verketten können
+4. Nach dem Callback wird jeder Validator in der Liste geprüft
 5. Die Ergebnisse werden in einer `FormValidationResponseBag` gesammelt
 
 ### Mehrere Felder validieren
@@ -91,7 +91,7 @@ Der optionale `label`-Parameter setzt einen lesbaren Namen, der in Fehlermeldung
 
 ## Validierungsergebnisse
 
-Die `check()`-Methode gibt eine `FormValidationResponseBag` (eine `List<FormValidationResult>`) zurueck, die Sie auch direkt inspizieren koennen:
+Die `check()`-Methode gibt eine `FormValidationResponseBag` (eine `List<FormValidationResult>`) zurück, die Sie auch direkt inspizieren können:
 
 ``` dart
 FormValidationResponseBag bag = check((validate) {
@@ -117,7 +117,7 @@ if (bag.isValid) {
 
 ### FormValidationResult
 
-Jedes `FormValidationResult` repraesentiert das Ergebnis der Validierung eines einzelnen Wertes:
+Jedes `FormValidationResult` repräsentiert das Ergebnis der Validierung eines einzelnen Wertes:
 
 ``` dart
 FormValidator validator = FormValidator(data: "test@email.com")
@@ -144,9 +144,9 @@ if (result.isValid) {
 
 ## FormValidator verwenden
 
-`FormValidator` kann eigenstaendig oder mit Formularfeldern verwendet werden.
+`FormValidator` kann eigenständig oder mit Formularfeldern verwendet werden.
 
-### Eigenstaendige Verwendung
+### Eigenständige Verwendung
 
 ``` dart
 // Verwendung eines benannten Konstruktors
@@ -176,13 +176,13 @@ print(result.isValid); // true
 
 ## Benannte FormValidator-Konstruktoren
 
-{{ config('app.name') }} v7 bietet benannte Konstruktoren fuer gaengige Validierungen:
+{{ config('app.name') }} v7 bietet benannte Konstruktoren für gängige Validierungen:
 
 ``` dart
 // E-Mail-Validierung
 FormValidator.email(message: "Please enter a valid email")
 
-// Passwort-Validierung (Staerke 1 oder 2)
+// Passwort-Validierung (Stärke 1 oder 2)
 FormValidator.password(strength: 1)
 FormValidator.password(strength: 2, message: "Password too weak")
 
@@ -193,29 +193,29 @@ FormValidator.phoneNumberUs()
 // URL-Validierung
 FormValidator.url()
 
-// Laengenbeschraenkungen
+// Längenbeschränkungen
 FormValidator.minLength(5, message: "Too short")
 FormValidator.maxLength(100, message: "Too long")
 
-// Wertbeschraenkungen
+// Wertbeschränkungen
 FormValidator.minValue(18, message: "Must be 18+")
 FormValidator.maxValue(100)
 
-// Groessenbeschraenkungen (fuer Listen/Strings)
+// Größenbeschränkungen (für Listen/Strings)
 FormValidator.minSize(2, message: "Select at least 2")
 FormValidator.maxSize(5)
 
 // Nicht leer
 FormValidator.notEmpty(message: "This field is required")
 
-// Enthaelt Werte
+// Enthält Werte
 FormValidator.contains(['option1', 'option2'])
 
 // Beginnt/endet mit
 FormValidator.beginsWith("https://")
 FormValidator.endsWith(".com")
 
-// Boolean-Pruefungen
+// Boolean-Prüfungen
 FormValidator.booleanTrue(message: "Must accept terms")
 FormValidator.booleanFalse()
 
@@ -252,7 +252,7 @@ FormValidator.custom(
 
 ## Validierungsregeln verketten
 
-Verketten Sie mehrere Regeln fliessend mit Instanzmethoden. Jede Methode gibt den `FormValidator` zurueck, sodass Sie Regeln aufbauen koennen:
+Verketten Sie mehrere Regeln fließend mit Instanzmethoden. Jede Methode gibt den `FormValidator` zurück, sodass Sie Regeln aufbauen können:
 
 ``` dart
 FormValidator validator = FormValidator()
@@ -297,9 +297,9 @@ Field.text(
 )
 ```
 
-Ohne `.nullable()` wuerde ein leeres Feld die `minLength`-Regel nicht bestehen. Mit `.nullable()` besteht das Leer-Lassen des Feldes die Validierung.
+Ohne `.nullable()` würde ein leeres Feld die `minLength`-Regel nicht bestehen. Mit `.nullable()` besteht das Leer-Lassen des Feldes die Validierung.
 
-Dies ist nuetzlich fuer optionale Profilfelder, sekundaere Kontaktinformationen oder jedes Feld, das nur validiert wird, wenn der Benutzer es ausfullt. Lesen Sie die [Forms-Dokumentation](/docs/{{ $version }}/forms), um zu erfahren, wie `nullable()` mit `Field`-Widgets integriert.
+Dies ist nützlich für optionale Profilfelder, sekundäre Kontaktinformationen oder jedes Feld, das nur validiert wird, wenn der Benutzer es ausfüllt. Lesen Sie die [Forms-Dokumentation](/docs/{{ $version }}/forms), um zu erfahren, wie `nullable()` mit `Field`-Widgets integriert.
 
 <div id="custom-validation"></div>
 
@@ -307,13 +307,13 @@ Dies ist nuetzlich fuer optionale Profilfelder, sekundaere Kontaktinformationen 
 
 ### Benutzerdefinierte Regel (Inline)
 
-Verwenden Sie `.custom()`, um Inline-Validierungslogik hinzuzufuegen:
+Verwenden Sie `.custom()`, um Inline-Validierungslogik hinzuzufügen:
 
 ``` dart
 FormValidator.custom(
   message: "Username already taken",
   validate: (data) {
-    // true zurueckgeben wenn gueltig, false wenn ungueltig
+    // true zurückgeben wenn gültig, false wenn ungültig
     return !_takenUsernames.contains(data);
   },
 )
@@ -332,7 +332,7 @@ FormValidator()
 
 ### Equals-Validierung
 
-Pruefen Sie, ob ein Wert einem anderen entspricht:
+Prüfen Sie, ob ein Wert einem anderen entspricht:
 
 ``` dart
 FormValidator()
@@ -347,7 +347,7 @@ FormValidator()
 
 ## FormValidator mit Feldern verwenden
 
-`FormValidator` integriert sich mit `Field`-Widgets in Formularen. Uebergeben Sie einen Validator an den `validator`-Parameter:
+`FormValidator` integriert sich mit `Field`-Widgets in Formularen. Übergeben Sie einen Validator an den `validator`-Parameter:
 
 ``` dart
 class RegisterForm extends NyFormData {
@@ -369,7 +369,7 @@ class RegisterForm extends NyFormData {
 }
 ```
 
-Sie koennen auch verkettete Validatoren mit Feldern verwenden:
+Sie können auch verkettete Validatoren mit Feldern verwenden:
 
 ``` dart
 Field.text(
@@ -388,36 +388,36 @@ Field.slider(
 
 <div id="validation-rules"></div>
 
-## Verfuegbare Validierungsregeln
+## Verfügbare Validierungsregeln
 
-Alle verfuegbaren Regeln fuer `FormValidator`, sowohl als benannte Konstruktoren als auch als verkettbare Methoden:
+Alle verfügbaren Regeln für `FormValidator`, sowohl als benannte Konstruktoren als auch als verkettbare Methoden:
 
 | Regel | Benannter Konstruktor | Verkettbare Methode | Beschreibung |
 |-------|----------------------|---------------------|-------------|
 | Email | `FormValidator.email()` | `.email()` | Validiert E-Mail-Format |
-| Password | `FormValidator.password(strength: 1)` | `.password(strength: 1)` | Staerke 1: 8+ Zeichen, 1 Grossbuchstabe, 1 Ziffer. Staerke 2: + 1 Sonderzeichen |
+| Password | `FormValidator.password(strength: 1)` | `.password(strength: 1)` | Stärke 1: 8+ Zeichen, 1 Großbuchstabe, 1 Ziffer. Stärke 2: + 1 Sonderzeichen |
 | Not Empty | `FormValidator.notEmpty()` | `.notEmpty()` | Darf nicht leer sein |
-| Min Length | `FormValidator.minLength(5)` | `.minLength(5)` | Minimale String-Laenge |
-| Max Length | `FormValidator.maxLength(100)` | `.maxLength(100)` | Maximale String-Laenge |
-| Min Value | `FormValidator.minValue(18)` | `.minValue(18)` | Minimaler numerischer Wert (funktioniert auch mit String-Laenge, Listen-Laenge, Map-Laenge) |
+| Min Length | `FormValidator.minLength(5)` | `.minLength(5)` | Minimale String-Länge |
+| Max Length | `FormValidator.maxLength(100)` | `.maxLength(100)` | Maximale String-Länge |
+| Min Value | `FormValidator.minValue(18)` | `.minValue(18)` | Minimaler numerischer Wert (funktioniert auch mit String-Länge, Listen-Länge, Map-Länge) |
 | Max Value | `FormValidator.maxValue(100)` | `.maxValue(100)` | Maximaler numerischer Wert |
-| Min Size | `FormValidator.minSize(2)` | `.minSize(2)` | Mindestgroesse fuer Listen/Strings |
-| Max Size | `FormValidator.maxSize(5)` | `.maxSize(5)` | Maximalgroesse fuer Listen/Strings |
+| Min Size | `FormValidator.minSize(2)` | `.minSize(2)` | Mindestgröße für Listen/Strings |
+| Max Size | `FormValidator.maxSize(5)` | `.maxSize(5)` | Maximalgröße für Listen/Strings |
 | Contains | `FormValidator.contains(['a', 'b'])` | `.contains(['a', 'b'])` | Wert muss einen der angegebenen Werte enthalten |
-| Begins With | `FormValidator.beginsWith("https://")` | `.beginsWith("https://")` | String muss mit Praefix beginnen |
+| Begins With | `FormValidator.beginsWith("https://")` | `.beginsWith("https://")` | String muss mit Präfix beginnen |
 | Ends With | `FormValidator.endsWith(".com")` | `.endsWith(".com")` | String muss mit Suffix enden |
 | URL | `FormValidator.url()` | `.url()` | Validiert URL-Format |
 | Numeric | `FormValidator.numeric()` | `.numeric()` | Muss eine Zahl sein |
 | Boolean True | `FormValidator.booleanTrue()` | `.booleanTrue()` | Muss `true` sein |
 | Boolean False | `FormValidator.booleanFalse()` | `.booleanFalse()` | Muss `false` sein |
-| Date | `FormValidator.date()` | `.date()` | Muss ein gueltiges Datum sein |
+| Date | `FormValidator.date()` | `.date()` | Muss ein gültiges Datum sein |
 | Date In Past | `FormValidator.dateInPast()` | `.dateInPast()` | Datum muss in der Vergangenheit liegen |
 | Date In Future | `FormValidator.dateInFuture()` | `.dateInFuture()` | Datum muss in der Zukunft liegen |
-| Age Is Older | `FormValidator.dateAgeIsOlder(18)` | `.dateAgeIsOlder(18)` | Alter muss aelter als N sein |
-| Age Is Younger | `FormValidator.dateAgeIsYounger(65)` | `.dateAgeIsYounger(65)` | Alter muss juenger als N sein |
+| Age Is Older | `FormValidator.dateAgeIsOlder(18)` | `.dateAgeIsOlder(18)` | Alter muss älter als N sein |
+| Age Is Younger | `FormValidator.dateAgeIsYounger(65)` | `.dateAgeIsYounger(65)` | Alter muss jünger als N sein |
 | Capitalized | `FormValidator.capitalized()` | `.capitalized()` | Erster Buchstabe muss gross sein |
-| Lowercase | `FormValidator.lowercase()` | `.lowercase()` | Alle Zeichen muessen Kleinbuchstaben sein |
-| Uppercase | `FormValidator.uppercase()` | `.uppercase()` | Alle Zeichen muessen Grossbuchstaben sein |
+| Lowercase | `FormValidator.lowercase()` | `.lowercase()` | Alle Zeichen müssen Kleinbuchstaben sein |
+| Uppercase | `FormValidator.uppercase()` | `.uppercase()` | Alle Zeichen müssen Großbuchstaben sein |
 | Phone US | `FormValidator.phoneNumberUs()` | `.phoneNumberUs()` | US-Telefonnummernformat |
 | Phone UK | `FormValidator.phoneNumberUk()` | `.phoneNumberUk()` | UK-Telefonnummernformat |
 | Zipcode US | `FormValidator.zipcodeUs()` | `.zipcodeUs()` | US-Postleitzahlformat |
@@ -462,7 +462,7 @@ Verwenden Sie `@{{attribute}}` als Platzhalter in der `message` -- er wird zur L
 
 ### Eine benutzerdefinierte FormRule verwenden
 
-Fuegen Sie Ihre benutzerdefinierte Regel zu einem `FormValidator` mit `FormValidator.rule()` hinzu:
+Fügen Sie Ihre benutzerdefinierte Regel zu einem `FormValidator` mit `FormValidator.rule()` hinzu:
 
 ``` dart
 FormValidator validator = FormValidator.rule([
@@ -473,7 +473,7 @@ FormValidator validator = FormValidator.rule([
 FormValidationResult result = validator.check("my_username");
 ```
 
-Oder verwenden Sie die `.custom()`-Methode fuer einmalige Regeln, ohne eine Klasse zu erstellen:
+Oder verwenden Sie die `.custom()`-Methode für einmalige Regeln, ohne eine Klasse zu erstellen:
 
 ``` dart
 FormValidator()

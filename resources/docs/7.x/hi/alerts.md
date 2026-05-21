@@ -397,7 +397,6 @@ static ToastStyleFactory style({
 
 ### डेटा-अवेयर टोस्ट स्टाइल
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 रनटाइम पर कॉल के समय डेटा प्राप्त करने वाली टोस्ट स्टाइल रजिस्टर करने के लिए `ToastStyleDataFactory` का उपयोग करें। यह तब उपयोगी है जब टोस्ट की सामग्री — जैसे उपयोगकर्ता का नाम या अवतार — रजिस्ट्रेशन के समय ज्ञात नहीं होती।
 
 ``` dart

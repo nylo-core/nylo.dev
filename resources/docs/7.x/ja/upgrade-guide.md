@@ -114,7 +114,7 @@ v6 と v7 の変更差分を確認したい場合は、GitHub で比較を表示
 
 このチェックリストを使用して移行の進捗を追跡してください：
 
-- [ ] `pubspec.yaml` を更新（Dart >=3.10.7、Flutter >=3.24.0、nylo_framework: ^7.0.0）
+- [ ] `pubspec.yaml` を更新（Dart >=3.10.7、Flutter >=3.38.4、nylo_framework: ^7.0.0）
 - [ ] `flutter pub get` を実行
 - [ ] `metro make:key` を実行して APP_KEY を生成
 - [ ] `metro make:env` を実行して暗号化された環境を生成
@@ -150,7 +150,7 @@ v6 と v7 の変更差分を確認したい場合は、GitHub で比較を表示
 ``` yaml
 environment:
   sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.24.0"
+  flutter: ">=3.38.4"
 
 dependencies:
   nylo_framework: ^7.0.0

@@ -10,7 +10,7 @@
   - [Değerleri Alma](#retrieving-values "Değerleri Alma")
   - [Config Sınıfları Oluşturma](#creating-config-classes "Config Sınıfları Oluşturma")
   - [Değişken Türleri](#variable-types "Değişken Türleri")
-  - [Değişken İçi Değişken](#variable-interpolation "Değişken İçi Değişken")
+  - [Değişken Enterpolasyonu](#variable-interpolation "Değişken Enterpolasyonu")
 - [Ortam Çeşitleri](#environment-flavours "Ortam Çeşitleri")
 - [Derleme Zamanlı Enjeksiyon](#build-time-injection "Derleme Zamanlı Enjeksiyon")
 
@@ -204,9 +204,8 @@ Bu yaklaşım API anahtarlarınızı ve yapılandırma değerlerinizi güvenli v
 
 <div id="variable-interpolation"></div>
 
-## Değişken İçi Değişken
+## Değişken Enterpolasyonu
 
-<!-- uncertain: "Variable Interpolation" — rendered as "Değişken İçi Değişken" (literal: variable within variable); established Turkish convention in similar docs may differ -->
 `.env` dosyanızdaki string değerler, `${DEĞİŞKEN_ADI}` sözdizimini kullanarak diğer değişkenlere başvurabilir:
 
 ``` bash

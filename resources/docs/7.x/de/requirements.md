@@ -5,7 +5,7 @@
 <a name="section-1"></a>
 - [Systemvoraussetzungen](#system-requirements "Systemvoraussetzungen")
 - [Flutter installieren](#installing-flutter "Flutter installieren")
-- [Installation ueberpruefen](#verifying-installation "Installation ueberpruefen")
+- [Installation überprüfen](#verifying-installation "Installation überprüfen")
 - [Editor einrichten](#set-up-an-editor "Editor einrichten")
 
 
@@ -17,71 +17,71 @@
 
 | Voraussetzung | Mindestversion |
 |---------------|----------------|
-| **Flutter** | 3.24.0 oder hoeher |
-| **Dart SDK** | 3.10.7 oder hoeher |
+| **Flutter** | 3.38.4 oder höher |
+| **Dart SDK** | 3.10.7 oder höher |
 
-### Plattformunterstuetzung
+### Plattformunterstützung
 
-{{ config('app.name') }} unterstuetzt alle Plattformen, die Flutter unterstuetzt:
+{{ config('app.name') }} unterstützt alle Plattformen, die Flutter unterstützt:
 
-| Plattform | Unterstuetzung |
+| Plattform | Unterstützung |
 |-----------|---------------|
-| iOS | Volle Unterstuetzung |
-| Android | Volle Unterstuetzung |
-| Web | Volle Unterstuetzung |
-| macOS | Volle Unterstuetzung |
-| Windows | Volle Unterstuetzung |
-| Linux | Volle Unterstuetzung |
+| iOS | Volle Unterstützung |
+| Android | Volle Unterstützung |
+| Web | Volle Unterstützung |
+| macOS | Volle Unterstützung |
+| Windows | Volle Unterstützung |
+| Linux | Volle Unterstützung |
 
 <div id="installing-flutter"></div>
 
 ## Flutter installieren
 
-Wenn Sie Flutter noch nicht installiert haben, folgen Sie der offiziellen Installationsanleitung fuer Ihr Betriebssystem:
+Wenn Sie Flutter noch nicht installiert haben, folgen Sie der offiziellen Installationsanleitung für Ihr Betriebssystem:
 
 - <a href="https://docs.flutter.dev/get-started/install" target="_BLANK">Flutter-Installationsanleitung</a>
 
 <div id="verifying-installation"></div>
 
-## Installation ueberpruefen
+## Installation überprüfen
 
-Ueberpruefen Sie nach der Installation von Flutter Ihr Setup:
+Überprüfen Sie nach der Installation von Flutter Ihr Setup:
 
-### Flutter-Version pruefen
+### Flutter-Version prüfen
 
 ``` bash
 flutter --version
 ```
 
-Sie sollten eine aehnliche Ausgabe sehen:
+Sie sollten eine ähnliche Ausgabe sehen:
 
 ```
-Flutter 3.24.0 • channel stable
+Flutter 3.38.4 • channel stable
 Dart SDK version: 3.10.7
 ```
 
-### Flutter aktualisieren (falls noetig)
+### Flutter aktualisieren (falls nötig)
 
-Wenn Ihre Flutter-Version unter 3.24.0 liegt, aktualisieren Sie auf die neueste stabile Version:
+Wenn Ihre Flutter-Version unter 3.38.4 liegt, aktualisieren Sie auf die neueste stabile Version:
 
 ``` bash
 flutter channel stable
 flutter upgrade
 ```
 
-### Flutter Doctor ausfuehren
+### Flutter Doctor ausführen
 
-Ueberpruefen Sie, ob Ihre Entwicklungsumgebung korrekt konfiguriert ist:
+Überprüfen Sie, ob Ihre Entwicklungsumgebung korrekt konfiguriert ist:
 
 ``` bash
 flutter doctor -v
 ```
 
-Dieser Befehl prueft:
+Dieser Befehl prüft:
 - Flutter SDK-Installation
-- Android-Toolchain (fuer Android-Entwicklung)
-- Xcode (fuer iOS/macOS-Entwicklung)
-- Verbundene Geraete
+- Android-Toolchain (für Android-Entwicklung)
+- Xcode (für iOS/macOS-Entwicklung)
+- Verbundene Geräte
 - IDE-Plugins
 
 Beheben Sie alle gemeldeten Probleme, bevor Sie mit der {{ config('app.name') }}-Installation fortfahren.
@@ -90,11 +90,11 @@ Beheben Sie alle gemeldeten Probleme, bevor Sie mit der {{ config('app.name') }}
 
 ## Editor einrichten
 
-Waehlen Sie eine IDE mit Flutter-Unterstuetzung:
+Wählen Sie eine IDE mit Flutter-Unterstützung:
 
 ### Visual Studio Code (Empfohlen)
 
-<a href="https://code.visualstudio.com" target="_BLANK">VS Code</a> ist leichtgewichtig und bietet hervorragende Flutter-Unterstuetzung.
+<a href="https://code.visualstudio.com" target="_BLANK">VS Code</a> ist leichtgewichtig und bietet hervorragende Flutter-Unterstützung.
 
 1. Installieren Sie <a href="https://code.visualstudio.com" target="_BLANK">VS Code</a>
 2. Installieren Sie die <a href="https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter" target="_BLANK">Flutter-Extension</a>
@@ -104,7 +104,7 @@ Einrichtungsanleitung: <a href="https://docs.flutter.dev/get-started/editor?tab=
 
 ### Android Studio
 
-<a href="https://developer.android.com/studio" target="_BLANK">Android Studio</a> bietet eine voll ausgestattete IDE mit integrierter Emulator-Unterstuetzung.
+<a href="https://developer.android.com/studio" target="_BLANK">Android Studio</a> bietet eine voll ausgestattete IDE mit integrierter Emulator-Unterstützung.
 
 1. Installieren Sie <a href="https://developer.android.com/studio" target="_BLANK">Android Studio</a>
 2. Installieren Sie das Flutter-Plugin (Einstellungen -> Plugins -> Flutter)
@@ -114,7 +114,7 @@ Einrichtungsanleitung: <a href="https://docs.flutter.dev/get-started/editor?tab=
 
 ### IntelliJ IDEA
 
-<a href="https://www.jetbrains.com/idea/" target="_BLANK">IntelliJ IDEA</a> (Community oder Ultimate) unterstuetzt ebenfalls die Flutter-Entwicklung.
+<a href="https://www.jetbrains.com/idea/" target="_BLANK">IntelliJ IDEA</a> (Community oder Ultimate) unterstützt ebenfalls die Flutter-Entwicklung.
 
 1. Installieren Sie IntelliJ IDEA
 2. Installieren Sie das Flutter-Plugin (Einstellungen -> Plugins -> Flutter)

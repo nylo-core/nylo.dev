@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
-- [Voreingestellte Groessen](#preset-sizes "Voreingestellte Groessen")
+- [Voreingestellte Größen](#preset-sizes "Voreingestellte Größen")
 - [Benutzerdefinierter Abstand](#custom-spacing "Benutzerdefinierter Abstand")
 - [Verwendung mit Slivers](#slivers "Verwendung mit Slivers")
 
@@ -13,7 +13,7 @@
 
 ## Einleitung
 
-Das **Spacing**-Widget bietet eine saubere, lesbare Moeglichkeit, konsistente Abstaende zwischen UI-Elementen hinzuzufuegen. Anstatt manuell `SizedBox`-Instanzen in Ihrem gesamten Code zu erstellen, koennen Sie `Spacing` mit semantischen Voreinstellungen oder benutzerdefinierten Werten verwenden.
+Das **Spacing**-Widget bietet eine saubere, lesbare Möglichkeit, konsistente Abstände zwischen UI-Elementen hinzuzufügen. Anstatt manuell `SizedBox`-Instanzen in Ihrem gesamten Code zu erstellen, können Sie `Spacing` mit semantischen Voreinstellungen oder benutzerdefinierten Werten verwenden.
 
 ``` dart
 // Instead of this:
@@ -25,22 +25,22 @@ Spacing.md,
 
 <div id="preset-sizes"></div>
 
-## Voreingestellte Groessen
+## Voreingestellte Größen
 
-`Spacing` verfuegt ueber integrierte Voreinstellungen fuer gaengige Abstandswerte. Diese helfen, konsistente Abstaende in Ihrer gesamten App beizubehalten.
+`Spacing` verfügt über integrierte Voreinstellungen für gängige Abstandswerte. Diese helfen, konsistente Abstände in Ihrer gesamten App beizubehalten.
 
 ### Vertikale Abstands-Voreinstellungen
 
-Verwenden Sie diese in `Column`-Widgets oder ueberall, wo Sie vertikalen Abstand benoetigen:
+Verwenden Sie diese in `Column`-Widgets oder überall, wo Sie vertikalen Abstand benötigen:
 
-| Voreinstellung | Groesse | Verwendung |
+| Voreinstellung | Größe | Verwendung |
 |----------------|---------|------------|
 | `Spacing.zero` | 0px | Bedingter Abstand |
 | `Spacing.xs` | 4px | Extra klein |
 | `Spacing.sm` | 8px | Klein |
 | `Spacing.md` | 16px | Mittel |
-| `Spacing.lg` | 24px | Gross |
-| `Spacing.xl` | 32px | Extra gross |
+| `Spacing.lg` | 24px | Groß |
+| `Spacing.xl` | 32px | Extra groß |
 
 ``` dart
 Column(
@@ -61,15 +61,15 @@ Column(
 
 ### Horizontale Abstands-Voreinstellungen
 
-Verwenden Sie diese in `Row`-Widgets oder ueberall, wo Sie horizontalen Abstand benoetigen:
+Verwenden Sie diese in `Row`-Widgets oder überall, wo Sie horizontalen Abstand benötigen:
 
-| Voreinstellung | Groesse | Verwendung |
+| Voreinstellung | Größe | Verwendung |
 |----------------|---------|------------|
 | `Spacing.xsHorizontal` | 4px | Extra klein |
 | `Spacing.smHorizontal` | 8px | Klein |
 | `Spacing.mdHorizontal` | 16px | Mittel |
-| `Spacing.lgHorizontal` | 24px | Gross |
-| `Spacing.xlHorizontal` | 32px | Extra gross |
+| `Spacing.lgHorizontal` | 24px | Groß |
+| `Spacing.xlHorizontal` | 32px | Extra groß |
 
 ``` dart
 Row(
@@ -87,7 +87,7 @@ Row(
 
 ## Benutzerdefinierter Abstand
 
-Wenn die Voreinstellungen nicht Ihren Beduerfnissen entsprechen, erstellen Sie benutzerdefinierte Abstaende:
+Wenn die Voreinstellungen nicht Ihren Bedürfnissen entsprechen, erstellen Sie benutzerdefinierte Abstände:
 
 ### Vertikaler Abstand
 
@@ -157,11 +157,11 @@ CustomScrollView(
 )
 ```
 
-Die `asSliver()`-Methode umschliesst das `Spacing`-Widget in einem `SliverToBoxAdapter`, wodurch es mit Sliver-basierten Layouts kompatibel wird.
+Die `asSliver()`-Methode umschließt das `Spacing`-Widget in einem `SliverToBoxAdapter`, wodurch es mit Sliver-basierten Layouts kompatibel wird.
 
 ## Bedingter Abstand
 
-Verwenden Sie `Spacing.zero` fuer bedingten Abstand:
+Verwenden Sie `Spacing.zero` für bedingten Abstand:
 
 ``` dart
 Column(

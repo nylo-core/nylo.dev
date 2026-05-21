@@ -397,7 +397,6 @@ static ToastStyleFactory style({
 
 ### Kiểu Toast nhận dữ liệu động
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
 Dùng `ToastStyleDataFactory` để đăng ký các kiểu toast nhận dữ liệu thực tế tại thời điểm gọi. Điều này hữu ích khi nội dung toast — chẳng hạn tên hoặc ảnh đại diện của người dùng — chưa biết tại thời điểm đăng ký.
 
 ``` dart

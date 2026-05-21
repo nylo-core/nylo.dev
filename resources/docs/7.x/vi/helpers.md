@@ -1,5 +1,4 @@
 # Helpers
-<!-- uncertain: newly created translation; needs full human review -->
 
 ---
 

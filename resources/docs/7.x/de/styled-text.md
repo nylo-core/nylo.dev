@@ -9,9 +9,9 @@
 - [Template-Modus](#template-mode "Template-Modus")
   - [Platzhalter stylen](#styling-placeholders "Platzhalter stylen")
   - [Tipp-Callbacks](#tap-callbacks "Tipp-Callbacks")
-  - [Pipe-getrennte Schluessel](#pipe-keys "Pipe-getrennte Schluessel")
+  - [Pipe-getrennte Schlüssel](#pipe-keys "Pipe-getrennte Schlüssel")
   - [Platzhalter mit Wildcards](#wildcard-styles "Platzhalter mit Wildcards")
-  - [Lokalisierungsschluessel](#localization-keys "Lokalisierungsschluessel")
+  - [Lokalisierungsschlüssel](#localization-keys "Lokalisierungsschlüssel")
 - [Parameter](#parameters "Parameter")
 - [Text-Erweiterungen](#text-extensions "Text-Erweiterungen")
   - [Typografie-Stile](#typography-styles "Typografie-Stile")
@@ -22,11 +22,11 @@
 
 ## Einleitung
 
-**StyledText** ist ein Widget zur Anzeige von Rich Text mit gemischten Stilen, Tipp-Callbacks und Pointer-Events. Es wird als `RichText`-Widget mit mehreren `TextSpan`-Kindern gerendert und bietet Ihnen feinkoernige Kontrolle ueber jedes Textsegment.
+**StyledText** ist ein Widget zur Anzeige von Rich Text mit gemischten Stilen, Tipp-Callbacks und Pointer-Events. Es wird als `RichText`-Widget mit mehreren `TextSpan`-Kindern gerendert und bietet Ihnen feinkörnige Kontrolle über jedes Textsegment.
 
-StyledText unterstuetzt zwei Modi:
+StyledText unterstützt zwei Modi:
 
-1. **Children-Modus** -- uebergeben Sie eine Liste von `Text`-Widgets, jedes mit eigenem Stil
+1. **Children-Modus** -- übergeben Sie eine Liste von `Text`-Widgets, jedes mit eigenem Stil
 2. **Template-Modus** -- verwenden Sie `@{{Platzhalter}}`-Syntax in einem String und ordnen Sie Platzhaltern Stile und Aktionen zu
 
 <div id="basic-usage"></div>
@@ -55,7 +55,7 @@ StyledText.template(
 
 ## Children-Modus
 
-Uebergeben Sie eine Liste von `Text`-Widgets, um gestylten Text zusammenzusetzen:
+Übergeben Sie eine Liste von `Text`-Widgets, um gestylten Text zusammenzusetzen:
 
 ``` dart
 StyledText(
@@ -74,7 +74,7 @@ Der Basis-`style` wird auf jedes Kind angewendet, das keinen eigenen Stil hat.
 
 ### Pointer-Events
 
-Erkennen Sie, wenn der Pointer ein Textsegment betritt oder verlaesst:
+Erkennen Sie, wenn der Pointer ein Textsegment betritt oder verlässt:
 
 ``` dart
 StyledText(
@@ -113,7 +113,7 @@ StyledText.template(
 )
 ```
 
-Der Text zwischen `@{{ }}` ist sowohl der **Anzeigetext** als auch der **Schluessel**, der zum Nachschlagen von Stilen und Tipp-Callbacks verwendet wird.
+Der Text zwischen `@{{ }}` ist sowohl der **Anzeigetext** als auch der **Schlüssel**, der zum Nachschlagen von Stilen und Tipp-Callbacks verwendet wird.
 
 <div id="styling-placeholders"></div>
 
@@ -153,9 +153,9 @@ StyledText.template(
 
 <div id="pipe-keys"></div>
 
-### Pipe-getrennte Schluessel
+### Pipe-getrennte Schlüssel
 
-Wenden Sie denselben Stil oder Callback auf mehrere Platzhalter an, indem Sie durch Pipe `|` getrennte Schluessel verwenden:
+Wenden Sie denselben Stil oder Callback auf mehrere Platzhalter an, indem Sie durch Pipe `|` getrennte Schlüssel verwenden:
 
 ``` dart
 StyledText.template(
@@ -178,7 +178,7 @@ Dies ordnet allen drei Platzhaltern denselben Stil und Callback zu.
 
 ### Platzhalter mit Wildcards
 
-Verwenden Sie `"*"` als Schluessel, um einen Stil oder Tipp-Callback auf jeden Platzhalter anzuwenden, der keinen eigenen spezifischen Schluessel hat:
+Verwenden Sie `"*"` als Schlüssel, um einen Stil oder Tipp-Callback auf jeden Platzhalter anzuwenden, der keinen eigenen spezifischen Schlüssel hat:
 
 ``` dart
 StyledText.template(
@@ -189,14 +189,14 @@ StyledText.template(
 )
 ```
 
-Sowohl `name` als auch `app` erhalten den Wildcard-Stil. Wenn ein Platzhalter auch einen expliziten Schluessel hat, hat der explizite Schluessel Vorrang vor `"*"`.
+Sowohl `name` als auch `app` erhalten den Wildcard-Stil. Wenn ein Platzhalter auch einen expliziten Schlüssel hat, hat der explizite Schlüssel Vorrang vor `"*"`.
 
 ``` dart
 StyledText.template(
   "Click @{{here}} or @{{cancel}}.",
   styles: {
     "here": TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-    "*": TextStyle(color: Colors.grey), // gilt nur fuer "cancel"
+    "*": TextStyle(color: Colors.grey), // gilt nur für "cancel"
   },
   onTap: {
     "*": () => Navigator.pop(context), // Tipp auf jeden ungematchten Platzhalter
@@ -206,9 +206,9 @@ StyledText.template(
 
 <div id="localization-keys"></div>
 
-### Lokalisierungsschluessel
+### Lokalisierungsschlüssel
 
-Verwenden Sie die Syntax `@{{key:text}}`, um den **Nachschlageschluessel** vom **Anzeigetext** zu trennen. Dies ist nuetzlich fuer die Lokalisierung — der Schluessel bleibt ueber alle Sprachen hinweg gleich, waehrend sich der Anzeigetext pro Sprache aendert.
+Verwenden Sie die Syntax `@{{key:text}}`, um den **Nachschlageschlüssel** vom **Anzeigetext** zu trennen. Dies ist nützlich für die Lokalisierung — der Schlüssel bleibt über alle Sprachen hinweg gleich, während sich der Anzeigetext pro Sprache ändert.
 
 ``` dart
 // In Ihren Sprachdateien:
@@ -232,9 +232,9 @@ StyledText.template(
 // ES rendert: "Aprende Idiomas, Lectura y Habla en AppName"
 ```
 
-Der Teil vor `:` ist der **Schluessel**, der zum Nachschlagen von Stilen und Tipp-Callbacks verwendet wird. Der Teil nach `:` ist der **Anzeigetext**, der auf dem Bildschirm dargestellt wird. Ohne `:` verhaelt sich der Platzhalter genau wie bisher — vollstaendig abwaertskompatibel.
+Der Teil vor `:` ist der **Schlüssel**, der zum Nachschlagen von Stilen und Tipp-Callbacks verwendet wird. Der Teil nach `:` ist der **Anzeigetext**, der auf dem Bildschirm dargestellt wird. Ohne `:` verhält sich der Platzhalter genau wie bisher — vollständig abwärtskompatibel.
 
-Dies funktioniert mit allen bestehenden Funktionen einschliesslich [Pipe-getrennte Schluessel](#pipe-keys) und [Tipp-Callbacks](#tap-callbacks).
+Dies funktioniert mit allen bestehenden Funktionen einschließlich [Pipe-getrennte Schlüssel](#pipe-keys) und [Tipp-Callbacks](#tap-callbacks).
 
 <div id="parameters"></div>
 
@@ -245,15 +245,15 @@ Dies funktioniert mit allen bestehenden Funktionen einschliesslich [Pipe-getrenn
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|-----|---------|-------------|
 | `children` | `List<Text>` | erforderlich | Liste von Text-Widgets |
-| `style` | `TextStyle?` | null | Basisstil fuer alle Kinder |
+| `style` | `TextStyle?` | null | Basisstil für alle Kinder |
 | `onEnter` | `Function(Text, PointerEnterEvent)?` | null | Pointer-Enter-Callback |
 | `onExit` | `Function(Text, PointerExitEvent)?` | null | Pointer-Exit-Callback |
-| `spellOut` | `bool?` | null | Text Zeichen fuer Zeichen buchstabieren |
+| `spellOut` | `bool?` | null | Text Zeichen für Zeichen buchstabieren |
 | `softWrap` | `bool` | `true` | Weichen Zeilenumbruch aktivieren |
 | `textAlign` | `TextAlign` | `TextAlign.start` | Textausrichtung |
 | `textDirection` | `TextDirection?` | null | Textrichtung |
 | `maxLines` | `int?` | null | Maximale Zeilenanzahl |
-| `overflow` | `TextOverflow` | `TextOverflow.clip` | Ueberlaufverhalten |
+| `overflow` | `TextOverflow` | `TextOverflow.clip` | Überlaufverhalten |
 | `locale` | `Locale?` | null | Text-Locale |
 | `strutStyle` | `StrutStyle?` | null | Strut-Stil |
 | `textScaler` | `TextScaler?` | null | Textskalierung |
@@ -266,7 +266,7 @@ Dies funktioniert mit allen bestehenden Funktionen einschliesslich [Pipe-getrenn
 | `text` | `String` | erforderlich | Template-Text mit `@{{Platzhalter}}`-Syntax |
 | `styles` | `Map<String, TextStyle>?` | null | Zuordnung von Platzhalternamen zu Stilen |
 | `onTap` | `Map<String, VoidCallback>?` | null | Zuordnung von Platzhalternamen zu Tipp-Callbacks |
-| `style` | `TextStyle?` | null | Basisstil fuer Nicht-Platzhalter-Text |
+| `style` | `TextStyle?` | null | Basisstil für Nicht-Platzhalter-Text |
 
 Alle anderen Parameter (`softWrap`, `textAlign`, `maxLines` usw.) sind identisch mit dem Children-Konstruktor.
 
@@ -300,7 +300,7 @@ Text("Hello").labelMedium()
 Text("Hello").labelSmall()
 ```
 
-Jede akzeptiert optionale Ueberschreibungen:
+Jede akzeptiert optionale Überschreibungen:
 
 ``` dart
 Text("Welcome").headingLarge(
@@ -310,31 +310,31 @@ Text("Welcome").headingLarge(
 )
 ```
 
-**Verfuegbare Ueberschreibungen** (identisch fuer alle Typografie-Methoden):
+**Verfügbare Überschreibungen** (identisch für alle Typografie-Methoden):
 
 | Parameter | Typ | Beschreibung |
 |-----------|-----|-------------|
 | `color` | `Color?` | Textfarbe |
-| `fontSize` | `double?` | Schriftgroesse |
-| `fontWeight` | `FontWeight?` | Schriftstaerke |
+| `fontSize` | `double?` | Schriftgröße |
+| `fontWeight` | `FontWeight?` | Schriftstärke |
 | `fontStyle` | `FontStyle?` | Kursiv/Normal |
 | `letterSpacing` | `double?` | Zeichenabstand |
 | `wordSpacing` | `double?` | Wortabstand |
-| `height` | `double?` | Zeilenhoehe |
+| `height` | `double?` | Zeilenhöhe |
 | `decoration` | `TextDecoration?` | Textdekoration |
 | `decorationColor` | `Color?` | Dekorationsfarbe |
 | `decorationStyle` | `TextDecorationStyle?` | Dekorationsstil |
-| `decorationThickness` | `double?` | Dekorationsstaerke |
+| `decorationThickness` | `double?` | Dekorationsstärke |
 | `fontFamily` | `String?` | Schriftfamilie |
 | `shadows` | `List<Shadow>?` | Textschatten |
-| `overflow` | `TextOverflow?` | Ueberlaufverhalten |
+| `overflow` | `TextOverflow?` | Überlaufverhalten |
 
 <div id="utility-methods"></div>
 
 ### Hilfsmethoden
 
 ``` dart
-// Schriftstaerke
+// Schriftstärke
 Text("Bold text").fontWeightBold()
 Text("Light text").fontWeightLight()
 
@@ -349,7 +349,7 @@ Text("Long text...").setMaxLines(2)
 // Schriftfamilie
 Text("Custom font").setFontFamily("Roboto")
 
-// Schriftgroesse
+// Schriftgröße
 Text("Big text").setFontSize(24)
 
 // Benutzerdefinierter Stil
@@ -358,7 +358,7 @@ Text("Styled").setStyle(TextStyle(color: Colors.red))
 // Innenabstand
 Text("Padded").paddingOnly(left: 8, top: 4, right: 8, bottom: 4)
 
-// Kopieren mit Aenderungen
+// Kopieren mit Änderungen
 Text("Original").copyWith(
   textAlign: TextAlign.center,
   maxLines: 2,

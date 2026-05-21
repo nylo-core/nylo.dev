@@ -240,7 +240,6 @@ Pour ajouter des champs au-dela de ces valeurs par defaut — vos propres bouton
 
 ## Etendre les styles de couleur
 
-<!-- uncertain: new section "Extending color styles" not present in previous locale file -->
 Les trois groupes par defaut (`general`, `appBar`, `bottomTabBar`) sont un point de depart, pas une limite absolue. `lib/resources/themes/color_styles.dart` vous appartient pour modification — ajoutez de nouveaux groupes de couleurs (ou des champs individuels) en plus des valeurs par defaut, puis implementez-les dans la classe de couleurs de chaque theme.
 
 **1. Definir un groupe de couleurs personnalise**

@@ -333,6 +333,7 @@ return [
             'advanced' => [
                 'state-management',
                 'local-notifications',
+                'deep-links',
                 'providers',
                 'decoders',
                 'events',

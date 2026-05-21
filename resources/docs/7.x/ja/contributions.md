@@ -57,7 +57,7 @@ git clone https://github.com/YOUR-USERNAME/support
 
 | 必要条件 | 最低バージョン |
 |-------------|-----------------|
-| Flutter | 3.24.0 以上 |
+| Flutter | 3.38.4 以上 |
 | Dart SDK | 3.10.7 以上 |
 
 ### ローカルパッケージのリンク
@@ -203,7 +203,7 @@ Issue の簡潔な説明
 実際に起こること
 
 ### 環境
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

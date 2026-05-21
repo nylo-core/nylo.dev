@@ -57,7 +57,7 @@ Pastikan Anda telah menginstal yang berikut:
 
 | Persyaratan | Versi Minimum |
 |-------------|---------------|
-| Flutter | 3.24.0 atau lebih tinggi |
+| Flutter | 3.38.4 atau lebih tinggi |
 | Dart SDK | 3.10.7 atau lebih tinggi |
 
 ### Hubungkan Paket Lokal
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

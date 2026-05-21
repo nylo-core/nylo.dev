@@ -156,7 +156,7 @@ if (await NyConnectivity.isOffline()) {
 
 ``` dart
 if (await NyConnectivity.isWifi()) {
-  // Grosse Dateien ueber WLAN herunterladen
+  // Große Dateien über WLAN herunterladen
   await downloadLargeFile();
 }
 
@@ -173,11 +173,11 @@ await NyConnectivity.isBluetooth();
 
 ### Auf Internet prüfen
 
-`hasInternet()` ist strenger als `isOnline()` -- es gibt nur `true` zurueck, wenn das Gerät über WLAN, Mobilfunk oder Ethernet verbunden ist. VPN-, Bluetooth- und Satellitenverbindungen sind ausgeschlossen.
+`hasInternet()` ist strenger als `isOnline()` -- es gibt nur `true` zurück, wenn das Gerät über WLAN, Mobilfunk oder Ethernet verbunden ist. VPN-, Bluetooth- und Satellitenverbindungen sind ausgeschlossen.
 
 ``` dart
 if (await NyConnectivity.hasInternet()) {
-  // Bestaetigter Internetzugang ueber WLAN, Mobilfunk oder Ethernet
+  // Bestätigter Internetzugang über WLAN, Mobilfunk oder Ethernet
   await syncData();
 }
 ```
@@ -219,7 +219,7 @@ void dispose() {
 ### Bedingte Ausführung
 
 ``` dart
-// Nur bei Online-Verbindung ausfuehren (gibt null zurueck, wenn offline)
+// Nur bei Online-Verbindung ausführen (gibt null zurück, wenn offline)
 final data = await NyConnectivity.whenOnline(() async {
   return await api.fetchData();
 });
@@ -228,7 +228,7 @@ if (data == null) {
   showOfflineMessage();
 }
 
-// Verschiedene Callbacks je nach Status ausfuehren
+// Verschiedene Callbacks je nach Status ausführen
 final result = await NyConnectivity.when(
   online: () async => await api.fetchData(),
   offline: () async => await cache.getData(),
@@ -253,7 +253,7 @@ MyContent().connectiveOr(
 ### Nur online anzeigen
 
 ``` dart
-// Vollstaendig ausblenden, wenn offline
+// Vollständig ausblenden, wenn offline
 SyncButton().onlyOnline()
 ```
 

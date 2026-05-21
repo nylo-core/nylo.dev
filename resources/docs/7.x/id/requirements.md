@@ -17,7 +17,7 @@
 
 | Persyaratan | Versi Minimum |
 |-------------|-----------------|
-| **Flutter** | 3.24.0 atau lebih tinggi |
+| **Flutter** | 3.38.4 atau lebih tinggi |
 | **Dart SDK** | 3.10.7 atau lebih tinggi |
 
 ### Dukungan Platform
@@ -56,13 +56,13 @@ flutter --version
 Anda akan melihat output yang mirip dengan:
 
 ```
-Flutter 3.24.0 • channel stable
+Flutter 3.38.4 • channel stable
 Dart SDK version: 3.10.7
 ```
 
 ### Perbarui Flutter (jika diperlukan)
 
-Jika versi Flutter Anda di bawah 3.24.0, perbarui ke rilis stabil terbaru:
+Jika versi Flutter Anda di bawah 3.38.4, perbarui ke rilis stabil terbaru:
 
 ``` bash
 flutter channel stable

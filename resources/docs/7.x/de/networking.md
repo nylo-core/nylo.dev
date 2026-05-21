@@ -10,7 +10,7 @@
   - [networkResponse-Helfer](#network-response-helper "networkResponse-Helfer")
   - [NyResponse](#ny-response "NyResponse")
   - [Basis-Optionen](#base-options "Basis-Optionen")
-  - [Header hinzufuegen](#adding-headers "Header hinzufuegen")
+  - [Header hinzufügen](#adding-headers "Header hinzufügen")
 - Dateioperationen
   - [Dateien hochladen](#uploading-files "Dateien hochladen")
   - [Dateien herunterladen](#downloading-files "Dateien herunterladen")
@@ -24,7 +24,7 @@
   - [Cache-Richtlinien](#cache-policies "Cache-Richtlinien")
 - Fehlerbehandlung
   - [Fehlgeschlagene Anfragen wiederholen](#retrying-failed-requests "Fehlgeschlagene Anfragen wiederholen")
-  - [Konnektivitaetspruefungen](#connectivity-checks "Konnektivitaetspruefungen")
+  - [Konnektivitätsprüfungen](#connectivity-checks "Konnektivitätsprüfungen")
   - [Cancel Tokens](#cancel-tokens "Cancel Tokens")
 - Authentifizierung
   - [Auth-Header setzen](#setting-auth-headers "Auth-Header setzen")
@@ -36,9 +36,9 @@
 
 ## Einleitung
 
-{{ config('app.name') }} macht Networking einfach. Sie definieren API-Endpunkte in Service-Klassen, die `NyApiService` erweitern, und rufen sie dann von Ihren Seiten aus auf. Das Framework uebernimmt JSON-Dekodierung, Fehlerbehandlung, Caching und die automatische Konvertierung von Antworten in Ihre Model-Klassen (genannt "Morphing").
+{{ config('app.name') }} macht Networking einfach. Sie definieren API-Endpunkte in Service-Klassen, die `NyApiService` erweitern, und rufen sie dann von Ihren Seiten aus auf. Das Framework übernimmt JSON-Dekodierung, Fehlerbehandlung, Caching und die automatische Konvertierung von Antworten in Ihre Model-Klassen (genannt "Morphing").
 
-Ihre API-Services befinden sich in `lib/app/networking/`. Ein neues Projekt enthaelt einen Standard-`ApiService`:
+Ihre API-Services befinden sich in `lib/app/networking/`. Ein neues Projekt enthält einen Standard-`ApiService`:
 
 ```dart
 class ApiService extends NyApiService {
@@ -60,13 +60,13 @@ class ApiService extends NyApiService {
 }
 ```
 
-Es gibt drei Moeglichkeiten, HTTP-Anfragen zu stellen:
+Es gibt drei Möglichkeiten, HTTP-Anfragen zu stellen:
 
-| Ansatz | Rueckgabe | Am besten geeignet fuer |
+| Ansatz | Rückgabe | Am besten geeignet für |
 |--------|---------|----------|
 | Komfortmethoden (`get`, `post`, etc.) | `T?` | Einfache CRUD-Operationen |
-| `network()` | `T?` | Anfragen, die Caching, Wiederholungen oder benutzerdefinierte Header benoetigen |
-| `networkResponse()` | `NyResponse<T>` | Wenn Sie Statuscodes, Header oder Fehlerdetails benoetigen |
+| `network()` | `T?` | Anfragen, die Caching, Wiederholungen oder benutzerdefinierte Header benötigen |
+| `networkResponse()` | `NyResponse<T>` | Wenn Sie Statuscodes, Header oder Fehlerdetails benötigen |
 
 Unter der Haube verwendet {{ config('app.name') }} <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>, einen leistungsstarken HTTP-Client.
 
@@ -75,7 +75,7 @@ Unter der Haube verwendet {{ config('app.name') }} <a href="https://pub.dev/pack
 
 ## Komfortmethoden
 
-`NyApiService` bietet Kurzschreibmethoden fuer gaengige HTTP-Operationen. Diese rufen intern `network()` auf.
+`NyApiService` bietet Kurzschreibmethoden für gängige HTTP-Operationen. Diese rufen intern `network()` auf.
 
 ### GET-Anfrage
 
@@ -122,7 +122,7 @@ Future<User?> patchUser(int id, Map<String, dynamic> data) async {
 
 ### HEAD-Anfrage
 
-Verwenden Sie HEAD, um die Existenz einer Ressource zu pruefen oder Header zu erhalten, ohne den Body herunterzuladen:
+Verwenden Sie HEAD, um die Existenz einer Ressource zu prüfen oder Header zu erhalten, ohne den Body herunterzuladen:
 
 ```dart
 Future<bool> checkResourceExists(String url) async {
@@ -136,7 +136,7 @@ Future<bool> checkResourceExists(String url) async {
 
 ## Network-Helfer
 
-Die `network`-Methode gibt Ihnen mehr Kontrolle als die Komfortmethoden. Sie gibt die umgewandelten Daten (`T?`) direkt zurueck.
+Die `network`-Methode gibt Ihnen mehr Kontrolle als die Komfortmethoden. Sie gibt die umgewandelten Daten (`T?`) direkt zurück.
 
 ```dart
 class ApiService extends NyApiService {
@@ -162,26 +162,26 @@ class ApiService extends NyApiService {
 }
 ```
 
-Der `request`-Callback erhaelt eine <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>-Instanz mit Ihrer Basis-URL und Interceptors bereits konfiguriert.
+Der `request`-Callback erhält eine <a href="https://pub.dev/packages/dio" target="_BLANK">Dio</a>-Instanz mit Ihrer Basis-URL und Interceptors bereits konfiguriert.
 
 ### network-Parameter
 
 | Parameter | Typ | Beschreibung |
 |-----------|------|-------------|
-| `request` | `Function(Dio)` | Die auszufuehrende HTTP-Anfrage (erforderlich) |
-| `bearerToken` | `String?` | Bearer-Token fuer diese Anfrage |
-| `baseUrl` | `String?` | Basis-URL des Services ueberschreiben |
-| `headers` | `Map<String, dynamic>?` | Zusaetzliche Header |
+| `request` | `Function(Dio)` | Die auszuführende HTTP-Anfrage (erforderlich) |
+| `bearerToken` | `String?` | Bearer-Token für diese Anfrage |
+| `baseUrl` | `String?` | Basis-URL des Services überschreiben |
+| `headers` | `Map<String, dynamic>?` | Zusätzliche Header |
 | `retry` | `int?` | Anzahl der Wiederholungsversuche |
-| `retryDelay` | `Duration?` | Verzoegerung zwischen Wiederholungen |
-| `retryIf` | `bool Function(DioException)?` | Bedingung fuer Wiederholung |
+| `retryDelay` | `Duration?` | Verzögerung zwischen Wiederholungen |
+| `retryIf` | `bool Function(DioException)?` | Bedingung für Wiederholung |
 | `connectionTimeout` | `Duration?` | Verbindungs-Timeout |
 | `receiveTimeout` | `Duration?` | Empfangs-Timeout |
 | `sendTimeout` | `Duration?` | Sende-Timeout |
-| `cacheKey` | `String?` | Cache-Schluessel |
+| `cacheKey` | `String?` | Cache-Schlüssel |
 | `cacheDuration` | `Duration?` | Cache-Dauer |
 | `cachePolicy` | `CachePolicy?` | Cache-Strategie |
-| `checkConnectivity` | `bool?` | Konnektivitaet vor Anfrage pruefen |
+| `checkConnectivity` | `bool?` | Konnektivität vor Anfrage prüfen |
 | `handleSuccess` | `Function(NyResponse<T>)?` | Erfolgs-Callback |
 | `handleFailure` | `Function(NyResponse<T>)?` | Fehler-Callback |
 
@@ -190,13 +190,13 @@ Der `request`-Callback erhaelt eine <a href="https://pub.dev/packages/dio" targe
 
 ## networkResponse-Helfer
 
-Verwenden Sie `networkResponse`, wenn Sie Zugriff auf die vollstaendige Antwort benoetigen -- Statuscodes, Header, Fehlermeldungen -- nicht nur die Daten. Es gibt ein `NyResponse<T>` anstelle von `T?` zurueck.
+Verwenden Sie `networkResponse`, wenn Sie Zugriff auf die vollständige Antwort benötigen -- Statuscodes, Header, Fehlermeldungen -- nicht nur die Daten. Es gibt ein `NyResponse<T>` anstelle von `T?` zurück.
 
 Verwenden Sie `networkResponse`, wenn Sie:
-- HTTP-Statuscodes fuer spezifische Behandlung pruefen muessen
-- Auf Antwort-Header zugreifen muessen
-- Detaillierte Fehlermeldungen fuer Benutzer-Feedback benoetigen
-- Benutzerdefinierte Fehlerbehandlungslogik implementieren muessen
+- HTTP-Statuscodes für spezifische Behandlung prüfen müssen
+- Auf Antwort-Header zugreifen müssen
+- Detaillierte Fehlermeldungen für Benutzer-Feedback benötigen
+- Benutzerdefinierte Fehlerbehandlungslogik implementieren müssen
 
 ```dart
 Future<NyResponse<User>> fetchUser(int id) async {
@@ -236,14 +236,14 @@ User? user = response.data;
 int? status = response.statusCode;
 ```
 
-Beide Methoden akzeptieren die gleichen Parameter. Waehlen Sie `networkResponse`, wenn Sie die Antwort ueber die reinen Daten hinaus inspizieren muessen.
+Beide Methoden akzeptieren die gleichen Parameter. Wählen Sie `networkResponse`, wenn Sie die Antwort über die reinen Daten hinaus inspizieren müssen.
 
 
 <div id="ny-response"></div>
 
 ## NyResponse
 
-`NyResponse<T>` umhuellt die Dio-Antwort mit umgewandelten Daten und Status-Helfern.
+`NyResponse<T>` umhüllt die Dio-Antwort mit umgewandelten Daten und Status-Helfern.
 
 ### Eigenschaften
 
@@ -258,7 +258,7 @@ Beide Methoden akzeptieren die gleichen Parameter. Waehlen Sie `networkResponse`
 | `contentType` | `String?` | Content-Type aus den Headern |
 | `errorMessage` | `String?` | Extrahierte Fehlermeldung |
 
-### Status-Pruefungen
+### Status-Prüfungen
 
 | Getter | Beschreibung |
 |--------|-------------|
@@ -285,7 +285,7 @@ User user = response.dataOrThrow('User not found');
 // Daten abrufen oder Fallback verwenden
 User user = response.dataOr(User.guest());
 
-// Callback nur bei Erfolg ausfuehren
+// Callback nur bei Erfolg ausführen
 String? greeting = response.ifSuccessful((user) => 'Hello ${user.name}');
 
 // Erfolg/Fehler per Pattern-Matching behandeln
@@ -303,7 +303,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ## Basis-Optionen
 
-Konfigurieren Sie Standard-Dio-Optionen fuer Ihren API-Service mit dem `baseOptions`-Parameter:
+Konfigurieren Sie Standard-Dio-Optionen für Ihren API-Service mit dem `baseOptions`-Parameter:
 
 ```dart
 class ApiService extends NyApiService {
@@ -320,7 +320,7 @@ class ApiService extends NyApiService {
 }
 ```
 
-Sie koennen Optionen auch dynamisch auf einer Instanz konfigurieren:
+Sie können Optionen auch dynamisch auf einer Instanz konfigurieren:
 
 ```dart
 apiService.setConnectTimeout(Duration(seconds: 10));
@@ -329,12 +329,12 @@ apiService.setSendTimeout(Duration(seconds: 10));
 apiService.setContentType('application/json');
 ```
 
-Klicken Sie <a href="https://pub.dev/packages/dio#request-options" target="_BLANK">hier</a>, um alle Basis-Optionen zu sehen, die Sie festlegen koennen.
+Klicken Sie <a href="https://pub.dev/packages/dio#request-options" target="_BLANK">hier</a>, um alle Basis-Optionen zu sehen, die Sie festlegen können.
 
 
 <div id="adding-headers"></div>
 
-## Header hinzufuegen
+## Header hinzufügen
 
 ### Header pro Anfrage
 
@@ -384,8 +384,8 @@ Future<RequestHeaders> setAuthHeaders(RequestHeaders headers) async {
 |---------|-------------|
 | `addBearerToken(token)` | Den `Authorization: Bearer`-Header setzen |
 | `getBearerToken()` | Das Bearer-Token aus den Headern lesen |
-| `addHeader(key, value)` | Einen benutzerdefinierten Header hinzufuegen |
-| `hasHeader(key)` | Pruefen, ob ein Header existiert |
+| `addHeader(key, value)` | Einen benutzerdefinierten Header hinzufügen |
+| `hasHeader(key)` | Prüfen, ob ein Header existiert |
 
 
 <div id="uploading-files"></div>
@@ -452,13 +452,13 @@ Future<void> downloadFile(String url, String savePath) async {
 
 ## Interceptors
 
-Interceptors ermoeglichen es Ihnen, Anfragen vor dem Senden zu modifizieren, Antworten zu verarbeiten und Fehler zu behandeln. Sie werden bei jeder Anfrage ausgefuehrt, die ueber den API-Service gemacht wird.
+Interceptors ermöglichen es Ihnen, Anfragen vor dem Senden zu modifizieren, Antworten zu verarbeiten und Fehler zu behandeln. Sie werden bei jeder Anfrage ausgeführt, die über den API-Service gemacht wird.
 
 Verwenden Sie Interceptors, wenn Sie:
-- Authentifizierungs-Header zu allen Anfragen hinzufuegen muessen
-- Anfragen und Antworten fuer das Debugging loggen muessen
-- Anfrage-/Antwortdaten global transformieren muessen
-- Bestimmte Fehlercodes behandeln muessen (z.B. Tokens bei 401 erneuern)
+- Authentifizierungs-Header zu allen Anfragen hinzufügen müssen
+- Anfragen und Antworten für das Debugging loggen müssen
+- Anfrage-/Antwortdaten global transformieren müssen
+- Bestimmte Fehlercodes behandeln müssen (z.B. Tokens bei 401 erneuern)
 
 ```dart
 class ApiService extends NyApiService {
@@ -511,7 +511,7 @@ class LoggingInterceptor extends Interceptor {
 
 ## Network Logger
 
-{{ config('app.name') }} enthaelt einen eingebauten `NetworkLogger`-Interceptor. Er ist standardmaessig aktiviert, wenn `APP_DEBUG` in Ihrer Umgebung auf `true` gesetzt ist.
+{{ config('app.name') }} enthält einen eingebauten `NetworkLogger`-Interceptor. Er ist standardmäßig aktiviert, wenn `APP_DEBUG` in Ihrer Umgebung auf `true` gesetzt ist.
 
 ### Konfiguration
 
@@ -533,7 +533,7 @@ class ApiService extends NyApiService {
 }
 ```
 
-Sie koennen ihn deaktivieren, indem Sie `useNetworkLogger: false` setzen.
+Sie können ihn deaktivieren, indem Sie `useNetworkLogger: false` setzen.
 
 ```
 class ApiService extends NyApiService {
@@ -568,7 +568,7 @@ NetworkLogger(
 
 ## Einen API-Service verwenden
 
-Es gibt zwei Moeglichkeiten, Ihren API-Service von einer Seite aus aufzurufen.
+Es gibt zwei Möglichkeiten, Ihren API-Service von einer Seite aus aufzurufen.
 
 ### Direkte Instanziierung
 
@@ -619,16 +619,16 @@ await api<ApiService>(
 | Parameter | Typ | Beschreibung |
 |-----------|------|-------------|
 | `request` | `Function(T)` | Die API-Anfragefunktion |
-| `headers` | `Map<String, dynamic>` | Zusaetzliche Header |
+| `headers` | `Map<String, dynamic>` | Zusätzliche Header |
 | `bearerToken` | `String?` | Bearer-Token |
-| `baseUrl` | `String?` | Basis-URL ueberschreiben |
+| `baseUrl` | `String?` | Basis-URL überschreiben |
 | `page` | `int?` | Paginierungsseite |
 | `perPage` | `int?` | Elemente pro Seite |
 | `retry` | `int` | Wiederholungsversuche |
-| `retryDelay` | `Duration?` | Verzoegerung zwischen Wiederholungen |
+| `retryDelay` | `Duration?` | Verzögerung zwischen Wiederholungen |
 | `onSuccess` | `Function(Response, dynamic)?` | Erfolgs-Callback |
 | `onError` | `Function(DioException)?` | Fehler-Callback |
-| `cacheKey` | `String?` | Cache-Schluessel |
+| `cacheKey` | `String?` | Cache-Schlüssel |
 | `cacheDuration` | `Duration?` | Cache-Dauer |
 
 
@@ -691,20 +691,20 @@ class UserApiService extends NyApiService {
 
 ## JSON in Models umwandeln
 
-"Morphing" ist der Begriff von {{ config('app.name') }} fuer die automatische Konvertierung von JSON-Antworten in Ihre Dart-Model-Klassen. Wenn Sie `network<User>(...)` verwenden, wird das JSON der Antwort durch Ihren Decoder geleitet, um eine `User`-Instanz zu erstellen -- kein manuelles Parsen noetig.
+"Morphing" ist der Begriff von {{ config('app.name') }} für die automatische Konvertierung von JSON-Antworten in Ihre Dart-Model-Klassen. Wenn Sie `network<User>(...)` verwenden, wird das JSON der Antwort durch Ihren Decoder geleitet, um eine `User`-Instanz zu erstellen -- kein manuelles Parsen nötig.
 
 ```dart
 class ApiService extends NyApiService {
   ApiService() : super(decoders: modelDecoders);
 
-  // Gibt einen einzelnen User zurueck
+  // Gibt einen einzelnen User zurück
   Future<User?> fetchUser() async {
     return await network<User>(
       request: (request) => request.get("/user/1"),
     );
   }
 
-  // Gibt eine Liste von Users zurueck
+  // Gibt eine Liste von Users zurück
   Future<List<User>?> fetchUsers() async {
     return await network<List<User>>(
       request: (request) => request.get("/users"),
@@ -724,16 +724,16 @@ final Map<Type, dynamic> modelDecoders = {
 };
 ```
 
-Der Typparameter, den Sie an `network<T>()` uebergeben, wird mit Ihrer `modelDecoders`-Map abgeglichen, um den richtigen Decoder zu finden.
+Der Typparameter, den Sie an `network<T>()` übergeben, wird mit Ihrer `modelDecoders`-Map abgeglichen, um den richtigen Decoder zu finden.
 
-**Siehe auch:** [Decoders](/docs/{{$version}}/decoders#model-decoders) fuer Details zur Registrierung von Model-Decodern.
+**Siehe auch:** [Decoders](/docs/{{$version}}/decoders#model-decoders) für Details zur Registrierung von Model-Decodern.
 
 
 <div id="caching-responses"></div>
 
 ## Antworten cachen
 
-Cachen Sie Antworten, um API-Aufrufe zu reduzieren und die Leistung zu verbessern. Caching ist nuetzlich fuer Daten, die sich nicht haeufig aendern, wie Laenderlisten, Kategorien oder Konfigurationen.
+Cachen Sie Antworten, um API-Aufrufe zu reduzieren und die Leistung zu verbessern. Caching ist nützlich für Daten, die sich nicht häufig ändern, wie Länderlisten, Kategorien oder Konfigurationen.
 
 Geben Sie einen `cacheKey` und optional eine `cacheDuration` an:
 
@@ -750,7 +750,7 @@ Future<List<Country>> fetchCountries() async {
 ### Cache leeren
 
 ```dart
-// Einen bestimmten Cache-Schluessel leeren
+// Einen bestimmten Cache-Schlüssel leeren
 await apiService.clearCache("app_countries");
 
 // Gesamten API-Cache leeren
@@ -772,7 +772,7 @@ api<ApiService>(
 
 ## Cache-Richtlinien
 
-Verwenden Sie `CachePolicy` fuer feinkoernige Kontrolle ueber das Caching-Verhalten:
+Verwenden Sie `CachePolicy` für feinkörnige Kontrolle über das Caching-Verhalten:
 
 | Richtlinie | Beschreibung |
 |------------|-------------|
@@ -780,7 +780,7 @@ Verwenden Sie `CachePolicy` fuer feinkoernige Kontrolle ueber das Caching-Verhal
 | `CachePolicy.cacheFirst` | Zuerst Cache versuchen, bei Fehlen Netzwerk verwenden |
 | `CachePolicy.networkFirst` | Zuerst Netzwerk versuchen, bei Fehler Cache verwenden |
 | `CachePolicy.cacheOnly` | Nur Cache verwenden, Fehler wenn leer |
-| `CachePolicy.staleWhileRevalidate` | Cache sofort zurueckgeben, im Hintergrund aktualisieren |
+| `CachePolicy.staleWhileRevalidate` | Cache sofort zurückgeben, im Hintergrund aktualisieren |
 
 ### Verwendung
 
@@ -797,9 +797,9 @@ Future<List<Country>> fetchCountries() async {
 
 ### Wann welche Richtlinie verwenden
 
-- **cacheFirst** -- Daten, die sich selten aendern. Gibt gecachte Daten sofort zurueck, ruft nur vom Netzwerk ab, wenn der Cache leer ist.
-- **networkFirst** -- Daten, die moeglichst aktuell sein sollten. Versucht zuerst das Netzwerk, faellt bei Fehler auf Cache zurueck.
-- **staleWhileRevalidate** -- UI, die eine sofortige Antwort benoetigt, aber aktuell bleiben sollte. Gibt gecachte Daten zurueck und aktualisiert dann im Hintergrund.
+- **cacheFirst** -- Daten, die sich selten ändern. Gibt gecachte Daten sofort zurück, ruft nur vom Netzwerk ab, wenn der Cache leer ist.
+- **networkFirst** -- Daten, die möglichst aktuell sein sollten. Versucht zuerst das Netzwerk, fällt bei Fehler auf Cache zurück.
+- **staleWhileRevalidate** -- UI, die eine sofortige Antwort benötigt, aber aktuell bleiben sollte. Gibt gecachte Daten zurück und aktualisiert dann im Hintergrund.
 - **cacheOnly** -- Offline-Modus. Wirft einen Fehler, wenn keine gecachten Daten vorhanden sind.
 
 > **Hinweis:** Wenn Sie einen `cacheKey` oder eine `cacheDuration` ohne Angabe einer `cachePolicy` angeben, ist die Standardrichtlinie `cacheFirst`.
@@ -822,7 +822,7 @@ Future fetchUsers() async {
 }
 ```
 
-### Wiederholung mit Verzoegerung
+### Wiederholung mit Verzögerung
 
 ```dart
 Future fetchUsers() async {
@@ -860,9 +860,9 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 <div id="connectivity-checks"></div>
 
-## Konnektivitaetspruefungen
+## Konnektivitätsprüfungen
 
-Schnell fehlschlagen, wenn das Geraet offline ist, anstatt auf ein Timeout zu warten.
+Schnell fehlschlagen, wenn das Gerät offline ist, anstatt auf ein Timeout zu warten.
 
 ### Service-Level
 
@@ -891,8 +891,8 @@ await network(
 apiService.setCheckConnectivityBeforeRequest(true);
 ```
 
-Wenn aktiviert und das Geraet offline ist:
-- `networkFirst`-Richtlinie faellt auf Cache zurueck
+Wenn aktiviert und das Gerät offline ist:
+- `networkFirst`-Richtlinie fällt auf Cache zurück
 - Andere Richtlinien werfen sofort `DioExceptionType.connectionError`
 
 
@@ -910,7 +910,7 @@ await apiService.get('/endpoint', cancelToken: token);
 // Alle ausstehenden Anfragen abbrechen (z.B. bei Abmeldung)
 apiService.cancelAllRequests('User logged out');
 
-// Anzahl aktiver Anfragen pruefen
+// Anzahl aktiver Anfragen prüfen
 int count = apiService.activeRequestCount;
 
 // Einen bestimmten Token bereinigen, wenn fertig
@@ -922,7 +922,7 @@ apiService.removeCancelToken(token);
 
 ## Auth-Header setzen
 
-Ueberschreiben Sie `setAuthHeaders`, um Authentifizierungs-Header an jede Anfrage anzuhaengen. Diese Methode wird vor jeder Anfrage aufgerufen, wenn `shouldSetAuthHeaders` auf `true` steht (Standard).
+Überschreiben Sie `setAuthHeaders`, um Authentifizierungs-Header an jede Anfrage anzuhängen. Diese Methode wird vor jeder Anfrage aufgerufen, wenn `shouldSetAuthHeaders` auf `true` steht (Standard).
 
 ```dart
 class ApiService extends NyApiService {
@@ -941,7 +941,7 @@ class ApiService extends NyApiService {
 
 ### Auth-Header deaktivieren
 
-Fuer oeffentliche Endpunkte, die keine Authentifizierung benoetigen:
+Für öffentliche Endpunkte, die keine Authentifizierung benötigen:
 
 ```dart
 // Pro Anfrage
@@ -954,14 +954,14 @@ await network(
 apiService.setShouldSetAuthHeaders(false);
 ```
 
-**Siehe auch:** [Authentifizierung](/docs/{{ $version }}/authentication) fuer Details zur Benutzerauthentifizierung und Token-Speicherung.
+**Siehe auch:** [Authentifizierung](/docs/{{ $version }}/authentication) für Details zur Benutzerauthentifizierung und Token-Speicherung.
 
 
 <div id="refreshing-tokens"></div>
 
 ## Tokens aktualisieren
 
-Ueberschreiben Sie `shouldRefreshToken` und `refreshToken`, um den Token-Ablauf zu behandeln. Diese werden vor jeder Anfrage aufgerufen.
+Überschreiben Sie `shouldRefreshToken` und `refreshToken`, um den Token-Ablauf zu behandeln. Diese werden vor jeder Anfrage aufgerufen.
 
 ```dart
 class ApiService extends NyApiService {
@@ -969,7 +969,7 @@ class ApiService extends NyApiService {
 
   @override
   Future<bool> shouldRefreshToken() async {
-    // Pruefen, ob der Token erneuert werden muss
+    // Prüfen, ob der Token erneuert werden muss
     return false;
   }
 
@@ -994,7 +994,7 @@ Der `dio`-Parameter in `refreshToken` ist eine neue Dio-Instanz, getrennt von de
 
 ## Singleton API-Service
 
-Standardmaessig erstellt der `api`-Helfer jedes Mal eine neue Instanz. Um ein Singleton zu verwenden, uebergeben Sie eine Instanz anstelle einer Factory in `config/decoders.dart`:
+Standardmäßig erstellt der `api`-Helfer jedes Mal eine neue Instanz. Um ein Singleton zu verwenden, übergeben Sie eine Instanz anstelle einer Factory in `config/decoders.dart`:
 
 ```dart
 final Map<Type, dynamic> apiDecoders = {
@@ -1057,14 +1057,14 @@ apiService.onError((dioException) {
 });
 ```
 
-### Ueberschreibbare Eigenschaften
+### Überschreibbare Eigenschaften
 
 | Eigenschaft | Typ | Standard | Beschreibung |
 |------------|------|---------|-------------|
-| `baseUrl` | `String` | `""` | Basis-URL fuer alle Anfragen |
+| `baseUrl` | `String` | `""` | Basis-URL für alle Anfragen |
 | `interceptors` | `Map<Type, Interceptor>` | `{}` | Dio-Interceptors |
-| `decoders` | `Map<Type, dynamic>?` | `{}` | Model-Decoder fuer JSON-Umwandlung |
+| `decoders` | `Map<Type, dynamic>?` | `{}` | Model-Decoder für JSON-Umwandlung |
 | `shouldSetAuthHeaders` | `bool` | `true` | Ob `setAuthHeaders` vor Anfragen aufgerufen werden soll |
 | `retry` | `int` | `0` | Standard-Wiederholungsversuche |
-| `retryDelay` | `Duration` | `1 second` | Standard-Verzoegerung zwischen Wiederholungen |
-| `checkConnectivityBeforeRequest` | `bool` | `false` | Konnektivitaet vor Anfragen pruefen |
+| `retryDelay` | `Duration` | `1 second` | Standard-Verzögerung zwischen Wiederholungen |
+| `checkConnectivityBeforeRequest` | `bool` | `false` | Konnektivität vor Anfragen prüfen |

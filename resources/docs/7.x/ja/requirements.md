@@ -17,7 +17,7 @@
 
 | 要件 | 最低バージョン |
 |-------------|-----------------|
-| **Flutter** | 3.24.0 以上 |
+| **Flutter** | 3.38.4 以上 |
 | **Dart SDK** | 3.10.7 以上 |
 
 ### プラットフォームサポート
@@ -56,13 +56,13 @@ flutter --version
 以下のような出力が表示されるはずです:
 
 ```
-Flutter 3.24.0 • channel stable
+Flutter 3.38.4 • channel stable
 Dart SDK version: 3.10.7
 ```
 
 ### Flutter の更新（必要な場合）
 
-Flutter のバージョンが 3.24.0 未満の場合、最新の安定版にアップグレードしてください:
+Flutter のバージョンが 3.38.4 未満の場合、最新の安定版にアップグレードしてください:
 
 ``` bash
 flutter channel stable

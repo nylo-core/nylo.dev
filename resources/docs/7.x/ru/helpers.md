@@ -1,7 +1,5 @@
 # Вспомогательные функции
 
-<!-- uncertain: newly created translation; needs full human review -->
-
 ---
 
 <a name="section-1"></a>

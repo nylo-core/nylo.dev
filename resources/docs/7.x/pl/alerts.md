@@ -404,7 +404,6 @@ typedef ToastStyleDataFactory =
     ToastStyleFactory Function(Map<String, dynamic> data);
 ```
 
-<!-- uncertain: new Nylo-specific term "registerWithData" — not seen in existing locale file -->
 Zarejestruj styl uwzgledniajacy dane za pomoca `registerWithData()`:
 
 ``` dart
@@ -457,7 +456,6 @@ showToastNotification(
 
 Jesli rowniez przekazesz `title` lub `description`, maja one priorytet nad pasujacymi kluczami w `data`.
 
-<!-- uncertain: new Nylo-specific method "ToastNotificationRegistry.resolve" — not seen in existing locale file -->
 Uzyj `ToastNotificationRegistry.resolve(id, data)` bezposrednio, jesli musisz samodzielnie zbudowac widget:
 
 ``` dart

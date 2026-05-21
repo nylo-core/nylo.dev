@@ -133,7 +133,7 @@ class ProfileController extends NyController {
   Future<void> construct(BuildContext context) async {
     super.construct(context);
 
-    // Die uebergebenen Daten abrufen
+    // Die übergebenen Daten abrufen
     Map<String, dynamic>? userData = data();
     int? userId = userData?['userId'];
   }
@@ -206,7 +206,7 @@ class HomeController extends NyController {
 
   void increment() {
     counter++;
-    // Ein setState auf der Seite ausloesen
+    // Ein setState auf der Seite auslösen
     setState(setState: () {});
   }
 
@@ -221,7 +221,7 @@ class HomeController extends NyController {
   }
 
   void goBackFromRoot() {
-    // Aus dem Root-Navigator herausspringen (z. B. um ein modales Root-Fenster in einem Navigation Hub zu schliessen)
+    // Aus dem Root-Navigator herausspringen (z. B. um ein modales Root-Fenster in einem Navigation Hub zu schließen)
     pop(rootNavigator: true);
   }
 
@@ -354,7 +354,7 @@ class CheckoutController extends NyController {
 
   void onTapPurchase() {
     lockRelease("purchase_lock", perform: () async {
-      // Dieser Code wird nur einmal ausgefuehrt, bis die Sperre freigegeben wird
+      // Dieser Code wird nur einmal ausgeführt, bis die Sperre freigegeben wird
       await processPayment();
       showToastSuccess(description: "Payment complete!");
     });
@@ -366,7 +366,7 @@ class CheckoutController extends NyController {
       perform: () async {
         await someAsyncOperation();
       },
-      shouldSetState: false, // Kein setState danach ausloesen
+      shouldSetState: false, // Kein setState danach auslösen
     );
   }
 }
@@ -384,7 +384,7 @@ class AccountController extends NyController {
   void onTapDeleteAccount() {
     confirmAction(
       () async {
-        // Benutzer hat bestaetigt - Loeschung durchfuehren
+        // Benutzer hat bestätigt - Löschung durchführen
         await deleteAccount();
         showToastSuccess(description: "Account deleted");
       },
@@ -459,7 +459,7 @@ class AdminController extends NyController {
   @override
   Future<void> construct(BuildContext context) async {
     super.construct(context);
-    // Wird nur ausgefuehrt, wenn alle Guards bestanden haben
+    // Wird nur ausgeführt, wenn alle Guards bestanden haben
   }
 }
 ```

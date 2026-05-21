@@ -11,7 +11,7 @@
   - [Parameter](#parameters "Parameter")
   - [Aktionen](#actions "Aktionen")
   - [Kopfzeile](#header "Kopfzeile")
-  - [Schliessen-Schaltflaeche](#close-button "Schliessen-Schaltflaeche")
+  - [Schließen-Schaltfläche](#close-button "Schließen-Schaltfläche")
   - [Benutzerdefinierte Dekoration](#custom-decoration "Benutzerdefinierte Dekoration")
 - [BottomModalSheetStyle](#bottom-modal-sheet-style "BottomModalSheetStyle")
 - [Beispiele](#examples "Beispiele")
@@ -22,10 +22,10 @@
 
 {{ config('app.name') }} bietet ein Modal-System, das auf **Bottom-Sheet-Modalen** basiert.
 
-Die Klasse `BottomSheetModal` bietet eine flexible API zur Anzeige von Inhalts-Overlays mit Aktionen, Kopfzeilen, Schliessen-Schaltflaechen und benutzerdefiniertem Styling.
+Die Klasse `BottomSheetModal` bietet eine flexible API zur Anzeige von Inhalts-Overlays mit Aktionen, Kopfzeilen, Schließen-Schaltflächen und benutzerdefiniertem Styling.
 
-Modale sind nuetzlich fuer:
-- Bestaetigungsdialoge (z. B. Abmelden, Loeschen)
+Modale sind nützlich für:
+- Bestätigungsdialoge (z. B. Abmelden, Löschen)
 - Schnelle Eingabeformulare
 - Aktionslisten mit mehreren Optionen
 - Informations-Overlays
@@ -34,7 +34,7 @@ Modale sind nuetzlich fuer:
 
 ## Ein Modal erstellen
 
-Sie koennen ein neues Modal mit der Metro-CLI erstellen:
+Sie können ein neues Modal mit der Metro-CLI erstellen:
 
 ``` bash
 metro make:bottom_sheet_modal payment_options
@@ -64,7 +64,7 @@ class PaymentOptionsModal extends StatelessWidget {
 }
 ```
 
-2. **Eine statische Methode**, die Ihrer `BottomSheetModal`-Klasse in `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart` hinzugefuegt wird:
+2. **Eine statische Methode**, die Ihrer `BottomSheetModal`-Klasse in `lib/resources/widgets/bottom_sheet_modals/bottom_sheet_modals.dart` hinzugefügt wird:
 
 ``` dart
 /// Payment-Optionen-Modal anzeigen
@@ -77,13 +77,13 @@ static Future<void> showPaymentOptions(BuildContext context) {
 }
 ```
 
-Anschliessend koennen Sie das Modal von ueberall aufrufen:
+Anschließend können Sie das Modal von überall aufrufen:
 
 ``` dart
 BottomSheetModal.showPaymentOptions(context);
 ```
 
-Wenn ein Modal mit demselben Namen bereits existiert, verwenden Sie das `--force`-Flag zum Ueberschreiben:
+Wenn ein Modal mit demselben Namen bereits existiert, verwenden Sie das `--force`-Flag zum Überschreiben:
 
 ``` bash
 metro make:bottom_sheet_modal payment_options --force
@@ -103,7 +103,7 @@ BottomSheetModal.showLogout(context);
 
 ## Ein Modal erstellen
 
-Das empfohlene Muster ist die Erstellung einer `BottomSheetModal`-Klasse mit statischen Methoden fuer jeden Modal-Typ. Die Projektvorlage bietet diese Struktur:
+Das empfohlene Muster ist die Erstellung einer `BottomSheetModal`-Klasse mit statischen Methoden für jeden Modal-Typ. Die Projektvorlage bietet diese Struktur:
 
 ``` dart
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class BottomSheetModal extends NyBaseModal {
 }
 ```
 
-Rufen Sie es von ueberall auf:
+Rufen Sie es von überall auf:
 
 ``` dart
 BottomSheetModal.showLogout(context);
@@ -166,32 +166,32 @@ BottomSheetModal.showLogout(
 
 | Parameter | Typ | Standard | Beschreibung |
 |-----------|------|---------|-------------|
-| `context` | `BuildContext` | erforderlich | Build-Kontext fuer das Modal |
+| `context` | `BuildContext` | erforderlich | Build-Kontext für das Modal |
 | `child` | `Widget` | erforderlich | Haupt-Inhalts-Widget |
 | `actionsRow` | `List<Widget>` | `[]` | Aktions-Widgets in einer horizontalen Reihe |
 | `actionsColumn` | `List<Widget>` | `[]` | Aktions-Widgets vertikal angeordnet |
-| `height` | `double?` | null | Feste Hoehe fuer das Modal |
+| `height` | `double?` | null | Feste Höhe für das Modal |
 | `header` | `Widget?` | null | Kopfzeilen-Widget oben |
 | `useSafeArea` | `bool` | `true` | Inhalt in SafeArea einbetten |
 | `isScrollControlled` | `bool` | `false` | Modal scrollbar machen |
-| `isDismissible` | `bool` | `true` | Modal durch Tippen ausserhalb schliessen |
-| `enableDrag` | `bool` | `true` | Ziehen zum Schliessen erlauben |
-| `showCloseButton` | `bool` | `false` | X-Schliessen-Schaltflaeche anzeigen |
+| `isDismissible` | `bool` | `true` | Modal durch Tippen außerhalb schließen |
+| `enableDrag` | `bool` | `true` | Ziehen zum Schließen erlauben |
+| `showCloseButton` | `bool` | `false` | X-Schließen-Schaltfläche anzeigen |
 | `headerPadding` | `EdgeInsets?` | null | Abstand bei vorhandener Kopfzeile |
 | `contentPadding` | `EdgeInsets?` | null | Abstand um den Hauptinhalt |
 | `actionsPadding` | `EdgeInsets?` | null | Abstand um den Aktionsbereich |
 | `backgroundColor` | `Color?` | null | Hintergrundfarbe des Modals |
 | `showHandle` | `bool` | `true` | Ziehgriff oben anzeigen |
-| `closeButtonColor` | `Color?` | null | Hintergrundfarbe der Schliessen-Schaltflaeche |
-| `closeButtonIconColor` | `Color?` | null | Symbolfarbe der Schliessen-Schaltflaeche |
-| `modalDecoration` | `BoxDecoration?` | null | Benutzerdefinierte Dekoration fuer den Modal-Container |
+| `closeButtonColor` | `Color?` | null | Hintergrundfarbe der Schließen-Schaltfläche |
+| `closeButtonIconColor` | `Color?` | null | Symbolfarbe der Schließen-Schaltfläche |
+| `modalDecoration` | `BoxDecoration?` | null | Benutzerdefinierte Dekoration für den Modal-Container |
 | `handleColor` | `Color?` | null | Farbe des Ziehgriffs |
 
 <div id="actions"></div>
 
 ### Aktionen
 
-Aktionen sind Schaltflaechen, die am unteren Rand des Modals angezeigt werden.
+Aktionen sind Schaltflächen, die am unteren Rand des Modals angezeigt werden.
 
 **Zeilenaktionen** werden nebeneinander platziert, wobei jede den gleichen Platz einnimmt:
 
@@ -235,7 +235,7 @@ displayModal(
 
 ### Kopfzeile
 
-Fuegen Sie eine Kopfzeile hinzu, die ueber dem Hauptinhalt steht:
+Fügen Sie eine Kopfzeile hinzu, die über dem Hauptinhalt steht:
 
 ``` dart
 displayModal(
@@ -254,9 +254,9 @@ displayModal(
 
 <div id="close-button"></div>
 
-### Schliessen-Schaltflaeche
+### Schließen-Schaltfläche
 
-Zeigen Sie eine Schliessen-Schaltflaeche in der oberen rechten Ecke an:
+Zeigen Sie eine Schließen-Schaltfläche in der oberen rechten Ecke an:
 
 ``` dart
 displayModal(
@@ -315,16 +315,16 @@ BottomModalSheetStyle(
 | `backgroundColor` | `NyColor?` | Hintergrundfarbe des Modals |
 | `barrierColor` | `NyColor?` | Farbe des Overlays hinter dem Modal |
 | `useRootNavigator` | `bool` | Root-Navigator verwenden (Standard: `false`) |
-| `routeSettings` | `RouteSettings?` | Routeneinstellungen fuer das Modal |
-| `titleStyle` | `TextStyle?` | Stil fuer den Titeltext |
-| `itemStyle` | `TextStyle?` | Stil fuer Listenelementtext |
-| `clearButtonStyle` | `TextStyle?` | Stil fuer den Loeschen-Schaltflaechentext |
+| `routeSettings` | `RouteSettings?` | Routeneinstellungen für das Modal |
+| `titleStyle` | `TextStyle?` | Stil für den Titeltext |
+| `itemStyle` | `TextStyle?` | Stil für Listenelementtext |
+| `clearButtonStyle` | `TextStyle?` | Stil für den Löschen-Schaltflächentext |
 
 <div id="examples"></div>
 
 ## Beispiele
 
-### Bestaetigungsmodal
+### Bestätigungsmodal
 
 ``` dart
 static Future<bool?> showConfirm(
@@ -356,7 +356,7 @@ bool? confirmed = await BottomSheetModal.showConfirm(
   message: "Delete this item?",
 );
 if (confirmed == true) {
-  // Element loeschen
+  // Element löschen
 }
 ```
 

@@ -380,7 +380,7 @@ Field.mask("Credit Card", mask: "#### #### #### ####")
 Field.mask("Custom Code",
   mask: "AA-####",
   match: r'[\w\d]',
-  maskReturnValue: true, // Gibt den formatierten Wert zurueck
+  maskReturnValue: true, // Gibt den formatierten Wert zurück
 )
 ```
 
@@ -602,7 +602,7 @@ Der Parameter `child` erfordert ein Widget, das `NyFieldStatefulWidget` erweiter
 
 ### Builder-Felder
 
-Verwenden Sie `Field.builder()`, um ein benutzerdefiniertes Inline-Formularfeld zu erstellen, ohne `NyFieldStatefulWidget` zu unterklassifizieren. Die Builder-Funktion empfängt den aktuellen Wert, einen `onChanged`-Callback zur Meldung von Wertänderungen an das Formular und einen `setState`-Callback zum Ausloesen einer UI-Neudarstellung.
+Verwenden Sie `Field.builder()`, um ein benutzerdefiniertes Inline-Formularfeld zu erstellen, ohne `NyFieldStatefulWidget` zu unterklassifizieren. Die Builder-Funktion empfängt den aktuellen Wert, einen `onChanged`-Callback zur Meldung von Wertänderungen an das Formular und einen `setState`-Callback zum Auslösen einer UI-Neudarstellung.
 
 ``` dart
 Field.builder(
@@ -620,7 +620,7 @@ Field.builder(
 )
 ```
 
-Der dritte Parameter ist der aktuelle Feldwert und der vierte ist `setState`. Wenn Ihr Builder kein `setState` benoetigt, koennen Sie die veraltete 3-Argument-Signatur (`NyFieldBuilderLegacy`) verwenden, die weiterhin unterstuetzt wird:
+Der dritte Parameter ist der aktuelle Feldwert und der vierte ist `setState`. Wenn Ihr Builder kein `setState` benötigt, können Sie die veraltete 3-Argument-Signatur (`NyFieldBuilderLegacy`) verwenden, die weiterhin unterstützt wird:
 
 ``` dart
 Field.builder(
@@ -1121,7 +1121,7 @@ LoginForm(
   double crossAxisSpacing = 10,  // Horizontaler Abstand zwischen Zeilenfeldern
   double mainAxisSpacing = 10,   // Vertikaler Abstand zwischen Feldern
   Map<String, dynamic>? initialData, // Anfangsfeld-Werte
-  Function(Field field, dynamic value)? onChanged, // Feldaenderungs-Callback
+  Function(Field field, dynamic value)? onChanged, // Feldänderungs-Callback
   Widget? header,                // Widget über dem Formular
   Widget? submitButton,          // Absende-Button-Widget
   Widget? footer,                // Widget unter dem Formular
@@ -1129,7 +1129,7 @@ LoginForm(
   double submitButtonSpacing = 10, // Abstand nach dem Absende-Button
   double footerSpacing = 10,     // Abstand vor dem Footer
   LoadingStyle? loadingStyle,    // Ladeindikator-Stil
-  bool locked = false,           // Formular schreibgeschuetzt machen
+  bool locked = false,           // Formular schreibgeschützt machen
   Function(dynamic data)? onSubmit,   // Wird mit Formulardaten bei erfolgreicher Validierung aufgerufen
   Function(dynamic error)? onFailure, // Wird mit Fehlern bei fehlgeschlagener Validierung aufgerufen
 )

@@ -7,7 +7,7 @@
 - [Grundlegende Verwendung](#basic-usage "Grundlegende Verwendung")
 - [Daten lesen](#reading-data "Daten lesen")
 - [Daten speichern](#saving-data "Daten speichern")
-- [Daten loeschen](#deleting-data "Daten loeschen")
+- [Daten löschen](#deleting-data "Daten löschen")
 - [Sitzungen](#sessions "Sitzungen")
 - [Zugriff auf die Nylo-Instanz](#nylo-instance "Zugriff auf die Nylo-Instanz")
 - [Hilfsfunktionen](#helper-functions "Hilfsfunktionen")
@@ -18,9 +18,9 @@
 
 ## Einleitung
 
-**Backpack** ist ein In-Memory-Singleton-Speichersystem in {{ config('app.name') }}. Es bietet schnellen, synchronen Zugriff auf Daten waehrend der Laufzeit Ihrer App. Im Gegensatz zu `NyStorage`, das Daten persistent auf dem Geraet speichert, haelt Backpack Daten im Arbeitsspeicher und wird beim Schliessen der App geleert.
+**Backpack** ist ein In-Memory-Singleton-Speichersystem in {{ config('app.name') }}. Es bietet schnellen, synchronen Zugriff auf Daten während der Laufzeit Ihrer App. Im Gegensatz zu `NyStorage`, das Daten persistent auf dem Gerät speichert, hält Backpack Daten im Arbeitsspeicher und wird beim Schließen der App geleert.
 
-Backpack wird intern vom Framework verwendet, um wichtige Instanzen wie das `Nylo`-App-Objekt, den `EventBus` und Authentifizierungsdaten zu speichern. Sie koennen es auch verwenden, um eigene Daten zu speichern, auf die schnell und ohne asynchrone Aufrufe zugegriffen werden soll.
+Backpack wird intern vom Framework verwendet, um wichtige Instanzen wie das `Nylo`-App-Objekt, den `EventBus` und Authentifizierungsdaten zu speichern. Sie können es auch verwenden, um eigene Daten zu speichern, auf die schnell und ohne asynchrone Aufrufe zugegriffen werden soll.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -31,7 +31,7 @@ Backpack.instance.save("user_name", "Anthony");
 // Einen Wert lesen (synchron)
 String? name = Backpack.instance.read("user_name");
 
-// Einen Wert loeschen
+// Einen Wert löschen
 Backpack.instance.delete("user_name");
 ```
 
@@ -39,7 +39,7 @@ Backpack.instance.delete("user_name");
 
 ## Grundlegende Verwendung
 
-Backpack verwendet das **Singleton-Muster** -- greifen Sie ueber `Backpack.instance` darauf zu:
+Backpack verwendet das **Singleton-Muster** -- greifen Sie über `Backpack.instance` darauf zu:
 
 ``` dart
 // Daten speichern
@@ -48,7 +48,7 @@ Backpack.instance.save("theme", "dark");
 // Daten lesen
 String? theme = Backpack.instance.read("theme"); // "dark"
 
-// Pruefen, ob Daten vorhanden sind
+// Prüfen, ob Daten vorhanden sind
 bool hasTheme = Backpack.instance.contains("theme"); // true
 ```
 
@@ -56,7 +56,7 @@ bool hasTheme = Backpack.instance.contains("theme"); // true
 
 ## Daten lesen
 
-Lesen Sie Werte aus Backpack mit der Methode `read<T>()`. Sie unterstuetzt generische Typen und einen optionalen Standardwert:
+Lesen Sie Werte aus Backpack mit der Methode `read<T>()`. Sie unterstützt generische Typen und einen optionalen Standardwert:
 
 ``` dart
 // Einen String lesen
@@ -69,16 +69,16 @@ String name = Backpack.instance.read<String>("name", defaultValue: "Guest") ?? "
 int? score = Backpack.instance.read<int>("score");
 ```
 
-Backpack deserialisiert gespeicherte Werte automatisch zu Model-Objekten, wenn ein Typ angegeben wird. Dies funktioniert sowohl fuer JSON-Strings als auch fuer rohe `Map<String, dynamic>`-Werte:
+Backpack deserialisiert gespeicherte Werte automatisch zu Model-Objekten, wenn ein Typ angegeben wird. Dies funktioniert sowohl für JSON-Strings als auch für rohe `Map<String, dynamic>`-Werte:
 
 ``` dart
 // Wenn ein User-Model als JSON-String gespeichert ist, wird es deserialisiert
 User? user = Backpack.instance.read<User>("current_user");
 
-// Wenn eine rohe Map gespeichert wurde (z. B. ueber syncKeys von NyStorage), wird sie
+// Wenn eine rohe Map gespeichert wurde (z. B. über syncKeys von NyStorage), wird sie
 // ebenfalls automatisch beim Lesen in das typisierte Model deserialisiert
 Backpack.instance.save("current_user", {"name": "Alice", "age": 30});
-User? user = Backpack.instance.read<User>("current_user"); // gibt ein User-Objekt zurueck
+User? user = Backpack.instance.read<User>("current_user"); // gibt ein User-Objekt zurück
 ```
 
 <div id="saving-data"></div>
@@ -93,32 +93,32 @@ Backpack.instance.save("is_premium", true);
 Backpack.instance.save("cart_count", 3);
 ```
 
-### Daten anfuegen
+### Daten anfügen
 
-Verwenden Sie `append()`, um Werte zu einer Liste unter einem Schluessel hinzuzufuegen:
+Verwenden Sie `append()`, um Werte zu einer Liste unter einem Schlüssel hinzuzufügen:
 
 ``` dart
-// Zu einer Liste hinzufuegen
+// Zu einer Liste hinzufügen
 Backpack.instance.append("recent_searches", "Flutter");
 Backpack.instance.append("recent_searches", "Dart");
 
-// Mit einem Limit hinzufuegen (behaelt nur die letzten N Eintraege)
+// Mit einem Limit hinzufügen (behält nur die letzten N Einträge)
 Backpack.instance.append("recent_searches", "Nylo", limit: 10);
 ```
 
 <div id="deleting-data"></div>
 
-## Daten loeschen
+## Daten löschen
 
-### Einzelnen Schluessel loeschen
+### Einzelnen Schlüssel löschen
 
 ``` dart
 Backpack.instance.delete("api_token");
 ```
 
-### Alle Daten loeschen
+### Alle Daten löschen
 
-Die Methode `deleteAll()` entfernt alle Werte **ausser** den reservierten Framework-Schluesseln (`nylo` und `event_bus`):
+Die Methode `deleteAll()` entfernt alle Werte **außer** den reservierten Framework-Schlüsseln (`nylo` und `event_bus`):
 
 ``` dart
 Backpack.instance.deleteAll();
@@ -128,7 +128,7 @@ Backpack.instance.deleteAll();
 
 ## Sitzungen
 
-Backpack bietet Sitzungsverwaltung zur Organisation von Daten in benannten Gruppen. Dies ist nuetzlich, um zusammengehoerige Daten gemeinsam zu speichern.
+Backpack bietet Sitzungsverwaltung zur Organisation von Daten in benannten Gruppen. Dies ist nützlich, um zusammengehörige Daten gemeinsam zu speichern.
 
 ### Sitzungswert aktualisieren
 
@@ -144,7 +144,7 @@ int? itemCount = Backpack.instance.sessionGet<int>("cart", "item_count"); // 3
 double? total = Backpack.instance.sessionGet<double>("cart", "total"); // 29.99
 ```
 
-### Sitzungsschluessel entfernen
+### Sitzungsschlüssel entfernen
 
 ``` dart
 Backpack.instance.sessionRemove("cart", "item_count");
@@ -167,13 +167,13 @@ Map<String, dynamic>? cartData = Backpack.instance.sessionData("cart");
 
 ## Zugriff auf die Nylo-Instanz
 
-Backpack speichert die `Nylo`-Anwendungsinstanz. Sie koennen sie wie folgt abrufen:
+Backpack speichert die `Nylo`-Anwendungsinstanz. Sie können sie wie folgt abrufen:
 
 ``` dart
 Nylo nylo = Backpack.instance.nylo();
 ```
 
-Pruefen Sie, ob die Nylo-Instanz initialisiert wurde:
+Prüfen Sie, ob die Nylo-Instanz initialisiert wurde:
 
 ``` dart
 bool isReady = Backpack.instance.isNyloInitialized(); // true
@@ -183,14 +183,14 @@ bool isReady = Backpack.instance.isNyloInitialized(); // true
 
 ## Hilfsfunktionen
 
-{{ config('app.name') }} stellt globale Hilfsfunktionen fuer gaengige Backpack-Operationen bereit:
+{{ config('app.name') }} stellt globale Hilfsfunktionen für gängige Backpack-Operationen bereit:
 
 | Funktion | Beschreibung |
 |----------|-------------|
 | `backpackRead<T>(key)` | Einen Wert aus Backpack lesen |
 | `backpackSave(key, value)` | Einen Wert in Backpack speichern |
-| `backpackDelete(key)` | Einen Wert aus Backpack loeschen |
-| `backpackDeleteAll()` | Alle Werte loeschen (Framework-Schluessel bleiben erhalten) |
+| `backpackDelete(key)` | Einen Wert aus Backpack löschen |
+| `backpackDeleteAll()` | Alle Werte löschen (Framework-Schlüssel bleiben erhalten) |
 | `backpackNylo()` | Die Nylo-Instanz aus Backpack abrufen |
 
 ### Beispiel
@@ -211,26 +211,26 @@ Nylo nylo = backpackNylo();
 
 ## Integration mit NyStorage
 
-Backpack laesst sich mit `NyStorage` fuer kombinierte persistente und In-Memory-Speicherung integrieren:
+Backpack lässt sich mit `NyStorage` für kombinierte persistente und In-Memory-Speicherung integrieren:
 
 ``` dart
 // In NyStorage (persistent) und Backpack (In-Memory) speichern
 await NyStorage.save("auth_token", "abc123", inBackpack: true);
 
-// Jetzt synchron ueber Backpack zugaenglich
+// Jetzt synchron über Backpack zugänglich
 String? token = Backpack.instance.read("auth_token");
 
-// Beim Loeschen aus NyStorage auch aus Backpack entfernen
+// Beim Löschen aus NyStorage auch aus Backpack entfernen
 await NyStorage.deleteAll(andFromBackpack: true);
 ```
 
-Dieses Muster ist nuetzlich fuer Daten wie Authentifizierungstoken, die sowohl Persistenz als auch schnellen synchronen Zugriff benoetigen (z. B. in HTTP-Interceptoren).
+Dieses Muster ist nützlich für Daten wie Authentifizierungstoken, die sowohl Persistenz als auch schnellen synchronen Zugriff benötigen (z. B. in HTTP-Interceptoren).
 
 <div id="examples"></div>
 
 ## Beispiele
 
-### Auth-Token fuer API-Anfragen speichern
+### Auth-Token für API-Anfragen speichern
 
 ``` dart
 // In Ihrem Auth-Interceptor
@@ -251,7 +251,7 @@ class BearerAuthInterceptor extends Interceptor {
 ### Sitzungsbasierte Warenkorbverwaltung
 
 ``` dart
-// Artikel zu einer Warenkorb-Sitzung hinzufuegen
+// Artikel zu einer Warenkorb-Sitzung hinzufügen
 Backpack.instance.sessionUpdate("cart", "items", ["item_1", "item_2"]);
 Backpack.instance.sessionUpdate("cart", "total", 49.99);
 
@@ -265,10 +265,10 @@ Backpack.instance.sessionFlush("cart");
 ### Schnelle Feature-Flags
 
 ``` dart
-// Feature-Flags fuer schnellen Zugriff in Backpack speichern
+// Feature-Flags für schnellen Zugriff in Backpack speichern
 backpackSave("feature_dark_mode", true);
 backpackSave("feature_notifications", false);
 
-// Einen Feature-Flag pruefen
+// Einen Feature-Flag prüfen
 bool darkMode = backpackRead<bool>("feature_dark_mode") ?? false;
 ```

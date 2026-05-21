@@ -22,9 +22,9 @@
 
 ## Einleitung
 
-{{ config('app.name') }} bietet ein Toast-Benachrichtigungssystem zur Anzeige von Meldungen an Benutzer. Es wird mit vier integrierten Stilen ausgeliefert -- **success**, **warning**, **info** und **danger** -- und unterstuetzt benutzerdefinierte Stile ueber ein Registry-Muster.
+{{ config('app.name') }} bietet ein Toast-Benachrichtigungssystem zur Anzeige von Meldungen an Benutzer. Es wird mit vier integrierten Stilen ausgeliefert -- **success**, **warning**, **info** und **danger** -- und unterstützt benutzerdefinierte Stile über ein Registry-Muster.
 
-Benachrichtigungen koennen von Seiten, Controllern oder ueberall dort ausgeloest werden, wo Sie einen `BuildContext` haben.
+Benachrichtigungen können von Seiten, Controllern oder überall dort ausgelöst werden, wo Sie einen `BuildContext` haben.
 
 <div id="basic-usage"></div>
 
@@ -60,9 +60,9 @@ showToastNotification(context, id: "success", description: "Item saved!");
 
 | Stil-ID | Symbol | Farbe | Standardtitel |
 |---------|--------|-------|---------------|
-| `success` | Haekchen | Gruen | Success |
+| `success` | Häkchen | Grün | Success |
 | `warning` | Ausrufezeichen | Orange | Warning |
-| `info` | Info-Symbol | Tuerkis | Info |
+| `info` | Info-Symbol | Türkis | Info |
 | `danger` | Warnsymbol | Rot | Error |
 
 Diese werden in `lib/config/toast_notification.dart` konfiguriert:
@@ -146,7 +146,7 @@ showToast(
 
 ## Benachrichtigungen von Controllern anzeigen
 
-Controller, die `NyController` erweitern, verfuegen ueber dieselben Komfortmethoden:
+Controller, die `NyController` erweitern, verfügen über dieselben Komfortmethoden:
 
 ``` dart
 class ProfileController extends NyController {
@@ -161,13 +161,13 @@ class ProfileController extends NyController {
 }
 ```
 
-Verfuegbare Methoden: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Alle akzeptieren optionale Parameter `description`, `duration` (`Duration?`) und `data` (`Map<String, dynamic>?`).
+Verfügbare Methoden: `showToastSuccess`, `showToastWarning`, `showToastInfo`, `showToastDanger`, `showToastOops`, `showToastSorry`, `showToastCustom`. Alle akzeptieren optionale Parameter `description`, `duration` (`Duration?`) und `data` (`Map<String, dynamic>?`).
 
 <div id="show-toast-notification"></div>
 
 ## showToastNotification
 
-Die globale Funktion `showToastNotification()` zeigt einen Toast ueberall dort an, wo Sie einen `BuildContext` haben:
+Die globale Funktion `showToastNotification()` zeigt einen Toast überall dort an, wo Sie einen `BuildContext` haben:
 
 ``` dart
 showToastNotification(
@@ -196,20 +196,20 @@ showToastNotification(
 |-----------|-----|---------|-------------|
 | `context` | `BuildContext` | erforderlich | Build-Kontext |
 | `id` | `String` | `'success'` | Toast-Stil-ID |
-| `title` | `String?` | null | Titeltext; wird unveraendert an das Toast-Widget weitergegeben |
+| `title` | `String?` | null | Titeltext; wird unverändert an das Toast-Widget weitergegeben |
 | `description` | `String?` | null | Beschreibungstext |
-| `data` | `Map<String, dynamic>?` | null | Schluessel-Wert-Paare, die an datenbewusste Toast-Stile weitergegeben werden; `title` und `description` haben Vorrang vor uebereinstimmenden Schluesseln in `data` |
+| `data` | `Map<String, dynamic>?` | null | Schlüssel-Wert-Paare, die an datenbewusste Toast-Stile weitergegeben werden; `title` und `description` haben Vorrang vor übereinstimmenden Schlüsseln in `data` |
 | `duration` | `Duration?` | null | Wie lange der Toast angezeigt wird |
 | `position` | `ToastNotificationPosition?` | null | Position auf dem Bildschirm |
 | `action` | `VoidCallback?` | null | Tipp-Callback |
-| `onDismiss` | `VoidCallback?` | null | Schliessen-Callback |
+| `onDismiss` | `VoidCallback?` | null | Schließen-Callback |
 | `onShow` | `VoidCallback?` | null | Anzeige-Callback |
 
 <div id="toast-meta"></div>
 
 ## ToastMeta
 
-`ToastMeta` kapselt alle Daten fuer eine Toast-Benachrichtigung:
+`ToastMeta` kapselt alle Daten für eine Toast-Benachrichtigung:
 
 ``` dart
 ToastMeta(
@@ -236,10 +236,10 @@ ToastMeta(
 | `title` | `String` | `''` | Titeltext |
 | `style` | `String` | `''` | Stilbezeichner |
 | `description` | `String` | `''` | Beschreibungstext |
-| `color` | `Color?` | null | Hintergrundfarbe fuer den Symbolbereich |
+| `color` | `Color?` | null | Hintergrundfarbe für den Symbolbereich |
 | `action` | `VoidCallback?` | null | Tipp-Callback |
-| `dismiss` | `VoidCallback?` | null | Schliessen-Schaltflaechen-Callback |
-| `onDismiss` | `VoidCallback?` | null | Automatisches/manuelles Schliessen-Callback |
+| `dismiss` | `VoidCallback?` | null | Schließen-Schaltflächen-Callback |
+| `onDismiss` | `VoidCallback?` | null | Automatisches/manuelles Schließen-Callback |
 | `onShow` | `VoidCallback?` | null | Sichtbarkeits-Callback |
 | `duration` | `Duration` | 5 Sekunden | Anzeigedauer |
 | `position` | `ToastNotificationPosition` | `top` | Bildschirmposition |
@@ -314,7 +314,7 @@ class AppProvider implements NyProvider {
 }
 ```
 
-Oder fuegen Sie Stile jederzeit hinzu:
+Oder fügen Sie Stile jederzeit hinzu:
 
 ``` dart
 nylo.addToastNotifications({
@@ -353,16 +353,16 @@ static ToastStyleFactory style({
 
 | Parameter | Typ | Beschreibung |
 |-----------|-----|-------------|
-| `icon` | `Widget` | Symbol-Widget fuer den Toast |
-| `color` | `Color` | Hintergrundfarbe fuer den Symbolbereich |
+| `icon` | `Widget` | Symbol-Widget für den Toast |
+| `color` | `Color` | Hintergrundfarbe für den Symbolbereich |
 | `defaultTitle` | `String` | Titel, der angezeigt wird, wenn keiner angegeben ist |
 | `position` | `ToastNotificationPosition?` | Standardposition |
 | `duration` | `Duration?` | Standarddauer |
-| `builder` | `Widget Function(ToastMeta)?` | Benutzerdefinierter Widget-Builder fuer vollstaendige Kontrolle |
+| `builder` | `Widget Function(ToastMeta)?` | Benutzerdefinierter Widget-Builder für vollständige Kontrolle |
 
-### Vollstaendig benutzerdefinierter Builder
+### Vollständig benutzerdefinierter Builder
 
-Fuer vollstaendige Kontrolle ueber das Toast-Widget:
+Für vollständige Kontrolle über das Toast-Widget:
 
 ``` dart
 'banner': (ToastMeta meta, void Function(ToastMeta) updateMeta) {
@@ -397,15 +397,13 @@ Fuer vollstaendige Kontrolle ueber das Toast-Widget:
 
 ### Datenbewusste Toast-Stile
 
-<!-- uncertain: new Nylo-specific term "ToastStyleDataFactory" — not seen in existing locale file -->
-Verwenden Sie `ToastStyleDataFactory`, um Toast-Stile zu registrieren, die zur Laufzeit Daten erhalten. Dies ist nuetzlich, wenn der Toast-Inhalt -- z. B. Name oder Avatar eines Benutzers -- zum Registrierungszeitpunkt noch nicht bekannt ist.
+Verwenden Sie `ToastStyleDataFactory`, um Toast-Stile zu registrieren, die zur Laufzeit Daten erhalten. Dies ist nützlich, wenn der Toast-Inhalt — z. B. Name oder Avatar eines Benutzers — zum Registrierungszeitpunkt noch nicht bekannt ist.
 
 ``` dart
 typedef ToastStyleDataFactory =
     ToastStyleFactory Function(Map<String, dynamic> data);
 ```
 
-<!-- uncertain: new method "registerWithData()" — not seen in existing locale file -->
 Registrieren Sie einen datenbewussten Stil mit `registerWithData()`:
 
 ``` dart
@@ -456,9 +454,9 @@ showToastNotification(
 );
 ```
 
-Wenn Sie zusaetzlich `title` oder `description` uebergeben, haben diese Vorrang vor uebereinstimmenden Schluesseln in `data`.
+Wenn Sie zusätzlich `title` oder `description` übergeben, haben diese Vorrang vor übereinstimmenden Schlüsseln in `data`.
 
-Verwenden Sie `ToastNotificationRegistry.resolve(id, data)` direkt, wenn Sie das Widget selbst erstellen moechten:
+Verwenden Sie `ToastNotificationRegistry.resolve(id, data)` direkt, wenn Sie das Widget selbst erstellen möchten:
 
 ``` dart
 final factory = ToastNotificationRegistry.instance.resolve('new_follower', data);
@@ -471,7 +469,7 @@ if (factory != null) {
 
 ## AlertTab
 
-`AlertTab` ist ein Badge-Widget zum Hinzufuegen von Benachrichtigungsindikatoren zu Navigations-Tabs. Es zeigt ein Badge an, das umgeschaltet und optional im Speicher persistiert werden kann.
+`AlertTab` ist ein Badge-Widget zum Hinzufügen von Benachrichtigungsindikatoren zu Navigations-Tabs. Es zeigt ein Badge an, das umgeschaltet und optional im Speicher persistiert werden kann.
 
 ``` dart
 AlertTab(
@@ -493,8 +491,8 @@ AlertTab(
 | `backgroundColor` | `Color?` | null | Tab-Hintergrund |
 | `textColor` | `Color?` | null | Badge-Textfarbe |
 | `alertColor` | `Color?` | null | Badge-Hintergrundfarbe |
-| `smallSize` | `double?` | null | Kleine Badge-Groesse |
-| `largeSize` | `double?` | null | Grosse Badge-Groesse |
+| `smallSize` | `double?` | null | Kleine Badge-Größe |
+| `largeSize` | `double?` | null | Große Badge-Größe |
 | `textStyle` | `TextStyle?` | null | Badge-Textstil |
 | `padding` | `EdgeInsetsGeometry?` | null | Badge-Abstand |
 | `alignment` | `Alignment?` | null | Badge-Ausrichtung |

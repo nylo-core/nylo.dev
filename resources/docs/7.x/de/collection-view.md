@@ -133,7 +133,7 @@ CollectionView<Map<String, dynamic>>(
   builder: (context, item) {
     return ListTile(title: Text(item.data['title']));
   },
-  spacing: 8.0, // Abstand zwischen Elementen hinzufuegen
+  spacing: 8.0, // Abstand zwischen Elementen hinzufügen
   padding: EdgeInsets.all(16),
 )
 ```
@@ -187,7 +187,7 @@ Erstellt eine Liste mit Pull-to-Refresh und unendlicher Scroll-Paginierung:
 ``` dart
 CollectionView<Post>.pullable(
   data: (int iteration) async {
-    // iteration beginnt bei 1 und wird bei jedem Laden erhoeht
+    // iteration beginnt bei 1 und wird bei jedem Laden erhöht
     return await api<ApiService>((request) =>
       request.get('/posts?page=$iteration')
     );
@@ -341,7 +341,7 @@ CollectionView<User>(
 
 ## Status aktualisieren
 
-Sie koennen eine CollectionView programmatisch aktualisieren, indem Sie ihr einen `stateName` geben und `CollectionView.stateActions()` aufrufen:
+Sie können eine CollectionView programmatisch aktualisieren, indem Sie ihr einen `stateName` geben und `CollectionView.stateActions()` aufrufen:
 
 ``` dart
 CollectionView<Todo>(
@@ -356,16 +356,16 @@ Verwenden Sie `stateActions`, um die Liste zur Laufzeit zu bearbeiten:
 ``` dart
 final actions = CollectionView.stateActions("my_todo_list");
 
-// Daten zuruecksetzen und neu laden
+// Daten zurücksetzen und neu laden
 actions.reset();
 
-// Daten aktualisieren (neu abrufen und Paginierung zuruecksetzen)
+// Daten aktualisieren (neu abrufen und Paginierung zurücksetzen)
 actions.refreshData();
 
-// Ein Element am Ende der Liste hinzufuegen
+// Ein Element am Ende der Liste hinzufügen
 actions.addItem(newTodo);
 
-// Ein Element an einem bestimmten Index einfuegen
+// Ein Element an einem bestimmten Index einfügen
 actions.insertItem(0, newTodo);
 
 // Ein Element per Index entfernen
@@ -375,7 +375,7 @@ actions.removeFromIndex(2);
 actions.updateItemAtIndex(0, updatedTodo);
 ```
 
-Alle `stateActions`-Methoden funktionieren korrekt ueber Neubauten hinweg, sowohl fuer synchrone als auch asynchrone Daten. `refreshData()` setzt auch den Paginierungszaehler zurueck, sodass Pullable-Listen wieder bei Seite 1 beginnen.
+Alle `stateActions`-Methoden funktionieren korrekt über Neubauten hinweg, sowohl für synchrone als auch asynchrone Daten. `refreshData()` setzt auch den Paginierungszähler zurück, sodass Pullable-Listen wieder bei Seite 1 beginnen.
 
 <div id="parameters"></div>
 

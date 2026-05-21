@@ -116,7 +116,7 @@ final class AppConfig {
 Dann greifen Sie in Ihrem App-Code über die Konfigurationsklasse auf die Werte zu:
 
 ``` dart
-// Ueberall in Ihrer App
+// Überall in Ihrer App
 String name = AppConfig.appName;
 bool isDebug = AppConfig.appDebug;
 String apiUrl = AppConfig.apiBaseUrl;
@@ -138,7 +138,7 @@ Dies erstellt eine neue Konfigurationsdatei unter `lib/config/revenue_cat_config
 
 ``` dart
 final class RevenueCatConfig {
-  // Ihre Konfigurationswerte hier einfuegen
+  // Ihre Konfigurationswerte hier einfügen
 }
 ```
 
@@ -179,9 +179,9 @@ await Purchases.configure(
   PurchasesConfiguration(RevenueCatConfig.apiKey),
 );
 
-// Berechtigungen pruefen
+// Berechtigungen prüfen
 if (entitlement.identifier == RevenueCatConfig.entitlementId) {
-  // Premium-Zugang gewaehren
+  // Premium-Zugang gewähren
 }
 ```
 
@@ -206,7 +206,7 @@ Werte in Ihrer `.env`-Datei werden automatisch geparst:
 
 ## Variableninterpolation
 
-String-Werte in Ihrer `.env`-Datei koennen andere Variablen mit der Syntax `${VAR_NAME}` referenzieren:
+String-Werte in Ihrer `.env`-Datei können andere Variablen mit der Syntax `${VAR_NAME}` referenzieren:
 
 ``` bash
 APP_DOMAIN="myapp.com"
@@ -214,7 +214,7 @@ APP_URL="https://${APP_DOMAIN}"
 API_BASE_URL="https://api.${APP_DOMAIN}/v1"
 ```
 
-Wenn Ihr Code `getEnv('APP_URL')` aufruft, lautet der zurueckgegebene Wert `https://myapp.com`. Referenzen werden rekursiv aufgeloest, sodass verkettete Referenzen wie erwartet funktionieren:
+Wenn Ihr Code `getEnv('APP_URL')` aufruft, lautet der zurückgegebene Wert `https://myapp.com`. Referenzen werden rekursiv aufgelöst, sodass verkettete Referenzen wie erwartet funktionieren:
 
 ``` bash
 HOST="example.com"
@@ -222,9 +222,9 @@ BASE="https://${HOST}"
 UPLOADS="${BASE}/uploads"
 ```
 
-`getEnv('UPLOADS')` gibt `https://example.com/uploads` zurueck.
+`getEnv('UPLOADS')` gibt `https://example.com/uploads` zurück.
 
-Zirkulaere Referenzen sind geschuetzt -- wenn eine Variable sich selbst referenziert (direkt oder ueber eine Kette), wird der unaufgeloeste Platzhalter `${VAR_NAME}` in der Ausgabe beibehalten, anstatt eine Endlosschleife zu verursachen.
+Zirkuläre Referenzen sind geschützt -- wenn eine Variable sich selbst referenziert (direkt oder über eine Kette), wird der unaufgelöste Platzhalter `${VAR_NAME}` in der Ausgabe beibehalten, anstatt eine Endlosschleife zu verursachen.
 
 <div id="environment-flavours"></div>
 
@@ -258,10 +258,10 @@ API_BASE_URL="https://api.myapp.com"
 Generierung aus einer bestimmten Umgebungsdatei:
 
 ``` bash
-# Fuer Produktion
+# Für Produktion
 metro make:env --file=".env.production"
 
-# Fuer Staging
+# Für Staging
 metro make:env --file=".env.staging"
 ```
 
@@ -302,7 +302,7 @@ flutter build ios --dart-define=APP_KEY=your-secret-key
 # Android
 flutter build appbundle --dart-define=APP_KEY=your-secret-key
 
-# Ausfuehren
+# Ausführen
 flutter run --dart-define=APP_KEY=your-secret-key
 ```
 

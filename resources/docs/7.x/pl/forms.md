@@ -602,7 +602,6 @@ Parametr `child` wymaga widgetu rozszerzającego `NyFieldStatefulWidget`. Daje t
 
 ### Pola buildera
 
-<!-- uncertain: new Nylo-specific term "Field.builder()" with 4-argument signature including setState — not seen in existing locale file -->
 Użyj `Field.builder()`, aby stworzyć niestandardowe pole formularza inline bez tworzenia podklasy `NyFieldStatefulWidget`. Funkcja buildera otrzymuje bieżącą wartość, callback `onChanged` do zgłaszania zmian wartości do formularza oraz callback `setState` do wyzwolenia przebudowy UI.
 
 ``` dart

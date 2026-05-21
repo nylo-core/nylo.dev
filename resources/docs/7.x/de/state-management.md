@@ -4,10 +4,10 @@
 
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
-- [Muster waehlen](#choose-your-pattern "Muster waehlen")
+- [Muster wählen](#choose-your-pattern "Muster wählen")
 - [State-Aktionen](#state-actions "State-Aktionen")
   - [Handler definieren](#defining-handlers "Handler definieren")
-  - [Aktionen ausloesen](#triggering-actions "Aktionen ausloesen")
+  - [Aktionen auslösen](#triggering-actions "Aktionen auslösen")
   - [Handler mit und ohne Daten](#handlers-with-and-without-data "Handler mit und ohne Daten")
   - [Eine StateActions-Instanz verwenden](#using-a-state-actions-instance "Eine StateActions-Instanz verwenden")
 - [Muster: State-verwaltete Seiten (NyPage)](#pattern-ny-page "Muster: State-verwaltete Seiten")
@@ -36,7 +36,7 @@ Es gibt drei Muster für den Aufbau von state-verwalteten Oberflächen. Alle ver
 
 <div id="choose-your-pattern"></div>
 
-## Muster waehlen
+## Muster wählen
 
 | Sie möchten... | Verwenden Sie | Scaffold-Befehl |
 |---|---|---|
@@ -97,15 +97,15 @@ Verwenden Sie die argumentlose Form `()`, wenn die Aktion keine Nutzlast trägt.
 
 <div id="triggering-actions"></div>
 
-### Aktionen ausloesen
+### Aktionen auslösen
 
 Verwenden Sie die globale Funktion `stateAction`, um eine Aktion von überall auszulösen — einem anderen Widget, einem Controller, einem Event-Handler, einem API-Callback usw.
 
 ``` dart
-// Eine Aktion ohne Daten ausloesen
+// Eine Aktion ohne Daten auslösen
 stateAction("clear_cart", state: Cart.state);
 
-// Eine Aktion mit Daten ausloesen
+// Eine Aktion mit Daten auslösen
 stateAction("show_toast", state: Cart.state, data: {
   "message": "Item added",
 });
@@ -125,19 +125,19 @@ Handler können synchron oder asynchron sein und mit oder ohne `data`-Argument d
 ``` dart
 @override
 Map<String, Function> get stateActions => {
-  // Ohne Daten — Handler wird direkt ausgefuehrt
+  // Ohne Daten — Handler wird direkt ausgeführt
   "reset": () {
     _value = null;
     setState(() {});
   },
 
-  // Mit Daten — empfaengt, was ueber das `data:`-Argument uebergeben wurde
+  // Mit Daten — empfängt, was über das `data:`-Argument übergeben wurde
   "set_value": (data) {
     _value = data;
     setState(() {});
   },
 
-  // Async wird unterstuetzt — das Framework wartet auf den Handler
+  // Async wird unterstützt — das Framework wartet auf den Handler
   "reload": (data) async {
     _items = await fetchItems();
     setState(() {});
@@ -159,7 +159,7 @@ Wenn ein Widget eine typisierte `StateActions`-Instanz bereitstellt (oft über e
 stateAction("reset_avatar", state: UserAvatar.state);
 stateAction("update_user_image", state: UserAvatar.state, data: user);
 
-// Mit einer StateActions-Instanz — aequivalent, weniger Wiederholung
+// Mit einer StateActions-Instanz — äquivalent, weniger Wiederholung
 final actions = UserAvatar.stateActions(UserAvatar.state);
 actions.action("reset_avatar");
 actions.action("update_user_image", data: user);
@@ -323,7 +323,7 @@ class _ProfileCardState extends NyState<ProfileCard> {
   @override
   get init => () {
     // stateAction("hello_world", state: ProfileCard.state);
-    // ^ rufen Sie dies von ueberall in Ihrer App auf, um den Handler unten auszuloesen
+    // ^ rufen Sie dies von überall in Ihrer App auf, um den Handler unten auszulösen
   };
 
   @override
@@ -414,7 +414,7 @@ class _CartState extends NyState<Cart> {
   Map<String, Function> get stateActions => {
     "my_action": (data) {},
     "clear_data": () {
-      // Aktionen von ueberall in Ihrer App aufrufen
+      // Aktionen von überall in Ihrer App aufrufen
       // Cart.action("my_action", data: "hello world");
       // Cart.action("clear_data");
     },

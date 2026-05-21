@@ -114,7 +114,7 @@
 
 Используйте этот чек-лист для отслеживания прогресса миграции:
 
-- [ ] Обновите `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.24.0, nylo_framework: ^7.0.0)
+- [ ] Обновите `pubspec.yaml` (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
 - [ ] Выполните `flutter pub get`
 - [ ] Выполните `metro make:key` для генерации APP_KEY
 - [ ] Выполните `metro make:env` для генерации зашифрованного окружения
@@ -150,7 +150,7 @@
 ``` yaml
 environment:
   sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.24.0"
+  flutter: ">=3.38.4"
 
 dependencies:
   nylo_framework: ^7.0.0

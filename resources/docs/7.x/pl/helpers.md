@@ -1,7 +1,5 @@
 # Funkcje pomocnicze
 
-<!-- uncertain: newly created translation; needs full human review -->
-
 ---
 
 <a name="section-1"></a>
@@ -1301,7 +1299,7 @@ Str.snake('helloWorld', '-');    // 'hello-world'
 
 #### `Str.squish()`
 
-Usuwa wiodące/końcowe białe znaki i zija wewnętrzne białe znaki do pojedynczych spacji:
+Usuwa wiodące/końcowe białe znaki i zwija wewnętrzne białe znaki do pojedynczych spacji:
 
 ``` dart
 Str.squish('   hello    world   '); // 'hello world'

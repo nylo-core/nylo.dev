@@ -240,7 +240,6 @@ Per aggiungere campi oltre a questi predefiniti — pulsanti, icone, badge, ecc.
 
 ## Estendere gli stili di colore
 
-<!-- uncertain: new section "Extending color styles" with new anchor #extending-color-styles — not present in the previous locale file -->
 I tre gruppi predefiniti (`general`, `appBar`, `bottomTabBar`) sono un punto di partenza, non un limite fisso. `lib/resources/themes/color_styles.dart` e' tuo da modificare — aggiungi nuovi gruppi di colori (o singoli campi) sopra i predefiniti, poi implementali nella classe dei colori di ogni tema.
 
 **1. Definisci un gruppo di colori personalizzato**

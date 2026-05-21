@@ -57,7 +57,7 @@ git clone https://github.com/YOUR-USERNAME/support
 
 | ความต้องการ | เวอร์ชันขั้นต่ำ |
 |-------------|-----------------|
-| Flutter | 3.24.0 ขึ้นไป |
+| Flutter | 3.38.4 ขึ้นไป |
 | Dart SDK | 3.10.7 ขึ้นไป |
 
 ### เชื่อมต่อ Package ในเครื่อง
@@ -203,7 +203,7 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.24.x
+- Flutter: 3.38.x
 - Dart SDK: 3.10.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux

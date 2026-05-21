@@ -22,13 +22,13 @@
 
 ## Einleitung
 
-Sie koennen die UI-Stile Ihrer Anwendung mithilfe von Themes verwalten. Themes ermoeglichen es uns, z.B. die Schriftgroesse von Texten, das Erscheinungsbild von Buttons und das allgemeine Aussehen unserer Anwendung zu aendern.
+Sie können die UI-Stile Ihrer Anwendung mithilfe von Themes verwalten. Themes ermöglichen es uns, z.B. die Schriftgröße von Texten, das Erscheinungsbild von Buttons und das allgemeine Aussehen unserer Anwendung zu ändern.
 
 Wenn Sie neu bei Themes sind, helfen Ihnen die Beispiele auf der Flutter-Website beim Einstieg <a href="https://docs.flutter.dev/cookbook/design/themes#creating-an-app-theme" target="_BLANK">hier</a>.
 
-Standardmaessig enthaelt {{ config('app.name') }} vorkonfigurierte Themes fuer `Light mode` und `Dark mode`.
+Standardmäßig enthält {{ config('app.name') }} vorkonfigurierte Themes für `Light mode` und `Dark mode`.
 
-Das Theme wird auch aktualisiert, wenn das Geraet in den <b>'light/dark'</b>-Modus wechselt.
+Das Theme wird auch aktualisiert, wenn das Gerät in den <b>'light/dark'</b>-Modus wechselt.
 
 <div id="light-and-dark-themes"></div>
 
@@ -49,7 +49,7 @@ Beide Themes teilen sich einen gemeinsamen Builder unter `lib/resources/themes/b
 
 ## Ein Theme erstellen
 
-Wenn Sie mehrere Themes fuer Ihre App haben moechten, erstellen Sie die Theme-Dateien manuell unter `lib/resources/themes/`. Die folgenden Schritte verwenden `bright` als Beispiel — ersetzen Sie es durch Ihren Theme-Namen.
+Wenn Sie mehrere Themes für Ihre App haben möchten, erstellen Sie die Theme-Dateien manuell unter `lib/resources/themes/`. Die folgenden Schritte verwenden `bright` als Beispiel — ersetzen Sie es durch Ihren Theme-Namen.
 
 **Schritt 1:** Erstellen Sie die Theme-Datei unter `lib/resources/themes/bright/bright_theme.dart`:
 
@@ -123,13 +123,13 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 ];
 ```
 
-Sie koennen die Farben in `bright_theme_colors.dart` an Ihr Design anpassen.
+Sie können die Farben in `bright_theme_colors.dart` an Ihr Design anpassen.
 
 <div id="theme-colors"></div>
 
 ## Theme-Farben
 
-Um die Theme-Farben in Ihrem Projekt zu verwalten, schauen Sie sich die Verzeichnisse `lib/resources/themes/light/` und `lib/resources/themes/dark/` an. Jedes enthaelt die Farbdatei fuer sein Theme — `light_theme_colors.dart` und `dark_theme_colors.dart`.
+Um die Theme-Farben in Ihrem Projekt zu verwalten, schauen Sie sich die Verzeichnisse `lib/resources/themes/light/` und `lib/resources/themes/dark/` an. Jedes enthält die Farbdatei für sein Theme — `light_theme_colors.dart` und `dark_theme_colors.dart`.
 
 Farbwerte sind in Gruppen (`general`, `appBar`, `bottomTabBar`) organisiert, die vom Framework definiert werden. Die Farbenklasse Ihres Themes erweitert `ColorStyles` und liefert eine Instanz jeder Gruppe:
 
@@ -140,7 +140,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
 class LightThemeColors extends ColorStyles {
-  /// Farben fuer die allgemeine Verwendung.
+  /// Farben für die allgemeine Verwendung.
   @override
   GeneralColors get general => const GeneralColors(
         background: Color(0xFFFFFFFF),
@@ -150,14 +150,14 @@ class LightThemeColors extends ColorStyles {
         surfaceContent: Colors.black,
       );
 
-  /// Farben fuer die App-Leiste.
+  /// Farben für die App-Leiste.
   @override
   AppBarColors get appBar => const AppBarColors(
         background: Colors.white,
         content: Colors.black,
       );
 
-  /// Farben fuer die untere Tab-Leiste.
+  /// Farben für die untere Tab-Leiste.
   @override
   BottomTabBarColors get bottomTabBar => const BottomTabBarColors(
         background: Colors.white,
@@ -173,7 +173,7 @@ class LightThemeColors extends ColorStyles {
 
 ## Farben in Widgets verwenden
 
-Verwenden Sie den Hilfsaufruf `nyColorStyle<T>(context)`, um die Farben des aktiven Themes abzurufen. Uebergeben Sie den `ColorStyles`-Typ Ihres Projekts, damit der Aufruf vollstaendig typisiert ist:
+Verwenden Sie den Hilfsaufruf `nyColorStyle<T>(context)`, um die Farben des aktiven Themes abzurufen. Übergeben Sie den `ColorStyles`-Typ Ihres Projekts, damit der Aufruf vollständig typisiert ist:
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -193,7 +193,7 @@ Text(
   ),
 ),
 
-// Farben aus einem bestimmten Theme lesen (unabhaengig davon, welches aktiv ist):
+// Farben aus einem bestimmten Theme lesen (unabhängig davon, welches aktiv ist):
 final dark = nyColorStyle<ColorStyles>(context, themeId: 'dark_theme');
 Container(color: dark.general.background);
 ```
@@ -202,9 +202,9 @@ Container(color: dark.general.background);
 
 ## Basis-Stile
 
-Basis-Stile ermoeglichen es Ihnen, jedes Theme ueber ein einziges Interface zu beschreiben. {{ config('app.name') }} wird mit `lib/resources/themes/color_styles.dart` geliefert, welches der Vertrag ist, den sowohl `light_theme_colors.dart` als auch `dark_theme_colors.dart` implementieren.
+Basis-Stile ermöglichen es Ihnen, jedes Theme über ein einziges Interface zu beschreiben. {{ config('app.name') }} wird mit `lib/resources/themes/color_styles.dart` geliefert, welches der Vertrag ist, den sowohl `light_theme_colors.dart` als auch `dark_theme_colors.dart` implementieren.
 
-`ColorStyles` erweitert `ThemeColor` aus dem Framework, das drei vordefinierte Farbgruppen bereitstellt: `GeneralColors`, `AppBarColors` und `BottomTabBarColors`. Der Basis-Theme-Builder (`lib/resources/themes/base_theme.dart`) liest diese Gruppen beim Erstellen von `ThemeData`, sodass alles, was Sie darin einfuegen, automatisch mit den entsprechenden Widgets verbunden wird.
+`ColorStyles` erweitert `ThemeColor` aus dem Framework, das drei vordefinierte Farbgruppen bereitstellt: `GeneralColors`, `AppBarColors` und `BottomTabBarColors`. Der Basis-Theme-Builder (`lib/resources/themes/base_theme.dart`) liest diese Gruppen beim Erstellen von `ThemeData`, sodass alles, was Sie darin einfügen, automatisch mit den entsprechenden Widgets verbunden wird.
 
 <br>
 
@@ -214,15 +214,15 @@ Datei `lib/resources/themes/color_styles.dart`
 import 'package:nylo_framework/nylo_framework.dart';
 
 abstract class ColorStyles extends ThemeColor {
-  /// Farben fuer die allgemeine Verwendung.
+  /// Farben für die allgemeine Verwendung.
   @override
   GeneralColors get general;
 
-  /// Farben fuer die App-Leiste.
+  /// Farben für die App-Leiste.
   @override
   AppBarColors get appBar;
 
-  /// Farben fuer die untere Tab-Leiste.
+  /// Farben für die untere Tab-Leiste.
   @override
   BottomTabBarColors get bottomTabBar;
 }
@@ -234,18 +234,17 @@ Die drei Gruppen stellen folgende Felder bereit:
 - `AppBarColors` – `background`, `content`
 - `BottomTabBarColors` – `background`, `iconSelected`, `iconUnselected`, `labelSelected`, `labelUnselected`
 
-Um Felder jenseits dieser Standardwerte hinzuzufuegen — eigene Buttons, Icons, Badges usw. — siehe [Farbstile erweitern](#extending-color-styles).
+Um Felder jenseits dieser Standardwerte hinzuzufügen — eigene Buttons, Icons, Badges usw. — siehe [Farbstile erweitern](#extending-color-styles).
 
 <div id="extending-color-styles"></div>
 
 ## Farbstile erweitern
 
-<!-- uncertain: new section "Extending color styles" not present in previous locale file -->
-Die drei Standard-Gruppen (`general`, `appBar`, `bottomTabBar`) sind ein Ausgangspunkt, keine feste Grenze. `lib/resources/themes/color_styles.dart` steht Ihnen zur Anpassung offen — fuegen Sie neue Farbgruppen (oder einzelne Felder) zu den Standardwerten hinzu und implementieren Sie diese dann in der Farbenklasse jedes Themes.
+Die drei Standard-Gruppen (`general`, `appBar`, `bottomTabBar`) sind ein Ausgangspunkt, keine feste Grenze. `lib/resources/themes/color_styles.dart` steht Ihnen zur Anpassung offen — fügen Sie neue Farbgruppen (oder einzelne Felder) zu den Standardwerten hinzu und implementieren Sie diese dann in der Farbenklasse jedes Themes.
 
 **1. Eine benutzerdefinierte Farbgruppe definieren**
 
-Gruppieren Sie verwandte Farben in einer kleinen unveraenderlichen Klasse:
+Gruppieren Sie verwandte Farben in einer kleinen unveränderlichen Klasse:
 
 ``` dart
 import 'package:flutter/material.dart';
@@ -261,7 +260,7 @@ class IconColors {
 }
 ```
 
-**2. Sie zu `ColorStyles` hinzufuegen**
+**2. Sie zu `ColorStyles` hinzufügen**
 
 ``` dart
 // lib/resources/themes/color_styles.dart
@@ -295,7 +294,7 @@ class LightThemeColors extends ColorStyles {
 }
 ```
 
-Wiederholen Sie den gleichen `icons`-Override in `dark_theme_colors.dart` mit den Werten fuer den Dunkelmodus.
+Wiederholen Sie den gleichen `icons`-Override in `dark_theme_colors.dart` mit den Werten für den Dunkelmodus.
 
 **4. In Ihren Widgets verwenden**
 
@@ -308,11 +307,11 @@ Container(color: colors.icons.iconBackground);
 
 ## Theme wechseln
 
-{{ config('app.name') }} unterstuetzt die Moeglichkeit, Themes zur Laufzeit zu wechseln.
+{{ config('app.name') }} unterstützt die Möglichkeit, Themes zur Laufzeit zu wechseln.
 
-Z.B. wenn Sie das Theme wechseln muessen, weil ein Benutzer auf einen Button tippt, um das "dunkle Theme" zu aktivieren.
+Z.B. wenn Sie das Theme wechseln müssen, weil ein Benutzer auf einen Button tippt, um das "dunkle Theme" zu aktivieren.
 
-Sie koennen dies wie folgt unterstuetzen:
+Sie können dies wie folgt unterstützen:
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -344,7 +343,7 @@ TextButton(onPressed: () {
 
 ## Schriftarten
 
-Das Aktualisieren Ihrer primaeren Schriftart in der gesamten App ist in {{ config('app.name') }} einfach. Oeffnen Sie `lib/config/design.dart` und aktualisieren Sie `DesignConfig.appFont`.
+Das Aktualisieren Ihrer primären Schriftart in der gesamten App ist in {{ config('app.name') }} einfach. Öffnen Sie `lib/config/design.dart` und aktualisieren Sie `DesignConfig.appFont`.
 
 ``` dart
 // lib/config/design.dart
@@ -354,7 +353,7 @@ final class DesignConfig {
 }
 ```
 
-Wir binden die <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a>-Bibliothek im Repository ein, sodass Sie alle Schriftarten mit wenig Aufwand verwenden koennen. Um zu einer anderen Google-Schriftart zu wechseln, aendern Sie einfach den Aufruf:
+Wir binden die <a href="https://pub.dev/packages/google_fonts" target="_BLANK">GoogleFonts</a>-Bibliothek im Repository ein, sodass Sie alle Schriftarten mit wenig Aufwand verwenden können. Um zu einer anderen Google-Schriftart zu wechseln, ändern Sie einfach den Aufruf:
 
 ``` dart
 static final TextStyle appFont = GoogleFonts.montserrat();
@@ -362,9 +361,9 @@ static final TextStyle appFont = GoogleFonts.montserrat();
 
 Schauen Sie sich die Schriftarten in der offiziellen <a href="https://pub.dev/packages/google_fonts" target="_BLANK">Google Fonts</a>-Bibliothek an, um mehr zu erfahren.
 
-Muessen Sie eine benutzerdefinierte Schriftart verwenden? Schauen Sie sich diese Anleitung an - https://flutter.dev/docs/cookbook/design/fonts
+Müssen Sie eine benutzerdefinierte Schriftart verwenden? Schauen Sie sich diese Anleitung an - https://flutter.dev/docs/cookbook/design/fonts
 
-Sobald Sie Ihre Schriftart hinzugefuegt haben, aendern Sie die Variable wie im folgenden Beispiel.
+Sobald Sie Ihre Schriftart hinzugefügt haben, ändern Sie die Variable wie im folgenden Beispiel.
 
 ``` dart
 static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTokyoZoo used as an example for the custom font
@@ -374,23 +373,23 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 
 ## Design
 
-Die Datei **lib/config/design.dart** wird zur Verwaltung der Design-Elemente Ihrer App verwendet. Alles wird ueber die Klasse `DesignConfig` bereitgestellt:
+Die Datei **lib/config/design.dart** wird zur Verwaltung der Design-Elemente Ihrer App verwendet. Alles wird über die Klasse `DesignConfig` bereitgestellt:
 
-`DesignConfig.appFont` enthaelt die Schriftart fuer Ihre App.
+`DesignConfig.appFont` enthält die Schriftart für Ihre App.
 
 `DesignConfig.logo` wird zur Anzeige des Logos Ihrer App verwendet.
 
-Sie koennen **lib/resources/widgets/logo_widget.dart** aendern, um die Darstellung Ihres Logos anzupassen.
+Sie können **lib/resources/widgets/logo_widget.dart** ändern, um die Darstellung Ihres Logos anzupassen.
 
 `DesignConfig.loader` wird zur Anzeige eines Laders verwendet. {{ config('app.name') }} verwendet diese Variable in einigen Hilfsmethoden als Standard-Loader-Widget.
 
-Sie koennen **lib/resources/widgets/loader_widget.dart** aendern, um die Darstellung Ihres Laders anzupassen.
+Sie können **lib/resources/widgets/loader_widget.dart** ändern, um die Darstellung Ihres Laders anzupassen.
 
 <div id="text-extensions"></div>
 
 ## Text-Extensions
 
-Hier sind die verfuegbaren Text-Extensions, die Sie in {{ config('app.name') }} verwenden koennen.
+Hier sind die verfügbaren Text-Extensions, die Sie in {{ config('app.name') }} verwenden können.
 
 | Regelname   | Verwendung | Info |
 |---|---|---|
@@ -415,7 +414,7 @@ Hier sind die verfuegbaren Text-Extensions, die Sie in {{ config('app.name') }} 
 | <a href="#text-extension-align-left">Align Left</a> | alignLeft  | Richtet die Schrift links aus |
 | <a href="#text-extension-align-right">Align Right</a> | alignRight  | Richtet die Schrift rechts aus |
 | <a href="#text-extension-align-center">Align Center</a> | alignCenter  | Richtet die Schrift zentriert aus |
-| <a href="#text-extension-set-max-lines">Set Max Lines</a> | setMaxLines(int maxLines)  | Setzt die maximale Zeilenanzahl fuer das Text-Widget |
+| <a href="#text-extension-set-max-lines">Set Max Lines</a> | setMaxLines(int maxLines)  | Setzt die maximale Zeilenanzahl für das Text-Widget |
 
 <br>
 

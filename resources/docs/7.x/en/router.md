@@ -928,6 +928,8 @@ Deep linking allows users to navigate directly to specific content within your a
 - Handling notifications that should open specific app screens
 - Seamless web-to-app transitions
 
+> Looking for the full setup walkthrough? See the dedicated [Deep Links](/docs/{{ $version }}/deep-links) guide for platform configuration, intercepting links, and Metro scaffolding.
+
 ## Setup
 
 Before implementing deep linking in your app, ensure your project is properly configured:
@@ -1066,32 +1068,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## Handling Deep Links
 
-You can handle deep link events in your `RouteProvider`:
+Enable platform deep-link capture with `useDeepLinks()`, then use `onIncomingLink` to intercept each URI before {{ config('app.name') }} routes it:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // Handle deep links
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // Update the route stack for deep links
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1100,6 +1103,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+See the [Deep Links](/docs/{{ $version }}/deep-links) guide for the full API.
 
 ### Testing Deep Links
 
