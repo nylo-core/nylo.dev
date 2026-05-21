@@ -69,7 +69,7 @@ class LlmMarkdownDocsTest extends TestCase
     #[RunInSeparateProcess]
     public function test_localized_route_returns_markdown_for_llm(): void
     {
-        $response = $this->get('/en/docs/7.x/installation?format=md');
+        $response = $this->get('/fr/docs/7.x/installation?format=md');
 
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'text/markdown; charset=UTF-8');

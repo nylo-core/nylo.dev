@@ -40,6 +40,9 @@ class DocsPages7xTest extends TestCase
 
         $sections = $docIndex['versions']['7.x'];
         $locales = array_keys($localization['supported_locales']);
+        // English docs live at the canonical /docs/... route (see test_docs_7x_page_loads);
+        // /en/docs/... 301-redirects there, so it is not exercised as a localized route.
+        $locales = array_filter($locales, fn ($l) => $l !== 'en');
 
         $cases = [];
         foreach ($locales as $locale) {

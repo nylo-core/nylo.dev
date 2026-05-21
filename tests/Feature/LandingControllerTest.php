@@ -29,7 +29,7 @@ class LandingControllerTest extends TestCase
     #[RunInSeparateProcess]
     public function test_docs_page_loads(): void
     {
-        $response = $this->get('/en/docs/7.x/installation');
+        $response = $this->get('/docs/7.x/installation');
 
         $response->assertStatus(200);
         $response->assertViewIs('docs.template');
@@ -49,11 +49,22 @@ class LandingControllerTest extends TestCase
     }
 
     /**
+     * Test that /en/docs/... 301-redirects to the canonical non-prefixed URL.
+     */
+    public function test_en_docs_redirects_to_canonical(): void
+    {
+        $response = $this->get('/en/docs/7.x/installation');
+
+        $response->assertStatus(301);
+        $response->assertRedirect('/docs/7.x/installation');
+    }
+
+    /**
      * Test that docs with invalid version returns 404.
      */
     public function test_docs_with_invalid_version_returns_404(): void
     {
-        $response = $this->get('/en/docs/invalid/installation');
+        $response = $this->get('/docs/invalid/installation');
 
         $response->assertStatus(404);
     }
@@ -63,7 +74,7 @@ class LandingControllerTest extends TestCase
      */
     public function test_docs_with_invalid_page_returns_404(): void
     {
-        $response = $this->get('/en/docs/7.x/nonexistent-page');
+        $response = $this->get('/docs/7.x/nonexistent-page');
 
         $response->assertStatus(404);
     }
@@ -268,7 +279,7 @@ class LandingControllerTest extends TestCase
     #[RunInSeparateProcess]
     public function test_docs_view_contains_required_data(): void
     {
-        $response = $this->get('/en/docs/7.x/router');
+        $response = $this->get('/docs/7.x/router');
 
         $response->assertStatus(200);
         $response->assertViewHas('mdDocPage');
@@ -285,7 +296,7 @@ class LandingControllerTest extends TestCase
     #[RunInSeparateProcess]
     public function test_viewing_old_docs_flag_is_true_for_old_version(): void
     {
-        $response = $this->get('/en/docs/6.x/installation');
+        $response = $this->get('/docs/6.x/installation');
 
         $response->assertStatus(200);
         $response->assertViewHas('viewingOldDocs', true);
@@ -297,7 +308,7 @@ class LandingControllerTest extends TestCase
     #[RunInSeparateProcess]
     public function test_viewing_old_docs_flag_is_false_for_latest_version(): void
     {
-        $response = $this->get('/en/docs/7.x/installation');
+        $response = $this->get('/docs/7.x/installation');
 
         $response->assertStatus(200);
         $response->assertViewHas('viewingOldDocs', false);

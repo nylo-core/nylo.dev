@@ -84,7 +84,7 @@ class LocalizationTest extends TestCase
     #[RunInSeparateProcess]
     public function test_docs_routes_work_with_locale(): void
     {
-        $response = $this->get('/en/docs/7.x/installation');
+        $response = $this->get('/fr/docs/7.x/installation');
 
         $response->assertStatus(200);
     }
