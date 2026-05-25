@@ -649,28 +649,20 @@ You can make a new state managed widget by running the below in the terminal.
 metro make:state_managed_widget product_rating_widget
 ```
 
-The above will create a new widget in `lib/resources/widgets/`. The generated widget extends `NyStateManaged`, which supports multi-instance isolation via a `stateName` constructor parameter.
+The above will create a new widget in `lib/resources/widgets/`. The generated widget extends `NyStateManaged`, which supports multi-instance isolation via an `id` constructor parameter.
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // initialization logic here

@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Sử dụng mẫu này khi bạn cần **nhiều instance độc lập của cùng một widget** trên màn hình cùng một lúc — ví dụ, badge giỏ hàng ở header và một cái khác ở sidebar cần cập nhật độc lập.
 
-`NyStateManaged` thêm tham số `stateName` để mỗi instance có thể được địa chỉ hóa riêng. Nếu bạn chỉ render một instance của widget, hãy ưu tiên `NyState` — đơn giản hơn.
+`NyStateManaged` thêm tham số `id` để mỗi instance có thể được địa chỉ hóa riêng. Nếu bạn chỉ render một instance của widget, hãy ưu tiên `NyState` — đơn giản hơn.
 
 **Bước 1:** Scaffold một widget được quản lý state.
 
@@ -386,24 +386,16 @@ Lệnh này tạo ra trong `lib/resources/widgets/`:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // logic khởi tạo ở đây
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### Nâng cao: Nhiều instance độc lập
 
-Lý do `NyStateManaged` tồn tại là để hỗ trợ nhiều instance độc lập của cùng một widget. Mỗi instance nhận `stateName` riêng, tạo ra state key có namespace.
+Lý do `NyStateManaged` tồn tại là để hỗ trợ nhiều instance độc lập của cùng một widget. Mỗi instance nhận `id` riêng, tạo ra state key có namespace.
 
-Render hai giỏ hàng với tên khác nhau:
+Render hai giỏ hàng với các id khác nhau:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Giờ bạn có thể cập nhật từng cái độc lập:
 
 ``` dart
 // Chỉ reload giỏ hàng header
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Chỉ reload giỏ hàng sidebar
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// Không có stateName — nhắm đến instance mặc định không tên
+// Không có id — nhắm đến instance mặc định không tên
 Cart.action("reload_cart");
 ```
 
-Helper `_stateFor` xử lý namespace: `Cart(stateName: "header")` đăng ký dưới key `"cart_header"`, và `Cart.action(..., stateName: "header")` nhắm đến đúng key đó.
+`NyStateManaged` xử lý namespace: `Cart(id: "header")` đăng ký dưới key `"cart_header"`, và `Cart.action(..., id: "header")` nhắm đến đúng key đó.
 
 
 <div id="lifecycle"></div>

@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Usa esto cuando necesites **múltiples instancias independientes del mismo widget** en pantalla a la vez — por ejemplo, un badge de carrito en la cabecera y otro en una barra lateral que deben actualizarse de forma independiente.
 
-`NyStateManaged` añade un parámetro `stateName` para que cada instancia pueda ser dirigida por separado. Si solo renderizas una instancia del widget, prefiere `NyState` en su lugar — es más sencillo.
+`NyStateManaged` añade un parámetro `id` para que cada instancia pueda ser dirigida por separado. Si solo renderizas una instancia del widget, prefiere `NyState` en su lugar — es más sencillo.
 
 **Paso 1:** Genera un widget gestionado por estado con andamiaje.
 
@@ -386,24 +386,16 @@ Esto genera lo siguiente en `lib/resources/widgets/`:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // lógica de inicialización aquí
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Esto es equivalente a `stateAction("reload_cart", state: Cart.state)` — el hel
 
 ### Avanzado: Múltiples Instancias Aisladas
 
-La razón por la que existe `NyStateManaged` es para soportar múltiples instancias independientes del mismo widget. Cada instancia obtiene su propio `stateName`, que produce una clave de estado con espacio de nombres.
+La razón por la que existe `NyStateManaged` es para soportar múltiples instancias independientes del mismo widget. Cada instancia obtiene su propio `id`, que produce una clave de estado con espacio de nombres.
 
-Renderiza dos carritos con nombres distintos:
+Renderiza dos carritos con ids distintos:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Ahora puedes actualizar cualquiera de ellos de forma independiente:
 
 ``` dart
 // Actualizar solo el carrito de la cabecera
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Actualizar solo el carrito de la barra lateral
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// Sin stateName — apunta a la instancia predeterminada sin nombre
+// Sin id — apunta a la instancia predeterminada sin nombre
 Cart.action("reload_cart");
 ```
 
-El helper `_stateFor` gestiona el espacio de nombres: `Cart(stateName: "header")` se registra bajo la clave `"cart_header"`, y `Cart.action(..., stateName: "header")` apunta exactamente a esa clave.
+`NyStateManaged` gestiona el espacio de nombres: `Cart(id: "header")` se registra bajo la clave `"cart_header"`, y `Cart.action(..., id: "header")` apunta exactamente a esa clave.
 
 
 <div id="lifecycle"></div>

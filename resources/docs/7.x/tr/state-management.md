@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Ekranda aynı anda **aynı widget'ın birden fazla bağımsız örneğine** ihtiyaç duyduğunuzda kullanın — örneğin, başlıktaki ve bağımsız olarak güncellenebilmesi gereken kenar çubuğundaki sepet rozeti.
 
-`NyStateManaged`, her örneğin ayrı ayrı adreslenebildiği bir `stateName` parametresi ekler. Widget'ın yalnızca bir örneğini render ediyorsanız, `NyState`'i tercih edin — daha basittir.
+`NyStateManaged`, her örneğin ayrı ayrı adreslenebildiği bir `id` parametresi ekler. Widget'ın yalnızca bir örneğini render ediyorsanız, `NyState`'i tercih edin — daha basittir.
 
 **Adım 1:** Scaffold ile durumu yönetilen bir widget oluşturun.
 
@@ -386,24 +386,16 @@ Bu, `lib/resources/widgets/` konumunda aşağıdakini oluşturur:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // başlatma mantığı burada
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Bu, `stateAction("reload_cart", state: Cart.state)` ile eşdeğerdir — statik 
 
 ### Gelişmiş: Birden Fazla İzole Örnek
 
-`NyStateManaged`'ın var olma nedeni, aynı widget'ın birden fazla bağımsız örneğini desteklemektir. Her örnek kendi `stateName`'ini alır ve bu, ad alanı içeren bir durum anahtarı üretir.
+`NyStateManaged`'ın var olma nedeni, aynı widget'ın birden fazla bağımsız örneğini desteklemektir. Her örnek kendi `id`'sini alır ve bu, ad alanı içeren bir durum anahtarı üretir.
 
-Farklı adlarla iki sepet render edin:
+Farklı id'lerle iki sepet render edin:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Artık her birini bağımsız olarak güncelleyebilirsiniz:
 
 ``` dart
 // Yalnızca başlık sepetini yenile
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Yalnızca kenar çubuğu sepetini yenile
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// stateName yok — varsayılan adsız örneği hedefler
+// id yok — varsayılan adsız örneği hedefler
 Cart.action("reload_cart");
 ```
 
-`_stateFor` yardımcısı ad alanını işler: `Cart(stateName: "header")` `"cart_header"` anahtarı altında kaydedilir ve `Cart.action(..., stateName: "header")` tam olarak o anahtarı hedefler.
+`NyStateManaged` ad alanını işler: `Cart(id: "header")` `"cart_header"` anahtarı altında kaydedilir ve `Cart.action(..., id: "header")` tam olarak o anahtarı hedefler.
 
 
 <div id="lifecycle"></div>

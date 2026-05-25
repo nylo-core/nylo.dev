@@ -649,28 +649,20 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-ऊपर दी गई कमांड `lib/resources/widgets/` में एक नया विजेट बनाएगी। जेनरेट किया गया विजेट `NyStateManaged` को एक्सटेंड करता है, जो `stateName` कंस्ट्रक्टर पैरामीटर के माध्यम से मल्टी-इंस्टेंस आइसोलेशन को सपोर्ट करता है।
+ऊपर दी गई कमांड `lib/resources/widgets/` में एक नया विजेट बनाएगी। जेनरेट किया गया विजेट `NyStateManaged` को एक्सटेंड करता है, जो `id` कंस्ट्रक्टर पैरामीटर के माध्यम से मल्टी-इंस्टेंस आइसोलेशन को सपोर्ट करता है।
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // initialization logic here

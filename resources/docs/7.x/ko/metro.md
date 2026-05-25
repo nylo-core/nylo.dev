@@ -649,28 +649,20 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-위 명령어는 `lib/resources/widgets/`에 새 위젯을 생성합니다. 생성된 위젯은 `NyStateManaged`를 확장하며, `stateName` 생성자 매개변수를 통한 다중 인스턴스 격리를 지원합니다.
+위 명령어는 `lib/resources/widgets/`에 새 위젯을 생성합니다. 생성된 위젯은 `NyStateManaged`를 확장하며, `id` 생성자 매개변수를 통한 다중 인스턴스 격리를 지원합니다.
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // 초기화 로직을 여기에 작성

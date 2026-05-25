@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 जब आपको स्क्रीन पर **एक ही विजेट के एकाधिक स्वतंत्र इंस्टेंसेज** की जरूरत हो तो इसका उपयोग करें — उदाहरण के लिए, हेडर में कार्ट बैज और साइडबार में एक और बैज जो दोनों स्वतंत्र रूप से अपडेट होने चाहिए।
 
-`NyStateManaged` एक `stateName` पैरामीटर जोड़ता है ताकि प्रत्येक इंस्टेंस को अलग से एड्रेस किया जा सके। यदि आप विजेट का केवल एक इंस्टेंस रेंडर करते हैं, तो `NyState` को प्राथमिकता दें — यह सरल है।
+`NyStateManaged` एक `id` पैरामीटर जोड़ता है ताकि प्रत्येक इंस्टेंस को अलग से एड्रेस किया जा सके। यदि आप विजेट का केवल एक इंस्टेंस रेंडर करते हैं, तो `NyState` को प्राथमिकता दें — यह सरल है।
 
 **स्टेप 1:** एक स्टेट मैनेज्ड विजेट स्कैफोल्ड करें।
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // यहाँ इनिशियलाइज़ेशन लॉजिक है
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज
 
-`NyStateManaged` के अस्तित्व का कारण एक ही विजेट के एकाधिक स्वतंत्र इंस्टेंसेज को सपोर्ट करना है। प्रत्येक इंस्टेंस को अपना `stateName` मिलता है, जो एक नेमस्पेस्ड स्टेट की बनाता है।
+`NyStateManaged` के अस्तित्व का कारण एक ही विजेट के एकाधिक स्वतंत्र इंस्टेंसेज को सपोर्ट करना है। प्रत्येक इंस्टेंस को अपना `id` मिलता है, जो एक नेमस्पेस्ड स्टेट की बनाता है।
 
-अलग-अलग नामों से दो कार्ट रेंडर करें:
+अलग-अलग आईडी से दो कार्ट रेंडर करें:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // केवल हेडर कार्ट रीलोड करें
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // केवल साइडबार कार्ट रीलोड करें
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// stateName नहीं — डिफ़ॉल्ट अनाम इंस्टेंस को टार्गेट करता है
+// id नहीं — डिफ़ॉल्ट अनाम इंस्टेंस को टार्गेट करता है
 Cart.action("reload_cart");
 ```
 
-`_stateFor` हेल्पर नेमस्पेसिंग को हैंडल करता है: `Cart(stateName: "header")` की `"cart_header"` के नीचे रजिस्टर होता है, और `Cart.action(..., stateName: "header")` उस सटीक की को टार्गेट करता है।
+`NyStateManaged` नेमस्पेसिंग को हैंडल करता है: `Cart(id: "header")` की `"cart_header"` के नीचे रजिस्टर होता है, और `Cart.action(..., id: "header")` उस सटीक की को टार्गेट करता है।
 
 
 <div id="lifecycle"></div>

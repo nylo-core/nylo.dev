@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 화면에 **동일한 위젯의 여러 독립적인 인스턴스**가 필요할 때 사용합니다 — 예를 들어, 헤더의 장바구니 배지와 사이드바의 배지가 각각 독립적으로 업데이트되어야 하는 경우입니다.
 
-`NyStateManaged`는 각 인스턴스를 개별적으로 지정할 수 있도록 `stateName` 매개변수를 추가합니다. 위젯의 인스턴스를 하나만 렌더링한다면 더 간단한 `NyState`를 사용하세요.
+`NyStateManaged`는 각 인스턴스를 개별적으로 지정할 수 있도록 `id` 매개변수를 추가합니다. 위젯의 인스턴스를 하나만 렌더링한다면 더 간단한 `NyState`를 사용하세요.
 
 **1단계:** 상태 관리 위젯을 스캐폴드합니다.
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // 초기화 로직은 여기에
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### 고급: 다중 격리 인스턴스
 
-`NyStateManaged`가 존재하는 이유는 동일한 위젯의 여러 독립적인 인스턴스를 지원하기 위해서입니다. 각 인스턴스는 고유한 `stateName`을 받아 네임스페이스화된 상태 키를 생성합니다.
+`NyStateManaged`가 존재하는 이유는 동일한 위젯의 여러 독립적인 인스턴스를 지원하기 위해서입니다. 각 인스턴스는 고유한 `id`를 받아 네임스페이스화된 상태 키를 생성합니다.
 
-서로 다른 이름으로 두 개의 장바구니를 렌더링합니다:
+서로 다른 id로 두 개의 장바구니를 렌더링합니다:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // 헤더 장바구니만 리로드
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // 사이드바 장바구니만 리로드
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// stateName 없음 — 기본 이름 없는 인스턴스를 타깃으로
+// id 없음 — 기본 이름 없는 인스턴스를 타깃으로
 Cart.action("reload_cart");
 ```
 
-`_stateFor` 헬퍼가 네임스페이싱을 처리합니다: `Cart(stateName: "header")`는 키 `"cart_header"` 아래에 등록되고, `Cart.action(..., stateName: "header")`는 그 정확한 키를 타깃으로 합니다.
+`NyStateManaged`가 네임스페이싱을 처리합니다: `Cart(id: "header")`는 키 `"cart_header"` 아래에 등록되고, `Cart.action(..., id: "header")`는 그 정확한 키를 타깃으로 합니다.
 
 
 <div id="lifecycle"></div>

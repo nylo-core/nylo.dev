@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 画面上に**同じウィジェットの複数の独立したインスタンス**が必要な場合に使用します — たとえば、ヘッダーのカートバッジとサイドバーのカートバッジがそれぞれ独立して更新される必要がある場合などです。
 
-`NyStateManaged` は各インスタンスを個別にアドレス指定できるように `stateName` パラメータを追加します。ウィジェットのインスタンスを 1 つしかレンダリングしない場合は、よりシンプルな `NyState` を優先してください。
+`NyStateManaged` は各インスタンスを個別にアドレス指定できるように `id` パラメータを追加します。ウィジェットのインスタンスを 1 つしかレンダリングしない場合は、よりシンプルな `NyState` を優先してください。
 
 **ステップ 1:** 状態管理ウィジェットをスキャフォールドします。
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // 初期化ロジックをここに記述
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### 応用: 複数の独立したインスタンス
 
-`NyStateManaged` が存在する理由は、同じウィジェットの複数の独立したインスタンスをサポートするためです。各インスタンスは独自の `stateName` を取得し、名前空間付きの状態キーを生成します。
+`NyStateManaged` が存在する理由は、同じウィジェットの複数の独立したインスタンスをサポートするためです。各インスタンスは独自の `id` を取得し、名前空間付きの状態キーを生成します。
 
-異なる名前で 2 つのカートをレンダリングします:
+異なる id で 2 つのカートをレンダリングします:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // ヘッダーのカートのみをリロード
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // サイドバーのカートのみをリロード
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// stateName なし — デフォルトの無名インスタンスをターゲット
+// id なし — デフォルトの無名インスタンスをターゲット
 Cart.action("reload_cart");
 ```
 
-`_stateFor` ヘルパーが名前空間を処理します: `Cart(stateName: "header")` はキー `"cart_header"` の下に登録され、`Cart.action(..., stateName: "header")` はその正確なキーをターゲットとします。
+`NyStateManaged` が名前空間を処理します: `Cart(id: "header")` はキー `"cart_header"` の下に登録され、`Cart.action(..., id: "header")` はその正確なキーをターゲットとします。
 
 
 <div id="lifecycle"></div>

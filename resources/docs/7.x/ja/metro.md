@@ -649,28 +649,20 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-上記のコマンドにより、`lib/resources/widgets/` に新しいウィジェットが作成されます。生成されるウィジェットは `NyStateManaged` を継承し、`stateName` コンストラクタパラメータによる複数インスタンスの独立管理をサポートします。
+上記のコマンドにより、`lib/resources/widgets/` に新しいウィジェットが作成されます。生成されるウィジェットは `NyStateManaged` を継承し、`id` コンストラクタパラメータによる複数インスタンスの独立管理をサポートします。
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // 初期化ロジックをここに記述

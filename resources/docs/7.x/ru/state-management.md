@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Используйте этот паттерн, когда нужно **несколько независимых экземпляров одного виджета** одновременно на экране — например, значок корзины в шапке и ещё один в боковой панели, которые должны обновляться независимо.
 
-`NyStateManaged` добавляет параметр `stateName`, чтобы каждый экземпляр можно было адресовать отдельно. Если вы всегда отображаете только один экземпляр виджета, предпочтите `NyState` — он проще.
+`NyStateManaged` добавляет параметр `id`, чтобы каждый экземпляр можно было адресовать отдельно. Если вы всегда отображаете только один экземпляр виджета, предпочтите `NyState` — он проще.
 
 **Шаг 1:** Создайте виджет с управляемым состоянием через scaffold.
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // логика инициализации здесь
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### Расширенно: Несколько изолированных экземпляров
 
-Причина существования `NyStateManaged` — поддержка нескольких независимых экземпляров одного виджета. Каждый экземпляр получает свой `stateName`, который формирует ключ состояния с пространством имён.
+Причина существования `NyStateManaged` — поддержка нескольких независимых экземпляров одного виджета. Каждый экземпляр получает свой `id`, который формирует ключ состояния с пространством имён.
 
-Отобразите две корзины с разными именами:
+Отобразите две корзины с разными id:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // Обновить только корзину в шапке
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Обновить только корзину в боковой панели
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// Без stateName — обращается к экземпляру по умолчанию
+// Без id — обращается к экземпляру по умолчанию
 Cart.action("reload_cart");
 ```
 
-Хелпер `_stateFor` выполняет пространство имён: `Cart(stateName: "header")` регистрируется под ключом `"cart_header"`, а `Cart.action(..., stateName: "header")` адресуется именно к этому ключу.
+`NyStateManaged` выполняет пространство имён: `Cart(id: "header")` регистрируется под ключом `"cart_header"`, а `Cart.action(..., id: "header")` адресуется именно к этому ключу.
 
 
 <div id="lifecycle"></div>

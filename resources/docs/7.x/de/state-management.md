@@ -375,7 +375,7 @@ Map<String, Function> get stateActions => {
 
 Verwenden Sie dies, wenn Sie **mehrere unabhängige Instanzen desselben Widgets** gleichzeitig auf dem Bildschirm benötigen — zum Beispiel ein Warenkorb-Badge in der Kopfzeile und ein weiteres in einer Seitenleiste, die sich unabhängig voneinander aktualisieren sollen.
 
-`NyStateManaged` fügt einen `stateName`-Parameter hinzu, damit jede Instanz separat angesprochen werden kann. Wenn Sie nur jeweils eine Instanz des Widgets rendern, bevorzugen Sie stattdessen `NyState` — es ist einfacher.
+`NyStateManaged` fügt einen `id`-Parameter hinzu, damit jede Instanz separat angesprochen werden kann. Wenn Sie nur jeweils eine Instanz des Widgets rendern, bevorzugen Sie stattdessen `NyState` — es ist einfacher.
 
 **Schritt 1:** State-verwaltetes Widget erstellen (Scaffolding).
 
@@ -387,24 +387,16 @@ Dies generiert folgendes in `lib/resources/widgets/`:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // Initialisierungslogik hier
@@ -434,10 +426,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -484,15 +472,15 @@ Dies ist äquivalent zu `stateAction("reload_cart", state: Cart.state)` — der 
 
 ### Fortgeschritten: Mehrere isolierte Instanzen
 
-Der Grund für die Existenz von `NyStateManaged` ist die Unterstützung mehrerer unabhängiger Instanzen desselben Widgets. Jede Instanz erhält ihren eigenen `stateName`, der einen Namespace-State-Schlüssel erzeugt.
+Der Grund für die Existenz von `NyStateManaged` ist die Unterstützung mehrerer unabhängiger Instanzen desselben Widgets. Jede Instanz erhält ihre eigene `id`, die einen Namespace-State-Schlüssel erzeugt.
 
-Zwei Warenkörbe mit unterschiedlichen Namen rendern:
+Zwei Warenkörbe mit unterschiedlichen IDs rendern:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -501,16 +489,16 @@ Nun können Sie jeden unabhängig aktualisieren:
 
 ``` dart
 // Nur den Warenkorb in der Kopfzeile neu laden
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Nur den Warenkorb in der Seitenleiste neu laden
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// Kein stateName — zielt auf die unbenannte Standardinstanz
+// Keine id — zielt auf die unbenannte Standardinstanz
 Cart.action("reload_cart");
 ```
 
-Der `_stateFor`-Helper verwaltet die Namespaces: `Cart(stateName: "header")` wird unter dem Schlüssel `"cart_header"` registriert, und `Cart.action(..., stateName: "header")` zielt genau auf diesen Schlüssel ab.
+`NyStateManaged` verwaltet die Namespaces: `Cart(id: "header")` wird unter dem Schlüssel `"cart_header"` registriert, und `Cart.action(..., id: "header")` zielt genau auf diesen Schlüssel ab.
 
 
 <div id="lifecycle"></div>

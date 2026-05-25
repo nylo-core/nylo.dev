@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Gunakan ini ketika Anda membutuhkan **beberapa instance independen dari widget yang sama** di layar sekaligus — misalnya, badge keranjang di header dan satu lagi di sidebar yang keduanya harus diperbarui secara independen.
 
-`NyStateManaged` menambahkan parameter `stateName` sehingga setiap instance dapat dialamatkan secara terpisah. Jika Anda hanya merender satu instance widget, gunakan `NyState` — lebih sederhana.
+`NyStateManaged` menambahkan parameter `id` sehingga setiap instance dapat dialamatkan secara terpisah. Jika Anda hanya merender satu instance widget, gunakan `NyState` — lebih sederhana.
 
 **Langkah 1:** Scaffold widget berstate terkelola.
 
@@ -386,24 +386,16 @@ Ini menghasilkan berikut di `lib/resources/widgets/`:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // logika inisialisasi di sini
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Ini setara dengan `stateAction("reload_cart", state: Cart.state)` — helper sta
 
 ### Lanjutan: Beberapa Instance Terisolasi
 
-Alasan `NyStateManaged` ada adalah untuk mendukung beberapa instance independen dari widget yang sama. Setiap instance mendapatkan `stateName` sendiri, yang menghasilkan state key bernamespace.
+Alasan `NyStateManaged` ada adalah untuk mendukung beberapa instance independen dari widget yang sama. Setiap instance mendapatkan `id` sendiri, yang menghasilkan state key bernamespace.
 
-Render dua keranjang dengan nama berbeda:
+Render dua keranjang dengan id berbeda:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Sekarang Anda dapat memperbarui keduanya secara independen:
 
 ``` dart
 // Reload hanya keranjang header
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Reload hanya keranjang sidebar
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// Tanpa stateName — menarget instance default yang tidak bernama
+// Tanpa id — menarget instance default yang tidak bernama
 Cart.action("reload_cart");
 ```
 
-Helper `_stateFor` menangani namespace: `Cart(stateName: "header")` mendaftar di bawah kunci `"cart_header"`, dan `Cart.action(..., stateName: "header")` menarget kunci tersebut secara tepat.
+`NyStateManaged` menangani namespace: `Cart(id: "header")` mendaftar di bawah kunci `"cart_header"`, dan `Cart.action(..., id: "header")` menarget kunci tersebut secara tepat.
 
 
 <div id="lifecycle"></div>

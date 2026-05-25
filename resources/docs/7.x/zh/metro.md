@@ -649,28 +649,20 @@ metro make:command my_command --force
 metro make:state_managed_widget product_rating_widget
 ```
 
-上述命令将在 `lib/resources/widgets/` 中创建一个新组件。生成的组件继承 `NyStateManaged`，通过 `stateName` 构造函数参数支持多实例隔离。
+上述命令将在 `lib/resources/widgets/` 中创建一个新组件。生成的组件继承 `NyStateManaged`，通过 `id` 构造函数参数支持多实例隔离。
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // 在此处编写初始化逻辑

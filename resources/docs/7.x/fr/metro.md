@@ -649,28 +649,20 @@ Vous pouvez creer un nouveau widget a etat gere en executant la commande suivant
 metro make:state_managed_widget product_rating_widget
 ```
 
-La commande ci-dessus creera un nouveau widget dans `lib/resources/widgets/`. Le widget genere etend `NyStateManaged`, qui prend en charge l'isolation multi-instance via un parametre de constructeur `stateName`.
+La commande ci-dessus creera un nouveau widget dans `lib/resources/widgets/`. Le widget genere etend `NyStateManaged`, qui prend en charge l'isolation multi-instance via un parametre de constructeur `id`.
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // logique d'initialisation ici

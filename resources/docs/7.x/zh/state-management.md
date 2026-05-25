@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 当您需要同时在屏幕上显示**同一组件的多个独立实例**时使用——例如，标题中的购物车徽章和侧边栏中的另一个徽章，它们应当独立更新。
 
-`NyStateManaged` 添加了一个 `stateName` 参数，使每个实例可以单独寻址。如果您只渲染组件的一个实例，请优先使用更简单的 `NyState`。
+`NyStateManaged` 添加了一个 `id` 参数，使每个实例可以单独寻址。如果您只渲染组件的一个实例，请优先使用更简单的 `NyState`。
 
 **第 1 步：** 生成一个状态管理组件脚手架。
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // 初始化逻辑在此处
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### 高级：多个隔离实例
 
-`NyStateManaged` 存在的原因是支持同一组件的多个独立实例。每个实例获得自己的 `stateName`，从而生成命名空间化的状态键。
+`NyStateManaged` 存在的原因是支持同一组件的多个独立实例。每个实例获得自己的 `id`，从而生成命名空间化的状态键。
 
-渲染两个具有不同名称的购物车：
+渲染两个具有不同 id 的购物车：
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // 仅重新加载标题购物车
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // 仅重新加载侧边栏购物车
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// 无 stateName — 以默认无名实例为目标
+// 无 id — 以默认无名实例为目标
 Cart.action("reload_cart");
 ```
 
-`_stateFor` 辅助方法处理命名空间：`Cart(stateName: "header")` 在键 `"cart_header"` 下注册，而 `Cart.action(..., stateName: "header")` 以该确切键为目标。
+`NyStateManaged` 处理命名空间：`Cart(id: "header")` 在键 `"cart_header"` 下注册，而 `Cart.action(..., id: "header")` 以该确切键为目标。
 
 
 <div id="lifecycle"></div>

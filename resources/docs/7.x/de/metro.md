@@ -649,28 +649,20 @@ Sie können ein neues State Managed Widget erstellen, indem Sie Folgendes im Ter
 metro make:state_managed_widget product_rating_widget
 ```
 
-Das obige erstellt ein neues Widget in `lib/resources/widgets/`. Das generierte Widget erweitert `NyStateManaged`, das Multi-Instance-Isolation über einen `stateName`-Konstruktorparameter unterstützt.
+Das obige erstellt ein neues Widget in `lib/resources/widgets/`. Das generierte Widget erweitert `NyStateManaged`, das Multi-Instance-Isolation über einen `id`-Konstruktorparameter unterstützt.
 
 ``` dart
 class ProductRatingWidget extends NyStateManaged {
-  ProductRatingWidget({super.key, super.stateName})
-      : super(child: () => _ProductRatingWidgetState(stateName));
+  ProductRatingWidget({super.key, super.id})
+      : super(baseState: state, child: () => _ProductRatingWidgetState());
 
-  static String state = "product_rating_widget";
+  static const String state = "product_rating_widget";
 
-  static String _stateFor(String? state) =>
-      state == null ? ProductRatingWidget.state : "${ProductRatingWidget.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _ProductRatingWidgetState extends NyState<ProductRatingWidget> {
-  _ProductRatingWidgetState(String? stateName) {
-    this.stateName = ProductRatingWidget._stateFor(stateName);
-  }
-
   @override
   get init => () {
    // Initialisierungslogik hier

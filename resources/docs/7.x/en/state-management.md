@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 Use this when you need **multiple independent instances of the same widget** on screen at once — for example, a cart badge in the header and another in a sidebar that should both update independently.
 
-`NyStateManaged` adds a `stateName` parameter so each instance can be addressed separately. If you only ever render one instance of the widget, prefer `NyState` instead — it's simpler.
+`NyStateManaged` adds an `id` parameter so each instance can be addressed separately. If you only ever render one instance of the widget, prefer `NyState` instead — it's simpler.
 
 **Step 1:** Scaffold a state managed widget.
 
@@ -386,24 +386,16 @@ This generates the following in `lib/resources/widgets/`:
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // initialization logic here
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ This is equivalent to `stateAction("reload_cart", state: Cart.state)` — the st
 
 ### Advanced: Multiple Isolated Instances
 
-The reason `NyStateManaged` exists is to support multiple independent instances of the same widget. Each instance gets its own `stateName`, which produces a namespaced state key.
+The reason `NyStateManaged` exists is to support multiple independent instances of the same widget. Each instance gets its own `id`, which produces a namespaced state key.
 
-Render two carts with distinct names:
+Render two carts with distinct ids:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Now you can update either one independently:
 
 ``` dart
 // Reload only the header cart
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Reload only the sidebar cart
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// No stateName — targets the default unnamed instance
+// No id — targets the default unnamed instance
 Cart.action("reload_cart");
 ```
 
-The `_stateFor` helper handles the namespacing: `Cart(stateName: "header")` registers under the key `"cart_header"`, and `Cart.action(..., stateName: "header")` targets that exact key.
+`NyStateManaged` handles the namespacing: `Cart(id: "header")` registers under the key `"cart_header"`, and `Cart.action(..., id: "header")` targets that exact key.
 
 
 <div id="lifecycle"></div>

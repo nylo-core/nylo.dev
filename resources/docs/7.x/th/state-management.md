@@ -374,7 +374,7 @@ Map<String, Function> get stateActions => {
 
 ใช้เมื่อคุณต้องการ **หลาย instance อิสระของ widget เดียวกัน** บนหน้าจอพร้อมกัน — ตัวอย่างเช่น cart badge ใน header และอีกอันใน sidebar ที่ควรอัปเดตอย่างอิสระ
 
-`NyStateManaged` เพิ่ม parameter `stateName` เพื่อให้แต่ละ instance สามารถระบุได้แยกต่างหาก หากคุณ render เพียงหนึ่ง instance ของ widget ให้ใช้ `NyState` แทน — มันง่ายกว่า
+`NyStateManaged` เพิ่ม parameter `id` เพื่อให้แต่ละ instance สามารถระบุได้แยกต่างหาก หากคุณ render เพียงหนึ่ง instance ของ widget ให้ใช้ `NyState` แทน — มันง่ายกว่า
 
 **ขั้นตอนที่ 1:** สร้าง scaffold ของ state managed widget
 
@@ -386,24 +386,16 @@ metro make:state_managed_widget cart
 
 ``` dart
 class Cart extends NyStateManaged {
-  Cart({super.key, super.stateName})
-      : super(child: () => _CartState(stateName));
+  Cart({super.key, super.id})
+      : super(baseState: state, child: () => _CartState());
 
-  static String state = "cart";
+  static const String state = "cart";
 
-  static String _stateFor(String? state) =>
-      state == null ? Cart.state : "${Cart.state}_$state";
-
-  static action(String action, {dynamic data, String? stateName}) {
-    return stateAction(action, data: data, state: _stateFor(stateName));
-  }
+  static action(String action, {dynamic data, String? id}) =>
+      stateAction(action, data: data, state: state, id: id);
 }
 
 class _CartState extends NyState<Cart> {
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
-
   @override
   get init => () {
     // logic การ initialize ที่นี่
@@ -433,10 +425,6 @@ class _CartState extends NyState<Cart> {
 ``` dart
 class _CartState extends NyState<Cart> {
   String? _cartValue;
-
-  _CartState(String? stateName) {
-    this.stateName = Cart._stateFor(stateName);
-  }
 
   @override
   get init => () async {
@@ -483,15 +471,15 @@ Cart.action("clear_cart");
 
 ### ขั้นสูง: หลาย Instance ที่แยกจากกัน
 
-เหตุผลที่ `NyStateManaged` มีอยู่คือเพื่อรองรับหลาย instance อิสระของ widget เดียวกัน แต่ละ instance ได้รับ `stateName` ของตัวเอง ซึ่งสร้าง state key แบบ namespaced
+เหตุผลที่ `NyStateManaged` มีอยู่คือเพื่อรองรับหลาย instance อิสระของ widget เดียวกัน แต่ละ instance ได้รับ `id` ของตัวเอง ซึ่งสร้าง state key แบบ namespaced
 
-Render สอง cart ที่มีชื่อต่างกัน:
+Render สอง cart ที่มี id ต่างกัน:
 
 ``` dart
 Column(
   children: [
-    Cart(stateName: "header"),
-    Cart(stateName: "sidebar"),
+    Cart(id: "header"),
+    Cart(id: "sidebar"),
   ],
 )
 ```
@@ -500,16 +488,16 @@ Column(
 
 ``` dart
 // Reload เฉพาะ header cart
-Cart.action("reload_cart", stateName: "header");
+Cart.action("reload_cart", id: "header");
 
 // Reload เฉพาะ sidebar cart
-Cart.action("reload_cart", stateName: "sidebar");
+Cart.action("reload_cart", id: "sidebar");
 
-// ไม่มี stateName — เป้าหมายคือ default unnamed instance
+// ไม่มี id — เป้าหมายคือ default unnamed instance
 Cart.action("reload_cart");
 ```
 
-Helper `_stateFor` จัดการ namespacing: `Cart(stateName: "header")` ลงทะเบียนภายใต้ key `"cart_header"` และ `Cart.action(..., stateName: "header")` เล็งไปที่ key นั้นอย่างแม่นยำ
+`NyStateManaged` จัดการ namespacing: `Cart(id: "header")` ลงทะเบียนภายใต้ key `"cart_header"` และ `Cart.action(..., id: "header")` เล็งไปที่ key นั้นอย่างแม่นยำ
 
 
 <div id="lifecycle"></div>
