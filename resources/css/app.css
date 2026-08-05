@@ -1443,7 +1443,8 @@ button.ny-chip:hover {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%;
+    /* Width comes from the markup (w-auto on mobile, lg:w-full on desktop).
+       A width here would beat those utilities — this file loads after them. */
     text-align: left;
     border: 0;
     cursor: pointer;
