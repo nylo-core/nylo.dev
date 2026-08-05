@@ -932,7 +932,8 @@ Deep Linking ermöglicht es Benutzern, direkt zu bestimmten Inhalten in Ihrer Ap
 
 Bevor Sie Deep Linking in Ihrer App implementieren, stellen Sie sicher, dass Ihr Projekt richtig konfiguriert ist:
 
-### 1. Plattformkonfiguration
+<x-doc-steps>
+<x-doc-step number="1" title="Plattformkonfiguration">
 
 **iOS**: Konfigurieren Sie Universal Links in Ihrem Xcode-Projekt
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter Universal Links Konfigurationsanleitung</a>
@@ -940,7 +941,9 @@ Bevor Sie Deep Linking in Ihrer App implementieren, stellen Sie sicher, dass Ihr
 **Android**: Richten Sie App Links in Ihrer AndroidManifest.xml ein
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter App Links Konfigurationsanleitung</a>
 
-### 2. Definieren Sie Ihre Routen
+</x-doc-step>
+
+<x-doc-step number="2" title="Definieren Sie Ihre Routen">
 
 Alle Routen, die über Deep Links erreichbar sein sollen, müssen in Ihrer Router-Konfiguration registriert sein:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## Deep Links verwenden
 

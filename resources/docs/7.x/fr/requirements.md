@@ -13,6 +13,8 @@
 
 ## Configuration requise
 
+<x-doc-strip label="En bref" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Toutes les plateformes Flutter" linkText="Installer Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 necessite les versions minimales suivantes :
 
 | Prerequis | Version minimale |

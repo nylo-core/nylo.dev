@@ -932,7 +932,8 @@ NyNavigator.updateStack([
 
 在应用中实现深度链接之前，请确保项目配置正确：
 
-### 1. 平台配置
+<x-doc-steps>
+<x-doc-step number="1" title="平台配置">
 
 **iOS**：在 Xcode 项目中配置通用链接
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter 通用链接配置指南</a>
@@ -940,7 +941,9 @@ NyNavigator.updateStack([
 **Android**：在 AndroidManifest.xml 中设置应用链接
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter 应用链接配置指南</a>
 
-### 2. 定义路由
+</x-doc-step>
+
+<x-doc-step number="2" title="定义路由">
 
 所有应通过深度链接访问的路由都必须在路由配置中注册：
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## 使用深度链接
 

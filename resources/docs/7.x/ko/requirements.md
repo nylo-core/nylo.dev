@@ -13,6 +13,8 @@
 
 ## 시스템 요구 사항
 
+<x-doc-strip label="한눈에 보기" items="Flutter 3.38.4+, Dart SDK 3.10.7+, 모든 Flutter 플랫폼" linkText="Flutter 설치" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7은 다음 최소 버전이 필요합니다:
 
 | 요구 사항 | 최소 버전 |

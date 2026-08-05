@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\OnlineEvent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Routing\Middleware\ThrottleRequests;
-use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\TestCase;
 
@@ -21,6 +20,25 @@ class LandingControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('pages.index');
+    }
+
+    /**
+     * Test that the home page shows the banner for an upcoming event.
+     */
+    public function test_home_page_shows_upcoming_event_banner(): void
+    {
+        cache()->forget('event');
+
+        OnlineEvent::factory()->create([
+            'title' => 'Nylo Launch Party',
+            'link' => 'https://nylo.dev/events/launch-party',
+        ]);
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee('Nylo Launch Party');
+        $response->assertSee('https://nylo.dev/events/launch-party');
     }
 
     /**
@@ -196,70 +214,14 @@ class LandingControllerTest extends TestCase
     }
 
     /**
-     * Test that download route redirects to GitHub zipball.
+     * Test that download redirects to GitHub releases.
      */
-    public function test_download_route_redirects_to_github(): void
+    public function test_download_redirects_to_github_releases(): void
     {
-        Http::fake([
-            'api.github.com/repos/nylo-core/nylo/releases/latest' => Http::response([
-                'name' => 'v7.0.0',
-                'zipball_url' => 'https://github.com/nylo-core/nylo/zipball/v7.0.0',
-            ], 200),
-        ]);
-
-        $response = $this->withoutMiddleware(ThrottleRequests::class)
-            ->get('/download');
-
-        $response->assertStatus(302);
-        $response->assertRedirect('https://github.com/nylo-core/nylo/zipball/v7.0.0');
-    }
-
-    /**
-     * Test that download creates a download record.
-     */
-    public function test_download_creates_download_record(): void
-    {
-        Http::fake([
-            'api.github.com/repos/nylo-core/nylo/releases/latest' => Http::response([
-                'name' => 'v7.0.0',
-                'zipball_url' => 'https://github.com/nylo-core/nylo/zipball/v7.0.0',
-            ], 200),
-        ]);
-
-        $this->assertDatabaseCount('downloads', 0);
-
-        $this->withoutMiddleware(ThrottleRequests::class)
-            ->get('/download');
-
-        $this->assertDatabaseCount('downloads', 1);
-        $this->assertDatabaseHas('downloads', [
-            'project' => 'nylo-core/nylo',
-            'version' => 'v7.0.0',
-        ]);
-    }
-
-    /**
-     * Test that download route is rate limited after 5 requests.
-     */
-    #[RunInSeparateProcess]
-    public function test_download_route_is_rate_limited(): void
-    {
-        Http::fake([
-            'api.github.com/repos/nylo-core/nylo/releases/latest' => Http::response([
-                'name' => 'v7.0.0',
-                'zipball_url' => 'https://github.com/nylo-core/nylo/zipball/v7.0.0',
-            ], 200),
-        ]);
-
-        // Make 5 successful requests
-        for ($i = 0; $i < 5; $i++) {
-            $response = $this->get('/download');
-            $this->assertNotEquals(429, $response->getStatusCode(), "Request $i should not be rate limited");
-        }
-
-        // 6th request should be rate limited
         $response = $this->get('/download');
-        $response->assertStatus(429);
+
+        $response->assertStatus(301);
+        $response->assertRedirect('https://github.com/nylo-core/nylo/releases');
     }
 
     /**

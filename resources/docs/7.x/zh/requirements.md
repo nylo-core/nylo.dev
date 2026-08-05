@@ -13,6 +13,8 @@
 
 ## 系统要求
 
+<x-doc-strip label="概览" items="Flutter 3.38.4+, Dart SDK 3.10.7+, 所有 Flutter 平台" linkText="安装 Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 需要以下最低版本：
 
 | 要求 | 最低版本 |

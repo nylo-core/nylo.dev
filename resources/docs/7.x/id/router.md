@@ -932,7 +932,8 @@ Deep linking memungkinkan pengguna menavigasi langsung ke konten tertentu dalam 
 
 Sebelum mengimplementasikan deep linking di aplikasi Anda, pastikan proyek Anda dikonfigurasi dengan benar:
 
-### 1. Konfigurasi Platform
+<x-doc-steps>
+<x-doc-step number="1" title="Konfigurasi Platform">
 
 **iOS**: Konfigurasikan universal links di proyek Xcode Anda
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Panduan Konfigurasi Flutter Universal Links</a>
@@ -940,7 +941,9 @@ Sebelum mengimplementasikan deep linking di aplikasi Anda, pastikan proyek Anda 
 **Android**: Atur app links di AndroidManifest.xml Anda
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Panduan Konfigurasi Flutter App Links</a>
 
-### 2. Definisikan Rute Anda
+</x-doc-step>
+
+<x-doc-step number="2" title="Definisikan Rute Anda">
 
 Semua rute yang harus dapat diakses melalui deep links harus didaftarkan di konfigurasi router Anda:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## Menggunakan Deep Links
 

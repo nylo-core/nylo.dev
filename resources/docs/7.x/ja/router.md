@@ -932,7 +932,8 @@ NyNavigator.updateStack([
 
 アプリでディープリンクを実装する前に、プロジェクトが正しく設定されていることを確認してください:
 
-### 1. プラットフォーム設定
+<x-doc-steps>
+<x-doc-step number="1" title="プラットフォーム設定">
 
 **iOS**: Xcode プロジェクトで Universal Links を設定します
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter Universal Links 設定ガイド</a>
@@ -940,7 +941,9 @@ NyNavigator.updateStack([
 **Android**: AndroidManifest.xml で App Links を設定します
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter App Links 設定ガイド</a>
 
-### 2. ルートの定義
+</x-doc-step>
+
+<x-doc-step number="2" title="ルートの定義">
 
 ディープリンクでアクセス可能なすべてのルートは、ルーター設定に登録する必要があります:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## ディープリンクの使用
 

@@ -13,6 +13,8 @@
 
 ## Persyaratan Sistem
 
+<x-doc-strip label="Sekilas" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Semua platform Flutter" linkText="Instal Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 memerlukan versi minimum berikut:
 
 | Persyaratan | Versi Minimum |

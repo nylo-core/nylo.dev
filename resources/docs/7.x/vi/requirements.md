@@ -13,6 +13,8 @@
 
 ## Yêu cầu hệ thống
 
+<x-doc-strip label="Tổng quan" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Tất cả nền tảng Flutter" linkText="Cài đặt Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 yêu cầu các phiên bản tối thiểu sau:
 
 | Yêu cầu | Phiên bản tối thiểu |

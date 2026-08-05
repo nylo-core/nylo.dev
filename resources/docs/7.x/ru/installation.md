@@ -7,41 +7,47 @@
 - [Запуск проекта](#running-the-project "Запуск проекта")
 - [Metro CLI](#metro-cli "Metro CLI")
 
-
 <div id="install"></div>
+
+Три команды превращают пустую папку в работающее Flutter-приложение с уже настроенными маршрутизацией, сетью, темами и генерацией кода.
+
+<x-doc-strip label="Перед началом" items="Flutter SDK установлен, Dart 3" linkText="Полные требования" linkHref="/ru/docs/{{ $version }}/requirements" />
 
 ## Установка
 
-### 1. Установите nylo_installer глобально
+Выполните эти команды по порядку. Каждую из них можно безопасно запустить повторно.
+
+<x-doc-steps>
+<x-doc-step number="1" title="Установите Nylo CLI глобально">
+Это устанавливает инструмент CLI {{ config('app.name') }} глобально в вашу систему.
 
 ``` bash
 dart pub global activate nylo_installer
 ```
+</x-doc-step>
 
-Это устанавливает инструмент CLI {{ config('app.name') }} глобально в вашу систему.
-
-### 2. Создайте новый проект
+<x-doc-step number="2" title="Создайте новый проект">
+Эта команда клонирует шаблон {{ config('app.name') }}, настраивает проект с вашим именем приложения и автоматически устанавливает все зависимости.
 
 ``` bash
 nylo new my_app
 ```
+</x-doc-step>
 
-Эта команда клонирует шаблон {{ config('app.name') }}, настраивает проект с вашим именем приложения и автоматически устанавливает все зависимости.
-
-### 3. Настройте алиас Metro CLI
+<x-doc-step number="3" title="Настройте псевдоним Metro">
+Это настраивает команду `metro` для вашего проекта, позволяя использовать команды Metro CLI без полного синтаксиса `dart run`.
 
 ``` bash
 cd my_app
 nylo init
 ```
+</x-doc-step>
+</x-doc-steps>
 
-Это настраивает команду `metro` для вашего проекта, позволяя использовать команды Metro CLI без полного синтаксиса `dart run`.
-
-После установки у вас будет полноценная структура Flutter-проекта с:
-- Предварительно настроенной маршрутизацией и навигацией
-- Шаблоном API-сервиса
-- Настройкой тем и локализации
-- Metro CLI для генерации кода
+<x-doc-panel title="Что вы получите" items="Предварительно настроенные маршрутизация и навигация
+Шаблон API-сервиса
+Настройка тем и локализации
+Metro CLI для генерации кода" />
 
 
 <div id="running-the-project"></div>
@@ -50,35 +56,39 @@ nylo init
 
 Проекты {{ config('app.name') }} запускаются как любое стандартное Flutter-приложение.
 
-### Через терминал
+<x-doc-tabs tabs="Терминал, Android Studio, VS Code">
+<x-doc-tab label="Терминал">
 
 ``` bash
 flutter run
 ```
 
-### Через IDE
-
-- **Android Studio**: <a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Запуск и отладка</a>
-- **VS Code**: <a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Запуск приложения без точек останова</a>
-
 Если сборка прошла успешно, приложение отобразит стартовый экран {{ config('app.name') }} по умолчанию.
+</x-doc-tab>
+
+<x-doc-tab label="Android Studio">
+Откройте папку проекта, выберите устройство в селекторе цели и нажмите **Run**.
+
+<a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Документация Flutter: запуск и отладка ↗</a>
+</x-doc-tab>
+
+<x-doc-tab label="VS Code">
+Откройте папку проекта и выполните **Debug: Start Without Debugging** из палитры команд.
+
+<a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Документация Flutter: запуск без точек останова ↗</a>
+</x-doc-tab>
+</x-doc-tabs>
 
 
 <div id="metro-cli"></div>
 
 ## Metro CLI
 
-{{ config('app.name') }} включает инструмент CLI под названием **Metro** для генерации файлов проекта.
+Metro генерирует файлы проекта. Запустите его без аргументов, чтобы увидеть меню, или вызовите команду напрямую.
 
-### Запуск Metro
+``` plaintext
+$ metro
 
-``` bash
-metro
-```
-
-Это отображает меню Metro:
-
-``` bash
 Metro - Nylo's Companion to Build Flutter apps by Anthony Gordon
 
 Usage:
@@ -113,29 +123,34 @@ All commands:
   make:env
 ```
 
-### Справочник команд Metro
+### Справочник команд
 
-| Команда | Описание |
-|---------|----------|
-| `make:page` | Создать новую страницу |
-| `make:stateful_widget` | Создать stateful-виджет |
-| `make:stateless_widget` | Создать stateless-виджет |
-| `make:state_managed_widget` | Создать виджет с управлением состоянием |
-| `make:navigation_hub` | Создать навигационный хаб (нижняя навигация) |
-| `make:journey_widget` | Создать journey-виджет для навигационного хаба |
-| `make:bottom_sheet_modal` | Создать модальное нижнее окно |
-| `make:button` | Создать пользовательский виджет кнопки |
-| `make:form` | Создать форму с валидацией |
-| `make:model` | Создать класс модели |
-| `make:provider` | Создать провайдер |
-| `make:api_service` | Создать API-сервис |
-| `make:controller` | Создать контроллер |
-| `make:event` | Создать событие |
-| `make:route_guard` | Создать защитник маршрута |
-| `make:config` | Создать файл конфигурации |
-| `make:interceptor` | Создать сетевой перехватчик |
-| `make:command` | Создать пользовательскую команду Metro |
-| `make:env` | Сгенерировать конфигурацию окружения из .env |
+Каждая команда принимает имя, например `metro make:page settings_page`
+
+<x-doc-commands title="Команды виджетов" rows="
+metro make:page | Создать новую страницу
+metro make:stateful_widget | Создать stateful-виджет
+metro make:stateless_widget | Создать stateless-виджет
+metro make:state_managed_widget | Создать виджет с управлением состоянием
+metro make:navigation_hub | Создать навигационный хаб (нижняя навигация)
+metro make:journey_widget | Создать journey-виджет для навигационного хаба
+metro make:bottom_sheet_modal | Создать модальное нижнее окно
+metro make:button | Создать пользовательский виджет кнопки
+metro make:form | Создать форму с валидацией
+" />
+
+<x-doc-commands title="Вспомогательные команды" rows="
+metro make:model | Создать класс модели
+metro make:provider | Создать провайдер
+metro make:api_service | Создать API-сервис
+metro make:controller | Создать контроллер
+metro make:event | Создать событие
+metro make:route_guard | Создать защитник маршрута
+metro make:config | Создать файл конфигурации
+metro make:interceptor | Создать сетевой перехватчик
+metro make:command | Создать пользовательскую команду Metro
+metro make:env | Сгенерировать конфигурацию окружения из .env
+" />
 
 ### Примеры использования
 

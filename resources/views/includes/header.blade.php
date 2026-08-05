@@ -1,30 +1,41 @@
-<div class="bg-gradient-to-b border-b from-[#f8fcfdab] isolate py-2 text-center z-10 border-gray-50 text-slate-700 dark:border-slate-800 dark:from-slate-900/50 dark:text-slate-300 text-sm shadow-sm">
-    <p class="text-sm">🎉 {{ __('Nylo v7 is here!') }} <a href="{{ route('learn-more.v7') }}" class="underline hover:text-gray-900 transition-all font-medium">{{ __('See what\'s new') }} →</a></p>
+<div class="ny-announce">
+    <div class="ny-shell flex flex-wrap items-center justify-center gap-x-3 gap-y-2 py-[9px]">
+        <span class="ny-announce-tag">V7</span>
+        {{-- The full sentence wraps to three lines on a phone, so short-form it there. --}}
+        <span class="ny-announce-text whitespace-nowrap md:hidden">{{ __('Nylo v7 is here!') }}</span>
+        <span class="ny-announce-text hidden md:inline">{{ __('Nylo v7 is here — faster scaffolding, new Nav Hub, refreshed docs.') }}</span>
+        <a href="{{ route('learn-more.v7') }}" class="ny-announce-link whitespace-nowrap">{{ __('See what\'s new') }} →</a>
+    </div>
 </div>
 
 
-<header class="backdrop-blur bg-white/90 dark:bg-slate-900/90 dark:border-slate-50/[0.06] duration-500 flex-none lg:border-slate-900/10 lg:z-50 sticky supports-backdrop-blur:bg-white/60 dark:supports-backdrop-blur:bg-slate-900/60 top-0 transition-colors w-full z-40" style="position: relative; max-height: 83px;">
-    <div class="max-w-8xl mx-auto">
-        <div class="border-b border-slate-900/10 dark:border-slate-300/10 lg:border-0 lg:mx-0 lg:px-4 py-4">
-            <div class="relative flex items-center justify-between mx-5 md:mx-5 md:justify-start">
-                <a class="flex-none overflow-hidden md:w-auto" href="{{ route('landing.home') }}">
-                    <img src="{{ asset('images/nylo_logo_filled.png') }}" class="h-[50px] dark:brightness-0 dark:invert" alt="{{ config('app.name') }} logo" />
-                </a>
+<header class="ny-bg-header sticky top-0 z-40 w-full">
+    <div class="ny-shell flex h-[66px] items-center gap-6 lg:gap-9">
+        <a class="flex flex-none items-center gap-2.5" href="{{ route('landing.home') }}">
+            <img src="{{ asset('images/nylo_logo.png') }}" alt="" class="ny-mark h-[26px] drop-shadow-[0_2px_5px_rgba(16,118,190,.35)]">
+            <span class="ny-wordmark">{{ config('app.name') }}</span>
+        </a>
 
-                <div class="relative hidden sm:flex items-center ml-auto">
-                    <nav class="leading-6 text-slate-700 dark:text-slate-200">
-                        <ul class="flex space-x-8">
+                <div class="relative hidden sm:flex flex-1 items-center">
+                    <nav>
+                        <ul class="flex items-center gap-6 lg:gap-[26px]">
                             <li>
-                                <a class="flex hover:text-primary-blue transition-all text-gray-600 dark:text-slate-300 dark:hover:text-primary-blue" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'installation']) }}">{{ __('Docs') }}</a>
+                                <a class="ny-nav-link" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'installation']) }}">{{ __('Docs') }}</a>
                             </li>
                             {{-- Framework Dropdown --}}
                             <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                                <button class="flex items-center hover:text-primary-blue transition-all text-gray-600 dark:text-slate-300 dark:hover:text-primary-blue">
+                                <button class="ny-nav-link">
                                     {{ __('Framework') }}
-                                    <svg class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    <svg class="w-2.5 h-2.5 transition-transform ny-c-faint" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
+
+                                {{-- Arrow pointer. Sits on the li, not the panel, so it keeps
+                                     pointing at the trigger whatever the panel's width or the
+                                     translated label's length. --}}
+                                <div x-show="open" x-cloak
+                                     class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-4 h-4 rotate-45 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 z-[51]"></div>
 
                                 {{-- Dropdown Panel --}}
                                 <div x-show="open"
@@ -34,11 +45,8 @@
                                      x-transition:leave="transition ease-in duration-150"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 z-50 w-[700px]"
+                                     class="absolute top-full left-0 mt-3 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 z-50 w-[700px] max-w-[calc(100vw-2.5rem)]"
                                      style="display: none;">
-
-                                    {{-- Arrow pointer --}}
-                                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 rotate-45"></div>
 
                                     {{-- Flutter Packages Section --}}
                                     <div class="relative">
@@ -135,12 +143,16 @@
                             </li>
                             {{-- Resources Dropdown --}}
                             <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                                <button class="flex items-center hover:text-primary-blue transition-all text-gray-600 dark:text-slate-300 dark:hover:text-primary-blue">
+                                <button class="ny-nav-link">
                                     {{ __('Resources') }}
-                                    <svg class="ml-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    <svg class="w-2.5 h-2.5 transition-transform ny-c-faint" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
+
+                                {{-- Arrow pointer (see note on the Framework dropdown above) --}}
+                                <div x-show="open" x-cloak
+                                     class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-4 h-4 rotate-45 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 z-[51]"></div>
 
                                 {{-- Dropdown Panel --}}
                                 <div x-show="open"
@@ -150,11 +162,8 @@
                                      x-transition:leave="transition ease-in duration-150"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[620px] bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 z-50"
+                                     class="absolute top-full left-0 mt-3 w-[620px] max-w-[calc(100vw-2.5rem)] bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 z-50"
                                      style="display: none;">
-
-                                    {{-- Arrow pointer --}}
-                                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 rotate-45"></div>
 
                                     {{-- Resources Section --}}
                                     <div class="relative">
@@ -257,71 +266,73 @@
                             </li>
 
                             <li>
-                                <a class="flex hover:text-primary-blue transition-all text-gray-600 dark:text-slate-300 dark:hover:text-primary-blue" href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK">
+                                <a class="ny-nav-link" href="https://pub.dev/publishers/nylo.dev/packages" target="_BLANK">
                                     <span>{{ __('Packages') }}</span>
-
-                                    <span class="ml-2 self-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="9" viewBox="0 0 13 13" fill="none">
-<path d="M12.9199 0.62C12.8185 0.375651 12.6243 0.181475 12.3799 0.0799999C12.2597 0.028759 12.1306 0.00157999 11.9999 0H1.99994C1.73472 0 1.48037 0.105357 1.29283 0.292893C1.1053 0.48043 0.999939 0.734784 0.999939 1C0.999939 1.26522 1.1053 1.51957 1.29283 1.70711C1.48037 1.89464 1.73472 2 1.99994 2H9.58994L1.28994 10.29C1.19621 10.383 1.12182 10.4936 1.07105 10.6154C1.02028 10.7373 0.994141 10.868 0.994141 11C0.994141 11.132 1.02028 11.2627 1.07105 11.3846C1.12182 11.5064 1.19621 11.617 1.28994 11.71C1.3829 11.8037 1.4935 11.8781 1.61536 11.9289C1.73722 11.9797 1.86793 12.0058 1.99994 12.0058C2.13195 12.0058 2.26266 11.9797 2.38452 11.9289C2.50638 11.8781 2.61698 11.8037 2.70994 11.71L10.9999 3.41V11C10.9999 11.2652 11.1053 11.5196 11.2928 11.7071C11.4804 11.8946 11.7347 12 11.9999 12C12.2652 12 12.5195 11.8946 12.707 11.7071C12.8946 11.5196 12.9999 11.2652 12.9999 11V1C12.9984 0.869323 12.9712 0.740222 12.9199 0.62Z" fill="currentColor" class="text-gray-400 dark:text-slate-500"/>
+                                    <svg class="ny-c-faint" width="9" height="9" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M12.9199 0.62C12.8185 0.375651 12.6243 0.181475 12.3799 0.0799999C12.2597 0.028759 12.1306 0.00157999 11.9999 0H1.99994C1.73472 0 1.48037 0.105357 1.29283 0.292893C1.1053 0.48043 0.999939 0.734784 0.999939 1C0.999939 1.26522 1.1053 1.51957 1.29283 1.70711C1.48037 1.89464 1.73472 2 1.99994 2H9.58994L1.28994 10.29C1.19621 10.383 1.12182 10.4936 1.07105 10.6154C1.02028 10.7373 0.994141 10.868 0.994141 11C0.994141 11.132 1.02028 11.2627 1.07105 11.3846C1.12182 11.5064 1.19621 11.617 1.28994 11.71C1.3829 11.8037 1.4935 11.8781 1.61536 11.9289C1.73722 11.9797 1.86793 12.0058 1.99994 12.0058C2.13195 12.0058 2.26266 11.9797 2.38452 11.9289C2.50638 11.8781 2.61698 11.8037 2.70994 11.71L10.9999 3.41V11C10.9999 11.2652 11.1053 11.5196 11.2928 11.7071C11.4804 11.8946 11.7347 12 11.9999 12C12.2652 12 12.5195 11.8946 12.707 11.7071C12.8946 11.5196 12.9999 11.2652 12.9999 11V1C12.9984 0.869323 12.9712 0.740222 12.9199 0.62Z" fill="currentColor"/>
 </svg>
-                                    </span>
                                 </a>
                             </li>
 
                         </ul>
                     </nav>
 
-                    <div class="flex items-center ml-6 pl-6 border-l border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center gap-2.5 ml-auto pl-6">
 
                         {{-- Search button --}}
-                        <button @click="$store.search.toggle()" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center mr-1" aria-label="Search">
-                            <span class="iconify lucide--search shrink-0 size-5 text-slate-600 dark:text-slate-400" aria-hidden="true"></span>
+                        <button @click="$store.search.toggle()" class="ny-icon-btn" aria-label="Search">
+                            <span class="iconify lucide--search shrink-0 size-4" aria-hidden="true"></span>
                         </button>
 
-                        <a href="https://github.com/nylo-core/nylo" rel="noopener" target="_blank" aria-label="Nylo on GitHub" class="rounded-md font-medium inline-flex items-center transition-colors text-sm gap-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 p-1.5 mr-1">
-                            <span class="iconify lucide--github shrink-0 size-5 text-slate-600 dark:text-slate-400" aria-hidden="true"></span>
-                            <span class="truncate text-slate-600 dark:text-slate-400">{{ $githubStars }}</span>
-                        </a>
-
                         {{-- Dark mode toggle --}}
-                        <button @click="$store.darkMode.toggle()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle dark mode">
+                        <button @click="$store.darkMode.toggle()" class="ny-icon-btn" aria-label="Toggle dark mode">
                             {{-- Sun icon (shown in dark mode) --}}
-                            <svg x-show="$store.darkMode.on" x-cloak class="w-5 h-5 text-slate-400"
-                            fill="currentColor" viewBox="0 0 20 20">
+                            <svg x-show="$store.darkMode.on" x-cloak class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
                             </svg>
                             {{-- Moon icon (shown in light mode) --}}
-                            <svg x-show="!$store.darkMode.on" class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 20 20">
+                            <svg x-show="!$store.darkMode.on" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                             </svg>
                         </button>
-                        
+
+                        {{-- GitHub stars --}}
+                        <a href="https://github.com/nylo-core/nylo" rel="noopener" target="_blank" aria-label="{{ config('app.name') }} on GitHub" class="ny-pill-btn">
+                            <span class="iconify lucide--star shrink-0 size-3.5 ny-c-body" aria-hidden="true"></span>
+                            <span class="truncate">{{ $githubStars }}</span>
+                        </a>
+
+                        {{-- Primary CTA --}}
+                        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'installation']) }}" class="ny-cta-btn hidden lg:flex">
+                            {{ __('Get started') }} <span class="text-xs">→</span>
+                        </a>
+
                     </div>
                 </div>
 
                 {{-- Mobile Menu --}}
-                <div class="flex items-center sm:hidden" x-data="{ mobileMenuOpen: false, frameworkOpen: false, resourcesOpen: false }">
+                <div class="flex items-center gap-2 sm:hidden ml-auto" x-data="{ mobileMenuOpen: false, frameworkOpen: false, resourcesOpen: false }">
                     {{-- Mobile search button --}}
-                    <button @click="$store.search.toggle()" class="p-2 mr-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" aria-label="Search">
-                        <span class="iconify lucide--search shrink-0 size-5 text-slate-600 dark:text-slate-400" aria-hidden="true"></span>
+                    <button @click="$store.search.toggle()" class="ny-icon-btn" aria-label="Search">
+                        <span class="iconify lucide--search shrink-0 size-4" aria-hidden="true"></span>
                     </button>
 
                     {{-- Mobile dark mode toggle --}}
-                    <button @click="$store.darkMode.toggle()" class="p-2 mr-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle dark mode">
-                        <svg x-show="$store.darkMode.on" x-cloak class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <button @click="$store.darkMode.toggle()" class="ny-icon-btn" aria-label="Toggle dark mode">
+                        <svg x-show="$store.darkMode.on" x-cloak class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
                         </svg>
-                        <svg x-show="!$store.darkMode.on" class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg x-show="!$store.darkMode.on" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                         </svg>
                     </button>
 
                     {{-- Hamburger Menu Button --}}
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle menu">
-                        <svg x-show="!mobileMenuOpen" class="w-6 h-6 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="ny-icon-btn" aria-label="Toggle menu">
+                        <svg x-show="!mobileMenuOpen" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
-                        <svg x-show="mobileMenuOpen" x-cloak class="w-6 h-6 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg x-show="mobileMenuOpen" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
@@ -465,8 +476,6 @@
                         </div>
                     </template>
                 </div>
-            </div>
-        </div>
     </div>
 </header>
 

@@ -15,7 +15,7 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.5.0/styles/default.min.css">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/docs.css', 'resources/js/app.js'])
 
     @env('production')
     <!-- Global site tag (gtag.js) - Google Analytics -->

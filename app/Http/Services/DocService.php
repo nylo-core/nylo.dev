@@ -2,19 +2,18 @@
 
 namespace App\Http\Services;
 
-use App\Models\Download;
-use Illuminate\Support\Facades\Http;
-use Request;
+use Illuminate\Support\Str;
 
 /**
  * Class DocService
+ *
+ * @phpstan-type TutorialItem array{label: string, link: string}
+ * @phpstan-type TocItem array{text: string, anchor: string|null, title: string|null, children: array<int, mixed>}
  */
 class DocService
 {
     /**
      * Get latest version for Nylo.
-     *
-     * @param  string  $page
      */
     public function getLastestVersionNylo(): string
     {
@@ -24,7 +23,7 @@ class DocService
     /**
      * Performs a check to see if doc version is old.
      *
-     * @param  string  $page
+     * @param  string  $version
      */
     public function isViewingOldDocs($version): bool
     {
@@ -58,7 +57,9 @@ class DocService
      */
     public function findTutorialSection($version, $page): string
     {
-        foreach (config('project.doc-tutorials')['versions'][$version] as $key => $docLink) {
+        /** @var array<string, array<int, TutorialItem>> $tutorialSections */
+        $tutorialSections = config('project.doc-tutorials')['versions'][$version];
+        foreach ($tutorialSections as $key => $docLink) {
             $docLabels = collect($docLink)->map(function ($doc) {
                 return $doc['label'];
             })->toArray();
@@ -75,7 +76,7 @@ class DocService
      *
      * @param  string  $version
      */
-    public function containsTutorialsForVersion($version)
+    public function containsTutorialsForVersion($version): void
     {
         abort_if(array_key_exists($version, config('project.doc-tutorials')['versions']) == false, 403, "No tutorials found for $version");
     }
@@ -127,42 +128,21 @@ class DocService
      *
      * @param  string  $version
      * @param  string  $page
+     * @return TutorialItem|array{}
      */
     public function getTutorial($version, $page): array
     {
         $docsIndex = config('project.doc-tutorials');
+        /** @var array<string, array<int, TutorialItem>> $versions */
         $versions = $docsIndex['versions'][$version];
         foreach ($versions as $docs) {
-            $results = collect($docs)->where('label', $page);
-            if ($results->isEmpty()) {
-                continue;
+            $tutorial = collect($docs)->where('label', $page)->first();
+            if ($tutorial !== null) {
+                return $tutorial;
             }
-
-            return collect($docs)->where('label', $page)->first();
         }
 
         return [];
-    }
-
-    /**
-     * Returns the zipball_url to download a project from GitHub.
-     *
-     * @param  string  $project
-     */
-    public function downloadFile($project): string
-    {
-        abort_if(! in_array($project, ['nylo-core/nylo']), 404);
-        $response = Http::get('https://api.github.com/repos/'.$project.'/releases/latest');
-        abort_if(! $response->successful(), 500);
-
-        $download = Download::create([
-            'project' => $project,
-            'version' => $response->json('name'),
-            'ip' => Request::ip(),
-        ]);
-        abort_if(! $download, 500);
-
-        return $response->json('zipball_url');
     }
 
     /**
@@ -186,11 +166,14 @@ class DocService
      *
      * @param  string  $mdDocPage
      * @param  string  $version
-     * @return array{title: string, on-this-page: array, contents: string}
+     * @return array{title: string, on-this-page: array<int, TocItem>, contents: string, rawMarkdown: string}
      */
     public function generateDocPage($mdDocPage, $version)
     {
-        $bladeContents = \Blade::render(file_get_contents($mdDocPage), ['version' => $version]);
+        $markdown = file_get_contents($mdDocPage);
+        abort_if($markdown === false, 404);
+
+        $bladeContents = \Blade::render($markdown, ['version' => $version]);
 
         $onThisPage = [];
 
@@ -222,9 +205,29 @@ class DocService
     }
 
     /**
+     * Load a legal markdown document as HTML, falling back to English when no
+     * translation exists for the locale.
+     */
+    public function loadLegalMarkdown(string $document, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+        $path = resource_path("legal/{$locale}/{$document}.md");
+
+        if (! file_exists($path)) {
+            $path = resource_path("legal/en/{$document}.md");
+        }
+
+        $contents = file_get_contents($path);
+        abort_if($contents === false, 404);
+
+        return Str::markdown($contents);
+    }
+
+    /**
      * Parse the table of contents markdown into a nested array structure.
      *
      * @param  string  $tocContent
+     * @return array<int, TocItem>
      */
     private function parseTocToArray($tocContent): array
     {

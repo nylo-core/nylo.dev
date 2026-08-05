@@ -932,7 +932,8 @@ NyNavigator.updateStack([
 
 अपने ऐप में डीप लिंकिंग लागू करने से पहले, सुनिश्चित करें कि आपका प्रोजेक्ट सही तरह से कॉन्फ़िगर किया गया है:
 
-### 1. प्लेटफ़ॉर्म कॉन्फ़िगरेशन
+<x-doc-steps>
+<x-doc-step number="1" title="प्लेटफ़ॉर्म कॉन्फ़िगरेशन">
 
 **iOS**: अपने Xcode प्रोजेक्ट में यूनिवर्सल लिंक्स कॉन्फ़िगर करें
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter यूनिवर्सल लिंक्स कॉन्फ़िगरेशन गाइड</a>
@@ -940,7 +941,9 @@ NyNavigator.updateStack([
 **Android**: अपनी AndroidManifest.xml में ऐप लिंक्स सेट अप करें
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter ऐप लिंक्स कॉन्फ़िगरेशन गाइड</a>
 
-### 2. अपने रूट्स परिभाषित करें
+</x-doc-step>
+
+<x-doc-step number="2" title="अपने रूट्स परिभाषित करें">
 
 डीप लिंक्स के माध्यम से एक्सेसिबल होने वाले सभी रूट्स आपके राउटर कॉन्फ़िगरेशन में रजिस्टर्ड होने चाहिए:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## डीप लिंक्स का उपयोग
 

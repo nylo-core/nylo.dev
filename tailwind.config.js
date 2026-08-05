@@ -11,9 +11,11 @@ export default {
   theme: {
     fontFamily: {
         'Work sans': ['Work Sans', 'sans-serif'],
+        'DM sans': ['DM Sans', 'sans-serif'],
         'Outfit': ['Outfit', 'sans-serif'],
         'Sora': ['Sora', 'sans-serif'],
-        'sans': ['Work Sans', 'sans-serif'],
+        'mono': ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        'sans': ['DM Sans', 'Work Sans', 'sans-serif'],
       },
     extend: {
       typography: {

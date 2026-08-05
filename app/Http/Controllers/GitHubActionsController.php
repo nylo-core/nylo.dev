@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 /**
  * Class GitHubActionsController
- *
- * @property PackageService $packageService
  */
 class GitHubActionsController extends Controller
 {
@@ -19,10 +17,7 @@ class GitHubActionsController extends Controller
      *
      * @return void
      */
-    public function __construct(PackageService $packageService)
-    {
-        $this->packageService = $packageService;
-    }
+    public function __construct(private PackageService $packageService) {}
 
     /**
      * GitHub Workflow http request to update the latest version of a package.

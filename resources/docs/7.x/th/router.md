@@ -932,7 +932,8 @@ Deep linking อนุญาตให้ผู้ใช้นำทางโด�
 
 ก่อนใช้งาน deep linking ในแอปของคุณ ตรวจสอบว่าโปรเจกต์ของคุณตั้งค่าอย่างถูกต้อง:
 
-### 1. การตั้งค่าแพลตฟอร์ม
+<x-doc-steps>
+<x-doc-step number="1" title="การตั้งค่าแพลตฟอร์ม">
 
 **iOS**: ตั้งค่า universal links ในโปรเจกต์ Xcode ของคุณ
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">คู่มือการตั้งค่า Flutter Universal Links</a>
@@ -940,7 +941,9 @@ Deep linking อนุญาตให้ผู้ใช้นำทางโด�
 **Android**: ตั้งค่า app links ใน AndroidManifest.xml ของคุณ
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">คู่มือการตั้งค่า Flutter App Links</a>
 
-### 2. กำหนด Routes ของคุณ
+</x-doc-step>
+
+<x-doc-step number="2" title="กำหนด Routes ของคุณ">
 
 ทุก routes ที่ควรเข้าถึงได้ผ่าน deep links ต้องลงทะเบียนในการตั้งค่า router ของคุณ:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## การใช้ Deep Links
 

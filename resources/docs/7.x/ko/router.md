@@ -932,7 +932,8 @@ NyNavigator.updateStack([
 
 앱에서 딥 링킹을 구현하기 전에, 프로젝트가 올바르게 설정되어 있는지 확인하세요:
 
-### 1. 플랫폼 설정
+<x-doc-steps>
+<x-doc-step number="1" title="플랫폼 설정">
 
 **iOS**: Xcode 프로젝트에서 Universal Links 설정
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter Universal Links 설정 가이드</a>
@@ -940,7 +941,9 @@ NyNavigator.updateStack([
 **Android**: AndroidManifest.xml에서 App Links 설정
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter App Links 설정 가이드</a>
 
-### 2. 라우트 정의
+</x-doc-step>
+
+<x-doc-step number="2" title="라우트 정의">
 
 딥 링크를 통해 접근 가능해야 하는 모든 라우트는 라우터 설정에 등록되어야 합니다:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## 딥 링크 사용
 

@@ -12,10 +12,10 @@
 <div id="install"></div>
 ## Install
 
-You can either download Nylo <a href="/download">here</a> or clone the git repository using the below command.
+You can either download Nylo v3 <a href="https://github.com/nylo-core/nylo/archive/refs/heads/3.x.zip">here</a> or clone the git repository using the below command.
 
 ```bash
-git clone https://github.com/nylo-core/nylo.git nylo_app
+git clone -b 3.x https://github.com/nylo-core/nylo.git nylo_app
 ```
 
 <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.
@@ -24,7 +24,7 @@ git clone https://github.com/nylo-core/nylo.git nylo_app
 
 ## Adding your .env file
 
-You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo through our site or on GitHub, this file will already be there.
+You will also need to add a `.env` file to your project at the root level. If you've downloaded Nylo from GitHub, this file will already be there.
 
 > The project must have a `.env` file to build successfully.
 

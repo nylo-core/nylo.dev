@@ -932,7 +932,8 @@ Les liens profonds permettent aux utilisateurs de naviguer directement vers un c
 
 Avant d'implementer les liens profonds dans votre application, assurez-vous que votre projet est correctement configure :
 
-### 1. Configuration de la plateforme
+<x-doc-steps>
+<x-doc-step number="1" title="Configuration de la plateforme">
 
 **iOS** : Configurez les liens universels dans votre projet Xcode
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Guide de configuration des liens universels Flutter</a>
@@ -940,7 +941,9 @@ Avant d'implementer les liens profonds dans votre application, assurez-vous que 
 **Android** : Configurez les liens d'application dans votre AndroidManifest.xml
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Guide de configuration des liens d'application Flutter</a>
 
-### 2. Definir vos routes
+</x-doc-step>
+
+<x-doc-step number="2" title="Definir vos routes">
 
 Toutes les routes qui doivent etre accessibles via les liens profonds doivent etre enregistrees dans la configuration de votre routeur :
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## Utiliser les liens profonds
 

@@ -96,6 +96,67 @@ Alpine.data('typewriter', (phrases = [], speed = 100) => ({
     }
 }));
 
+// Install bar: after the first Copy, the command morphs into `nylo new <app>`
+// and cycles example app names so devs learn the next command to run.
+Alpine.data('installDemo', (command, appNames = []) => ({
+    copied: false,
+    base: command,
+    appName: '',
+    started: false,
+
+    copy() {
+        window.nyCopyText(command);
+        this.copied = true;
+        setTimeout(() => this.copied = false, 1800);
+
+        if (this.started || appNames.length === 0) return;
+        this.started = true;
+        this.run();
+    },
+
+    wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    async run() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            // No typewriter: swap the command and rotate names in place.
+            await this.wait(1400);
+            this.base = 'nylo new ';
+            for (let i = 0; ; i = (i + 1) % appNames.length) {
+                this.appName = appNames[i];
+                await this.wait(3200);
+            }
+        }
+
+        // Let the "Copied" state land, then backspace the install command.
+        await this.wait(900);
+        while (this.base.length > 0) {
+            this.base = this.base.slice(0, -1);
+            await this.wait(14);
+        }
+        await this.wait(260);
+
+        for (const char of 'nylo new ') {
+            this.base += char;
+            await this.wait(55);
+        }
+
+        for (let i = 0; ; i = (i + 1) % appNames.length) {
+            for (const char of appNames[i]) {
+                this.appName += char;
+                await this.wait(70);
+            }
+            await this.wait(2100);
+            while (this.appName.length > 0) {
+                this.appName = this.appName.slice(0, -1);
+                await this.wait(38);
+            }
+            await this.wait(340);
+        }
+    }
+}));
+
 // Counter animation component for stats
 Alpine.data('counter', (target = 0, duration = 2000) => ({
     count: 0,
@@ -141,6 +202,9 @@ Alpine.data('counter', (target = 0, duration = 2000) => ({
 }));
 
 Alpine.plugin(collapse);
+
+// Inline scripts (e.g. the ⌘K shortcut) reach the stores through this global.
+window.Alpine = Alpine;
 
 // Global theme setter function
 window.setTheme = function(theme) {

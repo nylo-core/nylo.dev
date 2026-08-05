@@ -16,7 +16,7 @@ class AuthenticateGitHubSignatureVerifyWebhook
     public function handle(Request $request, Closure $next): Response
     {
         $xHubSignature256 = $request->header('X-Hub-Signature-256');
-        if (empty($xHubSignature256)) {
+        if (! is_string($xHubSignature256) || $xHubSignature256 === '') {
             abort(403);
         }
 
@@ -29,10 +29,14 @@ class AuthenticateGitHubSignatureVerifyWebhook
         return $next($request);
     }
 
-    private function verifySignature($xHubSignature256)
+    private function verifySignature(string $xHubSignature256): bool
     {
         $body = file_get_contents('php://input');
         $secret = config('project.meta.github_webhook_secret');
+
+        if ($body === false || ! is_string($secret) || $secret === '') {
+            return false;
+        }
 
         return hash_equals('sha256='.hash_hmac('sha256', $body, $secret), $xHubSignature256);
     }

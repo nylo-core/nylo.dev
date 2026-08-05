@@ -21,12 +21,12 @@ Nylo.scheduleOnceDaily("free_daily_coins", () {
 });
 </x-code-highlighter>
 
-                        <p class="text-[18px] text-[#979DA2] mt-2" style="letter-spacing: -0.02em;">{{ __('Schedule tasks to run once or daily in your Flutter application.') }}</p>
-                        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'scheduler']) }}" target="_BLANK" class="inline-flex self-center text-[#6C7379]">
-                            {{ __('Learn more') }} <img src="{{ asset('images/upper_right_arrow.png') }}" class="h-[20px] w-[20px] self-center">
+                        <p class="ny-tab-blurb">{{ __('Schedule tasks to run once or daily in your Flutter application.') }}</p>
+                        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'scheduler']) }}" target="_BLANK" class="ny-tab-link">
+                            {{ __('Learn more') }} <span aria-hidden="true">↗</span>
                         </a>
 
-                        <div class="grid grid-cols-2 gap-5 mt-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
                             @foreach([
                                 [
                                     'title' => __('Schedule Once After Date'),
@@ -37,6 +37,6 @@ Nylo.scheduleOnceDaily("free_daily_coins", () {
                                     'link' => 'schedule-once-daily'
                                 ],
                                 ] as $item)
-                                <a class="bg-[#f9f9f9] font-medium border border-slate-200 hover hover:bg-[#ffffff] py-2 rounded-lg text-center transition-all" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'scheduler']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
+                                <a class="ny-chip justify-center py-2.5" href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $latestVersionOfNylo, 'page' => 'scheduler']) }}#{{ $item['link'] }}" target="_BLANK">{{ $item['title'] }}</a>
                             @endforeach
                         </div>

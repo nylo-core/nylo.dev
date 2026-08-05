@@ -8,12 +8,10 @@ use Illuminate\View\Component;
 
 class OverviewAuthentication extends Component
 {
-    public $latestVersionOfNylo;
-
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(public string $latestVersionOfNylo = '7.x')
     {
         //
     }

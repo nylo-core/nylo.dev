@@ -932,7 +932,8 @@ Deep linking cho phép người dùng điều hướng trực tiếp đến nộ
 
 Trước khi triển khai deep linking, đảm bảo dự án được cấu hình đúng:
 
-### 1. Cấu hình nền tảng
+<x-doc-steps>
+<x-doc-step number="1" title="Cấu hình nền tảng">
 
 **iOS**: Cấu hình universal links trong dự án Xcode
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Hướng dẫn cấu hình Universal Links Flutter</a>
@@ -940,7 +941,9 @@ Trước khi triển khai deep linking, đảm bảo dự án được cấu hì
 **Android**: Thiết lập app links trong AndroidManifest.xml
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Hướng dẫn cấu hình App Links Flutter</a>
 
-### 2. Định nghĩa Routes
+</x-doc-step>
+
+<x-doc-step number="2" title="Định nghĩa Routes">
 
 Tất cả routes có thể truy cập qua deep links phải được đăng ký trong cấu hình router:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## Sử dụng Deep Links
 

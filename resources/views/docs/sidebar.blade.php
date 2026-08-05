@@ -1,88 +1,77 @@
-<ul class="space-y-1">
-    <button id="close-menu" class="flex hidden mb-8 mt-8 items-center text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors duration-150">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z" fill="currentColor"/>
+@php
+    $docVersions = array_keys(config('project.doc-index.versions'));
+@endphp
+
+{{-- Version switcher --}}
+<div class="relative mb-[26px]" x-data="{ open: false }" @click.away="open = false" @keydown.escape="open = false">
+    <button type="button" class="ny-doc-version" @click="open = !open" :aria-expanded="open">
+        <span class="flex items-center gap-2">
+            <span class="ny-doc-version-dot"></span>{{ __('Version') }} {{ $version }}
+        </span>
+        <svg class="w-2.5 h-2.5 ny-c-faint transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
         </svg>
-        <span class="self-center ml-1">{{ __('Close Menu') }}</span>
     </button>
-    
-    @foreach(config('project.doc-index.versions')[$version] as $key => $docLinks)
-    <li x-data="{ open: {{ $key === $section ? 'true' : 'false' }} }" {!! $loop->first ? '' : 'class="mt-2"' !!}>
-        <button 
-            @click="open = !open" 
-            class="flex items-center justify-between w-full py-2 px-3 rounded-lg text-left font-semibold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-150"
-        >
-            <span>{{ __(str($key)->headline()->toString()) }}</span>
-            <svg 
-                class="w-4 h-4 text-slate-400 transition-transform duration-200" 
-                :class="{ 'rotate-90': open }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-            >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-        </button>
 
-        <ul 
-            x-show="open" 
-            x-collapse
-            class="mt-1 space-y-0.5 pl-3"
-        >
-            @foreach($docLinks as $docLink)
-            <li>
-                @php
-                    $isActive = $docLink === $page;
-                @endphp
-                <a class="block py-1.5 px-3 rounded-lg text-sm transition-all duration-150 {!! $isActive ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200' !!}"
-                    href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'page' => $docLink, 'version' => $version]) }}"
-                >
-                    @if (str($docLink)->startsWith('ny'))
-                        {{ str($docLink)->headline()->replace(" ", "") }}
-                    @else
-                        {{ __(str($docLink)->headline()->toString()) }}
-                    @endif
-                </a>
-            </li>
-            @endforeach
-        </ul>
-    </li>
-    @endforeach
+    <div x-show="open" x-cloak
+         x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
+         class="absolute left-0 right-0 top-full mt-1.5 z-30 rounded-[10px] border ny-bd ny-bg py-1 shadow-lg">
+        @foreach($docVersions as $docVersion)
+        <a href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $docVersion, 'page' => 'installation']) }}"
+           class="flex items-center gap-2 px-3 py-2 text-[13.5px] {{ $docVersion === $version ? 'font-semibold ny-c-blue' : 'ny-c-strong hover:ny-c-ink' }}"
+           style="border-radius:7px">
+            <span class="w-1.5 h-1.5 rounded-full flex-none" style="background: {{ $docVersion === $version ? 'var(--ny-cyan)' : 'var(--ny-line)' }}"></span>
+            {{ $docVersion }}
+            @if($docVersion === $latestVersionOfNylo)
+                <span class="ml-auto font-mono text-[10px] tracking-[0.1em] ny-c-muted uppercase">{{ __('latest') }}</span>
+            @endif
+        </a>
+        @endforeach
+    </div>
+</div>
 
-    <li x-data="{ open: false }" class="mt-2">
-        <button 
-            @click="open = !open" 
-            class="flex items-center justify-between w-full py-2 px-3 rounded-lg text-left font-semibold text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-150"
-        >
-            <span>{{ __('Packages') }}</span>
-            <svg 
-                class="w-4 h-4 text-slate-400 transition-transform duration-200" 
-                :class="{ 'rotate-90': open }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-            >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-        </button>
+{{-- Doc sections --}}
+@foreach(config('project.doc-index.versions')[$version] as $sectionKey => $docLinks)
+<div class="ny-doc-section" x-data="{ open: {{ $sectionKey === $section ? 'true' : 'false' }} }">
+    <button type="button" class="ny-doc-group-label" @click="open = !open" :aria-expanded="open">
+        <span>{{ __(str($sectionKey)->headline()->toString()) }}</span>
+        <svg class="w-2.5 h-2.5 transition-transform" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
 
-        <ul 
-            x-show="open" 
-            x-collapse
-            class="mt-1 space-y-0.5 pl-3"
-        >
-            @foreach(config('project.packages-index') as $packageLink)
-            <li>
-                <a target="_BLANK" class="block py-1.5 px-3 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200 transition-all duration-150"
-                    href="https://pub.dev/packages/{{ str($packageLink['link'])->replace('-', '_') }}"
-                >
-                    {{ $packageLink['label'] }}
-                    <svg class="inline-block w-3 h-3 ml-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                    </svg>
-                </a>
-            </li>
-            @endforeach
-        </ul>
-    </li>
-</ul>
+    <div class="ny-doc-group" x-show="open" x-collapse>
+        @foreach($docLinks as $docLink)
+        <a class="ny-doc-link {{ $docLink === $page ? 'ny-doc-link-active' : '' }}"
+           @if($docLink === $page) aria-current="page" @endif
+           href="{{ route('landing.docs', ['locale' => app()->getLocale(), 'page' => $docLink, 'version' => $version]) }}">
+            @if (str($docLink)->startsWith('ny'))
+                {{ str($docLink)->headline()->replace(' ', '') }}
+            @else
+                {{ __(str($docLink)->headline()->toString()) }}
+            @endif
+        </a>
+        @endforeach
+    </div>
+</div>
+@endforeach
+
+{{-- Packages --}}
+<div class="ny-doc-section" x-data="{ open: false }">
+    <button type="button" class="ny-doc-group-label" @click="open = !open" :aria-expanded="open">
+        <span>{{ __('Packages') }}</span>
+        <svg class="w-2.5 h-2.5 transition-transform" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
+
+    <div class="ny-doc-group" x-show="open" x-collapse>
+        @foreach(config('project.packages-index') as $packageLink)
+        <a target="_BLANK" class="ny-doc-link flex items-center gap-1.5"
+           href="https://pub.dev/packages/{{ str($packageLink['link'])->replace('-', '_') }}">
+            {{ $packageLink['label'] }}
+            <span class="text-[10px] ny-c-faint" aria-hidden="true">↗</span>
+        </a>
+        @endforeach
+    </div>
+</div>

@@ -2,20 +2,35 @@
 <html lang="{{ app()->getLocale() }}" x-data x-bind:class="{ 'dark': $store.darkMode.on }">
 @include('includes.head')
 <body class="bg-white dark:bg-slate-900 transition-colors duration-300">
-	@if(Route::current() != null && Route::current()->getName() == 'landing.index')
-	<div class="flex flex-col h-screen">
-	@endif
 	@include('includes.header')
 	@include('components.global-search-modal')
 
-	<main class="flex-1 overflow-y-auto mt-[-82px] pt-[82px]">
+	<main>
 	@yield('content')
 	@include('includes.footer')
 	</main>
-</div>
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script>
+        // Clipboard write with a fallback for non-secure contexts (http:// previews).
+        window.nyCopyText = function (text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            }
+
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } finally {
+                textarea.remove();
+            }
+        };
+
         function copyToClipboard() {
             const code = this.$el.querySelector('code').innerText;
             navigator.clipboard.writeText(code).then(() => {

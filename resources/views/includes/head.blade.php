@@ -19,9 +19,6 @@
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-  {{-- DocSearch CSS --}}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
-
   @env('production')
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('project.meta.ga_id') }}"></script>

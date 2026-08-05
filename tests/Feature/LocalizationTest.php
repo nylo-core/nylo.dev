@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\TestCase;
 
 class LocalizationTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Test that the root URL serves English content directly.
      */

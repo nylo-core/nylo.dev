@@ -932,7 +932,8 @@ Derin baglanti, kullanicilarin URL'ler kullanarak uygulamanizdaki belirli icerik
 
 Uygulamanizda derin baglantiyi uygulamadan once, projenizin duzgun yapilandirildigindan emin olun:
 
-### 1. Platform Yapilandirmasi
+<x-doc-steps>
+<x-doc-step number="1" title="Platform Yapilandirmasi">
 
 **iOS**: Xcode projenizde universal link'leri yapilandirin
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-universal-links#adjust-ios-build-settings" target="_BLANK">Flutter Universal Links Yapilandirma Kilavuzu</a>
@@ -940,7 +941,9 @@ Uygulamanizda derin baglantiyi uygulamadan once, projenizin duzgun yapilandirild
 **Android**: AndroidManifest.xml dosyanizda uygulama baglantilarini ayarlayin
 - <a href="https://docs.flutter.dev/cookbook/navigation/set-up-app-links#2-modify-androidmanifest-xml" target="_BLANK">Flutter Uygulama Baglantilari Yapilandirma Kilavuzu</a>
 
-### 2. Rotalarinizi Tanimlayin
+</x-doc-step>
+
+<x-doc-step number="2" title="Rotalarinizi Tanimlayin">
 
 Derin baglantilar araciligiyla erisilebilir olmasi gereken tum rotalar, router yapilandirmanizda kayitli olmalidir:
 
@@ -956,6 +959,8 @@ appRouter() => nyRoutes((router) {
   router.add(HotelBookingPage.path);
 });
 ```
+</x-doc-step>
+</x-doc-steps>
 
 ## Derin Baglantilari Kullanma
 

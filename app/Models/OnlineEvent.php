@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OnlineEvent extends Model
 {
+    /** @use HasFactory<\Database\Factories\OnlineEventFactory> */
     use HasFactory;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'title',
@@ -25,7 +26,7 @@ class OnlineEvent extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'start_date' => 'datetime',

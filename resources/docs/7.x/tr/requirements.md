@@ -13,6 +13,8 @@
 
 ## Sistem Gereksinimleri
 
+<x-doc-strip label="Kısa bakış" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Tüm Flutter platformları" linkText="Flutter'ı yükle" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 a&#351;a&#287;&#305;daki minimum s&#252;r&#252;mleri gerektirir:
 
 | Gereksinim | Minimum S&#252;r&#252;m |

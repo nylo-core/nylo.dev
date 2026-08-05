@@ -7,41 +7,47 @@
 - [Menjalankan Proyek](#running-the-project "Menjalankan Proyek")
 - [Metro CLI](#metro-cli "Metro CLI")
 
-
 <div id="install"></div>
+
+Tiga perintah membawa Anda dari folder kosong ke aplikasi Flutter yang berjalan, dengan routing, networking, tema, dan pembuatan kode yang sudah disiapkan.
+
+<x-doc-strip label="Sebelum memulai" items="Flutter SDK terinstal, Dart 3" linkText="Persyaratan lengkap" linkHref="/id/docs/{{ $version }}/requirements" />
 
 ## Instalasi
 
-### 1. Instal nylo_installer secara global
+Jalankan perintah berikut secara berurutan. Setiap perintah aman untuk dijalankan ulang.
+
+<x-doc-steps>
+<x-doc-step number="1" title="Instal Nylo CLI secara global">
+Ini menginstal alat CLI {{ config('app.name') }} secara global di sistem Anda.
 
 ``` bash
 dart pub global activate nylo_installer
 ```
+</x-doc-step>
 
-Ini menginstal alat CLI {{ config('app.name') }} secara global di sistem Anda.
-
-### 2. Buat proyek baru
+<x-doc-step number="2" title="Buat proyek baru">
+Perintah ini meng-clone template {{ config('app.name') }}, mengkonfigurasi proyek dengan nama aplikasi Anda, dan menginstal semua dependensi secara otomatis.
 
 ``` bash
 nylo new my_app
 ```
+</x-doc-step>
 
-Perintah ini meng-clone template {{ config('app.name') }}, mengkonfigurasi proyek dengan nama aplikasi Anda, dan menginstal semua dependensi secara otomatis.
-
-### 3. Siapkan alias Metro CLI
+<x-doc-step number="3" title="Siapkan alias Metro">
+Ini mengkonfigurasi perintah `metro` untuk proyek Anda, memungkinkan Anda menggunakan perintah Metro CLI tanpa sintaks `dart run` lengkap.
 
 ``` bash
 cd my_app
 nylo init
 ```
+</x-doc-step>
+</x-doc-steps>
 
-Ini mengkonfigurasi perintah `metro` untuk proyek Anda, memungkinkan Anda menggunakan perintah Metro CLI tanpa sintaks `dart run` lengkap.
-
-Setelah instalasi, Anda akan memiliki struktur proyek Flutter lengkap dengan:
-- Routing dan navigasi yang sudah dikonfigurasi
-- Boilerplate layanan API
-- Pengaturan tema dan lokalisasi
-- Metro CLI untuk pembuatan kode
+<x-doc-panel title="Yang Anda dapatkan" items="Routing dan navigasi yang sudah dikonfigurasi
+Boilerplate layanan API
+Pengaturan tema dan lokalisasi
+Metro CLI untuk pembuatan kode" />
 
 
 <div id="running-the-project"></div>
@@ -50,35 +56,39 @@ Setelah instalasi, Anda akan memiliki struktur proyek Flutter lengkap dengan:
 
 Proyek {{ config('app.name') }} berjalan seperti aplikasi Flutter standar pada umumnya.
 
-### Menggunakan Terminal
+<x-doc-tabs tabs="Terminal, Android Studio, VS Code">
+<x-doc-tab label="Terminal">
 
 ``` bash
 flutter run
 ```
 
-### Menggunakan IDE
-
-- **Android Studio**: <a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Running and debugging</a>
-- **VS Code**: <a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Run app without breakpoints</a>
-
 Jika build berhasil, aplikasi akan menampilkan layar landing default {{ config('app.name') }}.
+</x-doc-tab>
+
+<x-doc-tab label="Android Studio">
+Buka folder proyek, pilih perangkat dari pemilih target, lalu tekan **Run**.
+
+<a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Dokumentasi Flutter: menjalankan dan debugging ↗</a>
+</x-doc-tab>
+
+<x-doc-tab label="VS Code">
+Buka folder proyek, lalu jalankan **Debug: Start Without Debugging** dari command palette.
+
+<a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Dokumentasi Flutter: jalankan tanpa breakpoint ↗</a>
+</x-doc-tab>
+</x-doc-tabs>
 
 
 <div id="metro-cli"></div>
 
 ## Metro CLI
 
-{{ config('app.name') }} menyertakan alat CLI bernama **Metro** untuk menghasilkan file proyek.
+Metro membuat file proyek untuk Anda. Jalankan tanpa argumen untuk melihat menu, atau panggil perintah secara langsung.
 
-### Menjalankan Metro
+``` plaintext
+$ metro
 
-``` bash
-metro
-```
-
-Ini menampilkan menu Metro:
-
-``` bash
 Metro - Nylo's Companion to Build Flutter apps by Anthony Gordon
 
 Usage:
@@ -113,29 +123,34 @@ All commands:
   make:env
 ```
 
-### Referensi Perintah Metro
+### Referensi perintah
 
-| Perintah | Deskripsi |
-|----------|-----------|
-| `make:page` | Buat halaman baru |
-| `make:stateful_widget` | Buat widget stateful |
-| `make:stateless_widget` | Buat widget stateless |
-| `make:state_managed_widget` | Buat widget yang dikelola state |
-| `make:navigation_hub` | Buat navigation hub (navigasi bawah) |
-| `make:journey_widget` | Buat widget journey untuk navigation hub |
-| `make:bottom_sheet_modal` | Buat modal bottom sheet |
-| `make:button` | Buat widget tombol kustom |
-| `make:form` | Buat form dengan validasi |
-| `make:model` | Buat kelas model |
-| `make:provider` | Buat provider |
-| `make:api_service` | Buat layanan API |
-| `make:controller` | Buat controller |
-| `make:event` | Buat event |
-| `make:route_guard` | Buat route guard |
-| `make:config` | Buat file konfigurasi |
-| `make:interceptor` | Buat interceptor jaringan |
-| `make:command` | Buat perintah Metro kustom |
-| `make:env` | Generate konfigurasi environment dari .env |
+Setiap perintah menerima nama, misalnya `metro make:page settings_page`
+
+<x-doc-commands title="Perintah widget" rows="
+metro make:page | Buat halaman baru
+metro make:stateful_widget | Buat widget stateful
+metro make:stateless_widget | Buat widget stateless
+metro make:state_managed_widget | Buat widget yang dikelola state
+metro make:navigation_hub | Buat navigation hub (navigasi bawah)
+metro make:journey_widget | Buat widget journey untuk navigation hub
+metro make:bottom_sheet_modal | Buat modal bottom sheet
+metro make:button | Buat widget tombol kustom
+metro make:form | Buat form dengan validasi
+" />
+
+<x-doc-commands title="Perintah helper" rows="
+metro make:model | Buat kelas model
+metro make:provider | Buat provider
+metro make:api_service | Buat layanan API
+metro make:controller | Buat controller
+metro make:event | Buat event
+metro make:route_guard | Buat route guard
+metro make:config | Buat file konfigurasi
+metro make:interceptor | Buat interceptor jaringan
+metro make:command | Buat perintah Metro kustom
+metro make:env | Generate konfigurasi environment dari .env
+" />
 
 ### Contoh Penggunaan
 

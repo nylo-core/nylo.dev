@@ -30,7 +30,6 @@ Route::prefix('{locale}')
 
 // Non-localized routes
 Route::controller(LandingController::class)->group(function () {
-    Route::get('download', 'download')->name('landing.download')->middleware('throttle:5,1');
     Route::get('tutorials/{version}/{page?}', 'tutorials')->where(['version' => '[\w.]+', 'page' => '[\w-]+'])->name('tutorials.index');
     Route::get('api/docs/{version}/{page?}', 'apiDocs')->where(['version' => '[\w.]+', 'page' => '[\w-]+'])->name('landing.api.docs');
     Route::get('learn-more/v7', 'learnMoreV7')->name('learn-more.v7');
@@ -47,6 +46,8 @@ Route::get('docs/{version}/{page?}', function (string $version, string $page = '
 Route::redirect('/docs', '/docs/'.array_key_last(config('project.doc-index')['versions']).'/installation', 301);
 
 Route::redirect('/learn-more/v6', '/en/', 301);
+
+Route::redirect('/download', 'https://github.com/nylo-core/nylo/releases', 301);
 
 Route::get('resources', [LandingController::class, 'resources'])->name('landing.resources');
 

@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('latestVersionOfNylo', $latestVersionOfNylo);
         });
 
-        view()->composer('includes.header', function ($view) {
+        view()->composer(['includes.header', 'pages.index', 'layouts.app-docs'], function ($view) {
             $githubService = app(GitHubService::class);
             $view->with('githubStars', $githubService->getFormattedStars('nylo'));
         });

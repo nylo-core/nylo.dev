@@ -13,6 +13,8 @@
 
 ## システム要件
 
+<x-doc-strip label="概要" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Flutter の全プラットフォーム" linkText="Flutter をインストール" linkHref="https://docs.flutter.dev/get-started/install" />
+
 {{ config('app.name') }} v7 には以下の最低バージョンが必要です:
 
 | 要件 | 最低バージョン |

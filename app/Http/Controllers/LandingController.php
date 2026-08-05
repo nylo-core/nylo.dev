@@ -3,42 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\DocService;
-use App\Http\Services\PackageService;
+use App\Http\Services\LandingContentService;
 use App\Http\Services\SeoService;
-use App\Models\OnlineEvent;
 use Illuminate\Support\Str;
 
-/**
- * Class LandingController
- *
- * @property SeoService $seoService
- * @property DocService $docService
- * @property PackageService $packageService
- */
 class LandingController extends Controller
 {
     public function __construct(
-        SeoService $seoService,
-        DocService $docService,
-        PackageService $packageService
-    ) {
-        $this->seoService = $seoService;
-        $this->docService = $docService;
-        $this->packageService = $packageService;
-    }
-
-    /**
-     * Download the latest version of Nylo.
-     *
-     * @param  string  $project
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function download($project = 'nylo-core/nylo')
-    {
-        $downloadUrl = $this->docService->downloadFile($project);
-
-        return redirect($downloadUrl);
-    }
+        private readonly SeoService $seoService,
+        private readonly DocService $docService,
+        private readonly LandingContentService $landingContent
+    ) {}
 
     /**
      * Index page for Nylo.
@@ -49,16 +24,18 @@ class LandingController extends Controller
     {
         $this->seoService->setTitle(config('app.name').' - Powerful Flutter Micro-Framework');
 
-        $event = cache()->remember('event', now()->addHours(1), function () {
-            $events = OnlineEvent::where('end_date', '>', now())->get();
-            if (empty($events)) {
-                return null;
-            }
+        $version = $this->docService->getLastestVersionNylo();
 
-            return $events->first();
-        });
-
-        return view('pages.index', compact('event'));
+        return view('pages.index', [
+            'event' => $this->landingContent->currentEvent(),
+            'installCommand' => 'dart pub global activate nylo_installer',
+            'docsUrl' => $this->landingContent->docsUrls($version),
+            'pillars' => $this->landingContent->pillars($version),
+            'extraFeatures' => $this->landingContent->extraFeatures($version),
+            'metroHighlights' => $this->landingContent->metroHighlights(),
+            'explorerTabs' => $this->landingContent->explorerTabs(),
+            'testimonials' => $this->landingContent->testimonials(),
+        ]);
     }
 
     /**
@@ -70,7 +47,7 @@ class LandingController extends Controller
     {
         $this->seoService->setTitle(__('Privacy policy'));
 
-        $content = $this->loadLegalMarkdown('privacy-policy');
+        $content = $this->docService->loadLegalMarkdown('privacy-policy');
 
         return view('pages.privacy-policy', compact('content'));
     }
@@ -84,24 +61,9 @@ class LandingController extends Controller
     {
         $this->seoService->setTitle(__('Terms and conditions'));
 
-        $content = $this->loadLegalMarkdown('terms-and-conditions');
+        $content = $this->docService->loadLegalMarkdown('terms-and-conditions');
 
         return view('pages.terms-and-conditions', compact('content'));
-    }
-
-    /**
-     * Load a legal markdown document based on current locale.
-     */
-    protected function loadLegalMarkdown(string $document): string
-    {
-        $locale = app()->getLocale();
-        $path = resource_path("legal/{$locale}/{$document}.md");
-
-        if (! file_exists($path)) {
-            $path = resource_path("legal/en/{$document}.md");
-        }
-
-        return Str::markdown(file_get_contents($path));
     }
 
     /**
@@ -109,7 +71,7 @@ class LandingController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function tutorials($version = null, $page = 'introduction')
+    public function tutorials(?string $version = null, string $page = 'introduction')
     {
         $this->seoService->setTitle('Tutorials');
 
@@ -132,7 +94,7 @@ class LandingController extends Controller
      *
      * @param  string  $version
      * @param  string  $page
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function docs(?string $locale = null, $version = null, $page = 'installation')
     {

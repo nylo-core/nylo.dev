@@ -13,10 +13,10 @@
 
 ## Install
 
-You can either download {{ config('app.name') }} <a href="{{ route('landing.download') }}">here</a> or clone the git repository using the below command.
+You can either download {{ config('app.name') }} v6 <a href="https://github.com/nylo-core/nylo/archive/refs/heads/6.x.zip">here</a> or clone the git repository using the below command.
 
 ```bash
-git clone https://github.com/nylo-core/nylo.git nylo_app
+git clone -b 6.x https://github.com/nylo-core/nylo.git nylo_app
 ```
 
 > <b>Note:</b> run `flutter pub get` when opening the project for the first time to fetch all dependencies.

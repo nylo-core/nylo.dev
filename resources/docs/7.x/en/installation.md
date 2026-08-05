@@ -10,38 +10,45 @@
 
 <div id="install"></div>
 
+Three commands take you from an empty folder to a running Flutter app with routing, networking, themes and code generation already wired up.
+
+<x-doc-strip label="Before you start" items="Flutter SDK installed, Dart 3" linkText="Full requirements" linkHref="/docs/{{ $version }}/requirements" />
+
 ## Install
 
-### 1. Install nylo_installer globally
+Run these in order. Each one is safe to re-run.
+
+<x-doc-steps>
+<x-doc-step number="1" title="Install the Nylo CLI globally">
+Puts the `nylo` command on your system.
 
 ``` bash
 dart pub global activate nylo_installer
 ```
+</x-doc-step>
 
-This installs the {{ config('app.name') }} CLI tool globally on your system.
-
-### 2. Create a new project
+<x-doc-step number="2" title="Create a new project">
+Clones the {{ config('app.name') }} template, renames it to your app, and installs dependencies.
 
 ``` bash
 nylo new my_app
 ```
+</x-doc-step>
 
-This command clones the {{ config('app.name') }} template, configures the project with your app name, and installs all dependencies automatically.
-
-### 3. Set up Metro CLI alias
+<x-doc-step number="3" title="Set up the Metro alias">
+Lets you type `metro` instead of the full `dart run` syntax.
 
 ``` bash
 cd my_app
 nylo init
 ```
+</x-doc-step>
+</x-doc-steps>
 
-This configures the `metro` command for your project, allowing you to use Metro CLI commands without the full `dart run` syntax.
-
-After installation, you'll have a complete Flutter project structure with:
-- Pre-configured routing and navigation
-- API service boilerplate
-- Theme and localization setup
-- Metro CLI for code generation
+<x-doc-panel title="What you get" items="Pre-configured routing and navigation
+API service boilerplate
+Theme and localization setup
+Metro CLI for code generation" />
 
 
 <div id="running-the-project"></div>
@@ -50,35 +57,39 @@ After installation, you'll have a complete Flutter project structure with:
 
 {{ config('app.name') }} projects run like any standard Flutter app.
 
-### Using the Terminal
+<x-doc-tabs tabs="Terminal, Android Studio, VS Code">
+<x-doc-tab label="Terminal">
 
 ``` bash
 flutter run
 ```
 
-### Using an IDE
+On a successful build the app opens on {{ config('app.name') }}'s default landing screen.
+</x-doc-tab>
 
-- **Android Studio**: <a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Running and debugging</a>
-- **VS Code**: <a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Run app without breakpoints</a>
+<x-doc-tab label="Android Studio">
+Open the project folder, pick a device from the target selector, then press **Run**.
 
-If the build is successful, the app will display {{ config('app.name') }}'s default landing screen.
+<a href="https://docs.flutter.dev/tools/android-studio#running-and-debugging" target="_BLANK">Flutter docs: running and debugging ↗</a>
+</x-doc-tab>
+
+<x-doc-tab label="VS Code">
+Open the project folder, then run **Debug: Start Without Debugging** from the command palette.
+
+<a href="https://docs.flutter.dev/tools/vs-code#run-app-without-breakpoints" target="_BLANK">Flutter docs: run app without breakpoints ↗</a>
+</x-doc-tab>
+</x-doc-tabs>
 
 
 <div id="metro-cli"></div>
 
 ## Metro CLI
 
-{{ config('app.name') }} includes a CLI tool called **Metro** for generating project files.
+Metro generates project files for you. Run it bare to see the menu, or call a command directly.
 
-### Running Metro
+``` plaintext
+$ metro
 
-``` bash
-metro
-```
-
-This displays the Metro menu:
-
-``` bash
 Metro - Nylo's Companion to Build Flutter apps by Anthony Gordon
 
 Usage:
@@ -113,31 +124,36 @@ All commands:
   make:env
 ```
 
-### Metro Commands Reference
+### Command reference
 
-| Command | Description |
-|---------|-------------|
-| `make:page` | Create a new page |
-| `make:stateful_widget` | Create a stateful widget |
-| `make:stateless_widget` | Create a stateless widget |
-| `make:state_managed_widget` | Create a state-managed widget |
-| `make:navigation_hub` | Create a navigation hub (bottom nav) |
-| `make:journey_widget` | Create a journey widget for navigation hub |
-| `make:bottom_sheet_modal` | Create a bottom sheet modal |
-| `make:button` | Create a custom button widget |
-| `make:form` | Create a form with validation |
-| `make:model` | Create a model class |
-| `make:provider` | Create a provider |
-| `make:api_service` | Create an API service |
-| `make:controller` | Create a controller |
-| `make:event` | Create an event |
-| `make:route_guard` | Create a route guard |
-| `make:config` | Create a config file |
-| `make:interceptor` | Create a network interceptor |
-| `make:command` | Create a custom Metro command |
-| `make:env` | Generate environment config from .env |
+Every command takes a name, e.g. `metro make:page settings_page`
 
-### Example Usage
+<x-doc-commands title="Widget commands" rows="
+metro make:page | Create a new page
+metro make:stateful_widget | Create a stateful widget
+metro make:stateless_widget | Create a stateless widget
+metro make:state_managed_widget | Create a state-managed widget
+metro make:navigation_hub | Create a navigation hub (bottom nav)
+metro make:journey_widget | Create a journey widget for a navigation hub
+metro make:bottom_sheet_modal | Create a bottom sheet modal
+metro make:button | Create a custom button widget
+metro make:form | Create a form with validation
+" />
+
+<x-doc-commands title="Helper commands" rows="
+metro make:model | Create a model class
+metro make:provider | Create a provider
+metro make:api_service | Create an API service
+metro make:controller | Create a controller
+metro make:event | Create an event
+metro make:route_guard | Create a route guard
+metro make:config | Create a config file
+metro make:interceptor | Create a network interceptor
+metro make:command | Create a custom Metro command
+metro make:env | Generate environment config from .env
+" />
+
+### Example usage
 
 ``` bash
 # Create a new page

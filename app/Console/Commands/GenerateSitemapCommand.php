@@ -63,7 +63,8 @@ class GenerateSitemapCommand extends Command
      */
     private function addStaticPages(Sitemap $sitemap): void
     {
-        $locales = config('localization.supported_locales', ['en']);
+        /** @var array<string, array<string, string>> $locales */
+        $locales = config('localization.supported_locales', ['en' => []]);
 
         // Root homepage (non-localized)
         $sitemap->add(Url::create('/')->setPriority(0.95));
@@ -87,6 +88,7 @@ class GenerateSitemapCommand extends Command
      */
     private function addDocumentationPages(Sitemap $sitemap, string $latestVersion): bool
     {
+        /** @var array{versions?: array<string, array<string, array<int, string>>>}|null $docs */
         $docs = config('project.doc-index');
 
         if (empty($docs['versions'])) {
@@ -94,7 +96,10 @@ class GenerateSitemapCommand extends Command
         }
 
         $added = false;
-        $locales = array_keys(config('localization.supported_locales', ['en' => []]));
+
+        /** @var array<string, array<string, string>> $supportedLocales */
+        $supportedLocales = config('localization.supported_locales', ['en' => []]);
+        $locales = array_keys($supportedLocales);
 
         foreach ($docs['versions'] as $version => $versionLinks) {
             if ($version !== $latestVersion) {
@@ -161,6 +166,7 @@ class GenerateSitemapCommand extends Command
      */
     private function addTutorialPages(Sitemap $sitemap, string $latestVersion): bool
     {
+        /** @var array{versions?: array<string, array<string, array<int, array{label: string, link: string}>>>}|null $docsTutorials */
         $docsTutorials = config('project.doc-tutorials');
 
         if (empty($docsTutorials['versions'])) {

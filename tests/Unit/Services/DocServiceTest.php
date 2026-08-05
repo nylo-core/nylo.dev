@@ -3,9 +3,7 @@
 namespace Tests\Unit\Services;
 
 use App\Http\Services\DocService;
-use App\Models\Download;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class DocServiceTest extends TestCase
@@ -204,52 +202,23 @@ class DocServiceTest extends TestCase
     }
 
     /**
-     * Test downloadFile returns zipball URL for valid project.
+     * Test loadLegalMarkdown renders a legal document as HTML.
      */
-    public function test_download_file_returns_zipball_url(): void
+    public function test_load_legal_markdown_returns_html(): void
     {
-        Http::fake([
-            'api.github.com/repos/nylo-core/nylo/releases/latest' => Http::response([
-                'name' => 'v7.0.0',
-                'zipball_url' => 'https://github.com/nylo-core/nylo/zipball/v7.0.0',
-            ], 200),
-        ]);
+        $html = $this->docService->loadLegalMarkdown('privacy-policy', 'en');
 
-        $url = $this->docService->downloadFile('nylo-core/nylo');
-
-        $this->assertEquals('https://github.com/nylo-core/nylo/zipball/v7.0.0', $url);
+        $this->assertNotEmpty($html);
+        $this->assertStringContainsString('<p', $html);
     }
 
     /**
-     * Test downloadFile creates download record.
+     * Test loadLegalMarkdown falls back to English for unknown locales.
      */
-    public function test_download_file_creates_download_record(): void
+    public function test_load_legal_markdown_falls_back_to_english(): void
     {
-        Http::fake([
-            'api.github.com/repos/nylo-core/nylo/releases/latest' => Http::response([
-                'name' => 'v7.0.0',
-                'zipball_url' => 'https://github.com/nylo-core/nylo/zipball/v7.0.0',
-            ], 200),
-        ]);
+        $fallback = $this->docService->loadLegalMarkdown('privacy-policy', 'xx');
 
-        $this->assertDatabaseCount('downloads', 0);
-
-        $this->docService->downloadFile('nylo-core/nylo');
-
-        $this->assertDatabaseCount('downloads', 1);
-        $this->assertDatabaseHas('downloads', [
-            'project' => 'nylo-core/nylo',
-            'version' => 'v7.0.0',
-        ]);
-    }
-
-    /**
-     * Test downloadFile aborts for invalid project.
-     */
-    public function test_download_file_aborts_for_invalid_project(): void
-    {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-
-        $this->docService->downloadFile('invalid/project');
+        $this->assertEquals($this->docService->loadLegalMarkdown('privacy-policy', 'en'), $fallback);
     }
 }

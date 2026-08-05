@@ -6,17 +6,15 @@ use Illuminate\View\Component;
 
 class CodeHighlighter extends Component
 {
-    public $language;
+    public string $language;
 
-    public $highlightedCode;
+    public string $title;
 
-    public $title;
+    public string $class;
 
-    public $class;
+    public ?string $header = null;
 
-    public $header;
-
-    public function __construct($language = 'dart', $class = '', $title = '')
+    public function __construct(string $language = 'dart', string $class = '', string $title = '')
     {
         $this->language = $language;
         $this->title = $title;
@@ -28,7 +26,7 @@ class CodeHighlighter extends Component
         return view('components.code-highlighter');
     }
 
-    public function highlightCode($code)
+    public function highlightCode(string $code): string
     {
         $code = htmlspecialchars($code);
 

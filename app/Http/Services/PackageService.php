@@ -20,7 +20,7 @@ class PackageService
     /**
      * Get the resource meta data.
      *
-     * @return array
+     * @return array<string, array{repository: string, version: string, organization: string, release_note_url: string, repository_url: string}>
      */
     public function getResourceMetaData()
     {
