@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\DocService;
 use App\Http\Services\LandingContentService;
+use App\Http\Services\LlmsTxtService;
 use App\Http\Services\SeoService;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class LandingController extends Controller
@@ -12,7 +14,8 @@ class LandingController extends Controller
     public function __construct(
         private readonly SeoService $seoService,
         private readonly DocService $docService,
-        private readonly LandingContentService $landingContent
+        private readonly LandingContentService $landingContent,
+        private readonly LlmsTxtService $llmsTxtService
     ) {}
 
     /**
@@ -35,6 +38,16 @@ class LandingController extends Controller
             'metroHighlights' => $this->landingContent->metroHighlights(),
             'explorerTabs' => $this->landingContent->explorerTabs(),
             'testimonials' => $this->landingContent->testimonials(),
+        ]);
+    }
+
+    /**
+     * llms.txt index, giving AI agents a curated map of the documentation.
+     */
+    public function llmsTxt(): Response
+    {
+        return response($this->llmsTxtService->generate(), 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
         ]);
     }
 

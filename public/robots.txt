@@ -2,3 +2,6 @@ User-agent: *
 Disallow:
 
 Sitemap: https://nylo.dev/sitemap.xml
+
+# Curated documentation index for AI agents (https://llmstxt.org)
+Llms: https://nylo.dev/llms.txt

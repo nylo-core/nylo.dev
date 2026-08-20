@@ -16,6 +16,9 @@ Route::get('en/docs/{version}/{page?}', function (string $version, string $page 
     return redirect("/docs/{$version}/{$page}", 301);
 })->where(['version' => '[\w.]+', 'page' => '[\w-]+']);
 
+// llms.txt index for AI agents (https://llmstxt.org)
+Route::get('llms.txt', [LandingController::class, 'llmsTxt'])->name('landing.llms-txt');
+
 // Localized landing pages
 Route::prefix('{locale}')
     ->middleware('locale')

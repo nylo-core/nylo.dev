@@ -18,4 +18,6 @@ return [
     'algolia_index_name' => env('ALGOLIA_INDEX_NAME'),
 
     'github_stars_cache_minutes' => env('GITHUB_STARS_CACHE_MINUTES', 60),
+
+    'llms_txt_cache_minutes' => env('LLMS_TXT_CACHE_MINUTES', 60),
 ];
