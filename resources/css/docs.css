@@ -149,7 +149,7 @@
     background: none;
     border: 0;
     cursor: pointer;
-    font: 700 10.5px/1 'JetBrains Mono', monospace;
+    font: 700 10.5px/1 'DM Sans', sans-serif;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--ny-muted);
