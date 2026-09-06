@@ -8,6 +8,8 @@
 - [Struktur Perintah](#command-structure)
 - [Menjalankan Perintah](#running-commands)
 - [Registri Perintah](#command-registry)
+- [Perintah Paket](#package-commands)
+  - [Menyertakan Perintah dalam Paket](#shipping-commands-in-a-package)
 - [Opsi dan Flag](#options-and-flags)
   - [Menambahkan Opsi](#adding-options)
   - [Menambahkan Flag](#adding-flags)
@@ -158,6 +160,111 @@ Setiap entri memiliki:
 | `name` | Nama perintah (digunakan setelah prefiks kategori) |
 | `category` | Kategori perintah (misalnya `app`, `project`) |
 | `script` | File Dart di `lib/app/commands/` |
+
+<div id="package-commands"></div>
+
+## Perintah Paket
+
+Paket dapat menyertakan perintah Metro untuk developer yang menginstalnya -- misalnya perintah `install` yang membuat scaffold konfigurasi yang dibutuhkan sebuah paket. Ketika paket yang menjadi dependensi proyek Anda berisi file `metro_commands.json`, Metro akan menemukan perintahnya secara otomatis; tidak ada yang perlu didaftarkan di proyek Anda. Tambahkan paket ke `pubspec.yaml` Anda, jalankan `flutter pub get`, dan perintahnya akan muncul di menu `metro` di bawah nama paket tersebut:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+Jalankan seperti perintah lainnya:
+
+```bash
+metro analytics:install
+```
+
+Perintah bawaan selalu diprioritaskan, kemudian perintah di `commands.json` proyek Anda, lalu paket-paket secara alfabetis. Jika sebuah perintah paket memiliki `category:name` yang sama dengan perintah yang sudah ada, Metro akan melewatinya dan menampilkan peringatan yang menyebutkan keduanya.
+
+> **Catatan:** Perintah paket menjalankan kode paket tersebut di komputer Anda, seperti dependensi apa pun yang Anda tambahkan. Menu `metro` menunjukkan paket mana yang menjadi asal setiap perintah.
+
+<div id="shipping-commands-in-a-package"></div>
+
+### Menyertakan Perintah dalam Paket
+
+Untuk menyertakan perintah dalam paket yang Anda kelola, letakkan setiap perintah di direktori `bin/` milik paket dan daftarkan di file `metro_commands.json` pada root paket, di sebelah `pubspec.yaml`:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| Field | Deskripsi |
+|-------|-----------|
+| `name` | Nama perintah (digunakan setelah prefiks kategori) |
+| `category` | Kategori perintah. Default-nya adalah nama paket |
+| `script` | File Dart di direktori `bin/` milik paket yang menjalankan perintah |
+| `description` | Opsional. Ringkasan satu baris yang ditampilkan di menu `metro` |
+
+Perintah itu sendiri ditulis persis seperti perintah proyek: ia meng-extend `NyCustomCommand` dan mengimpor `ny_cli.dart`, sehingga paket Anda memerlukan `nylo_framework` sebagai dependensi. Perintah `install` ini membuat scaffold file konfigurasi ke dalam proyek developer dan menambahkan key yang dibacanya ke `.env` mereka:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro menjalankan perintah sebagai `dart run <package>:<executable>` dari root proyek developer, yang berarti:
+
+- Helper seperti `scaffold()`, `appendFile()`, `addPackage()`, dan `commandsPath` beroperasi pada aplikasi developer, bukan pada paket Anda.
+- Impor diselesaikan melalui proyek developer, sehingga `nylo_framework` adalah versi yang menjadi dependensi aplikasi mereka. Paket Anda tidak pernah dimodifikasi.
+- Script harus berupa file langsung di dalam `bin/` -- direktori bertingkat tidak didukung.
+
+Pilih kategori yang spesifik untuk paket Anda agar tidak bertabrakan dengan perintah milik developer sendiri. Perintah paket dapat ditemukan oleh Metro mulai {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) ke atas.
 
 <div id="options-and-flags"></div>
 

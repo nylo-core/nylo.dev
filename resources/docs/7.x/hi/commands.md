@@ -8,6 +8,8 @@
 - [कमांड स्ट्रक्चर](#command-structure)
 - [कमांड्स चलाना](#running-commands)
 - [कमांड रजिस्ट्री](#command-registry)
+- [पैकेज कमांड्स](#package-commands)
+  - [एक पैकेज में कमांड्स शिप करना](#shipping-commands-in-a-package)
 - [ऑप्शन्स और फ्लैग्स](#options-and-flags)
   - [ऑप्शन्स जोड़ना](#adding-options)
   - [फ्लैग्स जोड़ना](#adding-flags)
@@ -158,6 +160,111 @@ metro app:current_time --help
 | `name` | कमांड का नाम (कैटेगरी प्रीफिक्स के बाद उपयोग किया जाता है) |
 | `category` | कमांड की कैटेगरी (जैसे `app`, `project`) |
 | `script` | `lib/app/commands/` में Dart फाइल |
+
+<div id="package-commands"></div>
+
+## पैकेज कमांड्स
+
+पैकेज उन डेवलपर्स के लिए Metro कमांड्स शिप कर सकते हैं जो उन्हें इंस्टॉल करते हैं -- उदाहरण के लिए एक `install` कमांड जो पैकेज को जरूरी कॉन्फ़िग स्कैफोल्ड करता है। जब आपका प्रोजेक्ट जिस पैकेज पर निर्भर करता है उसमें एक `metro_commands.json` फाइल होती है, तो Metro स्वचालित रूप से इसके कमांड्स को खोज लेता है; आपके प्रोजेक्ट में कुछ भी रजिस्टर करने की आवश्यकता नहीं है। पैकेज को अपनी `pubspec.yaml` में जोड़ें, `flutter pub get` चलाएँ, और इसके कमांड्स `metro` मेनू में पैकेज के नाम के अंतर्गत दिखाई देंगे:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+इन्हें किसी भी अन्य कमांड की तरह चलाएँ:
+
+```bash
+metro analytics:install
+```
+
+बिल्ट-इन कमांड्स को हमेशा प्राथमिकता मिलती है, फिर आपके प्रोजेक्ट की `commands.json` में मौजूद कमांड्स को, फिर पैकेजेज़ को वर्णानुक्रम में। अगर किसी पैकेज कमांड का `category:name` पहले से मौजूद किसी कमांड जैसा ही है, तो Metro इसे स्किप कर देता है और दोनों पक्षों का नाम लेते हुए एक चेतावनी प्रिंट करता है।
+
+> **नोट:** एक पैकेज कमांड आपकी मशीन पर पैकेज का कोड चलाता है, ठीक वैसे ही जैसे कोई भी डिपेंडेंसी जो आप जोड़ते हैं। `metro` मेनू दिखाता है कि हर कमांड किस पैकेज से आया है।
+
+<div id="shipping-commands-in-a-package"></div>
+
+### एक पैकेज में कमांड्स शिप करना
+
+अपने द्वारा मेंटेन किए जा रहे पैकेज के साथ कमांड्स शिप करने के लिए, हर कमांड को पैकेज की `bin/` डायरेक्टरी में रखें और इसे पैकेज के रूट में, `pubspec.yaml` के बगल में, एक `metro_commands.json` फाइल में सूचीबद्ध करें:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| फील्ड | विवरण |
+|-------|-------------|
+| `name` | कमांड का नाम (कैटेगरी प्रीफिक्स के बाद उपयोग किया जाता है) |
+| `category` | कमांड की कैटेगरी। डिफ़ॉल्ट रूप से पैकेज का नाम |
+| `script` | पैकेज की `bin/` डायरेक्टरी में Dart फाइल जो कमांड चलाती है |
+| `description` | वैकल्पिक। `metro` मेनू में दिखाया जाने वाला एक-पंक्ति सारांश |
+
+कमांड खुद बिल्कुल प्रोजेक्ट कमांड की तरह लिखा जाता है: यह `NyCustomCommand` को एक्सटेंड करता है और `ny_cli.dart` इम्पोर्ट करता है, इसलिए आपके पैकेज को `nylo_framework` को डिपेंडेंसी के रूप में चाहिए होगा। यह `install` कमांड डेवलपर के प्रोजेक्ट में एक कॉन्फ़िग फाइल स्कैफोल्ड करता है और जो key यह पढ़ता है उसे उनके `.env` में जोड़ देता है:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro कमांड को डेवलपर के प्रोजेक्ट के रूट से `dart run <package>:<executable>` के रूप में चलाता है, जिसका मतलब है:
+
+- `scaffold()`, `appendFile()`, `addPackage()` और `commandsPath` जैसे हेल्पर्स डेवलपर के ऐप पर काम करते हैं, आपके पैकेज पर नहीं।
+- इम्पोर्ट्स डेवलपर के प्रोजेक्ट के माध्यम से रिज़ॉल्व होते हैं, इसलिए `nylo_framework` वह वर्शन है जिस पर उनका ऐप निर्भर करता है। आपका पैकेज कभी संशोधित नहीं होता।
+- स्क्रिप्ट `bin/` के अंदर सीधे एक फाइल होनी चाहिए -- नेस्टेड डायरेक्टरीज़ सपोर्टेड नहीं हैं।
+
+एक ऐसी कैटेगरी चुनें जो आपके पैकेज के लिए विशिष्ट हो ताकि यह डेवलपर के अपने कमांड्स से टकराए नहीं। पैकेज कमांड्स को Metro द्वारा {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) और उसके बाद के वर्शन में खोजा जाता है।
 
 <div id="options-and-flags"></div>
 

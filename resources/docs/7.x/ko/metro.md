@@ -31,6 +31,7 @@
 - 커스텀 명령어
   - [커스텀 명령어 생성](#creating-custom-commands "커스텀 명령어 생성")
   - [커스텀 명령어 실행](#running-custom-commands "커스텀 명령어 실행")
+  - [패키지에서 제공하는 명령어](#package-commands "패키지에서 제공하는 명령어")
   - [명령어에 옵션 추가](#adding-options-to-custom-commands "명령어에 옵션 추가")
   - [명령어에 플래그 추가](#adding-flags-to-custom-commands "명령어에 플래그 추가")
   - [헬퍼 메서드](#custom-command-helper-methods "헬퍼 메서드")
@@ -825,6 +826,7 @@ dart run flutter_launcher_icons:main
 
 - [커스텀 명령어 생성](#creating-custom-commands)
 - [커스텀 명령어 실행](#running-custom-commands)
+- [패키지에서 제공하는 명령어](#package-commands)
 - [명령어에 옵션 추가](#adding-options-to-custom-commands)
 - [명령어에 플래그 추가](#adding-flags-to-custom-commands)
 - [헬퍼 메서드](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## 패키지에서 제공하는 명령어
+
+패키지는 설치한 개발자를 위해 Metro 명령어를 제공할 수 있습니다 -- 예를 들어 패키지에 필요한 설정을 스캐폴딩하는 `install` 명령어처럼요. `pubspec.yaml`의 패키지에 `metro_commands.json` 파일이 포함되어 있으면 Metro가 해당 명령어를 자동으로 발견하여 패키지 이름 아래 메뉴에 나열합니다:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+여러분 자신의 명령어와 완전히 동일하게 실행하면 됩니다. 예: `metro analytics:install`. 직접 관리하는 패키지에서 명령어를 제공하는 방법을 알아보려면 [패키지 커맨드]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) 문서를 참고하세요.
 
 <div id="adding-options-to-custom-commands"></div>
 

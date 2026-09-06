@@ -31,6 +31,7 @@
 - カスタムコマンド
   - [カスタムコマンドの作成](#creating-custom-commands "カスタムコマンドの作成")
   - [カスタムコマンドの実行](#running-custom-commands "カスタムコマンドの実行")
+  - [パッケージからのコマンド](#package-commands "パッケージからのコマンド")
   - [コマンドにオプションを追加](#adding-options-to-custom-commands "コマンドにオプションを追加")
   - [コマンドにフラグを追加](#adding-flags-to-custom-commands "コマンドにフラグを追加")
   - [ヘルパーメソッド](#custom-command-helper-methods "ヘルパーメソッド")
@@ -825,6 +826,7 @@ dart run flutter_launcher_icons:main
 
 - [カスタムコマンドの作成](#creating-custom-commands)
 - [カスタムコマンドの実行](#running-custom-commands)
+- [パッケージからのコマンド](#package-commands)
 - [コマンドにオプションを追加](#adding-options-to-custom-commands)
 - [コマンドにフラグを追加](#adding-flags-to-custom-commands)
 - [ヘルパーメソッド](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## パッケージからのコマンド
+
+パッケージは、インストールした開発者向けに Metro コマンドを提供できます。例えば、パッケージが必要とする設定をスキャフォールディングする `install` コマンドなどです。`pubspec.yaml` 内のパッケージに `metro_commands.json` ファイルが含まれている場合、Metro はそのコマンドを自動的に検出し、パッケージ名のもとでメニューに一覧表示します:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+自分のコマンドとまったく同じように実行できます。例: `metro analytics:install`。自分が保守するパッケージでコマンドを提供する方法については、[パッケージコマンド]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) を参照してください。
 
 <div id="adding-options-to-custom-commands"></div>
 

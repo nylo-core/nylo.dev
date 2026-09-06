@@ -31,6 +31,7 @@
 - Lệnh tùy chỉnh
   - [Tạo lệnh tùy chỉnh](#creating-custom-commands "Tạo lệnh tùy chỉnh")
   - [Chạy lệnh tùy chỉnh](#running-custom-commands "Chạy lệnh tùy chỉnh")
+  - [Lệnh từ package](#package-commands "Lệnh từ package")
   - [Thêm tùy chọn vào lệnh](#adding-options-to-custom-commands "Thêm tùy chọn vào lệnh tùy chỉnh")
   - [Thêm cờ vào lệnh](#adding-flags-to-custom-commands "Thêm cờ vào lệnh tùy chỉnh")
   - [Các phương thức hỗ trợ](#custom-command-helper-methods "Các phương thức hỗ trợ cho lệnh tùy chỉnh")
@@ -829,6 +830,7 @@ Lệnh tùy chỉnh cho phép bạn mở rộng CLI của Nylo với các lệnh
 
 - [Tạo lệnh tùy chỉnh](#creating-custom-commands)
 - [Chạy lệnh tùy chỉnh](#running-custom-commands)
+- [Lệnh từ package](#package-commands)
 - [Thêm tùy chọn vào lệnh](#adding-options-to-custom-commands)
 - [Thêm cờ vào lệnh](#adding-flags-to-custom-commands)
 - [Các phương thức hỗ trợ](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ Khi bạn chạy `metro` mà không có tham số, bạn sẽ thấy các lệnh
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Lệnh từ package
+
+Package có thể cung cấp các lệnh Metro cho những nhà phát triển cài đặt chúng -- ví dụ như một lệnh `install` để tạo khung cấu hình mà package cần. Khi một package trong `pubspec.yaml` của bạn có chứa tệp `metro_commands.json`, Metro sẽ tự động phát hiện các lệnh của nó và liệt kê chúng trong menu dưới tên package:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Chạy chúng giống hệt như lệnh của riêng bạn, ví dụ: `metro analytics:install`. Để tìm hiểu cách cung cấp lệnh trong một package bạn duy trì, xem [Command từ Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

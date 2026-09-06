@@ -8,6 +8,8 @@
 - [โครงสร้างคำสั่ง](#command-structure "โครงสร้างคำสั่ง")
 - [การเรียกใช้คำสั่ง](#running-commands "การเรียกใช้คำสั่ง")
 - [ทะเบียนคำสั่ง](#command-registry "ทะเบียนคำสั่ง")
+- [คำสั่งจาก Package](#package-commands "คำสั่งจาก Package")
+  - [การแจกจ่ายคำสั่งใน Package](#shipping-commands-in-a-package "การแจกจ่ายคำสั่งใน Package")
 - [ตัวเลือกและ Flag](#options-and-flags "ตัวเลือกและ Flag")
   - [การเพิ่มตัวเลือก](#adding-options "การเพิ่มตัวเลือก")
   - [การเพิ่ม Flag](#adding-flags "การเพิ่ม Flag")
@@ -158,6 +160,111 @@ metro app:current_time --help
 | `name` | ชื่อคำสั่ง (ใช้หลังคำนำหน้าหมวดหมู่) |
 | `category` | หมวดหมู่คำสั่ง (เช่น `app`, `project`) |
 | `script` | ไฟล์ Dart ใน `lib/app/commands/` |
+
+<div id="package-commands"></div>
+
+## คำสั่งจาก Package
+
+Package สามารถแจกจ่ายคำสั่ง Metro ให้กับนักพัฒนาที่ติดตั้งมันได้ -- ตัวอย่างเช่น คำสั่ง `install` ที่สร้าง scaffold ให้กับการตั้งค่าที่ package ต้องการ เมื่อ package ที่โปรเจกต์ของคุณพึ่งพามีไฟล์ `metro_commands.json` Metro จะค้นพบคำสั่งของมันโดยอัตโนมัติ โดยไม่ต้องลงทะเบียนอะไรในโปรเจกต์ของคุณ เพิ่ม package ลงใน `pubspec.yaml` ของคุณ รัน `flutter pub get` แล้วคำสั่งของมันจะปรากฏในเมนู `metro` ภายใต้ชื่อของ package:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+เรียกใช้เหมือนคำสั่งอื่นๆ:
+
+```bash
+metro analytics:install
+```
+
+คำสั่งในตัวมีความสำคัญก่อนเสมอ ตามด้วยคำสั่งใน `commands.json` ของโปรเจกต์คุณ จากนั้นตามด้วย package ตามลำดับตัวอักษร ถ้าคำสั่งจาก package มี `category:name` เดียวกันกับคำสั่งที่มีอยู่แล้ว Metro จะข้ามมันและแสดงคำเตือนโดยระบุทั้งสองฝ่าย
+
+> **หมายเหตุ:** คำสั่งจาก package จะรันโค้ดของ package นั้นบนเครื่องของคุณ เหมือนกับ dependency ใดๆ ที่คุณเพิ่มเข้ามา เมนู `metro` จะแสดงว่าคำสั่งแต่ละคำสั่งมาจาก package ไหน
+
+<div id="shipping-commands-in-a-package"></div>
+
+### การแจกจ่ายคำสั่งใน Package
+
+หากต้องการแจกจ่ายคำสั่งไปกับ package ที่คุณดูแล ให้วางแต่ละคำสั่งไว้ในโฟลเดอร์ `bin/` ของ package และระบุไว้ในไฟล์ `metro_commands.json` ที่รากของ package ข้างๆ `pubspec.yaml`:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| ฟิลด์ | คำอธิบาย |
+|-------|-------------|
+| `name` | ชื่อคำสั่ง (ใช้หลังคำนำหน้าหมวดหมู่) |
+| `category` | หมวดหมู่ของคำสั่ง ค่าเริ่มต้นคือชื่อของ package |
+| `script` | ไฟล์ Dart ในโฟลเดอร์ `bin/` ของ package ที่รันคำสั่งนี้ |
+| `description` | ไม่บังคับ คำอธิบายสั้นๆ หนึ่งบรรทัดที่แสดงในเมนู `metro` |
+
+ตัวคำสั่งเองเขียนเหมือนกับคำสั่งของโปรเจกต์ทุกประการ คือสืบทอดจาก `NyCustomCommand` และ import `ny_cli.dart` ดังนั้น package ของคุณต้องมี `nylo_framework` เป็น dependency คำสั่ง `install` นี้จะสร้าง scaffold ไฟล์ config ลงในโปรเจกต์ของนักพัฒนาและเพิ่มคีย์ที่มันอ่านลงใน `.env` ของพวกเขา:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro จะรันคำสั่งในรูปแบบ `dart run <package>:<executable>` จากรากของโปรเจกต์นักพัฒนา ซึ่งหมายความว่า:
+
+- Helper อย่าง `scaffold()`, `appendFile()`, `addPackage()` และ `commandsPath` จะทำงานกับแอปของนักพัฒนา ไม่ใช่กับ package ของคุณ
+- Import จะถูก resolve ผ่านโปรเจกต์ของนักพัฒนา ดังนั้น `nylo_framework` จะเป็นเวอร์ชันที่แอปของพวกเขาพึ่งพาอยู่ package ของคุณจะไม่ถูกแก้ไขเลย
+- สคริปต์ต้องเป็นไฟล์ที่อยู่ภายใน `bin/` โดยตรง -- ไม่รองรับโฟลเดอร์ซ้อนกัน
+
+เลือกหมวดหมู่ที่เจาะจงสำหรับ package ของคุณ เพื่อไม่ให้ชนกับคำสั่งของนักพัฒนาเอง คำสั่งจาก package จะถูกค้นพบโดย Metro ตั้งแต่ {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) เป็นต้นไป
 
 <div id="options-and-flags"></div>
 

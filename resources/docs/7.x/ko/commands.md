@@ -8,6 +8,8 @@
 - [커맨드 구조](#command-structure)
 - [커맨드 실행](#running-commands)
 - [커맨드 레지스트리](#command-registry)
+- [패키지 커맨드](#package-commands)
+  - [패키지에서 커맨드 제공하기](#shipping-commands-in-a-package)
 - [옵션과 플래그](#options-and-flags)
   - [옵션 추가](#adding-options)
   - [플래그 추가](#adding-flags)
@@ -158,6 +160,111 @@ metro app:current_time --help
 | `name` | 커맨드 이름 (카테고리 접두사 뒤에 사용) |
 | `category` | 커맨드 카테고리 (예: `app`, `project`) |
 | `script` | `lib/app/commands/`의 Dart 파일 |
+
+<div id="package-commands"></div>
+
+## 패키지 커맨드
+
+패키지는 설치한 개발자를 위해 Metro 커맨드를 제공할 수 있습니다 -- 예를 들어 패키지에 필요한 설정을 스캐폴딩하는 `install` 커맨드처럼요. 프로젝트가 의존하는 패키지에 `metro_commands.json` 파일이 포함되어 있으면 Metro가 해당 커맨드를 자동으로 발견합니다. 프로젝트에서 별도로 등록할 필요가 없습니다. 패키지를 `pubspec.yaml`에 추가하고 `flutter pub get`을 실행하면, 해당 커맨드가 패키지 이름 아래 `metro` 메뉴에 나타납니다:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+다른 커맨드와 동일하게 실행합니다:
+
+```bash
+metro analytics:install
+```
+
+내장 커맨드가 항상 우선하며, 그다음 프로젝트의 `commands.json`에 있는 커맨드, 그다음 패키지가 알파벳순으로 적용됩니다. 패키지 커맨드가 이미 존재하는 커맨드와 동일한 `category:name`을 가지면 Metro는 이를 건너뛰고 양쪽 이름을 명시한 경고를 출력합니다.
+
+> **참고:** 패키지 커맨드는 추가한 다른 의존성과 마찬가지로 패키지의 코드를 사용자의 컴퓨터에서 실행합니다. `metro` 메뉴에는 각 커맨드가 어느 패키지에서 왔는지 표시됩니다.
+
+<div id="shipping-commands-in-a-package"></div>
+
+### 패키지에서 커맨드 제공하기
+
+직접 관리하는 패키지에서 커맨드를 제공하려면, 각 커맨드를 패키지의 `bin/` 폴더에 넣고 패키지 루트(`pubspec.yaml`과 같은 위치)의 `metro_commands.json` 파일에 등록하세요:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| 필드 | 설명 |
+|-------|-------------|
+| `name` | 커맨드 이름 (카테고리 접두사 뒤에 사용) |
+| `category` | 커맨드 카테고리. 기본값은 패키지 이름 |
+| `script` | 커맨드를 실행하는, 패키지의 `bin/` 폴더 안의 Dart 파일 |
+| `description` | 선택 사항. `metro` 메뉴에 표시되는 한 줄 요약 |
+
+커맨드 자체는 프로젝트 커맨드와 완전히 동일한 방식으로 작성합니다. `NyCustomCommand`를 확장하고 `ny_cli.dart`를 임포트하므로, 패키지는 `nylo_framework`를 의존성으로 필요로 합니다. 이 `install` 커맨드는 설정 파일을 개발자의 프로젝트에 스캐폴딩하고, 그것이 읽는 키를 개발자의 `.env`에 추가합니다:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro는 개발자 프로젝트의 루트에서 `dart run <package>:<executable>`로 커맨드를 실행합니다. 즉:
+
+- `scaffold()`, `appendFile()`, `addPackage()`, `commandsPath` 같은 헬퍼는 여러분의 패키지가 아니라 개발자의 앱에 대해 동작합니다.
+- 임포트는 개발자의 프로젝트를 통해 해석되므로, `nylo_framework`는 개발자 앱이 의존하는 버전이 됩니다. 여러분의 패키지는 절대 수정되지 않습니다.
+- 스크립트는 `bin/` 바로 아래에 있는 파일이어야 합니다 -- 중첩된 폴더는 지원되지 않습니다.
+
+개발자 자신의 커맨드와 충돌하지 않도록 여러분의 패키지에 고유한 카테고리를 선택하세요. 패키지 커맨드는 {{ config('app.name') }} `7.1.29`(`nylo_support` `7.29.0`) 이상에서 Metro에 의해 발견됩니다.
 
 <div id="options-and-flags"></div>
 

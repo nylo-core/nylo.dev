@@ -31,6 +31,7 @@
 - Perintah Kustom
   - [Membuat perintah kustom](#creating-custom-commands "Membuat perintah kustom")
   - [Menjalankan Perintah Kustom](#running-custom-commands "Menjalankan Perintah Kustom")
+  - [Perintah dari Paket](#package-commands "Perintah dari Paket")
   - [Menambahkan opsi ke perintah](#adding-options-to-custom-commands "Menambahkan opsi ke perintah")
   - [Menambahkan flag ke perintah](#adding-flags-to-custom-commands "Menambahkan flag ke perintah")
   - [Metode helper](#custom-command-helper-methods "Metode helper")
@@ -829,6 +830,7 @@ Perintah kustom memungkinkan Anda memperluas CLI Nylo dengan perintah khusus pro
 
 - [Membuat perintah kustom](#creating-custom-commands)
 - [Menjalankan Perintah Kustom](#running-custom-commands)
+- [Perintah dari Paket](#package-commands)
 - [Menambahkan opsi ke perintah](#adding-options-to-custom-commands)
 - [Menambahkan flag ke perintah](#adding-flags-to-custom-commands)
 - [Metode helper](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ Untuk menampilkan informasi bantuan untuk perintah Anda, gunakan flag `--help` a
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Perintah dari Paket
+
+Paket dapat menyertakan perintah Metro untuk developer yang menginstalnya -- misalnya perintah `install` yang membuat scaffold konfigurasi yang dibutuhkan sebuah paket. Ketika sebuah paket di `pubspec.yaml` Anda berisi file `metro_commands.json`, Metro akan menemukan perintahnya secara otomatis dan mencantumkannya di menu di bawah nama paket tersebut:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Jalankan persis seperti perintah Anda sendiri, misalnya `metro analytics:install`. Untuk mempelajari cara menyertakan perintah dalam paket yang Anda kelola, lihat [Perintah Paket]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

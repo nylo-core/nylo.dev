@@ -8,6 +8,8 @@
 - [Estrutura do Comando](#command-structure "Estrutura do Comando")
 - [Executando Comandos](#running-commands "Executando Comandos")
 - [Registro de Comandos](#command-registry "Registro de Comandos")
+- [Comandos de Pacotes](#package-commands "Comandos de Pacotes")
+  - [Distribuindo Comandos em um Pacote](#shipping-commands-in-a-package "Distribuindo Comandos em um Pacote")
 - [Opções e Flags](#options-and-flags "Opções e Flags")
   - [Adicionando Opções](#adding-options "Adicionando Opções")
   - [Adicionando Flags](#adding-flags "Adicionando Flags")
@@ -115,7 +117,7 @@ Execute seu comando usando Metro:
 metro app:current_time
 ```
 
-O nome do comando segue o padrão `categoria:nome`. Quando você executa `metro` sem argumentos, seus comandos personalizados aparecem na seção **Custom Commands**:
+O nome do comando segue o padrão `category:name`. Quando você executa `metro` sem argumentos, seus comandos personalizados aparecem na seção **Custom Commands**:
 
 ```
 [Custom Commands]
@@ -158,6 +160,111 @@ Cada entrada possui:
 | `name` | O nome do comando (usado após o prefixo da categoria) |
 | `category` | A categoria do comando (ex: `app`, `project`) |
 | `script` | O arquivo Dart em `lib/app/commands/` |
+
+<div id="package-commands"></div>
+
+## Comandos de Pacotes
+
+Pacotes podem distribuir comandos do Metro para os desenvolvedores que os instalam -- por exemplo, um comando `install` que cria o scaffold da configuração que um pacote precisa. Quando um pacote do qual o seu projeto depende contém um arquivo `metro_commands.json`, o Metro descobre os comandos dele automaticamente; não há nada para registrar no seu projeto. Adicione o pacote ao seu `pubspec.yaml`, execute `flutter pub get`, e os comandos dele aparecem no menu do `metro` sob o nome do pacote:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+Execute-os como qualquer outro comando:
+
+```bash
+metro analytics:install
+```
+
+Comandos integrados sempre têm precedência, depois os comandos no `commands.json` do seu projeto, depois os pacotes em ordem alfabética. Se um comando de pacote tiver o mesmo `category:name` de um comando que já existe, o Metro o ignora e imprime um aviso citando os dois lados.
+
+> **Nota:** Um comando de pacote executa o código do pacote na sua máquina, como qualquer dependência que você adiciona. O menu do `metro` mostra de qual pacote cada comando vem.
+
+<div id="shipping-commands-in-a-package"></div>
+
+### Distribuindo Comandos em um Pacote
+
+Para distribuir comandos com um pacote que você mantém, coloque cada comando na pasta `bin/` do pacote e liste-o em um arquivo `metro_commands.json` na raiz do pacote, ao lado do `pubspec.yaml`:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| Campo | Descrição |
+|-------|-------------|
+| `name` | O nome do comando (usado após o prefixo da categoria) |
+| `category` | A categoria do comando. O padrão é o nome do pacote |
+| `script` | O arquivo Dart na pasta `bin/` do pacote que executa o comando |
+| `description` | Opcional. Um resumo de uma linha exibido no menu do `metro` |
+
+O comando em si é escrito exatamente como um comando de projeto: ele estende `NyCustomCommand` e importa `ny_cli.dart`, então o seu pacote precisa de `nylo_framework` como dependência. Este comando `install` cria o scaffold de um arquivo de configuração no projeto do desenvolvedor e adiciona a chave que ele lê ao `.env` dele:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+O Metro executa o comando como `dart run <package>:<executable>` a partir da raiz do projeto do desenvolvedor, o que significa que:
+
+- Helpers como `scaffold()`, `appendFile()`, `addPackage()` e `commandsPath` operam no app do desenvolvedor, não no seu pacote.
+- Os imports são resolvidos através do projeto do desenvolvedor, então `nylo_framework` é a versão da qual o app dele depende. O seu pacote nunca é modificado.
+- O script deve ser um arquivo diretamente dentro de `bin/` -- pastas aninhadas não são suportadas.
+
+Escolha uma categoria específica para o seu pacote para que ela não colida com os próprios comandos do desenvolvedor. Comandos de pacotes são descobertos pelo Metro a partir do {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) em diante.
 
 <div id="options-and-flags"></div>
 

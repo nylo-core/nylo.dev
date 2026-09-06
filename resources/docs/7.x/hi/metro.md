@@ -31,6 +31,7 @@
 - कस्टम कमांड्स
   - [कस्टम कमांड्स बनाना](#creating-custom-commands "कस्टम कमांड्स बनाना")
   - [कस्टम कमांड्स चलाना](#running-custom-commands "कस्टम कमांड्स चलाना")
+  - [पैकेज से कमांड्स](#package-commands "पैकेज से कमांड्स")
   - [कमांड्स में ऑप्शन्स जोड़ना](#adding-options-to-custom-commands "कमांड्स में ऑप्शन्स जोड़ना")
   - [कमांड्स में फ़्लैग्स जोड़ना](#adding-flags-to-custom-commands "कमांड्स में फ़्लैग्स जोड़ना")
   - [हेल्पर मेथड्स](#custom-command-helper-methods "हेल्पर मेथड्स")
@@ -829,6 +830,7 @@ dart run flutter_launcher_icons:main
 
 - [कस्टम कमांड्स बनाना](#creating-custom-commands)
 - [कस्टम कमांड्स चलाना](#running-custom-commands)
+- [पैकेज से कमांड्स](#package-commands)
 - [कमांड्स में ऑप्शन्स जोड़ना](#adding-options-to-custom-commands)
 - [कमांड्स में फ़्लैग्स जोड़ना](#adding-flags-to-custom-commands)
 - [हेल्पर मेथड्स](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## पैकेज से कमांड्स
+
+पैकेज उन डेवलपर्स के लिए Metro कमांड्स शिप कर सकते हैं जो उन्हें इंस्टॉल करते हैं -- उदाहरण के लिए एक `install` कमांड जो पैकेज को जरूरी कॉन्फ़िग स्कैफोल्ड करता है। जब आपकी `pubspec.yaml` में मौजूद कोई पैकेज `metro_commands.json` फाइल रखता है, तो Metro स्वचालित रूप से इसके कमांड्स खोज लेता है और उन्हें पैकेज के नाम के अंतर्गत मेनू में सूचीबद्ध कर देता है:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+इन्हें बिल्कुल अपने कमांड्स की तरह चलाएँ, जैसे `metro analytics:install`। अपने द्वारा मेंटेन किए जा रहे पैकेज में कमांड्स शिप करना सीखने के लिए, [पैकेज कमांड्स]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) देखें।
 
 <div id="adding-options-to-custom-commands"></div>
 

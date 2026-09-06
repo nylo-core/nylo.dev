@@ -32,6 +32,7 @@
 - Benutzerdefinierte Commands
   - [Benutzerdefinierte Commands erstellen](#creating-custom-commands "Benutzerdefinierte Commands erstellen")
   - [Benutzerdefinierte Commands ausführen](#running-custom-commands "Benutzerdefinierte Commands ausführen")
+  - [Befehle aus Paketen](#package-commands "Befehle aus Paketen")
   - [Optionen zu Commands hinzufügen](#adding-options-to-custom-commands "Optionen zu Commands hinzufügen")
   - [Flags zu Commands hinzufügen](#adding-flags-to-custom-commands "Flags zu Commands hinzufügen")
   - [Hilfsmethoden](#custom-command-helper-methods "Hilfsmethoden")
@@ -829,6 +830,7 @@ Benutzerdefinierte Commands ermöglichen es Ihnen, die CLI von Nylo mit Ihren ei
 
 - [Benutzerdefinierte Commands erstellen](#creating-custom-commands)
 - [Benutzerdefinierte Commands ausführen](#running-custom-commands)
+- [Befehle aus Paketen](#package-commands)
 - [Optionen zu Commands hinzufügen](#adding-options-to-custom-commands)
 - [Flags zu Commands hinzufügen](#adding-flags-to-custom-commands)
 - [Hilfsmethoden](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ Um Hilfe-Informationen für Ihren Command anzuzeigen, verwenden Sie das `--help`
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Befehle aus Paketen
+
+Pakete können Metro-Befehle für die Entwickler bereitstellen, die sie installieren -- zum Beispiel einen `install`-Befehl, der die von einem Paket benötigte Konfiguration erstellt. Wenn ein Paket in Ihrer `pubspec.yaml` eine Datei `metro_commands.json` enthält, erkennt Metro dessen Befehle automatisch und listet sie im Menü unter dem Namen des Pakets auf:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Führen Sie sie genau wie Ihre eigenen Befehle aus, z. B. `metro analytics:install`. Um zu erfahren, wie Sie Befehle in einem von Ihnen gepflegten Paket bereitstellen, siehe [Paketbefehle]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

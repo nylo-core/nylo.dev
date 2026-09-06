@@ -31,6 +31,7 @@
 - คำสั่งแบบกำหนดเอง
   - [การสร้างคำสั่งแบบกำหนดเอง](#creating-custom-commands "การสร้างคำสั่งแบบกำหนดเอง")
   - [การรันคำสั่งแบบกำหนดเอง](#running-custom-commands "การรันคำสั่งแบบกำหนดเอง")
+  - [คำสั่งจาก Package](#package-commands "คำสั่งจาก Package")
   - [การเพิ่ม options ให้คำสั่ง](#adding-options-to-custom-commands "การเพิ่ม options ให้คำสั่งแบบกำหนดเอง")
   - [การเพิ่ม flags ให้คำสั่ง](#adding-flags-to-custom-commands "การเพิ่ม flags ให้คำสั่งแบบกำหนดเอง")
   - [เมธอดตัวช่วย](#custom-command-helper-methods "เมธอดตัวช่วยของคำสั่งแบบกำหนดเอง")
@@ -829,6 +830,7 @@ dart run flutter_launcher_icons:main
 
 - [การสร้างคำสั่งแบบกำหนดเอง](#creating-custom-commands)
 - [การรันคำสั่งแบบกำหนดเอง](#running-custom-commands)
+- [คำสั่งจาก Package](#package-commands)
 - [การเพิ่ม options ให้คำสั่ง](#adding-options-to-custom-commands)
 - [การเพิ่ม flags ให้คำสั่ง](#adding-flags-to-custom-commands)
 - [เมธอดตัวช่วย](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## คำสั่งจาก Package
+
+Package สามารถแจกจ่ายคำสั่ง Metro ให้กับนักพัฒนาที่ติดตั้งมันได้ -- ตัวอย่างเช่น คำสั่ง `install` ที่สร้าง scaffold ให้กับการตั้งค่าที่ package ต้องการ เมื่อ package ใน `pubspec.yaml` ของคุณมีไฟล์ `metro_commands.json` Metro จะค้นพบคำสั่งของมันโดยอัตโนมัติและแสดงไว้ในเมนูภายใต้ชื่อของ package:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+เรียกใช้เหมือนกับคำสั่งของคุณเองทุกประการ เช่น `metro analytics:install` หากต้องการเรียนรู้วิธีแจกจ่ายคำสั่งใน package ที่คุณดูแล ดูที่ [คำสั่งจาก Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)
 
 <div id="adding-options-to-custom-commands"></div>
 

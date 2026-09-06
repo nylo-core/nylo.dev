@@ -8,6 +8,8 @@
 - [Komut Yapısı](#command-structure "Komut Yapısı")
 - [Komutları Çalıştırma](#running-commands "Komutları Çalıştırma")
 - [Komut Kaydı](#command-registry "Komut Kaydı")
+- [Paket Komutları](#package-commands "Paket Komutları")
+  - [Pakette Komut Dağıtma](#shipping-commands-in-a-package "Pakette Komut Dağıtma")
 - [Seçenekler ve Bayraklar](#options-and-flags "Seçenekler ve Bayraklar")
   - [Seçenek Ekleme](#adding-options "Seçenek Ekleme")
   - [Bayrak Ekleme](#adding-flags "Bayrak Ekleme")
@@ -158,6 +160,111 @@ Her giriş şunları içerir:
 | `name` | Komut adı (kategori önekinden sonra kullanılır) |
 | `category` | Komut kategorisi (ör. `app`, `project`) |
 | `script` | `lib/app/commands/` içindeki Dart dosyası |
+
+<div id="package-commands"></div>
+
+## Paket Komutları
+
+Paketler, onları yükleyen geliştiriciler için Metro komutları sunabilir -- örneğin bir paketin ihtiyaç duyduğu yapılandırmayı oluşturan bir `install` komutu gibi. Projenizin bağımlı olduğu bir paket `metro_commands.json` dosyası içeriyorsa, Metro onun komutlarını otomatik olarak keşfeder; projenizde kaydedilecek hiçbir şey yoktur. Paketi `pubspec.yaml` dosyanıza ekleyin, `flutter pub get` çalıştırın ve komutları `metro` menüsünde paketin adı altında görünür:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+Bunları diğer herhangi bir komut gibi çalıştırın:
+
+```bash
+metro analytics:install
+```
+
+Yerleşik komutlar her zaman önceliklidir, ardından projenizin `commands.json` dosyasındaki komutlar, ardından paketler alfabetik sırayla gelir. Bir paket komutu, zaten var olan bir komutla aynı `category:name` değerine sahipse, Metro onu atlar ve her iki tarafı da belirten bir uyarı yazdırır.
+
+> **Not:** Bir paket komutu, eklediğiniz herhangi bir bağımlılık gibi, paketin kodunu makinenizde çalıştırır. `metro` menüsü her komutun hangi paketten geldiğini gösterir.
+
+<div id="shipping-commands-in-a-package"></div>
+
+### Pakette Komut Dağıtma
+
+Sürdürdüğünüz bir pakette komut dağıtmak için, her komutu paketin `bin/` klasörüne koyun ve `pubspec.yaml` ile aynı dizinde, paketin kök dizininde bulunan bir `metro_commands.json` dosyasında listeleyin:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| Alan | Açıklama |
+|-------|-------------|
+| `name` | Komut adı (kategori önekinden sonra kullanılır) |
+| `category` | Komut kategorisi. Varsayılan olarak paket adı kullanılır |
+| `script` | Komutu çalıştıran, paketin `bin/` klasöründeki Dart dosyası |
+| `description` | İsteğe bağlı. `metro` menüsünde gösterilen tek satırlık özet |
+
+Komutun kendisi tam olarak bir proje komutu gibi yazılır: `NyCustomCommand` sınıfını genişletir ve `ny_cli.dart` dosyasını içe aktarır, bu nedenle paketinizin `nylo_framework`'ü bağımlılık olarak kullanması gerekir. Bu `install` komutu, geliştiricinin projesine bir yapılandırma dosyası oluşturur ve okuduğu anahtarı `.env` dosyasına ekler:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro, komutu geliştiricinin proje kök dizininden `dart run <package>:<executable>` olarak çalıştırır, bu da şu anlama gelir:
+
+- `scaffold()`, `appendFile()`, `addPackage()` ve `commandsPath` gibi yardımcılar, paketiniz üzerinde değil geliştiricinin uygulaması üzerinde çalışır.
+- İçe aktarmalar geliştiricinin projesi üzerinden çözümlenir, bu nedenle `nylo_framework`, uygulamalarının bağımlı olduğu sürümdür. Paketiniz asla değiştirilmez.
+- Betik, `bin/` içinde doğrudan bir dosya olmalıdır -- iç içe klasörler desteklenmez.
+
+Geliştiricinin kendi komutlarıyla çakışmaması için paketinize özgü bir kategori seçin. Paket komutları, Metro tarafından {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) ve üzeri sürümlerde keşfedilir.
 
 <div id="options-and-flags"></div>
 

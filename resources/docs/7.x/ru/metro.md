@@ -31,6 +31,7 @@
 - Пользовательские команды
   - [Создание пользовательских команд](#creating-custom-commands "Создание пользовательских команд")
   - [Запуск пользовательских команд](#running-custom-commands "Запуск пользовательских команд")
+  - [Команды из пакетов](#package-commands "Команды из пакетов")
   - [Добавление опций к командам](#adding-options-to-custom-commands "Добавление опций к пользовательским командам")
   - [Добавление флагов к командам](#adding-flags-to-custom-commands "Добавление флагов к пользовательским командам")
   - [Вспомогательные методы](#custom-command-helper-methods "Вспомогательные методы команд")
@@ -825,6 +826,7 @@ dart run flutter_launcher_icons:main
 
 - [Создание пользовательских команд](#creating-custom-commands)
 - [Запуск пользовательских команд](#running-custom-commands)
+- [Команды из пакетов](#package-commands)
 - [Добавление опций к командам](#adding-options-to-custom-commands)
 - [Добавление флагов к командам](#adding-flags-to-custom-commands)
 - [Вспомогательные методы](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Команды из пакетов
+
+Пакеты могут поставлять команды Metro для разработчиков, которые их устанавливают -- например, команду `install`, которая создаёт конфигурацию, необходимую пакету. Когда пакет в вашем `pubspec.yaml` содержит файл `metro_commands.json`, Metro автоматически обнаруживает его команды и выводит их в меню под именем пакета:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Запускайте их точно так же, как свои собственные команды, например `metro analytics:install`. Чтобы узнать, как поставлять команды в поддерживаемом вами пакете, смотрите [Команды пакетов]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

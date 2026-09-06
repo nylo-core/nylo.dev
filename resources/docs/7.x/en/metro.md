@@ -31,6 +31,7 @@
 - Custom Commands
   - [Creating custom commands](#creating-custom-commands "Creating Custom Commands")
   - [Running Custom Commands](#running-custom-commands "Running Custom Commands")
+  - [Commands from packages](#package-commands "Commands from packages")
   - [Adding options to commands](#adding-options-to-custom-commands "Adding options to Custom Commands")
   - [Adding flags to commands](#adding-flags-to-custom-commands "Adding flags to Custom Commands")
   - [Helper methods](#custom-command-helper-methods "Custom Command Helper Methods")
@@ -825,6 +826,7 @@ Custom commands allow you to extend Nylo's CLI with your own project-specific co
 
 - [Creating custom commands](#creating-custom-commands)
 - [Running Custom Commands](#running-custom-commands)
+- [Commands from packages](#package-commands)
 - [Adding options to commands](#adding-options-to-custom-commands)
 - [Adding flags to commands](#adding-flags-to-custom-commands)
 - [Helper methods](#custom-command-helper-methods)
@@ -883,7 +885,7 @@ class _CurrentTimeCommand extends NyCustomCommand {
 }
 ```
 
-The command will automatically be registered in the `lib/app/commands/commands.json` file, which contains a list of all registered commands:
+The command will automatically be registered in the `lib/app/commands/commands.json` file, which contains a list of your project's registered commands:
 
 ```json
 [
@@ -899,6 +901,8 @@ The command will automatically be registered in the `lib/app/commands/commands.j
   }
 ]
 ```
+
+Commands shipped by a package are discovered separately and never added to this file -- see [Commands from Packages](#package-commands).
 
 <div id="running-custom-commands"></div>
 
@@ -920,11 +924,28 @@ When you run `metro` without arguments, you'll see your custom commands listed i
   project:deploy
 ```
 
+If any installed packages ship their own commands, they appear in additional sections below yours -- see [Commands from Packages](#package-commands).
+
 To display help information for your command, use the `--help` or `-h` flag:
 
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Commands from Packages
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+If a package in your `pubspec.yaml` ships Metro commands, they're discovered automatically and listed in the menu under the package's name:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Run them exactly like your own commands, e.g. `metro analytics:install`. For the full discovery and precedence rules, and for shipping commands in a package you maintain, see [Package Commands]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

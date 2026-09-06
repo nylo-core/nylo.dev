@@ -31,6 +31,7 @@
 - Comandos Personalizados
   - [Criando comandos personalizados](#creating-custom-commands "Criando comandos personalizados")
   - [Executando Comandos Personalizados](#running-custom-commands "Executando comandos personalizados")
+  - [Comandos de Pacotes](#package-commands "Comandos de Pacotes")
   - [Adicionando opções aos comandos](#adding-options-to-custom-commands "Adicionando opções aos comandos personalizados")
   - [Adicionando flags aos comandos](#adding-flags-to-custom-commands "Adicionando flags aos comandos personalizados")
   - [Métodos auxiliares](#custom-command-helper-methods "Métodos auxiliares de comandos personalizados")
@@ -825,6 +826,7 @@ Comandos personalizados permitem que você estenda o CLI do Nylo com seus própr
 
 - [Criando comandos personalizados](#creating-custom-commands)
 - [Executando Comandos Personalizados](#running-custom-commands)
+- [Comandos de Pacotes](#package-commands)
 - [Adicionando opções aos comandos](#adding-options-to-custom-commands)
 - [Adicionando flags aos comandos](#adding-flags-to-custom-commands)
 - [Métodos auxiliares](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ Para exibir informações de ajuda para seu comando, use a flag `--help` ou `-h`
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Comandos de Pacotes
+
+Pacotes podem distribuir comandos do Metro para os desenvolvedores que os instalam -- por exemplo, um comando `install` que cria o scaffold da configuração que um pacote precisa. Quando um pacote no seu `pubspec.yaml` contém um arquivo `metro_commands.json`, o Metro descobre os comandos dele automaticamente e os lista no menu sob o nome do pacote:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Execute-os exatamente como os seus próprios comandos, por exemplo `metro analytics:install`. Para aprender como distribuir comandos em um pacote que você mantém, veja [Comandos de Pacotes]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

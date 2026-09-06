@@ -31,6 +31,7 @@
 - Comandi Personalizzati
   - [Creare comandi personalizzati](#creating-custom-commands "Creare comandi personalizzati")
   - [Eseguire Comandi Personalizzati](#running-custom-commands "Eseguire Comandi Personalizzati")
+  - [Comandi dai Pacchetti](#package-commands "Comandi dai Pacchetti")
   - [Aggiungere opzioni ai comandi](#adding-options-to-custom-commands "Aggiungere opzioni ai comandi")
   - [Aggiungere flag ai comandi](#adding-flags-to-custom-commands "Aggiungere flag ai comandi")
   - [Metodi helper](#custom-command-helper-methods "Metodi helper")
@@ -825,6 +826,7 @@ I comandi personalizzati ti permettono di estendere la CLI di Nylo con i tuoi co
 
 - [Creare comandi personalizzati](#creating-custom-commands)
 - [Eseguire Comandi Personalizzati](#running-custom-commands)
+- [Comandi dai Pacchetti](#package-commands)
 - [Aggiungere opzioni ai comandi](#adding-options-to-custom-commands)
 - [Aggiungere flag ai comandi](#adding-flags-to-custom-commands)
 - [Metodi helper](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ Per visualizzare le informazioni di aiuto per il tuo comando, usa il flag `--hel
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Comandi dai Pacchetti
+
+I pacchetti possono fornire comandi Metro per gli sviluppatori che li installano -- ad esempio un comando `install` che crea la configurazione di cui un pacchetto ha bisogno. Quando un pacchetto nel tuo `pubspec.yaml` contiene un file `metro_commands.json`, Metro rileva automaticamente i suoi comandi e li elenca nel menu sotto il nome del pacchetto:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Eseguili esattamente come i tuoi comandi, ad es. `metro analytics:install`. Per scoprire come distribuire comandi in un pacchetto che mantieni, vedi [Comandi dei Pacchetti]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

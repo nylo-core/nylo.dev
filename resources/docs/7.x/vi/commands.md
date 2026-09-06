@@ -8,6 +8,8 @@
 - [Cấu trúc Command](#command-structure "Cấu trúc Command")
 - [Chạy Command](#running-commands "Chạy Command")
 - [Đăng ký Command](#command-registry "Đăng ký Command")
+- [Command từ Package](#package-commands "Command từ Package")
+  - [Cung cấp Command trong Package](#shipping-commands-in-a-package "Cung cấp Command trong Package")
 - [Tùy chọn và Cờ](#options-and-flags "Tùy chọn và Cờ")
   - [Thêm tùy chọn](#adding-options "Thêm tùy chọn")
   - [Thêm cờ](#adding-flags "Thêm cờ")
@@ -158,6 +160,111 @@ Mỗi mục có:
 | `name` | Tên command (sử dụng sau tiền tố danh mục) |
 | `category` | Danh mục command (ví dụ: `app`, `project`) |
 | `script` | Tệp Dart trong `lib/app/commands/` |
+
+<div id="package-commands"></div>
+
+## Command từ Package
+
+Package có thể cung cấp các command Metro cho những nhà phát triển cài đặt chúng -- ví dụ như một command `install` để tạo khung cấu hình mà package cần. Khi một package mà dự án của bạn phụ thuộc vào có chứa tệp `metro_commands.json`, Metro sẽ tự động phát hiện các command của nó; không có gì cần đăng ký trong dự án của bạn. Thêm package vào `pubspec.yaml`, chạy `flutter pub get`, và các command của nó sẽ xuất hiện trong menu `metro` dưới tên package:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+Chạy chúng như bất kỳ command nào khác:
+
+```bash
+metro analytics:install
+```
+
+Các command dựng sẵn luôn được ưu tiên trước, tiếp theo là các command trong `commands.json` của dự án bạn, sau đó là các package theo thứ tự bảng chữ cái. Nếu một command của package có cùng `category:name` với một command đã tồn tại, Metro sẽ bỏ qua nó và in ra cảnh báo nêu tên cả hai phía.
+
+> **Lưu ý:** Một command từ package chạy mã của package đó trên máy của bạn, giống như bất kỳ dependency nào bạn thêm vào. Menu `metro` hiển thị package nào cung cấp mỗi command.
+
+<div id="shipping-commands-in-a-package"></div>
+
+### Cung cấp Command trong Package
+
+Để cung cấp command trong một package bạn duy trì, hãy đặt mỗi command vào thư mục `bin/` của package và liệt kê nó trong tệp `metro_commands.json` ở thư mục gốc của package, cạnh `pubspec.yaml`:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| Trường | Mô tả |
+|-------|-------------|
+| `name` | Tên command (sử dụng sau tiền tố danh mục) |
+| `category` | Danh mục command. Mặc định là tên package |
+| `script` | Tệp Dart trong thư mục `bin/` của package chạy command này |
+| `description` | Tùy chọn. Tóm tắt một dòng hiển thị trong menu `metro` |
+
+Bản thân command được viết hoàn toàn giống như một command của dự án: nó kế thừa `NyCustomCommand` và import `ny_cli.dart`, vì vậy package của bạn cần có `nylo_framework` như một dependency. Command `install` này tạo khung một tệp cấu hình vào dự án của nhà phát triển và thêm khóa mà nó đọc vào `.env` của họ:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro chạy command dưới dạng `dart run <package>:<executable>` từ thư mục gốc của dự án nhà phát triển, điều này có nghĩa là:
+
+- Các helper như `scaffold()`, `appendFile()`, `addPackage()` và `commandsPath` hoạt động trên ứng dụng của nhà phát triển, không phải trên package của bạn.
+- Import được phân giải thông qua dự án của nhà phát triển, vì vậy `nylo_framework` là phiên bản mà ứng dụng của họ phụ thuộc vào. Package của bạn không bao giờ bị thay đổi.
+- Script phải là một tệp nằm trực tiếp trong `bin/` -- không hỗ trợ thư mục con lồng nhau.
+
+Hãy chọn một danh mục riêng cho package của bạn để không xung đột với các command riêng của nhà phát triển. Command từ package được Metro phát hiện từ {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) trở lên.
 
 <div id="options-and-flags"></div>
 

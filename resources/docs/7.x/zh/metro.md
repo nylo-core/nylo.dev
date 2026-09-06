@@ -31,6 +31,7 @@
 - 自定义命令
   - [创建自定义命令](#creating-custom-commands "创建自定义命令")
   - [运行自定义命令](#running-custom-commands "运行自定义命令")
+  - [来自包的命令](#package-commands "来自包的命令")
   - [为命令添加选项](#adding-options-to-custom-commands "为命令添加选项")
   - [为命令添加标志](#adding-flags-to-custom-commands "为命令添加标志")
   - [辅助方法](#custom-command-helper-methods "辅助方法")
@@ -825,6 +826,7 @@ dart run flutter_launcher_icons:main
 
 - [创建自定义命令](#creating-custom-commands)
 - [运行自定义命令](#running-custom-commands)
+- [来自包的命令](#package-commands)
 - [为命令添加选项](#adding-options-to-custom-commands)
 - [为命令添加标志](#adding-flags-to-custom-commands)
 - [辅助方法](#custom-command-helper-methods)
@@ -925,6 +927,19 @@ metro app:current_time
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## 来自包的命令
+
+包可以为安装它们的开发者提供 Metro 命令——例如一个用于生成包所需配置的 `install` 命令。当您 `pubspec.yaml` 中的某个包包含 `metro_commands.json` 文件时，Metro 会自动发现其命令，并将它们列在菜单中该包名称下：
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+像运行您自己的命令一样运行它们，例如 `metro analytics:install`。要了解如何在您维护的包中提供命令，请参阅[包命令]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)。
 
 <div id="adding-options-to-custom-commands"></div>
 

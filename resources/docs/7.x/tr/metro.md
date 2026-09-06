@@ -31,6 +31,7 @@
 - Ozel Komutlar
   - [Ozel komutlar olusturma](#creating-custom-commands "Ozel komutlar olusturma")
   - [Ozel komutlari calistirma](#running-custom-commands "Ozel komutlari calistirma")
+  - [Paketlerden gelen komutlar](#package-commands "Paketlerden gelen komutlar")
   - [Komutlara secenek ekleme](#adding-options-to-custom-commands "Komutlara secenek ekleme")
   - [Komutlara bayrak ekleme](#adding-flags-to-custom-commands "Komutlara bayrak ekleme")
   - [Yardimci metotlar](#custom-command-helper-methods "Yardimci metotlar")
@@ -829,6 +830,7 @@ Ozel komutlar, Nylo'nun CLI'sini kendi projenize ozel komutlarla genisletmenize 
 
 - [Ozel komutlar olusturma](#creating-custom-commands)
 - [Ozel Komutlari Calistirma](#running-custom-commands)
+- [Paketlerden gelen komutlar](#package-commands)
 - [Komutlara secenek ekleme](#adding-options-to-custom-commands)
 - [Komutlara bayrak ekleme](#adding-flags-to-custom-commands)
 - [Yardimci metotlar](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ Komutunuz icin yardim bilgilerini goruntulemek icin `--help` veya `-h` bayragini
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Paketlerden Gelen Komutlar
+
+Paketler, onlari yukleyen gelistiriciler icin Metro komutlari sunabilir -- ornegin bir paketin ihtiyac duydugu yapilandirmayi olusturan bir `install` komutu gibi. `pubspec.yaml` dosyanizdaki bir paket `metro_commands.json` dosyasi iceriyorsa, Metro onun komutlarini otomatik olarak kesfeder ve bunlari menude paketin adi altinda listeler:
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Bunlari tipki kendi komutlariniz gibi calistirin, ornegin `metro analytics:install`. Surdurdugunuz bir pakette komut sunmayi ogrenmek icin bkz. [Paket Komutları]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

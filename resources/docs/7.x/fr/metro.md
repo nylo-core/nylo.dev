@@ -32,6 +32,7 @@
 - Commandes personnalisees
   - [Creer des commandes personnalisees](#creating-custom-commands "Creer des commandes personnalisees")
   - [Executer des commandes personnalisees](#running-custom-commands "Executer des commandes personnalisees")
+  - [Commandes depuis les packages](#package-commands "Commandes depuis les packages")
   - [Ajouter des options aux commandes](#adding-options-to-custom-commands "Ajouter des options aux commandes")
   - [Ajouter des flags aux commandes](#adding-flags-to-custom-commands "Ajouter des flags aux commandes")
   - [Methodes d'aide](#custom-command-helper-methods "Methodes d'aide")
@@ -829,6 +830,7 @@ Les commandes personnalisees vous permettent d'etendre la CLI de Nylo avec vos p
 
 - [Creer des commandes personnalisees](#creating-custom-commands)
 - [Executer des commandes personnalisees](#running-custom-commands)
+- [Commandes depuis les packages](#package-commands)
 - [Ajouter des options aux commandes](#adding-options-to-custom-commands)
 - [Ajouter des flags aux commandes](#adding-flags-to-custom-commands)
 - [Methodes d'aide](#custom-command-helper-methods)
@@ -929,6 +931,19 @@ Pour afficher les informations d'aide pour votre commande, utilisez le flag `--h
 ```bash
 metro project:install_firebase --help
 ```
+
+<div id="package-commands"></div>
+
+## Commandes depuis les packages
+
+Les packages peuvent fournir des commandes Metro pour les developpeurs qui les installent -- par exemple une commande `install` qui genere la configuration dont un package a besoin. Lorsqu'un package de votre `pubspec.yaml` contient un fichier `metro_commands.json`, Metro decouvre automatiquement ses commandes et les liste dans le menu sous le nom du package :
+
+```
+[nylo_analytics Commands]
+  analytics:install    Add the analytics config file and .env key
+```
+
+Executez-les exactement comme vos propres commandes, par exemple `metro analytics:install`. Pour apprendre a distribuer des commandes dans un package que vous maintenez, consultez [Commandes de packages]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

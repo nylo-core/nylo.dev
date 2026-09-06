@@ -8,6 +8,8 @@
 - [コマンドの構造](#command-structure "コマンドの構造")
 - [コマンドの実行](#running-commands "コマンドの実行")
 - [コマンドレジストリ](#command-registry "コマンドレジストリ")
+- [パッケージコマンド](#package-commands "パッケージコマンド")
+  - [パッケージでのコマンドの提供](#shipping-commands-in-a-package "パッケージでのコマンドの提供")
 - [オプションとフラグ](#options-and-flags "オプションとフラグ")
   - [オプションの追加](#adding-options "オプションの追加")
   - [フラグの追加](#adding-flags "フラグの追加")
@@ -158,6 +160,111 @@ metro app:current_time --help
 | `name` | コマンド名（カテゴリプレフィックスの後に使用） |
 | `category` | コマンドカテゴリ（例: `app`、`project`） |
 | `script` | `lib/app/commands/` 内の Dart ファイル |
+
+<div id="package-commands"></div>
+
+## パッケージコマンド
+
+パッケージは、インストールした開発者向けに Metro コマンドを提供できます。例えば、パッケージが必要とする設定をスキャフォールディングする `install` コマンドなどです。プロジェクトが依存するパッケージに `metro_commands.json` ファイルが含まれている場合、Metro はそのコマンドを自動的に検出します。プロジェクト側で登録する必要はありません。パッケージを `pubspec.yaml` に追加して `flutter pub get` を実行すると、そのコマンドがパッケージ名のもとで `metro` メニューに表示されます:
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+他のコマンドと同じように実行します:
+
+```bash
+metro analytics:install
+```
+
+組み込みコマンドが常に優先され、次にプロジェクトの `commands.json` 内のコマンド、その次にパッケージがアルファベット順で適用されます。パッケージコマンドが既存のコマンドと同じ `category:name` を持つ場合、Metro はそれをスキップし、両方の名前を示す警告を表示します。
+
+> **注意:** パッケージコマンドは、追加した他の依存関係と同様に、パッケージのコードをマシン上で実行します。`metro` メニューには、各コマンドがどのパッケージ由来かが表示されます。
+
+<div id="shipping-commands-in-a-package"></div>
+
+### パッケージでのコマンドの提供
+
+自分が保守するパッケージでコマンドを提供するには、各コマンドをパッケージの `bin/` フォルダに配置し、パッケージのルート（`pubspec.yaml` と同じ場所）にある `metro_commands.json` ファイルに記載します:
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| フィールド | 説明 |
+|-------|-------------|
+| `name` | コマンド名（カテゴリプレフィックスの後に使用） |
+| `category` | コマンドカテゴリ。デフォルトはパッケージ名 |
+| `script` | コマンドを実行する、パッケージの `bin/` フォルダ内の Dart ファイル |
+| `description` | 任意。`metro` メニューに表示される 1 行の概要 |
+
+コマンド自体は、プロジェクトのコマンドとまったく同じように記述します。`NyCustomCommand` を継承し `ny_cli.dart` をインポートするため、パッケージは `nylo_framework` を依存関係として必要とします。この `install` コマンドは、設定ファイルを開発者のプロジェクトにスキャフォールディングし、それが読み取るキーを開発者の `.env` に追加します:
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro は、開発者のプロジェクトのルートから `dart run <package>:<executable>` としてコマンドを実行します。つまり:
+
+- `scaffold()`、`appendFile()`、`addPackage()`、`commandsPath` などのヘルパーは、あなたのパッケージではなく開発者のアプリに対して動作します。
+- インポートは開発者のプロジェクトを通じて解決されるため、`nylo_framework` は開発者のアプリが依存しているバージョンになります。あなたのパッケージが変更されることはありません。
+- スクリプトは `bin/` の直下にあるファイルである必要があります。ネストされたフォルダはサポートされていません。
+
+自分のパッケージに固有のカテゴリを選ぶことで、開発者自身のコマンドと衝突しないようにしてください。パッケージコマンドは {{ config('app.name') }} `7.1.29`（`nylo_support` `7.29.0`）以降で Metro によって検出されます。
 
 <div id="options-and-flags"></div>
 

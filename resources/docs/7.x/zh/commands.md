@@ -8,6 +8,8 @@
 - [命令结构](#command-structure)
 - [运行命令](#running-commands)
 - [命令注册表](#command-registry)
+- [包命令](#package-commands)
+  - [在包中提供命令](#shipping-commands-in-a-package)
 - [选项和标志](#options-and-flags)
   - [添加选项](#adding-options)
   - [添加标志](#adding-flags)
@@ -158,6 +160,111 @@ metro app:current_time --help
 | `name` | 命令名称（在类别前缀之后使用） |
 | `category` | 命令类别（例如 `app`、`project`） |
 | `script` | `lib/app/commands/` 中的 Dart 文件 |
+
+<div id="package-commands"></div>
+
+## 包命令
+
+包可以为安装它们的开发者提供 Metro 命令——例如一个用于生成包所需配置的 `install` 命令。当您项目依赖的某个包包含 `metro_commands.json` 文件时，Metro 会自动发现其命令；您的项目中无需注册任何内容。将该包添加到 `pubspec.yaml`，运行 `flutter pub get`，其命令就会出现在 `metro` 菜单中该包名称下：
+
+```
+[Custom Commands]
+  app:current_time
+
+[nylo_analytics Commands]
+  analytics:doctor     Check that analytics is configured
+  analytics:install    Add the analytics config file and .env key
+```
+
+像运行其他命令一样运行它们：
+
+```bash
+metro analytics:install
+```
+
+内置命令始终优先，其次是项目 `commands.json` 中的命令，然后是按字母顺序排列的包。如果某个包命令与已存在的命令具有相同的 `category:name`，Metro 会跳过它并打印一条同时指出双方的警告。
+
+> **注意：** 包命令会像您添加的任何依赖一样，在您的机器上运行该包的代码。`metro` 菜单会显示每个命令来自哪个包。
+
+<div id="shipping-commands-in-a-package"></div>
+
+### 在包中提供命令
+
+要在您维护的包中提供命令，请将每个命令放在包的 `bin/` 文件夹中，并在包根目录、与 `pubspec.yaml` 同级的 `metro_commands.json` 文件中列出它：
+
+```json
+[
+  {
+    "name": "install",
+    "category": "analytics",
+    "script": "install.dart",
+    "description": "Add the analytics config file and .env key"
+  },
+  {
+    "name": "doctor",
+    "category": "analytics",
+    "script": "doctor.dart",
+    "description": "Check that analytics is configured"
+  }
+]
+```
+
+| 字段 | 描述 |
+|-------|-------------|
+| `name` | 命令名称（在类别前缀之后使用） |
+| `category` | 命令类别。默认为包名 |
+| `script` | 包的 `bin/` 文件夹中运行该命令的 Dart 文件 |
+| `description` | 可选。在 `metro` 菜单中显示的单行摘要 |
+
+命令本身的编写方式与项目命令完全相同：它继承 `NyCustomCommand` 并导入 `ny_cli.dart`，因此您的包需要将 `nylo_framework` 作为依赖。这个 `install` 命令会在开发者的项目中生成一个配置文件，并将其读取的键添加到他们的 `.env` 中：
+
+```dart
+// bin/install.dart
+import 'package:nylo_framework/metro/ny_cli.dart';
+
+void main(arguments) => _InstallCommand(arguments).run();
+
+class _InstallCommand extends NyCustomCommand {
+  _InstallCommand(super.arguments);
+
+  @override
+  CommandBuilder builder(CommandBuilder command) {
+    command.addFlag('force', abbr: 'f', help: 'Overwrite the config file if it exists');
+    return command;
+  }
+
+  @override
+  Future<void> handle(CommandResult result) async {
+    await scaffold(
+      path: 'lib/config/analytics.dart',
+      content: '''
+import 'package:nylo_framework/nylo_framework.dart';
+
+final class AnalyticsConfig {
+  static final String key = getEnv('ANALYTICS_KEY', defaultValue: '');
+}
+''',
+      force: result.hasForceFlag,
+      successMessage: 'Created lib/config/analytics.dart',
+    );
+
+    if (!await fileContains('.env', 'ANALYTICS_KEY')) {
+      await appendFile('.env', '\nANALYTICS_KEY=\n');
+    }
+
+    success('nylo_analytics is installed');
+    comment('Set ANALYTICS_KEY in your .env file to finish.');
+  }
+}
+```
+
+Metro 会从开发者项目的根目录以 `dart run <package>:<executable>` 的方式运行该命令，这意味着：
+
+- `scaffold()`、`appendFile()`、`addPackage()` 和 `commandsPath` 等辅助工具作用于开发者的应用，而不是您的包。
+- 导入通过开发者的项目解析，因此 `nylo_framework` 是其应用所依赖的版本。您的包永远不会被修改。
+- 脚本必须是直接位于 `bin/` 内的文件——不支持嵌套文件夹。
+
+请为您的包选择一个专属类别，以免与开发者自己的命令冲突。包命令自 {{ config('app.name') }} `7.1.29`（`nylo_support` `7.29.0`）及以上版本起可被 Metro 发现。
 
 <div id="options-and-flags"></div>
 

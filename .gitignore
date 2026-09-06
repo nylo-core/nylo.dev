@@ -19,3 +19,5 @@ boost.json
 .vscode/
 .github/copilot-instructions.md
 .mcp.json
+video/
+tweet-posts/
