@@ -695,8 +695,9 @@ runApp(Main(nylo));
 | `BaseColorStyles` | `ThemeColor` を使用 |
 | `LocalizedApp` | `Main(nylo)` を直接使用 |
 | `NyException` | 標準的な Dart 例外を使用 |
-| `PushNotification` | `flutter_local_notifications` を直接使用 |
-| `PushNotificationAttachments` | `flutter_local_notifications` を直接使用 |
+
+<!-- uncertain: link text for local-notifications — the page's own H1 is "ローカル通知" but an existing cross-reference in helpers.md keeps "Local Notifications" in English; used the Japanese heading here -->
+`PushNotification` と `PushNotificationAttachments` は削除されていません。現在は `LocalNotification` と `NotificationAttachment` という名前になっており、旧名も非推奨のエイリアスとして引き続き動作します。[ローカル通知](/docs/{{ $version }}/local-notifications) を参照してください。
 
 <div id="widget-reference"></div>
 

@@ -68,7 +68,7 @@ metro make:stateful_widget ProfileImage
 class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
-  LoadingStyleType get loadingStyle => LoadingStyleType.normal();
+  LoadingStyle get loadingStyle => LoadingStyle.normal();
 
   @override
   get init => () async {
@@ -301,6 +301,8 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - 从堆栈中移除当前页面。
 
+传入 `rootNavigator: true` 可以从根导航器而不是最近的本地导航器弹出。当模态框或浮层是通过根导航器推入时，这在 Navigation Hub 标签页内很有用。
+
 示例
 
 ``` dart
@@ -308,6 +310,11 @@ class _HomePageState extends NyState<HomePage> {
 
   popView() {
     pop();
+  }
+
+  // 从根导航器弹出（例如关闭根级别的模态框）
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -463,7 +470,7 @@ class _LoginPageState extends NyState<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
             Center(
               child: InkWell(
                 onTap: _login,
@@ -496,7 +503,7 @@ class _HomePageState extends NyState<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
           ],
         )
     );
@@ -650,7 +657,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading()) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(
@@ -785,7 +792,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading(name: 'refreshing_content')) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(

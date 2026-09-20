@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Forms kế thừa `NyFormWidget` và ghi đè phương thức `fields()` để định nghĩa các trường form. Mỗi trường sử dụng một constructor được đặt tên như `Field.text()`, `Field.email()`, hoặc `Field.password()`. Getter `static NyFormActions get actions` cung cấp cách thuận tiện để tương tác với form từ bất kỳ đâu trong ứng dụng.
 
+Constructor được tạo tự động sẽ truyền tiếp `submitButton`, `onSubmit` và `onFailure`. Để cung cấp `initialData` hoặc `onChanged` cho form của bạn, hãy thêm chúng vào constructor:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Các trường picker, radio, và chip yêu cầu `FormCollection` cho tùy ch�
 ### Tạo FormCollection
 
 ``` dart
+// Collection rỗng (hữu ích làm placeholder trước khi các tùy chọn được tải)
+const FormCollection.empty()
+
 // Từ danh sách chuỗi (value và label giống nhau)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Constructor của form bạn cần có `super.initialData` để làm được điều này (xem [Tạo một Form](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Đặt giá trị trường
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+Đối với `onChanged`, constructor của form bạn cần có `super.onChanged` (xem [Tạo một Form](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1131,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Được gọi với lỗi khi xác thực thất bại
 )
 ```
+
+Constructor của form được tạo tự động chỉ truyền tiếp `key`, `submitButton`, `onSubmit` và `onFailure`, vì vậy hãy thêm tham số `super.` cho mỗi tham số khác mà bạn sử dụng (xem [Tạo một Form](#creating-forms)).
 
 Callback `onChanged` nhận `Field` đã thay đổi và giá trị mới của nó:
 

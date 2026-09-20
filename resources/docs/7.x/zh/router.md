@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 您可以通过修改 `router.dart` 文件来在页面导航时添加过渡效果。
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // 从下到上
@@ -928,6 +926,8 @@ NyNavigator.updateStack([
 - 处理应打开特定应用页面的通知
 - 无缝的网页到应用过渡
 
+> 想要完整的设置流程？请参阅专门的 [Deep Links](/docs/{{ $version }}/deep-links) 指南，了解平台配置、拦截链接和 Metro 脚手架。
+
 ## 设置
 
 在应用中实现深度链接之前，请确保项目配置正确：
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## 处理深度链接
 
-您可以在 `RouteProvider` 中处理深度链接事件：
+使用 `useDeepLinks()` 启用平台深度链接捕获，然后使用 `onIncomingLink` 在 {{ config('app.name') }} 路由之前拦截每个 URI：
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // 处理深度链接
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // 为深度链接更新路由栈
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+完整 API 请参阅 [Deep Links](/docs/{{ $version }}/deep-links) 指南。
 
 ### 测试深度链接
 

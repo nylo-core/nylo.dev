@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 表单继承 `NyFormWidget` 并覆盖 `fields()` 方法来定义表单字段。每个字段使用命名构造函数，如 `Field.text()`、`Field.email()` 或 `Field.password()`。`static NyFormActions get actions` getter 提供了从应用的任何位置与表单交互的便捷方式。
 
+生成的构造函数只会转发 `submitButton`、`onSubmit` 和 `onFailure`。如果您想为表单提供 `initialData` 或 `onChanged`，需要将它们也添加到构造函数中：
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### 创建 FormCollection
 
 ``` dart
+// 空集合（在选项加载前用作占位符很有用）
+const FormCollection.empty()
+
 // 从字符串列表创建（值和标签相同）
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+您的表单构造函数需要包含 `super.initialData` 才能实现这一点（参见[创建表单](#creating-forms)）。
+
 <div id="setting-field-values"></div>
 
 ### 设置字段值
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+对于 `onChanged`，您的表单构造函数需要包含 `super.onChanged`（参见[创建表单](#creating-forms)）。
 
 <div id="clearing-data"></div>
 
@@ -1132,6 +1145,8 @@ LoginForm(
 )
 ```
 
+生成的表单构造函数只会转发 `key`、`submitButton`、`onSubmit` 和 `onFailure`，因此如果您要使用其他参数，需要为每一个添加相应的 `super.` 参数（参见[创建表单](#creating-forms)）。
+
 `onChanged` 回调接收更改的 `Field` 及其新值：
 
 ``` dart
@@ -1228,5 +1243,6 @@ LoginForm.actions.submit(
 | `Field.slider()` | -- | 单值滑块 |
 | `Field.rangeSlider()` | -- | 范围值滑块 |
 | `Field.custom()` | `child`（必需 `NyFieldStatefulWidget`） | 自定义有状态组件 |
+| `Field.builder()` | `builder`（必需 `NyFieldBuilder` 或 `NyFieldBuilderLegacy`） | 无需子类化的内联自定义字段 |
 | `Field.widget()` | `child`（必需 `Widget`） | 嵌入任何组件（非字段） |
 

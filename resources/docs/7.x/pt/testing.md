@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Introdução](#introduction "Introdução")
 - [Primeiros Passos](#getting-started "Primeiros Passos")
+  - [Executando os Testes](#running-tests "Executando os Testes")
 - [Escrevendo Testes](#writing-tests "Escrevendo Testes")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Inicialize o framework de testes no topo do seu arquivo de teste:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` configura o ambiente de teste e habilita o reset automático de estado entre testes quando `autoReset: true` (o padrão).
+
+<div id="running-tests"></div>
+
+### Executando os Testes
+
+<!-- uncertain: no established pt translation yet for the "Requires" strip label; using "Requer" -->
+<x-doc-strip label="Requer" items="nylo_installer 1.5.0+" />
+
+Execute seus testes com a CLI `nylo` a partir da raiz do seu projeto:
+
+``` bash
+nylo test
+```
+
+`nylo test` formata os arquivos em `test/` com `dart format`, executa `flutter test` e exibe cada teste com o tempo que levou, seguido de um resumo:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Durações de 2 segundos ou mais são exibidas em vermelho. Se algum teste falhar, o erro é exibido logo abaixo dele e o comando é encerrado com o código `1`, para que você possa usá-lo em CI.
+
+| Opção | Descrição |
+|--------|-------------|
+| `--filter`, `-f` | Executa apenas os testes cujo nome corresponde a um padrão |
+| `--coverage` | Coleta a cobertura de código |
+| `--path` | Executa os testes em outra pasta (padrão: `test`) |
+| `--no-format` | Pula a formatação dos arquivos de teste antes |
+
+``` bash
+# Apenas os testes com "login" no nome, com cobertura
+nylo test --filter "login" --coverage
+
+# Testes de integração, sem formatação
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

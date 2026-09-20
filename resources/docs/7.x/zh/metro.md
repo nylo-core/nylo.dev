@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [简介](#introduction "简介")
-- [安装](#install "安装")
+- [安装](#install "为 {{ config('app.name') }} 安装 Metro 别名")
 - 生成命令
   - [生成控制器](#make-controller "生成控制器")
   - [生成模型](#make-model "生成模型")
@@ -63,7 +63,9 @@ Metro 是一个在 {{ config('app.name') }} 框架底层运行的 CLI 工具。
 
 ## 安装
 
-当您使用 `nylo init` 创建新的 Nylo 项目时，`metro` 命令会自动为您的终端配置。您可以在任何 Nylo 项目中立即开始使用它。
+使用 `nylo new` 创建项目后，在项目中运行 `nylo init`，即可将 `metro` 命令添加到您的 shell。重启终端（或运行它打印出的 `source` 命令），之后您就可以在任何 Nylo 项目中使用 `metro`。
+
+您也可以在不使用别名的情况下运行 Metro，这在 Windows 上很方便：`nylo metro make:page settings_page`。参见[不使用别名运行 Metro](/docs/{{ $version }}/installation#nylo-metro)。
 
 从项目目录运行 `metro` 来查看所有可用命令：
 
@@ -247,6 +249,8 @@ metro make:page login_page -a
 ``` bash
 metro make:page home_page -i
 ```
+
+路由器只能设置一个初始路由。Metro 不会移除已拥有该设置的路由上的 `.initialRoute()`（在新项目中为 `HomePage`），因此您需要自行在 `lib/routes/router.dart` 中移除它，否则应用会在调试断言处停止运行。
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ metro make:navigation_hub dashboard
 
 | 标志 | 简写 | 描述 |
 |------|-------|-------------|
-| `--auth` | `-a` | 创建为认证页面 |
-| `--initial` | `-i` | 创建为初始页面 |
 | `--force` | `-f` | 如果存在则覆盖 |
 
-``` bash
-# 创建为初始页面
-metro make:navigation_hub dashboard --initial
+Metro 添加的路由并不是初始路由。要让应用启动时打开该导航中心，请在 `lib/routes/router.dart` 中为它添加 `.initialRoute()`，并将其从原本拥有该设置的路由上移除：
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -922,6 +925,8 @@ metro app:current_time
   project:deploy
 ```
 
+如果已安装的包提供了自己的命令，它们会显示在你的命令下方的附加部分中 -- 参见 [来自包的命令](#package-commands)。
+
 要显示命令的帮助信息，请使用 `--help` 或 `-h` 标志：
 
 ```bash
@@ -932,14 +937,16 @@ metro project:install_firebase --help
 
 ## 来自包的命令
 
-包可以为安装它们的开发者提供 Metro 命令——例如一个用于生成包所需配置的 `install` 命令。当您 `pubspec.yaml` 中的某个包包含 `metro_commands.json` 文件时，Metro 会自动发现其命令，并将它们列在菜单中该包名称下：
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+如果 `pubspec.yaml` 中的某个包提供了 Metro 命令，它们会被自动发现并在菜单中以该包的名称列出：
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-像运行您自己的命令一样运行它们，例如 `metro analytics:install`。要了解如何在您维护的包中提供命令，请参阅[包命令]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)。
+像运行自己的命令一样运行它们，例如 `metro analytics:install`。完整的发现与优先级规则，以及如何在你维护的包中提供命令，请参见 [包命令]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)。
 
 <div id="adding-options-to-custom-commands"></div>
 

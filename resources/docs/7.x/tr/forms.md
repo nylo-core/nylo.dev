@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Formlar `NyFormWidget` sınıfını genişletir ve form alanlarını tanımlamak için `fields()` metodunu geçersiz kılar. Her alan `Field.text()`, `Field.email()` veya `Field.password()` gibi adlandırılmış bir kurucu kullanır. `static NyFormActions get actions` getter'ı, uygulamanızın herhangi bir yerinden formla etkileşim kurmak için uygun bir yol sağlar.
 
+Oluşturulan kurucu, `submitButton`, `onSubmit` ve `onFailure` parametrelerini aktarır. Formunuza `initialData` veya `onChanged` eklemek için, bunları da kurucusuna ekleyin:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -858,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Bunun için formunuzun kurucusunun `super.initialData` içermesi gerekir (bkz. [Form Oluşturma](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Alan Değerlerini Ayarlama
@@ -897,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+`onChanged` için, formunuzun kurucusunun `super.onChanged` içermesi gerekir (bkz. [Form Oluşturma](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1134,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Başarısız doğrulamada hatalarla çağrılır
 )
 ```
+
+Oluşturulan bir formun kurucusu yalnızca `key`, `submitButton`, `onSubmit` ve `onFailure` parametrelerini aktarır, bu yüzden kullandığınız her diğer parametre için bir `super.` parametresi ekleyin (bkz. [Form Oluşturma](#creating-forms)).
 
 `onChanged` callback'i, değişen `Field` ve yeni değerini alır:
 

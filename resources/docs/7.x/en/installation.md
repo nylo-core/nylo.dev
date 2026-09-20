@@ -6,6 +6,11 @@
 - [Install](#install "Install")
 - [Running the Project](#running-the-project "Running the project")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [Cleaning a project](#nylo-clean "Cleaning a project")
+  - [Refreshing iOS pods](#nylo-ios-pod-refresh "Refreshing iOS pods")
+  - [Running Metro without the alias](#nylo-metro "Running Metro without the alias")
+  - [Updating the CLI](#nylo-self-update "Updating the CLI")
 
 
 <div id="install"></div>
@@ -42,6 +47,8 @@ Lets you type `metro` instead of the full `dart run` syntax.
 cd my_app
 nylo init
 ```
+
+Restart your terminal afterwards, or run the `source` command that `nylo init` prints.
 </x-doc-step>
 </x-doc-steps>
 
@@ -164,4 +171,95 @@ metro make:model User
 
 # Create an API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<x-doc-strip label="Requires" items="nylo_installer 1.8.0+" linkText="Update the CLI" linkHref="#nylo-self-update" />
+
+The `nylo` command from step 1 does more than create projects. Run it from your project directory to clean builds, refresh iOS pods, run tests, and check your translations.
+
+<x-doc-commands title="Project commands" rows="
+nylo new | Create a new project
+nylo init | Set up the metro alias in your shell
+nylo clean | Run flutter clean and flutter pub get
+nylo ios:pod-refresh | Reinstall your iOS pods
+nylo metro | Run a Metro command without the alias
+" />
+
+<x-doc-commands title="Testing and translations" rows="
+nylo test | Format and run your tests
+nylo locale:find-untranslated | Find text that isn't wrapped in .tr()
+nylo locale:check-missing-keys | Find keys missing from your lang files
+" />
+
+<x-doc-commands title="The CLI itself" rows="
+nylo self-update | Update nylo to the latest version
+nylo --version | Show the installed version
+" />
+
+Commands that take options list them with `-h`, for example `nylo test -h`. Testing is covered in [Running Tests](/docs/{{ $version }}/testing#running-tests), and the `locale:` commands in [Auditing Translations](/docs/{{ $version }}/localization#auditing-translations).
+
+<div id="nylo-clean"></div>
+
+### Cleaning a project
+
+`nylo clean` runs `flutter clean` and then `flutter pub get`. Add a platform flag when a normal clean isn't enough:
+
+``` bash
+# flutter clean, then flutter pub get
+nylo clean
+
+# Also remove ios/Pods, ios/.symlinks and ios/Podfile.lock, then run pod install --repo-update
+nylo clean --ios
+
+# Also run gradlew clean in android/
+nylo clean --android
+
+# Both of the above
+nylo clean --all
+```
+
+If a project has no `ios/` or `android/` folder, that platform is skipped with a warning. `pod install` only runs on macOS.
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### Refreshing iOS pods
+
+When CocoaPods gets out of sync, `nylo ios:pod-refresh` deletes `ios/Pods`, `ios/.symlinks` and `ios/Podfile.lock`, then runs `pod install --repo-update` in the `ios/` folder:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+Run it from your project root on macOS. Unlike `nylo clean --ios`, it doesn't run `flutter clean` or `flutter pub get`.
+
+<div id="nylo-metro"></div>
+
+### Running Metro without the alias
+
+`nylo metro` passes everything after it to Metro (`dart run nylo_framework:main`). Use it before you've run `nylo init`, or on Windows, where `nylo init` can't add the `metro` alias for you:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### Updating the CLI
+
+``` bash
+nylo self-update
+```
+
+This checks pub.dev and reinstalls `nylo_installer` if a newer version is available. After a command finishes, `nylo` also tells you when an update is out. It stays quiet when the output isn't going to a terminal, so the notice never ends up in CI logs or piped reports.
+
+To see which version you have installed:
+
+``` bash
+nylo --version
 ```

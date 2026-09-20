@@ -68,7 +68,7 @@ Sayfanız için yükleme stilini ayarlamak amacıyla `loadingStyle` özelliğini
 class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
-  LoadingStyleType get loadingStyle => LoadingStyleType.normal();
+  LoadingStyle get loadingStyle => LoadingStyle.normal();
 
   @override
   get init => () async {
@@ -470,7 +470,7 @@ class _LoginPageState extends NyState<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
             Center(
               child: InkWell(
                 onTap: _login,
@@ -503,7 +503,7 @@ class _HomePageState extends NyState<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
           ],
         )
     );
@@ -657,7 +657,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading()) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(
@@ -792,7 +792,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading(name: 'refreshing_content')) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(

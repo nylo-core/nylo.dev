@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 I form estendono `NyFormWidget` e sovrascrivono il metodo `fields()` per definire i campi del form. Ogni campo usa un costruttore nominato come `Field.text()`, `Field.email()` o `Field.password()`. Il getter `static NyFormActions get actions` fornisce un modo conveniente per interagire con il form da qualsiasi punto della tua app.
 
+Il costruttore generato passa `submitButton`, `onSubmit` e `onFailure`. Per fornire al tuo form `initialData` o `onChanged`, aggiungili anche al suo costruttore:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ I campi picker, radio e chip richiedono una `FormCollection` per le loro opzioni
 ### Creare una FormCollection
 
 ``` dart
+// Collezione vuota (utile come segnaposto prima del caricamento delle opzioni)
+const FormCollection.empty()
+
 // Da una lista di stringhe (valore e label sono gli stessi)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -741,7 +750,14 @@ Field.number("Age",
     },
   )
 )
+
+// Nullable — la validazione passa quando il campo e vuoto
+Field.text("Nickname",
+  validator: FormValidator().minLength(3).nullable(),
+)
 ```
+
+`nullable()` contrassegna un validatore come opzionale. Quando il valore del campo e null o vuoto, tutte le regole di validazione vengono ignorate e il campo passa. Quando il campo ha un valore, tutte le regole vengono applicate normalmente. Concatenalo alla fine di qualsiasi `FormValidator`.
 
 Quando un form viene inviato, tutti i validatori vengono controllati. Se qualcuno fallisce, viene mostrato un toast di errore con il primo messaggio di errore e viene chiamato il callback `onFailure`.
 
@@ -848,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Per farlo, il costruttore del tuo form ha bisogno di `super.initialData` (vedi [Creare un Form](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Impostare i Valori dei Campi
@@ -887,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+Per `onChanged`, il costruttore del tuo form ha bisogno di `super.onChanged` (vedi [Creare un Form](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1124,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Chiamato con gli errori dopo validazione fallita
 )
 ```
+
+Il costruttore di un form generato passa solo `key`, `submitButton`, `onSubmit` e `onFailure`, quindi aggiungi un parametro `super.` per ciascuno degli altri che utilizzi (vedi [Creare un Form](#creating-forms)).
 
 Il callback `onChanged` riceve il `Field` che e' cambiato e il suo nuovo valore:
 

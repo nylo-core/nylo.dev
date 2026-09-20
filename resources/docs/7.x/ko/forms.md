@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 폼은 `NyFormWidget`을 확장하고 `fields()` 메서드를 오버라이드하여 폼 필드를 정의합니다. 각 필드는 `Field.text()`, `Field.email()`, `Field.password()`와 같은 명명된 생성자를 사용합니다. `static NyFormActions get actions` getter는 앱 어디에서나 폼과 상호작용하는 편리한 방법을 제공합니다.
 
+생성된 생성자는 `submitButton`, `onSubmit`, `onFailure`만 전달합니다. 폼에 `initialData`나 `onChanged`를 사용하려면 생성자에도 다음과 같이 추가하세요:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Picker, 라디오, Chip 필드의 옵션에는 `FormCollection`이 필요합니�
 ### FormCollection 생성
 
 ``` dart
+// 빈 컬렉션 (옵션이 로드되기 전 플레이스홀더로 유용)
+const FormCollection.empty()
+
 // 문자열 목록으로부터 (값과 레이블이 동일)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+이를 위해서는 폼의 생성자에 `super.initialData`가 필요합니다([폼 생성](#creating-forms) 참고).
+
 <div id="setting-field-values"></div>
 
 ### 필드 값 설정
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+`onChanged`를 사용하려면 폼의 생성자에 `super.onChanged`가 필요합니다([폼 생성](#creating-forms) 참고).
 
 <div id="clearing-data"></div>
 
@@ -1132,6 +1145,8 @@ LoginForm(
 )
 ```
 
+생성된 폼의 생성자는 `key`, `submitButton`, `onSubmit`, `onFailure`만 전달하므로, 그 외에 사용하는 항목마다 `super.` 매개변수를 추가해야 합니다([폼 생성](#creating-forms) 참고).
+
 `onChanged` 콜백은 변경된 `Field`와 새 값을 받습니다:
 
 ``` dart
@@ -1228,4 +1243,5 @@ LoginForm.actions.submit(
 | `Field.slider()` | -- | 단일 값 슬라이더 |
 | `Field.rangeSlider()` | -- | 범위 값 슬라이더 |
 | `Field.custom()` | `child` (필수 `NyFieldStatefulWidget`) | 커스텀 상태가 있는 위젯 |
+| `Field.builder()` | `builder` (필수 `NyFieldBuilder` 또는 `NyFieldBuilderLegacy`) | 서브클래싱 없는 인라인 커스텀 필드 |
 | `Field.widget()` | `child` (필수 `Widget`) | 모든 위젯 삽입 (비필드) |

@@ -6,6 +6,11 @@
 - [설치하기](#install "설치하기")
 - [프로젝트 실행](#running-the-project "프로젝트 실행")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [프로젝트 정리](#nylo-clean "프로젝트 정리")
+  - [iOS Pod 새로고침](#nylo-ios-pod-refresh "iOS Pod 새로고침")
+  - [별칭 없이 Metro 실행](#nylo-metro "별칭 없이 Metro 실행")
+  - [CLI 업데이트](#nylo-self-update "CLI 업데이트")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@
 
 <x-doc-steps>
 <x-doc-step number="1" title="Nylo CLI 전역 설치">
-{{ config('app.name') }} CLI 도구를 시스템에 전역으로 설치합니다.
+`nylo` 명령을 시스템에 설치합니다.
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ nylo new my_app
 cd my_app
 nylo init
 ```
+
+이후 터미널을 재시작하거나, `nylo init`이 출력하는 `source` 명령어를 실행하세요.
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # API 서비스 생성
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: strip label "Requires" — no established translation in this locale's existing files -->
+<x-doc-strip label="필수" items="nylo_installer 1.8.0+" linkText="CLI 업데이트" linkHref="#nylo-self-update" />
+
+1단계에서 사용한 `nylo` 명령어는 프로젝트 생성 외에도 다양한 기능을 제공합니다. 프로젝트 디렉토리에서 실행하면 빌드 정리, iOS Pod 새로고침, 테스트 실행, 번역 확인을 할 수 있습니다.
+
+<x-doc-commands title="프로젝트 명령" rows="
+nylo new | 새 프로젝트 생성
+nylo init | 셸에 metro 별칭 설정
+nylo clean | flutter clean과 flutter pub get 실행
+nylo ios:pod-refresh | iOS Pod 재설치
+nylo metro | 별칭 없이 Metro 명령어 실행
+" />
+
+<x-doc-commands title="테스트 및 번역" rows="
+nylo test | 테스트를 포맷하고 실행
+nylo locale:find-untranslated | .tr()로 감싸지 않은 텍스트 찾기
+nylo locale:check-missing-keys | lang 파일에서 누락된 키 찾기
+" />
+
+<x-doc-commands title="CLI 자체" rows="
+nylo self-update | nylo를 최신 버전으로 업데이트
+nylo --version | 설치된 버전 표시
+" />
+
+옵션을 받는 명령어는 `-h`로 목록을 확인할 수 있습니다. 예: `nylo test -h`. 테스트에 관한 내용은 [테스트 실행](/docs/{{ $version }}/testing#running-tests)에서, `locale:` 명령어에 관한 내용은 [번역 감사](/docs/{{ $version }}/localization#auditing-translations)에서 확인할 수 있습니다.
+
+<div id="nylo-clean"></div>
+
+### 프로젝트 정리
+
+`nylo clean`은 `flutter clean`을 실행한 후 `flutter pub get`을 실행합니다. 일반적인 클린으로 충분하지 않을 때는 플랫폼 플래그를 추가하세요:
+
+``` bash
+# flutter clean 실행 후 flutter pub get 실행
+nylo clean
+
+# ios/Pods, ios/.symlinks, ios/Podfile.lock도 삭제한 후 pod install --repo-update 실행
+nylo clean --ios
+
+# android/에서 gradlew clean도 실행
+nylo clean --android
+
+# 위 두 가지 모두
+nylo clean --all
+```
+
+프로젝트에 `ios/` 또는 `android/` 폴더가 없으면 해당 플랫폼은 경고와 함께 건너뜁니다. `pod install`은 macOS에서만 실행됩니다.
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### iOS Pod 새로고침
+
+CocoaPods 동기화가 어긋나면 `nylo ios:pod-refresh`가 `ios/Pods`, `ios/.symlinks`, `ios/Podfile.lock`을 삭제한 후 `ios/` 폴더에서 `pod install --repo-update`를 실행합니다:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+macOS에서 프로젝트 루트 디렉토리에서 실행하세요. `nylo clean --ios`와 달리 `flutter clean`이나 `flutter pub get`은 실행하지 않습니다.
+
+<div id="nylo-metro"></div>
+
+### 별칭 없이 Metro 실행
+
+`nylo metro`는 그 뒤에 오는 모든 내용을 Metro(`dart run nylo_framework:main`)에 전달합니다. `nylo init`을 아직 실행하지 않았거나, `nylo init`이 `metro` 별칭을 추가할 수 없는 Windows에서 사용하세요:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### CLI 업데이트
+
+``` bash
+nylo self-update
+```
+
+이 명령어는 pub.dev를 확인하여 새 버전이 있으면 `nylo_installer`를 다시 설치합니다. 명령어 실행이 끝나면 `nylo`는 업데이트가 있을 때도 알려줍니다. 출력이 터미널로 가지 않을 때는 조용히 동작하므로, 이 알림이 CI 로그나 파이프된 결과에 섞이는 일은 없습니다.
+
+설치된 버전을 확인하려면:
+
+``` bash
+nylo --version
 ```

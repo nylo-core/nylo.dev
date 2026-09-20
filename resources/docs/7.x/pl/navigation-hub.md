@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Możesz nawigować do widgetów wewnątrz zakładki za pomocą helpera `pushTo`.
 
-Wewnątrz zakładki możesz użyć helpera `pushTo`, aby przejść do innego widgetu.
+Wewnątrz zakładki możesz użyć helpera `pushTo`, aby przejść do innego widgetu. `pushTo` pochodzi z `NyState`, więc stan Twojej zakładki musi go rozszerzać.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Możesz też przekazać dane do widgetu, do którego nawigujesz.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

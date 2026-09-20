@@ -981,10 +981,10 @@ Widget view(BuildContext context) {
 
 你可以使用 `pushTo` 辅助方法在标签页内导航到其他组件。
 
-在你的标签页内部，可以使用 `pushTo` 辅助方法导航到另一个组件。
+在你的标签页内部，可以使用 `pushTo` 辅助方法导航到另一个组件。`pushTo` 来自 `NyState`，因此你的标签页状态需要扩展它。
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -996,7 +996,7 @@ _HomeTabState extends State<HomeTab> {
 你也可以向目标组件传递数据。
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});
@@ -1263,6 +1263,14 @@ Future<bool> nextPage();
 /// 在 Journey 布局中导航到上一页
 /// 例如：await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// 刷新指定标签页，强制其重建
+/// 例如： MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// 刷新所有标签页，强制它们重建
+/// 例如： MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 要使用 State Action，你可以按以下方式操作：
@@ -1275,6 +1283,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // 切换到标签页 2
 
 await MyNavigationHub.stateActions.nextPage(); // Journey：跳转到下一页
+
+MyNavigationHub.stateActions.refreshTab(0); // 强制标签页 0 重建
+
+MyNavigationHub.stateActions.refresh(); // 强制所有标签页重建
 ```
 
 <div id="loading-style"></div>

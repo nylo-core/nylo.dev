@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 `router.dart` dosyanizi degistirerek bir sayfadan digerine gecis yaparken gecis efektleri ekleyebilirsiniz.
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // bottomToTop
@@ -928,6 +926,8 @@ Derin baglanti, kullanicilarin URL'ler kullanarak uygulamanizdaki belirli icerik
 - Belirli uygulama ekranlarini acmasi gereken bildirimleri yonetme
 - Kesintisiz web'den uygulamaya gecisler
 
+> Tam kurulum rehberini mi ariyorsunuz? Platform yapilandirmasi, baglantilari yakalama ve Metro iskeleti icin ozel [Deep Links](/docs/{{ $version }}/deep-links) rehberine bakin.
+
 ## Kurulum
 
 Uygulamanizda derin baglantiyi uygulamadan once, projenizin duzgun yapilandirildigindan emin olun:
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## Derin Baglantilari Yonetme
 
-Derin baglanti olaylarini `RouteProvider`'inizda yonetebilirsiniz:
+Platform derin baglanti yakalamayi `useDeepLinks()` ile etkinlestirin, ardindan {{ config('app.name') }} yonlendirmeden once her URI'yi yakalamak icin `onIncomingLink` kullanin:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // Derin baglantilari isle
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // Derin baglantilar icin rota yiginini guncelle
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+Tam API icin [Deep Links](/docs/{{ $version }}/deep-links) rehberine bakin.
 
 ### Derin Baglantilari Test Etme
 

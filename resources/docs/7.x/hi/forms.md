@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 फ़ॉर्म्स `NyFormWidget` को एक्सटेंड करते हैं और फ़ॉर्म फ़ील्ड्स डिफ़ाइन करने के लिए `fields()` मेथड को ओवरराइड करते हैं। प्रत्येक फ़ील्ड `Field.text()`, `Field.email()`, या `Field.password()` जैसे नेम्ड कंस्ट्रक्टर का उपयोग करता है। `static NyFormActions get actions` गेटर आपके ऐप में कहीं से भी फ़ॉर्म के साथ इंटरैक्ट करने का एक सुविधाजनक तरीका प्रदान करता है।
 
+जनरेट किया गया कंस्ट्रक्टर `submitButton`, `onSubmit` और `onFailure` को आगे पास करता है। अपने फ़ॉर्म को `initialData` या `onChanged` देने के लिए, इन्हें भी इसके कंस्ट्रक्टर में जोड़ें:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### FormCollection बनाना
 
 ``` dart
+// खाली कलेक्शन (विकल्प लोड होने से पहले प्लेसहोल्डर के रूप में उपयोगी)
+const FormCollection.empty()
+
 // स्ट्रिंग्स की लिस्ट से (वैल्यू और लेबल एक ही हैं)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+इसके लिए आपके फ़ॉर्म के कंस्ट्रक्टर में `super.initialData` होना चाहिए (देखें [फ़ॉर्म बनाना](#creating-forms))।
+
 <div id="setting-field-values"></div>
 
 ### फ़ील्ड वैल्यू सेट करना
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+`onChanged` के लिए, आपके फ़ॉर्म के कंस्ट्रक्टर में `super.onChanged` होना चाहिए (देखें [फ़ॉर्म बनाना](#creating-forms))।
 
 <div id="clearing-data"></div>
 
@@ -1131,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // विफल वैलिडेशन पर एरर के साथ कॉल किया जाता है
 )
 ```
+
+जनरेट किया गया फ़ॉर्म कंस्ट्रक्टर केवल `key`, `submitButton`, `onSubmit` और `onFailure` को आगे पास करता है, इसलिए आप जिस भी अन्य पैरामीटर का उपयोग करते हैं उसके लिए एक `super.` पैरामीटर जोड़ें (देखें [फ़ॉर्म बनाना](#creating-forms))।
 
 `onChanged` कॉलबैक बदले गए `Field` और उसकी नई वैल्यू प्राप्त करता है:
 

@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Giris](#introduction "Giris")
-- [Kurulum](#install "Kurulum")
+- [Kurulum](#install "{{ config('app.name') }} için Metro Takma Adını Kurma")
 - Make Komutlari
   - [Controller olusturma](#make-controller "Controller olusturma")
   - [Model olusturma](#make-model "Model olusturma")
@@ -63,7 +63,9 @@ Gelistirmeyi hizlandirmak icin bircok yararli arac saglar.
 
 ## Kurulum
 
-`nylo init` kullanarak yeni bir Nylo projesi olusturdugunuzda, `metro` komutu terminaliniz icin otomatik olarak yapilandirilir. Herhangi bir Nylo projesinde hemen kullanmaya baslayabilirsiniz.
+`nylo new` ile bir proje olusturduktan sonra, `metro` komutunu kabugunuza eklemek icin proje icinde `nylo init` calistirin. Terminalinizi yeniden baslatin (ya da yazdirdigi `source` komutunu calistirin), ardindan `metro`'yu herhangi bir Nylo projesinde kullanabilirsiniz.
+
+Metro'yu ayrica alias olmadan da calistirabilirsiniz; bu, Windows'ta kullanislidir: `nylo metro make:page settings_page`. Bkz. [Metro'yu alias olmadan calistirma](/docs/{{ $version }}/installation#nylo-metro).
 
 Tum kullanilabilir komutlari gormek icin proje dizininizden `metro` komutunu calistirin:
 
@@ -247,6 +249,9 @@ Terminalde asagidaki komutu calistirarak yeni bir baslangic sayfasi olusturabili
 ``` bash
 metro make:page home_page -i
 ```
+
+<!-- uncertain: "debug assert" - bu dosyada daha once gecmeyen Flutter/Dart'a ozgu bir terim -->
+Router'inizda yalnizca bir baslangic rotasi (initial route) olabilir. Metro, `.initialRoute()`'u zaten sahip olan rotadan kaldirmaz (yeni bir projede bu `HomePage`'dir), bu yuzden onu `lib/routes/router.dart` icinde kendiniz kaldirin, aksi halde uygulama bir debug assert'te durur.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +715,12 @@ Bu, `lib/resources/pages/` dizininde yeni bir navigation hub olusturacak ve rout
 
 | Bayrak | Kisaltma | Aciklama |
 |------|-------|-------------|
-| `--auth` | `-a` | Auth sayfasi olarak olustur |
-| `--initial` | `-i` | Baslangic sayfasi olarak olustur |
 | `--force` | `-f` | Mevcutsa uzerine yaz |
 
-``` bash
-# Başlangıç sayfası olarak oluştur
-metro make:navigation_hub dashboard --initial
+Metro'nun ekledigi rota, baslangic rotasi degildir. Uygulamanizi hub uzerinde acmak icin, `lib/routes/router.dart` dosyasinda ona `.initialRoute()` ekleyin ve bunu daha once sahip olan rotadan kaldirin:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +803,9 @@ metro make:key
 
 | Bayrak / Secenek | Kisaltma | Aciklama |
 |---------------|-------|-------------|
-| `--force` | `-f` | Mevcut APP_KEY'in uzerine yaz |
 | `--file` | `-e` | Hedef .env dosyasi (varsayilan: `.env`) |
 
 ``` bash
-# Anahtar oluştur ve mevcut anahtarın üzerine yaz
-metro make:key --force
-
 # Belirli bir env dosyası için anahtar oluştur
 metro make:key --file=.env.production
 ```
@@ -926,6 +926,8 @@ metro app:current_time
   project:deploy
 ```
 
+Kurulu paketler kendi komutlarini saglarsa, bunlar sizinkilerin altinda ek bolumlerde gorunur -- bkz. [Paketlerden Gelen Komutlar](#package-commands).
+
 Komutunuz icin yardim bilgilerini goruntulemek icin `--help` veya `-h` bayragini kullanin:
 
 ```bash
@@ -936,14 +938,16 @@ metro project:install_firebase --help
 
 ## Paketlerden Gelen Komutlar
 
-Paketler, onlari yukleyen gelistiriciler icin Metro komutlari sunabilir -- ornegin bir paketin ihtiyac duydugu yapilandirmayi olusturan bir `install` komutu gibi. `pubspec.yaml` dosyanizdaki bir paket `metro_commands.json` dosyasi iceriyorsa, Metro onun komutlarini otomatik olarak kesfeder ve bunlari menude paketin adi altinda listeler:
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+`pubspec.yaml` dosyanizdaki bir paket Metro komutlari saglarsa, bunlar otomatik olarak kesfedilir ve menude paketin adi altinda listelenir:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Bunlari tipki kendi komutlariniz gibi calistirin, ornegin `metro analytics:install`. Surdurdugunuz bir pakette komut sunmayi ogrenmek icin bkz. [Paket Komutları]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Bunlari kendi komutlariniz gibi calistirin, or. `metro analytics:install`. Tam kesif ve oncelik kurallari ile bakimini yaptiginiz bir pakette komut dagitmak icin bkz. [Paket Komutları]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

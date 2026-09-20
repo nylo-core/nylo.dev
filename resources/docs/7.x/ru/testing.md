@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Введение](#introduction "Введение")
 - [Начало работы](#getting-started "Начало работы")
+  - [Запуск тестов](#running-tests "Запуск тестов")
 - [Написание тестов](#writing-tests "Написание тестов")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Инициализируйте тестовый фреймворк в начале вашего тестового файла:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` настраивает тестовое окружение и включает автоматический сброс состояния между тестами, когда `autoReset: true` (по умолчанию).
+
+<div id="running-tests"></div>
+
+### Запуск тестов
+
+<!-- uncertain: no established ru rendering yet for the x-doc-strip label "Requires"; used "Требуется" -->
+<x-doc-strip label="Требуется" items="nylo_installer 1.5.0+" />
+
+Запускайте тесты с помощью CLI `nylo` из корня вашего проекта:
+
+``` bash
+nylo test
+```
+
+Команда `nylo test` форматирует файлы в `test/` с помощью `dart format`, запускает `flutter test` и выводит каждый тест с указанием затраченного времени, а затем сводку:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Тесты длительностью 2 секунды и более выделяются красным. Если тест не проходит, его ошибка выводится под ним, и команда завершается с кодом `1`, поэтому её можно использовать в CI.
+
+| Опция | Описание |
+|--------|-------------|
+| `--filter`, `-f` | Запускать только тесты, имя которых соответствует шаблону |
+| `--coverage` | Собирать покрытие кода |
+| `--path` | Запустить тесты в другой папке (по умолчанию: `test`) |
+| `--no-format` | Пропустить форматирование тестовых файлов |
+
+``` bash
+# Только тесты, содержащие "login" в названии, с покрытием
+nylo test --filter "login" --coverage
+
+# Интеграционные тесты, без форматирования
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

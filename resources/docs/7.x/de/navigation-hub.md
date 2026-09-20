@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Sie können innerhalb eines Tabs zu Widgets navigieren, indem Sie den `pushTo`-Helfer verwenden.
 
-Innerhalb Ihres Tabs können Sie den `pushTo`-Helfer verwenden, um zu einem anderen Widget zu navigieren.
+Innerhalb Ihres Tabs können Sie den `pushTo`-Helfer verwenden, um zu einem anderen Widget zu navigieren. `pushTo` stammt von `NyState`, daher muss der State Ihres Tabs `NyState` erweitern.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Sie können auch Daten an das Widget übergeben, zu dem Sie navigieren.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

@@ -72,21 +72,22 @@ class AppProvider extends NyProvider {
 
   @override
   Future<Nylo?> setup(Nylo nylo) async {
-    await NyLocalization.instance.init(
-        localeType: localeType,
-        languageCode: languageCode,
-        languagesList: languagesList,
-        assetsDirectory: assetsDirectory,
-        valuesAsMap: valuesAsMap);
+    await nylo.configure(
+      localization: NyLocalizationConfig(
+        languageCode: LocalizationConfig.languageCode,
+        localeType: LocalizationConfig.localeType,
+        assetsDirectory: LocalizationConfig.assetsDirectory,
+      ),
+    );
 
     return nylo;
   }
 
   @override
   Future<void> boot(Nylo nylo) async {
-    User user = await Auth.user();
-    if (!user.isSubscribed) {
-      await Auth.remove();
+    bool isSubscribed = Auth.data(field: 'is_subscribed') ?? false;
+    if (!isSubscribed) {
+      await Auth.logout();
     }
   }
 }

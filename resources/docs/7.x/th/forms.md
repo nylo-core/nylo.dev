@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 ฟอร์ม extend จาก `NyFormWidget` และ override เมธอด `fields()` เพื่อกำหนด form fields แต่ละ field ใช้ named constructor เช่น `Field.text()`, `Field.email()` หรือ `Field.password()` getter `static NyFormActions get actions` มอบวิธีที่สะดวกในการโต้ตอบกับฟอร์มจากที่ใดก็ได้ในแอปของคุณ
 
+constructor ที่สร้างขึ้นจะส่งต่อ `submitButton`, `onSubmit` และ `onFailure` หากต้องการให้ฟอร์มของคุณมี `initialData` หรือ `onChanged` ให้เพิ่มเข้าไปใน constructor ด้วยเช่นกัน:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Picker, radio และ chip fields ต้องการ `FormCollection` ส�
 ### การสร้าง FormCollection
 
 ``` dart
+// คอลเลกชันว่าง (มีประโยชน์เป็น placeholder ก่อนตัวเลือกจะโหลด)
+const FormCollection.empty()
+
 // จากรายการ strings (value และ label เหมือนกัน)
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+constructor ของฟอร์มคุณต้องมี `super.initialData` สำหรับสิ่งนี้ (ดู [การสร้างฟอร์ม](#creating-forms))
+
 <div id="setting-field-values"></div>
 
 ### การตั้งค่า Field Values
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+สำหรับ `onChanged` constructor ของฟอร์มคุณต้องมี `super.onChanged` (ดู [การสร้างฟอร์ม](#creating-forms))
 
 <div id="clearing-data"></div>
 
@@ -1131,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // เรียกพร้อมข้อผิดพลาดเมื่อตรวจสอบล้มเหลว
 )
 ```
+
+constructor ของฟอร์มที่สร้างขึ้นจะส่งต่อเฉพาะ `key`, `submitButton`, `onSubmit` และ `onFailure` เท่านั้น ดังนั้นให้เพิ่มพารามิเตอร์ `super.` สำหรับแต่ละตัวอื่นๆ ที่คุณใช้ (ดู [การสร้างฟอร์ม](#creating-forms))
 
 callback `onChanged` จะรับ `Field` ที่เปลี่ยนและค่าใหม่:
 

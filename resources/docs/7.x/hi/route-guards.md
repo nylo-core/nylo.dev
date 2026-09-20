@@ -8,7 +8,6 @@
 - [गार्ड जीवनचक्र](#guard-lifecycle "गार्ड जीवनचक्र")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
-  - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
 - [गार्ड एक्शन](#guard-actions "गार्ड एक्शन")
   - [next](#next "next")
@@ -67,7 +66,7 @@ class AuthRouteGuard extends NyRouteGuard {
 
 ## गार्ड जीवनचक्र
 
-प्रत्येक रूट गार्ड में तीन जीवनचक्र मेथड होते हैं:
+प्रत्येक रूट गार्ड में दो जीवनचक्र मेथड होते हैं:
 
 <div id="on-before"></div>
 
@@ -104,23 +103,6 @@ Future<GuardResult> onBefore(RouteContext context) async {
 Future<void> onAfter(RouteContext context) async {
   // Log page view
   Analytics.trackPageView(context.routeName);
-}
-```
-
-<div id="on-leave"></div>
-
-### onLeave
-
-जब उपयोगकर्ता किसी रूट **से बाहर जा रहा** हो तब कॉल होता है। उपयोगकर्ता को बाहर जाने से रोकने के लिए `false` लौटाएँ।
-
-``` dart
-@override
-Future<bool> onLeave(RouteContext context) async {
-  if (hasUnsavedChanges) {
-    // Show confirmation dialog
-    return await showConfirmDialog();
-  }
-  return true; // Allow leaving
 }
 ```
 
@@ -247,22 +229,17 @@ Future<GuardResult> onBefore(RouteContext context) async {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(
-    HomePage.path,
-    (_) => HomePage(),
-  ).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // Add a single guard
-  router.route(
+  router.add(
     ProfilePage.path,
-    (_) => ProfilePage(),
     routeGuards: [AuthRouteGuard()],
   );
 
   // Add multiple guards (executed in order)
-  router.route(
+  router.add(
     AdminPage.path,
-    (_) => AdminPage(),
     routeGuards: [AuthRouteGuard(), AdminRoleGuard()],
   );
 });
@@ -276,7 +253,7 @@ appRouter() => nyRoutes((router) {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(HomePage.path, (_) => HomePage()).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // All routes in this group require authentication
   router.group(() {
@@ -285,9 +262,9 @@ appRouter() => nyRoutes((router) {
       'route_guards': [AuthRouteGuard()],
     };
   }, (router) {
-    router.route(DashboardPage.path, (_) => DashboardPage());
-    router.route(SettingsPage.path, (_) => SettingsPage());
-    router.route(ProfilePage.path, (_) => ProfilePage());
+    router.add(DashboardPage.path);
+    router.add(SettingsPage.path);
+    router.add(ProfilePage.path);
   });
 });
 ```
@@ -312,9 +289,8 @@ final protectedRoute = GuardStack([
 ]);
 
 // Use the stack on a route
-router.route(
+router.add(
   SecurePage.path,
-  (_) => SecurePage(),
   routeGuards: [protectedRoute],
 );
 ```
@@ -328,9 +304,8 @@ router.route(
 गार्ड को केवल तभी लागू करें जब कोई शर्त सत्य हो:
 
 ``` dart
-router.route(
+router.add(
   BetaPage.path,
-  (_) => BetaPage(),
   routeGuards: [
     ConditionalGuard(
       condition: (context) => context.queryParameters.containsKey("beta"),
@@ -354,9 +329,9 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
+    String? role = Auth.data(field: 'role');
 
-    if (user == null || !params.contains(user.role)) {
+    if (role == null || !params.contains(role)) {
       return redirect(UnauthorizedPage.path);
     }
 
@@ -365,9 +340,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 }
 
 // Usage
-router.route(
+router.add(
   AdminPage.path,
-  (_) => AdminPage(),
   routeGuards: [RoleGuard(["admin", "super_admin"])],
 );
 ```
@@ -403,22 +377,21 @@ class SubscriptionGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
-    bool hasAccess = params.any((plan) => user?.subscription == plan);
+    String? plan = Auth.data(field: 'subscription');
+    bool hasAccess = params.contains(plan);
 
     if (!hasAccess) {
       return redirect(UpgradePage.path, data: {"plans": params});
     }
 
-    setData({"user": user});
+    setData({"plan": plan});
     return next();
   }
 }
 
 // Require premium or pro subscription
-router.route(
+router.add(
   PremiumPage.path,
-  (_) => PremiumPage(),
   routeGuards: [
     AuthRouteGuard(),
     SubscriptionGuard(["premium", "pro"]),

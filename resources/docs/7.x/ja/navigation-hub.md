@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 `pushTo` ヘルパーを使用してタブ内のウィジェットにナビゲートできます。
 
-タブ内で `pushTo` ヘルパーを使用して別のウィジェットにナビゲートできます。
+タブ内で `pushTo` ヘルパーを使用して別のウィジェットにナビゲートできます。`pushTo` は `NyState` に由来するため、タブのステートはこれを継承する必要があります。
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 ナビゲート先のウィジェットにデータを渡すこともできます。
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});
@@ -1264,6 +1264,14 @@ Future<bool> nextPage();
 /// ジャーニーレイアウトで前のページに遷移
 /// 例: await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// 特定のタブを更新し、再構築を強制
+/// 例: MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// すべてのタブを更新し、再構築を強制
+/// 例: MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 State Action を使用するには、以下のようにします:
@@ -1276,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // タブ 2 に切り替え
 
 await MyNavigationHub.stateActions.nextPage(); // ジャーニー: 次のページへ
+
+MyNavigationHub.stateActions.refreshTab(0); // タブ 0 の再構築を強制
+
+MyNavigationHub.stateActions.refresh(); // すべてのタブの再構築を強制
 ```
 
 <div id="loading-style"></div>

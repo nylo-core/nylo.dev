@@ -8,7 +8,6 @@
 - [Ciclo de Vida do Guard](#guard-lifecycle "Ciclo de Vida do Guard")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
-  - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
 - [Ações do Guard](#guard-actions "Ações do Guard")
   - [next](#next "next")
@@ -67,7 +66,7 @@ class AuthRouteGuard extends NyRouteGuard {
 
 ## Ciclo de Vida do Guard
 
-Todo route guard possui três métodos de ciclo de vida:
+Todo route guard possui dois métodos de ciclo de vida:
 
 <div id="on-before"></div>
 
@@ -104,23 +103,6 @@ Chamado **após** a navegação bem-sucedida. Use para analytics, logging ou efe
 Future<void> onAfter(RouteContext context) async {
   // Log page view
   Analytics.trackPageView(context.routeName);
-}
-```
-
-<div id="on-leave"></div>
-
-### onLeave
-
-Chamado quando o usuário está **saindo** de uma rota. Retorne `false` para impedir que o usuário saia.
-
-``` dart
-@override
-Future<bool> onLeave(RouteContext context) async {
-  if (hasUnsavedChanges) {
-    // Show confirmation dialog
-    return await showConfirmDialog();
-  }
-  return true; // Allow leaving
 }
 ```
 
@@ -247,22 +229,17 @@ Adicione guards a rotas individuais no seu arquivo de rotas:
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(
-    HomePage.path,
-    (_) => HomePage(),
-  ).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // Add a single guard
-  router.route(
+  router.add(
     ProfilePage.path,
-    (_) => ProfilePage(),
     routeGuards: [AuthRouteGuard()],
   );
 
   // Add multiple guards (executed in order)
-  router.route(
+  router.add(
     AdminPage.path,
-    (_) => AdminPage(),
     routeGuards: [AuthRouteGuard(), AdminRoleGuard()],
   );
 });
@@ -276,7 +253,7 @@ Aplique guards a múltiplas rotas de uma vez usando grupos de rotas:
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(HomePage.path, (_) => HomePage()).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // All routes in this group require authentication
   router.group(() {
@@ -285,9 +262,9 @@ appRouter() => nyRoutes((router) {
       'route_guards': [AuthRouteGuard()],
     };
   }, (router) {
-    router.route(DashboardPage.path, (_) => DashboardPage());
-    router.route(SettingsPage.path, (_) => SettingsPage());
-    router.route(ProfilePage.path, (_) => ProfilePage());
+    router.add(DashboardPage.path);
+    router.add(SettingsPage.path);
+    router.add(ProfilePage.path);
   });
 });
 ```
@@ -312,9 +289,8 @@ final protectedRoute = GuardStack([
 ]);
 
 // Use the stack on a route
-router.route(
+router.add(
   SecurePage.path,
-  (_) => SecurePage(),
   routeGuards: [protectedRoute],
 );
 ```
@@ -328,9 +304,8 @@ O `GuardStack` executa guards em ordem. Se qualquer guard retornar `handled`, os
 Aplique um guard apenas quando uma condição for verdadeira:
 
 ``` dart
-router.route(
+router.add(
   BetaPage.path,
-  (_) => BetaPage(),
   routeGuards: [
     ConditionalGuard(
       condition: (context) => context.queryParameters.containsKey("beta"),
@@ -354,9 +329,9 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
+    String? role = Auth.data(field: 'role');
 
-    if (user == null || !params.contains(user.role)) {
+    if (role == null || !params.contains(role)) {
       return redirect(UnauthorizedPage.path);
     }
 
@@ -365,9 +340,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 }
 
 // Usage
-router.route(
+router.add(
   AdminPage.path,
-  (_) => AdminPage(),
   routeGuards: [RoleGuard(["admin", "super_admin"])],
 );
 ```
@@ -403,22 +377,21 @@ class SubscriptionGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
-    bool hasAccess = params.any((plan) => user?.subscription == plan);
+    String? plan = Auth.data(field: 'subscription');
+    bool hasAccess = params.contains(plan);
 
     if (!hasAccess) {
       return redirect(UpgradePage.path, data: {"plans": params});
     }
 
-    setData({"user": user});
+    setData({"plan": plan});
     return next();
   }
 }
 
 // Require premium or pro subscription
-router.route(
+router.add(
   PremiumPage.path,
-  (_) => PremiumPage(),
   routeGuards: [
     AuthRouteGuard(),
     SubscriptionGuard(["premium", "pro"]),

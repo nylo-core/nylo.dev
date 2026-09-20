@@ -68,7 +68,7 @@ metro make:stateful_widget ProfileImage
 class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
-  LoadingStyleType get loadingStyle => LoadingStyleType.normal();
+  LoadingStyle get loadingStyle => LoadingStyle.normal();
 
   @override
   get init => () async {
@@ -301,6 +301,8 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - 스택에서 현재 페이지를 제거합니다.
 
+가장 가까운 로컬 내비게이터 대신 루트 내비게이터에서 pop 하려면 `rootNavigator: true`를 전달하세요. 모달이나 오버레이가 루트 내비게이터로 푸시된 경우 Navigation Hub 탭 안에서 유용합니다.
+
 예시
 
 ``` dart
@@ -308,6 +310,11 @@ class _HomePageState extends NyState<HomePage> {
 
   popView() {
     pop();
+  }
+
+  // 루트 내비게이터에서 pop (예: 루트 레벨 모달 닫기)
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -463,7 +470,7 @@ class _LoginPageState extends NyState<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
             Center(
               child: InkWell(
                 onTap: _login,
@@ -496,7 +503,7 @@ class _HomePageState extends NyState<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
           ],
         )
     );
@@ -650,7 +657,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading()) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(
@@ -785,7 +792,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading(name: 'refreshing_content')) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(

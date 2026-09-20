@@ -6,6 +6,11 @@
 - [Installa](#install "Installa")
 - [Esecuzione del Progetto](#running-the-project "Esecuzione del Progetto")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [Pulizia di un progetto](#nylo-clean "Pulizia di un progetto")
+  - [Aggiornamento dei pod iOS](#nylo-ios-pod-refresh "Aggiornamento dei pod iOS")
+  - [Esecuzione di Metro senza l'alias](#nylo-metro "Esecuzione di Metro senza l'alias")
+  - [Aggiornamento della CLI](#nylo-self-update "Aggiornamento della CLI")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@ Esegui questi comandi nell'ordine indicato. Ognuno può essere eseguito di nuovo
 
 <x-doc-steps>
 <x-doc-step number="1" title="Installa la CLI Nylo globalmente">
-Questo installa lo strumento CLI {{ config('app.name') }} globalmente sul tuo sistema.
+Installa il comando `nylo` sul tuo sistema.
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ Questo configura il comando `metro` per il tuo progetto, permettendoti di usare 
 cd my_app
 nylo init
 ```
+
+Al termine, riavvia il terminale oppure esegui il comando `source` stampato da `nylo init`.
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # Create an API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: no established it rendering yet for the x-doc-strip label "Requires" -->
+<x-doc-strip label="Richiede" items="nylo_installer 1.8.0+" linkText="Aggiorna la CLI" linkHref="#nylo-self-update" />
+
+Il comando `nylo` del passaggio 1 fa molto più che creare progetti. Eseguilo dalla directory del tuo progetto per pulire le build, aggiornare i pod iOS, eseguire i test e controllare le tue traduzioni.
+
+<x-doc-commands title="Comandi del progetto" rows="
+nylo new | Crea un nuovo progetto
+nylo init | Configura l'alias metro nella tua shell
+nylo clean | Esegui flutter clean e flutter pub get
+nylo ios:pod-refresh | Reinstalla i tuoi pod iOS
+nylo metro | Esegui un comando Metro senza l'alias
+" />
+
+<x-doc-commands title="Test e traduzioni" rows="
+nylo test | Formatta ed esegui i tuoi test
+nylo locale:find-untranslated | Trova il testo non racchiuso in .tr()
+nylo locale:check-missing-keys | Trova le chiavi mancanti nei tuoi file di lingua
+" />
+
+<x-doc-commands title="La CLI stessa" rows="
+nylo self-update | Aggiorna nylo all'ultima versione
+nylo --version | Mostra la versione installata
+" />
+
+I comandi che accettano opzioni le elencano con `-h`, ad esempio `nylo test -h`. Il testing è trattato in [Esecuzione dei Test](/docs/{{ $version }}/testing#running-tests), mentre i comandi `locale:` in [Audit delle Traduzioni](/docs/{{ $version }}/localization#auditing-translations).
+
+<div id="nylo-clean"></div>
+
+### Pulizia di un progetto
+
+`nylo clean` esegue `flutter clean` e poi `flutter pub get`. Aggiungi un flag di piattaforma quando una pulizia normale non basta:
+
+``` bash
+# flutter clean, poi flutter pub get
+nylo clean
+
+# Rimuove anche ios/Pods, ios/.symlinks e ios/Podfile.lock, poi esegue pod install --repo-update
+nylo clean --ios
+
+# Esegue anche gradlew clean in android/
+nylo clean --android
+
+# Entrambe le opzioni sopra
+nylo clean --all
+```
+
+Se un progetto non ha una cartella `ios/` o `android/`, quella piattaforma viene saltata con un avviso. `pod install` viene eseguito solo su macOS.
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### Aggiornamento dei pod iOS
+
+Quando CocoaPods si desincronizza, `nylo ios:pod-refresh` elimina `ios/Pods`, `ios/.symlinks` e `ios/Podfile.lock`, poi esegue `pod install --repo-update` nella cartella `ios/`:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+Eseguilo dalla radice del tuo progetto su macOS. A differenza di `nylo clean --ios`, non esegue `flutter clean` né `flutter pub get`.
+
+<div id="nylo-metro"></div>
+
+### Esecuzione di Metro senza l'alias
+
+`nylo metro` passa tutto ciò che segue a Metro (`dart run nylo_framework:main`). Usalo prima di aver eseguito `nylo init`, oppure su Windows, dove `nylo init` non può aggiungere l'alias `metro` per te:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### Aggiornamento della CLI
+
+``` bash
+nylo self-update
+```
+
+Questo controlla pub.dev e reinstalla `nylo_installer` se è disponibile una versione più recente. Al termine di un comando, `nylo` ti avvisa anche quando è uscito un aggiornamento. Resta silenzioso quando l'output non è diretto a un terminale, così l'avviso non finisce mai nei log CI o negli output reindirizzati.
+
+Per vedere quale versione hai installato:
+
+``` bash
+nylo --version
 ```

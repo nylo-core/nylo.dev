@@ -8,7 +8,6 @@
 - [ガードのライフサイクル](#guard-lifecycle "ガードのライフサイクル")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
-  - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
 - [ガードアクション](#guard-actions "ガードアクション")
   - [next](#next "next")
@@ -67,7 +66,7 @@ class AuthRouteGuard extends NyRouteGuard {
 
 ## ガードのライフサイクル
 
-すべてのルートガードには 3 つのライフサイクルメソッドがあります:
+すべてのルートガードには 2 つのライフサイクルメソッドがあります:
 
 <div id="on-before"></div>
 
@@ -104,23 +103,6 @@ Future<GuardResult> onBefore(RouteContext context) async {
 Future<void> onAfter(RouteContext context) async {
   // ページビューを記録
   Analytics.trackPageView(context.routeName);
-}
-```
-
-<div id="on-leave"></div>
-
-### onLeave
-
-ユーザーがルートを **離れる** ときに呼び出されます。`false` を返すとユーザーの離脱を防止できます。
-
-``` dart
-@override
-Future<bool> onLeave(RouteContext context) async {
-  if (hasUnsavedChanges) {
-    // 確認ダイアログを表示
-    return await showConfirmDialog();
-  }
-  return true; // 離脱を許可
 }
 ```
 
@@ -247,22 +229,17 @@ Future<GuardResult> onBefore(RouteContext context) async {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(
-    HomePage.path,
-    (_) => HomePage(),
-  ).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // 単一のガードを追加
-  router.route(
+  router.add(
     ProfilePage.path,
-    (_) => ProfilePage(),
     routeGuards: [AuthRouteGuard()],
   );
 
   // 複数のガードを追加（順番に実行）
-  router.route(
+  router.add(
     AdminPage.path,
-    (_) => AdminPage(),
     routeGuards: [AuthRouteGuard(), AdminRoleGuard()],
   );
 });
@@ -276,7 +253,7 @@ appRouter() => nyRoutes((router) {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(HomePage.path, (_) => HomePage()).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // このグループのすべてのルートは認証が必要
   router.group(() {
@@ -285,9 +262,9 @@ appRouter() => nyRoutes((router) {
       'route_guards': [AuthRouteGuard()],
     };
   }, (router) {
-    router.route(DashboardPage.path, (_) => DashboardPage());
-    router.route(SettingsPage.path, (_) => SettingsPage());
-    router.route(ProfilePage.path, (_) => ProfilePage());
+    router.add(DashboardPage.path);
+    router.add(SettingsPage.path);
+    router.add(ProfilePage.path);
   });
 });
 ```
@@ -312,9 +289,8 @@ final protectedRoute = GuardStack([
 ]);
 
 // ルートでスタックを使用
-router.route(
+router.add(
   SecurePage.path,
-  (_) => SecurePage(),
   routeGuards: [protectedRoute],
 );
 ```
@@ -328,9 +304,8 @@ router.route(
 条件が true の場合にのみガードを適用します:
 
 ``` dart
-router.route(
+router.add(
   BetaPage.path,
-  (_) => BetaPage(),
   routeGuards: [
     ConditionalGuard(
       condition: (context) => context.queryParameters.containsKey("beta"),
@@ -354,9 +329,9 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
+    String? role = Auth.data(field: 'role');
 
-    if (user == null || !params.contains(user.role)) {
+    if (role == null || !params.contains(role)) {
       return redirect(UnauthorizedPage.path);
     }
 
@@ -365,9 +340,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 }
 
 // 使用方法
-router.route(
+router.add(
   AdminPage.path,
-  (_) => AdminPage(),
   routeGuards: [RoleGuard(["admin", "super_admin"])],
 );
 ```
@@ -403,22 +377,21 @@ class SubscriptionGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
-    bool hasAccess = params.any((plan) => user?.subscription == plan);
+    String? plan = Auth.data(field: 'subscription');
+    bool hasAccess = params.contains(plan);
 
     if (!hasAccess) {
       return redirect(UpgradePage.path, data: {"plans": params});
     }
 
-    setData({"user": user});
+    setData({"plan": plan});
     return next();
   }
 }
 
 // プレミアムまたはプロのサブスクリプションが必要
-router.route(
+router.add(
   PremiumPage.path,
-  (_) => PremiumPage(),
   routeGuards: [
     AuthRouteGuard(),
     SubscriptionGuard(["premium", "pro"]),

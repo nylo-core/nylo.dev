@@ -8,7 +8,6 @@
 - [Guard 생명주기](#guard-lifecycle "Guard 생명주기")
   - [onBefore](#on-before "onBefore")
   - [onAfter](#on-after "onAfter")
-  - [onLeave](#on-leave "onLeave")
 - [RouteContext](#route-context "RouteContext")
 - [Guard 액션](#guard-actions "Guard 액션")
   - [next](#next "next")
@@ -67,7 +66,7 @@ class AuthRouteGuard extends NyRouteGuard {
 
 ## Guard 생명주기
 
-모든 Route Guard에는 세 가지 생명주기 메서드가 있습니다:
+모든 Route Guard에는 두 가지 생명주기 메서드가 있습니다:
 
 <div id="on-before"></div>
 
@@ -104,23 +103,6 @@ Future<GuardResult> onBefore(RouteContext context) async {
 Future<void> onAfter(RouteContext context) async {
   // 페이지 뷰 기록
   Analytics.trackPageView(context.routeName);
-}
-```
-
-<div id="on-leave"></div>
-
-### onLeave
-
-사용자가 라우트를 **떠날 때** 호출됩니다. `false`를 반환하면 사용자가 떠나는 것을 방지합니다.
-
-``` dart
-@override
-Future<bool> onLeave(RouteContext context) async {
-  if (hasUnsavedChanges) {
-    // 확인 대화상자 표시
-    return await showConfirmDialog();
-  }
-  return true; // 떠나기 허용
 }
 ```
 
@@ -247,22 +229,17 @@ Future<GuardResult> onBefore(RouteContext context) async {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(
-    HomePage.path,
-    (_) => HomePage(),
-  ).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // 단일 Guard 추가
-  router.route(
+  router.add(
     ProfilePage.path,
-    (_) => ProfilePage(),
     routeGuards: [AuthRouteGuard()],
   );
 
   // 다중 Guard 추가 (순서대로 실행)
-  router.route(
+  router.add(
     AdminPage.path,
-    (_) => AdminPage(),
     routeGuards: [AuthRouteGuard(), AdminRoleGuard()],
   );
 });
@@ -276,7 +253,7 @@ appRouter() => nyRoutes((router) {
 
 ``` dart
 appRouter() => nyRoutes((router) {
-  router.route(HomePage.path, (_) => HomePage()).initialRoute();
+  router.add(HomePage.path).initialRoute();
 
   // 이 그룹의 모든 라우트는 인증이 필요합니다
   router.group(() {
@@ -285,9 +262,9 @@ appRouter() => nyRoutes((router) {
       'route_guards': [AuthRouteGuard()],
     };
   }, (router) {
-    router.route(DashboardPage.path, (_) => DashboardPage());
-    router.route(SettingsPage.path, (_) => SettingsPage());
-    router.route(ProfilePage.path, (_) => ProfilePage());
+    router.add(DashboardPage.path);
+    router.add(SettingsPage.path);
+    router.add(ProfilePage.path);
   });
 });
 ```
@@ -312,9 +289,8 @@ final protectedRoute = GuardStack([
 ]);
 
 // 라우트에 스택 사용
-router.route(
+router.add(
   SecurePage.path,
-  (_) => SecurePage(),
   routeGuards: [protectedRoute],
 );
 ```
@@ -328,9 +304,8 @@ router.route(
 조건이 참일 때만 Guard를 적용합니다:
 
 ``` dart
-router.route(
+router.add(
   BetaPage.path,
-  (_) => BetaPage(),
   routeGuards: [
     ConditionalGuard(
       condition: (context) => context.queryParameters.containsKey("beta"),
@@ -354,9 +329,9 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
+    String? role = Auth.data(field: 'role');
 
-    if (user == null || !params.contains(user.role)) {
+    if (role == null || !params.contains(role)) {
       return redirect(UnauthorizedPage.path);
     }
 
@@ -365,9 +340,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 }
 
 // 사용법
-router.route(
+router.add(
   AdminPage.path,
-  (_) => AdminPage(),
   routeGuards: [RoleGuard(["admin", "super_admin"])],
 );
 ```
@@ -403,22 +377,21 @@ class SubscriptionGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    User? user = await Auth.user<User>();
-    bool hasAccess = params.any((plan) => user?.subscription == plan);
+    String? plan = Auth.data(field: 'subscription');
+    bool hasAccess = params.contains(plan);
 
     if (!hasAccess) {
       return redirect(UpgradePage.path, data: {"plans": params});
     }
 
-    setData({"user": user});
+    setData({"plan": plan});
     return next();
   }
 }
 
 // 프리미엄 또는 프로 구독 필요
-router.route(
+router.add(
   PremiumPage.path,
-  (_) => PremiumPage(),
   routeGuards: [
     AuthRouteGuard(),
     SubscriptionGuard(["premium", "pro"]),

@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 Sie können Übergänge hinzufügen, wenn Sie von einer Seite navigieren, indem Sie Ihre `router.dart`-Datei ändern.
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // bottomToTop
@@ -928,6 +926,8 @@ Deep Linking ermöglicht es Benutzern, direkt zu bestimmten Inhalten in Ihrer Ap
 - Behandlung von Benachrichtigungen, die bestimmte App-Bildschirme öffnen sollen
 - Nahtlose Web-zu-App-Übergänge
 
+> Suchen Sie die vollständige Einrichtungsanleitung? Im dedizierten [Deep Links](/docs/{{ $version }}/deep-links)-Leitfaden finden Sie die Plattformkonfiguration, das Abfangen von Links und das Metro-Scaffolding.
+
 ## Einrichtung
 
 Bevor Sie Deep Linking in Ihrer App implementieren, stellen Sie sicher, dass Ihr Projekt richtig konfiguriert ist:
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## Deep Links behandeln
 
-Sie können Deep-Link-Events in Ihrem `RouteProvider` behandeln:
+Aktivieren Sie die Deep-Link-Erfassung der Plattform mit `useDeepLinks()` und verwenden Sie dann `onIncomingLink`, um jede URI abzufangen, bevor {{ config('app.name') }} sie weiterleitet:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // Deep Links behandeln
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // Routen-Stack für Deep Links aktualisieren
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+Den vollständigen API-Umfang finden Sie im [Deep Links](/docs/{{ $version }}/deep-links)-Leitfaden.
 
 ### Deep Links testen
 

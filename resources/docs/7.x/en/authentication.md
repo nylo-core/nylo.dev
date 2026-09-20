@@ -89,7 +89,7 @@ class _LoginPageState extends NyPage<LoginPage> {
     await Auth.authenticate(data: user);
 
     // 3. Navigate to home
-    routeTo(HomePage.path, removeUntil: (_) => false);
+    routeTo(HomePage.path, navigationType: NavigationType.pushAndForgetAll);
   }
 }
 ```
@@ -153,7 +153,7 @@ Future<void> handleLogout() async {
   await Auth.logout();
 
   // Navigate to login page
-  routeTo(LoginPage.path, removeUntil: (_) => false);
+  routeTo(LoginPage.path, navigationType: NavigationType.pushAndForgetAll);
 }
 ```
 

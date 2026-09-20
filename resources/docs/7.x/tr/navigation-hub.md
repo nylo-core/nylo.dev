@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 `pushTo` yardimcisini kullanarak bir sekme icindeki widget'lara gezinebilirsiniz.
 
-Sekmenizin icinde, baska bir widget'a gitmek icin `pushTo` yardimcisini kullanabilirsiniz.
+Sekmenizin icinde, baska bir widget'a gitmek icin `pushTo` yardimcisini kullanabilirsiniz. `pushTo` `NyState`'ten gelir, bu nedenle sekmenizin durumunun bunu genisletmesi gerekir.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Gezindiginiz widget'a veri de gecebilirsiniz.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

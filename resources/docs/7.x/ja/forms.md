@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 フォームは `NyFormWidget` を継承し、`fields()` メソッドをオーバーライドしてフォームフィールドを定義します。各フィールドは `Field.text()`、`Field.email()`、`Field.password()` のような名前付きコンストラクタを使用します。`static NyFormActions get actions` getter は、アプリのどこからでもフォームと対話するための便利な方法を提供します。
 
+生成されるコンストラクタは `submitButton`、`onSubmit`、`onFailure` のみを引き継ぎます。フォームに `initialData` や `onChanged` を渡せるようにするには、それらもコンストラクタに追加してください:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -658,6 +664,9 @@ Field.widget(child: Text("Section Header", style: TextStyle(fontSize: 18)))
 ### FormCollection の作成
 
 ``` dart
+// 空のコレクション（オプションの読み込み前のプレースホルダーとして便利）
+const FormCollection.empty()
+
 // 文字列リストから（値とラベルは同じ）
 FormCollection.from(["Red", "Green", "Blue"])
 
@@ -855,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+これには、フォームのコンストラクタに `super.initialData` が必要です（[フォームの作成](#creating-forms) を参照）。
+
 <div id="setting-field-values"></div>
 
 ### フィールド値の設定
@@ -894,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+`onChanged` を使用するには、フォームのコンストラクタに `super.onChanged` が必要です（[フォームの作成](#creating-forms) を参照）。
 
 <div id="clearing-data"></div>
 
@@ -1132,6 +1145,8 @@ LoginForm(
 )
 ```
 
+生成されたフォームのコンストラクタが引き継ぐのは `key`、`submitButton`、`onSubmit`、`onFailure` のみです。それ以外を使用する場合は、使用するものごとに `super.` パラメータを追加してください（[フォームの作成](#creating-forms) を参照）。
+
 `onChanged` コールバックは変更された `Field` とその新しい値を受け取ります:
 
 ``` dart
@@ -1228,4 +1243,5 @@ LoginForm.actions.submit(
 | `Field.slider()` | -- | 単一値スライダー |
 | `Field.rangeSlider()` | -- | 範囲値スライダー |
 | `Field.custom()` | `child`（必須 `NyFieldStatefulWidget`） | カスタムステートフルウィジェット |
+| `Field.builder()` | `builder`（必須 `NyFieldBuilder` または `NyFieldBuilderLegacy`） | サブクラス化なしのインラインカスタムフィールド |
 | `Field.widget()` | `child`（必須 `Widget`） | 任意のウィジェットを埋め込み（非フィールド） |

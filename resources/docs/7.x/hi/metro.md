@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [परिचय](#introduction "परिचय")
-- [इंस्टॉल](#install "इंस्टॉल")
+- [इंस्टॉल](#install "{{ config('app.name') }} के लिए Metro अलियास इंस्टॉल करना")
 - Make कमांड्स
   - [कंट्रोलर बनाना](#make-controller "कंट्रोलर बनाना")
   - [मॉडल बनाना](#make-model "मॉडल बनाना")
@@ -63,7 +63,9 @@ Metro एक CLI टूल है जो {{ config('app.name') }} framework क�
 
 ## इंस्टॉल
 
-जब आप `nylo init` का उपयोग करके एक नया Nylo प्रोजेक्ट बनाते हैं, तो `metro` कमांड आपके टर्मिनल के लिए स्वचालित रूप से कॉन्फ़िगर हो जाती है। आप इसे किसी भी Nylo प्रोजेक्ट में तुरंत उपयोग कर सकते हैं।
+`nylo new` से एक प्रोजेक्ट बनाने के बाद, अपने शेल में `metro` कमांड जोड़ने के लिए उसमें `nylo init` चलाएँ। अपना टर्मिनल रीस्टार्ट करें (या यह जो `source` कमांड प्रिंट करता है उसे चलाएँ), और आप किसी भी Nylo प्रोजेक्ट में `metro` का उपयोग कर सकते हैं।
+
+आप एलियास के बिना भी Metro चला सकते हैं, जो Windows पर काम आता है: `nylo metro make:page settings_page`। देखें [एलियास के बिना Metro चलाना](/docs/{{ $version }}/installation#nylo-metro)।
 
 सभी उपलब्ध कमांड्स देखने के लिए अपनी प्रोजेक्ट डायरेक्टरी से `metro` चलाएँ:
 
@@ -247,6 +249,9 @@ metro make:page login_page -a
 ``` bash
 metro make:page home_page -i
 ```
+
+<!-- uncertain: "debug assert" transliterated as "डीबग असर्ट" — term not seen elsewhere in this locale's docs -->
+आपके राउटर में केवल एक इनिशियल रूट हो सकता है। जिस रूट पर यह पहले से मौजूद है (नए प्रोजेक्ट में यह `HomePage` होता है), Metro उससे `.initialRoute()` को नहीं हटाता, इसलिए इसे खुद `lib/routes/router.dart` में हटाएँ, अन्यथा ऐप एक डीबग असर्ट पर रुक जाएगा।
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +715,12 @@ metro make:navigation_hub dashboard
 
 | फ़्लैग | शॉर्ट | विवरण |
 |------|-------|-------------|
-| `--auth` | `-a` | ऑथ पेज के रूप में बनाएँ |
-| `--initial` | `-i` | इनिशियल पेज के रूप में बनाएँ |
 | `--force` | `-f` | मौजूद होने पर ओवरराइट करें |
 
-``` bash
-# Create as the initial page
-metro make:navigation_hub dashboard --initial
+Metro जो रूट जोड़ता है वह इनिशियल रूट नहीं होता। अपने ऐप को हब पर खोलने के लिए, `lib/routes/router.dart` में इसमें `.initialRoute()` जोड़ें, और इसे उस रूट से हटा दें जिसके पास यह पहले था:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +803,9 @@ metro make:key
 
 | फ़्लैग / ऑप्शन | शॉर्ट | विवरण |
 |---------------|-------|-------------|
-| `--force` | `-f` | मौजूदा APP_KEY ओवरराइट करें |
 | `--file` | `-e` | लक्ष्य .env फ़ाइल (डिफ़ॉल्ट: `.env`) |
 
 ``` bash
-# Generate key and overwrite existing
-metro make:key --force
-
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
@@ -926,6 +926,8 @@ metro app:current_time
   project:deploy
 ```
 
+यदि कोई इंस्टॉल किया गया पैकेज अपने स्वयं के कमांड देता है, तो वे आपके कमांड के नीचे अतिरिक्त अनुभागों में दिखाई देते हैं -- देखें [पैकेज से कमांड्स](#package-commands)।
+
 अपनी कमांड के लिए सहायता जानकारी प्रदर्शित करने के लिए, `--help` या `-h` फ़्लैग का उपयोग करें:
 
 ```bash
@@ -936,14 +938,16 @@ metro project:install_firebase --help
 
 ## पैकेज से कमांड्स
 
-पैकेज उन डेवलपर्स के लिए Metro कमांड्स शिप कर सकते हैं जो उन्हें इंस्टॉल करते हैं -- उदाहरण के लिए एक `install` कमांड जो पैकेज को जरूरी कॉन्फ़िग स्कैफोल्ड करता है। जब आपकी `pubspec.yaml` में मौजूद कोई पैकेज `metro_commands.json` फाइल रखता है, तो Metro स्वचालित रूप से इसके कमांड्स खोज लेता है और उन्हें पैकेज के नाम के अंतर्गत मेनू में सूचीबद्ध कर देता है:
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+यदि आपकी `pubspec.yaml` में कोई पैकेज Metro कमांड देता है, तो वे स्वचालित रूप से खोजे जाते हैं और पैकेज के नाम के अंतर्गत मेनू में सूचीबद्ध होते हैं:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-इन्हें बिल्कुल अपने कमांड्स की तरह चलाएँ, जैसे `metro analytics:install`। अपने द्वारा मेंटेन किए जा रहे पैकेज में कमांड्स शिप करना सीखने के लिए, [पैकेज कमांड्स]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) देखें।
+उन्हें ठीक अपने कमांड की तरह चलाएँ, जैसे `metro analytics:install`। पूरी खोज और प्राथमिकता नियमों के लिए, और अपने द्वारा अनुरक्षित पैकेज में कमांड भेजने के लिए, देखें [पैकेज कमांड्स]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)।
 
 <div id="adding-options-to-custom-commands"></div>
 
@@ -2266,3 +2270,5 @@ Future<void> handle(CommandResult result) async {
 | `updateMessage(String newMessage)` | प्रदर्शित मैसेज बदलें |
 | `complete([String? completionMessage])` | वैकल्पिक मैसेज के साथ पूर्ण करें |
 | `stop()` | पूर्ण किए बिना रोकें |
+| `current` | वर्तमान प्रोग्रेस मान (getter) |
+| `percentage` | प्रतिशत के रूप में प्रोग्रेस (getter) |

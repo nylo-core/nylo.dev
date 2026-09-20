@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [परिचय](#introduction "परिचय")
 - [शुरुआत करना](#getting-started "शुरुआत करना")
+  - [टेस्ट चलाना](#running-tests "टेस्ट चलाना")
 - [टेस्ट लिखना](#writing-tests "टेस्ट लिखना")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 अपनी टेस्ट फ़ाइल के शीर्ष पर टेस्ट फ्रेमवर्क इनिशियलाइज़ करें:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,46 @@ void main() {
 ```
 
 `NyTest.init()` टेस्ट एनवायरनमेंट सेट अप करता है और जब `autoReset: true` (डिफ़ॉल्ट) होता है तो टेस्ट के बीच स्वचालित स्टेट रीसेट सक्षम करता है।
+
+<div id="running-tests"></div>
+
+### टेस्ट चलाना
+
+<x-doc-strip label="आवश्यक" items="nylo_installer 1.5.0+" />
+
+अपने प्रोजेक्ट रूट से `nylo` CLI के साथ अपने टेस्ट चलाएँ:
+
+``` bash
+nylo test
+```
+
+`nylo test`, `test/` में मौजूद फ़ाइलों को `dart format` से फ़ॉर्मेट करता है, `flutter test` चलाता है, और हर टेस्ट को उसमें लगे समय के साथ प्रिंट करता है, उसके बाद एक सारांश देता है:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+2 सेकंड या उससे अधिक की अवधि लाल रंग में दिखाई जाती है। यदि कोई टेस्ट फ़ेल होता है, तो उसकी एरर उसके नीचे प्रिंट होती है और कमांड कोड `1` के साथ एग्ज़िट होता है, ताकि आप इसे CI में उपयोग कर सकें।
+
+| विकल्प | विवरण |
+|--------|-------------|
+| `--filter`, `-f` | केवल वे टेस्ट चलाएँ जिनका नाम किसी पैटर्न से मेल खाता है |
+| `--coverage` | कोड कवरेज इकट्ठा करें |
+| `--path` | टेस्ट को किसी दूसरे फ़ोल्डर में चलाएँ (डिफ़ॉल्ट: `test`) |
+| `--no-format` | पहले टेस्ट फ़ाइलों को फ़ॉर्मेट करना छोड़ें |
+
+``` bash
+# केवल वे टेस्ट जिनके नाम में "login" है, कवरेज के साथ
+nylo test --filter "login" --coverage
+
+# इंटीग्रेशन टेस्ट, फ़ॉर्मेटिंग के बिना
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

@@ -63,7 +63,9 @@ Metro เป็นเครื่องมือ CLI ที่ทำงานภ
 
 ## การติดตั้ง
 
-เมื่อคุณสร้างโปรเจกต์ Nylo ใหม่โดยใช้ `nylo init` คำสั่ง `metro` จะถูกตั้งค่าสำหรับ terminal ของคุณโดยอัตโนมัติ คุณสามารถเริ่มใช้งานได้ทันทีในทุกโปรเจกต์ Nylo
+หลังจากสร้างโปรเจกต์ด้วย `nylo new` แล้ว ให้รัน `nylo init` ในโปรเจกต์นั้นเพื่อเพิ่มคำสั่ง `metro` ให้กับ shell ของคุณ รีสตาร์ทเทอร์มินัลของคุณ (หรือรันคำสั่ง `source` ที่มันแสดงผลออกมา) แล้วคุณจะสามารถใช้ `metro` ได้ในทุกโปรเจกต์ Nylo
+
+คุณยังสามารถรัน Metro โดยไม่ใช้ alias ได้ ซึ่งมีประโยชน์บน Windows: `nylo metro make:page settings_page` ดู [การรัน Metro โดยไม่ใช้ alias](/docs/{{ $version }}/installation#nylo-metro)
 
 รัน `metro` จากไดเรกทอรีโปรเจกต์ของคุณเพื่อดูคำสั่งทั้งหมดที่มี:
 
@@ -247,6 +249,8 @@ metro make:page login_page -a
 ``` bash
 metro make:page home_page -i
 ```
+
+router ของคุณสามารถมี route เริ่มต้นได้เพียงเส้นทางเดียวเท่านั้น Metro จะไม่ลบ `.initialRoute()` ออกจาก route ที่มีอยู่แล้ว (ในโปรเจกต์ใหม่คือ `HomePage`) ดังนั้นคุณต้องลบออกเองใน `lib/routes/router.dart` มิฉะนั้นแอปจะหยุดทำงานที่ debug assert
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ metro make:navigation_hub dashboard
 
 | Flag | ย่อ | คำอธิบาย |
 |------|-------|-------------|
-| `--auth` | `-a` | สร้างเป็นหน้า auth |
-| `--initial` | `-i` | สร้างเป็นหน้าเริ่มต้น |
 | `--force` | `-f` | เขียนทับหากมีอยู่แล้ว |
 
-``` bash
-# สร้างเป็นหน้าเริ่มต้น
-metro make:navigation_hub dashboard --initial
+route ที่ Metro เพิ่มให้ไม่ใช่ route เริ่มต้น หากต้องการเปิดแอปของคุณที่ hub นี้ ให้เพิ่ม `.initialRoute()` ให้กับมันใน `lib/routes/router.dart` และลบออกจาก route ที่เคยมีมันอยู่:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +802,9 @@ metro make:key
 
 | Flag / Option | ย่อ | คำอธิบาย |
 |---------------|-------|-------------|
-| `--force` | `-f` | เขียนทับ APP_KEY ที่มีอยู่ |
 | `--file` | `-e` | ไฟล์ .env เป้าหมาย (ค่าเริ่มต้น: `.env`) |
 
 ``` bash
-# สร้าง key และเขียนทับที่มีอยู่
-metro make:key --force
-
 # สร้าง key สำหรับไฟล์ env เฉพาะ
 metro make:key --file=.env.production
 ```
@@ -926,6 +925,8 @@ metro app:current_time
   project:deploy
 ```
 
+หากแพ็กเกจที่ติดตั้งมีคำสั่งของตัวเอง คำสั่งเหล่านั้นจะแสดงในส่วนเพิ่มเติมด้านล่างคำสั่งของคุณ -- ดู [คำสั่งจาก Package](#package-commands)
+
 เพื่อแสดงข้อมูลช่วยเหลือสำหรับคำสั่งของคุณ ใช้ flag `--help` หรือ `-h`:
 
 ```bash
@@ -936,14 +937,16 @@ metro project:install_firebase --help
 
 ## คำสั่งจาก Package
 
-Package สามารถแจกจ่ายคำสั่ง Metro ให้กับนักพัฒนาที่ติดตั้งมันได้ -- ตัวอย่างเช่น คำสั่ง `install` ที่สร้าง scaffold ให้กับการตั้งค่าที่ package ต้องการ เมื่อ package ใน `pubspec.yaml` ของคุณมีไฟล์ `metro_commands.json` Metro จะค้นพบคำสั่งของมันโดยอัตโนมัติและแสดงไว้ในเมนูภายใต้ชื่อของ package:
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+หากแพ็กเกจใน `pubspec.yaml` ของคุณมีคำสั่ง Metro คำสั่งเหล่านั้นจะถูกค้นพบโดยอัตโนมัติและแสดงในเมนูภายใต้ชื่อแพ็กเกจ:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-เรียกใช้เหมือนกับคำสั่งของคุณเองทุกประการ เช่น `metro analytics:install` หากต้องการเรียนรู้วิธีแจกจ่ายคำสั่งใน package ที่คุณดูแล ดูที่ [คำสั่งจาก Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)
+เรียกใช้ได้เหมือนคำสั่งของคุณเอง เช่น `metro analytics:install` สำหรับกฎการค้นพบและลำดับความสำคัญทั้งหมด และการแนบคำสั่งในแพ็กเกจที่คุณดูแล ดู [คำสั่งจาก Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)
 
 <div id="adding-options-to-custom-commands"></div>
 
@@ -2266,3 +2269,5 @@ Future<void> handle(CommandResult result) async {
 | `updateMessage(String newMessage)` | เปลี่ยนข้อความที่แสดง |
 | `complete([String? completionMessage])` | เสร็จสมบูรณ์พร้อมข้อความที่เป็นตัวเลือก |
 | `stop()` | หยุดโดยไม่เสร็จสมบูรณ์ |
+| `current` | ค่าความคืบหน้าปัจจุบัน (getter) |
+| `percentage` | ความคืบหน้าเป็นเปอร์เซ็นต์ (getter) |

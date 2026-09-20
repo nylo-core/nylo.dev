@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [소개](#introduction "소개")
-- [설치](#install "설치")
+- [설치](#install "{{ config('app.name') }}용 Metro 별칭 설치")
 - Make 명령어
   - [Controller 생성](#make-controller "Controller 생성")
   - [Model 생성](#make-model "Model 생성")
@@ -63,7 +63,9 @@ Metro는 {{ config('app.name') }} 프레임워크 내부에서 동작하는 CLI 
 
 ## 설치
 
-`nylo init`을 사용하여 새 Nylo 프로젝트를 생성하면 `metro` 명령어가 터미널에 자동으로 구성됩니다. 모든 Nylo 프로젝트에서 바로 사용할 수 있습니다.
+`nylo new`로 프로젝트를 생성한 후, 그 안에서 `nylo init`을 실행하면 셸에 `metro` 명령어가 추가됩니다. 터미널을 재시작하거나(또는 출력된 `source` 명령어를 실행하면) 모든 Nylo 프로젝트에서 `metro`를 사용할 수 있습니다.
+
+별칭 없이 Metro를 실행할 수도 있으며, 이는 Windows에서 유용합니다: `nylo metro make:page settings_page`. 자세한 내용은 [별칭 없이 Metro 실행](/docs/{{ $version }}/installation#nylo-metro)을 참고하세요.
 
 프로젝트 디렉토리에서 `metro`를 실행하여 사용 가능한 모든 명령어를 확인하세요:
 
@@ -247,6 +249,9 @@ metro make:page login_page -a
 ``` bash
 metro make:page home_page -i
 ```
+
+<!-- uncertain: "debug assert" here is Dart's assert() build-time check, not the test-assertion sense ("어서션") already used in testing.md — kept as "디버그 어서션(assert)" to bridge both -->
+라우터에는 초기 라우트를 하나만 지정할 수 있습니다. Metro는 이미 `.initialRoute()`가 설정된 라우트(새 프로젝트에서는 `HomePage`)에서 이를 제거하지 않으므로, `lib/routes/router.dart`에서 직접 제거해야 합니다. 그렇지 않으면 디버그 어서션(assert)으로 인해 앱이 중단됩니다.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +715,12 @@ metro make:navigation_hub dashboard
 
 | 플래그 | 약어 | 설명 |
 |------|-------|-------------|
-| `--auth` | `-a` | Auth Page로 생성 |
-| `--initial` | `-i` | Initial Page로 생성 |
 | `--force` | `-f` | 이미 존재하면 덮어쓰기 |
 
-``` bash
-# Initial Page로 생성
-metro make:navigation_hub dashboard --initial
+Metro가 추가하는 라우트는 초기 라우트가 아닙니다. Hub로 앱을 실행하려면 `lib/routes/router.dart`에서 해당 라우트에 `.initialRoute()`를 추가하고, 기존에 설정되어 있던 라우트에서는 제거하세요:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -922,6 +926,8 @@ metro app:current_time
   project:deploy
 ```
 
+설치된 패키지가 자체 명령을 제공하면 내 명령 아래에 별도 섹션으로 표시됩니다 -- [패키지에서 제공하는 명령어](#package-commands)을 참조하세요.
+
 명령어의 도움말 정보를 표시하려면 `--help` 또는 `-h` 플래그를 사용합니다:
 
 ```bash
@@ -932,14 +938,16 @@ metro project:install_firebase --help
 
 ## 패키지에서 제공하는 명령어
 
-패키지는 설치한 개발자를 위해 Metro 명령어를 제공할 수 있습니다 -- 예를 들어 패키지에 필요한 설정을 스캐폴딩하는 `install` 명령어처럼요. `pubspec.yaml`의 패키지에 `metro_commands.json` 파일이 포함되어 있으면 Metro가 해당 명령어를 자동으로 발견하여 패키지 이름 아래 메뉴에 나열합니다:
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+`pubspec.yaml`의 패키지가 Metro 명령을 제공하면 자동으로 검색되어 패키지 이름 아래 메뉴에 표시됩니다:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-여러분 자신의 명령어와 완전히 동일하게 실행하면 됩니다. 예: `metro analytics:install`. 직접 관리하는 패키지에서 명령어를 제공하는 방법을 알아보려면 [패키지 커맨드]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) 문서를 참고하세요.
+자신의 명령과 똑같이 실행하세요. 예: `metro analytics:install`. 전체 검색 및 우선순위 규칙과 직접 관리하는 패키지에 명령을 포함하는 방법은 [패키지 커맨드]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands)을 참조하세요.
 
 <div id="adding-options-to-custom-commands"></div>
 

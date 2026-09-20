@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Introduzione](#introduction "Introduzione")
-- [Installazione](#install "Installazione")
+- [Installazione](#install "Installazione dell'alias Metro per {{ config('app.name') }}")
 - Comandi Make
   - [Make controller](#make-controller "Make controller")
   - [Make model](#make-model "Make model")
@@ -63,7 +63,9 @@ Fornisce molti strumenti utili per velocizzare lo sviluppo.
 
 ## Installazione
 
-Quando crei un nuovo progetto Nylo utilizzando `nylo init`, il comando `metro` viene configurato automaticamente per il tuo terminale. Puoi iniziare a usarlo immediatamente in qualsiasi progetto Nylo.
+Dopo aver creato un progetto con `nylo new`, esegui `nylo init` al suo interno per aggiungere il comando `metro` alla tua shell. Riavvia il terminale (o esegui il comando `source` che stampa), e potrai usare `metro` in qualsiasi progetto Nylo.
+
+Puoi anche eseguire Metro senza l'alias, il che è utile su Windows: `nylo metro make:page settings_page`. Vedi [Esecuzione di Metro senza l'alias](/docs/{{ $version }}/installation#nylo-metro).
 
 Esegui `metro` dalla directory del tuo progetto per vedere tutti i comandi disponibili:
 
@@ -247,6 +249,8 @@ Usando il flag `--initial` o `-i` creera' una nuova pagina iniziale.
 ``` bash
 metro make:page home_page -i
 ```
+
+Il tuo router puo' avere solo una route iniziale. Metro non rimuove `.initialRoute()` dalla route che gia' la possiede (in un nuovo progetto, `HomePage`), quindi rimuovila tu stesso in `lib/routes/router.dart`, altrimenti l'app si blocca su un assert di debug. <!-- uncertain: "debug assert" reso come prestito tecnico, non riscontrato altrove nel file -->
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ Questo creera' un nuovo navigation hub in `lib/resources/pages/` e aggiungera' a
 
 | Flag | Abbreviazione | Descrizione |
 |------|-------|-------------|
-| `--auth` | `-a` | Creare come pagina auth |
-| `--initial` | `-i` | Creare come pagina iniziale |
 | `--force` | `-f` | Sovrascrivere se esiste |
 
-``` bash
-# Create as the initial page
-metro make:navigation_hub dashboard --initial
+La route aggiunta da Metro non e' quella iniziale. Per aprire la tua app sull'hub, aggiungi `.initialRoute()` ad essa in `lib/routes/router.dart`, e rimuovilo dalla route che lo aveva:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -922,6 +925,8 @@ Quando esegui `metro` senza argomenti, vedrai i tuoi comandi personalizzati elen
   project:deploy
 ```
 
+Se i pacchetti installati includono i propri comandi, questi appaiono in sezioni aggiuntive sotto i tuoi -- vedi [Comandi dai Pacchetti](#package-commands).
+
 Per visualizzare le informazioni di aiuto per il tuo comando, usa il flag `--help` o `-h`:
 
 ```bash
@@ -932,14 +937,16 @@ metro project:install_firebase --help
 
 ## Comandi dai Pacchetti
 
-I pacchetti possono fornire comandi Metro per gli sviluppatori che li installano -- ad esempio un comando `install` che crea la configurazione di cui un pacchetto ha bisogno. Quando un pacchetto nel tuo `pubspec.yaml` contiene un file `metro_commands.json`, Metro rileva automaticamente i suoi comandi e li elenca nel menu sotto il nome del pacchetto:
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Se un pacchetto nel tuo `pubspec.yaml` include comandi Metro, vengono rilevati automaticamente ed elencati nel menu sotto il nome del pacchetto:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Eseguili esattamente come i tuoi comandi, ad es. `metro analytics:install`. Per scoprire come distribuire comandi in un pacchetto che mantieni, vedi [Comandi dei Pacchetti]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Eseguili esattamente come i tuoi comandi, ad es. `metro analytics:install`. Per le regole complete di rilevamento e precedenza, e per distribuire comandi in un pacchetto che mantieni, vedi [Comandi dei Pacchetti]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

@@ -63,7 +63,9 @@ Nó cung cấp rất nhiều công cụ hữu ích để tăng tốc quá trình
 
 ## Cài đặt
 
-Khi bạn tạo một dự án Nylo mới bằng `nylo init`, lệnh `metro` sẽ được tự động cấu hình cho terminal của bạn. Bạn có thể bắt đầu sử dụng ngay lập tức trong bất kỳ dự án Nylo nào.
+Sau khi tạo một dự án bằng `nylo new`, hãy chạy `nylo init` trong đó để thêm lệnh `metro` vào shell của bạn. Khởi động lại terminal (hoặc chạy lệnh `source` mà nó in ra), và bạn có thể sử dụng `metro` trong bất kỳ dự án Nylo nào.
+
+Bạn cũng có thể chạy Metro không cần alias, điều này hữu ích trên Windows: `nylo metro make:page settings_page`. Xem [Chạy Metro không cần alias](/docs/{{ $version }}/installation#nylo-metro).
 
 Chạy `metro` từ thư mục dự án của bạn để xem tất cả các lệnh có sẵn:
 
@@ -247,6 +249,8 @@ Sử dụng cờ `--initial` hoặc `-i` sẽ tạo trang khởi tạo mới.
 ``` bash
 metro make:page home_page -i
 ```
+
+Router của bạn chỉ có thể có một route ban đầu. Metro không xóa `.initialRoute()` khỏi route đã có sẵn (trong dự án mới là `HomePage`), vì vậy hãy tự xóa nó trong `lib/routes/router.dart`, nếu không ứng dụng sẽ dừng lại do debug assert.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ Lệnh này sẽ tạo navigation hub mới trong `lib/resources/pages/` và t�
 
 | Cờ | Viết tắt | Mô tả |
 |------|-------|-------------|
-| `--auth` | `-a` | Tạo dưới dạng trang xác thực |
-| `--initial` | `-i` | Tạo dưới dạng trang khởi tạo |
 | `--force` | `-f` | Ghi đè nếu đã tồn tại |
 
-``` bash
-# Tạo dưới dạng trang khởi tạo
-metro make:navigation_hub dashboard --initial
+Route mà Metro thêm vào không phải là route ban đầu. Để mở ứng dụng của bạn tại hub, hãy thêm `.initialRoute()` vào nó trong `lib/routes/router.dart`, và xóa nó khỏi route đã có trước đó:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +802,9 @@ metro make:key
 
 | Cờ / Tùy chọn | Viết tắt | Mô tả |
 |---------------|-------|-------------|
-| `--force` | `-f` | Ghi đè APP_KEY hiện có |
 | `--file` | `-e` | Tệp .env đích (mặc định: `.env`) |
 
 ``` bash
-# Tạo key và ghi đè key hiện có
-metro make:key --force
-
 # Tạo key cho tệp env cụ thể
 metro make:key --file=.env.production
 ```
@@ -926,6 +925,8 @@ Khi bạn chạy `metro` mà không có tham số, bạn sẽ thấy các lệnh
   project:deploy
 ```
 
+Nếu các gói đã cài đặt cung cấp lệnh riêng, chúng sẽ xuất hiện trong các phần bổ sung bên dưới lệnh của bạn -- xem [Lệnh từ package](#package-commands).
+
 Để hiển thị thông tin trợ giúp cho lệnh, sử dụng cờ `--help` hoặc `-h`:
 
 ```bash
@@ -936,14 +937,16 @@ metro project:install_firebase --help
 
 ## Lệnh từ package
 
-Package có thể cung cấp các lệnh Metro cho những nhà phát triển cài đặt chúng -- ví dụ như một lệnh `install` để tạo khung cấu hình mà package cần. Khi một package trong `pubspec.yaml` của bạn có chứa tệp `metro_commands.json`, Metro sẽ tự động phát hiện các lệnh của nó và liệt kê chúng trong menu dưới tên package:
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Nếu một gói trong `pubspec.yaml` của bạn cung cấp lệnh Metro, chúng sẽ được tự động phát hiện và liệt kê trong menu dưới tên gói:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Chạy chúng giống hệt như lệnh của riêng bạn, ví dụ: `metro analytics:install`. Để tìm hiểu cách cung cấp lệnh trong một package bạn duy trì, xem [Command từ Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Chạy chúng giống hệt lệnh của bạn, ví dụ `metro analytics:install`. Để biết đầy đủ quy tắc phát hiện và thứ tự ưu tiên, cũng như cách cung cấp lệnh trong gói bạn duy trì, xem [Command từ Package]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 
@@ -2266,3 +2269,5 @@ Class `ConsoleProgressBar` cung cấp:
 | `updateMessage(String newMessage)` | Thay đổi thông báo hiển thị |
 | `complete([String? completionMessage])` | Hoàn thành với thông báo tùy chọn |
 | `stop()` | Dừng mà không hoàn thành |
+| `current` | Giá trị tiến trình hiện tại (getter) |
+| `percentage` | Tiến trình dưới dạng phần trăm (getter) |

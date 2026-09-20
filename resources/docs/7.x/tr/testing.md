@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Giriş](#introduction "Giriş")
 - [Başlarken](#getting-started "Başlarken")
+  - [Testleri Çalıştırma](#running-tests "Testleri Çalıştırma")
 - [Test Yazma](#writing-tests "Test Yazma")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Test dosyanızın başında test framework'ünü başlatın:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` test ortamını kurar ve `autoReset: true` olduğunda (varsayılan) testler arasında otomatik durum sıfırlamayı etkinleştirir.
+
+<div id="running-tests"></div>
+
+### Testleri Çalıştırma
+
+<!-- uncertain: strip label "Requires" — no established Turkish translation seen in existing locale files -->
+<x-doc-strip label="Gereksinimler" items="nylo_installer 1.5.0+" />
+
+Testlerinizi proje kök dizininizden `nylo` CLI'ı ile çalıştırın:
+
+``` bash
+nylo test
+```
+
+`nylo test`, `test/` içindeki dosyaları `dart format` ile biçimlendirir, `flutter test` çalıştırır ve her testi ne kadar sürdüğüyle birlikte yazdırır, ardından bir özet gösterir:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+2 saniye veya daha uzun süreler kırmızı renkte gösterilir. Herhangi bir test başarısız olursa, hatası altında yazdırılır ve komut `1` koduyla sonlanır, böylece CI'da kullanabilirsiniz.
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--filter`, `-f` | Yalnızca adı bir kalıpla eşleşen testleri çalıştırın |
+| `--coverage` | Kod kapsamını topla |
+| `--path` | Testleri başka bir klasörde çalıştırın (varsayılan: `test`) |
+| `--no-format` | Test dosyalarını önce biçimlendirmeyi atlayın |
+
+``` bash
+# Adında "login" geçen testler, kapsamla birlikte
+nylo test --filter "login" --coverage
+
+# Biçimlendirme yapmadan entegrasyon testleri
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [はじめに](#introduction "はじめに")
-- [インストール](#install "インストール")
+- [インストール](#install "{{ config('app.name') }} 用の Metro エイリアスをインストール")
 - Make コマンド
   - [コントローラの作成](#make-controller "コントローラの作成")
   - [モデルの作成](#make-model "モデルの作成")
@@ -63,7 +63,9 @@ Metro は {{ config('app.name') }} フレームワークの内部で動作する
 
 ## インストール
 
-`nylo init` を使用して新しい Nylo プロジェクトを作成すると、`metro` コマンドはターミナルに自動的に設定されます。どの Nylo プロジェクトでもすぐに使い始めることができます。
+`nylo new` でプロジェクトを作成したら、その中で `nylo init` を実行して、シェルに `metro` コマンドを追加します。ターミナルを再起動する（または `nylo init` が出力する `source` コマンドを実行する）と、どの Nylo プロジェクトでも `metro` を使用できます。
+
+エイリアスを使わずに Metro を実行することもでき、これは Windows で便利です: `nylo metro make:page settings_page`。詳しくは [エイリアスなしで Metro を実行](/docs/{{ $version }}/installation#nylo-metro) を参照してください。
 
 プロジェクトディレクトリから `metro` を実行して、利用可能なすべてのコマンドを確認できます:
 
@@ -247,6 +249,8 @@ metro make:page login_page -a
 ``` bash
 metro make:page home_page -i
 ```
+
+ルーターに設定できる初期ルートは 1 つだけです。Metro は既に初期ルートを持つルート（新規プロジェクトでは `HomePage`）から `.initialRoute()` を削除しないため、`lib/routes/router.dart` で自分で削除してください。削除しないと、デバッグアサーションでアプリが停止します。
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ metro make:navigation_hub dashboard
 
 | フラグ | 短縮形 | 説明 |
 |------|-------|-------------|
-| `--auth` | `-a` | 認証ページとして作成 |
-| `--initial` | `-i` | 初期ページとして作成 |
 | `--force` | `-f` | 既存のファイルを上書き |
 
-``` bash
-# 初期ページとして作成
-metro make:navigation_hub dashboard --initial
+Metro が追加するルートは初期ルートではありません。アプリをこの Navigation Hub で起動するには、`lib/routes/router.dart` で `.initialRoute()` をこのルートに追加し、それまで初期ルートを持っていたルートからは削除してください:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -922,6 +925,8 @@ metro app:current_time
   project:deploy
 ```
 
+インストール済みのパッケージが独自のコマンドを提供している場合、それらは自分のコマンドの下に追加のセクションとして表示されます -- [パッケージからのコマンド](#package-commands) を参照してください。
+
 コマンドのヘルプ情報を表示するには、`--help` または `-h` フラグを使用します:
 
 ```bash
@@ -932,14 +937,16 @@ metro project:install_firebase --help
 
 ## パッケージからのコマンド
 
-パッケージは、インストールした開発者向けに Metro コマンドを提供できます。例えば、パッケージが必要とする設定をスキャフォールディングする `install` コマンドなどです。`pubspec.yaml` 内のパッケージに `metro_commands.json` ファイルが含まれている場合、Metro はそのコマンドを自動的に検出し、パッケージ名のもとでメニューに一覧表示します:
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+`pubspec.yaml` 内のパッケージが Metro コマンドを提供している場合、それらは自動的に検出され、パッケージ名の下にメニュー表示されます:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-自分のコマンドとまったく同じように実行できます。例: `metro analytics:install`。自分が保守するパッケージでコマンドを提供する方法については、[パッケージコマンド]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) を参照してください。
+自分のコマンドとまったく同じように実行できます。例: `metro analytics:install`。検出と優先順位の完全なルール、および自分が管理するパッケージでコマンドを提供する方法については、[パッケージコマンド]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands) を参照してください。
 
 <div id="adding-options-to-custom-commands"></div>
 

@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [はじめに](#introduction "はじめに")
 - [はじめに](#getting-started "はじめに")
+  - [テストの実行](#running-tests "テストの実行")
 - [テストの記述](#writing-tests "テストの記述")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 テストファイルの先頭でテストフレームワークを初期化します:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` はテスト環境をセットアップし、`autoReset: true`（デフォルト）の場合、テスト間で自動ステートリセットを有効にします。
+
+<div id="running-tests"></div>
+
+### テストの実行
+
+<!-- uncertain: strip label "Requires" — no established translation in this locale's existing files -->
+<x-doc-strip label="必須" items="nylo_installer 1.5.0+" />
+
+プロジェクトのルートから `nylo` CLI でテストを実行します:
+
+``` bash
+nylo test
+```
+
+`nylo test` は `dart format` で `test/` 内のファイルをフォーマットし、`flutter test` を実行して、各テストの所要時間を表示し、最後にサマリーを表示します:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+2 秒以上かかったものは赤色で表示されます。テストが失敗した場合は、その下にエラーが表示され、コマンドはコード `1` で終了するため、CI で利用できます。
+
+| オプション | 説明 |
+|--------|-------------|
+| `--filter`, `-f` | 名前がパターンに一致するテストのみを実行 |
+| `--coverage` | コードカバレッジを収集 |
+| `--path` | 別のフォルダーでテストを実行（デフォルト: `test`） |
+| `--no-format` | 最初にテストファイルをフォーマットする処理をスキップ |
+
+``` bash
+# 名前に "login" を含むテストのみ、カバレッジ付きで実行
+nylo test --filter "login" --coverage
+
+# 統合テストをフォーマットなしで実行
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

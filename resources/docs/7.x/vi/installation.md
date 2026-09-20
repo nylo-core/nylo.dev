@@ -6,6 +6,11 @@
 - [Cài đặt](#install "Cài đặt")
 - [Chạy dự án](#running-the-project "Chạy dự án")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [Dọn dẹp dự án](#nylo-clean "Dọn dẹp dự án")
+  - [Làm mới iOS pods](#nylo-ios-pod-refresh "Làm mới iOS pods")
+  - [Chạy Metro không cần alias](#nylo-metro "Chạy Metro không cần alias")
+  - [Cập nhật CLI](#nylo-self-update "Cập nhật CLI")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@ Chạy các lệnh này theo thứ tự. Mỗi lệnh đều có thể chạy l�
 
 <x-doc-steps>
 <x-doc-step number="1" title="Cài đặt Nylo CLI toàn cục">
-Lệnh này cài đặt công cụ CLI {{ config('app.name') }} trên toàn hệ thống của bạn.
+Đưa lệnh `nylo` vào hệ thống của bạn.
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ nylo new my_app
 cd my_app
 nylo init
 ```
+
+Sau đó, khởi động lại terminal của bạn, hoặc chạy lệnh `source` mà `nylo init` in ra.
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # Tạo một dịch vụ API
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: label "Requires" has no established translation in this locale file's existing x-doc-strip usage -->
+<x-doc-strip label="Yêu cầu" items="nylo_installer 1.8.0+" linkText="Cập nhật CLI" linkHref="#nylo-self-update" />
+
+Lệnh `nylo` ở bước 1 làm được nhiều hơn là chỉ tạo dự án. Chạy nó từ thư mục dự án của bạn để dọn dẹp bản build, làm mới iOS pods, chạy test, và kiểm tra bản dịch của bạn.
+
+<x-doc-commands title="Lệnh dự án" rows="
+nylo new | Tạo một dự án mới
+nylo init | Thiết lập alias metro trong shell của bạn
+nylo clean | Chạy flutter clean và flutter pub get
+nylo ios:pod-refresh | Cài đặt lại iOS pods của bạn
+nylo metro | Chạy một lệnh Metro không cần alias
+" />
+
+<x-doc-commands title="Kiểm thử và bản dịch" rows="
+nylo test | Định dạng và chạy test của bạn
+nylo locale:find-untranslated | Tìm văn bản chưa được bọc trong .tr()
+nylo locale:check-missing-keys | Tìm khóa còn thiếu trong file ngôn ngữ của bạn
+" />
+
+<x-doc-commands title="Bản thân CLI" rows="
+nylo self-update | Cập nhật nylo lên phiên bản mới nhất
+nylo --version | Hiển thị phiên bản đã cài đặt
+" />
+
+Các lệnh có tùy chọn sẽ liệt kê chúng bằng `-h`, ví dụ `nylo test -h`. Kiểm thử được trình bày trong [Chạy Test](/docs/{{ $version }}/testing#running-tests), và các lệnh `locale:` trong [Kiểm tra bản dịch](/docs/{{ $version }}/localization#auditing-translations).
+
+<div id="nylo-clean"></div>
+
+### Dọn dẹp dự án
+
+`nylo clean` chạy `flutter clean` rồi đến `flutter pub get`. Thêm cờ nền tảng khi việc dọn dẹp thông thường chưa đủ:
+
+``` bash
+# flutter clean, sau đó flutter pub get
+nylo clean
+
+# Đồng thời xóa ios/Pods, ios/.symlinks và ios/Podfile.lock, rồi chạy pod install --repo-update
+nylo clean --ios
+
+# Đồng thời chạy gradlew clean trong android/
+nylo clean --android
+
+# Cả hai điều trên
+nylo clean --all
+```
+
+Nếu một dự án không có thư mục `ios/` hoặc `android/`, nền tảng đó sẽ bị bỏ qua kèm cảnh báo. `pod install` chỉ chạy trên macOS.
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### Làm mới iOS pods
+
+Khi CocoaPods bị lệch đồng bộ, `nylo ios:pod-refresh` sẽ xóa `ios/Pods`, `ios/.symlinks` và `ios/Podfile.lock`, sau đó chạy `pod install --repo-update` trong thư mục `ios/`:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+Chạy lệnh này từ thư mục gốc dự án trên macOS. Khác với `nylo clean --ios`, nó không chạy `flutter clean` hay `flutter pub get`.
+
+<div id="nylo-metro"></div>
+
+### Chạy Metro không cần alias
+
+`nylo metro` chuyển mọi thứ phía sau nó đến Metro (`dart run nylo_framework:main`). Hãy dùng lệnh này trước khi bạn chạy `nylo init`, hoặc trên Windows, nơi `nylo init` không thể thêm alias `metro` giúp bạn:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### Cập nhật CLI
+
+``` bash
+nylo self-update
+```
+
+Lệnh này kiểm tra pub.dev và cài đặt lại `nylo_installer` nếu có phiên bản mới hơn. Sau khi một lệnh hoàn tất, `nylo` cũng cho bạn biết khi có bản cập nhật. Nó sẽ im lặng khi đầu ra không hướng đến terminal, vì vậy thông báo không bao giờ xuất hiện trong log CI hay báo cáo được pipe.
+
+Để xem phiên bản bạn đã cài đặt:
+
+``` bash
+nylo --version
 ```

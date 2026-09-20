@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
-- [Instalasi](#install "Instalasi")
+- [Instalasi](#install "Menginstal Alias Metro untuk {{ config('app.name') }}")
 - Perintah Make
   - [Membuat controller](#make-controller "Membuat controller")
   - [Membuat model](#make-model "Membuat model")
@@ -63,7 +63,9 @@ Alat ini menyediakan banyak tools yang berguna untuk mempercepat pengembangan.
 
 ## Instalasi
 
-Ketika Anda membuat proyek Nylo baru menggunakan `nylo init`, perintah `metro` akan otomatis dikonfigurasi untuk terminal Anda. Anda dapat langsung menggunakannya di proyek Nylo mana pun.
+Setelah Anda membuat proyek dengan `nylo new`, jalankan `nylo init` di dalamnya untuk menambahkan perintah `metro` ke shell Anda. Restart terminal Anda (atau jalankan perintah `source` yang ditampilkannya), dan Anda bisa menggunakan `metro` di proyek Nylo mana pun.
+
+Anda juga bisa menjalankan Metro tanpa alias, yang berguna di Windows: `nylo metro make:page settings_page`. Lihat [Menjalankan Metro tanpa alias](/docs/{{ $version }}/installation#nylo-metro).
 
 Jalankan `metro` dari direktori proyek Anda untuk melihat semua perintah yang tersedia:
 
@@ -247,6 +249,9 @@ Menggunakan flag `--initial` atau `-i` akan membuat halaman initial baru.
 ``` bash
 metro make:page home_page -i
 ```
+
+<!-- uncertain: "initial route" dipertahankan sebagai istilah, belum ada padanan baku di file ini -->
+Router Anda hanya boleh memiliki satu initial route. Metro tidak menghapus `.initialRoute()` dari route yang sudah memilikinya (pada proyek baru, `HomePage`), jadi hapus sendiri di `lib/routes/router.dart`, atau aplikasi akan berhenti karena debug assert.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +715,12 @@ Ini akan membuat navigation hub baru di `lib/resources/pages/` dan menambahkan r
 
 | Flag | Singkat | Deskripsi |
 |------|-------|-------------|
-| `--auth` | `-a` | Buat sebagai halaman auth |
-| `--initial` | `-i` | Buat sebagai halaman initial |
 | `--force` | `-f` | Timpa jika sudah ada |
 
-``` bash
-# Create as the initial page
-metro make:navigation_hub dashboard --initial
+Route yang ditambahkan Metro bukan initial route. Untuk membuka aplikasi Anda pada hub tersebut, tambahkan `.initialRoute()` padanya di `lib/routes/router.dart`, dan hapus dari route yang sebelumnya memilikinya:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +803,9 @@ metro make:key
 
 | Flag / Opsi | Singkat | Deskripsi |
 |---------------|-------|-------------|
-| `--force` | `-f` | Timpa APP_KEY yang sudah ada |
 | `--file` | `-e` | File .env target (default: `.env`) |
 
 ``` bash
-# Generate key and overwrite existing
-metro make:key --force
-
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
@@ -926,6 +926,8 @@ Ketika Anda menjalankan `metro` tanpa argumen, Anda akan melihat perintah kustom
   project:deploy
 ```
 
+Jika ada paket terpasang yang menyertakan perintahnya sendiri, perintah tersebut muncul di bagian tambahan di bawah milik Anda -- lihat [Perintah dari Paket](#package-commands).
+
 Untuk menampilkan informasi bantuan untuk perintah Anda, gunakan flag `--help` atau `-h`:
 
 ```bash
@@ -936,14 +938,16 @@ metro project:install_firebase --help
 
 ## Perintah dari Paket
 
-Paket dapat menyertakan perintah Metro untuk developer yang menginstalnya -- misalnya perintah `install` yang membuat scaffold konfigurasi yang dibutuhkan sebuah paket. Ketika sebuah paket di `pubspec.yaml` Anda berisi file `metro_commands.json`, Metro akan menemukan perintahnya secara otomatis dan mencantumkannya di menu di bawah nama paket tersebut:
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Jika paket di `pubspec.yaml` Anda menyertakan perintah Metro, perintah tersebut ditemukan secara otomatis dan terdaftar di menu dengan nama paketnya:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Jalankan persis seperti perintah Anda sendiri, misalnya `metro analytics:install`. Untuk mempelajari cara menyertakan perintah dalam paket yang Anda kelola, lihat [Perintah Paket]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Jalankan persis seperti perintah Anda sendiri, mis. `metro analytics:install`. Untuk aturan penemuan dan prioritas selengkapnya, serta untuk menyertakan perintah dalam paket yang Anda kelola, lihat [Perintah Paket]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 
@@ -2266,3 +2270,5 @@ Kelas `ConsoleProgressBar` menyediakan:
 | `updateMessage(String newMessage)` | Ubah pesan yang ditampilkan |
 | `complete([String? completionMessage])` | Selesaikan dengan pesan opsional |
 | `stop()` | Berhenti tanpa menyelesaikan |
+| `current` | Nilai progres saat ini (getter) |
+| `percentage` | Progres dalam bentuk persentase (getter) |

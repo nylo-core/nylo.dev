@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Form meng-extend `NyFormWidget` dan meng-override method `fields()` untuk mendefinisikan field form. Setiap field menggunakan konstruktor bernama seperti `Field.text()`, `Field.email()`, atau `Field.password()`. Getter `static NyFormActions get actions` menyediakan cara mudah untuk berinteraksi dengan form dari mana saja di aplikasi Anda.
 
+Konstruktor yang dihasilkan meneruskan `submitButton`, `onSubmit`, dan `onFailure`. Untuk memberikan `initialData` atau `onChanged` pada form Anda, tambahkan juga parameter tersebut ke konstruktornya:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -751,7 +757,7 @@ Field.text("Nickname",
 )
 ```
 
-Field yang ditandai `nullable()` akan melewati semua validasi jika nilainya kosong atau null. Ini berguna untuk field opsional yang hanya perlu divalidasi jika diisi.
+`nullable()` menandai sebuah validator sebagai opsional. Ketika nilai field null atau kosong, semua aturan validasi dilewati dan field dianggap lolos. Ketika field memiliki nilai, semua aturan diterapkan seperti biasa. Rangkai di akhir `FormValidator` mana pun.
 
 Saat form dikirim, semua validator diperiksa. Jika ada yang gagal, error toast menampilkan pesan error pertama dan callback `onFailure` dipanggil.
 
@@ -858,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Konstruktor form Anda memerlukan `super.initialData` untuk ini (lihat [Membuat Form](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Mengatur Nilai Field
@@ -897,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+Untuk `onChanged`, konstruktor form Anda memerlukan `super.onChanged` (lihat [Membuat Form](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1134,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Dipanggil dengan error saat validasi gagal
 )
 ```
+
+Konstruktor form yang dihasilkan hanya meneruskan `key`, `submitButton`, `onSubmit`, dan `onFailure`, jadi tambahkan parameter `super.` untuk setiap parameter lain yang Anda gunakan (lihat [Membuat Form](#creating-forms)).
 
 Callback `onChanged` menerima `Field` yang berubah dan nilai barunya:
 

@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 `router.dart` 파일을 수정하여 한 페이지에서 다른 페이지로 이동할 때 전환 효과를 추가할 수 있습니다.
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // 아래에서 위로
@@ -928,6 +926,8 @@ NyNavigator.updateStack([
 - 특정 앱 화면을 열어야 하는 알림 처리
 - 원활한 웹-앱 전환
 
+> 전체 설정 과정을 찾고 계신가요? 플랫폼 구성, 링크 가로채기, Metro 스캐폴딩은 전용 [Deep Links](/docs/{{ $version }}/deep-links) 가이드를 참조하세요.
+
 ## 설정
 
 앱에서 딥 링킹을 구현하기 전에, 프로젝트가 올바르게 설정되어 있는지 확인하세요:
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## 딥 링크 처리
 
-`RouteProvider`에서 딥 링크 이벤트를 처리할 수 있습니다:
+`useDeepLinks()`로 플랫폼 딥 링크 캡처를 활성화한 다음, `onIncomingLink`를 사용하여 {{ config('app.name') }}가 라우팅하기 전에 각 URI를 가로챕니다:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // 딥 링크 처리
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // 딥 링크를 위한 라우트 스택 업데이트
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+전체 API는 [Deep Links](/docs/{{ $version }}/deep-links) 가이드를 참조하세요.
 
 ### 딥 링크 테스트
 

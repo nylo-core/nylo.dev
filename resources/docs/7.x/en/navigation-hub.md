@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 You can navigate to widgets within a tab by using the `pushTo` helper.
 
-Inside your tab, you can use the `pushTo` helper to navigate to another widget.
+Inside your tab, you can use the `pushTo` helper to navigate to another widget. `pushTo` comes from `NyState`, so your tab's state needs to extend it.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 You can also pass data to the widget you're navigating to.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

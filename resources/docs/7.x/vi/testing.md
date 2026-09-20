@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Giới thiệu](#introduction "Giới thiệu")
 - [Bắt đầu](#getting-started "Bắt đầu")
+  - [Chạy Test](#running-tests "Chạy Test")
 - [Viết test](#writing-tests "Viết test")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Khởi tạo framework kiểm thử ở đầu file test của bạn:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,46 @@ void main() {
 ```
 
 `NyTest.init()` thiết lập môi trường test và kích hoạt tự động đặt lại trạng thái giữa các test khi `autoReset: true` (mặc định).
+
+<div id="running-tests"></div>
+
+### Chạy Test
+
+<x-doc-strip label="Yêu cầu" items="nylo_installer 1.5.0+" />
+
+Chạy test của bạn bằng CLI `nylo` từ thư mục gốc dự án:
+
+``` bash
+nylo test
+```
+
+`nylo test` định dạng các file trong `test/` bằng `dart format`, chạy `flutter test`, và in ra từng test kèm thời gian thực hiện, theo sau là một bản tóm tắt:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Thời lượng từ 2 giây trở lên được hiển thị màu đỏ. Nếu có test nào thất bại, lỗi của nó sẽ được in bên dưới và lệnh sẽ thoát với mã `1`, để bạn có thể dùng nó trong CI.
+
+| Tùy chọn | Mô tả |
+|--------|-------------|
+| `--filter`, `-f` | Chỉ chạy các test có tên khớp với một mẫu |
+| `--coverage` | Thu thập độ phủ code |
+| `--path` | Chạy test trong một thư mục khác (mặc định: `test`) |
+| `--no-format` | Bỏ qua việc định dạng file test trước |
+
+``` bash
+# Chỉ các test có "login" trong tên, kèm coverage
+nylo test --filter "login" --coverage
+
+# Test tích hợp, không định dạng
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

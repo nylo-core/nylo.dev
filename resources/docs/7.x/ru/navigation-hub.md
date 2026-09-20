@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Вы можете переходить к виджетам внутри вкладки, используя хелпер `pushTo`.
 
-Внутри вашей вкладки вы можете использовать хелпер `pushTo` для перехода к другому виджету.
+Внутри вашей вкладки вы можете использовать хелпер `pushTo` для перехода к другому виджету. `pushTo` происходит из `NyState`, поэтому состояние вашей вкладки должно наследовать этот класс.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Вы также можете передавать данные в виджет, к которому переходите.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});
@@ -1264,6 +1264,14 @@ Future<bool> nextPage();
 /// Перейти на предыдущую страницу в макете journey
 /// Напр. await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Обновить конкретную вкладку, принудительно перестроив её
+/// Напр. MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Обновить все вкладки, принудительно перестроив их
+/// Напр. MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Для использования действия состояния выполните следующее:
@@ -1276,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // Переключиться на вкладку 2
 
 await MyNavigationHub.stateActions.nextPage(); // Journey: перейти на следующую страницу
+
+MyNavigationHub.stateActions.refreshTab(0); // Принудительно перестроить вкладку 0
+
+MyNavigationHub.stateActions.refresh(); // Принудительно перестроить все вкладки
 ```
 
 <div id="loading-style"></div>

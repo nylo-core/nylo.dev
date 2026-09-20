@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Vous pouvez naviguer vers des widgets au sein d'un onglet en utilisant le helper `pushTo`.
 
-Dans votre onglet, vous pouvez utiliser le helper `pushTo` pour naviguer vers un autre widget.
+Dans votre onglet, vous pouvez utiliser le helper `pushTo` pour naviguer vers un autre widget. `pushTo` provient de `NyState`, l'etat de votre onglet doit donc l'etendre.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Vous pouvez &eacute;galement passer des donn&eacute;es au widget vers lequel vous naviguez.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

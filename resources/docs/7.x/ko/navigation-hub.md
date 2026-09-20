@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 `pushTo` 헬퍼를 사용하여 탭 내의 위젯으로 내비게이션할 수 있습니다.
 
-탭 내부에서 `pushTo` 헬퍼를 사용하여 다른 위젯으로 내비게이션할 수 있습니다.
+탭 내부에서 `pushTo` 헬퍼를 사용하여 다른 위젯으로 내비게이션할 수 있습니다. `pushTo`는 `NyState`에서 제공되므로, 탭의 State가 이를 확장해야 합니다.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 내비게이션하는 위젯에 데이터를 전달할 수도 있습니다.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});
@@ -1264,6 +1264,14 @@ Future<bool> nextPage();
 /// Journey 레이아웃에서 이전 페이지로 이동
 /// 예: await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// 특정 탭을 새로고침하여 다시 빌드하도록 강제
+/// 예: MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// 모든 탭을 새로고침하여 다시 빌드하도록 강제
+/// 예: MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 State 액션을 사용하려면 다음과 같이 하면 됩니다:
@@ -1276,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // 탭 2로 전환
 
 await MyNavigationHub.stateActions.nextPage(); // Journey: 다음 페이지로 이동
+
+MyNavigationHub.stateActions.refreshTab(0); // 탭 0 다시 빌드 강제
+
+MyNavigationHub.stateActions.refresh(); // 모든 탭 다시 빌드 강제
 ```
 
 <div id="loading-style"></div>

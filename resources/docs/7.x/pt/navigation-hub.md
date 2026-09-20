@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Você pode navegar para widgets dentro de uma aba usando o helper `pushTo`.
 
-Dentro da sua aba, você pode usar o helper `pushTo` para navegar para outro widget.
+Dentro da sua aba, você pode usar o helper `pushTo` para navegar para outro widget. O `pushTo` vem do `NyState`, então o estado da sua aba precisa estendê-lo.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 Você também pode passar dados para o widget para o qual está navegando.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});
@@ -1264,6 +1264,14 @@ Future<bool> nextPage();
 /// Navegar para a página anterior em um layout journey
 /// Ex: await MyNavigationHub.stateActions.previousPage();
 Future<bool> previousPage();
+
+/// Atualizar uma aba específica, forçando sua reconstrução
+/// Ex: MyNavigationHub.stateActions.refreshTab(0);
+void refreshTab(int tabIndex);
+
+/// Atualizar todas as abas, forçando a reconstrução
+/// Ex: MyNavigationHub.stateActions.refresh();
+void refresh();
 ```
 
 Para usar uma state action, você pode fazer o seguinte:
@@ -1276,6 +1284,10 @@ MyNavigationHub.stateActions.resetTabIndex(0);
 MyNavigationHub.stateActions.currentTabIndex(2); // Trocar para a aba 2
 
 await MyNavigationHub.stateActions.nextPage(); // Journey: ir para a próxima página
+
+MyNavigationHub.stateActions.refreshTab(0); // Força a reconstrução da aba 0
+
+MyNavigationHub.stateActions.refresh(); // Força a reconstrução de todas as abas
 ```
 
 <div id="loading-style"></div>

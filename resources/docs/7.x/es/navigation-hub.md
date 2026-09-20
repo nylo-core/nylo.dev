@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 Puedes navegar a widgets dentro de una pestaña usando el helper `pushTo`.
 
-Dentro de tu pestaña, puedes usar el helper `pushTo` para navegar a otro widget.
+Dentro de tu pestaña, puedes usar el helper `pushTo` para navegar a otro widget. `pushTo` proviene de `NyState`, así que el estado de tu pestaña necesita extenderlo.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 También puedes pasar datos al widget al que navegas.
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

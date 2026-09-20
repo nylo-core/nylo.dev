@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Pengantar](#introduction "Pengantar")
 - [Memulai](#getting-started "Memulai")
+  - [Menjalankan Test](#running-tests "Menjalankan Test")
 - [Menulis Test](#writing-tests "Menulis Test")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Inisialisasi framework test di bagian atas file test Anda:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,46 @@ void main() {
 ```
 
 `NyTest.init()` menyiapkan lingkungan test dan mengaktifkan reset state otomatis antar test ketika `autoReset: true` (nilai default).
+
+<div id="running-tests"></div>
+
+### Menjalankan Test
+
+<x-doc-strip label="Persyaratan" items="nylo_installer 1.5.0+" />
+
+Jalankan test Anda dengan CLI `nylo` dari root proyek Anda:
+
+``` bash
+nylo test
+```
+
+`nylo test` memformat file di `test/` dengan `dart format`, menjalankan `flutter test`, dan menampilkan setiap test beserta durasinya, diikuti dengan ringkasan:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Durasi 2 detik atau lebih ditampilkan dengan warna merah. Jika ada test yang gagal, errornya akan dicetak di bawahnya dan perintah akan keluar dengan kode `1`, sehingga Anda bisa menggunakannya di CI.
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--filter`, `-f` | Hanya menjalankan test yang namanya cocok dengan pola tertentu |
+| `--coverage` | Mengumpulkan code coverage |
+| `--path` | Menjalankan test di folder lain (default: `test`) |
+| `--no-format` | Lewati pemformatan file test terlebih dahulu |
+
+``` bash
+# Hanya test dengan "login" pada namanya, dengan coverage
+nylo test --filter "login" --coverage
+
+# Integration test, tanpa pemformatan
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

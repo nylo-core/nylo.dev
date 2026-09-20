@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 Bạn có thể thêm hiệu ứng chuyển khi điều hướng từ trang này bằng cách chỉnh sửa tệp `router.dart`.
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // từ dưới lên trên
@@ -928,6 +926,8 @@ Deep linking cho phép người dùng điều hướng trực tiếp đến nộ
 - Xử lý thông báo mở màn hình ứng dụng cụ thể
 - Chuyển đổi liền mạch từ web sang ứng dụng
 
+> Bạn đang tìm hướng dẫn thiết lập đầy đủ? Xem hướng dẫn chuyên biệt [Deep Links](/docs/{{ $version }}/deep-links) để biết cấu hình nền tảng, chặn liên kết và scaffolding bằng Metro.
+
 ## Thiết lập
 
 Trước khi triển khai deep linking, đảm bảo dự án được cấu hình đúng:
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## Xử lý Deep Links
 
-Bạn có thể xử lý sự kiện deep link trong `RouteProvider`:
+Bật tính năng bắt deep link của nền tảng bằng `useDeepLinks()`, sau đó dùng `onIncomingLink` để chặn từng URI trước khi {{ config('app.name') }} định tuyến:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // Xử lý deep links
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // Cập nhật ngăn xếp route cho deep links
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+Xem hướng dẫn [Deep Links](/docs/{{ $version }}/deep-links) để biết API đầy đủ.
 
 ### Kiểm thử Deep Links
 

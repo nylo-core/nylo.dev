@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [소개](#introduction "소개")
 - [시작하기](#getting-started "시작하기")
+  - [테스트 실행](#running-tests "테스트 실행")
 - [테스트 작성](#writing-tests "테스트 작성")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 테스트 파일 상단에서 테스트 프레임워크를 초기화합니다:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()`은 테스트 환경을 설정하고 `autoReset: true`(기본값)일 때 테스트 간 자동 상태 리셋을 활성화합니다.
+
+<div id="running-tests"></div>
+
+### 테스트 실행
+
+<!-- uncertain: strip label "Requires" — no established translation in this locale's existing files -->
+<x-doc-strip label="필수" items="nylo_installer 1.5.0+" />
+
+프로젝트 루트에서 `nylo` CLI로 테스트를 실행하세요:
+
+``` bash
+nylo test
+```
+
+`nylo test`는 `dart format`으로 `test/`의 파일을 포맷하고, `flutter test`를 실행하여 각 테스트와 소요 시간을 출력한 후, 마지막에 요약을 표시합니다:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+2초 이상 걸린 항목은 빨간색으로 표시됩니다. 테스트가 실패하면 그 아래에 오류가 출력되고 명령어는 코드 `1`로 종료되므로 CI에서 사용할 수 있습니다.
+
+| 옵션 | 설명 |
+|--------|-------------|
+| `--filter`, `-f` | 이름이 패턴과 일치하는 테스트만 실행 |
+| `--coverage` | 코드 커버리지 수집 |
+| `--path` | 다른 폴더에서 테스트 실행 (기본값: `test`) |
+| `--no-format` | 테스트 파일 포맷팅을 먼저 건너뛰기 |
+
+``` bash
+# 이름에 "login"이 포함된 테스트만, 커버리지 포함
+nylo test --filter "login" --coverage
+
+# 통합 테스트를 포맷팅 없이 실행
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

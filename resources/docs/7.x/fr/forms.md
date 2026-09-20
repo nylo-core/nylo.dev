@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Les formulaires etendent `NyFormWidget` et surchargent la methode `fields()` pour definir les champs du formulaire. Chaque champ utilise un constructeur nomme comme `Field.text()`, `Field.email()` ou `Field.password()`. Le getter `static NyFormActions get actions` offre un moyen pratique d'interagir avec le formulaire depuis n'importe ou dans votre application.
 
+Le constructeur genere transmet `submitButton`, `onSubmit` et `onFailure`. Pour donner a votre formulaire `initialData` ou `onChanged`, ajoutez-les egalement a son constructeur :
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -858,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Le constructeur de votre formulaire a besoin de `super.initialData` pour cela (voir [Creer un formulaire](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Definir les valeurs des champs
@@ -897,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+Pour `onChanged`, le constructeur de votre formulaire a besoin de `super.onChanged` (voir [Creer un formulaire](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1134,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Appele avec les erreurs lors d'une validation echouee
 )
 ```
+
+Le constructeur d'un formulaire genere ne transmet que `key`, `submitButton`, `onSubmit` et `onFailure`, ajoutez donc un parametre `super.` pour chacun des autres que vous utilisez (voir [Creer un formulaire](#creating-forms)).
 
 Le callback `onChanged` recoit le `Field` qui a change et sa nouvelle valeur :
 

@@ -63,7 +63,9 @@ Dostarcza wiele przydatnych narzędzi przyspieszających rozwój aplikacji.
 
 ## Instalacja
 
-Kiedy tworzysz nowy projekt Nylo za pomocą `nylo init`, komenda `metro` jest automatycznie konfigurowana dla Twojego terminala. Możesz od razu zacząć jej używać w dowolnym projekcie Nylo.
+Po utworzeniu projektu za pomocą `nylo new`, uruchom w nim `nylo init`, aby dodać komendę `metro` do swojej powłoki. Zrestartuj terminal (albo uruchom komendę `source`, którą on wypisuje), a następnie możesz używać `metro` w dowolnym projekcie Nylo.
+
+Możesz też uruchomić Metro bez aliasu, co przydaje się w systemie Windows: `nylo metro make:page settings_page`. Zobacz [Uruchamianie Metro bez aliasu](/docs/{{ $version }}/installation#nylo-metro).
 
 Uruchom `metro` z katalogu projektu, aby zobaczyć wszystkie dostępne komendy:
 
@@ -247,6 +249,9 @@ Użycie flagi `--initial` lub `-i` utworzy nową stronę początkową.
 ``` bash
 metro make:page home_page -i
 ```
+
+<!-- uncertain: "debug assert" - termin specyficzny dla Fluttera/Darta, niewystępujący wcześniej w tym pliku -->
+Twój router może mieć tylko jedną trasę początkową. Metro nie usuwa `.initialRoute()` z trasy, która już ją posiada (w nowym projekcie jest to `HomePage`), więc usuń ją samodzielnie w `lib/routes/router.dart`, w przeciwnym razie aplikacja zatrzyma się na asercji w trybie debugowania.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +715,12 @@ Spowoduje to utworzenie nowego Navigation Hub w `lib/resources/pages/` i automat
 
 | Flaga | Skrót | Opis |
 |------|-------|-------------|
-| `--auth` | `-a` | Utwórz jako stronę autoryzacji |
-| `--initial` | `-i` | Utwórz jako stronę początkową |
 | `--force` | `-f` | Nadpisz, jeśli istnieje |
 
-``` bash
-# Utwórz jako stronę początkową
-metro make:navigation_hub dashboard --initial
+Trasa dodawana przez Metro nie jest trasą początkową. Aby otworzyć aplikację na hubie, dodaj do niej `.initialRoute()` w `lib/routes/router.dart` i usuń ją z trasy, która ją wcześniej miała:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +803,9 @@ metro make:key
 
 | Flaga / Opcja | Skrót | Opis |
 |---------------|-------|-------------|
-| `--force` | `-f` | Nadpisz istniejący APP_KEY |
 | `--file` | `-e` | Docelowy plik .env (domyślnie: `.env`) |
 
 ``` bash
-# Wygeneruj klucz i nadpisz istniejący
-metro make:key --force
-
 # Wygeneruj klucz dla konkretnego pliku env
 metro make:key --file=.env.production
 ```
@@ -926,6 +926,8 @@ Gdy uruchomisz `metro` bez argumentów, zobaczysz swoje komendy niestandardowe w
   project:deploy
 ```
 
+Jeśli zainstalowane pakiety dostarczają własne polecenia, pojawią się one w dodatkowych sekcjach poniżej Twoich -- zobacz [Komendy z pakietów](#package-commands).
+
 Aby wyświetlić informacje pomocy dla komendy, użyj flagi `--help` lub `-h`:
 
 ```bash
@@ -936,14 +938,16 @@ metro project:install_firebase --help
 
 ## Komendy z pakietów
 
-Pakiety mogą dostarczać komendy Metro dla programistów, którzy je instalują -- na przykład komendę `install`, która tworzy szkielet konfiguracji potrzebnej pakietowi. Gdy pakiet w Twoim `pubspec.yaml` zawiera plik `metro_commands.json`, Metro automatycznie wykrywa jego komendy i wyświetla je w menu pod nazwą pakietu:
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Jeśli pakiet w Twoim `pubspec.yaml` dostarcza polecenia Metro, są one wykrywane automatycznie i wyświetlane w menu pod nazwą pakietu:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Uruchamiaj je dokładnie tak samo jak własne komendy, np. `metro analytics:install`. Aby dowiedzieć się, jak dostarczać komendy w utrzymywanym przez siebie pakiecie, zobacz [Komendy pakietów]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Uruchamiaj je dokładnie tak jak własne polecenia, np. `metro analytics:install`. Pełne reguły wykrywania i pierwszeństwa oraz sposób dostarczania poleceń w utrzymywanym przez Ciebie pakiecie znajdziesz w [Komendy pakietów]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

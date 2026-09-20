@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 आप `pushTo` हेल्पर का उपयोग करके टैब के भीतर विजेट्स पर नेविगेट कर सकते हैं।
 
-अपने टैब के अंदर, आप दूसरे विजेट पर नेविगेट करने के लिए `pushTo` हेल्पर का उपयोग कर सकते हैं।
+अपने टैब के अंदर, आप दूसरे विजेट पर नेविगेट करने के लिए `pushTo` हेल्पर का उपयोग कर सकते हैं। `pushTo` `NyState` से आता है, इसलिए आपके टैब के स्टेट को इसे एक्सटेंड करना होगा।
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 आप जिस विजेट पर नेविगेट कर रहे हैं उसे डेटा भी पास कर सकते हैं।
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

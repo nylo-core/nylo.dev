@@ -6,6 +6,11 @@
 - [安装](#install "安装")
 - [运行项目](#running-the-project "运行项目")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [清理项目](#nylo-clean "清理项目")
+  - [刷新 iOS Pod](#nylo-ios-pod-refresh "刷新 iOS Pod")
+  - [不使用别名运行 Metro](#nylo-metro "不使用别名运行 Metro")
+  - [更新 CLI](#nylo-self-update "更新 CLI")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@
 
 <x-doc-steps>
 <x-doc-step number="1" title="全局安装 Nylo CLI">
-这将在您的系统上全局安装 {{ config('app.name') }} CLI 工具。
+将 `nylo` 命令安装到您的系统中。
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ nylo new my_app
 cd my_app
 nylo init
 ```
+
+之后请重启终端，或运行 `nylo init` 打印出的 `source` 命令。
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # Create an API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: strip label "Requires" — no established translation in this locale's existing files -->
+<x-doc-strip label="需要" items="nylo_installer 1.8.0+" linkText="更新 CLI" linkHref="#nylo-self-update" />
+
+第 1 步中的 `nylo` 命令不仅仅用于创建项目。从项目目录运行它，还可以清理构建、刷新 iOS Pod、运行测试并检查您的翻译。
+
+<x-doc-commands title="项目命令" rows="
+nylo new | 创建新项目
+nylo init | 在您的 shell 中设置 metro 别名
+nylo clean | 运行 flutter clean 和 flutter pub get
+nylo ios:pod-refresh | 重新安装您的 iOS Pod
+nylo metro | 在不使用别名的情况下运行 Metro 命令
+" />
+
+<x-doc-commands title="测试与翻译" rows="
+nylo test | 格式化并运行您的测试
+nylo locale:find-untranslated | 查找未使用 .tr() 包装的文本
+nylo locale:check-missing-keys | 查找语言文件中缺失的键
+" />
+
+<x-doc-commands title="CLI 本身" rows="
+nylo self-update | 将 nylo 更新到最新版本
+nylo --version | 显示已安装的版本
+" />
+
+带选项的命令可以通过 `-h` 列出这些选项，例如 `nylo test -h`。测试相关内容请参阅[运行测试](/docs/{{ $version }}/testing#running-tests)，`locale:` 相关命令请参阅[审计翻译](/docs/{{ $version }}/localization#auditing-translations)。
+
+<div id="nylo-clean"></div>
+
+### 清理项目
+
+`nylo clean` 会运行 `flutter clean`，然后运行 `flutter pub get`。当常规清理不够时，添加平台标志：
+
+``` bash
+# 运行 flutter clean，然后运行 flutter pub get
+nylo clean
+
+# 同时删除 ios/Pods、ios/.symlinks 和 ios/Podfile.lock，然后运行 pod install --repo-update
+nylo clean --ios
+
+# 同时在 android/ 中运行 gradlew clean
+nylo clean --android
+
+# 以上两者同时执行
+nylo clean --all
+```
+
+如果项目没有 `ios/` 或 `android/` 文件夹，该平台会被跳过并显示警告。`pod install` 仅在 macOS 上运行。
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### 刷新 iOS Pod
+
+当 CocoaPods 不同步时，`nylo ios:pod-refresh` 会删除 `ios/Pods`、`ios/.symlinks` 和 `ios/Podfile.lock`，然后在 `ios/` 文件夹中运行 `pod install --repo-update`：
+
+``` bash
+nylo ios:pod-refresh
+```
+
+请在 macOS 上从项目根目录运行它。与 `nylo clean --ios` 不同，它不会运行 `flutter clean` 或 `flutter pub get`。
+
+<div id="nylo-metro"></div>
+
+### 不使用别名运行 Metro
+
+`nylo metro` 会将其后的所有内容传递给 Metro（`dart run nylo_framework:main`）。请在尚未运行 `nylo init` 之前，或在 Windows 上（`nylo init` 无法为您添加 `metro` 别名）使用它：
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### 更新 CLI
+
+``` bash
+nylo self-update
+```
+
+此命令会检查 pub.dev，如果有更新版本可用，则重新安装 `nylo_installer`。命令执行完成后，`nylo` 也会在有更新时提示您。当输出不是发往终端时，它会保持静默，因此该提示不会出现在 CI 日志或管道输出中。
+
+查看您已安装的版本：
+
+``` bash
+nylo --version
 ```

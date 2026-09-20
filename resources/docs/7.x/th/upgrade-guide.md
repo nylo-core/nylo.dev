@@ -695,8 +695,8 @@ runApp(Main(nylo));
 | `BaseColorStyles` | ใช้ `ThemeColor` |
 | `LocalizedApp` | ใช้ `Main(nylo)` โดยตรง |
 | `NyException` | ใช้ exception มาตรฐานของ Dart |
-| `PushNotification` | ใช้ `flutter_local_notifications` โดยตรง |
-| `PushNotificationAttachments` | ใช้ `flutter_local_notifications` โดยตรง |
+
+`PushNotification` และ `PushNotificationAttachments` ไม่ได้ถูกลบ แต่เปลี่ยนชื่อเป็น `LocalNotification` และ `NotificationAttachment` แล้ว โดยชื่อเดิมยังคงใช้งานได้ในฐานะ alias ที่เลิกใช้แล้ว ดูที่ [Local Notifications](/docs/{{ $version }}/local-notifications)
 
 <div id="widget-reference"></div>
 

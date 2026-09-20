@@ -63,7 +63,9 @@ Ela fornece muitas ferramentas úteis para acelerar o desenvolvimento.
 
 ## Instalar
 
-Quando você cria um novo projeto Nylo usando `nylo init`, o comando `metro` é automaticamente configurado para o seu terminal. Você pode começar a usá-lo imediatamente em qualquer projeto Nylo.
+Depois de criar um projeto com `nylo new`, execute `nylo init` nele para adicionar o comando `metro` ao seu shell. Reinicie o terminal (ou execute o comando `source` que ele exibe), e você pode usar o `metro` em qualquer projeto Nylo.
+
+Você também pode executar o Metro sem o alias, o que é útil no Windows: `nylo metro make:page settings_page`. Veja [Executando o Metro sem o alias](/docs/{{ $version }}/installation#nylo-metro).
 
 Execute `metro` a partir do diretório do seu projeto para ver todos os comandos disponíveis:
 
@@ -247,6 +249,8 @@ Usando a flag `--initial` ou `-i`, uma nova página inicial será criada.
 ``` bash
 metro make:page home_page -i
 ```
+
+Seu router só pode ter uma rota inicial. O Metro não remove o `.initialRoute()` da rota que já o possui (em um novo projeto, `HomePage`), então remova-o você mesmo em `lib/routes/router.dart`, ou o app para em um debug assert.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ Isso criará um novo navigation hub em `lib/resources/pages/` e adicionará a ro
 
 | Flag | Abreviação | Descrição |
 |------|-------|-------------|
-| `--auth` | `-a` | Criar como uma página de autenticação |
-| `--initial` | `-i` | Criar como a página inicial |
 | `--force` | `-f` | Sobrescrever se existir |
 
-``` bash
-# Criar como a página inicial
-metro make:navigation_hub dashboard --initial
+A rota que o Metro adiciona não é a rota inicial. Para abrir seu app no hub, adicione `.initialRoute()` a ela em `lib/routes/router.dart` e remova-o da rota que já o possuía:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -922,6 +925,8 @@ Quando você executa `metro` sem argumentos, você verá seus comandos personali
   project:deploy
 ```
 
+Se algum pacote instalado incluir seus próprios comandos, eles aparecem em seções adicionais abaixo dos seus -- veja [Comandos de Pacotes](#package-commands).
+
 Para exibir informações de ajuda para seu comando, use a flag `--help` ou `-h`:
 
 ```bash
@@ -932,14 +937,16 @@ metro project:install_firebase --help
 
 ## Comandos de Pacotes
 
-Pacotes podem distribuir comandos do Metro para os desenvolvedores que os instalam -- por exemplo, um comando `install` que cria o scaffold da configuração que um pacote precisa. Quando um pacote no seu `pubspec.yaml` contém um arquivo `metro_commands.json`, o Metro descobre os comandos dele automaticamente e os lista no menu sob o nome do pacote:
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Se um pacote no seu `pubspec.yaml` incluir comandos Metro, eles são descobertos automaticamente e listados no menu sob o nome do pacote:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Execute-os exatamente como os seus próprios comandos, por exemplo `metro analytics:install`. Para aprender como distribuir comandos em um pacote que você mantém, veja [Comandos de Pacotes]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Execute-os exatamente como seus próprios comandos, por ex. `metro analytics:install`. Para as regras completas de descoberta e precedência, e para distribuir comandos em um pacote que você mantém, veja [Comandos de Pacotes]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

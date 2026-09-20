@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Introduction](#introduction "Introduction")
 - [Getting Started](#getting-started "Getting Started")
+  - [Running Tests](#running-tests "Running Tests")
 - [Writing Tests](#writing-tests "Writing Tests")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Initialize the test framework at the top of your test file:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,46 @@ void main() {
 ```
 
 `NyTest.init()` sets up the test environment and enables automatic state reset between tests when `autoReset: true` (the default).
+
+<div id="running-tests"></div>
+
+### Running Tests
+
+<x-doc-strip label="Requires" items="nylo_installer 1.5.0+" />
+
+Run your tests with the `nylo` CLI from your project root:
+
+``` bash
+nylo test
+```
+
+`nylo test` formats the files in `test/` with `dart format`, runs `flutter test`, and prints each test with how long it took, followed by a summary:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Durations of 2 seconds or more are shown in red. If any test fails, its error is printed under it and the command exits with code `1`, so you can use it in CI.
+
+| Option | Description |
+|--------|-------------|
+| `--filter`, `-f` | Only run tests whose name matches a pattern |
+| `--coverage` | Collect code coverage |
+| `--path` | Run the tests in another folder (default: `test`) |
+| `--no-format` | Skip formatting the test files first |
+
+``` bash
+# Only tests with "login" in their name, with coverage
+nylo test --filter "login" --coverage
+
+# Integration tests, without formatting
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

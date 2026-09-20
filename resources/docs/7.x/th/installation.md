@@ -6,6 +6,11 @@
 - [ติดตั้ง](#install "ติดตั้ง")
 - [การรันโปรเจกต์](#running-the-project "การรันโปรเจกต์")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [การล้างโปรเจกต์](#nylo-clean "การล้างโปรเจกต์")
+  - [การรีเฟรช iOS pods](#nylo-ios-pod-refresh "การรีเฟรช iOS pods")
+  - [การรัน Metro โดยไม่ใช้ alias](#nylo-metro "การรัน Metro โดยไม่ใช้ alias")
+  - [การอัปเดต CLI](#nylo-self-update "การอัปเดต CLI")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@
 
 <x-doc-steps>
 <x-doc-step number="1" title="ติดตั้ง Nylo CLI แบบ global">
-คำสั่งนี้จะติดตั้งเครื่องมือ CLI ของ {{ config('app.name') }} แบบ global บนระบบของคุณ
+ติดตั้งคำสั่ง `nylo` ในระบบของคุณ
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ nylo new my_app
 cd my_app
 nylo init
 ```
+
+จากนั้นรีสตาร์ทเทอร์มินัลของคุณ หรือเรียกใช้คำสั่ง `source` ที่ `nylo init` แสดงผลออกมา
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # สร้าง API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: label "Requires" has no established translation in this locale file's existing x-doc-strip usage -->
+<x-doc-strip label="ข้อกำหนด" items="nylo_installer 1.8.0+" linkText="อัปเดต CLI" linkHref="#nylo-self-update" />
+
+คำสั่ง `nylo` จากขั้นตอนที่ 1 ทำได้มากกว่าแค่สร้างโปรเจกต์ เรียกใช้จากไดเรกทอรีโปรเจกต์ของคุณเพื่อล้าง build รีเฟรช iOS pods รันเทสต์ และตรวจสอบคำแปลของคุณ
+
+<x-doc-commands title="คำสั่งโปรเจกต์" rows="
+nylo new | สร้างโปรเจกต์ใหม่
+nylo init | ตั้งค่า alias metro ใน shell ของคุณ
+nylo clean | รัน flutter clean และ flutter pub get
+nylo ios:pod-refresh | ติดตั้ง iOS pods ของคุณใหม่
+nylo metro | รันคำสั่ง Metro โดยไม่ใช้ alias
+" />
+
+<x-doc-commands title="การทดสอบและการแปลภาษา" rows="
+nylo test | จัดรูปแบบและรันเทสต์ของคุณ
+nylo locale:find-untranslated | ค้นหาข้อความที่ยังไม่ได้ครอบด้วย .tr()
+nylo locale:check-missing-keys | ค้นหาคีย์ที่หายไปจากไฟล์ภาษาของคุณ
+" />
+
+<x-doc-commands title="ตัว CLI เอง" rows="
+nylo self-update | อัปเดต nylo เป็นเวอร์ชันล่าสุด
+nylo --version | แสดงเวอร์ชันที่ติดตั้งอยู่
+" />
+
+คำสั่งที่มีตัวเลือกจะแสดงรายการด้วย `-h` เช่น `nylo test -h` การทดสอบมีอธิบายไว้ใน [การรันเทสต์](/docs/{{ $version }}/testing#running-tests) และคำสั่ง `locale:` ใน [การตรวจสอบคำแปล](/docs/{{ $version }}/localization#auditing-translations)
+
+<div id="nylo-clean"></div>
+
+### การล้างโปรเจกต์
+
+`nylo clean` จะรัน `flutter clean` แล้วตามด้วย `flutter pub get` เพิ่ม flag แพลตฟอร์มเมื่อการล้างแบบปกติไม่เพียงพอ:
+
+``` bash
+# flutter clean จากนั้น flutter pub get
+nylo clean
+
+# ลบ ios/Pods, ios/.symlinks และ ios/Podfile.lock ด้วย จากนั้นรัน pod install --repo-update
+nylo clean --ios
+
+# รัน gradlew clean ใน android/ ด้วย
+nylo clean --android
+
+# ทั้งสองอย่างข้างต้น
+nylo clean --all
+```
+
+หากโปรเจกต์ไม่มีโฟลเดอร์ `ios/` หรือ `android/` แพลตฟอร์มนั้นจะถูกข้ามไปพร้อมคำเตือน `pod install` จะรันเฉพาะบน macOS เท่านั้น
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### การรีเฟรช iOS pods
+
+เมื่อ CocoaPods ไม่ซิงค์กัน `nylo ios:pod-refresh` จะลบ `ios/Pods`, `ios/.symlinks` และ `ios/Podfile.lock` จากนั้นรัน `pod install --repo-update` ในโฟลเดอร์ `ios/`:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+เรียกใช้จาก root ของโปรเจกต์บน macOS ต่างจาก `nylo clean --ios` คำสั่งนี้จะไม่รัน `flutter clean` หรือ `flutter pub get`
+
+<div id="nylo-metro"></div>
+
+### การรัน Metro โดยไม่ใช้ alias
+
+`nylo metro` จะส่งทุกอย่างที่ตามหลังไปยัง Metro (`dart run nylo_framework:main`) ใช้คำสั่งนี้ก่อนที่คุณจะรัน `nylo init` หรือบน Windows ที่ซึ่ง `nylo init` ไม่สามารถเพิ่ม alias `metro` ให้คุณได้:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### การอัปเดต CLI
+
+``` bash
+nylo self-update
+```
+
+คำสั่งนี้จะตรวจสอบ pub.dev และติดตั้ง `nylo_installer` ใหม่หากมีเวอร์ชันใหม่กว่า หลังจากคำสั่งทำงานเสร็จ `nylo` จะบอกคุณด้วยเมื่อมีอัปเดตออกมา มันจะเงียบเมื่อ output ไม่ได้ส่งไปยังเทอร์มินัล เพื่อไม่ให้ข้อความแจ้งเตือนไปปรากฏใน CI log หรือรายงานที่ถูก pipe
+
+หากต้องการดูว่าคุณติดตั้งเวอร์ชันใดอยู่:
+
+``` bash
+nylo --version
 ```

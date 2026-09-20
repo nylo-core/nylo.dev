@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Формы наследуют `NyFormWidget` и переопределяют метод `fields()` для определения полей формы. Каждое поле использует именованный конструктор, такой как `Field.text()`, `Field.email()` или `Field.password()`. Геттер `static NyFormActions get actions` предоставляет удобный способ взаимодействия с формой из любого места вашего приложения.
 
+Сгенерированный конструктор передаёт только `submitButton`, `onSubmit` и `onFailure`. Чтобы добавить форме `initialData` или `onChanged`, добавьте их в конструктор самостоятельно:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -751,6 +757,8 @@ Field.text("Nickname",
 )
 ```
 
+`nullable()` помечает валидатор как необязательный. Если значение поля равно null или пусто, все правила валидации пропускаются и поле считается пройденным. Если у поля есть значение, все правила применяются как обычно. Добавляйте его в конец любого `FormValidator`.
+
 При отправке формы проверяются все валидаторы. Если какой-либо из них не проходит, отображается уведомление с первым сообщением об ошибке и вызывается обратный вызов `onFailure`.
 
 **См. также:** [Валидация](/docs/7.x/validation#validation-rules) для полного списка доступных валидаторов.
@@ -856,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Для этого конструктор вашей формы должен содержать `super.initialData` (см. [Создание формы](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Установка значений полей
@@ -895,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+Для `onChanged` конструктор вашей формы должен содержать `super.onChanged` (см. [Создание формы](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1132,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Вызывается с ошибками при неудачной валидации
 )
 ```
+
+Конструктор сгенерированной формы передаёт только `key`, `submitButton`, `onSubmit` и `onFailure`, поэтому для каждого дополнительного параметра, который вы используете, добавьте соответствующий `super.`-параметр (см. [Создание формы](#creating-forms)).
 
 Обратный вызов `onChanged` получает изменённый `Field` и его новое значение:
 

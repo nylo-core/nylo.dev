@@ -451,8 +451,8 @@ class RoleGuard extends ParameterizedGuard<List<String>> {
 
   @override
   Future<GuardResult> onBefore(RouteContext context) async {
-    final user = await Auth.user();
-    if (!params.any((role) => user.hasRole(role))) {
+    String? role = Auth.data(field: 'role');
+    if (!params.contains(role)) {
       return redirect('/unauthorized');
     }
     return next();
@@ -677,8 +677,6 @@ class _MyHomePageState extends NyPage<MyHomePage> {
 आप अपनी `router.dart` फ़ाइल को संशोधित करके एक पेज से दूसरे पेज पर नेविगेट करते समय ट्रांज़िशन जोड़ सकते हैं।
 
 ``` dart
-import 'package:page_transition/page_transition.dart';
-
 appRouter() => nyRoutes((router) {
 
   // नीचे से ऊपर
@@ -928,6 +926,8 @@ NyNavigator.updateStack([
 - नोटिफ़िकेशन हैंडल करना जो विशिष्ट ऐप स्क्रीन खोलनी चाहिए
 - सहज वेब-से-ऐप ट्रांज़िशन
 
+> पूरा सेटअप वॉकथ्रू खोज रहे हैं? प्लेटफ़ॉर्म कॉन्फ़िगरेशन, लिंक इंटरसेप्ट करने और Metro स्कैफ़ोल्डिंग के लिए समर्पित [Deep Links](/docs/{{ $version }}/deep-links) गाइड देखें।
+
 ## सेटअप
 
 अपने ऐप में डीप लिंकिंग लागू करने से पहले, सुनिश्चित करें कि आपका प्रोजेक्ट सही तरह से कॉन्फ़िगर किया गया है:
@@ -1071,32 +1071,33 @@ routeTo(HotelBookingPage.path.withParams({"id": "87"}), queryParameters: {
 
 ## डीप लिंक्स हैंडल करना
 
-आप अपने `RouteProvider` में डीप लिंक इवेंट्स हैंडल कर सकते हैं:
+प्लेटफ़ॉर्म डीप-लिंक कैप्चर को `useDeepLinks()` से सक्षम करें, फिर {{ config('app.name') }} द्वारा रूट किए जाने से पहले प्रत्येक URI को इंटरसेप्ट करने के लिए `onIncomingLink` का उपयोग करें:
 
 ```dart
 class RouteProvider implements NyProvider {
   @override
   setup(Nylo nylo) async {
     nylo.addRouter(appRouter());
+    nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
-    // डीप लिंक्स हैंडल करें
-    nylo.onDeepLink(_onDeepLink);
+    // Return `true` to let Nylo route automatically, or `false` to handle the URI yourself.
+    nylo.onIncomingLink((Uri uri) async {
+      print("Deep link uri: $uri");
+
+      if (uri.path == ProfilePage.path) {
+        NyNavigator.updateStack([
+          HomePage.path,
+          ProfilePage.path,
+        ], replace: true, dataForRoute: {
+          ProfilePage.path: uri.queryParameters,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
     return nylo;
-  }
-
-  _onDeepLink(String route, Map<String, String>? data) {
-    print("Deep link route: $route");
-    print("Deep link data: $data");
-
-    // डीप लिंक्स के लिए रूट स्टैक अपडेट करें
-    if (route == ProfilePage.path) {
-      NyNavigator.updateStack([
-        HomePage.path,
-        ProfilePage.path,
-      ], replace: true, dataForRoute: {
-        ProfilePage.path: data,
-      });
-    }
   }
 
   @override
@@ -1105,6 +1106,8 @@ class RouteProvider implements NyProvider {
   }
 }
 ```
+
+पूरी API के लिए [Deep Links](/docs/{{ $version }}/deep-links) गाइड देखें।
 
 ### डीप लिंक्स टेस्ट करना
 

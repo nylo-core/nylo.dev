@@ -6,6 +6,11 @@
 - [इंस्टॉल](#install "इंस्टॉल")
 - [प्रोजेक्ट चलाना](#running-the-project "प्रोजेक्ट चलाना")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [प्रोजेक्ट क्लीन करना](#nylo-clean "प्रोजेक्ट क्लीन करना")
+  - [iOS पॉड्स रीफ्रेश करना](#nylo-ios-pod-refresh "iOS पॉड्स रीफ्रेश करना")
+  - [एलियास के बिना Metro चलाना](#nylo-metro "एलियास के बिना Metro चलाना")
+  - [CLI अपडेट करना](#nylo-self-update "CLI अपडेट करना")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@
 
 <x-doc-steps>
 <x-doc-step number="1" title="Nylo CLI को ग्लोबली इंस्टॉल करें">
-यह आपके सिस्टम पर {{ config('app.name') }} CLI टूल को ग्लोबली इंस्टॉल करता है।
+आपके सिस्टम पर `nylo` कमांड स्थापित करता है।
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ nylo new my_app
 cd my_app
 nylo init
 ```
+
+इसके बाद अपना टर्मिनल रीस्टार्ट करें, या `nylo init` द्वारा प्रिंट किया गया `source` कमांड चलाएँ।
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # Create an API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: label "Requires" has no established translation in this locale file's existing x-doc-strip usage -->
+<x-doc-strip label="आवश्यक" items="nylo_installer 1.8.0+" linkText="CLI अपडेट करें" linkHref="#nylo-self-update" />
+
+स्टेप 1 वाला `nylo` कमांड सिर्फ़ प्रोजेक्ट बनाने से कहीं ज़्यादा कर सकता है। बिल्ड क्लीन करने, iOS पॉड्स रीफ्रेश करने, टेस्ट चलाने और अपने ट्रांसलेशन जाँचने के लिए इसे अपनी प्रोजेक्ट डायरेक्टरी से चलाएँ।
+
+<x-doc-commands title="प्रोजेक्ट कमांड" rows="
+nylo new | नया प्रोजेक्ट बनाएँ
+nylo init | अपने शेल में metro एलियास सेटअप करें
+nylo clean | flutter clean और flutter pub get चलाएँ
+nylo ios:pod-refresh | अपने iOS पॉड्स फिर से इंस्टॉल करें
+nylo metro | एलियास के बिना Metro कमांड चलाएँ
+" />
+
+<x-doc-commands title="टेस्टिंग और ट्रांसलेशन" rows="
+nylo test | अपने टेस्ट फ़ॉर्मेट करें और चलाएँ
+nylo locale:find-untranslated | ऐसा टेक्स्ट खोजें जो .tr() में रैप नहीं है
+nylo locale:check-missing-keys | अपनी lang फ़ाइलों से मिसिंग कीज़ खोजें
+" />
+
+<x-doc-commands title="स्वयं CLI" rows="
+nylo self-update | nylo को नवीनतम वर्शन में अपडेट करें
+nylo --version | इंस्टॉल किया गया वर्शन दिखाएँ
+" />
+
+जिन कमांड्स में ऑप्शन होते हैं, वे `-h` के साथ लिस्ट होते हैं, उदाहरण के लिए `nylo test -h`। टेस्टिंग के बारे में [टेस्ट चलाना](/docs/{{ $version }}/testing#running-tests) में बताया गया है, और `locale:` कमांड्स के बारे में [ट्रांसलेशन ऑडिट करना](/docs/{{ $version }}/localization#auditing-translations) में।
+
+<div id="nylo-clean"></div>
+
+### प्रोजेक्ट क्लीन करना
+
+`nylo clean`, `flutter clean` और फिर `flutter pub get` चलाता है। जब सामान्य क्लीन काफ़ी न हो, तो एक प्लेटफ़ॉर्म फ़्लैग जोड़ें:
+
+``` bash
+# flutter clean, फिर flutter pub get
+nylo clean
+
+# ios/Pods, ios/.symlinks और ios/Podfile.lock भी हटाएँ, फिर pod install --repo-update चलाएँ
+nylo clean --ios
+
+# android/ में gradlew clean भी चलाएँ
+nylo clean --android
+
+# ऊपर के दोनों
+nylo clean --all
+```
+
+यदि किसी प्रोजेक्ट में `ios/` या `android/` फ़ोल्डर नहीं है, तो उस प्लेटफ़ॉर्म को चेतावनी के साथ स्किप कर दिया जाता है। `pod install` केवल macOS पर चलता है।
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### iOS पॉड्स रीफ्रेश करना
+
+जब CocoaPods सिंक से बाहर हो जाता है, तो `nylo ios:pod-refresh`, `ios/Pods`, `ios/.symlinks` और `ios/Podfile.lock` को डिलीट करता है, फिर `ios/` फ़ोल्डर में `pod install --repo-update` चलाता है:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+इसे macOS पर अपने प्रोजेक्ट रूट से चलाएँ। `nylo clean --ios` के विपरीत, यह `flutter clean` या `flutter pub get` नहीं चलाता।
+
+<div id="nylo-metro"></div>
+
+### एलियास के बिना Metro चलाना
+
+`nylo metro` अपने बाद आने वाली हर चीज़ को Metro (`dart run nylo_framework:main`) तक पास करता है। इसका उपयोग तब करें जब आपने अभी तक `nylo init` न चलाया हो, या Windows पर, जहाँ `nylo init` आपके लिए `metro` एलियास नहीं जोड़ सकता:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### CLI अपडेट करना
+
+``` bash
+nylo self-update
+```
+
+यह pub.dev जाँचता है और यदि कोई नया वर्शन उपलब्ध है तो `nylo_installer` को फिर से इंस्टॉल करता है। किसी कमांड के पूरा होने के बाद, `nylo` आपको यह भी बताता है कि कोई अपडेट उपलब्ध है। जब आउटपुट टर्मिनल पर नहीं जा रहा हो, तो यह चुप रहता है, ताकि यह सूचना कभी भी CI लॉग्स या पाइप्ड रिपोर्ट्स में न पहुँचे।
+
+यह देखने के लिए कि आपने कौन-सा वर्शन इंस्टॉल किया है:
+
+``` bash
+nylo --version
 ```

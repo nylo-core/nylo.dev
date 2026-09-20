@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [บทนำ](#introduction "บทนำ")
 - [เริ่มต้นใช้งาน](#getting-started "เริ่มต้นใช้งาน")
+  - [การรันเทสต์](#running-tests "การรันเทสต์")
 - [การเขียนเทสต์](#writing-tests "การเขียนเทสต์")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 เริ่มต้น test framework ที่ด้านบนของไฟล์ทดสอบ:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,46 @@ void main() {
 ```
 
 `NyTest.init()` ตั้งค่าสภาพแวดล้อมการทดสอบและเปิดใช้การรีเซ็ต state อัตโนมัติระหว่างเทสต์เมื่อ `autoReset: true` (ค่าเริ่มต้น)
+
+<div id="running-tests"></div>
+
+### การรันเทสต์
+
+<x-doc-strip label="ข้อกำหนด" items="nylo_installer 1.5.0+" />
+
+รันเทสต์ของคุณด้วย CLI `nylo` จาก root ของโปรเจกต์:
+
+``` bash
+nylo test
+```
+
+`nylo test` จะจัดรูปแบบไฟล์ใน `test/` ด้วย `dart format` รัน `flutter test` และแสดงผลแต่ละเทสต์พร้อมเวลาที่ใช้ ตามด้วยสรุปผล:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+ระยะเวลาตั้งแต่ 2 วินาทีขึ้นไปจะแสดงเป็นสีแดง หากมีเทสต์ใดล้มเหลว ข้อผิดพลาดของเทสต์นั้นจะถูกแสดงไว้ด้านล่าง และคำสั่งจะออกด้วยโค้ด `1` ทำให้คุณสามารถใช้มันใน CI ได้
+
+| ตัวเลือก | คำอธิบาย |
+|--------|-------------|
+| `--filter`, `-f` | รันเฉพาะเทสต์ที่ชื่อตรงกับรูปแบบที่กำหนด |
+| `--coverage` | เก็บข้อมูล code coverage |
+| `--path` | รันเทสต์ในโฟลเดอร์อื่น (ค่าเริ่มต้น: `test`) |
+| `--no-format` | ข้ามการจัดรูปแบบไฟล์เทสต์ก่อน |
+
+``` bash
+# เฉพาะเทสต์ที่มี "login" อยู่ในชื่อ พร้อม coverage
+nylo test --filter "login" --coverage
+
+# integration test โดยไม่จัดรูปแบบ
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

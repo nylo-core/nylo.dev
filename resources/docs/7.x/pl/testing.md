@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Wprowadzenie](#introduction "Wprowadzenie")
 - [Rozpoczęcie pracy](#getting-started "Rozpoczęcie pracy")
+  - [Uruchamianie testów](#running-tests "Uruchamianie testów")
 - [Pisanie testów](#writing-tests "Pisanie testów")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Zainicjalizuj framework testowy na początku pliku testowego:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` konfiguruje środowisko testowe i umożliwia automatyczny reset stanu między testami, gdy `autoReset: true` (domyślnie).
+
+<div id="running-tests"></div>
+
+### Uruchamianie testów
+
+<!-- uncertain: strip label "Requires" — no established Polish translation seen in existing locale files -->
+<x-doc-strip label="Wymagania" items="nylo_installer 1.5.0+" />
+
+Uruchom swoje testy za pomocą CLI `nylo` z katalogu głównego projektu:
+
+``` bash
+nylo test
+```
+
+`nylo test` formatuje pliki w `test/` za pomocą `dart format`, uruchamia `flutter test` i wypisuje każdy test wraz z czasem jego trwania, a na końcu podsumowanie:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Czasy trwania wynoszące 2 sekundy lub więcej są wyświetlane na czerwono. Jeśli jakiś test zawiedzie, jego błąd jest wypisywany pod nim, a polecenie kończy działanie z kodem `1`, więc możesz używać go w CI.
+
+| Opcja | Opis |
+|--------|-------------|
+| `--filter`, `-f` | Uruchom tylko testy, których nazwa pasuje do wzorca |
+| `--coverage` | Zbierz pokrycie kodu |
+| `--path` | Uruchom testy w innym folderze (domyślnie: `test`) |
+| `--no-format` | Pomiń wstępne formatowanie plików testowych |
+
+``` bash
+# Tylko testy zawierające "login" w nazwie, z pokryciem kodu
+nylo test --filter "login" --coverage
+
+# Testy integracyjne, bez formatowania
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

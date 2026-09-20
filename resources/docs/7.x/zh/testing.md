@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [简介](#introduction "简介")
 - [开始使用](#getting-started "开始使用")
+  - [运行测试](#running-tests "运行测试")
 - [编写测试](#writing-tests "编写测试")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 在测试文件顶部初始化测试框架：
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` 设置测试环境，并在 `autoReset: true`（默认值）时启用测试之间的自动状态重置。
+
+<div id="running-tests"></div>
+
+### 运行测试
+
+<!-- uncertain: strip label "Requires" — no established translation in this locale's existing files -->
+<x-doc-strip label="需要" items="nylo_installer 1.5.0+" />
+
+在项目根目录使用 `nylo` CLI 运行您的测试：
+
+``` bash
+nylo test
+```
+
+`nylo test` 会使用 `dart format` 格式化 `test/` 中的文件，运行 `flutter test`，并打印每个测试及其耗时，最后附上摘要：
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+耗时 2 秒或以上的会以红色显示。如果有测试失败，其错误会打印在下方，并且命令会以代码 `1` 退出，因此您可以在 CI 中使用它。
+
+| 选项 | 描述 |
+|--------|-------------|
+| `--filter`, `-f` | 仅运行名称匹配某个模式的测试 |
+| `--coverage` | 收集代码覆盖率 |
+| `--path` | 在其他文件夹中运行测试（默认：`test`） |
+| `--no-format` | 跳过先格式化测试文件的步骤 |
+
+``` bash
+# 仅运行名称包含 "login" 的测试，并收集覆盖率
+nylo test --filter "login" --coverage
+
+# 运行集成测试，不进行格式化
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

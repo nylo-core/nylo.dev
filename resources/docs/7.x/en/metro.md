@@ -63,7 +63,9 @@ It provides a lot of helpful tools to speed up development.
 
 ## Install
 
-When you create a new Nylo project using `nylo init`, the `metro` command is automatically configured for your terminal. You can start using it immediately in any Nylo project.
+After you create a project with `nylo new`, run `nylo init` in it to add the `metro` command to your shell. Restart your terminal (or run the `source` command it prints), and you can use `metro` in any Nylo project.
+
+You can also run Metro without the alias, which is handy on Windows: `nylo metro make:page settings_page`. See [Running Metro without the alias](/docs/{{ $version }}/installation#nylo-metro).
 
 Run `metro` from your project directory to see all available commands:
 
@@ -247,6 +249,8 @@ Using the `--initial` or `-i` flag will create a new initial page.
 ``` bash
 metro make:page home_page -i
 ```
+
+Your router can only have one initial route. Metro doesn't remove `.initialRoute()` from the route that already has it (in a new project, `HomePage`), so remove it yourself in `lib/routes/router.dart`, or the app stops on a debug assert.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ This will create a new navigation hub in `lib/resources/pages/` and add the rout
 
 | Flag | Short | Description |
 |------|-------|-------------|
-| `--auth` | `-a` | Create as an auth page |
-| `--initial` | `-i` | Create as the initial page |
 | `--force` | `-f` | Overwrite if exists |
 
-``` bash
-# Create as the initial page
-metro make:navigation_hub dashboard --initial
+The route Metro adds isn't the initial route. To open your app on the hub, add `.initialRoute()` to it in `lib/routes/router.dart`, and remove it from the route that had it:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>

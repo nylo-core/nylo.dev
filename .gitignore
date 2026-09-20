@@ -19,5 +19,12 @@ boost.json
 .vscode/
 .github/copilot-instructions.md
 .mcp.json
-video/
+# The Remotion video project stays untracked, with one exception: the shared
+# sound palette is generated once by the nylo-shorts skill and reused by every
+# film, so it must survive a clean checkout rather than costing credits again.
+# Git cannot re-include a path under an excluded directory, hence the walk down.
+video/*
+!video/public/
+video/public/*
+!video/public/sfx/
 tweet-posts/

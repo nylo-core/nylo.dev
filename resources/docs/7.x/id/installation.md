@@ -6,6 +6,11 @@
 - [Instalasi](#install "Instalasi")
 - [Menjalankan Proyek](#running-the-project "Menjalankan Proyek")
 - [Metro CLI](#metro-cli "Metro CLI")
+- [Nylo CLI](#nylo-cli "Nylo CLI")
+  - [Membersihkan proyek](#nylo-clean "Membersihkan proyek")
+  - [Menyegarkan iOS pods](#nylo-ios-pod-refresh "Menyegarkan iOS pods")
+  - [Menjalankan Metro tanpa alias](#nylo-metro "Menjalankan Metro tanpa alias")
+  - [Memperbarui CLI](#nylo-self-update "Memperbarui CLI")
 
 <div id="install"></div>
 
@@ -19,7 +24,7 @@ Jalankan perintah berikut secara berurutan. Setiap perintah aman untuk dijalanka
 
 <x-doc-steps>
 <x-doc-step number="1" title="Instal Nylo CLI secara global">
-Ini menginstal alat CLI {{ config('app.name') }} secara global di sistem Anda.
+Menempatkan perintah `nylo` di sistem Anda.
 
 ``` bash
 dart pub global activate nylo_installer
@@ -41,6 +46,8 @@ Ini mengkonfigurasi perintah `metro` untuk proyek Anda, memungkinkan Anda menggu
 cd my_app
 nylo init
 ```
+
+Setelah itu, restart terminal Anda, atau jalankan perintah `source` yang ditampilkan oleh `nylo init`.
 </x-doc-step>
 </x-doc-steps>
 
@@ -163,4 +170,96 @@ metro make:model User
 
 # Create an API service
 metro make:api_service user_api_service
+```
+
+
+<div id="nylo-cli"></div>
+
+## Nylo CLI
+
+<!-- uncertain: label "Requires" has no established translation in this locale file's existing x-doc-strip usage -->
+<x-doc-strip label="Persyaratan" items="nylo_installer 1.8.0+" linkText="Perbarui CLI" linkHref="#nylo-self-update" />
+
+Perintah `nylo` dari langkah 1 bisa melakukan lebih dari sekadar membuat proyek. Jalankan dari direktori proyek Anda untuk membersihkan build, menyegarkan iOS pods, menjalankan test, dan memeriksa terjemahan Anda.
+
+<x-doc-commands title="Perintah proyek" rows="
+nylo new | Buat proyek baru
+nylo init | Siapkan alias metro di shell Anda
+nylo clean | Jalankan flutter clean dan flutter pub get
+nylo ios:pod-refresh | Instal ulang iOS pods Anda
+nylo metro | Jalankan perintah Metro tanpa alias
+" />
+
+<x-doc-commands title="Testing dan terjemahan" rows="
+nylo test | Format dan jalankan test Anda
+nylo locale:find-untranslated | Temukan teks yang belum dibungkus dalam .tr()
+nylo locale:check-missing-keys | Temukan key yang hilang dari file lang Anda
+" />
+
+<x-doc-commands title="CLI itu sendiri" rows="
+nylo self-update | Perbarui nylo ke versi terbaru
+nylo --version | Tampilkan versi yang terinstal
+" />
+
+Perintah yang memiliki opsi akan mencantumkannya dengan `-h`, misalnya `nylo test -h`. Testing dibahas di [Menjalankan Test](/docs/{{ $version }}/testing#running-tests), dan perintah `locale:` di [Mengaudit Terjemahan](/docs/{{ $version }}/localization#auditing-translations).
+
+<div id="nylo-clean"></div>
+
+### Membersihkan proyek
+
+`nylo clean` menjalankan `flutter clean` lalu `flutter pub get`. Tambahkan flag platform saat clean biasa tidak cukup:
+
+``` bash
+# flutter clean, lalu flutter pub get
+nylo clean
+
+# Juga menghapus ios/Pods, ios/.symlinks dan ios/Podfile.lock, lalu menjalankan pod install --repo-update
+nylo clean --ios
+
+# Juga menjalankan gradlew clean di android/
+nylo clean --android
+
+# Kedua hal di atas
+nylo clean --all
+```
+
+Jika proyek tidak memiliki folder `ios/` atau `android/`, platform tersebut akan dilewati dengan peringatan. `pod install` hanya berjalan di macOS.
+
+<div id="nylo-ios-pod-refresh"></div>
+
+### Menyegarkan iOS pods
+
+Ketika CocoaPods tidak sinkron, `nylo ios:pod-refresh` menghapus `ios/Pods`, `ios/.symlinks` dan `ios/Podfile.lock`, lalu menjalankan `pod install --repo-update` di folder `ios/`:
+
+``` bash
+nylo ios:pod-refresh
+```
+
+Jalankan dari root proyek Anda di macOS. Berbeda dengan `nylo clean --ios`, ini tidak menjalankan `flutter clean` atau `flutter pub get`.
+
+<div id="nylo-metro"></div>
+
+### Menjalankan Metro tanpa alias
+
+`nylo metro` meneruskan semua yang ada setelahnya ke Metro (`dart run nylo_framework:main`). Gunakan ini sebelum Anda menjalankan `nylo init`, atau di Windows, di mana `nylo init` tidak bisa menambahkan alias `metro` untuk Anda:
+
+``` bash
+nylo metro make:page settings_page
+nylo metro make:model User
+```
+
+<div id="nylo-self-update"></div>
+
+### Memperbarui CLI
+
+``` bash
+nylo self-update
+```
+
+Ini memeriksa pub.dev dan menginstal ulang `nylo_installer` jika ada versi baru yang tersedia. Setelah sebuah perintah selesai, `nylo` juga memberi tahu Anda ketika ada pembaruan. Ini tetap diam ketika output tidak diarahkan ke terminal, sehingga notifikasi tidak pernah muncul di log CI atau laporan yang di-pipe.
+
+Untuk melihat versi mana yang Anda instal:
+
+``` bash
+nylo --version
 ```

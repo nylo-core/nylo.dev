@@ -695,8 +695,9 @@ runApp(Main(nylo));
 | `BaseColorStyles` | Gunakan `ThemeColor` |
 | `LocalizedApp` | Gunakan `Main(nylo)` secara langsung |
 | `NyException` | Gunakan exception Dart standar |
-| `PushNotification` | Gunakan `flutter_local_notifications` secara langsung |
-| `PushNotificationAttachments` | Gunakan `flutter_local_notifications` secara langsung |
+
+<!-- uncertain: teks tautan "Local Notifications" dipertahankan dalam bahasa Inggris mengikuti referensi yang sudah ada di helpers.md, meskipun H1 halaman tersebut diterjemahkan sebagai "Notifikasi Lokal" -->
+`PushNotification` dan `PushNotificationAttachments` tidak dihapus. Keduanya kini menjadi `LocalNotification` dan `NotificationAttachment`, dan nama lama masih berfungsi sebagai alias yang sudah usang (deprecated). Lihat [Local Notifications](/docs/{{ $version }}/local-notifications).
 
 <div id="widget-reference"></div>
 

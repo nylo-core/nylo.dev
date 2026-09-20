@@ -68,7 +68,7 @@ metro make:stateful_widget ProfileImage
 class _ProfileImageState extends NyState<ProfileImage> {
 
   @override
-  LoadingStyleType get loadingStyle => LoadingStyleType.normal();
+  LoadingStyle get loadingStyle => LoadingStyle.normal();
 
   @override
   get init => () async {
@@ -301,6 +301,8 @@ class _HomePageState extends NyState<HomePage> {
 
 `pop` - 現在のページをスタックから削除します。
 
+最も近いローカルナビゲーターではなくルートナビゲーターから pop するには、`rootNavigator: true` を渡します。これは、モーダルやオーバーレイがルートナビゲーターでプッシュされた場合に、Navigation Hub のタブ内で役立ちます。
+
 例
 
 ``` dart
@@ -308,6 +310,11 @@ class _HomePageState extends NyState<HomePage> {
 
   popView() {
     pop();
+  }
+
+  // ルートナビゲーターから pop する（例: ルートレベルのモーダルを閉じる）
+  popViewFromRoot() {
+    pop(rootNavigator: true);
   }
 
   @override
@@ -463,7 +470,7 @@ class _LoginPageState extends NyState<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
             Center(
               child: InkWell(
                 onTap: _login,
@@ -496,7 +503,7 @@ class _HomePageState extends NyState<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLocked('login_to_app'))
-              AppLoader(),
+              Loader(),
           ],
         )
     );
@@ -650,7 +657,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading()) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(
@@ -785,7 +792,7 @@ class _HomePageState extends NyState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading(name: 'refreshing_content')) {
-      return AppLoader();
+      return Loader();
     }
 
     return Scaffold(

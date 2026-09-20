@@ -4,7 +4,7 @@
 
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
-- [Installieren](#install "Installieren")
+- [Installieren](#install "Metro-Alias für {{ config('app.name') }} installieren")
 - Make-Befehle
   - [Controller erstellen](#make-controller "Controller erstellen")
   - [Model erstellen](#make-model "Model erstellen")
@@ -64,7 +64,9 @@ Es bietet viele hilfreiche Werkzeuge zur Beschleunigung der Entwicklung.
 
 ## Installieren
 
-Wenn Sie ein neues Nylo-Projekt mit `nylo init` erstellen, wird der `metro`-Befehl automatisch für Ihr Terminal konfiguriert. Sie können ihn sofort in jedem Nylo-Projekt verwenden.
+Nachdem Sie ein Projekt mit `nylo new` erstellt haben, führen Sie darin `nylo init` aus, um den Befehl `metro` zu Ihrer Shell hinzuzufügen. Starten Sie Ihr Terminal neu (oder führen Sie den `source`-Befehl aus, den es ausgibt), und Sie können `metro` in jedem Nylo-Projekt verwenden.
+
+Sie können Metro auch ohne den Alias ausführen, was unter Windows praktisch ist: `nylo metro make:page settings_page`. Siehe [Metro ohne Alias ausführen](/docs/{{ $version }}/installation#nylo-metro).
 
 Führen Sie `metro` aus Ihrem Projektverzeichnis aus, um alle verfügbaren Befehle zu sehen:
 
@@ -248,6 +250,8 @@ Mit dem `--initial`- oder `-i`-Flag wird eine neue initiale Seite erstellt.
 ``` bash
 metro make:page home_page -i
 ```
+
+Ihr Router kann nur eine initiale Route haben. Metro entfernt `.initialRoute()` nicht von der Route, die es bereits besitzt (in einem neuen Projekt `HomePage`), daher müssen Sie es selbst in `lib/routes/router.dart` entfernen, sonst hält die App bei einem Debug-Assert an.
 
 <div id="forcefully-make-a-page"></div>
 
@@ -710,13 +714,12 @@ Dies erstellt einen neuen Navigation Hub in `lib/resources/pages/` und fügt die
 
 | Flag | Kurz | Beschreibung |
 |------|-------|-------------|
-| `--auth` | `-a` | Als Auth-Seite erstellen |
-| `--initial` | `-i` | Als initiale Seite erstellen |
 | `--force` | `-f` | Überschreiben, falls vorhanden |
 
-``` bash
-# Create as the initial page
-metro make:navigation_hub dashboard --initial
+Die von Metro hinzugefügte Route ist nicht die initiale Route. Damit Ihre App mit dem Hub startet, fügen Sie ihr in `lib/routes/router.dart` `.initialRoute()` hinzu und entfernen Sie es von der Route, die es bisher hatte:
+
+``` dart
+router.add(DashboardNavigationHub.path).initialRoute();
 ```
 
 <div id="make-bottom-sheet-modal"></div>
@@ -799,13 +802,9 @@ metro make:key
 
 | Flag / Option | Kurz | Beschreibung |
 |---------------|-------|-------------|
-| `--force` | `-f` | Vorhandenen APP_KEY überschreiben |
 | `--file` | `-e` | Ziel-.env-Datei (Standard: `.env`) |
 
 ``` bash
-# Generate key and overwrite existing
-metro make:key --force
-
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
@@ -926,6 +925,8 @@ Wenn Sie `metro` ohne Argumente ausführen, sehen Sie Ihre benutzerdefinierten C
   project:deploy
 ```
 
+Wenn installierte Pakete eigene Befehle mitbringen, erscheinen sie in zusätzlichen Abschnitten unterhalb Ihrer eigenen -- siehe [Befehle aus Paketen](#package-commands).
+
 Um Hilfe-Informationen für Ihren Command anzuzeigen, verwenden Sie das `--help`- oder `-h`-Flag:
 
 ```bash
@@ -936,14 +937,16 @@ metro project:install_firebase --help
 
 ## Befehle aus Paketen
 
-Pakete können Metro-Befehle für die Entwickler bereitstellen, die sie installieren -- zum Beispiel einen `install`-Befehl, der die von einem Paket benötigte Konfiguration erstellt. Wenn ein Paket in Ihrer `pubspec.yaml` eine Datei `metro_commands.json` enthält, erkennt Metro dessen Befehle automatisch und listet sie im Menü unter dem Namen des Pakets auf:
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
+Wenn ein Paket in Ihrer `pubspec.yaml` Metro-Befehle mitbringt, werden sie automatisch erkannt und im Menü unter dem Namen des Pakets aufgelistet:
 
 ```
 [nylo_analytics Commands]
   analytics:install    Add the analytics config file and .env key
 ```
 
-Führen Sie sie genau wie Ihre eigenen Befehle aus, z. B. `metro analytics:install`. Um zu erfahren, wie Sie Befehle in einem von Ihnen gepflegten Paket bereitstellen, siehe [Paketbefehle]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
+Führen Sie sie genau wie Ihre eigenen Befehle aus, z. B. `metro analytics:install`. Die vollständigen Erkennungs- und Vorrangregeln sowie Hinweise zum Bereitstellen von Befehlen in einem von Ihnen gepflegten Paket finden Sie unter [Paketbefehle]({{ route('landing.docs', ['locale' => app()->getLocale(), 'version' => $version, 'page' => 'commands']) }}#package-commands).
 
 <div id="adding-options-to-custom-commands"></div>
 

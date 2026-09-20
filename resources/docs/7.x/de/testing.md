@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [Einleitung](#introduction "Einleitung")
 - [Erste Schritte](#getting-started "Erste Schritte")
+  - [Tests ausführen](#running-tests "Tests ausführen")
 - [Tests schreiben](#writing-tests "Tests schreiben")
   - [nyTest](#ny-test "nyTest")
   - [nyWidgetTest](#ny-widget-test "nyWidgetTest")
@@ -54,6 +55,7 @@
 Initialisieren Sie das Test-Framework am Anfang Ihrer Testdatei:
 
 ``` dart
+import 'package:flutter_test/flutter_test.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 void main() {
@@ -66,6 +68,47 @@ void main() {
 ```
 
 `NyTest.init()` richtet die Testumgebung ein und aktiviert das automatische Zurücksetzen des Zustands zwischen Tests, wenn `autoReset: true` (Standardeinstellung).
+
+<div id="running-tests"></div>
+
+### Tests ausführen
+
+<!-- uncertain: strip label "Requires" has no established translation in this locale -->
+<x-doc-strip label="Voraussetzung" items="nylo_installer 1.5.0+" />
+
+Führen Sie Ihre Tests mit der `nylo`-CLI aus dem Stammverzeichnis Ihres Projekts aus:
+
+``` bash
+nylo test
+```
+
+`nylo test` formatiert die Dateien in `test/` mit `dart format`, führt `flutter test` aus und gibt jeden Test mit seiner Dauer aus, gefolgt von einer Zusammenfassung:
+
+``` plaintext
+ Test\HomePage
+  ✓ HomePage displays page header text                0.41s
+  ✓ HomePage has theme toggle widget                  0.12s
+
+  Tests:    2 passed
+  Duration: 0.53s
+```
+
+Laufzeiten von 2 Sekunden oder mehr werden rot angezeigt. Wenn ein Test fehlschlägt, wird sein Fehler darunter ausgegeben und der Befehl beendet sich mit Code `1`, sodass Sie ihn in CI verwenden können.
+
+| Option | Beschreibung |
+|--------|-------------|
+| `--filter`, `-f` | Nur Tests ausführen, deren Name einem Muster entspricht |
+| `--coverage` | Code-Coverage erfassen |
+| `--path` | Die Tests in einem anderen Ordner ausführen (Standard: `test`) |
+| `--no-format` | Das Formatieren der Testdateien überspringen |
+
+``` bash
+# Nur Tests mit "login" im Namen, mit Coverage
+nylo test --filter "login" --coverage
+
+# Integrationstests, ohne Formatierung
+nylo test --path integration_test --no-format
+```
 
 <div id="writing-tests"></div>
 

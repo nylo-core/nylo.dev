@@ -982,10 +982,10 @@ Widget view(BuildContext context) {
 
 คุณสามารถนำทางไปยัง widget ภายในแท็บโดยใช้ตัวช่วย `pushTo`
 
-ภายในแท็บของคุณ คุณสามารถใช้ตัวช่วย `pushTo` เพื่อนำทางไปยัง widget อื่น
+ภายในแท็บของคุณ คุณสามารถใช้ตัวช่วย `pushTo` เพื่อนำทางไปยัง widget อื่น `pushTo` มาจาก `NyState` ดังนั้น state ของแท็บของคุณจึงต้องขยายจากมัน
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage());
@@ -997,7 +997,7 @@ _HomeTabState extends State<HomeTab> {
 คุณยังสามารถส่งข้อมูลไปยัง widget ที่คุณนำทางไป
 
 ``` dart
-_HomeTabState extends State<HomeTab> {
+class _HomeTabState extends NyState<HomeTab> {
     ...
     void _navigateToSettings() {
         pushTo(SettingsPage(), data: {"name": "Anthony"});

@@ -112,6 +112,12 @@ class LoginForm extends NyFormWidget {
 
 Forms extend `NyFormWidget` and override the `fields()` method to define form fields. Each field uses a named constructor like `Field.text()`, `Field.email()`, or `Field.password()`. The `static NyFormActions get actions` getter provides a convenient way to interact with the form from anywhere in your app.
 
+The generated constructor passes on `submitButton`, `onSubmit` and `onFailure`. To give your form `initialData` or `onChanged`, add them to its constructor as well:
+
+``` dart
+LoginForm({super.key, super.submitButton, super.onSubmit, super.onFailure, super.initialData, super.onChanged});
+```
+
 
 <div id="displaying-a-form"></div>
 
@@ -858,6 +864,8 @@ EditAccountForm(
 )
 ```
 
+Your form's constructor needs `super.initialData` for this (see [Creating a Form](#creating-forms)).
+
 <div id="setting-field-values"></div>
 
 ### Setting Field Values
@@ -897,6 +905,8 @@ EditAccountForm(
   },
 )
 ```
+
+For `onChanged`, your form's constructor needs `super.onChanged` (see [Creating a Form](#creating-forms)).
 
 <div id="clearing-data"></div>
 
@@ -1134,6 +1144,8 @@ LoginForm(
   Function(dynamic error)? onFailure, // Called with errors on failed validation
 )
 ```
+
+A generated form's constructor only passes on `key`, `submitButton`, `onSubmit` and `onFailure`, so add a `super.` parameter for each other one you use (see [Creating a Form](#creating-forms)).
 
 The `onChanged` callback receives the `Field` that changed and its new value:
 
