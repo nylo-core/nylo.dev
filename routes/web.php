@@ -36,6 +36,7 @@ Route::controller(LandingController::class)->group(function () {
     Route::get('tutorials/{version}/{page?}', 'tutorials')->where(['version' => '[\w.]+', 'page' => '[\w-]+'])->name('tutorials.index');
     Route::get('api/docs/{version}/{page?}', 'apiDocs')->where(['version' => '[\w.]+', 'page' => '[\w-]+'])->name('landing.api.docs');
     Route::get('learn-more/v7', 'learnMoreV7')->name('learn-more.v7');
+    Route::get('events/{slug}', 'event')->where(['slug' => '[\w-]+'])->middleware('locale')->name('landing.event');
 });
 
 /* Redirects

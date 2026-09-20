@@ -3,81 +3,16 @@
 namespace Tests\Unit\Services;
 
 use App\Http\Services\LandingContentService;
-use App\Models\OnlineEvent;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LandingContentServiceTest extends TestCase
 {
-    use RefreshDatabase;
-
     private LandingContentService $landingContent;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->landingContent = new LandingContentService;
-        cache()->forget('event');
-    }
-
-    /**
-     * Test currentEvent returns null when no event exists.
-     */
-    public function test_current_event_returns_null_when_no_event(): void
-    {
-        $this->assertNull($this->landingContent->currentEvent());
-    }
-
-    /**
-     * Test currentEvent caches the empty result so the query is not re-run.
-     */
-    public function test_current_event_caches_empty_result(): void
-    {
-        $this->landingContent->currentEvent();
-
-        $this->assertFalse(cache()->get('event'));
-    }
-
-    /**
-     * Test currentEvent returns an event that has not ended yet.
-     */
-    public function test_current_event_returns_upcoming_event(): void
-    {
-        $event = OnlineEvent::factory()->create();
-
-        $this->assertTrue($event->is($this->landingContent->currentEvent()));
-    }
-
-    /**
-     * Test currentEvent ignores events that have already ended.
-     */
-    public function test_current_event_ignores_ended_events(): void
-    {
-        OnlineEvent::factory()->past()->create();
-
-        $this->assertNull($this->landingContent->currentEvent());
-    }
-
-    /**
-     * Test currentEvent returns an event that is happening right now.
-     */
-    public function test_current_event_returns_in_progress_event(): void
-    {
-        $event = OnlineEvent::factory()->happeningNow()->create();
-
-        $this->assertTrue($event->is($this->landingContent->currentEvent()));
-    }
-
-    /**
-     * Test currentEvent reads the cached empty result instead of re-querying.
-     */
-    public function test_current_event_returns_null_from_warm_empty_cache(): void
-    {
-        cache()->put('event', false, now()->addHour());
-
-        OnlineEvent::factory()->create();
-
-        $this->assertNull($this->landingContent->currentEvent());
     }
 
     /**

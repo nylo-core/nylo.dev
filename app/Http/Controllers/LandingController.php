@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\DocService;
+use App\Http\Services\EventService;
 use App\Http\Services\LandingContentService;
 use App\Http\Services\LlmsTxtService;
 use App\Http\Services\SeoService;
@@ -15,7 +16,8 @@ class LandingController extends Controller
         private readonly SeoService $seoService,
         private readonly DocService $docService,
         private readonly LandingContentService $landingContent,
-        private readonly LlmsTxtService $llmsTxtService
+        private readonly LlmsTxtService $llmsTxtService,
+        private readonly EventService $eventService
     ) {}
 
     /**
@@ -30,7 +32,7 @@ class LandingController extends Controller
         $version = $this->docService->getLastestVersionNylo();
 
         return view('pages.index', [
-            'event' => $this->landingContent->currentEvent(),
+            'event' => $this->eventService->current(),
             'installCommand' => 'dart pub global activate nylo_installer',
             'docsUrl' => $this->landingContent->docsUrls($version),
             'pillars' => $this->landingContent->pillars($version),
@@ -39,6 +41,24 @@ class LandingController extends Controller
             'explorerTabs' => $this->landingContent->explorerTabs(),
             'testimonials' => $this->landingContent->testimonials(),
         ]);
+    }
+
+    /**
+     * Page for a single online event.
+     *
+     * Finished events leave the site, so their URL 404s once they are over.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function event(string $slug)
+    {
+        $event = $this->eventService->find($slug);
+
+        abort_if($event === null, 404);
+
+        $this->seoService->setSeoViewingEvent($event);
+
+        return view('pages.event', compact('event'));
     }
 
     /**

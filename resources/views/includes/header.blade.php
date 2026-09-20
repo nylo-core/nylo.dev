@@ -1,12 +1,18 @@
-<div class="ny-announce">
-    <div class="ny-shell flex flex-wrap items-center justify-center gap-x-3 gap-y-2 py-[9px]">
-        <span class="ny-announce-tag">V7</span>
-        {{-- The full sentence wraps to three lines on a phone, so short-form it there. --}}
-        <span class="ny-announce-text whitespace-nowrap md:hidden">{{ __('Nylo v7 is here!') }}</span>
-        <span class="ny-announce-text hidden md:inline">{{ __('Nylo v7 is here — faster scaffolding, new Nav Hub, refreshed docs.') }}</span>
-        <a href="{{ route('learn-more.v7') }}" class="ny-announce-link whitespace-nowrap">{{ __('See what\'s new') }} →</a>
+{{-- An online event owns the top bar while one is running; otherwise the
+     standing v7 announcement keeps it. --}}
+@if (! empty($currentEvent))
+    <x-event-banner />
+@else
+    <div class="ny-announce">
+        <div class="ny-shell flex flex-wrap items-center justify-center gap-x-3 gap-y-2 py-[9px]">
+            <span class="ny-announce-tag">V7</span>
+            {{-- The full sentence wraps to three lines on a phone, so short-form it there. --}}
+            <span class="ny-announce-text whitespace-nowrap md:hidden">{{ __('Nylo v7 is here!') }}</span>
+            <span class="ny-announce-text hidden md:inline">{{ __('Nylo v7 is here — faster scaffolding, new Nav Hub, refreshed docs.') }}</span>
+            <a href="{{ route('learn-more.v7') }}" class="ny-announce-link whitespace-nowrap">{{ __('See what\'s new') }} →</a>
+        </div>
     </div>
-</div>
+@endif
 
 
 <header class="ny-bg-header sticky top-0 z-40 w-full">

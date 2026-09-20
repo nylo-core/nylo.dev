@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\EventService;
 use App\Http\Services\GitHubService;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
             $latestVersionOfNylo = array_key_last(config('project.doc-index')['versions']);
 
             $view->with('latestVersionOfNylo', $latestVersionOfNylo);
+        });
+
+        // The header hands its top bar to a running event, so it has to know.
+        view()->composer('includes.header', function ($view) {
+            $view->with('currentEvent', app(EventService::class)->current());
         });
 
         view()->composer(['includes.header', 'pages.index', 'layouts.app-docs'], function ($view) {

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\OnlineEvent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Tests\TestCase;
@@ -23,22 +22,26 @@ class LandingControllerTest extends TestCase
     }
 
     /**
-     * Test that the home page shows the banner for an upcoming event.
+     * Test that the home page shows the chip for an upcoming event.
      */
-    public function test_home_page_shows_upcoming_event_banner(): void
+    public function test_home_page_shows_upcoming_event_chip(): void
     {
-        cache()->forget('event');
-
-        OnlineEvent::factory()->create([
-            'title' => 'Nylo Launch Party',
-            'link' => 'https://nylo.dev/events/launch-party',
+        config()->set('project.events', [
+            'timezone' => 'Europe/London',
+            'events' => [[
+                'slug' => 'launch-party',
+                'title' => 'Nylo Launch Party',
+                'starts_at' => now()->addWeek()->format('Y-m-d H:i'),
+                'ends_at' => now()->addWeek()->addHour()->format('Y-m-d H:i'),
+                'luma_url' => 'https://lu.ma/nylo-launch-party',
+            ]],
         ]);
 
         $response = $this->get('/');
 
         $response->assertStatus(200);
         $response->assertSee('Nylo Launch Party');
-        $response->assertSee('https://nylo.dev/events/launch-party');
+        $response->assertSee(route('landing.event', ['slug' => 'launch-party']));
     }
 
     /**

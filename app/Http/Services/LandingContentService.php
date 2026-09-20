@@ -2,8 +2,6 @@
 
 namespace App\Http\Services;
 
-use App\Models\OnlineEvent;
-
 /**
  * Class LandingContentService
  *
@@ -12,18 +10,6 @@ use App\Models\OnlineEvent;
  */
 class LandingContentService
 {
-    /**
-     * The online event currently promoted on the landing page, if any.
-     */
-    public function currentEvent(): ?OnlineEvent
-    {
-        $event = cache()->remember('event', now()->addHours(1), function () {
-            return OnlineEvent::where('end_date', '>', now())->first() ?? false;
-        });
-
-        return $event ?: null;
-    }
-
     /**
      * Standalone documentation links the landing page needs by name.
      *

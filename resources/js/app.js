@@ -201,6 +201,159 @@ Alpine.data('counter', (target = 0, duration = 2000) => ({
     }
 }));
 
+// Split a millisecond gap into whole days, hours, minutes and seconds.
+function countdownParts(ms) {
+    const total = Math.max(0, Math.floor(ms / 1000));
+
+    return {
+        days: Math.floor(total / 86400),
+        hours: Math.floor((total % 86400) / 3600),
+        minutes: Math.floor((total % 3600) / 60),
+        seconds: total % 60,
+    };
+}
+
+// Site-wide event bar: ticks down to the next online event, flips to a live
+// state while it runs, and closes itself once it is over. The dismissal is
+// keyed by slug so next quarter's event shows again to everyone.
+Alpine.data('eventBanner', (slug, startsAt, endsAt) => ({
+    open: false,
+    live: false,
+    countdown: '',
+    key: `ny-event-dismissed:${slug}`,
+    timer: null,
+
+    init() {
+        this.start = new Date(startsAt).getTime();
+        this.end = new Date(endsAt).getTime();
+
+        try {
+            this.open = localStorage.getItem(this.key) !== '1';
+        } catch (e) {
+            this.open = true;
+        }
+
+        this.tick();
+
+        if (this.open) {
+            this.timer = setInterval(() => this.tick(), 1000);
+        }
+    },
+
+    destroy() {
+        clearInterval(this.timer);
+    },
+
+    tick() {
+        const now = Date.now();
+
+        // A tab left open past the end of the event shouldn't keep promoting it.
+        if (now > this.end) {
+            this.open = false;
+            clearInterval(this.timer);
+            return;
+        }
+
+        this.live = now >= this.start;
+
+        const { days, hours, minutes, seconds } = countdownParts(this.start - now);
+
+        // Drop the leading units as they empty, so the pill stays short.
+        if (days > 0) {
+            this.countdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        } else if (hours > 0) {
+            this.countdown = `${hours}h ${minutes}m ${seconds}s`;
+        } else if (minutes > 0) {
+            this.countdown = `${minutes}m ${seconds}s`;
+        } else {
+            this.countdown = `${seconds}s`;
+        }
+    },
+
+    dismiss() {
+        this.open = false;
+        clearInterval(this.timer);
+
+        try {
+            localStorage.setItem(this.key, '1');
+        } catch (e) {
+            // Private browsing: the bar stays gone for this page view only.
+        }
+    },
+}));
+
+// The four-box countdown on an event page.
+Alpine.data('eventCountdown', (startsAt, endsAt) => ({
+    days: '0',
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
+    live: false,
+    ended: false,
+    timer: null,
+
+    init() {
+        this.start = new Date(startsAt).getTime();
+        this.end = new Date(endsAt).getTime();
+
+        this.tick();
+        this.timer = setInterval(() => this.tick(), 1000);
+    },
+
+    destroy() {
+        clearInterval(this.timer);
+    },
+
+    pad(value) {
+        return String(value).padStart(2, '0');
+    },
+
+    tick() {
+        const now = Date.now();
+
+        this.live = now >= this.start && now <= this.end;
+        this.ended = now > this.end;
+
+        if (this.live || this.ended) {
+            clearInterval(this.timer);
+            return;
+        }
+
+        const { days, hours, minutes, seconds } = countdownParts(this.start - now);
+
+        this.days = String(days);
+        this.hours = this.pad(hours);
+        this.minutes = this.pad(minutes);
+        this.seconds = this.pad(seconds);
+    },
+}));
+
+// Restates an event's start time in whatever timezone the visitor is in —
+// the audience is spread across 16 locales, so "16:30 BST" isn't much help.
+Alpine.data('eventLocalTime', (startsAt, endsAt, timezone) => ({
+    label: '',
+
+    init() {
+        try {
+            const start = new Date(startsAt);
+            const end = new Date(endsAt);
+
+            // Nothing to add for a visitor whose clock already reads the same.
+            if (start.toLocaleString('en-GB', { timeZone: timezone }) === start.toLocaleString('en-GB')) {
+                return;
+            }
+
+            const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const time = (date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const day = start.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+
+            this.label = `${day}, ${time(start)} – ${time(end)} (${zone})`;
+        } catch (e) {
+            this.label = '';
+        }
+    },
+}));
+
 Alpine.plugin(collapse);
 
 // Inline scripts (e.g. the ⌘K shortcut) reach the stores through this global.

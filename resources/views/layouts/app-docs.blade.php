@@ -59,6 +59,8 @@
         <div id="reading-progress" class="h-full bg-gradient-to-r from-[#0B5FA8] to-[#3FC0E8] transition-all duration-150 ease-out" style="width: 0%"></div>
     </div>
 
+    <x-event-banner />
+
     <div x-data="{ menuOpen: false }">
 
     {{-- ===================================================== HEADER ===== --}}

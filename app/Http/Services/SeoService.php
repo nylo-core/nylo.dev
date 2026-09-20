@@ -2,7 +2,9 @@
 
 namespace App\Http\Services;
 
+use App\Support\OnlineEvent;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Request;
 use SEO;
 
@@ -63,6 +65,55 @@ class SeoService
     public function setTitle($title)
     {
         SEO::setTitle($title.' | '.config('app.name'));
+    }
+
+    /**
+     * Sets the SEO for an online event page, including the Event structured
+     * data that puts it in Google's event listings.
+     */
+    public function setSeoViewingEvent(OnlineEvent $event): void
+    {
+        $description = $event->tagline ?: Str::limit(strip_tags((string) $event->description), 155);
+
+        $this->setTitle($event->title);
+        SEO::setDescription($description);
+        SEO::setCanonical($event->url());
+
+        SEO::opengraph()->setTitle($event->title);
+        SEO::opengraph()->setDescription($description);
+        SEO::opengraph()->setUrl($event->url());
+
+        SEO::twitter()->setTitle($event->title);
+        SEO::twitter()->setDescription($description);
+
+        if ($image = $event->imageUrl()) {
+            SEO::opengraph()->addImage($image);
+            SEO::twitter()->setImage($image);
+        }
+
+        // SEO::generate() renders jsonLdMulti(), so the structured data has to
+        // be written there — anything set on jsonLd() never reaches the page.
+        SEO::jsonLdMulti()->setType('Event');
+        SEO::jsonLdMulti()->setTitle($event->title);
+        SEO::jsonLdMulti()->setDescription($description);
+        SEO::jsonLdMulti()->setUrl($event->url());
+        SEO::jsonLdMulti()->addValue('startDate', $event->startsAtIso());
+        SEO::jsonLdMulti()->addValue('endDate', $event->endsAtIso());
+        SEO::jsonLdMulti()->addValue('eventStatus', 'https://schema.org/EventScheduled');
+        SEO::jsonLdMulti()->addValue('eventAttendanceMode', 'https://schema.org/OnlineEventAttendanceMode');
+        SEO::jsonLdMulti()->addValue('location', [
+            '@type' => 'VirtualLocation',
+            'url' => $event->lumaUrl,
+        ]);
+        SEO::jsonLdMulti()->addValue('organizer', [
+            '@type' => 'Organization',
+            'name' => $event->host(),
+            'url' => config('app.url'),
+        ]);
+
+        if ($image = $event->imageUrl()) {
+            SEO::jsonLdMulti()->addImage($image);
+        }
     }
 
     /**

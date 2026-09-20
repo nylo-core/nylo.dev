@@ -11,21 +11,19 @@
     <div class="relative ny-shell grid items-center gap-12 pt-14 pb-16 lg:grid-cols-[1.04fr_.96fr] lg:gap-14 lg:pt-[78px] lg:pb-[88px]">
 
         <div class="ny-rise min-w-0">
-            {{-- Event Banner (if one is running) --}}
-            @if (!empty($event))
-                @if($event->isHappeningNow())
-                <a href="{{ $event->link }}" target="_BLANK" class="ny-chip mb-6 gap-2.5">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span><span class="font-semibold">{{ $event->title }}</span> &mdash; {{ __('Live now') }}</span>
+            {{-- The next online event, if one is running --}}
+            @if (! empty($event))
+                <a href="{{ $event->url() }}" class="ny-chip mb-6 gap-2.5">
+                    @if ($event->isLive())
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        <span><span class="font-semibold">{{ $event->title }}</span> &mdash; {{ __('Live now') }}</span>
+                    @else
+                        <span><span class="font-semibold">{{ $event->title }}</span> &mdash; {{ $event->shortDateTime() }}</span>
+                    @endif
                 </a>
-                @elseif($event->isUpcoming())
-                <a href="{{ $event->link }}" target="_BLANK" class="ny-chip mb-6 gap-2.5">
-                    <span class="font-semibold">{{ $event->title }}</span> &mdash; {{ $event->start_date->format('jS F, H:i') }} ICT
-                </a>
-                @endif
             @endif
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">

@@ -1748,3 +1748,215 @@ button.ny-chip:hover {
 .ny-text-lg { font-size: 16px; }
 .ny-text-md { font-size: 15.5px; }
 .ny-text-sm { font-size: 13.5px; }
+
+/* ---- Online events: site-wide countdown bar ---- */
+.ny-event-bar {
+    background: linear-gradient(90deg, #0A4C88 0%, #0B5FA8 46%, #1E8FD5 100%);
+    color: #fff;
+}
+
+.dark .ny-event-bar {
+    background: linear-gradient(90deg, #07335C 0%, #0B5FA8 58%, #1580C4 100%);
+}
+
+.ny-event-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    font: 600 12px/1 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.17);
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+
+.ny-event-clock-live {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 11px;
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.ny-event-copy {
+    font: 500 13.5px/1.4 'DM Sans', sans-serif;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.ny-event-cta {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    font: 600 12.5px/1 'DM Sans', sans-serif;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 7px;
+    padding: 6px 11px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ny-event-cta:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #0B5FA8;
+}
+
+.ny-event-close {
+    position: absolute;
+    /* Matches .ny-shell's gutter, which the padding box does not include. */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    height: 28px;
+    width: 28px;
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: background 0.15s, color 0.15s;
+}
+
+.ny-event-close:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+@media (min-width: 768px) {
+    .ny-event-close { right: 32px; }
+}
+
+/* ---- Online events: event page ---- */
+.ny-event-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font: 700 11px/1 'JetBrains Mono', monospace;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ny-blue);
+    background: rgba(11, 95, 168, 0.08);
+    border-radius: 6px;
+    padding: 6px 9px;
+}
+
+.dark .ny-event-eyebrow { background: rgba(88, 176, 236, 0.12); }
+
+.ny-event-cover {
+    border: 1px solid var(--ny-line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--ny-surface-alt);
+}
+
+.ny-event-panel {
+    background: var(--ny-surface);
+    border: 1px solid var(--ny-line);
+    border-radius: 14px;
+}
+
+.ny-event-panel-head {
+    border-bottom: 1px solid var(--ny-line-soft);
+    font: 600 12.5px/1 'DM Sans', sans-serif;
+    color: var(--ny-body);
+}
+
+/* Date block on the left of the "when" row, mirroring a calendar tear-off. */
+.ny-event-datecard {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 52px;
+    padding: 7px 0 9px;
+    border: 1px solid var(--ny-line);
+    border-radius: 10px;
+    background: var(--ny-surface-alt);
+    line-height: 1;
+}
+
+.ny-event-datecard-month {
+    font: 700 9.5px/1 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ny-blue);
+}
+
+.ny-event-datecard-day {
+    font: 700 21px/1 Outfit, sans-serif;
+    color: var(--ny-ink);
+    margin-top: 4px;
+}
+
+.ny-event-count {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.ny-event-count-box {
+    display: grid;
+    place-items: center;
+    gap: 4px;
+    padding: 11px 4px 9px;
+    border: 1px solid var(--ny-line);
+    border-radius: 10px;
+    background: var(--ny-surface-alt);
+}
+
+.ny-event-count-num {
+    font: 700 22px/1 Outfit, sans-serif;
+    color: var(--ny-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.ny-event-count-label {
+    font: 600 9.5px/1 'JetBrains Mono', monospace;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ny-muted);
+}
+
+/* The Register button. Luma's embed script attaches its overlay to this
+   element, so the styling has to live on the anchor itself. */
+.ny-event-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 46px;
+    border-radius: 11px;
+    background: linear-gradient(90deg, #0B5FA8 0%, #1E8FD5 100%);
+    font: 700 15px/1 'DM Sans', sans-serif;
+    color: #fff;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s;
+}
+
+.ny-event-register:hover {
+    filter: brightness(1.07);
+    transform: translateY(-1px);
+}
+
+.ny-event-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font: 500 15px/1.6 'DM Sans', sans-serif;
+    color: var(--ny-body);
+}
+
+.ny-event-highlight-tick {
+    flex: none;
+    margin-top: 5px;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: rgba(11, 95, 168, 0.1);
+    color: var(--ny-blue);
+    display: grid;
+    place-items: center;
+    font-size: 9px;
+}
+
+.dark .ny-event-highlight-tick { background: rgba(88, 176, 236, 0.14); }
