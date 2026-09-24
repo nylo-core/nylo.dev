@@ -48,6 +48,8 @@ int? coins = await NyStorage.read<int>('coins'); // 100
 await NyStorage.delete('coins');
 ```
 
+> जब आपका ऐप डिबग मोड में चल रहा हो, तब आप इन वैल्यूज़ को टर्मिनल से लाइव देख और बदल सकते हैं, और उन्हें दोबारा उपयोग के लिए एक सीडर में कैप्चर कर सकते हैं -- देखें Metro Live में [स्टोरेज स्नैपशॉट](/docs/{{ $version }}/metro-live#storage-snapshots)।
+
 <div id="save-values"></div>
 
 ## वैल्यू सेव करना

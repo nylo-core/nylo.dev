@@ -11,6 +11,7 @@
   - [Handler Dengan dan Tanpa Data](#handlers-with-and-without-data "Handler Dengan dan Tanpa Data")
   - [Menggunakan Instance StateActions](#using-a-state-actions-instance "Menggunakan Instance StateActions")
 - [Pola: Halaman Berstate Terkelola (NyPage)](#pattern-ny-page "Pola: Halaman Berstate Terkelola")
+  - [Memanggil Aksi Sebuah Halaman](#page-actions-shortcut "Memanggil aksi sebuah halaman dari luar dirinya")
 - [Pola: Stateful Widgets (NyState)](#pattern-ny-state "Pola: Stateful Widgets")
 - [Pola: Widget Berstate Terkelola (NyStateManaged)](#pattern-ny-state-managed "Pola: Widget Berstate Terkelola")
   - [Lanjutan: Beberapa Instance Terisolasi](#advanced-multiple-isolated-instances "Lanjutan: Beberapa Instance Terisolasi")
@@ -186,6 +187,9 @@ class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
 
+  /// Aksi mis. MyPage.actions.showToast("hello");
+  static final actions = path.actions;
+
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
 
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Langkah 2:** Ubah `stateManaged` menjadi `true`.
-
-Secara default, halaman **tidak** berlangganan state event — ini menghindari listener yang tidak perlu pada halaman yang tidak membutuhkannya. Untuk mengaktifkan state action pada sebuah halaman, ubah getter-nya:
+`stateManaged` sudah default ke `true`, sehingga halaman langsung siap menerima state action begitu Anda menambahkan map `stateActions` di bawah -- tanpa langkah tambahan. Halaman yang dibuat sebelum {{ config('app.name') }} 7.2.0 memiliki default `stateManaged` ke `false`; ubah sendiri untuk mengikutsertakan halaman yang sudah ada:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Langkah 3:** Tambahkan map `stateActions`.
+**Langkah 2:** Tambahkan map `stateActions`.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Langkah 4:** Picu aksi dari mana saja menggunakan `path` halaman.
+**Langkah 3:** Picu aksi dari mana saja menggunakan `path` halaman -- atau shortcut `actions`-nya.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,30 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Halaman menggunakan `MyPage.path` sebagai kunci, widget menggunakan `MyWidget.state`. Inilah satu-satunya perbedaan di sisi pemanggil.
+
+<div id="page-actions-shortcut"></div>
+
+### Memanggil Aksi Sebuah Halaman
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: terminologi baru "PageStateActions" dan pola subclass tanpa body via noSuchMethod -- belum ada di file locale ini sebelumnya -->
+Setiap halaman yang dihasilkan menyimpan `static final actions = path.actions;` pada class-nya — sebuah `PageStateActions` untuk memanggil halaman tersebut dari mana saja tanpa perlu membangun sendiri panggilan `stateAction(...)`:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Aksi bawaan mencakup `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, dan `call(name, data)` generik yang memicu salah satu handler `stateActions` Anda sendiri berdasarkan nama:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// sama seperti: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Anda juga dapat men-subclass `PageStateActions` dan mendeklarasikan method **tanpa body** untuk mengubah masing-masing menjadi aksi bertipe, dirutekan melalui `noSuchMethod`. Lihat [Metro Live](/docs/{{ $version }}/metro-live#page-actions), yang memanggil aksi sebuah halaman dengan cara yang sama saat aplikasi Anda berjalan.
 
 
 <div id="pattern-ny-state"></div>

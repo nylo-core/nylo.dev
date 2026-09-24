@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Ini akan membuat file baru di `lib/app/commands/current_time.dart` dan mendaftarkannya di registri perintah.
 
+Berikan `--live` untuk membuat scaffold perintah yang sebaliknya berjalan *di dalam aplikasi Anda*, dikendalikan dari Metro selagi aplikasi berjalan dalam mode debug -- lihat [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Struktur Perintah
@@ -165,6 +171,8 @@ Setiap entri memiliki:
 
 ## Perintah Paket
 
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Paket dapat menyertakan perintah Metro untuk developer yang menginstalnya -- misalnya perintah `install` yang membuat scaffold konfigurasi yang dibutuhkan sebuah paket. Ketika paket yang menjadi dependensi proyek Anda berisi file `metro_commands.json`, Metro akan menemukan perintahnya secara otomatis; tidak ada yang perlu didaftarkan di proyek Anda. Tambahkan paket ke `pubspec.yaml` Anda, jalankan `flutter pub get`, dan perintahnya akan muncul di menu `metro` di bawah nama paket tersebut:
 
 ```
@@ -189,6 +197,8 @@ Perintah bawaan selalu diprioritaskan, kemudian perintah di `commands.json` proy
 <div id="shipping-commands-in-a-package"></div>
 
 ### Menyertakan Perintah dalam Paket
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Untuk menyertakan perintah dalam paket yang Anda kelola, letakkan setiap perintah di direktori `bin/` milik paket dan daftarkan di file `metro_commands.json` pada root paket, di sebelah `pubspec.yaml`:
 

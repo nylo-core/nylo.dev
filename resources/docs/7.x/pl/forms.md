@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Podczas wysyłania formularz waliduje wszystkie pola. Jeśli walidacja przejdzie pomyślnie, wywoływany jest `onSuccess` z mapą `Map<String, dynamic>` danych pól (klucze to wersje snake_case nazw pól). Jeśli walidacja się nie powiedzie, domyślnie wyświetlany jest komunikat o błędzie toast, a jeśli podano `onFailure`, zostanie on wywołany.
 
+Wszystkie trzy powyższe sposoby wywołania `submit()` zwracają `Future<void>`, który kończy się, gdy `onSuccess` albo `onFailure` -- oraz cokolwiek zwróci jedno z nich -- zakończy działanie (kończy się natychmiast, jeśli żaden formularz o tej nazwie nie jest zamontowany). Zwróć go z `onPressed` przycisku, aby przycisk pozostał zablokowany przez cały czas wysyłania, a nie tylko do momentu zwalidowania formularza:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` zwraca `Future<void>` z `.submit(...)`, więc przycisk, który śledzi swój własny stan ładowania (jak wbudowane style `Button`), pozostaje zablokowany do momentu zakończenia `onSuccess`.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Metoda | Opis |
 |--------|------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Wyślij formularz po nazwie |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Wyślij formularz po nazwie. Zwraca `Future<void>`, który kończy się, gdy `onSuccess`/`onFailure` zakończy działanie |
 | `NyFormWidget.stateRefresh(name)` | Odśwież stan UI formularza |
 | `NyFormWidget.stateSetValue(name, key, value)` | Ustaw wartość pola po nazwie formularza |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Ustaw opcje pola po nazwie formularza |

@@ -9,6 +9,7 @@
 - [Логирование JSON](#json-logging "Логирование JSON")
 - [Цветной вывод](#colored-output "Цветной вывод")
 - [Слушатели логов](#log-listeners "Слушатели логов")
+  - [Несколько слушателей](#multiple-listeners "Несколько слушателей")
 - [Вспомогательные расширения](#helper-extensions "Вспомогательные расширения")
 - [Конфигурация](#configuration "Конфигурация")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Несколько слушателей
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` -- это единственный присваиваемый колбэк -- установка его заново молча заменяет то, что было раньше. Используйте `addListener`/`removeListener` вместо этого, когда вам нужно больше одного слушателя одновременно (например, ваш собственный сборщик сбоев *и* потоковая передача логов Nylo Live, работающие вместе):
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Позже, например, в tearDown теста
+NyLogger.removeListener(reportErrors);
+```
+
+Каждый слушатель, добавленный через `addListener`, работает наряду с `onLog` -- добавление одного никогда не заменяет другой, и он также никогда не заменяет `onLog`.
 
 <div id="helper-extensions"></div>
 

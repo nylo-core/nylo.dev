@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`、`live:devices`、`live:status`、`live:run` 会打开一个连接到正在运行的应用的 shell，让您可以在应用运行时检查和操作它 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live)。
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 新创建的 API 服务将放置在 `lib/app/networking/` 中。
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### 强制创建 API 服务
 
 **参数：**
@@ -424,6 +435,8 @@ metro make:api_service user --model="User"
 ``` bash
 metro make:api_service user --force
 ```
+
+如果不加 `--force`，对已存在的文件运行 `make:api_service` 现在会以退出码 `1` 退出，而不是静默地重新格式化它 -- 如果您在 CI 或代码生成中编写此命令的脚本，这会很有用。
 
 <div id="make-event"></div>
 

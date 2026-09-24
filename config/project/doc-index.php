@@ -343,6 +343,7 @@ return [
                 'route-guards',
                 'backpack',
                 'commands',
+                'metro-live',
             ],
         ],
     ],

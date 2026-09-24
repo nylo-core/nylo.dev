@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` и `live:run` открывают оболочку, подключённую к вашему запущенному приложению, что позволяет просматривать и управлять им во время его работы -- см. [Metro Live](/docs/{{ $version }}/metro-live).
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 Новый API-сервис будет размещён в `lib/app/networking/`.
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### Принудительное создание API-сервиса
 
 **Аргументы:**
@@ -424,6 +435,8 @@ metro make:api_service user --model="User"
 ``` bash
 metro make:api_service user --force
 ```
+
+Без флага `--force` запуск `make:api_service` для файла, который уже существует, теперь завершается с кодом выхода `1` вместо того, чтобы молча его перезаписывать -- это удобно, если вы используете эту команду в сценариях CI или генерации кода.
 
 <div id="make-event"></div>
 

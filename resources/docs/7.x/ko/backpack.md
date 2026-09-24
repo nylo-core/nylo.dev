@@ -50,7 +50,14 @@ String? theme = Backpack.instance.read("theme"); // "dark"
 
 // 데이터 존재 여부 확인
 bool hasTheme = Backpack.instance.contains("theme"); // true
+
+// 현재 보유 중인 모든 키 나열
+List<String> keys = Backpack.instance.keys;
 ```
+
+`Backpack.instance.keys`에는 여러분의 키와 함께 {{ config('app.name') }} 자체의 내부 키도 포함됩니다 -- `nylo`(`Nylo` 앱 인스턴스)와 `event_bus`입니다 -- 자신의 데이터에만 관심이 있다면 이를 걸러내세요.
+
+> `metro live`를 사용하면 터미널에서 실행 중인 앱의 Backpack 값을 나열하고 확인할 수 있습니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live#live-run)를 참고하세요.
 
 <div id="reading-data"></div>
 

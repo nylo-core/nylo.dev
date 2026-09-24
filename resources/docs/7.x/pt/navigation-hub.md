@@ -7,6 +7,7 @@
 - [Uso Básico](#basic-usage "Uso básico")
   - [Criando um Navigation Hub](#creating-a-navigation-hub "Criando um Navigation Hub")
   - [Criando Abas de Navegação](#creating-navigation-tabs "Criando abas de navegação")
+  - [Nomeando o Estado do Hub](#naming-the-hubs-state "Nomeando o estado do hub")
   - [Navegação Inferior](#bottom-navigation "Navegação inferior")
     - [Nav Bar Builder Personalizado](#custom-nav-bar-builder "Nav Bar Builder personalizado")
   - [Navegação Superior](#top-navigation "Navegação superior")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Há **muito mais** que você pode fazer com um Navigation Hub, vamos explorar algumas das funcionalidades.
+
+<div id="naming-the-hubs-state"></div>
+
+### Nomeando o Estado do Hub
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+O hub gerado acima concorda em um nome de estado de duas formas: o widget passa `stateName: path.stateName()` para `NyStatefulWidget`, e `NavigationHubStateActions(path.stateName())` direciona esse mesmo nome. A classe de estado do hub -- aquela que estende `NavigationHub<T>` -- também pode declarar esse nome ela mesma, através dos parâmetros de construtor `name` e `path` que `NavigationHub` repassa para `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Ambas as formas resolvem para o mesmo nome, então use a que ficar melhor no seu ponto de chamada -- isso é opcional, já que o hub gerado acima já funciona sem isso. Todo `NyStatefulWidget` também expõe `declaredStateName`, o `stateName` exato passado para o seu construtor (ou `null` quando nenhum foi fornecido), caso você precise ler de volta o que foi declarado em vez do nome que o {{ config('app.name') }} deriva por padrão.
 
 <div id="bottom-navigation"></div>
 

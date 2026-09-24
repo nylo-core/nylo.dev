@@ -7,6 +7,7 @@
 - [Penggunaan Dasar](#basic-usage "Penggunaan Dasar")
   - [Membuat Navigation Hub](#creating-a-navigation-hub "Membuat Navigation Hub")
   - [Membuat Tab Navigasi](#creating-navigation-tabs "Membuat Tab Navigasi")
+  - [Menamai State Hub](#naming-the-hubs-state "Menamai State Hub")
   - [Navigasi Bawah](#bottom-navigation "Navigasi Bawah")
     - [Nav Bar Builder Kustom](#custom-nav-bar-builder "Nav Bar Builder Kustom")
   - [Navigasi Atas](#top-navigation "Navigasi Atas")
@@ -150,6 +151,28 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Masih **banyak** lagi yang dapat Anda lakukan dengan Navigation Hub, mari kita bahas beberapa fiturnya.
+
+<div id="naming-the-hubs-state"></div>
+
+### Menamai State Hub
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+<!-- uncertain: istilah baru "NavigationHubStateActions", "path.stateName()", dan "declaredStateName" -- belum ada di file locale ini sebelumnya -->
+Hub yang dihasilkan di atas menyepakati satu nama state dengan dua cara: widget meneruskan `stateName: path.stateName()` ke `NyStatefulWidget`, dan `NavigationHubStateActions(path.stateName())` menargetkan nama yang sama tersebut. Class state hub -- yang meng-extend `NavigationHub<T>` -- juga dapat mendeklarasikan nama tersebut sendiri, melalui parameter constructor `name` dan `path` yang diteruskan `NavigationHub` ke `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Kedua bentuk ini menghasilkan nama yang sama, jadi gunakan mana pun yang terbaca lebih baik di titik pemanggilan Anda -- ini bersifat opsional, karena hub yang dihasilkan di atas sudah berfungsi tanpanya. Setiap `NyStatefulWidget` juga mengekspos `declaredStateName`, yaitu `stateName` persis yang diteruskan ke constructor-nya (atau `null` jika tidak ada yang diberikan), jika Anda perlu membaca kembali apa yang dideklarasikan alih-alih nama yang diturunkan secara default oleh {{ config('app.name') }}.
 
 <div id="bottom-navigation"></div>
 

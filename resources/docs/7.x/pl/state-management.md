@@ -11,6 +11,7 @@
   - [Obsługa z danymi i bez danych](#handlers-with-and-without-data "Obsługa z danymi i bez danych")
   - [Używanie instancji StateActions](#using-a-state-actions-instance "Używanie instancji StateActions")
 - [Wzorzec: Strony z zarządzaniem stanem (NyPage)](#pattern-ny-page "Wzorzec: Strony z zarządzaniem stanem")
+  - [Wywoływanie akcji strony](#page-actions-shortcut "Wywoływanie akcji strony spoza niej")
 - [Wzorzec: Stateful Widgets (NyState)](#pattern-ny-state "Wzorzec: Stateful Widgets")
 - [Wzorzec: Widgety z zarządzaniem stanem (NyStateManaged)](#pattern-ny-state-managed "Wzorzec: Widgety z zarządzaniem stanem")
   - [Zaawansowane: Wiele izolowanych instancji](#advanced-multiple-isolated-instances "Zaawansowane: Wiele izolowanych instancji")
@@ -179,12 +180,15 @@ Używaj tego wzorca, gdy chcesz wywołać zachowanie na całej stronie z innego 
 metro make:page my_page
 ```
 
-Generuje to `NyPage` w `lib/resources/pages/`:
+Generuje to `NyPage` w `lib/resources/pages/`, już podłączony do akcji stanu:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Akcje, np. MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Krok 2:** Zmień `stateManaged` na `true`.
-
-Domyślnie strony **nie** subskrybują zdarzeń stanu — pozwala to uniknąć zbędnych listenerów na stronach, które ich nie potrzebują. Aby włączyć akcje stanu na stronie, zmień getter:
+`stateManaged` domyślnie ma już wartość `true`, więc strona jest gotowa na przyjmowanie akcji stanu, gdy tylko dodasz poniżej mapę `stateActions` — bez dodatkowego kroku. Strony wygenerowane przed {{ config('app.name') }} 7.2.0 mają domyślnie `stateManaged` ustawione na `false`; przełącz to samodzielnie, aby włączyć tę funkcję w istniejącej stronie:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Krok 3:** Dodaj mapę `stateActions`.
+**Krok 2:** Dodaj mapę `stateActions`.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Krok 4:** Wywołaj akcję z dowolnego miejsca używając `path` strony.
+**Krok 3:** Wywołaj akcję z dowolnego miejsca, używając `path` strony — albo jej skrótu `actions`.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Strony są identyfikowane przez `MyPage.path`, widgety przez `MyWidget.state`. To jedyna różnica po stronie wywołania.
+
+<div id="page-actions-shortcut"></div>
+
+### Wywoływanie akcji strony
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Każda wygenerowana strona zachowuje w swojej klasie `static final actions = path.actions;` — `PageStateActions` do wywoływania strony z dowolnego miejsca bez ręcznego budowania wywołania `stateAction(...)`:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Wbudowane akcje obejmują `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage` oraz generyczne `call(name, data)`, które wywołuje po nazwie jeden z Twoich własnych handlerów `stateActions`:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// to samo co: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Możesz też utworzyć podklasę `PageStateActions` i zadeklarować metody **bez ciała**, aby zamienić każdą z nich w typowaną akcję, kierowaną przez `noSuchMethod`. Zobacz [Metro Live](/docs/{{ $version }}/metro-live#page-actions), które wywołuje akcje strony w ten sam sposób, gdy Twoja aplikacja działa.
 
 
 <div id="pattern-ny-state"></div>

@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Quando enviado, o formulário valida todos os campos. Se válido, `onSuccess` é chamado com um `Map<String, dynamic>` dos dados dos campos (as chaves são versões em snake_case dos nomes dos campos). Se inválido, um erro toast é exibido por padrão e `onFailure` é chamado se fornecido.
 
+Todas as três formas de chamar `submit()` acima retornam um `Future<void>` que se completa assim que `onSuccess` ou `onFailure` -- e o que qualquer um deles retornar -- tiver terminado (ele se completa imediatamente se nenhum formulário com esse nome estiver montado). Retorne-o do `onPressed` de um botão para manter o botão bloqueado durante todo o envio, não apenas até o formulário ser validado:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` retorna o `Future<void>` de `.submit(...)`, então um botão que rastreia seu próprio estado de carregamento (como os estilos `Button` integrados) permanece bloqueado até que `onSuccess` termine.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Método | Descrição |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Enviar um formulário pelo nome |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Enviar um formulário pelo nome. Retorna um `Future<void>` que se completa assim que `onSuccess`/`onFailure` tiver terminado |
 | `NyFormWidget.stateRefresh(name)` | Atualizar o estado da UI do formulário |
 | `NyFormWidget.stateSetValue(name, key, value)` | Definir um valor de campo pelo nome do formulário |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Definir opções de campo pelo nome do formulário |

@@ -9,6 +9,7 @@
 - [JSON लॉगिंग](#json-logging "JSON लॉगिंग")
 - [रंगीन आउटपुट](#colored-output "रंगीन आउटपुट")
 - [लॉग लिसनर्स](#log-listeners "लॉग लिसनर्स")
+  - [मल्टीपल लिसनर्स](#multiple-listeners "मल्टीपल लिसनर्स")
 - [हेल्पर एक्सटेंशन्स](#helper-extensions "हेल्पर एक्सटेंशन्स")
 - [कॉन्फ़िगरेशन](#configuration "कॉन्फ़िगरेशन")
 
@@ -194,6 +195,30 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### मल्टीपल लिसनर्स
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific API "addListener"/"removeListener" — not seen in existing locale file -->
+`NyLogger.onLog` एक सिंगल असाइनेबल कॉलबैक है -- इसे दोबारा सेट करने पर जो पहले था वह चुपचाप बदल जाता है। जब आपको एक साथ एक से अधिक लिसनर चाहिए हों (उदाहरण के लिए, आपका अपना क्रैश रिपोर्टर *और* Nylo Live की लॉग स्ट्रीमिंग, दोनों एक साथ चल रहे हों) तो इसकी बजाय `addListener`/`removeListener` का उपयोग करें:
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Later, e.g. in a test's tearDown
+NyLogger.removeListener(reportErrors);
+```
+
+`addListener` से जोड़ा गया हर लिसनर `onLog` के साथ-साथ चलता है -- एक जोड़ने से दूसरा कभी नहीं बदलता, और यह `onLog` को भी कभी नहीं बदलता।
 
 <div id="helper-extensions"></div>
 

@@ -50,7 +50,14 @@ String? theme = Backpack.instance.read("theme"); // "dark"
 
 // 检查数据是否存在
 bool hasTheme = Backpack.instance.contains("theme"); // true
+
+// 列出当前持有的所有键
+List<String> keys = Backpack.instance.keys;
 ```
+
+`Backpack.instance.keys` 除了您自己的键之外，还包括 {{ config('app.name') }} 自身的内部键 -- `nylo`（`Nylo` 应用实例）和 `event_bus` -- 如果您只关心自己的数据，请将它们过滤掉。
+
+> `metro live` 可以从终端列出并查看正在运行的应用中的 Backpack 值 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live#live-run)。
 
 <div id="reading-data"></div>
 

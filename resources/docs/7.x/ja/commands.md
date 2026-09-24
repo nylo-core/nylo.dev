@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 これにより `lib/app/commands/current_time.dart` に新しいファイルが作成され、コマンドレジストリに登録されます。
 
+`--live` を渡すと、代わりにアプリの *内部で* 実行されるコマンドをスキャフォールディングします。アプリがデバッグモードで実行されている間、Metro 側からそのコマンドを実行できます -- 詳しくは [Metro Live](/docs/{{ $version }}/metro-live#live-commands) を参照してください。
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## コマンドの構造
@@ -160,10 +166,15 @@ metro app:current_time --help
 | `name` | コマンド名（カテゴリプレフィックスの後に使用） |
 | `category` | コマンドカテゴリ（例: `app`、`project`） |
 | `script` | `lib/app/commands/` 内の Dart ファイル |
+| `description` | 任意。`metro` メニューに表示される 1 行の概要 |
+
+パッケージが提供するコマンドはこのファイルに追加されません -- Metro がそれらを個別に検出します。詳しくは、後述の[パッケージコマンド](#package-commands)を参照してください。
 
 <div id="package-commands"></div>
 
 ## パッケージコマンド
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 パッケージは、インストールした開発者向けに Metro コマンドを提供できます。例えば、パッケージが必要とする設定をスキャフォールディングする `install` コマンドなどです。プロジェクトが依存するパッケージに `metro_commands.json` ファイルが含まれている場合、Metro はそのコマンドを自動的に検出します。プロジェクト側で登録する必要はありません。パッケージを `pubspec.yaml` に追加して `flutter pub get` を実行すると、そのコマンドがパッケージ名のもとで `metro` メニューに表示されます:
 
@@ -189,6 +200,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### パッケージでのコマンドの提供
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 自分が保守するパッケージでコマンドを提供するには、各コマンドをパッケージの `bin/` フォルダに配置し、パッケージのルート（`pubspec.yaml` と同じ場所）にある `metro_commands.json` ファイルに記載します:
 

@@ -48,6 +48,8 @@ int? coins = await NyStorage.read<int>('coins'); // 100
 await NyStorage.delete('coins');
 ```
 
+> 앱이 디버그 모드로 실행되는 동안에는 터미널에서 이 값들을 실시간으로 확인하고 변경할 수 있으며, 재사용을 위해 시더로 캡처할 수도 있습니다 -- 자세한 내용은 Metro Live의 [스토리지 스냅샷](/docs/{{ $version }}/metro-live#storage-snapshots)을 참고하세요.
+
 <div id="save-values"></div>
 
 ## 값 저장

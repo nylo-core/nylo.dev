@@ -9,6 +9,7 @@
 - [JSON Günlükleme](#json-logging "JSON Günlükleme")
 - [Renkli Çıktı](#colored-output "Renkli Çıktı")
 - [Günlük Dinleyicileri](#log-listeners "Günlük Dinleyicileri")
+  - [Birden Fazla Dinleyici](#multiple-listeners "Birden Fazla Dinleyici")
 - [Yardımcı Uzantılar](#helper-extensions "Yardımcı Uzantılar")
 - [Yapılandırma](#configuration "Yapılandırma")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Birden Fazla Dinleyici
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog`, atanabilen tek bir callback'tir -- onu tekrar ayarlamak, önceden orada olanı sessizce değiştirir. Aynı anda birden fazla dinleyiciye ihtiyaç duyduğunuzda (örneğin, kendi çökme raporlayıcınız *ve* Nylo Live'ın günlük akışı aynı anda çalışırken) bunun yerine `addListener`/`removeListener` kullanın:
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Later, e.g. in a test's tearDown
+NyLogger.removeListener(reportErrors);
+```
+
+`addListener` ile eklenen her dinleyici, `onLog` ile birlikte çalışır -- birini eklemek asla bir diğerinin yerini almaz ve asla `onLog`'un da yerini almaz.
 
 <div id="helper-extensions"></div>
 

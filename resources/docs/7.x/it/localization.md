@@ -15,6 +15,7 @@
 - Avanzato
   - [Lingue Supportate](#supported-locales "Lingue Supportate")
   - [Lingua di Fallback](#fallback-language "Lingua di Fallback")
+  - [Traduzioni Integrate](#built-in-translations "Traduzioni integrate per la UI di Nylo")
   - [Supporto RTL](#rtl-support "Supporto RTL")
   - [Debug Chiavi Mancanti](#debug-missing-keys "Debug Chiavi Mancanti")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -325,15 +326,37 @@ Quando una chiave di traduzione non viene trovata nella lingua attiva, {{ config
 static const String fallbackLanguageCode = 'en';
 ```
 
-Questa risoluzione in due fasi si applica sia alle chiavi di primo livello che alle chiavi annidate con notazione a punto:
+Questa risoluzione si applica sia alle chiavi di primo livello che alle chiavi annidate con notazione a punto:
 
 1. Cerca la chiave nel file della lingua attiva.
 2. Se non trovata, cercala nel file della lingua di fallback.
-3. Se ancora non trovata, restituisce la stringa della chiave grezza.
+3. Se la chiave inizia con `nylo.` e non e' ancora stata trovata, la risolve nel [testo inglese integrato](#built-in-translations) di {{ config('app.name') }}.
+4. Se ancora non trovata, restituisce la stringa della chiave grezza.
 
 Ad esempio, se il file della lingua francese manca della chiave `settings.privacy`, la logica di fallback cerca `settings.privacy` nel file della lingua inglese prima di restituire `"settings.privacy"` come tale.
 
 Questo assicura che la tua app non mostri mai chiavi grezze se una traduzione e' solo parzialmente completa.
+
+<div id="built-in-translations"></div>
+
+## Traduzioni Integrate
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} include testo inglese integrato per la propria UI sotto le chiavi `nylo.*` -- toast, dialoghi di conferma, messaggi di validazione dei form, etichette dei campi di input, prompt di raccolta dati dei form, la pagina di errore per pagina non trovata, il banner offline, il language switcher, le etichette degli step del journey, e gli stati di `CollectionView`. Quando una di queste chiavi manca sia dal tuo file di lingua attivo che da quello di fallback, {{ config('app.name') }} la risolve in questo testo inglese integrato invece che nella chiave grezza -- cosi' un'app i cui file `lang/` precedono l'introduzione di una chiave mostra comunque il testo corretto invece di qualcosa come `nylo.toast.success`.
+
+Sovrascrivile esattamente come le tue traduzioni: aggiungi la stessa chiave sotto un oggetto `nylo` nel tuo file di lingua attivo (o di fallback) -- viene controllata prima del valore predefinito integrato.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

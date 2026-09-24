@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+इस तरह शेड्यूल करने के लिए Android 14+ पर `SCHEDULE_EXACT_ALARM` परमिशन चाहिए होती है। अगर आपके ऐप के पास यह नहीं है, तो {{ config('app.name') }}, `exact_alarms_not_permitted` थ्रो करने की बजाय स्वचालित रूप से निकटतम इनएग्ज़ैक्ट विकल्प पर फ़ॉलबैक हो जाता है और एक चेतावनी लॉग करता है:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+अगर आप फ़ॉलबैक पर निर्भर रहने की बजाय पहले से ही एक इनएग्ज़ैक्ट मोड चुनना चाहते हैं, तो ऊपर की तरह `androidScheduleMode` खुद पास करें।
+
 <div id="builder-pattern"></div>
 
 ## बिल्डर पैटर्न

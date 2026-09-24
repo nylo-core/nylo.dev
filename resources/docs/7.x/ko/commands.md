@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 이렇게 하면 `lib/app/commands/current_time.dart`에 새 파일이 생성되고 커맨드 레지스트리에 등록됩니다.
 
+`--live`를 전달하면 대신 앱 *내부에서* 실행되는 커맨드를 스캐폴딩합니다. 앱이 디버그 모드로 실행되는 동안 Metro에서 이 커맨드를 구동할 수 있습니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live#live-commands)를 참고하세요.
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## 커맨드 구조
@@ -160,10 +166,15 @@ metro app:current_time --help
 | `name` | 커맨드 이름 (카테고리 접두사 뒤에 사용) |
 | `category` | 커맨드 카테고리 (예: `app`, `project`) |
 | `script` | `lib/app/commands/`의 Dart 파일 |
+| `description` | 선택 사항. `metro` 메뉴에 표시되는 한 줄 요약 |
+
+패키지가 제공하는 커맨드는 이 파일에 추가되지 않습니다 -- Metro가 이를 별도로 발견합니다. 자세한 내용은 아래 [패키지 커맨드](#package-commands)를 참고하세요.
 
 <div id="package-commands"></div>
 
 ## 패키지 커맨드
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 패키지는 설치한 개발자를 위해 Metro 커맨드를 제공할 수 있습니다 -- 예를 들어 패키지에 필요한 설정을 스캐폴딩하는 `install` 커맨드처럼요. 프로젝트가 의존하는 패키지에 `metro_commands.json` 파일이 포함되어 있으면 Metro가 해당 커맨드를 자동으로 발견합니다. 프로젝트에서 별도로 등록할 필요가 없습니다. 패키지를 `pubspec.yaml`에 추가하고 `flutter pub get`을 실행하면, 해당 커맨드가 패키지 이름 아래 `metro` 메뉴에 나타납니다:
 
@@ -189,6 +200,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### 패키지에서 커맨드 제공하기
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 직접 관리하는 패키지에서 커맨드를 제공하려면, 각 커맨드를 패키지의 `bin/` 폴더에 넣고 패키지 루트(`pubspec.yaml`과 같은 위치)의 `metro_commands.json` 파일에 등록하세요:
 

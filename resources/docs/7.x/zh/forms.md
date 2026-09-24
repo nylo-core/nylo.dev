@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 提交时，表单会验证所有字段。如果有效，`onSuccess` 将被调用，并传入字段数据的 `Map<String, dynamic>`（键为字段名的 snake_case 版本）。如果无效，默认会显示 toast 错误，并调用 `onFailure`（如已提供）。
 
+上面三种调用 `submit()` 的方式，都会返回一个 `Future<void>`，它会在 `onSuccess` 或 `onFailure` -- 以及两者中被调用的那个所返回的内容 -- 完成后才完成（如果没有挂载同名的表单，则会立即完成）。从按钮的 `onPressed` 中返回它，可以让按钮在整个提交过程中都保持锁定状态，而不仅仅是锁定到表单验证完成为止：
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` 会返回 `.submit(...)` 返回的 `Future<void>`，因此会自行跟踪加载状态的按钮（例如内置的 `Button` 样式）会一直保持锁定状态，直到 `onSuccess` 完成为止。
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | 方法 | 描述 |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | 通过名称提交表单 |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | 通过名称提交表单。返回一个 `Future<void>`，在 `onSuccess`/`onFailure` 完成后完成 |
 | `NyFormWidget.stateRefresh(name)` | 刷新表单的 UI 状态 |
 | `NyFormWidget.stateSetValue(name, key, value)` | 通过表单名称设置字段值 |
 | `NyFormWidget.stateSetOptions(name, key, options)` | 通过表单名称设置字段选项 |

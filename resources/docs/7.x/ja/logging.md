@@ -9,6 +9,7 @@
 - [JSON ロギング](#json-logging "JSON ロギング")
 - [カラー出力](#colored-output "カラー出力")
 - [ログリスナー](#log-listeners "ログリスナー")
+  - [複数のリスナー](#multiple-listeners "複数のリスナー")
 - [ヘルパーエクステンション](#helper-extensions "ヘルパーエクステンション")
 - [設定](#configuration "設定")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### 複数のリスナー
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` は単一の代入可能なコールバックです -- 再度設定すると、それ以前にあったものは黙って置き換えられます。一度に複数のリスナーが必要な場合（例えば、自分のクラッシュレポーターと Nylo Live のログストリーミングを*両方*同時に動かす場合）は、代わりに `addListener`/`removeListener` を使用してください:
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// 後で、例えばテストの tearDown 内で
+NyLogger.removeListener(reportErrors);
+```
+
+`addListener` で追加された各リスナーは `onLog` と並行して実行されます -- 1 つを追加しても他のものが置き換えられることはなく、`onLog` が置き換えられることもありません。
 
 <div id="helper-extensions"></div>
 

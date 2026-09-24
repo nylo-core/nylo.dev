@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Bu, `lib/app/commands/current_time.dart` konumunda yeni bir dosya oluşturur ve komut kaydına kaydeder.
 
+Bunun yerine uygulamanızın *içinde* çalışan, debug modunda uygulama çalışırken Metro'dan yönetilen bir komutun iskeletini oluşturmak için `--live` bayrağını geçin -- bkz. [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Komut Yapısı
@@ -165,6 +171,8 @@ Her giriş şunları içerir:
 
 ## Paket Komutları
 
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Paketler, onları yükleyen geliştiriciler için Metro komutları sunabilir -- örneğin bir paketin ihtiyaç duyduğu yapılandırmayı oluşturan bir `install` komutu gibi. Projenizin bağımlı olduğu bir paket `metro_commands.json` dosyası içeriyorsa, Metro onun komutlarını otomatik olarak keşfeder; projenizde kaydedilecek hiçbir şey yoktur. Paketi `pubspec.yaml` dosyanıza ekleyin, `flutter pub get` çalıştırın ve komutları `metro` menüsünde paketin adı altında görünür:
 
 ```
@@ -189,6 +197,8 @@ Yerleşik komutlar her zaman önceliklidir, ardından projenizin `commands.json`
 <div id="shipping-commands-in-a-package"></div>
 
 ### Pakette Komut Dağıtma
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Sürdürdüğünüz bir pakette komut dağıtmak için, her komutu paketin `bin/` klasörüne koyun ve `pubspec.yaml` ile aynı dizinde, paketin kök dizininde bulunan bir `metro_commands.json` dosyasında listeleyin:
 
@@ -264,7 +274,7 @@ Metro, komutu geliştiricinin proje kök dizininden `dart run <package>:<executa
 - İçe aktarmalar geliştiricinin projesi üzerinden çözümlenir, bu nedenle `nylo_framework`, uygulamalarının bağımlı olduğu sürümdür. Paketiniz asla değiştirilmez.
 - Betik, `bin/` içinde doğrudan bir dosya olmalıdır -- iç içe klasörler desteklenmez.
 
-Geliştiricinin kendi komutlarıyla çakışmaması için paketinize özgü bir kategori seçin. Paket komutları, Metro tarafından {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) ve üzeri sürümlerde keşfedilir.
+Geliştiricinin kendi komutlarıyla çakışmaması için paketinize özgü bir kategori seçin.
 
 <div id="options-and-flags"></div>
 

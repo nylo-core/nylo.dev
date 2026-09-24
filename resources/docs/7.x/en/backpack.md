@@ -50,7 +50,14 @@ String? theme = Backpack.instance.read("theme"); // "dark"
 
 // Check if data exists
 bool hasTheme = Backpack.instance.contains("theme"); // true
+
+// List every key currently held
+List<String> keys = Backpack.instance.keys;
 ```
+
+`Backpack.instance.keys` includes {{ config('app.name') }}'s own internal keys alongside yours -- `nylo` (the `Nylo` app instance) and `event_bus` -- so filter them out if you're only interested in your own data.
+
+> `metro live` can list and inspect Backpack values on a running app from the terminal -- see [Metro Live](/docs/{{ $version }}/metro-live#live-run).
 
 <div id="reading-data"></div>
 

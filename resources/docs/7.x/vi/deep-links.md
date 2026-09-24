@@ -13,6 +13,7 @@
   - [Cấu hình iOS](#ios-configuration "Cấu hình iOS")
 - [Chặn bắt liên kết](#intercepting-links "Chặn bắt liên kết")
 - [Route dự phòng](#fallback-route "Route dự phòng")
+- [Phân giải một Liên kết](#resolving-a-link "Phân giải một liên kết")
 - [Kiểm thử](#testing "Kiểm thử")
 - [Tài liệu API](#api-reference "Tài liệu API")
 
@@ -181,6 +182,29 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Khi đường dẫn URI khớp với route đã đăng ký, {{ config('app.name') }} sẽ định tuyến đến đó. Ngược lại, người dùng sẽ đến route dự phòng.
 
+<div id="resolving-a-link"></div>
+
+## Phân giải một Liên kết
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "NyDeepLinkHandler", "DeepLinkTarget" -- not seen in existing locale file -->
+Đọc xem một URI sẽ đưa ứng dụng đến đâu, mà không cần điều hướng thật sự -- hữu ích trong test, hoặc để chẩn đoán một liên kết không định tuyến đến nơi bạn mong đợi:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- đường dẫn đọc được từ URI
+target.registered;       // true -- liệu đường dẫn đó có phải route đã đăng ký không
+target.target;           // nơi ứng dụng thực sự sẽ đến: `path`, hoặc route
+                          // dự phòng khi `path` chưa được đăng ký
+target.queryParameters;  // các tham số query của URI
+target.usedFallback;     // true khi `target` đến từ `fallbackRoute`
+```
+
+`resolve()` chính là phép tra cứu mà đường dẫn tự động sử dụng, nên một liên kết được báo cáo đúng chính xác như cách nó sẽ được xử lý.
+
 <div id="testing"></div>
 
 ## Kiểm thử
@@ -229,3 +253,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | Tham số | Kiểu | Mô tả |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Nhận URI đến. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Đọc xem `uri` sẽ định tuyến đến đâu, mà không cần điều hướng. Xem [Phân giải một Liên kết](#resolving-a-link).
+
+| Thuộc tính | Kiểu | Mô tả |
+|----------|------|-------------|
+| `path` | `String` | Đường dẫn đọc được từ URI. |
+| `registered` | `bool` | Liệu `path` có phải route đã đăng ký không. |
+| `target` | `String` | Nơi ứng dụng thực sự sẽ đến: `path`, hoặc `fallbackRoute` khi `path` chưa được đăng ký. |
+| `queryParameters` | `Map<String, dynamic>` | Các tham số query của URI. |
+| `usedFallback` | `bool` | Liệu route dự phòng có được dùng thay cho `path` không. |

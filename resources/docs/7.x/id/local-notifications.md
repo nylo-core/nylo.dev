@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Penjadwalan seperti ini memerlukan izin `SCHEDULE_EXACT_ALARM` di Android 14+. Jika aplikasi Anda tidak memilikinya, {{ config('app.name') }} secara otomatis jatuh kembali ke padanan inexact terdekat dan mencatat peringatan, alih-alih melempar `exact_alarms_not_permitted`:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Kirim `androidScheduleMode` sendiri, seperti di atas, jika Anda lebih memilih memilih mode inexact di awal daripada mengandalkan fallback.
+
 <div id="builder-pattern"></div>
 
 ## Pola Builder

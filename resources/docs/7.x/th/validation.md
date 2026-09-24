@@ -10,6 +10,7 @@
 - FormValidator
   - [การใช้งาน FormValidator](#using-form-validator "การใช้งาน FormValidator")
   - [FormValidator Named Constructor](#form-validator-named-constructors "FormValidator Named Constructor")
+  - [ข้อความการตรวจสอบที่แปลแล้ว](#translated-validation-messages "ข้อความการตรวจสอบที่แปลแล้ว")
   - [การต่อเชื่อมกฎการตรวจสอบ](#chaining-validation-rules "การต่อเชื่อมกฎการตรวจสอบ")
   - [ฟิลด์ Nullable](#nullable-fields "ฟิลด์ Nullable")
   - [การตรวจสอบแบบกำหนดเอง](#custom-validation "การตรวจสอบแบบกำหนดเอง")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## ข้อความการตรวจสอบที่แปลแล้ว
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific concept `nylo.validation.*` translation keys and `FormRule.messageArguments` -- not seen in existing locale file -->
+named constructor ทุกตัวด้านบนทำงานได้โดยไม่ต้องส่ง `message:` -- กฎที่ไม่มีข้อความกำหนดเองจะ resolve ค่าเริ่มต้นผ่านคีย์คำแปล `nylo.validation.*` แทนที่จะเป็น string ที่เขียนตายตัว:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." -- จาก nylo.validation.min_length
+```
+
+Override ค่าเริ่มต้นของกฎใดก็ได้ในลักษณะเดียวกับ[ข้อความในตัวอื่นๆ ของ Nylo](/docs/{{ $version }}/localization#built-in-translations) โดยเพิ่มคีย์ที่ตรงกันไว้ใต้ `nylo.validation` ในไฟล์ภาษาของคุณเอง:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+กฎที่รับค่าของตัวเอง -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder` และอื่นๆ -- จะเปิดเผยค่านั้นให้กับข้อความที่แปลแล้วในรูปแบบ `@{{placeholder}}` ควบคู่กับ `@{{attribute}}` ผ่าน `FormRule.messageArguments` ส่วน `@{{attribute}}` เองจะถูกกรอกจากชื่อ field (หรือ `attribute:` ที่คุณส่งมา) ซึ่งแปลในลักษณะเดียวกัน
+
+`FormValidationResponse` (และคลาสย่อย `FormValidationError`/`FormValidationSuccess` ของมัน ตามที่เห็นใน `onFailure` ของ `FormValidator` หรือ `Field`) จะเก็บชื่อ field ไว้ใน `attribute` ควบคู่กับ `message` ที่แปลแล้ว:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

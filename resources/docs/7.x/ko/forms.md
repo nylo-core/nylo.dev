@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 제출 시 폼은 모든 필드를 유효성 검사합니다. 유효하면 필드 데이터의 `Map<String, dynamic>`과 함께 `onSuccess`가 호출됩니다 (키는 필드 이름의 snake_case 버전). 유효하지 않으면 기본적으로 Toast 에러가 표시되고 제공된 경우 `onFailure`가 호출됩니다.
 
+위 `submit()`을 호출하는 세 가지 방법은 모두 `onSuccess` 또는 `onFailure` -- 그리고 둘 중 하나가 반환하는 것 -- 이 완료되면 완료되는 `Future<void>`를 반환합니다(해당 이름의 폼이 마운트되어 있지 않으면 즉시 완료됩니다). 폼이 검증될 때까지가 아니라 제출 과정 전체 동안 버튼을 잠긴 상태로 유지하려면, 버튼의 `onPressed`에서 이를 반환하세요:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed`는 `.submit(...)`에서 반환되는 `Future<void>`를 반환하므로, (내장 `Button` 스타일처럼) 자체적으로 로딩 상태를 추적하는 버튼은 `onSuccess`가 완료될 때까지 잠긴 상태를 유지합니다.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | 메서드 | 설명 |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | 이름으로 폼 제출 |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | 이름으로 폼 제출. `onSuccess`/`onFailure`가 완료되면 완료되는 `Future<void>`를 반환 |
 | `NyFormWidget.stateRefresh(name)` | 폼의 UI 상태 새로고침 |
 | `NyFormWidget.stateSetValue(name, key, value)` | 폼 이름으로 필드 값 설정 |
 | `NyFormWidget.stateSetOptions(name, key, options)` | 폼 이름으로 필드 옵션 설정 |

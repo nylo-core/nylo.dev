@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` ve `live:run`, calisan uygulamaniza bagli bir kabuk acar; boylece calisirken onu inceleyebilir ve yonetebilirsiniz -- bkz. [Metro Live](/docs/{{ $version }}/metro-live).
 
 <div id="make-controller"></div>
 
@@ -416,6 +425,8 @@ metro make:api_service user --model="User"
 
 Yeni olusturulan API servisi `lib/app/networking/` dizinine yerlestirilecektir.
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### Zorunlu API Servisi olusturma
 
 **Argumenler:**
@@ -425,6 +436,8 @@ Yeni olusturulan API servisi `lib/app/networking/` dizinine yerlestirilecektir.
 ``` bash
 metro make:api_service user --force
 ```
+
+`--force` olmadan, zaten mevcut olan bir dosyaya karsi `make:api_service` calistirmak, artik onu sessizce yeniden bicimlendirmek yerine `1` koduyla sonlanir -- bu komutu CI'da veya kod uretiminde betiklerken kullanislidir.
 
 <div id="make-event"></div>
 

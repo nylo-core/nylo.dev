@@ -9,6 +9,7 @@
 - [JSON-Logging](#json-logging "JSON-Logging")
 - [Farbige Ausgabe](#colored-output "Farbige Ausgabe")
 - [Log-Listener](#log-listeners "Log-Listener")
+  - [Mehrere Listener](#multiple-listeners "Mehrere Listener")
 - [Hilfs-Extensions](#helper-extensions "Hilfs-Extensions")
 - [Konfiguration](#configuration "Konfiguration")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Mehrere Listener
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` ist ein einzelner zuweisbarer Callback -- wird er erneut gesetzt, ersetzt dies stillschweigend, was zuvor vorhanden war. Verwenden Sie stattdessen `addListener`/`removeListener`, wenn Sie mehrere Listener gleichzeitig benötigen (zum Beispiel Ihren eigenen Crash-Reporter *und* das Log-Streaming von Nylo Live, beide gleichzeitig laufend):
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Später, z. B. im tearDown eines Tests
+NyLogger.removeListener(reportErrors);
+```
+
+Jeder mit `addListener` hinzugefügte Listener läuft neben `onLog` -- das Hinzufügen eines Listeners ersetzt nie einen anderen, und es ersetzt auch nie `onLog`.
 
 <div id="helper-extensions"></div>
 

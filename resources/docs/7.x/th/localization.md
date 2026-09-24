@@ -15,6 +15,7 @@
 - ขั้นสูง
   - [Locales ที่รองรับ](#supported-locales "Locales ที่รองรับ")
   - [ภาษาสำรอง](#fallback-language "ภาษาสำรอง")
+  - [คำแปลในตัว](#built-in-translations "คำแปลในตัวสำหรับ UI ของ Nylo เอง")
   - [รองรับ RTL](#rtl-support "รองรับ RTL")
   - [ดีบักคีย์ที่หายไป](#debug-missing-keys "ดีบักคีย์ที่หายไป")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -329,9 +330,32 @@ static const String fallbackLanguageCode = 'en';
 
 1. ค้นหาคีย์ในไฟล์ locale ที่ใช้งาน
 2. หากไม่พบ ให้ค้นหาในไฟล์ locale สำรอง
-3. หากยังไม่พบ ให้ส่งคืนสตริงคีย์ดิบ
+3. หากคีย์ขึ้นต้นด้วย `nylo.` และยังไม่พบ ให้ resolve เป็น[ข้อความภาษาอังกฤษในตัว](#built-in-translations)ของ {{ config('app.name') }}
+4. หากยังไม่พบ ให้ส่งคืนสตริงคีย์ดิบ
 
 สิ่งนี้ทำให้แอปของคุณไม่แสดงคีย์ดิบหากคำแปลเสร็จสมบูรณ์เพียงบางส่วน
+
+<div id="built-in-translations"></div>
+
+## คำแปลในตัว
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific concept "built-in nylo.* translation keys" -- not seen in existing locale file -->
+{{ config('app.name') }} มาพร้อมข้อความภาษาอังกฤษในตัวสำหรับ UI ของตัวเองภายใต้คีย์ `nylo.*` -- toast, confirm dialog, ข้อความ validation ของฟอร์ม, ป้ายกำกับ input field, prompt ของ form collection, หน้า page-not-found, แบนเนอร์ offline, language switcher, ป้ายกำกับขั้นตอนของ journey และสถานะของ `CollectionView` เมื่อคีย์เหล่านี้หายไปจากทั้งไฟล์ภาษาที่ใช้งานและไฟล์สำรองของคุณ {{ config('app.name') }} จะ resolve เป็นข้อความภาษาอังกฤษในตัวนี้แทนคีย์ดิบ -- ดังนั้นแอปที่ไฟล์ `lang/` มีมาก่อนคีย์ใดคีย์หนึ่งจะยังคงแสดงข้อความที่ถูกต้อง แทนที่จะเป็นอะไรบางอย่างเช่น `nylo.toast.success`
+
+Override คีย์ใดก็ได้เหมือนกับคำแปลของคุณเองทุกประการ: เพิ่มคีย์เดียวกันไว้ใต้ object `nylo` ในไฟล์ภาษาที่ใช้งาน (หรือไฟล์สำรอง) ของคุณ -- มันจะถูกตรวจสอบก่อนค่าเริ่มต้นในตัว
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

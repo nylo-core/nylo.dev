@@ -28,3 +28,4 @@ video/*
 video/public/*
 !video/public/sfx/
 tweet-posts/
+video/public/sfx

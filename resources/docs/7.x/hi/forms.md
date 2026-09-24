@@ -200,6 +200,15 @@ NyFormWidget.submit("LoginForm",
 
 सबमिट करने पर, फ़ॉर्म सभी फ़ील्ड्स को वैलिडेट करता है। यदि मान्य है, तो `onSuccess` को फ़ील्ड डेटा के `Map<String, dynamic>` के साथ कॉल किया जाता है (कीज़ फ़ील्ड नामों के snake_case वर्ज़न हैं)। यदि अमान्य है, तो डिफ़ॉल्ट रूप से टोस्ट एरर दिखाया जाता है और यदि प्रदान किया गया हो तो `onFailure` कॉल किया जाता है।
 
+ऊपर दिए `submit()` को कॉल करने के तीनों तरीके एक `Future<void>` रिटर्न करते हैं जो `onSuccess` या `onFailure` -- और इनमें से कोई भी जो कुछ रिटर्न करे -- के पूरा होने पर पूरा होता है (अगर उस नाम का कोई फ़ॉर्म माउंट नहीं है तो यह तुरंत पूरा हो जाता है)। बटन को केवल फ़ॉर्म वैलिडेट होने तक नहीं, बल्कि पूरी सबमिशन के दौरान लॉक रखने के लिए इसे किसी बटन के `onPressed` से रिटर्न करें:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
 
 <div id="field-types"></div>
 
@@ -965,17 +974,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed`, `.submit(...)` से `Future<void>` रिटर्न करता है, इसलिए एक बटन जो अपनी खुद की लोडिंग स्टेट ट्रैक करता है (जैसे बिल्ट-इन `Button` स्टाइल्स) `onSuccess` के पूरा होने तक लॉक रहता है।
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1105,7 @@ Field.chips("Tags",
 
 | मेथड | विवरण |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | नाम से फ़ॉर्म सबमिट करें |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | नाम से फ़ॉर्म सबमिट करें। एक `Future<void>` रिटर्न करता है जो `onSuccess`/`onFailure` के पूरा होने पर पूरा होता है |
 | `NyFormWidget.stateRefresh(name)` | फ़ॉर्म की UI स्टेट रिफ्रेश करें |
 | `NyFormWidget.stateSetValue(name, key, value)` | फ़ॉर्म नाम से फ़ील्ड वैल्यू सेट करें |
 | `NyFormWidget.stateSetOptions(name, key, options)` | फ़ॉर्म नाम से फ़ील्ड ऑप्शन्स सेट करें |

@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Dies erstellt eine neue Datei unter `lib/app/commands/current_time.dart` und registriert sie im Befehlsregister.
 
+Übergeben Sie `--live`, um stattdessen einen Befehl zu erzeugen, der *innerhalb Ihrer App* läuft, gesteuert von Metro, während die App im Debug-Modus läuft -- siehe [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Befehlsstruktur
@@ -165,6 +171,8 @@ Jeder Eintrag hat:
 
 ## Paketbefehle
 
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Pakete können Metro-Befehle für die Entwickler bereitstellen, die sie installieren -- zum Beispiel einen `install`-Befehl, der die von einem Paket benötigte Konfiguration erstellt. Wenn ein Paket, von dem Ihr Projekt abhängt, eine Datei `metro_commands.json` enthält, erkennt Metro dessen Befehle automatisch; in Ihrem Projekt muss nichts registriert werden. Fügen Sie das Paket zu Ihrer `pubspec.yaml` hinzu, führen Sie `flutter pub get` aus, und die Befehle erscheinen im `metro`-Menü unter dem Namen des Pakets:
 
 ```
@@ -189,6 +197,8 @@ Eingebaute Befehle haben immer Vorrang, dann die Befehle in der `commands.json` 
 <div id="shipping-commands-in-a-package"></div>
 
 ### Befehle in einem Paket bereitstellen
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Um Befehle mit einem von Ihnen gepflegten Paket bereitzustellen, platzieren Sie jeden Befehl im `bin/`-Ordner des Pakets und listen Sie ihn in einer Datei `metro_commands.json` im Stammverzeichnis des Pakets neben der `pubspec.yaml` auf:
 

@@ -13,6 +13,7 @@
   - [iOS Configuration](#ios-configuration "iOS Configuration")
 - [Intercepting Links](#intercepting-links "Intercepting Links")
 - [Fallback Route](#fallback-route "Fallback Route")
+- [Resolving a Link](#resolving-a-link "Resolving a Link")
 - [Testing](#testing "Testing")
 - [API Reference](#api-reference "API Reference")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 When the URI's path matches a registered route, {{ config('app.name') }} routes to it. Otherwise, the user lands on the fallback.
 
+<div id="resolving-a-link"></div>
+
+## Resolving a Link
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Read where a URI would take the app, without navigating -- useful in tests, or for diagnosing a link that isn't routing where you expect:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- the path read out of the URI
+target.registered;       // true -- whether that path is a registered route
+target.target;           // where the app would actually go: `path`, or the
+                          // fallback route when `path` isn't registered
+target.queryParameters;  // the URI's query parameters
+target.usedFallback;     // true when `target` came from `fallbackRoute`
+```
+
+`resolve()` is the same lookup the automatic dispatch path uses, so a link is reported exactly as it will be handled.
+
 <div id="testing"></div>
 
 ## Testing
@@ -229,3 +252,19 @@ Registers a callback invoked for every incoming URI. Return `true` to let {{ con
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Receives the incoming URI. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Reads where `uri` would route to, without navigating. See [Resolving a Link](#resolving-a-link).
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `path` | `String` | The path read out of the URI. |
+| `registered` | `bool` | Whether `path` is a registered route. |
+| `target` | `String` | Where the app actually goes: `path`, or `fallbackRoute` when `path` isn't registered. |
+| `queryParameters` | `Map<String, dynamic>` | The URI's query parameters. |
+| `usedFallback` | `bool` | Whether the fallback route was used instead of `path`. |

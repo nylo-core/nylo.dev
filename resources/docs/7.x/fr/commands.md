@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Cela cree un nouveau fichier dans `lib/app/commands/current_time.dart` et l'enregistre dans le registre des commandes.
 
+Passez `--live` pour generer a la place une commande qui s'execute *a l'interieur de votre application*, pilotee depuis Metro pendant que l'application tourne en mode debug -- voir [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Structure d'une commande
@@ -165,6 +171,8 @@ Chaque entree contient :
 
 ## Commandes de packages
 
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Les packages peuvent fournir des commandes Metro pour les developpeurs qui les installent -- par exemple une commande `install` qui genere la configuration dont un package a besoin. Lorsqu'un package dont depend votre projet contient un fichier `metro_commands.json`, Metro decouvre automatiquement ses commandes ; il n'y a rien a enregistrer dans votre projet. Ajoutez le package a votre `pubspec.yaml`, executez `flutter pub get`, et ses commandes apparaissent dans le menu `metro` sous le nom du package :
 
 ```
@@ -189,6 +197,8 @@ Les commandes integrees sont toujours prioritaires, puis les commandes du `comma
 <div id="shipping-commands-in-a-package"></div>
 
 ### Distribuer des commandes dans un package
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Pour distribuer des commandes avec un package que vous maintenez, placez chaque commande dans le dossier `bin/` du package et listez-la dans un fichier `metro_commands.json` a la racine du package, a cote de `pubspec.yaml` :
 

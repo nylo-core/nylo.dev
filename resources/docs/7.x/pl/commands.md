@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 To tworzy nowy plik w `lib/app/commands/current_time.dart` i rejestruje go w rejestrze komend.
 
+Przekaż `--live`, aby zamiast tego utworzyć szkielet komendy, która działa *wewnątrz Twojej aplikacji*, sterowanej z Metro, gdy aplikacja działa w trybie debug -- zobacz [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Struktura komendy
@@ -165,6 +171,8 @@ Każdy wpis zawiera:
 
 ## Komendy pakietów
 
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Pakiety mogą dostarczać komendy Metro dla programistów, którzy je instalują -- na przykład komendę `install`, która tworzy szkielet konfiguracji potrzebnej pakietowi. Gdy pakiet, od którego zależy Twój projekt, zawiera plik `metro_commands.json`, Metro automatycznie wykrywa jego komendy; nie musisz niczego rejestrować w swoim projekcie. Dodaj pakiet do `pubspec.yaml`, uruchom `flutter pub get`, a jego komendy pojawią się w menu `metro` pod nazwą pakietu:
 
 ```
@@ -189,6 +197,8 @@ Wbudowane komendy zawsze mają pierwszeństwo, następnie komendy z `commands.js
 <div id="shipping-commands-in-a-package"></div>
 
 ### Dostarczanie komend w pakiecie
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Aby dostarczać komendy wraz z utrzymywanym przez siebie pakietem, umieść każdą komendę w folderze `bin/` pakietu i wypisz ją w pliku `metro_commands.json` w katalogu głównym pakietu, obok `pubspec.yaml`:
 
@@ -264,7 +274,7 @@ Metro uruchamia komendę jako `dart run <package>:<executable>` z katalogu głó
 - Importy są rozwiązywane w kontekście projektu programisty, więc `nylo_framework` to wersja, od której zależy jego aplikacja. Twój pakiet nigdy nie jest modyfikowany.
 - Skrypt musi być plikiem bezpośrednio wewnątrz `bin/` -- zagnieżdżone foldery nie są obsługiwane.
 
-Wybierz kategorię specyficzną dla swojego pakietu, aby nie kolidowała z własnymi komendami programisty. Komendy pakietów są wykrywane przez Metro w {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`) i nowszych.
+Wybierz kategorię specyficzną dla swojego pakietu, aby nie kolidowała z własnymi komendami programisty.
 
 <div id="options-and-flags"></div>
 

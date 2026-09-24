@@ -7,6 +7,7 @@
 - [Базовое использование](#basic-usage "Базовое использование")
   - [Создание Navigation Hub](#creating-a-navigation-hub "Создание Navigation Hub")
   - [Создание вкладок навигации](#creating-navigation-tabs "Создание вкладок навигации")
+  - [Именование состояния хаба](#naming-the-hubs-state "Именование состояния хаба")
   - [Нижняя навигация](#bottom-navigation "Нижняя навигация")
     - [Пользовательский конструктор панели навигации](#custom-nav-bar-builder "Пользовательский конструктор панели навигации")
   - [Верхняя навигация](#top-navigation "Верхняя навигация")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 С Navigation Hub можно сделать **гораздо больше**, давайте рассмотрим некоторые возможности.
+
+<div id="naming-the-hubs-state"></div>
+
+### Именование состояния хаба
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+Сгенерированный выше хаб согласует одно имя состояния двумя способами: виджет передаёт `stateName: path.stateName()` в `NyStatefulWidget`, а `NavigationHubStateActions(path.stateName())` обращается к тому же имени. Класс состояния хаба -- тот, что расширяет `NavigationHub<T>` -- также может объявить это имя самостоятельно, через параметры конструктора `name` и `path`, которые `NavigationHub` передаёт дальше в `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Обе формы приводят к одному и тому же имени, поэтому используйте ту, которая лучше читается в месте вызова -- это необязательно, поскольку сгенерированный выше хаб уже работает без этого. Каждый `NyStatefulWidget` также предоставляет `declaredStateName` -- точное значение `stateName`, переданное в его конструктор (или `null`, если ничего не было передано) -- если вам нужно узнать, что было объявлено, а не имя, которое {{ config('app.name') }} выводит по умолчанию.
 
 <div id="bottom-navigation"></div>
 

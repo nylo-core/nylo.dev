@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 คำสั่งนี้สร้างไฟล์ใหม่ที่ `lib/app/commands/current_time.dart` และลงทะเบียนในทะเบียนคำสั่ง
 
+ส่ง `--live` เพื่อสร้างคำสั่งที่รัน *ภายในแอปของคุณ* แทน โดยขับเคลื่อนจาก Metro ขณะที่แอปกำลังทำงานในโหมด debug -- ดู [Metro Live](/docs/{{ $version }}/metro-live#live-commands)
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## โครงสร้างคำสั่ง
@@ -165,6 +171,8 @@ metro app:current_time --help
 
 ## คำสั่งจาก Package
 
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Package สามารถแจกจ่ายคำสั่ง Metro ให้กับนักพัฒนาที่ติดตั้งมันได้ -- ตัวอย่างเช่น คำสั่ง `install` ที่สร้าง scaffold ให้กับการตั้งค่าที่ package ต้องการ เมื่อ package ที่โปรเจกต์ของคุณพึ่งพามีไฟล์ `metro_commands.json` Metro จะค้นพบคำสั่งของมันโดยอัตโนมัติ โดยไม่ต้องลงทะเบียนอะไรในโปรเจกต์ของคุณ เพิ่ม package ลงใน `pubspec.yaml` ของคุณ รัน `flutter pub get` แล้วคำสั่งของมันจะปรากฏในเมนู `metro` ภายใต้ชื่อของ package:
 
 ```
@@ -189,6 +197,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### การแจกจ่ายคำสั่งใน Package
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 หากต้องการแจกจ่ายคำสั่งไปกับ package ที่คุณดูแล ให้วางแต่ละคำสั่งไว้ในโฟลเดอร์ `bin/` ของ package และระบุไว้ในไฟล์ `metro_commands.json` ที่รากของ package ข้างๆ `pubspec.yaml`:
 

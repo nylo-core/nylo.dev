@@ -15,6 +15,7 @@
 - 高级
   - [支持的区域设置](#supported-locales "支持的区域设置")
   - [备用语言](#fallback-language "备用语言")
+  - [内置翻译](#built-in-translations "Nylo 自身 UI 的内置翻译")
   - [RTL 支持](#rtl-support "RTL 支持")
   - [调试缺失键](#debug-missing-keys "调试缺失键")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -325,15 +326,37 @@ static const List<Locale> supportedLocales = [
 static const String fallbackLanguageCode = 'en';
 ```
 
-这种两步解析适用于顶级键和点符号嵌套键：
+此解析适用于顶级键和点符号嵌套键：
 
 1. 在活动区域文件中查找键。
 2. 如果找不到，在备用区域文件中查找。
-3. 如果仍然找不到，返回原始键字符串。
+3. 如果键以 `nylo.` 开头且仍未找到，则解析为 {{ config('app.name') }} 的[内置英文文本](#built-in-translations)。
+4. 如果仍然找不到，返回原始键字符串。
 
 例如，如果法语区域文件缺少 `settings.privacy` 键，备用逻辑会在英语区域文件中查找 `settings.privacy`，然后才回退到原样返回 `"settings.privacy"`。
 
 这确保您的应用即使翻译只完成了一部分，也永远不会显示原始键。
+
+<div id="built-in-translations"></div>
+
+## 内置翻译
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} 在 `nylo.*` 键下为自身的 UI 附带了内置英文文本 -- 包括提示消息、确认对话框、表单验证消息、输入字段标签、表单集合提示语、页面未找到页面、离线横幅、语言切换器、journey 步骤标签，以及 `CollectionView` 的各种状态。当活动语言文件和备用语言文件都缺少某个键时，{{ config('app.name') }} 会解析为这段内置英文文本，而不是原始键 -- 因此，即使某个应用的 `lang/` 文件早于某个键存在，也会显示正确的文本，而不是类似 `nylo.toast.success` 这样的内容。
+
+您可以完全按照翻译自己内容的方式来覆盖其中任何一个：在您的活动（或备用）语言文件中的 `nylo` 对象下添加相同的键即可 -- 它会在内置默认值之前被检查。
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

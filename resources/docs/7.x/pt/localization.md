@@ -15,6 +15,7 @@
 - Avancado
   - [Localidades Suportadas](#supported-locales "Localidades suportadas")
   - [Idioma de Fallback](#fallback-language "Idioma de fallback")
+  - [Traducoes Integradas](#built-in-translations "Traducoes integradas para a propria UI do Nylo")
   - [Suporte RTL](#rtl-support "Suporte RTL")
   - [Depurar Chaves Ausentes](#debug-missing-keys "Depurar chaves ausentes")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -329,11 +330,35 @@ Essa resolucao em duas etapas se aplica tanto a chaves de nivel superior quanto 
 
 1. Buscar a chave no arquivo da localidade ativa.
 2. Se nao encontrada, busca-la no arquivo da localidade de fallback.
-3. Se ainda nao encontrada, retornar a string da chave bruta.
+3. Se a chave comecar com `nylo.` e ainda nao for encontrada, resolve-la para o [texto em ingles integrado](#built-in-translations) do {{ config('app.name') }}.
+4. Se ainda nao encontrada, retornar a string da chave bruta.
 
 Por exemplo, se o arquivo de localidade francesa nao tem a chave `settings.privacy`, a logica de fallback busca `settings.privacy` no arquivo de localidade inglesa antes de retornar `"settings.privacy"` como esta.
 
 Isso garante que seu app nunca mostre chaves brutas se uma traducao estiver apenas parcialmente completa.
+
+<div id="built-in-translations"></div>
+
+## Traducoes Integradas
+
+<!-- uncertain: new "Built-in Translations" feature/section, no prior terminology in this locale file to match -->
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+O {{ config('app.name') }} inclui texto em ingles integrado para sua propria UI sob as chaves `nylo.*` -- toasts, dialogos de confirmacao, mensagens de validacao de formulario, labels de campos de input, prompts de colecao de formulario, a pagina de pagina nao encontrada, o banner offline, o seletor de idioma, labels de passos de journey, e estados do `CollectionView`. Quando uma dessas chaves esta ausente tanto no seu arquivo de idioma ativo quanto no de fallback, o {{ config('app.name') }} a resolve para esse texto em ingles integrado em vez da chave bruta -- entao um app cujos arquivos `lang/` sao anteriores a uma chave ainda mostra o texto correto em vez de algo como `nylo.toast.success`.
+
+Sobrescreva qualquer uma delas exatamente como suas proprias traducoes: adicione a mesma chave sob um objeto `nylo` no seu arquivo de idioma ativo (ou de fallback) -- ela e verificada antes do padrao integrado.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

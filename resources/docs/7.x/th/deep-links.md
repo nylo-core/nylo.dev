@@ -13,6 +13,7 @@
   - [การตั้งค่า iOS](#ios-configuration "การตั้งค่า iOS")
 - [การดักจับลิงก์](#intercepting-links "การดักจับลิงก์")
 - [เส้นทาง Fallback](#fallback-route "เส้นทาง Fallback")
+- [การระบุปลายทางลิงก์](#resolving-a-link "การระบุปลายทางลิงก์")
 - [การทดสอบ](#testing "การทดสอบ")
 - [เอกสาร API](#api-reference "เอกสาร API")
 
@@ -181,6 +182,29 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 เมื่อ path ของ URI ตรงกับเส้นทางที่ลงทะเบียนไว้ {{ config('app.name') }} จะส่งต่อไปยังเส้นทางนั้น หากไม่ตรง ผู้ใช้จะถูกนำไปยัง fallback
 
+<div id="resolving-a-link"></div>
+
+## การระบุปลายทางลิงก์
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "NyDeepLinkHandler", "DeepLinkTarget" -- not seen in existing locale file -->
+อ่านว่า URI จะนำแอปไปที่ใด โดยไม่ต้องนำทางจริง -- มีประโยชน์ในการทดสอบ หรือสำหรับวินิจฉัยลิงก์ที่ไม่นำทางไปยังที่ที่คุณคาดหวัง:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- path ที่อ่านได้จาก URI
+target.registered;       // true -- ว่า path นั้นเป็น route ที่ลงทะเบียนไว้หรือไม่
+target.target;           // ที่ที่แอปจะไปจริง: `path` หรือ
+                          // fallback route เมื่อ `path` ไม่ได้ลงทะเบียนไว้
+target.queryParameters;  // query parameters ของ URI
+target.usedFallback;     // true เมื่อ `target` มาจาก `fallbackRoute`
+```
+
+`resolve()` คือการค้นหาแบบเดียวกับที่ automatic dispatch path ใช้ ดังนั้นลิงก์จะถูกรายงานตรงตามที่มันจะถูกจัดการจริง
+
 <div id="testing"></div>
 
 ## การทดสอบ
@@ -229,3 +253,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | พารามิเตอร์ | ชนิด | คำอธิบาย |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | รับ URI ที่เข้ามา |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+อ่านว่า `uri` จะนำทางไปที่ใด โดยไม่ต้องนำทางจริง ดู [การระบุปลายทางลิงก์](#resolving-a-link)
+
+| คุณสมบัติ | ชนิด | คำอธิบาย |
+|----------|------|-------------|
+| `path` | `String` | path ที่อ่านได้จาก URI |
+| `registered` | `bool` | ว่า `path` เป็น route ที่ลงทะเบียนไว้หรือไม่ |
+| `target` | `String` | ที่ที่แอปจะไปจริง: `path` หรือ `fallbackRoute` เมื่อ `path` ไม่ได้ลงทะเบียนไว้ |
+| `queryParameters` | `Map<String, dynamic>` | query parameters ของ URI |
+| `usedFallback` | `bool` | ว่า fallback route ถูกใช้แทน `path` หรือไม่ |

@@ -10,6 +10,7 @@
 - FormValidator
   - [FormValidator का उपयोग](#using-form-validator "FormValidator का उपयोग")
   - [FormValidator नेम्ड कंस्ट्रक्टर्स](#form-validator-named-constructors "FormValidator नेम्ड कंस्ट्रक्टर्स")
+  - [ट्रांसलेटेड वैलिडेशन मैसेज](#translated-validation-messages "ट्रांसलेटेड वैलिडेशन मैसेज")
   - [वैलिडेशन नियम चेन करना](#chaining-validation-rules "वैलिडेशन नियम चेन करना")
   - [नलेबल फ़ील्ड्स](#nullable-fields "नलेबल फ़ील्ड्स")
   - [कस्टम वैलिडेशन](#custom-validation "कस्टम वैलिडेशन")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## ट्रांसलेटेड वैलिडेशन मैसेज
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific "nylo.validation.*" translation key convention and "FormRule.messageArguments" — not seen in existing locale file -->
+ऊपर दिया हर नेम्ड कंस्ट्रक्टर `message:` पास किए बिना भी काम करता है -- कस्टम मैसेज के बिना कोई नियम अपने डिफ़ॉल्ट को हार्डकोडेड स्ट्रिंग की बजाय एक `nylo.validation.*` ट्रांसलेशन कुंजी के माध्यम से रिज़ॉल्व करता है:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — from nylo.validation.min_length
+```
+
+किसी भी नियम के डिफ़ॉल्ट को उसी तरह ओवरराइड करें जैसे आप [Nylo के दूसरे बिल्ट-इन टेक्स्ट](/docs/{{ $version }}/localization#built-in-translations) को करते हैं, अपनी खुद की भाषा फ़ाइल में `nylo.validation` के अंतर्गत मेल खाती कुंजी जोड़कर:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+एक नियम जो अपना खुद का वैल्यू लेता है -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, और अन्य -- उसे `FormRule.messageArguments` के माध्यम से `@{{attribute}}` के साथ-साथ ट्रांसलेटेड मैसेज में एक `@{{placeholder}}` के रूप में एक्सपोज़ करता है। `@{{attribute}}` खुद फ़ील्ड के नाम से (या आपके द्वारा पास किए गए `attribute:` से) भरा जाता है, जिसे उसी तरह ट्रांसलेट किया जाता है।
+
+`FormValidationResponse` (और इसकी `FormValidationError`/`FormValidationSuccess` सबक्लासेज़, जैसा कि किसी `FormValidator` या `Field` के `onFailure` में देखा जाता है) `attribute` में फ़ील्ड का नाम, ट्रांसलेटेड `message` के साथ रखता है:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

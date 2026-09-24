@@ -9,6 +9,7 @@
 - [Log JSON](#json-logging "Log JSON")
 - [Đầu ra có màu](#colored-output "Đầu ra có màu")
 - [Log Listener](#log-listeners "Log Listener")
+  - [Nhiều Listener](#multiple-listeners "Nhiều Listener")
 - [Extension helper](#helper-extensions "Extension helper")
 - [Cấu hình](#configuration "Cấu hình")
 
@@ -194,6 +195,30 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Nhiều Listener
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific API "addListener"/"removeListener" -- not seen in existing locale file -->
+`NyLogger.onLog` là một callback có thể gán duy nhất -- gán lại nó sẽ âm thầm thay thế bất cứ thứ gì đã có trước đó. Hãy dùng `addListener`/`removeListener` khi bạn cần nhiều hơn một listener cùng lúc (ví dụ: crash reporter của riêng bạn *và* log streaming của Nylo Live, cả hai cùng chạy):
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Later, e.g. in a test's tearDown
+NyLogger.removeListener(reportErrors);
+```
+
+Mỗi listener được thêm bằng `addListener` sẽ chạy song song với `onLog` -- thêm một cái không bao giờ thay thế cái khác, và nó cũng không bao giờ thay thế `onLog`.
 
 <div id="helper-extensions"></div>
 

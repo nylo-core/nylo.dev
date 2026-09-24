@@ -10,6 +10,7 @@
 - FormValidator
   - [Usando FormValidator](#using-form-validator "Usando FormValidator")
   - [Construtores Nomeados do FormValidator](#form-validator-named-constructors "Construtores nomeados do FormValidator")
+  - [Mensagens de Validação Traduzidas](#translated-validation-messages "Mensagens de validação traduzidas")
   - [Encadeando Regras de Validação](#chaining-validation-rules "Encadeando regras de validação")
   - [Campos Nullable](#nullable-fields "Campos Nullable")
   - [Validação Personalizada](#custom-validation "Validação personalizada")
@@ -246,6 +247,48 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Mensagens de Validação Traduzidas
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Todo construtor nomeado acima funciona sem passar `message:` — uma regra sem mensagem personalizada resolve seu padrão através de uma chave de tradução `nylo.validation.*` em vez de uma string fixa:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — vem de nylo.validation.min_length
+```
+
+Sobrescreva o padrão de qualquer regra da mesma forma que faria com [os outros textos integrados do Nylo](/docs/{{ $version }}/localization#built-in-translations), adicionando a chave correspondente sob `nylo.validation` no seu próprio arquivo de idioma:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Uma regra que recebe seu próprio valor -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, e outras -- o expõe para a mensagem traduzida como um `@{{placeholder}}` ao lado de `@{{attribute}}`, através de `FormRule.messageArguments`. O próprio `@{{attribute}}` é preenchido a partir do nome do campo (ou do `attribute:` que você passou), traduzido da mesma forma.
+
+`FormValidationResponse` (e suas subclasses `FormValidationError`/`FormValidationSuccess`, como vistas no `onFailure` de um `FormValidator` ou `Field`) carrega o nome do campo em `attribute` ao lado da `message` traduzida:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

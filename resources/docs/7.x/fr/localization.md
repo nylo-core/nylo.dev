@@ -15,6 +15,7 @@
 - Avance
   - [Locales prises en charge](#supported-locales "Locales prises en charge")
   - [Langue de secours](#fallback-language "Langue de secours")
+  - [Traductions integrees](#built-in-translations "Traductions integrees pour l'interface propre a Nylo")
   - [Support RTL](#rtl-support "Support RTL")
   - [Debugger les cles manquantes](#debug-missing-keys "Debugger les cles manquantes")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -325,15 +326,39 @@ Lorsqu'une cle de traduction n'est pas trouvee dans la locale active, {{ config(
 static const String fallbackLanguageCode = 'en';
 ```
 
-Cette resolution en deux etapes s'applique aussi bien aux cles de niveau superieur qu'aux cles imbriquees en notation par points :
+Cette resolution s'applique aussi bien aux cles de niveau superieur qu'aux cles imbriquees en notation par points :
 
 1. Rechercher la cle dans le fichier de locale actif.
 2. Si non trouvee, la rechercher dans le fichier de locale de secours.
-3. Si toujours pas trouvee, retourner la cle brute.
+3. Si la cle commence par `nylo.` et est toujours introuvable, la resoudre vers le [texte anglais integre](#built-in-translations) de {{ config('app.name') }}.
+4. Si toujours pas trouvee, retourner la cle brute.
 
 Par exemple, si le fichier de locale francais ne contient pas la cle `settings.privacy`, la logique de secours recherche `settings.privacy` dans le fichier de locale anglais avant de retourner `"settings.privacy"` tel quel.
 
 Cela garantit que votre application n'affiche jamais de cles brutes si une traduction est seulement partiellement complete.
+
+<div id="built-in-translations"></div>
+
+## Traductions integrees
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: liste de surfaces UI Nylo (toasts, dialogues, form collection prompts, journey step labels, etc.) traduite sans equivalent etabli dans ce fichier -->
+
+{{ config('app.name') }} fournit un texte anglais integre pour sa propre interface sous les cles `nylo.*` -- toasts, dialogues de confirmation, messages de validation de formulaire, libelles de champs de saisie, invites de collecte de formulaire, la page introuvable, la banniere hors ligne, le selecteur de langue, les libelles d'etape de journey, et les etats de `CollectionView`. Lorsqu'une de ces cles est absente a la fois de votre fichier de langue actif et de secours, {{ config('app.name') }} la resout vers ce texte anglais integre au lieu de la cle brute -- ainsi une application dont les fichiers `lang/` datent d'avant une cle affiche quand meme le bon texte plutot que quelque chose comme `nylo.toast.success`.
+
+Remplacez n'importe laquelle d'entre elles exactement comme vos propres traductions : ajoutez la meme cle sous un objet `nylo` dans votre fichier de langue actif (ou de secours) -- elle est verifiee avant la valeur par defaut integree.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

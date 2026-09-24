@@ -13,6 +13,7 @@
   - [Konfigurasi iOS](#ios-configuration "Konfigurasi iOS")
 - [Mencegat Link](#intercepting-links "Mencegat Link")
 - [Rute Fallback](#fallback-route "Rute Fallback")
+- [Menyelesaikan Sebuah Link](#resolving-a-link "Menyelesaikan Sebuah Link")
 - [Pengujian](#testing "Pengujian")
 - [Referensi API](#api-reference "Referensi API")
 
@@ -181,6 +182,30 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Ketika path URI cocok dengan rute yang terdaftar, {{ config('app.name') }} akan merutekan ke sana. Jika tidak, pengguna akan diarahkan ke rute fallback.
 
+<div id="resolving-a-link"></div>
+
+## Menyelesaikan Sebuah Link
+
+<!-- uncertain: terminologi baru "NyDeepLinkHandler", "DeepLinkTarget", dan method "resolve()" -- belum ada di file locale ini sebelumnya -->
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Baca ke mana sebuah URI akan membawa aplikasi, tanpa benar-benar bernavigasi -- berguna dalam pengujian, atau untuk mendiagnosis link yang tidak merutekan ke tempat yang Anda harapkan:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- path yang dibaca dari URI
+target.registered;       // true -- apakah path tersebut adalah rute terdaftar
+target.target;           // ke mana aplikasi sebenarnya akan pergi: `path`, atau
+                          // rute fallback ketika `path` tidak terdaftar
+target.queryParameters;  // query parameter dari URI
+target.usedFallback;     // true ketika `target` berasal dari `fallbackRoute`
+```
+
+`resolve()` adalah lookup yang sama dengan yang digunakan jalur dispatch otomatis, sehingga sebuah link dilaporkan persis seperti bagaimana ia akan ditangani.
+
 <div id="testing"></div>
 
 ## Pengujian
@@ -229,3 +254,19 @@ Mendaftarkan callback yang dipanggil untuk setiap URI yang masuk. Kembalikan `tr
 | Parameter | Tipe | Deskripsi |
 |-----------|------|-----------|
 | `callback` | `Future<bool> Function(Uri uri)` | Menerima URI yang masuk. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Membaca ke mana `uri` akan merutekan, tanpa bernavigasi. Lihat [Menyelesaikan Sebuah Link](#resolving-a-link).
+
+| Properti | Tipe | Deskripsi |
+|----------|------|-----------|
+| `path` | `String` | Path yang dibaca dari URI. |
+| `registered` | `bool` | Apakah `path` adalah rute terdaftar. |
+| `target` | `String` | Ke mana aplikasi sebenarnya pergi: `path`, atau `fallbackRoute` ketika `path` tidak terdaftar. |
+| `queryParameters` | `Map<String, dynamic>` | Query parameter dari URI. |
+| `usedFallback` | `bool` | Apakah rute fallback digunakan alih-alih `path`. |

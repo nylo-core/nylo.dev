@@ -15,6 +15,7 @@
 - Zaawansowane
   - [Obsługiwane lokalizacje](#supported-locales "Obsługiwane lokalizacje")
   - [Język zapasowy](#fallback-language "Język zapasowy")
+  - [Wbudowane tłumaczenia](#built-in-translations "Wbudowane tłumaczenia dla własnego UI Nylo")
   - [Obsługa RTL](#rtl-support "Obsługa RTL")
   - [Debugowanie brakujących kluczy](#debug-missing-keys "Debugowanie brakujących kluczy")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -325,15 +326,37 @@ Gdy klucz tłumaczenia nie zostanie znaleziony w aktywnej lokalizacji, {{ config
 static const String fallbackLanguageCode = 'en';
 ```
 
-Ta dwuetapowa resolucja dotyczy zarówno kluczy najwyższego poziomu, jak i zagnieżdżonych kluczy z notacją kropkową:
+Ta resolucja dotyczy zarówno kluczy najwyższego poziomu, jak i zagnieżdżonych kluczy z notacją kropkową:
 
 1. Wyszukaj klucz w aktywnym pliku lokalizacji.
 2. Jeśli nie znaleziono, wyszukaj go w pliku lokalizacji zapasowej.
-3. Jeśli nadal nie znaleziono, zwróć ciąg surowego klucza.
+3. Jeśli klucz zaczyna się od `nylo.` i nadal nie został znaleziony, rozwiąż go do [wbudowanego tekstu](#built-in-translations) {{ config('app.name') }}.
+4. Jeśli nadal nie znaleziono, zwróć ciąg surowego klucza.
 
 Na przykład, jeśli w pliku lokalizacji francuskiej brakuje klucza `settings.privacy`, logika zapasowa szuka `settings.privacy` w pliku lokalizacji angielskiej przed zwróceniem `"settings.privacy"` bez zmian.
 
 Zapewnia to, że Twoja aplikacja nigdy nie wyświetli surowych kluczy, jeśli tłumaczenie jest tylko częściowo kompletne.
+
+<div id="built-in-translations"></div>
+
+## Wbudowane tłumaczenia
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} dostarcza wbudowany tekst w języku angielskim dla własnego UI, pod kluczami `nylo.*` -- toasty, dialogi potwierdzenia, komunikaty walidacji formularzy, etykiety pól wejściowych, podpowiedzi kolekcji formularzy, stronę „nie znaleziono strony”, baner offline, przełącznik języka, etykiety kroków journey oraz stany `CollectionView`. Gdy jeden z tych kluczy brakuje zarówno w Twoim aktywnym, jak i zapasowym pliku języka, {{ config('app.name') }} rozwiązuje go do tego wbudowanego tekstu angielskiego zamiast surowego klucza -- dzięki temu aplikacja, której pliki `lang/` powstały przed dodaniem danego klucza, nadal pokazuje poprawny tekst zamiast czegoś w rodzaju `nylo.toast.success`.
+
+Nadpisz dowolny z nich dokładnie tak samo jak swoje własne tłumaczenia: dodaj ten sam klucz pod obiektem `nylo` w swoim aktywnym (albo zapasowym) pliku języka -- jest on sprawdzany przed wbudowaną wartością domyślną.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

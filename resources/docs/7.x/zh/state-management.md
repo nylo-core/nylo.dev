@@ -11,6 +11,7 @@
   - [有无数据的处理器](#handlers-with-and-without-data "有无数据的处理器")
   - [使用 StateActions 实例](#using-a-state-actions-instance "使用 StateActions 实例")
 - [模式：状态管理页面 (NyPage)](#pattern-ny-page "模式：状态管理页面")
+  - [调用页面的操作](#page-actions-shortcut "从外部调用页面的操作")
 - [模式：有状态组件 (NyState)](#pattern-ny-state "模式：有状态组件")
 - [模式：状态管理组件 (NyStateManaged)](#pattern-ny-state-managed "模式：状态管理组件")
   - [高级：多个隔离实例](#advanced-multiple-isolated-instances "高级：多个隔离实例")
@@ -179,12 +180,15 @@ actions.action("update_user_image", data: user);
 metro make:page my_page
 ```
 
-这会在 `lib/resources/pages/` 中生成一个 `NyPage`：
+这会在 `lib/resources/pages/` 中生成一个已经为状态动作接好线的 `NyPage`：
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// 操作示例：MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**第 2 步：** 将 `stateManaged` 切换为 `true`。
-
-默认情况下，页面**不**订阅状态事件——这避免了在不需要的页面上产生不必要的监听器。要在页面上启用状态动作，请更改 getter：
+`stateManaged` 现在默认已经是 `true`，因此只要在下面添加 `stateActions` 映射，页面就已准备好接收状态动作 —— 无需额外步骤。在 {{ config('app.name') }} 7.2.0 之前生成的页面，`stateManaged` 默认仍为 `false`；如果要让现有页面支持此特性，请自行切换：
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**第 3 步：** 添加 `stateActions` 映射。
+**第 2 步：** 添加 `stateActions` 映射。
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**第 4 步：** 使用页面的 `path` 从任何位置触发动作。
+**第 3 步：** 使用页面的 `path` 从任何位置触发动作 —— 或使用它的 `actions` 快捷方式。
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > 页面以 `MyPage.path` 为键，组件以 `MyWidget.state` 为键。这是调用端的唯一区别。
+
+<div id="page-actions-shortcut"></div>
+
+### 调用页面的操作
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+每个生成的页面都会在其类上保留 `static final actions = path.actions;` —— 这是一个 `PageStateActions`，让您无需自己构造 `stateAction(...)` 调用，就可以从任何地方调用该页面：
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+内置操作包括 `showToast`、`refreshPage`、`pop`、`confirmAction`、`lockRelease`、`validate`、`changeLanguage`，以及一个通用的 `call(name, data)`，可按名称触发您自己某个 `stateActions` 处理程序：
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// 等同于：stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+您也可以继承 `PageStateActions`，声明**没有方法体**的方法，将每一个都变成通过 `noSuchMethod` 路由的类型化操作。另请参见 [Metro Live](/docs/{{ $version }}/metro-live#page-actions)，它在应用运行期间以相同方式调用页面的操作。
 
 
 <div id="pattern-ny-state"></div>

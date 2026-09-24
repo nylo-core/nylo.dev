@@ -10,6 +10,7 @@
 - FormValidator
   - [FormValidator の使用](#using-form-validator "FormValidator の使用")
   - [FormValidator の名前付きコンストラクタ](#form-validator-named-constructors "FormValidator の名前付きコンストラクタ")
+  - [翻訳されたバリデーションメッセージ](#translated-validation-messages "翻訳されたバリデーションメッセージ")
   - [バリデーションルールのチェーン](#chaining-validation-rules "バリデーションルールのチェーン")
   - [Nullable フィールド](#nullable-fields "Nullable フィールド")
   - [カスタムバリデーション](#custom-validation "カスタムバリデーション")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## 翻訳されたバリデーションメッセージ
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+上記の名前付きコンストラクタはすべて `message:` を渡さなくても動作します -- カスタムメッセージを指定しないルールは、ハードコードされた文字列の代わりに `nylo.validation.*` 翻訳キーを通じてデフォルトを解決します:
+
+<!-- uncertain: kept the quoted example message in English since it's literal program output from Nylo's built-in (English) validation text, not descriptive prose -->
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — nylo.validation.min_length より
+```
+
+[Nylo の他の組み込みテキスト](/docs/{{ $version }}/localization#built-in-translations)と同じ方法で、任意のルールのデフォルトをオーバーライドできます。自分の言語ファイルの `nylo.validation` の下に対応するキーを追加してください:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+`minLength`、`maxLength`、`minValue`、`dateAgeIsOlder` など、自身の値を取るルールは、`FormRule.messageArguments` を通じて、その値を `@{{attribute}}` と並ぶ `@{{placeholder}}` として翻訳メッセージに公開します。`@{{attribute}}` 自体は、フィールドの名前（または渡した `attribute:`）から、同じ方法で翻訳されて埋め込まれます。
+
+`FormValidationResponse`（および、`FormValidator` や `Field` の `onFailure` で見られる、そのサブクラスである `FormValidationError`/`FormValidationSuccess`）は、翻訳済みの `message` と並んで、フィールドの名前を `attribute` に保持します:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

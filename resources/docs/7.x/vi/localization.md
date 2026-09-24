@@ -15,6 +15,7 @@
 - Nâng cao
   - [Ngôn ngữ được hỗ trợ](#supported-locales "Ngôn ngữ được hỗ trợ")
   - [Ngôn ngữ dự phòng](#fallback-language "Ngôn ngữ dự phòng")
+  - [Bản dịch dựng sẵn](#built-in-translations "Bản dịch dựng sẵn cho UI riêng của Nylo")
   - [Hỗ trợ RTL](#rtl-support "Hỗ trợ RTL")
   - [Gỡ lỗi khóa thiếu](#debug-missing-keys "Gỡ lỗi khóa thiếu")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -325,13 +326,38 @@ Khi không tìm thấy khóa dịch trong ngôn ngữ đang hoạt động, {{ c
 static const String fallbackLanguageCode = 'en';
 ```
 
-Quy trình phân giải hai bước này áp dụng cho cả khóa cấp cao nhất lẫn khóa lồng nhau theo ký hiệu chấm:
+Quy trình phân giải này áp dụng cho cả khóa cấp cao nhất lẫn khóa lồng nhau theo ký hiệu chấm:
 
 1. Tìm khóa trong file ngôn ngữ đang hoạt động.
 2. Nếu không tìm thấy, tìm trong file ngôn ngữ dự phòng.
-3. Nếu vẫn không tìm thấy, trả về chuỗi khóa thô.
+3. Nếu khóa bắt đầu bằng `nylo.` và vẫn không tìm thấy, phân giải nó thành [văn bản tiếng Anh dựng sẵn](#built-in-translations) của {{ config('app.name') }}.
+4. Nếu vẫn không tìm thấy, trả về chuỗi khóa thô.
+
+Ví dụ, nếu file ngôn ngữ tiếng Pháp thiếu khóa `settings.privacy`, logic dự phòng sẽ tìm `settings.privacy` trong file ngôn ngữ tiếng Anh trước khi cuối cùng trả về `"settings.privacy"` nguyên trạng.
 
 Điều này đảm bảo ứng dụng không bao giờ hiển thị khóa thô nếu bản dịch chỉ hoàn thành một phần.
+
+<div id="built-in-translations"></div>
+
+## Bản dịch dựng sẵn
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "nylo.*" built-in translation key convention -- not seen in existing locale file -->
+{{ config('app.name') }} đi kèm văn bản tiếng Anh dựng sẵn cho UI riêng của nó dưới các khóa `nylo.*` -- toast, hộp thoại xác nhận, thông báo xác thực form, nhãn field input, lời nhắc form collection, trang không tìm thấy, banner ngoại tuyến, language switcher, nhãn bước journey, và các trạng thái `CollectionView`. Khi một trong các khóa này bị thiếu ở cả file ngôn ngữ đang hoạt động lẫn file ngôn ngữ dự phòng của bạn, {{ config('app.name') }} sẽ phân giải nó thành văn bản tiếng Anh dựng sẵn này thay vì khóa thô -- vì vậy một ứng dụng có file `lang/` có từ trước khi khóa này xuất hiện vẫn hiển thị đúng văn bản thay vì một thứ như `nylo.toast.success`.
+
+Ghi đè bất kỳ khóa nào trong số này giống hệt như cách bạn ghi đè các bản dịch của riêng mình: thêm cùng khóa đó dưới một object `nylo` trong file ngôn ngữ đang hoạt động (hoặc dự phòng) của bạn -- nó được kiểm tra trước khi dùng đến giá trị mặc định dựng sẵn.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

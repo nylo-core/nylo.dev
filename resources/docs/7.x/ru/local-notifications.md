@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Такое планирование требует разрешения `SCHEDULE_EXACT_ALARM` на Android 14+. Если у вашего приложения его нет, {{ config('app.name') }} автоматически переключается на ближайший неточный эквивалент и записывает предупреждение в лог, вместо того чтобы выбрасывать `exact_alarms_not_permitted`:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Передайте `androidScheduleMode` самостоятельно, как показано выше, если вы предпочитаете сразу выбрать неточный режим, а не полагаться на автоматическое переключение.
+
 <div id="builder-pattern"></div>
 
 ## Паттерн построителя

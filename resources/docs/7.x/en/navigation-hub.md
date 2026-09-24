@@ -7,6 +7,7 @@
 - [Basic Usage](#basic-usage "Basic Usage")
   - [Creating a Navigation Hub](#creating-a-navigation-hub "Creating a Navigation Hub")
   - [Creating Navigation Tabs](#creating-navigation-tabs "Creating Navigation Tabs")
+  - [Naming the Hub's State](#naming-the-hubs-state "Naming the Hub's State")
   - [Bottom Navigation](#bottom-navigation "Bottom Navigation")
     - [Custom Nav Bar Builder](#custom-nav-bar-builder "Custom Nav Bar Builder")
   - [Top Navigation](#top-navigation "Top Navigation")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 There's a lot **more** you can do with a Navigation Hub, let's dive into some of the features.
+
+<div id="naming-the-hubs-state"></div>
+
+### Naming the Hub's State
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+The generated hub above agrees on one state name two ways: the widget passes `stateName: path.stateName()` to `NyStatefulWidget`, and `NavigationHubStateActions(path.stateName())` addresses that same name. The hub's state class -- the one extending `NavigationHub<T>` -- can also declare that name itself, through `name` and `path` constructor parameters `NavigationHub` forwards to `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Both forms resolve to the same name, so use whichever reads better at your call site -- this is optional, since the generated hub above already works without it. Every `NyStatefulWidget` also exposes `declaredStateName`, the exact `stateName` passed to its constructor (or `null` when none was given), if you need to read back what was declared rather than the name {{ config('app.name') }} derives by default.
 
 <div id="bottom-navigation"></div>
 

@@ -7,6 +7,7 @@
 - [बेसिक उपयोग](#basic-usage "बेसिक उपयोग")
   - [Navigation Hub बनाना](#creating-a-navigation-hub "Navigation Hub बनाना")
   - [नेविगेशन टैब्स बनाना](#creating-navigation-tabs "नेविगेशन टैब्स बनाना")
+  - [हब के स्टेट को नाम देना](#naming-the-hubs-state "हब के स्टेट को नाम देना")
   - [बॉटम नेविगेशन](#bottom-navigation "बॉटम नेविगेशन")
     - [कस्टम Nav Bar बिल्डर](#custom-nav-bar-builder "कस्टम Nav Bar बिल्डर")
   - [टॉप नेविगेशन](#top-navigation "टॉप नेविगेशन")
@@ -150,6 +151,28 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Navigation Hub के साथ और भी **बहुत कुछ** किया जा सकता है, आइए कुछ फ़ीचर्स को विस्तार से जानें।
+
+<div id="naming-the-hubs-state"></div>
+
+### हब के स्टेट को नाम देना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+<!-- uncertain: new Nylo-specific API "NavigationHubStateActions" / "path.stateName()" / "declaredStateName" — not seen in existing locale file -->
+ऊपर जनरेट किया गया हब एक ही स्टेट नाम पर दो तरीकों से सहमत होता है: विजेट `NyStatefulWidget` को `stateName: path.stateName()` पास करता है, और `NavigationHubStateActions(path.stateName())` उसी नाम को एड्रेस करता है। हब की स्टेट क्लास -- जो `NavigationHub<T>` को एक्सटेंड करती है -- भी उस नाम को खुद घोषित कर सकती है, `name` और `path` कंस्ट्रक्टर पैरामीटर्स के माध्यम से जिन्हें `NavigationHub`, `NyPage` को फॉरवर्ड करता है:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+दोनों फॉर्म एक ही नाम पर रिज़ॉल्व होते हैं, इसलिए जो भी आपकी कॉल साइट पर बेहतर पढ़ा जाए उसका उपयोग करें -- यह वैकल्पिक है, क्योंकि ऊपर जनरेट किया गया हब बिना इसके भी काम करता है। हर `NyStatefulWidget`, `declaredStateName` भी एक्सपोज़ करता है, जो इसके कंस्ट्रक्टर को पास किया गया वास्तविक `stateName` है (या कोई नहीं दिए जाने पर `null`), अगर आपको यह पढ़ना हो कि क्या घोषित किया गया था, न कि वह नाम जो {{ config('app.name') }} डिफ़ॉल्ट रूप से निकालता है।
 
 <div id="bottom-navigation"></div>
 

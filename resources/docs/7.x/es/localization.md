@@ -15,6 +15,7 @@
 - Avanzado
   - [Localizaciones soportadas](#supported-locales "Localizaciones soportadas")
   - [Idioma de respaldo](#fallback-language "Idioma de respaldo")
+  - [Traducciones integradas](#built-in-translations "Traducciones en inglés integradas para la interfaz propia de Nylo")
   - [Soporte RTL](#rtl-support "Soporte RTL")
   - [Depurar claves faltantes](#debug-missing-keys "Depurar claves faltantes")
   - [API de NyLocalization](#nylocalization-api "API de NyLocalization")
@@ -325,15 +326,37 @@ Cuando no se encuentra una clave de traducción en la localización activa, {{ c
 static const String fallbackLanguageCode = 'en';
 ```
 
-Esta resolución en dos pasos se aplica tanto a claves de nivel superior como a claves anidadas con notación de puntos:
+Esta resolución se aplica tanto a claves de nivel superior como a claves anidadas con notación de puntos:
 
 1. Buscar la clave en el archivo de localización activo.
 2. Si no se encuentra, buscarla en el archivo de localización de respaldo.
-3. Si aún no se encuentra, devolver la cadena de clave sin procesar.
+3. Si la clave comienza con `nylo.` y aún no se encuentra, resolverla al [texto en inglés integrado](#built-in-translations) de {{ config('app.name') }}.
+4. Si aún no se encuentra, devolver la cadena de clave sin procesar.
 
 Por ejemplo, si el archivo de localización francés no tiene la clave `settings.privacy`, la lógica de respaldo busca `settings.privacy` en el archivo de localización inglés antes de devolver `"settings.privacy"` tal cual.
 
 Esto asegura que tu aplicación nunca muestre claves sin procesar si una traducción solo está parcialmente completa.
+
+<div id="built-in-translations"></div>
+
+## Traducciones integradas
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} incluye texto en inglés integrado para su propia interfaz bajo claves `nylo.*` -- toasts, diálogos de confirmación, mensajes de validación de formularios, etiquetas de campos de entrada, indicaciones de colecciones de formularios, la página de no encontrado, el banner sin conexión, el selector de idioma, las etiquetas de los pasos de un recorrido, y los estados de `CollectionView`. Cuando una de estas claves falta tanto en tu archivo de idioma activo como en el de respaldo, {{ config('app.name') }} la resuelve a este texto en inglés integrado en lugar de a la clave sin procesar -- así, una app cuyos archivos `lang/` sean anteriores a una clave sigue mostrando el texto correcto en lugar de algo como `nylo.toast.success`.
+
+Sobrescribe cualquiera de ellas exactamente igual que tus propias traducciones: agrega la misma clave bajo un objeto `nylo` en tu archivo de idioma activo (o de respaldo) -- se verifica antes que el valor integrado por defecto.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

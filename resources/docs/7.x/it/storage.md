@@ -48,6 +48,8 @@ int? coins = await NyStorage.read<int>('coins'); // 100
 await NyStorage.delete('coins');
 ```
 
+> Mentre la tua app è in esecuzione in modalità debug, puoi ispezionare e modificare questi valori dal vivo dal terminale, e catturarli in un seeder per riutilizzarli — vedi [Snapshot dello Storage](/docs/{{ $version }}/metro-live#storage-snapshots) in Metro Live.
+
 <div id="save-values"></div>
 
 ## Salvare Valori

@@ -200,6 +200,15 @@ NyFormWidget.submit("LoginForm",
 
 Al enviar, el formulario valida todos los campos. Si es válido, se llama a `onSuccess` con un `Map<String, dynamic>` de los datos del campo (las claves son versiones en snake_case de los nombres de campo). Si no es válido, se muestra un error toast por defecto y se llama a `onFailure` si se proporcionó.
 
+Las tres formas de llamar a `submit()` mostradas arriba devuelven un `Future<void>` que se completa cuando `onSuccess` u `onFailure` -- y cualquier cosa que cualquiera de los dos devuelva -- haya terminado (se completa de inmediato si no hay ningún formulario montado con ese nombre). Devuélvelo desde el `onPressed` de un botón para mantener el botón bloqueado durante todo el envío, no solo hasta que el formulario se valide:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
 
 <div id="field-types"></div>
 
@@ -965,18 +974,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
 
+`onPressed` devuelve el `Future<void>` de `.submit(...)`, así que un botón que rastrea su propio estado de carga (como los estilos integrados de `Button`) permanece bloqueado hasta que `onSuccess` termine.
 
 <div id="form-layout"></div>
 

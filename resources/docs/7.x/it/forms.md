@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Quando inviato, il form valida tutti i campi. Se valido, `onSuccess` viene chiamato con una `Map<String, dynamic>` dei dati dei campi (le chiavi sono versioni snake_case dei nomi dei campi). Se non valido, viene mostrato un toast di errore per impostazione predefinita e `onFailure` viene chiamato se fornito.
 
+Tutti e tre i modi di chiamare `submit()` sopra restituiscono un `Future<void>` che si completa quando `onSuccess` o `onFailure` -- e qualsiasi cosa uno dei due restituisca -- ha terminato (si completa immediatamente se non e' montato alcun form con quel nome). Restituiscilo dall'`onPressed` di un pulsante per mantenere il pulsante bloccato per l'intero invio, non solo finche' il form viene validato:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` restituisce il `Future<void>` di `.submit(...)`, cosi' un pulsante che traccia il proprio stato di caricamento (come gli stili `Button` integrati) resta bloccato finche' `onSuccess` non termina.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Metodo | Descrizione |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Invia un form per nome |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Invia un form per nome. Restituisce un `Future<void>` che si completa quando `onSuccess`/`onFailure` ha terminato |
 | `NyFormWidget.stateRefresh(name)` | Aggiorna lo stato dell'UI del form |
 | `NyFormWidget.stateSetValue(name, key, value)` | Imposta il valore di un campo per nome del form |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Imposta le opzioni di un campo per nome del form |

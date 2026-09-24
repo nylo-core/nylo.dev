@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Việc lên lịch như thế này cần quyền `SCHEDULE_EXACT_ALARM` trên Android 14+. Nếu ứng dụng của bạn không có quyền này, {{ config('app.name') }} sẽ tự động chuyển sang phương án gần đúng gần nhất và ghi log cảnh báo, thay vì ném ra lỗi `exact_alarms_not_permitted`:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Tự truyền `androidScheduleMode`, như ví dụ trên, nếu bạn muốn chủ động chọn chế độ gần đúng thay vì dựa vào phương án dự phòng tự động.
+
 <div id="builder-pattern"></div>
 
 ## Mẫu Builder

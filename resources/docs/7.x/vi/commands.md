@@ -70,6 +70,12 @@ Bạn có thể chỉ định danh mục cho command bằng tùy chọn `--categ
 metro make:command current_time --category="project"
 ```
 
+Truyền `--live` để tạo khung cho một command chạy *bên trong ứng dụng của bạn* thay vào đó, được điều khiển từ Metro trong khi ứng dụng đang chạy ở chế độ debug -- xem [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 Lệnh này tạo một tệp mới tại `lib/app/commands/current_time.dart` và đăng ký nó trong danh sách command.
 
 <div id="command-structure"></div>
@@ -165,6 +171,8 @@ Mỗi mục có:
 
 ## Command từ Package
 
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Package có thể cung cấp các command Metro cho những nhà phát triển cài đặt chúng -- ví dụ như một command `install` để tạo khung cấu hình mà package cần. Khi một package mà dự án của bạn phụ thuộc vào có chứa tệp `metro_commands.json`, Metro sẽ tự động phát hiện các command của nó; không có gì cần đăng ký trong dự án của bạn. Thêm package vào `pubspec.yaml`, chạy `flutter pub get`, và các command của nó sẽ xuất hiện trong menu `metro` dưới tên package:
 
 ```
@@ -189,6 +197,8 @@ Các command dựng sẵn luôn được ưu tiên trước, tiếp theo là cá
 <div id="shipping-commands-in-a-package"></div>
 
 ### Cung cấp Command trong Package
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Để cung cấp command trong một package bạn duy trì, hãy đặt mỗi command vào thư mục `bin/` của package và liệt kê nó trong tệp `metro_commands.json` ở thư mục gốc của package, cạnh `pubspec.yaml`:
 

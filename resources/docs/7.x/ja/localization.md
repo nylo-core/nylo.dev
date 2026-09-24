@@ -15,6 +15,7 @@
 - 応用
   - [サポートされるロケール](#supported-locales "サポートされるロケール")
   - [フォールバック言語](#fallback-language "フォールバック言語")
+  - [組み込み翻訳](#built-in-translations "Nylo 自身の UI 用の組み込み翻訳")
   - [RTL サポート](#rtl-support "RTL サポート")
   - [欠落キーのデバッグ](#debug-missing-keys "欠落キーのデバッグ")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -325,15 +326,37 @@ static const List<Locale> supportedLocales = [
 static const String fallbackLanguageCode = 'en';
 ```
 
-この2段階の解決はトップレベルのキーとドット記法のネストされたキーの両方に適用されます:
+この解決処理はトップレベルのキーとドット記法のネストされたキーの両方に適用されます:
 
 1. アクティブなロケールファイルでキーを検索します。
 2. 見つからない場合は、フォールバックロケールファイルでキーを検索します。
-3. それでも見つからない場合は、生のキー文字列を返します。
+3. キーが `nylo.` で始まり、それでも見つからない場合は、{{ config('app.name') }} の[組み込みの英語テキスト](#built-in-translations)に解決します。
+4. それでも見つからない場合は、生のキー文字列を返します。
 
 例えば、フランス語のロケールファイルに `settings.privacy` キーが欠落している場合、フォールバックロジックは英語のロケールファイルで `settings.privacy` を検索し、その後 `"settings.privacy"` をそのまま返すフォールバックを行います。
 
 これにより、翻訳が部分的にしか完了していない場合でも、アプリが生のキーを表示することはありません。
+
+<div id="built-in-translations"></div>
+
+## 組み込み翻訳
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} は、`nylo.*` キーの下に、自身の UI 用の組み込み英語テキストを同梱しています -- トースト、確認ダイアログ、フォームバリデーションメッセージ、入力フィールドのラベル、フォームコレクションのプロンプト、ページが見つからない場合のページ、オフラインバナー、言語切り替え、ジャーニーのステップラベル、`CollectionView` の各状態などです。これらのキーのいずれかがアクティブな言語ファイルとフォールバック言語ファイルの両方に存在しない場合、{{ config('app.name') }} は生のキーの代わりにこの組み込みの英語テキストに解決します -- そのため、`lang/` ファイルがあるキーより古いアプリでも、`nylo.toast.success` のような表示にはならず、正しいテキストが表示されます。
+
+これらは、自分の翻訳とまったく同じ方法でオーバーライドできます: アクティブな（またはフォールバックの）言語ファイルの `nylo` オブジェクトの下に同じキーを追加してください -- これは組み込みのデフォルトよりも先にチェックされます。
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

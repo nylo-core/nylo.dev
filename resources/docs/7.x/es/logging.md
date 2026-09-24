@@ -9,6 +9,7 @@
 - [Registro JSON](#json-logging "Registro JSON")
 - [Salida con color](#colored-output "Salida con color")
 - [Oyentes de registro](#log-listeners "Oyentes de registro")
+  - [Varios oyentes](#multiple-listeners "Varios oyentes")
 - [Extensiones helper](#helper-extensions "Extensiones helper")
 - [Configuración](#configuration "Configuración")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Varios oyentes
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` es un único callback asignable -- volver a asignarlo reemplaza silenciosamente lo que hubiera antes. Usa `addListener`/`removeListener` en su lugar cuando necesites más de un oyente a la vez (por ejemplo, tu propio reportador de errores *y* el streaming de registros de Nylo Live, ambos funcionando):
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Más adelante, p. ej. en el tearDown de una prueba
+NyLogger.removeListener(reportErrors);
+```
+
+Todo oyente agregado con `addListener` se ejecuta junto a `onLog` -- agregar uno nunca reemplaza a otro, y tampoco reemplaza a `onLog`.
 
 <div id="helper-extensions"></div>
 

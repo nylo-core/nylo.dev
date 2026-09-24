@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 When submitted, the form validates all fields. If valid, `onSuccess` is called with a `Map<String, dynamic>` of field data (keys are snake_case versions of field names). If invalid, a toast error is shown by default and `onFailure` is called if provided.
 
+All three ways of calling `submit()` above return a `Future<void>` that completes once `onSuccess` or `onFailure` -- and anything either one returns -- has finished (it completes immediately if no form with that name is mounted). Return it from a button's `onPressed` to keep the button locked for the whole submission, not just until the form is validated:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` returns the `Future<void>` from `.submit(...)`, so a button that tracks its own loading state (like the built-in `Button` styles) stays locked until `onSuccess` finishes.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Method | Description |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Submit a form by its name |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Submit a form by its name. Returns a `Future<void>` that completes once `onSuccess`/`onFailure` has finished |
 | `NyFormWidget.stateRefresh(name)` | Refresh the form's UI state |
 | `NyFormWidget.stateSetValue(name, key, value)` | Set a field value by form name |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Set field options by form name |

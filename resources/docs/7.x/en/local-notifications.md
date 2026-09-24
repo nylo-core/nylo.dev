@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Scheduling like this needs the `SCHEDULE_EXACT_ALARM` permission on Android 14+. If your app doesn't have it, {{ config('app.name') }} automatically falls back to the nearest inexact equivalent and logs a warning, instead of throwing `exact_alarms_not_permitted`:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Pass `androidScheduleMode` yourself, as above, if you'd rather choose an inexact mode up front than rely on the fallback.
+
 <div id="builder-pattern"></div>
 
 ## Builder Pattern

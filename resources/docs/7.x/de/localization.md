@@ -15,6 +15,7 @@
 - Fortgeschritten
   - [Unterstützte Locales](#supported-locales "Unterstützte Locales")
   - [Fallback-Sprache](#fallback-language "Fallback-Sprache")
+  - [Integrierte Übersetzungen](#built-in-translations "Integrierte Übersetzungen für Nylos eigene Oberfläche")
   - [RTL-Unterstützung](#rtl-support "RTL-Unterstützung")
   - [Fehlende Schlüssel debuggen](#debug-missing-keys "Fehlende Schlüssel debuggen")
   - [NyLocalization-API](#nylocalization-api "NyLocalization-API")
@@ -325,15 +326,37 @@ Wenn ein Übersetzungsschlüssel in der aktiven Locale nicht gefunden wird, such
 static const String fallbackLanguageCode = 'en';
 ```
 
-Diese zweistufige Auflösung gilt sowohl für Top-Level-Schlüssel als auch für punkt-notierte verschachtelte Schlüssel:
+Diese Auflösung gilt sowohl für Top-Level-Schlüssel als auch für punkt-notierte verschachtelte Schlüssel:
 
 1. Schlüssel in der aktiven Locale-Datei nachschlagen.
 2. Falls nicht gefunden, in der Fallback-Locale-Datei nachschlagen.
-3. Falls immer noch nicht gefunden, den Rohschlüssel zurückgeben.
+3. Falls der Schlüssel mit `nylo.` beginnt und immer noch nicht gefunden wird, wird er zu {{ config('app.name') }}s [integriertem englischen Text](#built-in-translations) aufgelöst.
+4. Falls immer noch nicht gefunden, den Rohschlüssel zurückgeben.
 
 Wenn beispielsweise der französischen Locale-Datei der Schlüssel `settings.privacy` fehlt, sucht die Fallback-Logik nach `settings.privacy` in der englischen Locale-Datei, bevor sie `"settings.privacy"` unverändert zurückgibt.
 
 Dies stellt sicher, dass Ihre App niemals rohe Schlüssel anzeigt, wenn eine Übersetzung nur teilweise abgeschlossen ist.
+
+<div id="built-in-translations"></div>
+
+## Integrierte Übersetzungen
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} liefert integrierten englischen Text für seine eigene Oberfläche unter `nylo.*`-Schlüsseln aus -- Toasts, Bestätigungsdialoge, Formularvalidierungsmeldungen, Eingabefeld-Beschriftungen, Formular-Collection-Prompts, die Seite-nicht-gefunden-Seite, das Offline-Banner, den Sprachumschalter, Journey-Schritt-Beschriftungen und `CollectionView`-Zustände. Fehlt einer dieser Schlüssel sowohl in Ihrer aktiven als auch in Ihrer Fallback-Sprachdatei, löst {{ config('app.name') }} ihn zu diesem integrierten englischen Text auf statt zum Rohschlüssel -- sodass eine App, deren `lang/`-Dateien älter als ein Schlüssel sind, weiterhin den korrekten Text zeigt statt so etwas wie `nylo.toast.success`.
+
+Überschreiben Sie jeden davon genau wie Ihre eigenen Übersetzungen: Fügen Sie denselben Schlüssel unter einem `nylo`-Objekt in Ihrer aktiven (oder Fallback-)Sprachdatei hinzu -- er wird vor dem integrierten Standardwert geprüft.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

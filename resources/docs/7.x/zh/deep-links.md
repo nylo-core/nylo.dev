@@ -13,6 +13,7 @@
   - [iOS 配置](#ios-configuration "iOS 配置")
 - [拦截链接](#intercepting-links "拦截链接")
 - [回退路由](#fallback-route "回退路由")
+- [解析链接](#resolving-a-link "解析链接")
 - [测试](#testing "测试")
 - [API 参考](#api-reference "API 参考")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 当 URI 的路径匹配已注册的路由时，{{ config('app.name') }} 将路由到该路由。否则，用户将落到回退路由。
 
+<div id="resolving-a-link"></div>
+
+## 解析链接
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+在不进行导航的情况下，读取某个 URI 会将应用带到哪里 -- 这在测试中，或在诊断某个链接没有按预期路由时很有用：
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- 从 URI 中读取出的路径
+target.registered;       // true -- 该路径是否为已注册的路由
+target.target;           // 应用实际会前往的位置：`path`，或者在
+                          // `path` 未注册时使用的回退路由
+target.queryParameters;  // URI 的查询参数
+target.usedFallback;     // 当 `target` 来自 `fallbackRoute` 时为 true
+```
+
+`resolve()` 使用的查找方式与自动分发路径完全相同，因此链接会按照实际处理方式被准确地报告出来。
+
 <div id="testing"></div>
 
 ## 测试
@@ -229,3 +252,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | 参数 | 类型 | 说明 |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | 接收传入的 URI。 |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+在不进行导航的情况下，读取 `uri` 会路由到哪里。参见[解析链接](#resolving-a-link)。
+
+| 属性 | 类型 | 说明 |
+|----------|------|-------------|
+| `path` | `String` | 从 URI 中读取出的路径。 |
+| `registered` | `bool` | `path` 是否为已注册的路由。 |
+| `target` | `String` | 应用实际会前往的位置：`path`，或者在 `path` 未注册时使用的 `fallbackRoute`。 |
+| `queryParameters` | `Map<String, dynamic>` | URI 的查询参数。 |
+| `usedFallback` | `bool` | 是否使用了回退路由而非 `path`。 |

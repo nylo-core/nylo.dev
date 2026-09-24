@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+이러한 예약에는 Android 14+에서 `SCHEDULE_EXACT_ALARM` 권한이 필요합니다. 앱에 이 권한이 없으면, {{ config('app.name') }}는 `exact_alarms_not_permitted`를 던지는 대신 자동으로 가장 가까운 비정확(inexact) 대안으로 대체하고 경고를 로그로 남깁니다:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+대체 동작에 의존하는 대신 비정확 모드를 직접 미리 선택하고 싶다면, 위와 같이 `androidScheduleMode`를 직접 전달하세요.
+
 <div id="builder-pattern"></div>
 
 ## 빌더 패턴

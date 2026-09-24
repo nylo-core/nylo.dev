@@ -10,6 +10,7 @@
 - FormValidator
   - [FormValidator Kullanımı](#using-form-validator "FormValidator Kullanımı")
   - [FormValidator Adlandırılmış Yapıcılar](#form-validator-named-constructors "FormValidator Adlandırılmış Yapıcılar")
+  - [Çevrilmiş Doğrulama Mesajları](#translated-validation-messages "Çevrilmiş doğrulama mesajları")
   - [Doğrulama Kurallarını Zincirleme](#chaining-validation-rules "Doğrulama Kurallarını Zincirleme")
   - [İsteğe Bağlı Alanlar](#nullable-fields "İsteğe Bağlı Alanlar")
   - [Özel Doğrulama](#custom-validation "Özel Doğrulama")
@@ -246,6 +247,48 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Çevrilmiş Doğrulama Mesajları
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Yukarıdaki her adlandırılmış yapıcı, `message:` geçirilmeden de çalışır — özel mesajı olmayan bir kural, sabit kodlanmış bir dize yerine varsayılanını bir `nylo.validation.*` çeviri anahtarı üzerinden çözümler:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — from nylo.validation.min_length
+```
+
+Herhangi bir kuralın varsayılanını, [Nylo'nun diğer yerleşik metnini](/docs/{{ $version }}/localization#built-in-translations) geçersiz kıldığınız şekilde, kendi dil dosyanızdaki `nylo.validation` altına eşleşen anahtarı ekleyerek geçersiz kılın:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Kendi değerini alan bir kural -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder` ve diğerleri -- bunu, `FormRule.messageArguments` aracılığıyla `@{{attribute}}`'ın yanında bir `@{{placeholder}}` olarak çevrilmiş mesaja sunar. `@{{attribute}}`'ın kendisi, alanın adından (veya geçirdiğiniz `attribute:` değerinden) doldurulur ve aynı şekilde çevrilir.
+
+`FormValidationResponse` (bir `FormValidator` veya `Field`'ın `onFailure`'ında görüldüğü gibi, `FormValidationError`/`FormValidationSuccess` alt sınıflarıyla birlikte), çevrilmiş `message`'ın yanında alanın adını `attribute` içinde taşır:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

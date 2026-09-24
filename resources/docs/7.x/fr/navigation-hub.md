@@ -7,6 +7,7 @@
 - [Utilisation de base](#basic-usage "Utilisation de base")
   - [Cr&eacute;er un Navigation Hub](#creating-a-navigation-hub "Cr&eacute;er un Navigation Hub")
   - [Cr&eacute;er des onglets de navigation](#creating-navigation-tabs "Cr&eacute;er des onglets de navigation")
+  - [Nommer l'&eacute;tat du Hub](#naming-the-hubs-state "Nommer l'&eacute;tat du Hub")
   - [Navigation inf&eacute;rieure](#bottom-navigation "Navigation inf&eacute;rieure")
     - [Constructeur de barre de navigation personnalis&eacute;](#custom-nav-bar-builder "Constructeur de barre de navigation personnalis&eacute;")
   - [Navigation sup&eacute;rieure](#top-navigation "Navigation sup&eacute;rieure")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Il y a **beaucoup plus** de choses que vous pouvez faire avec un Navigation Hub. Explorons certaines de ses fonctionnalit&eacute;s.
+
+<div id="naming-the-hubs-state"></div>
+
+### Nommer l'&eacute;tat du Hub
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+Le hub g&eacute;n&eacute;r&eacute; ci-dessus fait concorder un seul nom d'&eacute;tat de deux mani&egrave;res : le widget passe `stateName: path.stateName()` &agrave; `NyStatefulWidget`, et `NavigationHubStateActions(path.stateName())` s'adresse &agrave; ce m&ecirc;me nom. La classe d'&eacute;tat du hub -- celle qui &eacute;tend `NavigationHub<T>` -- peut aussi d&eacute;clarer ce nom elle-m&ecirc;me, via les param&egrave;tres de constructeur `name` et `path` que `NavigationHub` transmet &agrave; `NyPage` :
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Les deux formes aboutissent au m&ecirc;me nom, utilisez donc celle qui se lit le mieux &agrave; votre point d'appel -- ceci est optionnel, puisque le hub g&eacute;n&eacute;r&eacute; ci-dessus fonctionne d&eacute;j&agrave; sans cela. Chaque `NyStatefulWidget` expose aussi `declaredStateName`, le `stateName` exact pass&eacute; &agrave; son constructeur (ou `null` si aucun n'a &eacute;t&eacute; donn&eacute;), si vous avez besoin de relire ce qui a &eacute;t&eacute; d&eacute;clar&eacute; plut&ocirc;t que le nom que {{ config('app.name') }} d&eacute;rive par d&eacute;faut.
 
 <div id="bottom-navigation"></div>
 

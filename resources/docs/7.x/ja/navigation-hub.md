@@ -7,6 +7,7 @@
 - [基本的な使い方](#basic-usage "基本的な使い方")
   - [Navigation Hub の作成](#creating-a-navigation-hub "Navigation Hub の作成")
   - [ナビゲーションタブの作成](#creating-navigation-tabs "ナビゲーションタブの作成")
+  - [Hub の State に名前を付ける](#naming-the-hubs-state "Hub の State に名前を付ける")
   - [ボトムナビゲーション](#bottom-navigation "ボトムナビゲーション")
     - [カスタムナビバービルダー](#custom-nav-bar-builder "カスタムナビバービルダー")
   - [トップナビゲーション](#top-navigation "トップナビゲーション")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Navigation Hub でできることは**まだまだ**あります。いくつかの機能を見ていきましょう。
+
+<div id="naming-the-hubs-state"></div>
+
+### Hub の State に名前を付ける
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+上記の生成された hub は、1 つの state 名を 2 つの方法で一致させています: ウィジェットは `NyStatefulWidget` に `stateName: path.stateName()` を渡し、`NavigationHubStateActions(path.stateName())` は同じ名前を参照します。hub の state クラス -- `NavigationHub<T>` を継承するクラス -- も、`NavigationHub` が `NyPage` に転送する `name` と `path` コンストラクタパラメータを通じて、その名前自体を宣言できます:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+どちらの形式も同じ名前に解決されるため、呼び出し箇所で読みやすいほうを使用してください -- 上記の生成された hub はこれがなくても既に動作するため、これは任意です。すべての `NyStatefulWidget` は `declaredStateName` も公開しており、これはコンストラクタに渡された実際の `stateName`（何も渡されていない場合は `null`）です。{{ config('app.name') }} がデフォルトで導出する名前ではなく、宣言された内容を読み取りたい場合に使用します。
 
 <div id="bottom-navigation"></div>
 

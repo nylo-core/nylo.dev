@@ -7,6 +7,7 @@
 - [Grundlegende Verwendung](#basic-usage "Grundlegende Verwendung")
   - [Einen Navigation Hub erstellen](#creating-a-navigation-hub "Einen Navigation Hub erstellen")
   - [Navigations-Tabs erstellen](#creating-navigation-tabs "Navigations-Tabs erstellen")
+  - [Den State des Hubs benennen](#naming-the-hubs-state "Den State des Hubs benennen")
   - [Untere Navigation](#bottom-navigation "Untere Navigation")
     - [Benutzerdefinierter Nav-Bar-Builder](#custom-nav-bar-builder "Benutzerdefinierter Nav-Bar-Builder")
   - [Obere Navigation](#top-navigation "Obere Navigation")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Es gibt **noch viel mehr**, was Sie mit einem Navigation Hub machen können. Schauen wir uns einige der Funktionen an.
+
+<div id="naming-the-hubs-state"></div>
+
+### Den State des Hubs benennen
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+Der oben generierte Hub einigt sich auf zwei Arten auf einen State-Namen: Das Widget übergibt `stateName: path.stateName()` an `NyStatefulWidget`, und `NavigationHubStateActions(path.stateName())` spricht denselben Namen an. Die State-Klasse des Hubs -- die, die `NavigationHub<T>` erweitert -- kann diesen Namen auch selbst deklarieren, über die Konstruktorparameter `name` und `path`, die `NavigationHub` an `NyPage` weiterreicht:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Beide Formen lösen sich zum selben Namen auf, verwenden Sie also, was sich an Ihrer Aufrufstelle besser liest -- dies ist optional, da der oben generierte Hub bereits ohne es funktioniert. Jedes `NyStatefulWidget` stellt außerdem `declaredStateName` bereit, den exakten `stateName`, der seinem Konstruktor übergeben wurde (oder `null`, wenn keiner angegeben wurde), falls Sie auslesen müssen, was deklariert wurde, statt des Namens, den {{ config('app.name') }} standardmäßig ableitet.
 
 <div id="bottom-navigation"></div>
 

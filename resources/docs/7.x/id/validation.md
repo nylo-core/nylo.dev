@@ -10,6 +10,7 @@
 - FormValidator
   - [Menggunakan FormValidator](#using-form-validator "Menggunakan FormValidator")
   - [Konstruktor Bernama FormValidator](#form-validator-named-constructors "Konstruktor Bernama FormValidator")
+  - [Pesan Validasi Terjemahan](#translated-validation-messages "Pesan validasi yang diterjemahkan")
   - [Merangkai Aturan Validasi](#chaining-validation-rules "Merangkai Aturan Validasi")
   - [Field yang Bisa Null](#nullable-fields "Field yang Bisa Null")
   - [Validasi Kustom](#custom-validation "Validasi Kustom")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Pesan Validasi Terjemahan
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: terminologi baru "nylo.validation.*" dan "FormRule.messageArguments" -- belum ada di file locale ini sebelumnya -->
+Setiap konstruktor bernama di atas berfungsi tanpa mengirim `message:` -- aturan tanpa pesan kustom menyelesaikan defaultnya melalui key terjemahan `nylo.validation.*` alih-alih string yang di-hardcode:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — from nylo.validation.min_length
+```
+
+Override default aturan apa pun dengan cara yang sama seperti [teks bawaan Nylo lainnya](/docs/{{ $version }}/localization#built-in-translations), dengan menambahkan key yang cocok di bawah `nylo.validation` di file bahasa Anda sendiri:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Aturan yang membawa nilainya sendiri -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, dan lainnya -- mengekspos nilai tersebut ke pesan terjemahan sebagai `@{{placeholder}}` di samping `@{{attribute}}`, melalui `FormRule.messageArguments`. `@{{attribute}}` sendiri diisi dari nama field (atau `attribute:` yang Anda kirim), diterjemahkan dengan cara yang sama.
+
+`FormValidationResponse` (dan subclass-nya `FormValidationError`/`FormValidationSuccess`, seperti yang terlihat pada `onFailure` sebuah `FormValidator` atau `Field`) membawa nama field di `attribute` di samping `message` yang telah diterjemahkan:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

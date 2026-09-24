@@ -15,6 +15,7 @@
 - Advanced
   - [Supported Locales](#supported-locales "Supported locales")
   - [Fallback Language](#fallback-language "Fallback language")
+  - [Built-in Translations](#built-in-translations "Built-in translations for Nylo's own UI")
   - [RTL Support](#rtl-support "RTL support")
   - [Debug Missing Keys](#debug-missing-keys "Debug missing keys")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -325,15 +326,37 @@ When a translation key is not found in the active locale, {{ config('app.name') 
 static const String fallbackLanguageCode = 'en';
 ```
 
-This two-step resolution applies to both top-level keys and dot-notated nested keys:
+This resolution applies to both top-level keys and dot-notated nested keys:
 
 1. Look up the key in the active locale file.
 2. If not found, look it up in the fallback locale file.
-3. If still not found, return the raw key string.
+3. If the key starts with `nylo.` and is still not found, resolve it to {{ config('app.name') }}'s [built-in English text](#built-in-translations).
+4. If still not found, return the raw key string.
 
 For example, if the French locale file is missing the key `settings.privacy`, the fallback logic looks for `settings.privacy` in the English locale file before falling back to returning `"settings.privacy"` as-is.
 
 This ensures your app never shows raw keys if a translation is only partially complete.
+
+<div id="built-in-translations"></div>
+
+## Built-in Translations
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} ships built-in English text for its own UI under `nylo.*` keys -- toasts, confirm dialogs, form validation messages, input field labels, form collection prompts, the page-not-found page, the offline banner, the language switcher, journey step labels, and `CollectionView` states. When one of these keys is missing from both your active and fallback language files, {{ config('app.name') }} resolves it to this built-in English text instead of the raw key -- so an app whose `lang/` files predate a key still shows correct text rather than something like `nylo.toast.success`.
+
+Override any of them exactly like your own translations: add the same key under a `nylo` object in your active (or fallback) language file -- it's checked before the built-in default.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

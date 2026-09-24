@@ -13,6 +13,7 @@
   - [iOS 설정](#ios-configuration "iOS 설정")
 - [링크 인터셉트](#intercepting-links "링크 인터셉트")
 - [폴백 라우트](#fallback-route "폴백 라우트")
+- [링크 해석](#resolving-a-link "링크 해석")
 - [테스트](#testing "테스트")
 - [API 참조](#api-reference "API 참조")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 URI의 경로가 등록된 라우트와 일치하면 {{ config('app.name') }}가 해당 라우트로 이동합니다. 일치하지 않으면 사용자는 폴백 라우트로 이동합니다.
 
+<div id="resolving-a-link"></div>
+
+## 링크 해석
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+실제로 이동하지 않고 URI가 앱을 어디로 데려갈지 확인합니다 -- 테스트에서, 또는 예상과 다르게 라우팅되는 링크를 진단할 때 유용합니다:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- URI에서 읽어낸 경로
+target.registered;       // true -- 해당 경로가 등록된 라우트인지 여부
+target.target;           // 앱이 실제로 이동할 위치: `path`, 또는
+                          // `path`가 등록되지 않은 경우의 폴백 라우트
+target.queryParameters;  // URI의 쿼리 매개변수
+target.usedFallback;     // `target`이 `fallbackRoute`에서 온 경우 true
+```
+
+`resolve()`는 자동 디스패치 경로가 사용하는 것과 동일한 조회를 수행하므로, 링크는 실제로 처리되는 그대로 보고됩니다.
+
 <div id="testing"></div>
 
 ## 테스트
@@ -229,3 +252,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | 매개변수 | 타입 | 설명 |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | 들어오는 URI를 수신합니다. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+실제로 이동하지 않고 `uri`가 어디로 라우팅될지 확인합니다. [링크 해석](#resolving-a-link)을 참고하세요.
+
+| 속성 | 타입 | 설명 |
+|----------|------|-------------|
+| `path` | `String` | URI에서 읽어낸 경로. |
+| `registered` | `bool` | `path`가 등록된 라우트인지 여부. |
+| `target` | `String` | 앱이 실제로 이동할 위치: `path`, 또는 `path`가 등록되지 않은 경우의 `fallbackRoute`. |
+| `queryParameters` | `Map<String, dynamic>` | URI의 쿼리 매개변수. |
+| `usedFallback` | `bool` | `path` 대신 폴백 라우트가 사용되었는지 여부. |

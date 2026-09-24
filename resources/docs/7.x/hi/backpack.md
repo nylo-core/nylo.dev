@@ -50,7 +50,14 @@ String? theme = Backpack.instance.read("theme"); // "dark"
 
 // जाँचें कि डेटा मौजूद है या नहीं
 bool hasTheme = Backpack.instance.contains("theme"); // true
+
+// वर्तमान में मौजूद हर की सूचीबद्ध करें
+List<String> keys = Backpack.instance.keys;
 ```
+
+`Backpack.instance.keys` में आपकी कीज़ के साथ-साथ {{ config('app.name') }} की अपनी अंदरूनी कीज़ भी शामिल होती हैं -- `nylo` (`Nylo` ऐप इंस्टेंस) और `event_bus` -- इसलिए अगर आपको केवल अपने डेटा में दिलचस्पी है तो इन्हें फ़िल्टर कर दें।
+
+> `metro live` टर्मिनल से किसी चल रहे ऐप पर Backpack वैल्यूज़ को सूचीबद्ध और निरीक्षण कर सकता है -- देखें [Metro Live](/docs/{{ $version }}/metro-live#live-run)।
 
 <div id="reading-data"></div>
 

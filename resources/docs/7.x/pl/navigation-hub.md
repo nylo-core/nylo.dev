@@ -7,6 +7,7 @@
 - [Podstawowe użycie](#basic-usage "Podstawowe użycie")
   - [Tworzenie Navigation Hub](#creating-a-navigation-hub "Tworzenie Navigation Hub")
   - [Tworzenie zakładek nawigacji](#creating-navigation-tabs "Tworzenie zakładek nawigacji")
+  - [Nazywanie stanu huba](#naming-the-hubs-state "Nazywanie stanu huba")
   - [Nawigacja dolna](#bottom-navigation "Nawigacja dolna")
     - [Niestandardowy builder paska nawigacji](#custom-nav-bar-builder "Niestandardowy builder paska nawigacji")
   - [Nawigacja górna](#top-navigation "Nawigacja górna")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Navigation Hub oferuje **wiele** więcej możliwości, przyjrzyjmy się niektórym funkcjom.
+
+<div id="naming-the-hubs-state"></div>
+
+### Nazywanie stanu huba
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+Wygenerowany powyżej hub uzgadnia jedną nazwę stanu na dwa sposoby: widget przekazuje `stateName: path.stateName()` do `NyStatefulWidget`, a `NavigationHubStateActions(path.stateName())` odwołuje się do tej samej nazwy. Klasa stanu huba -- ta, która rozszerza `NavigationHub<T>` -- może też sama zadeklarować tę nazwę, poprzez parametry konstruktora `name` i `path`, które `NavigationHub` przekazuje dalej do `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Obie formy prowadzą do tej samej nazwy, więc użyj tej, która lepiej czyta się w miejscu wywołania -- jest to opcjonalne, ponieważ wygenerowany powyżej hub działa też bez tego. Każdy `NyStatefulWidget` udostępnia też `declaredStateName` -- dokładną wartość `stateName` przekazaną do jego konstruktora (albo `null`, gdy żadnej nie podano) -- jeśli potrzebujesz odczytać, co zostało zadeklarowane, zamiast nazwy, którą {{ config('app.name') }} wyprowadza domyślnie.
 
 <div id="bottom-navigation"></div>
 

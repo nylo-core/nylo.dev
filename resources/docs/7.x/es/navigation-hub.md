@@ -7,6 +7,7 @@
 - [Uso básico](#basic-usage "Uso básico")
   - [Crear un Navigation Hub](#creating-a-navigation-hub "Crear un Navigation Hub")
   - [Crear pestañas de navegación](#creating-navigation-tabs "Crear pestañas de navegación")
+  - [Nombrar el estado del hub](#naming-the-hubs-state "Nombrar el estado del hub")
   - [Navegación inferior](#bottom-navigation "Navegación inferior")
     - [Constructor personalizado de barra de navegación](#custom-nav-bar-builder "Constructor personalizado de barra de navegación")
   - [Navegación superior](#top-navigation "Navegación superior")
@@ -150,6 +151,29 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Hay mucho **más** que puedes hacer con un Navigation Hub, veamos algunas de las funcionalidades.
+
+<div id="naming-the-hubs-state"></div>
+
+<!-- uncertain: brand-new subsection with no prior es paragraphs in this file to anchor terminology/register -->
+
+### Nombrar el estado del hub
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+El hub generado arriba acuerda un mismo nombre de estado de dos maneras: el widget pasa `stateName: path.stateName()` a `NyStatefulWidget`, y `NavigationHubStateActions(path.stateName())` se dirige a ese mismo nombre. La clase de estado del hub -- la que extiende `NavigationHub<T>` -- también puede declarar ese nombre por sí misma, a través de los parámetros de constructor `name` y `path` que `NavigationHub` reenvía a `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Ambas formas resuelven al mismo nombre, así que usa la que mejor se lea en tu punto de llamada -- esto es opcional, ya que el hub generado arriba ya funciona sin ello. Todo `NyStatefulWidget` también expone `declaredStateName`, el `stateName` exacto pasado a su constructor (o `null` cuando no se proporcionó ninguno), por si necesitas leer lo que se declaró en lugar del nombre que {{ config('app.name') }} deriva por defecto.
 
 <div id="bottom-navigation"></div>
 

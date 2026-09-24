@@ -15,6 +15,7 @@
 - Lanjutan
   - [Locale yang Didukung](#supported-locales "Locale yang Didukung")
   - [Bahasa Fallback](#fallback-language "Bahasa Fallback")
+  - [Terjemahan Bawaan](#built-in-translations "Terjemahan bawaan untuk UI Nylo sendiri")
   - [Dukungan RTL](#rtl-support "Dukungan RTL")
   - [Debug Key yang Hilang](#debug-missing-keys "Debug Key yang Hilang")
   - [API NyLocalization](#nylocalization-api "API NyLocalization")
@@ -325,15 +326,39 @@ Ketika key terjemahan tidak ditemukan di locale aktif, {{ config('app.name') }} 
 static const String fallbackLanguageCode = 'en';
 ```
 
-Resolusi dua langkah ini berlaku untuk key tingkat atas maupun key bersarang dengan notasi titik:
+Resolusi ini berlaku untuk key tingkat atas maupun key bersarang dengan notasi titik:
 
 1. Cari key di file locale aktif.
 2. Jika tidak ditemukan, cari di file locale fallback.
-3. Jika masih tidak ditemukan, kembalikan string key mentah.
+3. Jika key dimulai dengan `nylo.` dan masih tidak ditemukan, selesaikan ke [teks bawaan bahasa Inggris](#built-in-translations) milik {{ config('app.name') }}.
+4. Jika masih tidak ditemukan, kembalikan string key mentah.
 
 Misalnya, jika file locale Prancis tidak memiliki key `settings.privacy`, logika fallback mencari `settings.privacy` di file locale Inggris sebelum mengembalikan `"settings.privacy"` apa adanya.
 
 Ini memastikan aplikasi Anda tidak pernah menampilkan key mentah jika terjemahan hanya sebagian selesai.
+
+<div id="built-in-translations"></div>
+
+## Terjemahan Bawaan
+
+<!-- uncertain: konvensi key terjemahan bawaan "nylo.*" -- terminologi baru, belum ada di file locale ini sebelumnya -->
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }} menyertakan teks bahasa Inggris bawaan untuk UI-nya sendiri di bawah key `nylo.*` -- toast, dialog konfirmasi, pesan validasi form, label field input, prompt koleksi form, halaman page-not-found, banner offline, language switcher, label langkah journey, dan state `CollectionView`. Ketika salah satu key ini hilang dari file bahasa aktif maupun fallback Anda, {{ config('app.name') }} menyelesaikannya ke teks bahasa Inggris bawaan ini alih-alih key mentah -- sehingga aplikasi yang file `lang/`-nya lebih lama dari sebuah key tetap menampilkan teks yang benar daripada sesuatu seperti `nylo.toast.success`.
+
+Override key apa pun persis seperti terjemahan Anda sendiri: tambahkan key yang sama di bawah objek `nylo` di file bahasa aktif (atau fallback) Anda -- key ini diperiksa sebelum default bawaan.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

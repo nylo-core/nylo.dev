@@ -11,6 +11,7 @@
   - [Обработчики с данными и без](#handlers-with-and-without-data "Обработчики с данными и без")
   - [Использование экземпляра StateActions](#using-a-state-actions-instance "Использование экземпляра StateActions")
 - [Паттерн: Страницы с управляемым состоянием (NyPage)](#pattern-ny-page "Паттерн: Страницы с управляемым состоянием")
+  - [Вызов действий страницы](#page-actions-shortcut "Вызов действий страницы извне")
 - [Паттерн: Stateful-виджеты (NyState)](#pattern-ny-state "Паттерн: Stateful-виджеты")
 - [Паттерн: Виджеты с управляемым состоянием (NyStateManaged)](#pattern-ny-state-managed "Паттерн: Виджеты с управляемым состоянием")
   - [Расширенно: Несколько изолированных экземпляров](#advanced-multiple-isolated-instances "Расширенно: Несколько изолированных экземпляров")
@@ -179,12 +180,15 @@ actions.action("update_user_image", data: user);
 metro make:page my_page
 ```
 
-Это создаёт `NyPage` в `lib/resources/pages/`:
+Это создаёт `NyPage` в `lib/resources/pages/`, уже настроенный для действий состояния:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Действия, например: MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Шаг 2:** Установите `stateManaged` в `true`.
-
-По умолчанию страницы **не** подписываются на события состояния — это позволяет избежать ненужных слушателей на страницах, которым они не нужны. Чтобы включить действия состояния на странице, измените геттер:
+`stateManaged` теперь по умолчанию равен `true`, поэтому страница готова принимать действия состояния сразу же, как только вы добавите карту `stateActions` ниже — дополнительный шаг не нужен. Страницы, созданные до версии {{ config('app.name') }} 7.2.0, по умолчанию имеют `stateManaged` равным `false`; переключите его самостоятельно, чтобы подключить уже существующую страницу:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Шаг 3:** Добавьте карту `stateActions`.
+**Шаг 2:** Добавьте карту `stateActions`.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Шаг 4:** Вызовите действие из любого места, используя `path` страницы.
+**Шаг 3:** Вызовите действие из любого места, используя `path` страницы — или её сокращение `actions`.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Страницы идентифицируются по `MyPage.path`, виджеты — по `MyWidget.state`. Это единственное отличие на стороне вызова.
+
+<div id="page-actions-shortcut"></div>
+
+### Вызов действий страницы
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Каждая сгенерированная страница хранит в своём классе `static final actions = path.actions;` — `PageStateActions` для вызова страницы из любого места без необходимости самостоятельно строить вызов `stateAction(...)`:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Встроенные действия включают `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, а также обобщённый `call(name, data)`, который вызывает один из ваших собственных обработчиков `stateActions` по имени:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// то же самое, что stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Вы также можете унаследовать `PageStateActions` и объявить методы **без тела**, чтобы превратить каждый из них в типизированное действие, маршрутизируемое через `noSuchMethod`. Смотрите [Metro Live](/docs/{{ $version }}/metro-live#page-actions), где действия страницы вызываются точно так же, пока ваше приложение запущено.
 
 
 <div id="pattern-ny-state"></div>

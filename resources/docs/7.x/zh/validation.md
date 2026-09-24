@@ -10,6 +10,7 @@
 - FormValidator
   - [使用 FormValidator](#using-form-validator "使用 FormValidator")
   - [FormValidator 命名构造函数](#form-validator-named-constructors "FormValidator 命名构造函数")
+  - [已翻译的验证消息](#translated-validation-messages "已翻译的验证消息")
   - [链式验证规则](#chaining-validation-rules "链式验证规则")
   - [可空字段](#nullable-fields "可空字段")
   - [自定义验证](#custom-validation "自定义验证")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## 已翻译的验证消息
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+上面的每个命名构造函数都可以在不传入 `message:` 的情况下使用 -- 没有自定义消息的规则会通过 `nylo.validation.*` 翻译键来解析其默认值，而不是使用硬编码的字符串：
+
+<!-- uncertain: kept the quoted example message in English since it's literal program output from Nylo's built-in (English) validation text, not descriptive prose -->
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — 来自 nylo.validation.min_length
+```
+
+您可以用和覆盖 [Nylo 其他内置文本](/docs/{{ $version }}/localization#built-in-translations)相同的方式，覆盖任何规则的默认值：在您自己的语言文件中的 `nylo.validation` 下添加匹配的键：
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+像 `minLength`、`maxLength`、`minValue`、`dateAgeIsOlder` 等接受自身取值的规则，会通过 `FormRule.messageArguments`，将该值与 `@{{attribute}}` 一起以 `@{{placeholder}}` 的形式暴露给已翻译的消息。`@{{attribute}}` 本身则由字段名称（或您传入的 `attribute:`）填充，并以同样的方式翻译。
+
+`FormValidationResponse`（以及它的子类 `FormValidationError`/`FormValidationSuccess`，可以在 `FormValidator` 或 `Field` 的 `onFailure` 中见到）会将字段名称放在 `attribute` 中，与已翻译的 `message` 一起传出：
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

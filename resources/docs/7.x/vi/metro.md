@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` và `live:run` mở một shell kết nối đến ứng dụng đang chạy của bạn, để bạn có thể kiểm tra và điều khiển nó trong khi nó đang chạy -- xem [Metro Live](/docs/{{ $version }}/metro-live).
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 Lệnh này sẽ đặt API service mới được tạo trong `lib/app/networking/`.
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### Buộc tạo API Service
 
 **Tham số:**
@@ -424,6 +435,8 @@ Sử dụng cờ `--force` hoặc `-f` sẽ ghi đè API Service hiện có nế
 ``` bash
 metro make:api_service user --force
 ```
+
+Nếu không có `--force`, chạy `make:api_service` nhắm vào một tệp đã tồn tại giờ đây sẽ thoát với mã `1` thay vì âm thầm định dạng lại nó -- hữu ích nếu bạn script hóa lệnh này trong CI hoặc codegen.
 
 <div id="make-event"></div>
 

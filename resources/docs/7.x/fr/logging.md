@@ -9,6 +9,7 @@
 - [Journalisation JSON](#json-logging "Journalisation JSON")
 - [Sortie coloree](#colored-output "Sortie coloree")
 - [Ecouteurs de logs](#log-listeners "Ecouteurs de logs")
+  - [Ecouteurs multiples](#multiple-listeners "Ecouteurs multiples")
 - [Extensions d'aide](#helper-extensions "Extensions d'aide")
 - [Configuration](#configuration "Configuration")
 
@@ -194,6 +195,30 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### Ecouteurs multiples
+
+<!-- uncertain: new subsection, no prior precedent in this file; heading "Ecouteurs multiples" coined by analogy with "Ecouteurs de logs"; x-doc-strip label kept accented ("Nécessite") per corpus-wide convention even though this file's prose omits accents -->
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` est un callback assignable unique -- le redefinir remplace silencieusement ce qui etait present avant. Utilisez `addListener`/`removeListener` a la place lorsque vous avez besoin de plusieurs ecouteurs a la fois (par exemple, votre propre outil de rapport de crash *et* le streaming de logs de Nylo Live, tous les deux actifs) :
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Later, e.g. in a test's tearDown
+NyLogger.removeListener(reportErrors);
+```
+
+Chaque ecouteur ajoute avec `addListener` s'execute en parallele de `onLog` -- en ajouter un ne remplace jamais un autre, et cela ne remplace jamais `onLog` non plus.
 
 <div id="helper-extensions"></div>
 

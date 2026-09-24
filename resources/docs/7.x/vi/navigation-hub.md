@@ -7,6 +7,7 @@
 - [Cách sử dụng cơ bản](#basic-usage "Cách sử dụng cơ bản")
   - [Tạo Navigation Hub](#creating-a-navigation-hub "Tạo Navigation Hub")
   - [Tạo Navigation Tab](#creating-navigation-tabs "Tạo Navigation Tab")
+  - [Đặt tên State của Hub](#naming-the-hubs-state "Đặt tên State của Hub")
   - [Điều hướng dưới](#bottom-navigation "Điều hướng dưới")
     - [Tùy chỉnh Nav Bar Builder](#custom-nav-bar-builder "Tùy chỉnh Nav Bar Builder")
   - [Điều hướng trên](#top-navigation "Điều hướng trên")
@@ -150,6 +151,29 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Có **nhiều hơn** những gì bạn có thể làm với Navigation Hub, hãy cùng khám phá một số tính năng.
+
+<div id="naming-the-hubs-state"></div>
+
+### Đặt tên State của Hub
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "NavigationHubStateActions", "declaredStateName" -- not seen in existing locale file -->
+Hub được tạo ở trên thống nhất một tên state theo hai cách: widget truyền `stateName: path.stateName()` vào `NyStatefulWidget`, và `NavigationHubStateActions(path.stateName())` nhắm đến đúng tên đó. Class state của hub -- class kế thừa `NavigationHub<T>` -- cũng có thể tự khai báo tên đó, thông qua các tham số constructor `name` và `path` mà `NavigationHub` chuyển tiếp đến `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Cả hai cách đều phân giải về cùng một tên, vì vậy hãy dùng cách nào đọc thuận hơn tại nơi bạn gọi -- điều này là tùy chọn, vì hub được tạo ở trên đã hoạt động tốt mà không cần nó. Mọi `NyStatefulWidget` cũng có `declaredStateName`, chính là `stateName` đã truyền vào constructor của nó (hoặc `null` khi không truyền gì), nếu bạn cần đọc lại những gì đã khai báo thay vì tên mà {{ config('app.name') }} tự suy ra theo mặc định.
+
 
 <div id="bottom-navigation"></div>
 

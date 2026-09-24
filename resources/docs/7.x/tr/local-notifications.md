@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Bu şekilde zamanlama, Android 14+ üzerinde `SCHEDULE_EXACT_ALARM` iznini gerektirir. Uygulamanızda bu izin yoksa, {{ config('app.name') }}, `exact_alarms_not_permitted` fırlatmak yerine otomatik olarak en yakın kesin olmayan eşdeğerine geri döner ve bir uyarı kaydeder:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Geri dönüş mekanizmasına güvenmek yerine baştan kesin olmayan bir mod seçmeyi tercih ederseniz, yukarıdaki gibi `androidScheduleMode`'u kendiniz geçin.
+
 <div id="builder-pattern"></div>
 
 ## Builder Deseni

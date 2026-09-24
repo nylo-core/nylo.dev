@@ -10,6 +10,7 @@
 - FormValidator
   - [Sử dụng FormValidator](#using-form-validator "Sử dụng FormValidator")
   - [Constructor được đặt tên của FormValidator](#form-validator-named-constructors "Constructor được đặt tên của FormValidator")
+  - [Thông báo Validation đã dịch](#translated-validation-messages "Thông báo validation đã dịch")
   - [Chuỗi quy tắc Validation](#chaining-validation-rules "Chuỗi quy tắc validation")
   - [Trường Nullable](#nullable-fields "Trường Nullable")
   - [Validation tùy chỉnh](#custom-validation "Validation tùy chỉnh")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Giá trị không hợp lệ",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Thông báo Validation đã dịch
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "nylo.validation.*" translation keys and "FormRule.messageArguments" -- not seen in existing locale file -->
+Mọi constructor được đặt tên ở trên đều hoạt động mà không cần truyền `message:` -- một quy tắc không có thông báo tùy chỉnh sẽ phân giải giá trị mặc định của nó thông qua một khóa dịch `nylo.validation.*` thay vì một chuỗi cứng:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." -- từ nylo.validation.min_length
+```
+
+Ghi đè giá trị mặc định của bất kỳ quy tắc nào theo cùng cách bạn ghi đè [các văn bản dựng sẵn khác của Nylo](/docs/{{ $version }}/localization#built-in-translations), bằng cách thêm khóa tương ứng dưới `nylo.validation` trong file ngôn ngữ của riêng bạn:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Một quy tắc nhận giá trị riêng của nó -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, và các quy tắc khác -- sẽ cung cấp giá trị đó cho thông báo đã dịch dưới dạng một `@{{placeholder}}` bên cạnh `@{{attribute}}`, thông qua `FormRule.messageArguments`. Bản thân `@{{attribute}}` được điền từ tên của field (hoặc `attribute:` bạn đã truyền), cũng được dịch theo cùng cách.
+
+`FormValidationResponse` (cùng các lớp con `FormValidationError`/`FormValidationSuccess` của nó, như thấy trong `onFailure` của một `FormValidator` hoặc `Field`) mang tên của field trong `attribute` bên cạnh `message` đã dịch:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

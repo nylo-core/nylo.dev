@@ -11,6 +11,7 @@
   - [データあり・なしのハンドラー](#handlers-with-and-without-data "データあり・なしのハンドラー")
   - [StateActionsインスタンスの使用](#using-a-state-actions-instance "StateActionsインスタンスの使用")
 - [パターン: 状態管理ページ (NyPage)](#pattern-ny-page "パターン: 状態管理ページ")
+  - [ページのアクションを呼び出す](#page-actions-shortcut "外部からページのアクションを呼び出す")
 - [パターン: ステートフルウィジェット (NyState)](#pattern-ny-state "パターン: ステートフルウィジェット")
 - [パターン: 状態管理ウィジェット (NyStateManaged)](#pattern-ny-state-managed "パターン: 状態管理ウィジェット")
   - [応用: 複数の独立したインスタンス](#advanced-multiple-isolated-instances "応用: 複数の独立したインスタンス")
@@ -179,12 +180,15 @@ actions.action("update_user_image", data: user);
 metro make:page my_page
 ```
 
-これにより `lib/resources/pages/` に `NyPage` が生成されます:
+これにより `lib/resources/pages/` に、state actions 用の配線が済んだ状態の `NyPage` が生成されます:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// アクションの例: MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**ステップ 2:** `stateManaged` を `true` に切り替えます。
-
-デフォルトでは、ページは状態イベントをサブスクライブしません — これにより、必要のないページへの不要なリスナーを回避できます。ページで state actions を有効にするには、ゲッターを変更してください:
+`stateManaged` はデフォルトで既に `true` になっているため、以下の `stateActions` マップを追加すればすぐに state actions を受け取れるようになります — 追加の手順は不要です。{{ config('app.name') }} 7.2.0 より前に生成されたページは `stateManaged` のデフォルトが `false` のままなので、既存のページを対応させるには自分で切り替えてください:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**ステップ 3:** `stateActions` マップを追加します。
+**ステップ 2:** `stateActions` マップを追加します。
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**ステップ 4:** ページの `path` を使用してどこからでもアクションをトリガーします。
+**ステップ 3:** ページの `path` を使用してどこからでもアクションをトリガーします — またはその `actions` ショートカットを使用します。
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > ページは `MyPage.path` をキーとし、ウィジェットは `MyWidget.state` をキーとします。これが呼び出し側での唯一の違いです。
+
+<div id="page-actions-shortcut"></div>
+
+### ページのアクションを呼び出す
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+生成されるすべてのページは、そのクラスに `static final actions = path.actions;` を保持しています -- これは、`stateAction(...)` 呼び出しを自分で組み立てなくても、どこからでもページを呼び出せる `PageStateActions` です:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+組み込みのアクションには `showToast`、`refreshPage`、`pop`、`confirmAction`、`lockRelease`、`validate`、`changeLanguage`、そして名前で自分の `stateActions` ハンドラーの 1 つを発火させる汎用の `call(name, data)` があります:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// 次と同じ: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+`PageStateActions` をサブクラス化し、**本体のない**メソッドを宣言することで、それぞれを `noSuchMethod` を通じてルーティングされる型付きアクションに変えることもできます。アプリの実行中に同じ方法でページのアクションを呼び出す [Metro Live](/docs/{{ $version }}/metro-live#page-actions) も参照してください。
 
 
 <div id="pattern-ny-state"></div>

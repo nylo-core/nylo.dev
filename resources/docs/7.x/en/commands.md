@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 This creates a new file at `lib/app/commands/current_time.dart` and registers it in the command registry.
 
+Pass `--live` to scaffold a command that runs *inside your app* instead, driven from Metro while the app is running in debug mode -- see [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Command Structure

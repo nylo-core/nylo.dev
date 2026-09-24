@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` and `live:run` open a shell connected to your running app, so you can inspect and drive it while it's running -- see [Metro Live](/docs/{{ $version }}/metro-live).
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 It will place the newly created API service in `lib/app/networking/`.
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### Forcefully make an API Service
 
 **Arguments:**
@@ -424,6 +435,8 @@ Using the `--force` or `-f` flag will overwrite an existing API Service if it al
 ``` bash
 metro make:api_service user --force
 ```
+
+Without `--force`, running `make:api_service` against a file that already exists now exits with code `1` instead of silently reformatting it -- useful if you script this command in CI or codegen.
 
 <div id="make-event"></div>
 

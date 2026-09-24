@@ -11,6 +11,7 @@
   - [Handler có và không có dữ liệu](#handlers-with-and-without-data "Handler có và không có dữ liệu")
   - [Sử dụng Instance StateActions](#using-a-state-actions-instance "Sử dụng Instance StateActions")
 - [Mẫu: Trang quản lý State (NyPage)](#pattern-ny-page "Mẫu: Trang quản lý State")
+  - [Gọi các Action của một trang](#page-actions-shortcut "Gọi action của một trang từ bên ngoài nó")
 - [Mẫu: Stateful Widgets (NyState)](#pattern-ny-state "Mẫu: Stateful Widgets")
 - [Mẫu: Widget quản lý State (NyStateManaged)](#pattern-ny-state-managed "Mẫu: Widget quản lý State")
   - [Nâng cao: Nhiều instance độc lập](#advanced-multiple-isolated-instances "Nâng cao: Nhiều instance độc lập")
@@ -179,12 +180,15 @@ Sử dụng mẫu này khi bạn muốn kích hoạt hành vi trên toàn bộ t
 metro make:page my_page
 ```
 
-Lệnh này tạo một `NyPage` trong `lib/resources/pages/`:
+Lệnh này tạo một `NyPage` trong `lib/resources/pages/`, đã sẵn sàng cho state action:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Actions ví dụ: MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Bước 2:** Đặt `stateManaged` thành `true`.
-
-Theo mặc định, các trang **không** đăng ký nhận state event — điều này tránh các listener không cần thiết trên các trang không cần chúng. Để bật state action trên một trang, thay đổi getter:
+`stateManaged` đã mặc định là `true`, nên trang đã sẵn sàng nhận state action ngay khi bạn thêm map `stateActions` bên dưới -- không cần thêm bước nào khác. Các trang được tạo trước {{ config('app.name') }} 7.2.0 mặc định `stateManaged` là `false`; tự bật nó lên để đưa một trang hiện có vào diện quản lý state:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Bước 3:** Thêm map `stateActions`.
+**Bước 2:** Thêm map `stateActions`.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Bước 4:** Kích hoạt action từ bất kỳ đâu bằng `path` của trang.
+**Bước 3:** Kích hoạt action từ bất kỳ đâu bằng `path` của trang.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Trang dùng `MyPage.path` làm key, widget dùng `MyWidget.state`. Đây là sự khác biệt duy nhất ở phía gọi.
+
+<div id="page-actions-shortcut"></div>
+
+### Gọi các Action của một trang
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Mỗi trang được tạo ra đều giữ `static final actions = path.actions;` trên class của nó -- một `PageStateActions` để gọi trang từ bất kỳ đâu mà không cần tự xây dựng lệnh gọi `stateAction(...)`:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Các action dựng sẵn bao gồm `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, và một `call(name, data)` chung để kích hoạt một trong các handler `stateActions` của riêng bạn theo tên:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// tương đương với: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Bạn cũng có thể kế thừa `PageStateActions` và khai báo các phương thức **không có phần thân** để biến mỗi phương thức thành một action có kiểu, được định tuyến qua `noSuchMethod`. Xem [Metro Live](/docs/{{ $version }}/metro-live#page-actions), nơi gọi action của một trang theo cùng cách trong khi ứng dụng của bạn đang chạy.
 
 
 <div id="pattern-ny-state"></div>

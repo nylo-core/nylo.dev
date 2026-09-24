@@ -13,6 +13,7 @@
   - [iOS Yapilandirmasi](#ios-configuration "iOS Yapilandirmasi")
 - [Baglantilari Yakalama](#intercepting-links "Baglantilari Yakalama")
 - [Yedek Rota](#fallback-route "Yedek Rota")
+- [Baglanti Cozumleme](#resolving-a-link "Baglanti Cozumleme")
 - [Test Etme](#testing "Test Etme")
 - [API Referansi](#api-reference "API Referansi")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 URI'nin yolu kayitli bir rota ile eslesiyor ise {{ config('app.name') }} o rotaya yonlendirir. Aksi takdirde kullanici yedek rotaya ulasir.
 
+<div id="resolving-a-link"></div>
+
+## Baglanti Cozumleme
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Bir URI'nin uygulamayi nereye goturecegini, yonlendirme yapmadan okuyun -- testlerde, veya beklediginiz yere yonlendirmeyen bir baglantiyi teshis etmek icin kullanislidir:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- URI'den okunan yol
+target.registered;       // true -- bu yolun kayitli bir rota olup olmadigi
+target.target;           // uygulamanin gercekte nereye gidecegi: `path`, veya
+                          // `path` kayitli degilse yedek rota
+target.queryParameters;  // URI'nin sorgu parametreleri
+target.usedFallback;     // `target`, `fallbackRoute`'tan geldiginde true
+```
+
+`resolve()`, otomatik dispatch yolunun kullandigi ayni aramadir, bu yuzden bir baglanti tam olarak nasil islenecekse oyle raporlanir.
+
 <div id="testing"></div>
 
 ## Test Etme
@@ -229,3 +252,19 @@ Her gelen URI icin cagrilan bir callback kaydeder. {{ config('app.name') }}'in o
 | Parametre | Tur | Aciklama |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Gelen URI'yi alir. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+`uri`'nin nereye yonlendirecegini, yonlendirme yapmadan okur. Bkz. [Baglanti Cozumleme](#resolving-a-link).
+
+| Ozellik | Tur | Aciklama |
+|----------|------|-------------|
+| `path` | `String` | URI'den okunan yol. |
+| `registered` | `bool` | `path`'in kayitli bir rota olup olmadigi. |
+| `target` | `String` | Uygulamanin gercekte gittigi yer: `path`, kayitli degilse `fallbackRoute`. |
+| `queryParameters` | `Map<String, dynamic>` | URI'nin sorgu parametreleri. |
+| `usedFallback` | `bool` | `path` yerine yedek rotanin kullanilip kullanilmadigi. |

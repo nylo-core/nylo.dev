@@ -15,6 +15,7 @@
 - 고급
   - [지원되는 로케일](#supported-locales "지원되는 로케일")
   - [폴백 언어](#fallback-language "폴백 언어")
+  - [내장 번역](#built-in-translations "Nylo 자체 UI를 위한 내장 번역")
   - [RTL 지원](#rtl-support "RTL 지원")
   - [누락된 키 디버그](#debug-missing-keys "누락된 키 디버그")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -325,15 +326,37 @@ static const List<Locale> supportedLocales = [
 static const String fallbackLanguageCode = 'en';
 ```
 
-이 두 단계 해결은 최상위 키와 점 표기법으로 된 중첩 키 모두에 적용됩니다:
+이 해결 방식은 최상위 키와 점 표기법으로 된 중첩 키 모두에 적용됩니다:
 
 1. 활성 로케일 파일에서 키를 검색합니다.
 2. 찾지 못하면 폴백 로케일 파일에서 키를 검색합니다.
-3. 그래도 찾지 못하면 원시 키 문자열을 반환합니다.
+3. 키가 `nylo.`로 시작하고 그래도 찾지 못하면, {{ config('app.name') }}의 [내장 영어 텍스트](#built-in-translations)로 해석합니다.
+4. 그래도 찾지 못하면 원시 키 문자열을 반환합니다.
 
 예를 들어, 프랑스어 로케일 파일에 `settings.privacy` 키가 없으면 폴백 로직은 영어 로케일 파일에서 `settings.privacy`를 검색한 후 `"settings.privacy"`를 그대로 반환하는 폴백을 수행합니다.
 
 이렇게 하면 번역이 부분적으로만 완료된 경우에도 앱에 원시 키가 표시되지 않습니다.
+
+<div id="built-in-translations"></div>
+
+## 내장 번역
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }}는 `nylo.*` 키 아래에 자체 UI를 위한 내장 영어 텍스트를 함께 제공합니다 -- 토스트, 확인 대화상자, 폼 유효성 검사 메시지, 입력 필드 레이블, 폼 컬렉션 프롬프트, 페이지를 찾을 수 없음 페이지, 오프라인 배너, 언어 전환기, journey 단계 레이블, `CollectionView` 상태 등입니다. 이러한 키 중 하나가 활성 언어 파일과 폴백 언어 파일 모두에 없으면, {{ config('app.name') }}는 원시 키 대신 이 내장 영어 텍스트로 해석합니다 -- 따라서 `lang/` 파일이 어떤 키보다 이전에 만들어진 앱에서도 `nylo.toast.success` 같은 텍스트 대신 올바른 텍스트가 표시됩니다.
+
+자신의 번역과 정확히 같은 방식으로 이를 재정의할 수 있습니다: 활성(또는 폴백) 언어 파일의 `nylo` 객체 아래에 동일한 키를 추가하세요 -- 이는 내장 기본값보다 먼저 확인됩니다.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

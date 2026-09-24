@@ -10,6 +10,7 @@
 - FormValidator
   - [Usando FormValidator](#using-form-validator "Usando FormValidator")
   - [Constructores con Nombre de FormValidator](#form-validator-named-constructors "Constructores con nombre de FormValidator")
+  - [Mensajes de Validación Traducidos](#translated-validation-messages "Mensajes de validación traducidos")
   - [Encadenar Reglas de Validacion](#chaining-validation-rules "Encadenar reglas de validacion")
   - [Campos Nullable](#nullable-fields "Campos nullable")
   - [Validacion Personalizada](#custom-validation "Validacion personalizada")
@@ -246,6 +247,50 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Mensajes de Validación Traducidos
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Todo constructor con nombre de arriba funciona sin pasar `message:` — una regla sin mensaje personalizado resuelve su valor por defecto a través de una clave de traducción `nylo.validation.*` en lugar de una cadena fija:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — desde nylo.validation.min_length
+```
+
+<!-- uncertain: this comment mixes a literal (English) default-output string with a descriptive gloss; translated only the gloss and kept the quoted output verbatim, matching how other files echo literal example values -->
+
+Sobrescribe el valor por defecto de cualquier regla de la misma manera que [el resto del texto integrado de Nylo](/docs/{{ $version }}/localization#built-in-translations), agregando la clave correspondiente bajo `nylo.validation` en tu propio archivo de idioma:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Una regla que toma su propio valor -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, y otras -- lo expone al mensaje traducido como un `@{{placeholder}}` junto a `@{{attribute}}`, a través de `FormRule.messageArguments`. `@{{attribute}}` en sí se completa a partir del nombre del campo (o del `attribute:` que hayas pasado), traducido de la misma manera.
+
+`FormValidationResponse` (y sus subclases `FormValidationError`/`FormValidationSuccess`, tal como se ven en el `onFailure` de un `FormValidator` o `Field`) lleva el nombre del campo en `attribute` junto al `message` traducido:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+像这样的调度在 Android 14+ 上需要 `SCHEDULE_EXACT_ALARM` 权限。如果您的应用没有该权限，{{ config('app.name') }} 不会抛出 `exact_alarms_not_permitted`，而是会自动回退到最接近的非精确等效方式，并记录一条警告：
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+如果您希望预先自行选择非精确模式，而不是依赖这种自动回退，可以像上面这样自行传入 `androidScheduleMode`。
+
 <div id="builder-pattern"></div>
 
 ## 构建器模式

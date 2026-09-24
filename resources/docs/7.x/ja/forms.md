@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 送信時、フォームはすべてのフィールドをバリデーションします。有効な場合、`onSuccess` がフィールドデータの `Map<String, dynamic>` を引数に呼び出されます（キーはフィールド名の snake_case 版）。無効な場合、デフォルトでトーストエラーが表示され、指定されていれば `onFailure` が呼び出されます。
 
+上記の `submit()` を呼び出す 3 つの方法はすべて、`onSuccess` または `onFailure` -- そしてそのどちらかが返すもの -- が完了した時点で完了する `Future<void>` を返します（その名前のフォームがマウントされていない場合は即座に完了します）。フォームが検証されるまでではなく、送信処理全体の間ボタンをロックしたままにするには、これをボタンの `onPressed` から返してください:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` は `.submit(...)` から返される `Future<void>` を返すため、（組み込みの `Button` スタイルのように）自身のローディング状態を追跡するボタンは、`onSuccess` が完了するまでロックされたままになります。
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | メソッド | 説明 |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | フォーム名でフォームを送信 |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | フォーム名でフォームを送信します。`onSuccess`/`onFailure` が完了すると完了する `Future<void>` を返します |
 | `NyFormWidget.stateRefresh(name)` | フォームの UI ステートを更新 |
 | `NyFormWidget.stateSetValue(name, key, value)` | フォーム名でフィールド値を設定 |
 | `NyFormWidget.stateSetOptions(name, key, options)` | フォーム名でフィールドオプションを設定 |

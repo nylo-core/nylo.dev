@@ -10,6 +10,7 @@
 - FormValidator
   - [Использование FormValidator](#using-form-validator "Использование FormValidator")
   - [Именованные конструкторы FormValidator](#form-validator-named-constructors "Именованные конструкторы FormValidator")
+  - [Переведённые сообщения валидации](#translated-validation-messages "Переведённые сообщения валидации")
   - [Цепочка правил валидации](#chaining-validation-rules "Цепочка правил валидации")
   - [Nullable-поля](#nullable-fields "Nullable-поля")
   - [Пользовательская валидация](#custom-validation "Пользовательская валидация")
@@ -246,6 +247,48 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Переведённые сообщения валидации
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Каждый именованный конструктор выше работает без передачи `message:` -- правило без пользовательского сообщения разрешает своё значение по умолчанию через ключ перевода `nylo.validation.*` вместо жёстко заданной строки:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." -- from nylo.validation.min_length
+```
+
+Переопределите значение по умолчанию любого правила так же, как [встроенный текст Nylo](/docs/{{ $version }}/localization#built-in-translations) -- добавив соответствующий ключ под `nylo.validation` в вашем собственном языковом файле:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+Правило, которое принимает собственное значение -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder` и другие -- предоставляет его переведённому сообщению как `@{{placeholder}}` наряду с `@{{attribute}}`, через `FormRule.messageArguments`. Сам `@{{attribute}}` заполняется из имени поля (или переданного вами `attribute:`), переводимого таким же образом.
+
+`FormValidationResponse` (и его подклассы `FormValidationError`/`FormValidationSuccess`, встречающиеся в `onFailure` у `FormValidator` или `Field`) содержит имя поля в `attribute` наряду с переведённым `message`:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

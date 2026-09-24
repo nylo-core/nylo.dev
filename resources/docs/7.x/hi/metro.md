@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` और `live:run` आपके चल रहे ऐप से जुड़ा एक शेल खोलते हैं, ताकि आप उसका निरीक्षण कर सकें और उसे संचालित कर सकें जब वह चल रहा हो -- देखें [Metro Live](/docs/{{ $version }}/metro-live)।
 
 <div id="make-controller"></div>
 
@@ -416,6 +425,8 @@ metro make:api_service user --model="User"
 
 यह नवनिर्मित API सर्विस को `lib/app/networking/` में रखेगा।
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### ज़बरदस्ती API सर्विस बनाना
 
 **आर्गुमेंट्स:**
@@ -425,6 +436,8 @@ metro make:api_service user --model="User"
 ``` bash
 metro make:api_service user --force
 ```
+
+`--force` के बिना, `make:api_service` को किसी पहले से मौजूद फ़ाइल के विरुद्ध चलाने पर अब यह चुपचाप उसे दोबारा फॉर्मेट करने की बजाय कोड `1` के साथ एग्ज़िट होता है -- यह तब उपयोगी है जब आप इस कमांड को CI या कोडजेन में स्क्रिप्ट करते हैं।
 
 <div id="make-event"></div>
 

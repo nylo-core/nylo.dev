@@ -11,6 +11,7 @@
   - [Handler mit und ohne Daten](#handlers-with-and-without-data "Handler mit und ohne Daten")
   - [Eine StateActions-Instanz verwenden](#using-a-state-actions-instance "Eine StateActions-Instanz verwenden")
 - [Muster: State-verwaltete Seiten (NyPage)](#pattern-ny-page "Muster: State-verwaltete Seiten")
+  - [Aktionen einer Seite aufrufen](#page-actions-shortcut "Aktionen einer Seite von außerhalb aufrufen")
 - [Muster: Stateful Widgets (NyState)](#pattern-ny-state "Muster: Stateful Widgets")
 - [Muster: State-verwaltete Widgets (NyStateManaged)](#pattern-ny-state-managed "Muster: State-verwaltete Widgets")
   - [Fortgeschritten: Mehrere isolierte Instanzen](#advanced-multiple-isolated-instances "Fortgeschritten: Mehrere isolierte Instanzen")
@@ -180,12 +181,15 @@ Verwenden Sie dies, wenn Sie von anderswo in Ihrer App ein Verhalten auf einer v
 metro make:page my_page
 ```
 
-Dies generiert eine `NyPage` in `lib/resources/pages/`:
+Dies generiert eine `NyPage` in `lib/resources/pages/`, bereits für State-Aktionen verdrahtet:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Aktionen, z. B. MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -198,7 +202,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -214,16 +218,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Schritt 2:** `stateManaged` auf `true` setzen.
-
-Standardmäßig abonnieren sich Seiten **nicht** für State-Ereignisse — dies vermeidet unnötige Listener auf Seiten, die diese nicht benötigen. Um State-Aktionen auf einer Seite zu aktivieren, ändern Sie den Getter:
+`stateManaged` ist bereits standardmäßig auf `true` gesetzt, sodass die Seite bereit ist, State-Aktionen zu empfangen, sobald Sie unten eine `stateActions`-Map hinzufügen — kein zusätzlicher Schritt nötig. Seiten, die vor {{ config('app.name') }} 7.2.0 erstellt wurden, haben `stateManaged` standardmäßig auf `false`; setzen Sie es bei einer bestehenden Seite selbst um, um sie einzubinden:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Schritt 3:** Eine `stateActions`-Map hinzufügen.
+**Schritt 2:** Eine `stateActions`-Map hinzufügen.
 
 ``` dart
 @override
@@ -238,7 +240,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Schritt 4:** Die Aktion von überall aus dem `path` der Seite auslösen.
+**Schritt 3:** Die Aktion von überall aus dem `path` der Seite auslösen — oder über die `actions`-Kurzform.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -249,6 +251,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Seiten verwenden `MyPage.path` als Schlüssel, Widgets verwenden `MyWidget.state`. Dies ist der einzige Unterschied an der Aufrufstelle.
+
+<div id="page-actions-shortcut"></div>
+
+### Aktionen einer Seite aufrufen
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Jede generierte Seite behält `static final actions = path.actions;` in ihrer Klasse — eine `PageStateActions`, um die Seite von überall aufzurufen, ohne den `stateAction(...)`-Aufruf selbst zu bauen:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Zu den integrierten Aktionen gehören `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, sowie ein generisches `call(name, data)`, das einen Ihrer eigenen `stateActions`-Handler anhand seines Namens auslöst:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// dasselbe wie: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Sie können `PageStateActions` außerdem als Subklasse erweitern und Methoden **ohne Rumpf** deklarieren, um jede davon über `noSuchMethod` in eine typisierte Aktion zu verwandeln. Siehe [Metro Live](/docs/{{ $version }}/metro-live#page-actions), das die Aktionen einer Seite auf dieselbe Weise aufruft, während Ihre App läuft.
 
 
 <div id="pattern-ny-state"></div>

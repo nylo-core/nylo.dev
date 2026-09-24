@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Эта команда создаёт новый файл `lib/app/commands/current_time.dart` и регистрирует его в реестре команд.
 
+Передайте `--live`, чтобы вместо этого создать команду, которая выполняется *внутри вашего приложения*, запускаемая из Metro, пока приложение работает в debug-режиме -- см. [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Структура команды
@@ -165,6 +171,8 @@ metro app:current_time --help
 
 ## Команды пакетов
 
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Пакеты могут поставлять команды Metro для разработчиков, которые их устанавливают -- например, команду `install`, которая создаёт конфигурацию, необходимую пакету. Когда пакет, от которого зависит ваш проект, содержит файл `metro_commands.json`, Metro автоматически обнаруживает его команды; в вашем проекте ничего регистрировать не нужно. Добавьте пакет в `pubspec.yaml`, выполните `flutter pub get`, и его команды появятся в меню `metro` под именем пакета:
 
 ```
@@ -189,6 +197,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### Распространение команд в пакете
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Чтобы поставлять команды вместе с пакетом, который вы поддерживаете, поместите каждую команду в папку `bin/` пакета и укажите её в файле `metro_commands.json` в корне пакета, рядом с `pubspec.yaml`:
 

@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 เมื่อส่งฟอร์ม ระบบจะตรวจสอบ fields ทั้งหมด หากถูกต้อง `onSuccess` จะถูกเรียกพร้อม `Map<String, dynamic>` ของข้อมูล field (keys เป็นเวอร์ชัน snake_case ของชื่อ field) หากไม่ถูกต้อง toast error จะแสดงโดยค่าเริ่มต้น และ `onFailure` จะถูกเรียกหากมีการกำหนดไว้
 
+ทั้งสามวิธีในการเรียก `submit()` ข้างต้นจะคืนค่า `Future<void>` ที่เสร็จสมบูรณ์เมื่อ `onSuccess` หรือ `onFailure` -- และสิ่งที่ทั้งสองคืนค่ากลับมา -- เสร็จสิ้นแล้ว (จะเสร็จสมบูรณ์ทันทีหากไม่มีฟอร์มที่มีชื่อนั้น mounted อยู่) คืนค่านี้จาก `onPressed` ของปุ่มเพื่อให้ปุ่มล็อกไว้ตลอดการส่งฟอร์ม ไม่ใช่แค่จนกว่าฟอร์มจะผ่านการตรวจสอบ:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` คืนค่า `Future<void>` จาก `.submit(...)` ดังนั้นปุ่มที่ติดตามสถานะการโหลดของตัวเอง (เช่นสไตล์ `Button` ในตัว) จะล็อกไว้จนกว่า `onSuccess` จะเสร็จสิ้น
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | เมธอด | คำอธิบาย |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | ส่งฟอร์มตามชื่อ |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | ส่งฟอร์มตามชื่อ คืนค่า `Future<void>` ที่เสร็จสมบูรณ์เมื่อ `onSuccess`/`onFailure` เสร็จสิ้นแล้ว |
 | `NyFormWidget.stateRefresh(name)` | รีเฟรช UI state ของฟอร์ม |
 | `NyFormWidget.stateSetValue(name, key, value)` | ตั้งค่า field ตามชื่อฟอร์ม |
 | `NyFormWidget.stateSetOptions(name, key, options)` | ตั้งค่า field options ตามชื่อฟอร์ม |

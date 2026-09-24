@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Isso cria um novo arquivo em `lib/app/commands/current_time.dart` e o registra no registro de comandos.
 
+Passe `--live` para criar o scaffold de um comando que roda *dentro do seu app* em vez disso, acionado pelo Metro enquanto o app está rodando em modo debug -- veja [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Estrutura do Comando
@@ -160,10 +166,15 @@ Cada entrada possui:
 | `name` | O nome do comando (usado após o prefixo da categoria) |
 | `category` | A categoria do comando (ex: `app`, `project`) |
 | `script` | O arquivo Dart em `lib/app/commands/` |
+| `description` | Opcional. Um resumo de uma linha exibido no menu do `metro` |
+
+Comandos distribuídos por um pacote nunca são adicionados a este arquivo -- o Metro os descobre separadamente. Veja [Comandos de Pacotes](#package-commands) abaixo.
 
 <div id="package-commands"></div>
 
 ## Comandos de Pacotes
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Pacotes podem distribuir comandos do Metro para os desenvolvedores que os instalam -- por exemplo, um comando `install` que cria o scaffold da configuração que um pacote precisa. Quando um pacote do qual o seu projeto depende contém um arquivo `metro_commands.json`, o Metro descobre os comandos dele automaticamente; não há nada para registrar no seu projeto. Adicione o pacote ao seu `pubspec.yaml`, execute `flutter pub get`, e os comandos dele aparecem no menu do `metro` sob o nome do pacote:
 
@@ -189,6 +200,8 @@ Comandos integrados sempre têm precedência, depois os comandos no `commands.js
 <div id="shipping-commands-in-a-package"></div>
 
 ### Distribuindo Comandos em um Pacote
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Para distribuir comandos com um pacote que você mantém, coloque cada comando na pasta `bin/` do pacote e liste-o em um arquivo `metro_commands.json` na raiz do pacote, ao lado do `pubspec.yaml`:
 

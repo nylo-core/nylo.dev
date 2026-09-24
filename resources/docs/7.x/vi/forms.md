@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Khi gửi, form xác thực tất cả các trường. Nếu hợp lệ, `onSuccess` được gọi với `Map<String, dynamic>` dữ liệu trường (khóa là phiên bản snake_case của tên trường). Nếu không hợp lệ, thông báo lỗi toast sẽ hiển thị mặc định và `onFailure` được gọi nếu được cung cấp.
 
+Cả ba cách gọi `submit()` ở trên đều trả về `Future<void>`, hoàn thành khi `onSuccess` hoặc `onFailure` -- và bất cứ thứ gì một trong hai hàm đó trả về -- đã xong (nó hoàn thành ngay lập tức nếu không có form nào với tên đó được mount). Hãy trả về nó từ `onPressed` của một nút để giữ nút bị khóa trong suốt quá trình gửi, không chỉ đến khi form được xác thực:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,18 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
 
+`onPressed` trả về `Future<void>` từ `.submit(...)`, nhờ đó một nút tự theo dõi trạng thái tải của chính nó (như các kiểu `Button` dựng sẵn) sẽ vẫn bị khóa cho đến khi `onSuccess` hoàn tất.
 
 <div id="form-layout"></div>
 
@@ -1096,7 +1105,7 @@ Field.chips("Tags",
 
 | Phương thức | Mô tả |
 |-------------|-------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Gửi form theo tên |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Gửi form theo tên. Trả về `Future<void>` hoàn thành khi `onSuccess`/`onFailure` đã xong |
 | `NyFormWidget.stateRefresh(name)` | Làm mới trạng thái UI form |
 | `NyFormWidget.stateSetValue(name, key, value)` | Đặt giá trị trường theo tên form |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Đặt tùy chọn trường theo tên form |

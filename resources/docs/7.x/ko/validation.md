@@ -10,6 +10,7 @@
 - FormValidator
   - [FormValidator 사용](#using-form-validator "FormValidator 사용")
   - [FormValidator Named Constructor](#form-validator-named-constructors "FormValidator Named Constructor")
+  - [번역된 유효성 검사 메시지](#translated-validation-messages "번역된 유효성 검사 메시지")
   - [유효성 검사 규칙 체이닝](#chaining-validation-rules "유효성 검사 규칙 체이닝")
   - [Nullable 필드](#nullable-fields "Nullable 필드")
   - [커스텀 유효성 검사](#custom-validation "커스텀 유효성 검사")
@@ -246,6 +247,49 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## 번역된 유효성 검사 메시지
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+위의 모든 named constructor는 `message:`를 전달하지 않아도 동작합니다 -- 커스텀 메시지가 없는 규칙은 하드코딩된 문자열 대신 `nylo.validation.*` 번역 키를 통해 기본값을 해석합니다:
+
+<!-- uncertain: kept the quoted example message in English since it's literal program output from Nylo's built-in (English) validation text, not descriptive prose -->
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — nylo.validation.min_length에서 가져옴
+```
+
+[Nylo의 다른 내장 텍스트](/docs/{{ $version }}/localization#built-in-translations)와 동일한 방식으로 모든 규칙의 기본값을 재정의할 수 있습니다. 자신의 언어 파일에서 `nylo.validation` 아래에 해당 키를 추가하세요:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+`minLength`, `maxLength`, `minValue`, `dateAgeIsOlder` 등 자신만의 값을 받는 규칙은, `FormRule.messageArguments`를 통해 그 값을 `@{{attribute}}`와 함께 `@{{placeholder}}`로 번역된 메시지에 노출합니다. `@{{attribute}}` 자체는 필드 이름(또는 전달한 `attribute:`)으로 채워지며, 동일한 방식으로 번역됩니다.
+
+`FormValidationResponse`(그리고 `FormValidator`나 `Field`의 `onFailure`에서 볼 수 있는 그 서브클래스인 `FormValidationError`/`FormValidationSuccess`)는 번역된 `message`와 함께 필드 이름을 `attribute`에 담아 전달합니다:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

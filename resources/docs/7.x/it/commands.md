@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Questo crea un nuovo file in `lib/app/commands/current_time.dart` e lo registra nel registro dei comandi.
 
+Passa `--live` per generare invece un comando che viene eseguito *all'interno della tua app*, pilotato da Metro mentre l'app e' in esecuzione in modalita' debug -- vedi [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Struttura del Comando
@@ -126,6 +132,8 @@ Il nome del comando segue il formato `category:name`. Quando esegui `metro` senz
   project:deploy
 ```
 
+Se i pacchetti installati includono i propri comandi, questi appaiono in sezioni aggiuntive sotto i tuoi -- vedi [Comandi dei Pacchetti](#package-commands).
+
 Per visualizzare l'aiuto per un comando:
 
 ```bash
@@ -160,10 +168,15 @@ Ogni voce contiene:
 | `name` | Il nome del comando (usato dopo il prefisso della categoria) |
 | `category` | La categoria del comando (es. `app`, `project`) |
 | `script` | Il file Dart in `lib/app/commands/` |
+| `description` | Opzionale. Un riepilogo di una riga mostrato nel menu di `metro` |
+
+I comandi distribuiti da un pacchetto non vengono mai aggiunti a questo file -- Metro li rileva separatamente. Vedi [Comandi dei Pacchetti](#package-commands) piu' sotto.
 
 <div id="package-commands"></div>
 
 ## Comandi dei Pacchetti
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 I pacchetti possono fornire comandi Metro per gli sviluppatori che li installano -- ad esempio un comando `install` che crea la configurazione di cui un pacchetto ha bisogno. Quando un pacchetto da cui dipende il tuo progetto contiene un file `metro_commands.json`, Metro rileva automaticamente i suoi comandi; non c'e' nulla da registrare nel tuo progetto. Aggiungi il pacchetto al tuo `pubspec.yaml`, esegui `flutter pub get`, e i suoi comandi appariranno nel menu di `metro` sotto il nome del pacchetto:
 
@@ -189,6 +202,8 @@ I comandi integrati hanno sempre la precedenza, poi i comandi nel `commands.json
 <div id="shipping-commands-in-a-package"></div>
 
 ### Distribuire Comandi in un Pacchetto
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Per distribuire comandi con un pacchetto che mantieni, metti ogni comando nella cartella `bin/` del pacchetto ed elencalo in un file `metro_commands.json` nella radice del pacchetto, accanto a `pubspec.yaml`:
 
@@ -264,7 +279,7 @@ Metro esegue il comando come `dart run <package>:<executable>` dalla radice del 
 - Gli import vengono risolti attraverso il progetto dello sviluppatore, quindi `nylo_framework` e' la versione da cui dipende la sua app. Il tuo pacchetto non viene mai modificato.
 - Lo script deve essere un file direttamente dentro `bin/` -- le sottocartelle non sono supportate.
 
-Scegli una categoria specifica per il tuo pacchetto in modo che non entri in collisione con i comandi propri dello sviluppatore. I comandi dei pacchetti sono rilevati da Metro a partire da {{ config('app.name') }} `7.1.29` (`nylo_support` `7.29.0`).
+Scegli una categoria specifica per il tuo pacchetto in modo che non entri in collisione con i comandi propri dello sviluppatore.
 
 <div id="options-and-flags"></div>
 

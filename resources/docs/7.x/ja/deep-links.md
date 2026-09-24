@@ -13,6 +13,7 @@
   - [iOS 設定](#ios-configuration "iOS 設定")
 - [リンクのインターセプト](#intercepting-links "リンクのインターセプト")
 - [フォールバックルート](#fallback-route "フォールバックルート")
+- [リンクの解決](#resolving-a-link "リンクの解決")
 - [テスト](#testing "テスト")
 - [API リファレンス](#api-reference "API リファレンス")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 URI のパスが登録済みルートと一致する場合、{{ config('app.name') }} はそのルートにナビゲーションします。一致しない場合は、フォールバック先に遷移します。
 
+<div id="resolving-a-link"></div>
+
+## リンクの解決
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+ナビゲーションを行わずに、ある URI がアプリをどこへ導くかを読み取ります -- テストや、期待通りにルーティングされないリンクを診断する際に便利です:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- URI から読み取られたパス
+target.registered;       // true -- そのパスが登録済みルートかどうか
+target.target;           // アプリが実際に遷移する先: `path`、または
+                          // `path` が登録されていない場合のフォールバックルート
+target.queryParameters;  // URI のクエリパラメータ
+target.usedFallback;     // `target` が `fallbackRoute` から来た場合に true
+```
+
+`resolve()` は自動ディスパッチパスが使用するものと同じ検索を行うため、リンクは実際に処理される内容そのままに報告されます。
+
 <div id="testing"></div>
 
 ## テスト
@@ -229,3 +252,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | パラメータ | 型 | 説明 |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | 受信した URI を受け取ります。 |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+ナビゲーションを行わずに、`uri` がどこにルーティングされるかを読み取ります。[リンクの解決](#resolving-a-link) を参照してください。
+
+| プロパティ | 型 | 説明 |
+|----------|------|-------------|
+| `path` | `String` | URI から読み取られたパス。 |
+| `registered` | `bool` | `path` が登録済みルートかどうか。 |
+| `target` | `String` | アプリが実際に遷移する先: `path`、または `path` が登録されていない場合の `fallbackRoute`。 |
+| `queryParameters` | `Map<String, dynamic>` | URI のクエリパラメータ。 |
+| `usedFallback` | `bool` | `path` の代わりにフォールバックルートが使用されたかどうか。 |

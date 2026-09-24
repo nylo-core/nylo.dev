@@ -11,6 +11,7 @@
   - [Handlers แบบมีและไม่มีข้อมูล](#handlers-with-and-without-data "Handlers แบบมีและไม่มีข้อมูล")
   - [การใช้ StateActions Instance](#using-a-state-actions-instance "การใช้ StateActions Instance")
 - [รูปแบบ: State Managed Pages (NyPage)](#pattern-ny-page "รูปแบบ: State Managed Pages")
+  - [การเรียกใช้ Actions ของหน้า](#page-actions-shortcut "การเรียกใช้ actions ของหน้าจากภายนอก")
 - [รูปแบบ: Stateful Widgets (NyState)](#pattern-ny-state "รูปแบบ: Stateful Widgets")
 - [รูปแบบ: State Managed Widgets (NyStateManaged)](#pattern-ny-state-managed "รูปแบบ: State Managed Widgets")
   - [ขั้นสูง: หลาย Instance ที่แยกจากกัน](#advanced-multiple-isolated-instances "ขั้นสูง: หลาย Instance ที่แยกจากกัน")
@@ -186,6 +187,9 @@ class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
 
+  /// Actions เช่น MyPage.actions.showToast("hello");
+  static final actions = path.actions;
+
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
 
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**ขั้นตอนที่ 2:** เปลี่ยน `stateManaged` เป็น `true`
-
-โดยค่าเริ่มต้น หน้า**ไม่**สมัครรับ state events — เพื่อหลีกเลี่ยง listeners ที่ไม่จำเป็นบนหน้าที่ไม่ต้องการ หากต้องการเปิดใช้ state actions บนหน้า ให้เปลี่ยน getter:
+`stateManaged` มีค่าเริ่มต้นเป็น `true` อยู่แล้ว ดังนั้นหน้าจึงพร้อมรับ state actions ทันทีที่คุณเพิ่ม map `stateActions` ด้านล่าง -- ไม่ต้องทำขั้นตอนเพิ่มเติม หน้าที่สร้างก่อน {{ config('app.name') }} 7.2.0 จะมีค่าเริ่มต้นของ `stateManaged` เป็น `false`; เปลี่ยนเองเพื่อเปิดใช้งานกับหน้าที่มีอยู่แล้ว:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**ขั้นตอนที่ 3:** เพิ่ม map `stateActions`
+**ขั้นตอนที่ 2:** เพิ่ม map `stateActions`
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**ขั้นตอนที่ 4:** เรียกใช้ action จากที่ใดก็ได้โดยใช้ `path` ของหน้า
+**ขั้นตอนที่ 3:** เรียกใช้ action จากที่ใดก็ได้โดยใช้ `path` ของหน้า -- หรือทางลัด `actions` ของมัน
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -249,6 +251,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 
 > หน้าใช้ `MyPage.path` เป็น key, widgets ใช้ `MyWidget.state` เป็น key นี่คือความแตกต่างเพียงอย่างเดียวที่ call site
 
+<div id="page-actions-shortcut"></div>
+
+### การเรียกใช้ Actions ของหน้า
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "PageStateActions" / "noSuchMethod"-routed typed actions -- not seen in existing locale file -->
+หน้าที่สร้างขึ้นทุกหน้าจะเก็บ `static final actions = path.actions;` ไว้ในคลาสของมัน -- เป็น `PageStateActions` สำหรับเรียกใช้หน้าจากที่ใดก็ได้โดยไม่ต้องสร้างการเรียก `stateAction(...)` เอง:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Actions ในตัวมี `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, และ `call(name, data)` แบบทั่วไปที่ยิง handler ใน `stateActions` ของคุณเองตามชื่อ:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// เหมือนกับ: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+คุณยังสามารถ subclass `PageStateActions` และประกาศ methods **โดยไม่มี body** เพื่อเปลี่ยนแต่ละอันให้เป็น action แบบมีชนิดข้อมูล ผ่าน `noSuchMethod` ดู [Metro Live](/docs/{{ $version }}/metro-live#page-actions) ซึ่งเรียกใช้ actions ของหน้าในลักษณะเดียวกันขณะที่แอปของคุณกำลังทำงาน
 
 <div id="pattern-ny-state"></div>
 

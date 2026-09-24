@@ -11,6 +11,7 @@
   - [Handlers With and Without Data](#handlers-with-and-without-data "Handlers With and Without Data")
   - [Using a StateActions Instance](#using-a-state-actions-instance "Using a StateActions Instance")
 - [Pattern: State Managed Pages (NyPage)](#pattern-ny-page "Pattern: State Managed Pages")
+  - [Calling a Page's Actions](#page-actions-shortcut "Calling a page's actions from outside it")
 - [Pattern: Stateful Widgets (NyState)](#pattern-ny-state "Pattern: Stateful Widgets")
 - [Pattern: State Managed Widgets (NyStateManaged)](#pattern-ny-state-managed "Pattern: State Managed Widgets")
   - [Advanced: Multiple Isolated Instances](#advanced-multiple-isolated-instances "Advanced: Multiple Isolated Instances")
@@ -179,12 +180,15 @@ Use this when you want to trigger behavior on a full page from elsewhere in your
 metro make:page my_page
 ```
 
-This generates a `NyPage` in `lib/resources/pages/`:
+This generates a `NyPage` in `lib/resources/pages/`, already wired for state actions:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Actions e.g. MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Step 2:** Flip `stateManaged` to `true`.
-
-By default, pages do **not** subscribe to state events — this avoids unnecessary listeners on pages that don't need them. To enable state actions on a page, change the getter:
+`stateManaged` already defaults to `true`, so the page is ready to receive state actions as soon as you add a `stateActions` map below — no extra step needed. Pages generated before {{ config('app.name') }} 7.2.0 default `stateManaged` to `false`; flip it yourself to opt an existing page in:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Step 3:** Add a `stateActions` map.
+**Step 2:** Add a `stateActions` map.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Step 4:** Trigger the action from anywhere using the page's `path`.
+**Step 3:** Trigger the action from anywhere using the page's `path` — or its `actions` shortcut.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Pages key off `MyPage.path`, widgets key off `MyWidget.state`. This is the only difference at the call site.
+
+<div id="page-actions-shortcut"></div>
+
+### Calling a Page's Actions
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Every generated page keeps `static final actions = path.actions;` on its class — a `PageStateActions` for calling the page from anywhere without building the `stateAction(...)` call yourself:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Built-in actions include `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, and a generic `call(name, data)` that fires one of your own `stateActions` handlers by name:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// same as: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+You can also subclass `PageStateActions` and declare methods **without a body** to turn each into a typed action, routed through `noSuchMethod`. See [Metro Live](/docs/{{ $version }}/metro-live#page-actions), which calls a page's actions the same way while your app is running.
 
 
 <div id="pattern-ny-state"></div>

@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Lors de la soumission, le formulaire valide tous les champs. Si la validation reussit, `onSuccess` est appele avec un `Map<String, dynamic>` des donnees du formulaire (les cles sont des versions snake_case des noms de champs). Si la validation echoue, une erreur toast est affichee par defaut et `onFailure` est appele si fourni.
 
+Les trois facons d'appeler `submit()` ci-dessus retournent un `Future<void>` qui se termine une fois que `onSuccess` ou `onFailure` -- et tout ce que l'un des deux retourne -- a fini de s'executer (il se termine immediatement si aucun formulaire portant ce nom n'est monte). Retournez-le depuis le `onPressed` d'un bouton pour garder le bouton verrouille pendant toute la soumission, et pas seulement jusqu'a ce que le formulaire soit valide :
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` retourne le `Future<void>` de `.submit(...)`, donc un bouton qui suit son propre etat de chargement (comme les styles `Button` integres) reste verrouille jusqu'a ce que `onSuccess` se termine.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Methode | Description |
 |---------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Soumettre un formulaire par son nom |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Soumettre un formulaire par son nom. Retourne un `Future<void>` qui se termine une fois que `onSuccess`/`onFailure` a fini |
 | `NyFormWidget.stateRefresh(name)` | Rafraichir l'etat de l'interface du formulaire |
 | `NyFormWidget.stateSetValue(name, key, value)` | Definir la valeur d'un champ par nom de formulaire |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Definir les options d'un champ par nom de formulaire |

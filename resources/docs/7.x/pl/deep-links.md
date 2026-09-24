@@ -13,6 +13,7 @@
   - [Konfiguracja iOS](#ios-configuration "Konfiguracja iOS")
 - [Przechwytywanie linków](#intercepting-links "Przechwytywanie linków")
 - [Trasa zastępcza](#fallback-route "Trasa zastępcza")
+- [Rozwiązywanie linku](#resolving-a-link "Rozwiązywanie linku")
 - [Testowanie](#testing "Testowanie")
 - [Dokumentacja API](#api-reference "Dokumentacja API")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Gdy ścieżka URI odpowiada zarejestrowanej trasie, {{ config('app.name') }} do niej przekierowuje. W przeciwnym razie użytkownik trafia na trasę zastępczą.
 
+<div id="resolving-a-link"></div>
+
+## Rozwiązywanie linku
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Odczytaj, dokąd zaprowadziłby aplikację dany URI, bez faktycznej nawigacji -- przydatne w testach albo do diagnozowania linku, który nie kieruje tam, gdzie się spodziewasz:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- ścieżka odczytana z URI
+target.registered;       // true -- czy ta ścieżka jest zarejestrowaną trasą
+target.target;           // dokąd aplikacja faktycznie trafi: `path`, albo
+                          // trasa zastępcza, gdy `path` nie jest zarejestrowana
+target.queryParameters;  // parametry zapytania URI
+target.usedFallback;     // true, gdy `target` pochodzi z `fallbackRoute`
+```
+
+`resolve()` to to samo wyszukiwanie, którego używa automatyczna ścieżka dispatchu, więc link jest raportowany dokładnie tak, jak zostanie obsłużony.
+
 <div id="testing"></div>
 
 ## Testowanie
@@ -229,3 +252,19 @@ Rejestruje callback wywoływany dla każdej przychodzącej URI. Zwróć `true`, 
 | Parametr | Typ | Opis |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Otrzymuje przychodzącą URI. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Odczytuje, dokąd skierowałby `uri`, bez faktycznej nawigacji. Zobacz [Rozwiązywanie linku](#resolving-a-link).
+
+| Właściwość | Typ | Opis |
+|----------|------|-------------|
+| `path` | `String` | Ścieżka odczytana z URI. |
+| `registered` | `bool` | Czy `path` jest zarejestrowaną trasą. |
+| `target` | `String` | Dokąd aplikacja faktycznie trafia: `path`, albo `fallbackRoute`, gdy `path` nie jest zarejestrowana. |
+| `queryParameters` | `Map<String, dynamic>` | Parametry zapytania URI. |
+| `usedFallback` | `bool` | Czy zamiast `path` użyto trasy zastępczej. |

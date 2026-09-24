@@ -7,6 +7,7 @@
 - [การใช้งานเบื้องต้น](#basic-usage "การใช้งานเบื้องต้น")
   - [การสร้าง Navigation Hub](#creating-a-navigation-hub "การสร้าง Navigation Hub")
   - [การสร้าง Navigation Tab](#creating-navigation-tabs "การสร้าง Navigation Tab")
+  - [การตั้งชื่อ State ของ Hub](#naming-the-hubs-state "การตั้งชื่อ State ของ Hub")
   - [การนำทางด้านล่าง](#bottom-navigation "การนำทางด้านล่าง")
     - [ตัวสร้างแถบนำทางแบบกำหนดเอง](#custom-nav-bar-builder "ตัวสร้างแถบนำทางแบบกำหนดเอง")
   - [การนำทางด้านบน](#top-navigation "การนำทางด้านบน")
@@ -150,6 +151,28 @@ routeTo(BaseNavigationHub.path);
 ```
 
 มี**อีกมากมาย**ที่คุณสามารถทำกับ Navigation Hub มาดูฟีเจอร์บางอย่างกัน
+
+<div id="naming-the-hubs-state"></div>
+
+### การตั้งชื่อ State ของ Hub
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+<!-- uncertain: new Nylo-specific terminology "NavigationHubStateActions" / "declaredStateName" -- not seen in existing locale file -->
+Hub ที่ถูกสร้างขึ้นด้านบนตกลงชื่อ state เดียวกันด้วยสองวิธี: widget ส่ง `stateName: path.stateName()` ให้กับ `NyStatefulWidget` และ `NavigationHubStateActions(path.stateName())` ก็อ้างอิงชื่อเดียวกันนั้น คลาส state ของ hub -- คลาสที่ extend จาก `NavigationHub<T>` -- ก็สามารถประกาศชื่อนั้นได้ด้วยตัวเอง ผ่านพารามิเตอร์ constructor `name` และ `path` ที่ `NavigationHub` ส่งต่อไปยัง `NyPage`:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+ทั้งสองรูปแบบ resolve ไปยังชื่อเดียวกัน ดังนั้นใช้แบบที่อ่านง่ายกว่าที่ call site ของคุณ -- นี่เป็นทางเลือก เนื่องจาก hub ที่สร้างขึ้นด้านบนทำงานได้อยู่แล้วโดยไม่ต้องมีมัน ทุก `NyStatefulWidget` ยังเปิดเผย `declaredStateName` ซึ่งคือ `stateName` ที่ส่งให้กับ constructor ของมันโดยตรง (หรือ `null` เมื่อไม่มีการส่งค่า) หากคุณต้องการอ่านค่ากลับว่าอะไรถูกประกาศไว้ แทนที่จะเป็นชื่อที่ {{ config('app.name') }} สร้างให้โดยค่าเริ่มต้น
 
 <div id="bottom-navigation"></div>
 

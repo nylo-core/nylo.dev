@@ -7,6 +7,7 @@
 - [Temel Kullanim](#basic-usage "Temel Kullanim")
   - [Navigation Hub Olusturma](#creating-a-navigation-hub "Navigation Hub Olusturma")
   - [Navigasyon Sekmeleri Olusturma](#creating-navigation-tabs "Navigasyon Sekmeleri Olusturma")
+  - [Hub'in Durumunu Adlandirma](#naming-the-hubs-state "Hub'in Durumunu Adlandirma")
   - [Alt Navigasyon](#bottom-navigation "Alt Navigasyon")
     - [Ozel Nav Bar Builder](#custom-nav-bar-builder "Ozel Nav Bar Builder")
   - [Ust Navigasyon](#top-navigation "Ust Navigasyon")
@@ -150,6 +151,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Navigation Hub ile yapabileceginiz cok **daha fazla** sey var, bazi ozelliklerine bakalim.
+
+<div id="naming-the-hubs-state"></div>
+
+### Hub'in Durumunu Adlandirma
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+Yukarida olusturulan hub, bir durum adi uzerinde iki sekilde anlasir: widget, `NyStatefulWidget`'a `stateName: path.stateName()` gecer ve `NavigationHubStateActions(path.stateName())` ayni adi hedef alir. Hub'in durum sinifi -- `NavigationHub<T>`'i genisleten sinif -- bu adi, `NavigationHub`'in `NyPage`'e iletigi `name` ve `path` constructor parametreleri araciligiyla kendisi de bildirebilir:
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+Her iki bicim de ayni ada cozumlenir, bu yuzden cagri noktanizda hangisi daha iyi okunuyorsa onu kullanin -- bu istege bagli, cunku yukaridaki olusturulan hub bu olmadan da zaten calisir. Her `NyStatefulWidget`, {{ config('app.name') }}'in varsayilan olarak turettigi ad yerine neyin bildirildigini geri okumaniz gerekirse, constructor'ina gecirilen tam `stateName` degerini (ya da hicbiri verilmediyse `null`) veren `declaredStateName`'i de sunar.
 
 <div id="bottom-navigation"></div>
 

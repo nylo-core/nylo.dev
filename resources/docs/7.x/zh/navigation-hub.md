@@ -7,6 +7,7 @@
 - [基本用法](#basic-usage "基本用法")
   - [创建 Navigation Hub](#creating-a-navigation-hub "创建 Navigation Hub")
   - [创建导航标签页](#creating-navigation-tabs "创建导航标签页")
+  - [为 Hub 的 State 命名](#naming-the-hubs-state "为 Hub 的 State 命名")
   - [底部导航](#bottom-navigation "底部导航")
     - [自定义导航栏构建器](#custom-nav-bar-builder "自定义导航栏构建器")
   - [顶部导航](#top-navigation "顶部导航")
@@ -149,6 +150,27 @@ routeTo(BaseNavigationHub.path);
 ```
 
 Navigation Hub 还有**更多**功能，让我们一起来了解一些特性。
+
+<div id="naming-the-hubs-state"></div>
+
+### 为 Hub 的 State 命名
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.1.28+, nylo_support 7.28.0+" />
+
+上面生成的 hub 通过两种方式就同一个 state 名称达成一致：组件将 `stateName: path.stateName()` 传给 `NyStatefulWidget`，而 `NavigationHubStateActions(path.stateName())` 则引用同一个名称。hub 的 state 类 -- 即继承 `NavigationHub<T>` 的那个类 -- 也可以通过 `NavigationHub` 转发给 `NyPage` 的 `name` 和 `path` 构造函数参数，自行声明这个名称：
+
+``` dart
+class _BaseNavigationHubState extends NavigationHub<BaseNavigationHub> {
+  _BaseNavigationHubState()
+      : super(() => {
+          0: NavigationTab.tab(title: "Home", page: HomeTab()),
+          1: NavigationTab.tab(title: "Settings", page: SettingsTab()),
+        }, path: BaseNavigationHub.path.stateName());
+  ...
+}
+```
+
+两种写法最终都会得到相同的名称，因此在调用处选用读起来更顺的那种即可 -- 这是可选的，因为上面生成的 hub 即使不这样做也已经能正常工作。每个 `NyStatefulWidget` 还会公开 `declaredStateName`，即传给其构造函数的确切 `stateName`（如果没有传入则为 `null`），如果您需要读取实际声明的值，而不是 {{ config('app.name') }} 默认推导出的名称，可以使用它。
 
 <div id="bottom-navigation"></div>
 

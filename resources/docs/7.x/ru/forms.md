@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 При отправке форма проверяет все поля. Если валидация прошла успешно, вызывается `onSuccess` с `Map<String, dynamic>` данных полей (ключи — версии имён полей в snake_case). Если валидация не прошла, по умолчанию отображается уведомление об ошибке, и вызывается `onFailure`, если он предоставлен.
 
+Все три способа вызова `submit()`, показанные выше, возвращают `Future<void>`, который завершается, когда `onSuccess` или `onFailure` — и всё, что вернёт любой из них — закончит выполнение (он завершается немедленно, если форма с этим именем не смонтирована). Верните его из `onPressed` кнопки, чтобы кнопка оставалась заблокированной на всё время отправки, а не только до момента валидации формы:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` возвращает `Future<void>` из `.submit(...)`, поэтому кнопка, отслеживающая собственное состояние загрузки (как встроенные стили `Button`), остаётся заблокированной до завершения `onSuccess`.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Метод | Описание |
 |-------|----------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Отправить форму по имени |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Отправить форму по имени. Возвращает `Future<void>`, который завершается после выполнения `onSuccess`/`onFailure` |
 | `NyFormWidget.stateRefresh(name)` | Обновить состояние UI формы |
 | `NyFormWidget.stateSetValue(name, key, value)` | Установить значение поля по имени формы |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Установить параметры поля по имени формы |

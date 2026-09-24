@@ -11,6 +11,7 @@
   - [डेटा के साथ और बिना हैंडलर्स](#handlers-with-and-without-data "डेटा के साथ और बिना हैंडलर्स")
   - [StateActions इंस्टेंस का उपयोग](#using-a-state-actions-instance "StateActions इंस्टेंस का उपयोग")
 - [पैटर्न: स्टेट मैनेज्ड पेजेज (NyPage)](#pattern-ny-page "पैटर्न: स्टेट मैनेज्ड पेजेज")
+  - [एक पेज के एक्शन्स को कॉल करना](#page-actions-shortcut "पेज के एक्शन्स को उसके बाहर से कॉल करना")
 - [पैटर्न: Stateful विजेट्स (NyState)](#pattern-ny-state "पैटर्न: Stateful विजेट्स")
 - [पैटर्न: स्टेट मैनेज्ड विजेट्स (NyStateManaged)](#pattern-ny-state-managed "पैटर्न: स्टेट मैनेज्ड विजेट्स")
   - [एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज](#advanced-multiple-isolated-instances "एडवांस्ड: एकाधिक अलग-अलग इंस्टेंसेज")
@@ -179,12 +180,15 @@ actions.action("update_user_image", data: user);
 metro make:page my_page
 ```
 
-यह `lib/resources/pages/` में एक `NyPage` जनरेट करता है:
+यह `lib/resources/pages/` में एक `NyPage` जनरेट करता है, जो पहले से ही state actions के लिए वायर्ड है:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// एक्शन्स, उदाहरण के लिए MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**स्टेप 2:** `stateManaged` को `true` पर स्विच करें।
-
-डिफ़ॉल्ट रूप से, पेजेज स्टेट इवेंट्स को सब्सक्राइब **नहीं** करते — यह उन पेजेज पर अनावश्यक लिस्नर्स से बचाता है जिन्हें उनकी जरूरत नहीं है। किसी पेज पर state actions सक्षम करने के लिए, गेटर बदलें:
+`stateManaged` पहले से ही डिफ़ॉल्ट रूप से `true` है, इसलिए जैसे ही आप नीचे एक `stateActions` मैप जोड़ते हैं, पेज state actions प्राप्त करने के लिए तैयार हो जाता है — किसी अतिरिक्त स्टेप की आवश्यकता नहीं है। {{ config('app.name') }} 7.2.0 से पहले जनरेट किए गए पेजेज में `stateManaged` डिफ़ॉल्ट रूप से `false` होता है; किसी मौजूदा पेज को शामिल करने के लिए इसे खुद बदलें:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**स्टेप 3:** एक `stateActions` मैप जोड़ें।
+**स्टेप 2:** एक `stateActions` मैप जोड़ें।
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**स्टेप 4:** पेज के `path` का उपयोग करके कहीं से भी एक्शन ट्रिगर करें।
+**स्टेप 3:** पेज के `path` का उपयोग करके — या इसके `actions` शॉर्टकट से — कहीं से भी एक्शन ट्रिगर करें।
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,30 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > पेजेज `MyPage.path` से की ऑफ करते हैं, विजेट्स `MyWidget.state` से की ऑफ करते हैं। कॉल साइट पर यही एकमात्र अंतर है।
+
+<div id="page-actions-shortcut"></div>
+
+### एक पेज के एक्शन्स को कॉल करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific API "PageStateActions" / noSuchMethod-based typed actions — not seen in existing locale file -->
+हर जनरेट किया गया पेज अपनी क्लास पर `static final actions = path.actions;` रखता है — कहीं से भी पेज को कॉल करने के लिए एक `PageStateActions`, बिना खुद `stateAction(...)` कॉल बनाए:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+बिल्ट-इन एक्शन्स में `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage`, और एक जेनेरिक `call(name, data)` शामिल है जो नाम से आपके अपने किसी `stateActions` हैंडलर को फायर करता है:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// समान है: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+आप `PageStateActions` को सबक्लास भी कर सकते हैं और **बिना बॉडी वाले** मेथड्स घोषित कर सकते हैं ताकि हर एक `noSuchMethod` के माध्यम से रूट होकर एक टाइप्ड एक्शन बन जाए। देखें [Metro Live](/docs/{{ $version }}/metro-live#page-actions), जो ऐप के चलते समय पेज के एक्शन्स को उसी तरह कॉल करता है।
 
 
 <div id="pattern-ny-state"></div>

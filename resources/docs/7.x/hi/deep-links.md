@@ -13,6 +13,7 @@
   - [iOS कॉन्फ़िगरेशन](#ios-configuration "iOS कॉन्फ़िगरेशन")
 - [लिंक्स इंटरसेप्ट करना](#intercepting-links "लिंक्स इंटरसेप्ट करना")
 - [फ़ॉलबैक रूट](#fallback-route "फ़ॉलबैक रूट")
+- [एक लिंक को रिज़ॉल्व करना](#resolving-a-link "एक लिंक को रिज़ॉल्व करना")
 - [परीक्षण](#testing "परीक्षण")
 - [API रेफ़रेंस](#api-reference "API रेफ़रेंस")
 
@@ -181,6 +182,29 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 जब URI का पाथ किसी रजिस्टर्ड रूट से मेल खाता है, तो {{ config('app.name') }} उस पर रूट करता है। अन्यथा, यूज़र फ़ॉलबैक पर पहुँचता है।
 
+<div id="resolving-a-link"></div>
+
+## एक लिंक को रिज़ॉल्व करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific API "NyDeepLinkHandler" / "DeepLinkTarget" — not seen in existing locale file -->
+बिना नेविगेट किए यह पढ़ें कि कोई URI ऐप को कहाँ ले जाएगा -- टेस्ट्स में उपयोगी, या किसी ऐसे लिंक का निदान करने के लिए जो आपकी अपेक्षा के अनुसार रूट नहीं हो रहा:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- URI से पढ़ा गया पाथ
+target.registered;       // true -- क्या वह पाथ एक रजिस्टर्ड रूट है
+target.target;           // ऐप वास्तव में कहाँ जाएगा: `path`, या जब
+                          // `path` रजिस्टर्ड न हो तो फ़ॉलबैक रूट
+target.queryParameters;  // URI के क्वेरी पैरामीटर्स
+target.usedFallback;     // true जब `target`, `fallbackRoute` से आया हो
+```
+
+`resolve()` वही लुकअप है जिसका उपयोग स्वचालित डिस्पैच पाथ करता है, इसलिए एक लिंक की रिपोर्ट बिल्कुल वैसे ही की जाती है जैसे उसे हैंडल किया जाएगा।
+
 <div id="testing"></div>
 
 ## परीक्षण
@@ -229,3 +253,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | पैरामीटर | टाइप | विवरण |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | आने वाला URI प्राप्त करता है। |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+बिना नेविगेट किए यह पढ़ता है कि `uri` कहाँ रूट होगा। देखें [एक लिंक को रिज़ॉल्व करना](#resolving-a-link)।
+
+| प्रॉपर्टी | टाइप | विवरण |
+|----------|------|-------------|
+| `path` | `String` | URI से पढ़ा गया पाथ। |
+| `registered` | `bool` | क्या `path` एक रजिस्टर्ड रूट है। |
+| `target` | `String` | ऐप वास्तव में कहाँ जाता है: `path`, या जब `path` रजिस्टर्ड न हो तो `fallbackRoute`। |
+| `queryParameters` | `Map<String, dynamic>` | URI के क्वेरी पैरामीटर्स। |
+| `usedFallback` | `bool` | क्या `path` की बजाय फ़ॉलबैक रूट का उपयोग किया गया। |

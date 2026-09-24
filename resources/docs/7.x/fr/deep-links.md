@@ -13,6 +13,7 @@
   - [Configuration iOS](#ios-configuration "Configuration iOS")
 - [Intercepter les liens](#intercepting-links "Intercepter les liens")
 - [Route de secours](#fallback-route "Route de secours")
+- [Resoudre un lien](#resolving-a-link "Resoudre un lien")
 - [Tests](#testing "Tests")
 - [Reference API](#api-reference "Reference API")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Lorsque le chemin de l'URI correspond a une route enregistree, {{ config('app.name') }} y navigue. Sinon, l'utilisateur arrive sur la route de secours.
 
+<div id="resolving-a-link"></div>
+
+## Resoudre un lien
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Lisez vers ou un URI emmenerait l'application, sans naviguer -- utile dans les tests, ou pour diagnostiquer un lien qui ne route pas la ou vous l'attendez :
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- le chemin lu depuis l'URI
+target.registered;       // true -- si ce chemin est une route enregistree
+target.target;           // ou l'application irait reellement : `path`, ou la
+                          // route de secours si `path` n'est pas enregistre
+target.queryParameters;  // les parametres de requete de l'URI
+target.usedFallback;     // true quand `target` provient de `fallbackRoute`
+```
+
+`resolve()` utilise exactement la meme recherche que le chemin de dispatch automatique, donc un lien est rapporte exactement comme il sera traite.
+
 <div id="testing"></div>
 
 ## Tests
@@ -229,3 +252,19 @@ Enregistre un callback invoque pour chaque URI entrant. Retournez `true` pour la
 | Parametre | Type | Description |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Recoit l'URI entrant. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Lit vers ou `uri` routerait, sans naviguer. Voir [Resoudre un lien](#resolving-a-link).
+
+| Propriete | Type | Description |
+|----------|------|-------------|
+| `path` | `String` | Le chemin lu depuis l'URI. |
+| `registered` | `bool` | Si `path` est une route enregistree. |
+| `target` | `String` | Ou l'application va reellement : `path`, ou `fallbackRoute` si `path` n'est pas enregistre. |
+| `queryParameters` | `Map<String, dynamic>` | Les parametres de requete de l'URI. |
+| `usedFallback` | `bool` | Si la route de secours a ete utilisee a la place de `path`. |

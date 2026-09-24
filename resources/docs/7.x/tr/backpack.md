@@ -50,7 +50,14 @@ String? theme = Backpack.instance.read("theme"); // "dark"
 
 // Verinin var olup olmadığını kontrol et
 bool hasTheme = Backpack.instance.contains("theme"); // true
+
+// Şu anda tutulan her anahtarı listele
+List<String> keys = Backpack.instance.keys;
 ```
+
+`Backpack.instance.keys`, sizinkilerin yanında {{ config('app.name') }}'ın kendi dahili anahtarlarını da içerir -- `nylo` (`Nylo` uygulama örneği) ve `event_bus` -- bu yüzden yalnızca kendi verilerinizle ilgileniyorsanız bunları filtreleyin.
+
+> `metro live`, terminalden çalışan bir uygulamadaki Backpack değerlerini listeleyebilir ve inceleyebilir -- bkz. [Metro Live](/docs/{{ $version }}/metro-live#live-run).
 
 <div id="reading-data"></div>
 

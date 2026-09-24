@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 Esto crea un nuevo archivo en `lib/app/commands/current_time.dart` y lo registra en el registro de comandos.
 
+Usa `--live` para generar en su lugar un comando que se ejecuta *dentro de tu app*, controlado desde Metro mientras la app se ejecuta en modo debug -- consulta [Metro Live](/docs/{{ $version }}/metro-live#live-commands).
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## Estructura del comando
@@ -165,6 +171,8 @@ Cada entrada tiene:
 
 ## Comandos de paquetes
 
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 Los paquetes pueden incluir comandos de Metro para los desarrolladores que los instalan -- por ejemplo un comando `install` que crea la configuracion que un paquete necesita. Cuando un paquete del que depende tu proyecto contiene un archivo `metro_commands.json`, Metro descubre sus comandos automaticamente; no hay nada que registrar en tu proyecto. Agrega el paquete a tu `pubspec.yaml`, ejecuta `flutter pub get`, y sus comandos apareceran en el menu de `metro` bajo el nombre del paquete:
 
 ```
@@ -189,6 +197,8 @@ Los comandos integrados siempre tienen prioridad, luego los comandos en el `comm
 <div id="shipping-commands-in-a-package"></div>
 
 ### Distribuir comandos en un paquete
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 Para distribuir comandos con un paquete que mantienes, coloca cada comando en la carpeta `bin/` del paquete y listalo en un archivo `metro_commands.json` en la raiz del paquete, junto a `pubspec.yaml`:
 

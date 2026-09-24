@@ -13,6 +13,7 @@
   - [Configuração iOS](#ios-configuration "Configuração iOS")
 - [Interceptando Links](#intercepting-links "Interceptando Links")
 - [Rota de Fallback](#fallback-route "Rota de Fallback")
+- [Resolvendo um Link](#resolving-a-link "Resolvendo um Link")
 - [Testes](#testing "Testes")
 - [Referência de API](#api-reference "Referência de API")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Quando o caminho da URI corresponde a uma rota registrada, o {{ config('app.name') }} roteia para ela. Caso contrário, o usuário é direcionado ao fallback.
 
+<div id="resolving-a-link"></div>
+
+## Resolvendo um Link
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Leia para onde uma URI levaria o app, sem navegar -- útil em testes, ou para diagnosticar um link que não está roteando para onde você espera:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- o caminho lido a partir da URI
+target.registered;       // true -- se esse caminho é uma rota registrada
+target.target;           // para onde o app realmente iria: `path`, ou a
+                          // rota de fallback quando `path` não está registrado
+target.queryParameters;  // os parâmetros de query da URI
+target.usedFallback;     // true quando `target` veio de `fallbackRoute`
+```
+
+`resolve()` é a mesma busca que o caminho de despacho automático usa, então um link é reportado exatamente como será tratado.
+
 <div id="testing"></div>
 
 ## Testes
@@ -229,3 +252,19 @@ Registra um callback invocado para cada URI recebida. Retorne `true` para deixar
 | Parâmetro | Tipo | Descrição |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Recebe a URI recebida. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Lê para onde `uri` rotearia, sem navegar. Veja [Resolvendo um Link](#resolving-a-link).
+
+| Propriedade | Tipo | Descrição |
+|----------|------|-------------|
+| `path` | `String` | O caminho lido a partir da URI. |
+| `registered` | `bool` | Se `path` é uma rota registrada. |
+| `target` | `String` | Para onde o app realmente vai: `path`, ou `fallbackRoute` quando `path` não está registrado. |
+| `queryParameters` | `Map<String, dynamic>` | Os parâmetros de query da URI. |
+| `usedFallback` | `bool` | Se a rota de fallback foi usada em vez de `path`. |

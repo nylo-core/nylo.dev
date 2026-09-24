@@ -9,6 +9,7 @@
 - [JSON 日志](#json-logging "JSON 日志")
 - [彩色输出](#colored-output "彩色输出")
 - [日志监听器](#log-listeners "日志监听器")
+  - [多个监听器](#multiple-listeners "多个监听器")
 - [辅助扩展](#helper-extensions "辅助扩展")
 - [配置](#configuration "配置")
 
@@ -194,6 +195,29 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### 多个监听器
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+`NyLogger.onLog` 是一个只能赋值一次的单一回调 -- 再次设置它会悄悄替换掉之前的值。当您需要同时使用多个监听器时（例如，同时运行您自己的崩溃报告工具*和* Nylo Live 的日志流），请改用 `addListener`/`removeListener`：
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// 之后，例如在测试的 tearDown 中
+NyLogger.removeListener(reportErrors);
+```
+
+每个通过 `addListener` 添加的监听器都会与 `onLog` 一起运行 -- 添加一个监听器不会替换其他监听器，也不会替换 `onLog`。
 
 <div id="helper-extensions"></div>
 

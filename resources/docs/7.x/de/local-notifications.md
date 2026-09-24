@@ -68,6 +68,15 @@ await LocalNotification.sendNotification(
 );
 ```
 
+Eine solche Terminplanung benötigt unter Android 14+ die Berechtigung `SCHEDULE_EXACT_ALARM`. Fehlt sie Ihrer App, weicht {{ config('app.name') }} automatisch auf das nächstliegende ungenaue Äquivalent aus und protokolliert eine Warnung, statt `exact_alarms_not_permitted` zu werfen:
+
+``` dart
+await LocalNotification(title: "Reminder", body: "...")
+    .send(at: tomorrow, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
+```
+
+Übergeben Sie `androidScheduleMode` selbst, wie oben gezeigt, wenn Sie lieber von vornherein einen ungenauen Modus wählen möchten, statt sich auf den Fallback zu verlassen.
+
 <div id="builder-pattern"></div>
 
 ## Builder-Pattern

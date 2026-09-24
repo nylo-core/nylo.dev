@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`、`live:devices`、`live:status`、`live:run` は実行中のアプリに接続したシェルを開き、実行中のアプリを検査・操作できるようにします -- 詳しくは [Metro Live](/docs/{{ $version }}/metro-live) を参照してください。
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 新しく作成された API Service は `lib/app/networking/` に配置されます。
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### API Service の強制作成
 
 **引数:**
@@ -424,6 +435,8 @@ metro make:api_service user --model="User"
 ``` bash
 metro make:api_service user --force
 ```
+
+`--force` を指定せずに既存のファイルに対して `make:api_service` を実行すると、サイレントに再フォーマットする代わりに終了コード `1` で終了するようになりました -- CI やコード生成でこのコマンドをスクリプトから呼び出す場合に便利です。
 
 <div id="make-event"></div>
 

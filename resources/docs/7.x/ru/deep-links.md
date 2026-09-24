@@ -13,6 +13,7 @@
   - [Настройка iOS](#ios-configuration "Настройка iOS")
 - [Перехват ссылок](#intercepting-links "Перехват ссылок")
 - [Резервный маршрут](#fallback-route "Резервный маршрут")
+- [Разрешение ссылки](#resolving-a-link "Разрешение ссылки")
 - [Тестирование](#testing "Тестирование")
 - [Справочник API](#api-reference "Справочник API")
 
@@ -181,6 +182,28 @@ nylo.useDeepLinks(fallbackRoute: HomePage.path);
 
 Если путь URI совпадает с зарегистрированным маршрутом, {{ config('app.name') }} переходит по нему. В противном случае пользователь попадает на резервный маршрут.
 
+<div id="resolving-a-link"></div>
+
+## Разрешение ссылки
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Узнайте, куда приведёт URI приложение, не выполняя переход -- полезно в тестах или для диагностики ссылки, которая маршрутизируется не туда, куда вы ожидаете:
+
+```dart
+final handler = NyDeepLinkHandler(fallbackRoute: HomePage.path);
+DeepLinkTarget target = handler.resolve(Uri.parse('myapp://product/42'));
+
+target.path;             // "/product/42" -- путь, считанный из URI
+target.registered;       // true -- зарегистрирован ли этот путь как маршрут
+target.target;           // куда приложение реально перейдёт: `path`, либо
+                          // резервный маршрут, если `path` не зарегистрирован
+target.queryParameters;  // параметры запроса URI
+target.usedFallback;     // true, если `target` пришёл из `fallbackRoute`
+```
+
+`resolve()` -- это тот же самый поиск, который использует автоматический путь диспетчеризации, поэтому ссылка сообщается ровно так же, как она будет обработана.
+
 <div id="testing"></div>
 
 ## Тестирование
@@ -229,3 +252,19 @@ void onIncomingLink(Future<bool> Function(Uri uri) callback)
 | Параметр | Тип | Описание |
 |-----------|------|-------------|
 | `callback` | `Future<bool> Function(Uri uri)` | Получает входящий URI. |
+
+### resolve
+
+```dart
+DeepLinkTarget resolve(Uri uri)
+```
+
+Читает, куда перейдёт `uri`, не выполняя переход. См. [Разрешение ссылки](#resolving-a-link).
+
+| Свойство | Тип | Описание |
+|----------|------|-------------|
+| `path` | `String` | Путь, считанный из URI. |
+| `registered` | `bool` | Зарегистрирован ли `path` как маршрут. |
+| `target` | `String` | Куда приложение реально переходит: `path`, либо `fallbackRoute`, если `path` не зарегистрирован. |
+| `queryParameters` | `Map<String, dynamic>` | Параметры запроса URI. |
+| `usedFallback` | `bool` | Был ли использован резервный маршрут вместо `path`. |

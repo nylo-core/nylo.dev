@@ -11,6 +11,7 @@
   - [Verisiz ve Verili Handler'lar](#handlers-with-and-without-data "Verisiz ve Verili Handler'lar")
   - [StateActions Örneği Kullanma](#using-a-state-actions-instance "StateActions Örneği Kullanma")
 - [Desen: Durumu Yönetilen Sayfalar (NyPage)](#pattern-ny-page "Desen: Durumu Yönetilen Sayfalar")
+  - [Sayfa Aksiyonlarını Çağırma](#page-actions-shortcut "Bir sayfanın aksiyonlarını dışarıdan çağırma")
 - [Desen: Stateful Widget'lar (NyState)](#pattern-ny-state "Desen: Stateful Widget'lar")
 - [Desen: Durumu Yönetilen Widget'lar (NyStateManaged)](#pattern-ny-state-managed "Desen: Durumu Yönetilen Widget'lar")
   - [Gelişmiş: Birden Fazla İzole Örnek](#advanced-multiple-isolated-instances "Gelişmiş: Birden Fazla İzole Örnek")
@@ -179,12 +180,15 @@ Uygulamanızın başka bir yerinden tam bir sayfada davranış tetiklemek istedi
 metro make:page my_page
 ```
 
-Bu, `lib/resources/pages/` konumunda bir `NyPage` oluşturur:
+Bu, `lib/resources/pages/` konumunda, durum aksiyonları için zaten bağlanmış bir `NyPage` oluşturur:
 
 ``` dart
 class MyPage extends NyStatefulWidget {
 
   static RouteView path = ("/my-page", (_) => MyPage());
+
+  /// Aksiyonlar, örn. MyPage.actions.showToast("hello");
+  static final actions = path.actions;
 
   MyPage({super.key}) : super(child: () => _MyPageState());
 }
@@ -197,7 +201,7 @@ class _MyPageState extends NyPage<MyPage> {
   };
 
   @override
-  bool get stateManaged => false;
+  bool get stateManaged => true;
 
   @override
   Widget view(BuildContext context) {
@@ -213,16 +217,14 @@ class _MyPageState extends NyPage<MyPage> {
 }
 ```
 
-**Adım 2:** `stateManaged`'ı `true` olarak değiştirin.
-
-Varsayılan olarak, sayfalar durum olaylarına **abone olmaz** — bu, bunlara ihtiyaç duymayan sayfalardaki gereksiz dinleyicilerden kaçınır. Bir sayfada durum aksiyonlarını etkinleştirmek için getter'ı değiştirin:
+`stateManaged`, varsayılan olarak zaten `true`'dur; bu yüzden aşağıya bir `stateActions` haritası eklediğiniz anda sayfa durum aksiyonlarını almaya hazır olur — ekstra bir adıma gerek yoktur. {{ config('app.name') }} 7.2.0'dan önce oluşturulan sayfalarda `stateManaged` varsayılan olarak `false`'tur; mevcut bir sayfayı dahil etmek için bunu kendiniz değiştirin:
 
 ``` dart
 @override
 bool get stateManaged => true;
 ```
 
-**Adım 3:** `stateActions` haritası ekleyin.
+**Adım 2:** `stateActions` haritası ekleyin.
 
 ``` dart
 @override
@@ -237,7 +239,7 @@ Map<String, Function> get stateActions => {
 };
 ```
 
-**Adım 4:** Sayfanın `path`'ini kullanarak herhangi bir yerden aksiyonu tetikleyin.
+**Adım 3:** Sayfanın `path`'ini — ya da `actions` kısayolunu — kullanarak aksiyonu herhangi bir yerden tetikleyin.
 
 ``` dart
 stateAction("refresh_data", state: MyPage.path);
@@ -248,6 +250,29 @@ stateAction("show_toast", state: MyPage.path, data: {
 ```
 
 > Sayfalar `MyPage.path`'e göre, widget'lar ise `MyWidget.state`'e göre tanımlanır. Bu, çağrı tarafındaki tek farktır.
+
+<div id="page-actions-shortcut"></div>
+
+### Sayfa Aksiyonlarını Çağırma
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Oluşturulan her sayfa, sınıfında `static final actions = path.actions;` satırını korur — `stateAction(...)` çağrısını kendiniz oluşturmadan sayfayı herhangi bir yerden çağırmak için bir `PageStateActions`:
+
+``` dart
+ProductPage.actions.showToast("Added to bag");
+ProductPage.actions.refreshPage();
+ProductPage.actions.pop();
+```
+
+Yerleşik aksiyonlar arasında `showToast`, `refreshPage`, `pop`, `confirmAction`, `lockRelease`, `validate`, `changeLanguage` ve kendi `stateActions` handler'larınızdan birini adıyla tetikleyen genel bir `call(name, data)` bulunur:
+
+``` dart
+ProductPage.actions.call("apply_discount", "promo_code_123");
+// aynısı: stateAction("apply_discount", state: ProductPage.path, data: "promo_code_123");
+```
+
+Ayrıca `PageStateActions`'ı alt sınıflayıp **gövdesiz** metotlar tanımlayarak her birini `noSuchMethod` üzerinden yönlendirilen tipli bir aksiyona dönüştürebilirsiniz. Uygulamanız çalışırken bir sayfanın aksiyonlarını aynı şekilde çağıran [Metro Live](/docs/{{ $version }}/metro-live#page-actions) sayfasına bakın.
 
 
 <div id="pattern-ny-state"></div>

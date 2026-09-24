@@ -70,6 +70,12 @@ metro make:command current_time
 metro make:command current_time --category="project"
 ```
 
+इसके बजाय एक ऐसा कमांड स्कैफोल्ड करने के लिए `--live` पास करें जो *आपके ऐप के अंदर* चलता है, Metro से संचालित होकर जब ऐप डिबग मोड में चल रहा हो -- देखें [Metro Live](/docs/{{ $version }}/metro-live#live-commands)।
+
+```bash
+metro make:command seed_cart --live
+```
+
 यह `lib/app/commands/current_time.dart` पर एक नई फाइल बनाता है और इसे कमांड रजिस्ट्री में रजिस्टर करता है।
 
 <div id="command-structure"></div>
@@ -165,6 +171,8 @@ metro app:current_time --help
 
 ## पैकेज कमांड्स
 
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
+
 पैकेज उन डेवलपर्स के लिए Metro कमांड्स शिप कर सकते हैं जो उन्हें इंस्टॉल करते हैं -- उदाहरण के लिए एक `install` कमांड जो पैकेज को जरूरी कॉन्फ़िग स्कैफोल्ड करता है। जब आपका प्रोजेक्ट जिस पैकेज पर निर्भर करता है उसमें एक `metro_commands.json` फाइल होती है, तो Metro स्वचालित रूप से इसके कमांड्स को खोज लेता है; आपके प्रोजेक्ट में कुछ भी रजिस्टर करने की आवश्यकता नहीं है। पैकेज को अपनी `pubspec.yaml` में जोड़ें, `flutter pub get` चलाएँ, और इसके कमांड्स `metro` मेनू में पैकेज के नाम के अंतर्गत दिखाई देंगे:
 
 ```
@@ -189,6 +197,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### एक पैकेज में कमांड्स शिप करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 अपने द्वारा मेंटेन किए जा रहे पैकेज के साथ कमांड्स शिप करने के लिए, हर कमांड को पैकेज की `bin/` डायरेक्टरी में रखें और इसे पैकेज के रूट में, `pubspec.yaml` के बगल में, एक `metro_commands.json` फाइल में सूचीबद्ध करें:
 

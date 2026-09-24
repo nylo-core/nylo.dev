@@ -9,6 +9,7 @@
 - [การบันทึก JSON](#json-logging "การบันทึก JSON")
 - [ผลลัพธ์แบบมีสี](#colored-output "ผลลัพธ์แบบมีสี")
 - [ตัวฟัง Log](#log-listeners "ตัวฟัง Log")
+  - [ผู้ฟังหลายตัว](#multiple-listeners "ผู้ฟังหลายตัว")
 - [ส่วนขยายตัวช่วย](#helper-extensions "ส่วนขยายตัวช่วย")
 - [การตั้งค่า](#configuration "การตั้งค่า")
 
@@ -194,6 +195,30 @@ NyLogger.onLog = (entry) {
   }
 };
 ```
+
+<div id="multiple-listeners"></div>
+
+### ผู้ฟังหลายตัว
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+<!-- uncertain: new Nylo-specific API "addListener"/"removeListener" -- not seen in existing locale file -->
+`NyLogger.onLog` เป็น callback ที่กำหนดได้เพียงตัวเดียว -- การตั้งค่าใหม่จะแทนที่ค่าเดิมอย่างเงียบๆ ใช้ `addListener`/`removeListener` แทนเมื่อคุณต้องการผู้ฟังมากกว่าหนึ่งตัวพร้อมกัน (เช่น crash reporter ของคุณเอง *และ* การสตรีม log ของ Nylo Live ทำงานพร้อมกัน):
+
+``` dart
+void reportErrors(NyLogEntry entry) {
+  if (entry.type == 'error') {
+    CrashReporter.log(entry.message, stackTrace: entry.stackTrace);
+  }
+}
+
+NyLogger.addListener(reportErrors);
+
+// Later, e.g. in a test's tearDown
+NyLogger.removeListener(reportErrors);
+```
+
+ผู้ฟังทุกตัวที่เพิ่มด้วย `addListener` จะทำงานควบคู่ไปกับ `onLog` -- การเพิ่มตัวหนึ่งจะไม่แทนที่ตัวอื่นเลย และจะไม่แทนที่ `onLog` ด้วยเช่นกัน
 
 <div id="helper-extensions"></div>
 

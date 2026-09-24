@@ -72,6 +72,12 @@ metro make:command current_time --category="project"
 
 这将在 `lib/app/commands/current_time.dart` 创建一个新文件，并将其注册到命令注册表中。
 
+传入 `--live` 可以生成一个改为在应用 *内部* 运行的命令，在应用以调试模式运行时由 Metro 驱动 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live#live-commands)。
+
+```bash
+metro make:command seed_cart --live
+```
+
 <div id="command-structure"></div>
 
 ## 命令结构
@@ -160,10 +166,15 @@ metro app:current_time --help
 | `name` | 命令名称（在类别前缀之后使用） |
 | `category` | 命令类别（例如 `app`、`project`） |
 | `script` | `lib/app/commands/` 中的 Dart 文件 |
+| `description` | 可选。在 `metro` 菜单中显示的单行摘要 |
+
+包提供的命令永远不会添加到此文件中 -- Metro 会单独发现它们。详见下文的[包命令](#package-commands)。
 
 <div id="package-commands"></div>
 
 ## 包命令
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 包可以为安装它们的开发者提供 Metro 命令——例如一个用于生成包所需配置的 `install` 命令。当您项目依赖的某个包包含 `metro_commands.json` 文件时，Metro 会自动发现其命令；您的项目中无需注册任何内容。将该包添加到 `pubspec.yaml`，运行 `flutter pub get`，其命令就会出现在 `metro` 菜单中该包名称下：
 
@@ -189,6 +200,8 @@ metro analytics:install
 <div id="shipping-commands-in-a-package"></div>
 
 ### 在包中提供命令
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.1.29+, nylo_support 7.29.0+" />
 
 要在您维护的包中提供命令，请将每个命令放在包的 `bin/` 文件夹中，并在包根目录、与 `pubspec.yaml` 同级的 `metro_commands.json` 文件中列出它：
 

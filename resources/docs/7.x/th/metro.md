@@ -107,9 +107,18 @@ All commands:
   make:config
   make:interceptor
   make:command
+  make:seeder
   make:env
   make:key
+
+[Live Commands]
+  live
+  live:devices
+  live:status
+  live:run
 ```
+
+`live`, `live:devices`, `live:status` และ `live:run` เปิด shell ที่เชื่อมต่อกับแอปที่กำลังทำงานของคุณ เพื่อให้คุณตรวจสอบและขับเคลื่อนมันได้ในขณะที่มันกำลังทำงาน -- ดู [Metro Live](/docs/{{ $version }}/metro-live)
 
 <div id="make-controller"></div>
 
@@ -415,6 +424,8 @@ metro make:api_service user --model="User"
 
 มันจะวาง API service ที่สร้างใหม่ใน `lib/app/networking/`
 
+<div id="forcefully-make-an-api-service"></div>
+
 ### บังคับสร้าง API Service
 
 **อาร์กิวเมนต์:**
@@ -424,6 +435,8 @@ metro make:api_service user --model="User"
 ``` bash
 metro make:api_service user --force
 ```
+
+หากไม่ใช้ `--force` การรัน `make:api_service` กับไฟล์ที่มีอยู่แล้วตอนนี้จะออกด้วยรหัส `1` แทนที่จะจัดรูปแบบไฟล์ใหม่อย่างเงียบๆ -- มีประโยชน์หากคุณเขียนสคริปต์ให้คำสั่งนี้ทำงานใน CI หรือ codegen
 
 <div id="make-event"></div>
 

@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Beim Absenden validiert das Formular alle Felder. Wenn gültig, wird `onSuccess` mit einer `Map<String, dynamic>` der Felddaten aufgerufen (Schlüssel sind snake_case-Versionen der Feldnamen). Wenn ungültig, wird standardmäßig ein Toast-Fehler angezeigt und `onFailure` aufgerufen, falls angegeben.
 
+Alle drei oben gezeigten Arten, `submit()` aufzurufen, geben ein `Future<void>` zurück, das abgeschlossen ist, sobald `onSuccess` oder `onFailure` -- und alles, was eine der beiden Funktionen zurückgibt -- beendet ist (es ist sofort abgeschlossen, wenn kein Formular mit diesem Namen eingebunden ist). Geben Sie es aus dem `onPressed` eines Buttons zurück, um den Button für die gesamte Übermittlung gesperrt zu halten, nicht nur bis das Formular validiert ist:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` gibt das `Future<void>` von `.submit(...)` zurück, sodass ein Button, der seinen eigenen Ladezustand verfolgt (wie die eingebauten `Button`-Stile), gesperrt bleibt, bis `onSuccess` abgeschlossen ist.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Methode | Beschreibung |
 |---------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Formular über seinen Namen absenden |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Formular über seinen Namen absenden. Gibt ein `Future<void>` zurück, das abgeschlossen ist, sobald `onSuccess`/`onFailure` beendet wurde |
 | `NyFormWidget.stateRefresh(name)` | UI-Status des Formulars aktualisieren |
 | `NyFormWidget.stateSetValue(name, key, value)` | Feldwert über Formularnamen setzen |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Feldoptionen über Formularnamen setzen |

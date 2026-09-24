@@ -15,6 +15,7 @@
 - Gelişmiş
   - [Desteklenen Yerel Ayarlar](#supported-locales "Desteklenen Yerel Ayarlar")
   - [Yedek Dil](#fallback-language "Yedek Dil")
+  - [Yerleşik Çeviriler](#built-in-translations "Nylo'nun kendi arayüzü için yerleşik çeviriler")
   - [RTL Desteği](#rtl-support "RTL Desteği")
   - [Eksik Anahtarları Hata Ayıklama](#debug-missing-keys "Eksik Anahtarları Hata Ayıklama")
   - [NyLocalization API](#nylocalization-api "NyLocalization API")
@@ -325,15 +326,37 @@ Aktif yerel ayarda bir çeviri anahtarı bulunamadığında, {{ config('app.name
 static const String fallbackLanguageCode = 'en';
 ```
 
-Bu iki aşamalı çözümleme, hem üst düzey anahtarlar hem de nokta gösterimli iç içe anahtarlar için geçerlidir:
+Bu çözümleme, hem üst düzey anahtarlar hem de nokta gösterimli iç içe anahtarlar için geçerlidir:
 
 1. Anahtarı aktif yerel ayar dosyasında ara.
 2. Bulunamazsa, yedek yerel ayar dosyasında ara.
-3. Hâlâ bulunamazsa, ham anahtar dizesini döndür.
+3. Anahtar `nylo.` ile başlıyorsa ve hâlâ bulunamazsa, onu {{ config('app.name') }}'ın [yerleşik metnine](#built-in-translations) çözümle.
+4. Hâlâ bulunamazsa, ham anahtar dizesini döndür.
 
 Örneğin, Fransızca yerel ayar dosyasında `settings.privacy` anahtarı eksikse, yedek mantığı `"settings.privacy"` olduğu gibi döndürmeden önce İngilizce yerel ayar dosyasında `settings.privacy`'yi arar.
 
 Bu, tüm çeviriler yalnızca kısmen tamamlanmış olsa bile uygulamanızın ham anahtarlar göstermemesini sağlar.
+
+<div id="built-in-translations"></div>
+
+## Yerleşik Çeviriler
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+{{ config('app.name') }}, kendi arayüzü için `nylo.*` anahtarları altında yerleşik İngilizce metinler sunar -- toast'lar, onay iletişim kutuları, form doğrulama mesajları, girdi alanı etiketleri, form koleksiyonu istemleri, sayfa-bulunamadı sayfası, çevrimdışı banner'ı, dil değiştirici, journey adım etiketleri ve `CollectionView` durumları. Bu anahtarlardan biri hem aktif hem de yedek dil dosyanızda eksikse, {{ config('app.name') }} onu ham anahtar yerine bu yerleşik İngilizce metne çözümler -- böylece `lang/` dosyaları bir anahtardan önce yazılmış olan bir uygulama, `nylo.toast.success` gibi bir şey yerine yine de doğru metni gösterir.
+
+Bunlardan herhangi birini tam olarak kendi çevirileriniz gibi geçersiz kılın: aktif (veya yedek) dil dosyanızdaki bir `nylo` nesnesinin altına aynı anahtarı ekleyin -- bu, yerleşik varsayılandan önce kontrol edilir.
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "toast": {
+      "success": "Nice one!"
+    }
+  }
+}
+```
 
 <div id="rtl-support"></div>
 

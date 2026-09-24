@@ -10,6 +10,7 @@
 - FormValidator
   - [Using FormValidator](#using-form-validator "Using FormValidator")
   - [FormValidator Named Constructors](#form-validator-named-constructors "FormValidator named constructors")
+  - [Translated Validation Messages](#translated-validation-messages "Translated validation messages")
   - [Chaining Validation Rules](#chaining-validation-rules "Chaining validation rules")
   - [Nullable Fields](#nullable-fields "Nullable fields")
   - [Custom Validation](#custom-validation "Custom validation")
@@ -246,6 +247,48 @@ FormValidator.custom(
   message: "Invalid value",
   validate: (data) => data != null,
 )
+```
+
+<div id="translated-validation-messages"></div>
+
+## Translated Validation Messages
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.0+, nylo_support 7.30.0+" />
+
+Every named constructor above works without passing `message:` — a rule with no custom message resolves its default through a `nylo.validation.*` translation key instead of a hardcoded string:
+
+``` dart
+FormValidator validator = FormValidator(data: "ab", attribute: "Username")
+    .minLength(8);
+
+FormValidationResult result = validator.check();
+print(result.getFirstErrorMessage());
+// "The Username must be at least 8 characters long." — from nylo.validation.min_length
+```
+
+Override any rule's default the same way you would [Nylo's other built-in text](/docs/{{ $version }}/localization#built-in-translations), by adding the matching key under `nylo.validation` in your own language file:
+
+``` json
+// lang/en.json
+{
+  "nylo": {
+    "validation": {
+      "min_length": "@{{attribute}} needs at least @{{minLength}} characters."
+    }
+  }
+}
+```
+
+A rule that takes its own value -- `minLength`, `maxLength`, `minValue`, `dateAgeIsOlder`, and others -- exposes it to the translated message as a `@{{placeholder}}` alongside `@{{attribute}}`, through `FormRule.messageArguments`. `@{{attribute}}` itself is filled in from the field's name (or the `attribute:` you passed), translated the same way.
+
+`FormValidationResponse` (and its `FormValidationError`/`FormValidationSuccess` subclasses, as seen in a `FormValidator` or `Field`'s `onFailure`) carries the field's name in `attribute` alongside the translated `message`:
+
+``` dart
+onFailure: (errors) {
+  for (final error in errors) {
+    print('${error.attribute}: ${error.message}');
+  }
+}
 ```
 
 <div id="chaining-validation-rules"></div>

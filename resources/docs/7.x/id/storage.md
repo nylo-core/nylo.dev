@@ -48,6 +48,8 @@ int? coins = await NyStorage.read<int>('coins'); // 100
 await NyStorage.delete('coins');
 ```
 
+> Selagi aplikasi Anda berjalan dalam mode debug, Anda dapat memeriksa dan mengubah nilai-nilai ini secara live dari terminal, dan menangkapnya ke dalam seeder untuk digunakan kembali -- lihat [Snapshot Penyimpanan](/docs/{{ $version }}/metro-live#storage-snapshots) di Metro Live.
+
 <div id="save-values"></div>
 
 ## Menyimpan Nilai

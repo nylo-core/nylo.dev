@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Saat dikirim, form memvalidasi semua field. Jika valid, `onSuccess` dipanggil dengan `Map<String, dynamic>` data field (kunci adalah versi snake_case dari nama field). Jika tidak valid, error toast ditampilkan secara default dan `onFailure` dipanggil jika disediakan.
 
+Ketiga cara pemanggilan `submit()` di atas mengembalikan `Future<void>` yang selesai setelah `onSuccess` atau `onFailure` -- dan apa pun yang dikembalikan oleh salah satunya -- selesai dijalankan (langsung selesai jika tidak ada form dengan nama tersebut yang ter-mount). Kembalikan ini dari `onPressed` sebuah tombol untuk menjaga tombol tetap terkunci selama seluruh proses pengiriman, bukan hanya sampai form divalidasi:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed` mengembalikan `Future<void>` dari `.submit(...)`, sehingga tombol yang melacak status loading-nya sendiri (seperti gaya `Button` bawaan) tetap terkunci sampai `onSuccess` selesai.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Method | Deskripsi |
 |--------|-----------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Kirim form berdasarkan namanya |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Kirim form berdasarkan namanya. Mengembalikan `Future<void>` yang selesai setelah `onSuccess`/`onFailure` selesai dijalankan |
 | `NyFormWidget.stateRefresh(name)` | Refresh state UI form |
 | `NyFormWidget.stateSetValue(name, key, value)` | Atur nilai field berdasarkan nama form |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Atur opsi field berdasarkan nama form |

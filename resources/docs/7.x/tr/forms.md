@@ -200,6 +200,16 @@ NyFormWidget.submit("LoginForm",
 
 Gönderildiğinde, form tüm alanları doğrular. Geçerliyse, `onSuccess` alan verilerinin `Map<String, dynamic>` değeriyle çağrılır (anahtarlar alan adlarının snake_case versiyonlarıdır). Geçersizse, varsayılan olarak bir toast hatası gösterilir ve sağlanmışsa `onFailure` çağrılır.
 
+Yukarıdaki `submit()` çağırma yöntemlerinin üçü de, `onSuccess` veya `onFailure` -- ve ikisinden birinin döndürdüğü her şey -- tamamlandığında tamamlanan bir `Future<void>` döndürür (bu isimde bağlı bir form yoksa hemen tamamlanır). Düğmeyi yalnızca form doğrulanana kadar değil, tüm gönderim boyunca kilitli tutmak için bunu bir düğmenin `onPressed`'inden döndürün:
+
+``` dart
+onPressed: () => LoginForm.actions.submit(
+  onSuccess: (data) async {
+    await api<AuthApiService>((request) => request.login(data));
+  },
+),
+```
+
 
 <div id="field-types"></div>
 
@@ -965,17 +975,17 @@ UserInfoForm(
     print(data);
   },
   footer: ElevatedButton(
-    onPressed: () {
-      UserInfoForm.actions.submit(
-        onSuccess: (data) {
-          print(data);
-        },
-      );
-    },
+    onPressed: () => UserInfoForm.actions.submit(
+      onSuccess: (data) {
+        print(data);
+      },
+    ),
     child: Text("Submit"),
   ),
 )
 ```
+
+`onPressed`, `.submit(...)`'ten gelen `Future<void>`'ı döndürür; böylece kendi yükleme durumunu takip eden bir düğme (yerleşik `Button` stilleri gibi), `onSuccess` tamamlanana kadar kilitli kalır.
 
 
 <div id="form-layout"></div>
@@ -1096,7 +1106,7 @@ Field.chips("Tags",
 
 | Metot | Açıklama |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Bir formu adıyla gönder |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Bir formu adıyla gönder. `onSuccess`/`onFailure` tamamlandığında tamamlanan bir `Future<void>` döndürür |
 | `NyFormWidget.stateRefresh(name)` | Formun arayüz durumunu yenile |
 | `NyFormWidget.stateSetValue(name, key, value)` | Form adıyla alan değerini ayarla |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Form adıyla alan seçeneklerini ayarla |
