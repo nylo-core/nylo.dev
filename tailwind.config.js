@@ -58,9 +58,6 @@ export default {
       backdropBlur: {
         xs: '2px',
       },
-      backgroundImage: {
-        'hero-pattern': "url('/images/hero_fade.png')"
-      }
     },
   },
   plugins: [
