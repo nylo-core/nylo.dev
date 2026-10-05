@@ -7,6 +7,7 @@
 - [Flutter Kurulumu](#installing-flutter "Flutter Kurulumu")
 - [Kurulumunuzu Do&#287;rulama](#verifying-installation "Kurulumunuzu Do&#287;rulama")
 - [Edit&#246;r Kurulumu](#set-up-an-editor "Edit&#246;r Kurulumu")
+  - [Nylo Edit&#246;r Eklentileri](#nylo-editor-plugins "Nylo Edit&#246;r Eklentileri")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Kurulum k&#305;lavuzu: <a href="https://docs.flutter.dev/get-started/editor?tab=
 1. IntelliJ IDEA'y&#305; kurun
 2. Flutter eklentisini kurun (Tercihler &#8594; Eklentiler &#8594; Flutter)
 3. Dart eklentisini kurun
+
+<div id="nylo-editor-plugins"></div>
+
+### Nylo Edit&#246;r Eklentileri
+
+{{ config('app.name') }}'nun VS Code ve JetBrains IDE'leri i&#231;in kendi eklentileri vard&#305;r:
+
+| Edit&#246;r | Eklenti |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+Eklenti, projenizdeki her `.env` dosyas&#305; i&#231;in ad&#305;n&#305; dosyadan alan bir &#231;al&#305;&#351;t&#305;rma yap&#305;land&#305;rmas&#305; ekler: `.env` **Default**, `.env.staging` ise **Staging** olur. Bunlardan birini ba&#351;latt&#305;&#287;&#305;n&#305;zda, uygulama a&#231;&#305;lmadan &#246;nce `metro make:env` komutu o dosyayla &#231;al&#305;&#351;t&#305;r&#305;l&#305;r, b&#246;ylece ortamlar aras&#305;nda ge&#231;i&#351; yapt&#305;&#287;&#305;n&#305;zda ortam yap&#305;land&#305;rman&#305;z&#305; elle yeniden olu&#351;turman&#305;z gerekmez. Liste, `.env` dosyalar&#305; ekledik&#231;e veya kald&#305;rd&#305;k&#231;a g&#252;ncellenir.
+
+VS Code'da, **Run and Debug** a&#231;&#305;l&#305;r listesinden bir ortam se&#231;in veya komut paletinden **Nylo: Run Environment&#8230;** komutunu &#231;al&#305;&#351;t&#305;r&#305;n. Android Studio ve IntelliJ IDEA'da, ortam&#305; &#231;al&#305;&#351;t&#305;rma yap&#305;land&#305;rmas&#305; a&#231;&#305;l&#305;r listesinden se&#231;in.
 
 Edit&#246;r&#252;n&#252;z yap&#305;land&#305;r&#305;ld&#305;&#287;&#305;nda, [{{ config('app.name') }} kurulumuna](/docs/7.x/installation) haz&#305;rs&#305;n&#305;z.

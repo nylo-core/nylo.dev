@@ -7,6 +7,7 @@
 - [Cài đặt Flutter](#installing-flutter "Cài đặt Flutter")
 - [Xác minh cài đặt](#verifying-installation "Xác minh cài đặt")
 - [Thiết lập trình soạn thảo](#set-up-an-editor "Thiết lập trình soạn thảo")
+  - [Plugin trình soạn thảo Nylo](#nylo-editor-plugins "Plugin trình soạn thảo Nylo")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Hướng dẫn thiết lập: <a href="https://docs.flutter.dev/get-started/edit
 1. Cài đặt IntelliJ IDEA
 2. Cài đặt plugin Flutter (Preferences → Plugins → Flutter)
 3. Cài đặt plugin Dart
+
+<div id="nylo-editor-plugins"></div>
+
+### Plugin trình soạn thảo Nylo
+
+{{ config('app.name') }} có các plugin riêng cho VS Code và các IDE của JetBrains:
+
+| Trình soạn thảo | Plugin |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+Plugin này thêm một run configuration cho mỗi file `.env` trong dự án của bạn, được đặt tên theo file đó: `.env` trở thành **Default** và `.env.staging` trở thành **Staging**. Khởi chạy một trong số đó sẽ chạy `metro make:env` với file đó trước khi ứng dụng khởi động, vì vậy bạn không cần tạo lại cấu hình môi trường thủ công khi chuyển đổi môi trường. Danh sách này được cập nhật khi bạn thêm hoặc xóa file `.env`.
+
+Trong VS Code, hãy chọn một môi trường từ dropdown **Run and Debug**, hoặc chạy **Nylo: Run Environment…** từ command palette. Trong Android Studio và IntelliJ IDEA, hãy chọn từ dropdown run configuration.
 
 Khi trình soạn thảo của bạn đã được cấu hình, bạn đã sẵn sàng để [cài đặt {{ config('app.name') }}](/docs/7.x/installation).

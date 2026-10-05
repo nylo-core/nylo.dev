@@ -7,6 +7,7 @@
 - [Instalacja Flutter](#installing-flutter "Instalacja Flutter")
 - [Weryfikacja instalacji](#verifying-installation "Weryfikacja instalacji")
 - [Konfiguracja edytora](#set-up-an-editor "Konfiguracja edytora")
+  - [Wtyczki edytora Nylo](#nylo-editor-plugins "Wtyczki edytora Nylo")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Przewodnik konfiguracji: <a href="https://docs.flutter.dev/get-started/editor?ta
 1. Zainstaluj IntelliJ IDEA
 2. Zainstaluj wtyczke Flutter (Preferences → Plugins → Flutter)
 3. Zainstaluj wtyczke Dart
+
+<div id="nylo-editor-plugins"></div>
+
+### Wtyczki edytora Nylo
+
+{{ config('app.name') }} ma wlasne wtyczki dla VS Code i IDE JetBrains:
+
+| Edytor | Wtyczka |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+Wtyczka dodaje konfiguracje uruchamiania dla kazdego pliku `.env` w Twoim projekcie. Nazwa konfiguracji pochodzi od pliku: `.env` staje sie **Default**, a `.env.staging` staje sie **Staging**. Uruchomienie takiej konfiguracji wykonuje `metro make:env` z tym plikiem przed startem aplikacji, wiec nie musisz recznie ponownie generowac konfiguracji srodowiska przy przelaczaniu srodowisk. Lista aktualizuje sie, gdy dodajesz lub usuwasz pliki `.env`.
+
+W VS Code wybierz srodowisko z listy rozwijanej **Run and Debug** lub uruchom **Nylo: Run Environment…** z palety polecen. W Android Studio i IntelliJ IDEA wybierz je z listy rozwijanej konfiguracji uruchamiania.
 
 Gdy Twoj edytor jest skonfigurowany, mozesz przejsc do [instalacji {{ config('app.name') }}](/docs/7.x/installation).

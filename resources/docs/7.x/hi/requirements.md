@@ -7,6 +7,7 @@
 - [Flutter इंस्टॉल करना](#installing-flutter "Flutter इंस्टॉल करना")
 - [अपनी इंस्टॉलेशन सत्यापित करना](#verifying-installation "अपनी इंस्टॉलेशन सत्यापित करना")
 - [एडिटर सेटअप करें](#set-up-an-editor "एडिटर सेटअप करें")
+  - [Nylo एडिटर प्लगइन्स](#nylo-editor-plugins "Nylo एडिटर प्लगइन्स")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Flutter सपोर्ट वाला IDE चुनें:
 1. IntelliJ IDEA इंस्टॉल करें
 2. Flutter प्लगइन इंस्टॉल करें (Preferences → Plugins → Flutter)
 3. Dart प्लगइन इंस्टॉल करें
+
+<div id="nylo-editor-plugins"></div>
+
+### Nylo एडिटर प्लगइन्स
+
+{{ config('app.name') }} VS Code और JetBrains IDE के लिए अपने खुद के प्लगइन्स प्रदान करता है:
+
+| एडिटर | प्लगइन |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+प्लगइन आपके प्रोजेक्ट की हर `.env` फ़ाइल के लिए एक रन कॉन्फ़िगरेशन जोड़ता है, जिसका नाम फ़ाइल के नाम पर रखा जाता है: `.env` का नाम **Default** और `.env.staging` का नाम **Staging** होता है। किसी एक को शुरू करने पर ऐप लॉन्च होने से पहले उस फ़ाइल के साथ `metro make:env` चलता है, इसलिए एनवायरनमेंट बदलते समय आपको एनवायरनमेंट कॉन्फ़िग मैन्युअल रूप से पुनः जेनरेट नहीं करना पड़ता। `.env` फ़ाइलें जोड़ने या हटाने पर यह लिस्ट अपडेट हो जाती है।
+
+VS Code में **Run and Debug** ड्रॉपडाउन से कोई एनवायरनमेंट चुनें, या कमांड पैलेट से **Nylo: Run Environment…** चलाएँ। Android Studio और IntelliJ IDEA में इसे रन कॉन्फ़िगरेशन ड्रॉपडाउन से चुनें।
 
 एक बार जब आपका एडिटर कॉन्फ़िगर हो जाए, तो आप [{{ config('app.name') }} इंस्टॉल](/docs/7.x/installation) करने के लिए तैयार हैं।

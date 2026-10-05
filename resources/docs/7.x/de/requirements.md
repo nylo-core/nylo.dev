@@ -7,6 +7,7 @@
 - [Flutter installieren](#installing-flutter "Flutter installieren")
 - [Installation überprüfen](#verifying-installation "Installation überprüfen")
 - [Editor einrichten](#set-up-an-editor "Editor einrichten")
+  - [Nylo-Editor-Plugins](#nylo-editor-plugins "Nylo-Editor-Plugins")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Einrichtungsanleitung: <a href="https://docs.flutter.dev/get-started/editor?tab=
 1. Installieren Sie IntelliJ IDEA
 2. Installieren Sie das Flutter-Plugin (Einstellungen -> Plugins -> Flutter)
 3. Installieren Sie das Dart-Plugin
+
+<div id="nylo-editor-plugins"></div>
+
+### Nylo-Editor-Plugins
+
+{{ config('app.name') }} bietet eigene Plugins für VS Code und JetBrains-IDEs:
+
+| Editor | Plugin |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+Das Plugin fügt für jede `.env`-Datei in Ihrem Projekt eine Ausführungskonfiguration hinzu, die nach der Datei benannt ist: `.env` wird zu **Default** und `.env.staging` wird zu **Staging**. Beim Starten einer Konfiguration wird `metro make:env` mit der zugehörigen Datei ausgeführt, bevor die App startet, sodass Sie Ihre Umgebungskonfiguration beim Wechsel zwischen Umgebungen nicht manuell neu generieren müssen. Die Liste wird aktualisiert, wenn Sie `.env`-Dateien hinzufügen oder entfernen.
+
+Wählen Sie in VS Code im Dropdown **Run and Debug** eine Umgebung aus oder führen Sie **Nylo: Run Environment…** über die Befehlspalette aus. In Android Studio und IntelliJ IDEA wählen Sie sie im Dropdown der Ausführungskonfigurationen aus.
 
 Sobald Ihr Editor konfiguriert ist, sind Sie bereit, [{{ config('app.name') }} zu installieren](/docs/7.x/installation).

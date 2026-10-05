@@ -7,6 +7,7 @@
 - [Menginstal Flutter](#installing-flutter "Menginstal Flutter")
 - [Memverifikasi Instalasi Anda](#verifying-installation "Memverifikasi Instalasi Anda")
 - [Menyiapkan Editor](#set-up-an-editor "Menyiapkan Editor")
+  - [Plugin Editor Nylo](#nylo-editor-plugins "Plugin Editor Nylo")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Panduan pengaturan: <a href="https://docs.flutter.dev/get-started/editor?tab=and
 1. Instal IntelliJ IDEA
 2. Instal plugin Flutter (Preferences → Plugins → Flutter)
 3. Instal plugin Dart
+
+<div id="nylo-editor-plugins"></div>
+
+### Plugin Editor Nylo
+
+{{ config('app.name') }} memiliki plugin sendiri untuk VS Code dan IDE JetBrains:
+
+| Editor | Plugin |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+Plugin ini menambahkan run configuration untuk setiap file `.env` di proyek Anda, yang dinamai sesuai nama file tersebut: `.env` menjadi **Default** dan `.env.staging` menjadi **Staging**. Memulai salah satunya akan menjalankan `metro make:env` dengan file tersebut sebelum aplikasi diluncurkan, sehingga Anda tidak perlu membuat ulang konfigurasi environment secara manual saat berpindah environment. Daftar ini diperbarui saat Anda menambah atau menghapus file `.env`.
+
+Di VS Code, pilih environment dari dropdown **Run and Debug**, atau jalankan **Nylo: Run Environment…** dari command palette. Di Android Studio dan IntelliJ IDEA, pilih dari dropdown run configuration.
 
 Setelah editor Anda dikonfigurasi, Anda siap untuk [menginstal {{ config('app.name') }}](/docs/7.x/installation).

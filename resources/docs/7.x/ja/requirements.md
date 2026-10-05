@@ -7,6 +7,7 @@
 - [Flutter のインストール](#installing-flutter "Flutter のインストール")
 - [インストールの確認](#verifying-installation "インストールの確認")
 - [エディタの設定](#set-up-an-editor "エディタの設定")
+  - [Nylo エディタプラグイン](#nylo-editor-plugins "Nylo エディタプラグイン")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ Flutter をサポートする IDE を選択してください:
 1. IntelliJ IDEA をインストール
 2. Flutter プラグインをインストール（設定 → プラグイン → Flutter）
 3. Dart プラグインをインストール
+
+<div id="nylo-editor-plugins"></div>
+
+### Nylo エディタプラグイン
+
+{{ config('app.name') }} は、VS Code と JetBrains IDE 向けの専用プラグインを提供しています:
+
+| エディタ | プラグイン |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+プラグインは、プロジェクト内の `.env` ファイルごとに実行構成を追加します。名前はファイルに応じて付けられ、`.env` は **Default**、`.env.staging` は **Staging** になります。実行構成を開始すると、アプリが起動する前にそのファイルを指定して `metro make:env` が実行されるため、環境を切り替えるときに環境設定を手動で再生成する必要はありません。実行構成の一覧は、`.env` ファイルを追加または削除すると更新されます。
+
+VS Code では、**Run and Debug** のドロップダウンから環境を選択するか、コマンドパレットから **Nylo: Run Environment…** を実行します。Android Studio と IntelliJ IDEA では、実行構成のドロップダウンから選択します。
 
 エディタの設定が完了したら、[{{ config('app.name') }} のインストール](/docs/7.x/installation)に進む準備が整いました。

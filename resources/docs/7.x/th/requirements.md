@@ -7,6 +7,7 @@
 - [การติดตั้ง Flutter](#installing-flutter "การติดตั้ง Flutter")
 - [การตรวจสอบการติดตั้งของคุณ](#verifying-installation "การตรวจสอบการติดตั้งของคุณ")
 - [ตั้งค่าโปรแกรมแก้ไขโค้ด](#set-up-an-editor "ตั้งค่าโปรแกรมแก้ไขโค้ด")
+  - [ปลั๊กอินโปรแกรมแก้ไขโค้ดของ Nylo](#nylo-editor-plugins "ปลั๊กอินโปรแกรมแก้ไขโค้ดของ Nylo")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ flutter doctor -v
 1. ติดตั้ง IntelliJ IDEA
 2. ติดตั้งปลั๊กอิน Flutter (Preferences → Plugins → Flutter)
 3. ติดตั้งปลั๊กอิน Dart
+
+<div id="nylo-editor-plugins"></div>
+
+### ปลั๊กอินโปรแกรมแก้ไขโค้ดของ Nylo
+
+{{ config('app.name') }} มีปลั๊กอินของตัวเองสำหรับ VS Code และ IDE ของ JetBrains:
+
+| โปรแกรมแก้ไขโค้ด | ปลั๊กอิน |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+ปลั๊กอินจะเพิ่ม run configuration ให้กับไฟล์ `.env` แต่ละไฟล์ในโปรเจกต์ของคุณ โดยตั้งชื่อตามไฟล์นั้น: `.env` จะเป็น **Default** และ `.env.staging` จะเป็น **Staging** การเริ่มรันอันใดอันหนึ่งจะเรียกใช้ `metro make:env` กับไฟล์นั้นก่อนที่แอปจะเปิด คุณจึงไม่ต้องสร้างการตั้งค่าสภาพแวดล้อมใหม่ด้วยตนเองเมื่อสลับสภาพแวดล้อม รายการนี้จะอัปเดตเมื่อคุณเพิ่มหรือลบไฟล์ `.env`
+
+ใน VS Code ให้เลือกสภาพแวดล้อมจากเมนูเลื่อนลง **Run and Debug** หรือเรียกใช้ **Nylo: Run Environment…** จาก command palette ส่วนใน Android Studio และ IntelliJ IDEA ให้เลือกจากเมนูเลื่อนลงของ run configuration
 
 เมื่อตั้งค่าโปรแกรมแก้ไขโค้ดของคุณเรียบร้อยแล้ว คุณพร้อมที่จะ[ติดตั้ง {{ config('app.name') }}](/docs/7.x/installation)

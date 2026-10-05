@@ -279,6 +279,8 @@ flutter build ios
 flutter build appbundle
 ```
 
+> **Tip:** The [Nylo editor plugins](/docs/{{ $version }}/requirements#nylo-editor-plugins) for VS Code, Android Studio and IntelliJ IDEA add a run configuration for each `.env` file. Starting one runs `metro make:env` with that file before the app launches.
+
 <div id="build-time-injection"></div>
 
 ## Build-Time Injection

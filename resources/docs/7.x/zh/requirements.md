@@ -7,6 +7,7 @@
 - [安装 Flutter](#installing-flutter "安装 Flutter")
 - [验证安装](#verifying-installation "验证安装")
 - [设置编辑器](#set-up-an-editor "设置编辑器")
+  - [Nylo 编辑器插件](#nylo-editor-plugins "Nylo 编辑器插件")
 
 
 <div id="system-requirements"></div>
@@ -121,5 +122,20 @@ flutter doctor -v
 1. 安装 IntelliJ IDEA
 2. 安装 Flutter 插件（Preferences → Plugins → Flutter）
 3. 安装 Dart 插件
+
+<div id="nylo-editor-plugins"></div>
+
+### Nylo 编辑器插件
+
+{{ config('app.name') }} 为 VS Code 和 JetBrains IDE 提供了专用插件：
+
+| 编辑器 | 插件 |
+|--------|--------|
+| VS Code | <a href="https://marketplace.visualstudio.com/items?itemName=Nylo.vscode-nylo" target="_BLANK">Nylo for VS Code</a> |
+| Android Studio, IntelliJ IDEA | <a href="https://plugins.jetbrains.com/plugin/33988-nylo" target="_BLANK">Nylo</a> |
+
+该插件会为项目中的每个 `.env` 文件添加一个运行配置，并以对应文件命名：`.env` 显示为 **Default**，`.env.staging` 显示为 **Staging**。运行其中任意一个配置时，会在应用启动前先使用该文件执行 `metro make:env`，因此切换环境时您无需手动重新生成环境配置。添加或删除 `.env` 文件时，运行配置列表会随之更新。
+
+在 VS Code 中，从 **Run and Debug** 下拉菜单中选择环境，或从命令面板运行 **Nylo: Run Environment…**。在 Android Studio 和 IntelliJ IDEA 中，从运行配置下拉菜单中选择即可。
 
 编辑器配置完成后，您就可以[安装 {{ config('app.name') }}](/docs/7.x/installation)了。
