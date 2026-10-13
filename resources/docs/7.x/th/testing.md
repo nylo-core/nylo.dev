@@ -32,6 +32,7 @@
 - [การทดสอบ State](#state-testing "การทดสอบ State")
 - [การดีบัก](#debugging "การดีบัก")
 - [Helper การนำทางและการโต้ตอบ](#nav-interaction "Helper การนำทางและการโต้ตอบ")
+- [การทดสอบ Playbook](#testing-playbooks "การทดสอบ Playbook")
 - [ตัวอย่าง](#examples "ตัวอย่างการใช้งานจริง")
 
 <div id="introduction"></div>
@@ -1160,6 +1161,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## การทดสอบ Playbook
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+[playbook](/docs/{{ $version }}/playbooks) สามารถรันเป็นเทสต์ได้ `NyTesterClock(tester)` จะรัน playbook บนนาฬิกาของ tester ดังนั้น journey ความเร็วแบบ natural จึงใช้เวลาประมาณหนึ่งวินาที และ `expectPlaybookPassed(report)` จะทำให้เทสต์ล้มเหลวพร้อมรายงานของ playbook เมื่อมี step ที่ไม่ผ่าน:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+ใน integration test ให้เรียก `preparePlaybookBinding(binding)` ก่อน `testWidgets` เพื่อให้การสัมผัสของ playbook ไปถึงแอป widget test ไม่จำเป็นต้องเรียก:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

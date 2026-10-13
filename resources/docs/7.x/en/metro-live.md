@@ -11,6 +11,7 @@
 - [live:devices](#live-devices "List running apps")
 - [live:status](#live-status "Show app status")
 - [live:run](#live-run "Run a built-in live command")
+- [Playbooks](#playbooks "Playing playbooks from Metro")
 - Live Commands
   - [Creating a Live Command](#creating-a-live-command "Creating a live command")
   - [Running a Live Command](#running-a-live-command "Running a live command")
@@ -98,7 +99,7 @@ Start the value with `@@` when it really begins with `@`.
 
 ### Tab Completion and History
 
-Inside the shell, Tab completes command names, options, routes, storage and Backpack keys, and seeder names against the connected app. History is kept in `.dart_tool/nylo/live_history` and survives between sessions.
+Inside the shell, Tab completes command names, options, routes, storage and Backpack keys, seeder names and playbook names against the connected app. History is kept in `.dart_tool/nylo/live_history` and survives between sessions.
 
 <div id="running-a-script"></div>
 
@@ -152,6 +153,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -182,6 +184,7 @@ metro live:run <command> [arguments]
 | `state` | Send data to a state with `updateState` |
 | `event` | Fire one of your events |
 | `toast` | Show a toast notification |
+| `playbook` | Play your [playbooks](/docs/{{ $version }}/playbooks), or list them |
 
 Inside `metro live`, drop the `live:run` part -- `route /profile` instead of `metro live:run route /profile`:
 
@@ -201,6 +204,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbooks
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Play one or more [playbooks](/docs/{{ $version }}/playbooks) on your running app. Each step prints as it happens:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Name several playbooks to play them back to back. With no names, or with `--list`, the command lists the app's playbooks.
+
+| Option | Description |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Play at this pace instead of each playbook's own |
+| `--data <json>` | A JSON object every playbook in the run reads in `data`, over its defaults |
+| `--no-overlay` | Hide the finger and the step caption |
+| `--loop` | Play the playbooks again and again until Ctrl+C |
+| `--list` | List the app's playbooks instead of playing one |
+
+Ctrl+C asks the app to stop: the remaining steps are skipped, but `tearDown` still runs. Press Ctrl+C a second time to stop waiting.
+
+Inside the `metro live` shell the command is `playbook <name>`, and Tab completes playbook names:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Live Command Reference
+
+The commands behind it are `playbooks.list`, `playbooks.run` and `playbooks.stop`. A run returns its id straight away and streams each step as a `nylo.playbook` event, so it can outlast a command's timeout. `live:status` lists the app's playbooks. Playbooks arrived in Nylo Live protocol version 9.
 
 <div id="live-commands"></div>
 

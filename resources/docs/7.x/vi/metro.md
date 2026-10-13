@@ -26,6 +26,7 @@
   - [Tạo Interceptor](#make-interceptor "Tạo interceptor mới")
   - [Tạo Env File](#make-env-file "Tạo env file mới")
   - [Tạo Key](#make-key "Tạo APP_KEY")
+  - [Tạo Playbook](#make-playbook "Tạo một playbook mới")
 - App Icons
   - [Tạo App Icons](#build-app-icons "Tạo App Icons với Metro")
 - Lệnh tùy chỉnh
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` và `live:run` mở một shell kết nối đến ứng dụng đang chạy của bạn, để bạn có thể kiểm tra và điều khiển nó trong khi nó đang chạy -- xem [Metro Live](/docs/{{ $version }}/metro-live).
+`live`, `live:devices`, `live:status` và `live:run` mở một shell kết nối đến ứng dụng đang chạy của bạn, để bạn có thể kiểm tra và điều khiển nó trong khi nó đang chạy -- xem [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` chạy một trong các [playbook](/docs/{{ $version }}/playbooks) của bạn trên ứng dụng đang chạy.
 
 <div id="make-controller"></div>
 
@@ -821,6 +823,37 @@ metro make:key
 # Tạo key cho tệp env cụ thể
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## Tạo Playbook
+
+Tạo một [playbook](/docs/{{ $version }}/playbooks): một hành trình người dùng mà ứng dụng của bạn tự thực hiện.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**Tham số:**
+
+| Tham số | Mô tả |
+|----------|-------------|
+| `<name>` | Tên của playbook. Dùng thư mục con như `onboarding/sign_up` để sắp xếp chúng |
+
+**Tùy chọn:**
+
+| Cờ / Tùy chọn | Viết tắt | Mô tả |
+|---------------|-------|-------------|
+| `--description` | | Mô tả một dòng, hiển thị khi Metro liệt kê các playbook |
+| `--force` | `-f` | Tạo tệp ngay cả khi nó đã tồn tại |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+Lệnh này tạo `lib/app/playbooks/sign_up_playbook.dart` (bên trong thư mục con nếu bạn chỉ định) và đăng ký nó trong `lib/bootstrap/playbooks.dart`, tạo tệp đó ở lần dùng đầu tiên. Registry là một map rỗng trong các bản build release. Lệnh cũng truyền `playbooks` vào `nylo.configure(...)` trong `AppProvider` của bạn.
+
+Chạy nó khi ứng dụng đang chạy bằng `metro live:run playbook sign_up`. Nếu ứng dụng đã chạy sẵn, hãy hot restart trước.
 
 <div id="build-app-icons"></div>
 

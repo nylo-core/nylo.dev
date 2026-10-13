@@ -32,6 +32,7 @@
 - [Testing State](#state-testing "Testing State")
 - [Debugging](#debugging "Debugging")
 - [Helper Navigasi dan Interaksi](#nav-interaction "Helper Navigasi dan Interaksi")
+- [Menguji Playbook](#testing-playbooks "Menguji Playbook")
 - [Contoh](#examples "Contoh")
 
 <div id="introduction"></div>
@@ -1160,6 +1161,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## Menguji Playbook
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Sebuah [playbook](/docs/{{ $version }}/playbooks) dapat dijalankan sebagai test. `NyTesterClock(tester)` menjalankannya pada clock tester, sehingga alur berkecepatan natural memakan waktu sekitar satu detik, dan `expectPlaybookPassed(report)` menggagalkan test beserta laporan playbook ketika ada langkah yang tidak lolos:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+Pada integration test, panggil `preparePlaybookBinding(binding)` sebelum `testWidgets` agar sentuhan playbook sampai ke aplikasi. Widget test tidak memerlukannya:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

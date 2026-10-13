@@ -26,6 +26,7 @@
   - [Membuat Interceptor](#make-interceptor "Membuat Interceptor")
   - [Membuat Env File](#make-env-file "Membuat Env File")
   - [Membuat Key](#make-key "Membuat Key")
+  - [Membuat Playbook](#make-playbook "Membuat playbook baru")
 - App Icons
   - [Membangun App Icons](#build-app-icons "Membangun App Icons")
 - Perintah Kustom
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status`, dan `live:run` membuka shell yang terhubung ke aplikasi Anda yang sedang berjalan, sehingga Anda dapat memeriksa dan menggerakkannya saat sedang berjalan -- lihat [Metro Live](/docs/{{ $version }}/metro-live).
+`live`, `live:devices`, `live:status`, dan `live:run` membuka shell yang terhubung ke aplikasi Anda yang sedang berjalan, sehingga Anda dapat memeriksa dan menggerakkannya saat sedang berjalan -- lihat [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` memutar salah satu [playbook](/docs/{{ $version }}/playbooks) Anda pada aplikasi yang sedang berjalan.
 
 <div id="make-controller"></div>
 
@@ -822,6 +824,37 @@ metro make:key
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## Membuat Playbook
+
+Buat sebuah [playbook](/docs/{{ $version }}/playbooks): alur perjalanan pengguna yang dijalankan aplikasi Anda pada dirinya sendiri.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**Argumen:**
+
+| Argumen | Deskripsi |
+|----------|-------------|
+| `<name>` | Nama playbook. Gunakan subfolder seperti `onboarding/sign_up` untuk mengaturnya |
+
+**Opsi:**
+
+| Flag / Opsi | Singkat | Deskripsi |
+|---------------|-------|-------------|
+| `--description` | | Deskripsi satu baris, ditampilkan saat Metro mendaftar playbook |
+| `--force` | `-f` | Membuat file meskipun sudah ada |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+Ini membuat `lib/app/playbooks/sign_up_playbook.dart` (di dalam subfolder apa pun yang Anda berikan) dan mendaftarkannya di `lib/bootstrap/playbooks.dart`, yang dibuat saat pertama kali digunakan. Registry-nya berupa map kosong pada build release. Ini juga meneruskan `playbooks` ke `nylo.configure(...)` di `AppProvider` Anda.
+
+Putar saat aplikasi Anda berjalan dengan `metro live:run playbook sign_up`. Jika aplikasi sudah berjalan, lakukan hot restart terlebih dahulu.
 
 <div id="build-app-icons"></div>
 

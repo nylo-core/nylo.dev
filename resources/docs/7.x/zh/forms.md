@@ -459,6 +459,20 @@ Field.picker("Country",
 
 `options` 参数需要一个 `FormCollection`（不是原始列表）。查看 [FormCollection](#form-collection) 了解详情。样式类型：`FieldStylePicker`
 
+选择器的布局方式与文本字段类似。在选择选项之前，"Select Category" 作为标签显示。选择之后，标签会上浮为 "Category"，显示在所选内容上方，下拉图标作为后缀。当内容超出 `containerHeight`（默认 `50`）时，选择器会增高以容纳标签和所选内容。默认情况下，文本为 16pt，内边距为 13pt，圆角半径为 12pt。
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` 会替换选择器的 `InputDecoration`，与 `FieldStyleDateTimePicker.decoration` 对日期字段的作用相同。如果您的 decoration 没有提供自己的标签、下拉图标或 `prefixIcon`，则会保留字段自带的。
+
 #### 列表磁贴样式
 
 您可以使用 `PickerListTileStyle` 自定义选择器底部弹窗中项目的显示方式。默认情况下，底部弹窗显示纯文本磁贴。使用内置预设添加选择指示器，或提供完全自定义的构建器。

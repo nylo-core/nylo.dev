@@ -26,6 +26,7 @@
   - [生成拦截器](#make-interceptor "生成拦截器")
   - [生成环境文件](#make-env-file "生成环境文件")
   - [生成密钥](#make-key "生成密钥")
+  - [创建剧本](#make-playbook "创建新剧本")
 - 应用图标
   - [构建应用图标](#build-app-icons "构建应用图标")
 - 自定义命令
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`、`live:devices`、`live:status`、`live:run` 会打开一个连接到正在运行的应用的 shell，让您可以在应用运行时检查和操作它 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live)。
+`live`、`live:devices`、`live:status`、`live:run` 会打开一个连接到正在运行的应用的 shell，让您可以在应用运行时检查和操作它 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live)。 `live:run playbook <name>` 会在正在运行的应用上运行您的某个[剧本](/docs/{{ $version }}/playbooks)。
 
 <div id="make-controller"></div>
 
@@ -821,6 +823,37 @@ metro make:key
 # 为特定 env 文件生成密钥
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## 创建剧本
+
+创建一个[剧本](/docs/{{ $version }}/playbooks)：由您的应用自行执行的用户操作流程。
+
+``` bash
+metro make:playbook sign_up
+```
+
+**参数：**
+
+| 参数 | 描述 |
+|----------|-------------|
+| `<name>` | 剧本的名称。可使用子文件夹（例如 `onboarding/sign_up`）进行整理 |
+
+**选项：**
+
+| 标志 / 选项 | 简写 | 描述 |
+|---------------|-------|-------------|
+| `--description` | | 一行描述，Metro 列出剧本时会显示 |
+| `--force` | `-f` | 即使文件已存在也会创建 |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+这会创建 `lib/app/playbooks/sign_up_playbook.dart`（位于您指定的子文件夹内），并将其注册到 `lib/bootstrap/playbooks.dart` 中，该文件会在首次使用时创建。在发布构建中，注册表是一个空的 map。它还会将 `playbooks` 传给 `AppProvider` 中的 `nylo.configure(...)`。
+
+在应用运行时使用 `metro live:run playbook sign_up` 来运行它。如果应用已在运行，请先热重启。
 
 <div id="build-app-icons"></div>
 

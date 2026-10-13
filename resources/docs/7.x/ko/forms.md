@@ -459,6 +459,20 @@ Field.picker("Country",
 
 `options` 매개변수에는 `FormCollection`이 필요합니다 (원시 리스트가 아님). 자세한 내용은 [FormCollection](#form-collection)을 참조하세요. 스타일 타입: `FieldStylePicker`
 
+Picker는 텍스트 필드와 같은 방식으로 레이아웃됩니다. 옵션을 선택하기 전에는 "Select Category"가 라벨로 표시됩니다. 옵션을 선택하면 라벨이 "Category"로 바뀌어 선택한 항목 위로 떠오르고, 드롭다운 아이콘이 접미사(suffix)로 표시됩니다. Picker는 라벨과 선택한 항목에 맞춰 `containerHeight`(기본값 `50`)보다 커집니다. 기본적으로 텍스트는 16pt, 패딩은 13pt, 모서리 반경은 12pt입니다.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration`은 Picker의 `InputDecoration`을 대체하며, 날짜 필드에서 `FieldStyleDateTimePicker.decoration`이 하는 것과 같습니다. decoration에 자체 라벨, 드롭다운 아이콘 또는 `prefixIcon`이 없으면 필드의 것이 유지됩니다.
+
 #### 리스트 타일 스타일
 
 `PickerListTileStyle`을 사용하여 Picker의 바텀 시트에서 항목이 표시되는 방식을 커스터마이징할 수 있습니다. 기본적으로 바텀 시트는 일반 텍스트 타일을 표시합니다. 내장 프리셋을 사용하여 선택 표시기를 추가하거나 완전히 커스텀 빌더를 제공할 수 있습니다.

@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "Elenca le app in esecuzione")
 - [live:status](#live-status "Mostra lo stato dell'app")
 - [live:run](#live-run "Eseguire un comando live integrato")
+- [Playbook](#playbooks "Eseguire i playbook da Metro")
 - Comandi Live
   - [Creare un Comando Live](#creating-a-live-command "Creare un comando live")
   - [Eseguire un Comando Live](#running-a-live-command "Eseguire un comando live")
@@ -100,7 +101,7 @@ Inizia il valore con `@@` quando inizia realmente con `@`.
 
 ### Completamento Tab e Cronologia
 
-All'interno della shell, Tab completa nomi dei comandi, opzioni, route, chiavi di storage e Backpack, e nomi dei seeder in base all'app connessa. La cronologia viene mantenuta in `.dart_tool/nylo/live_history` e persiste tra le sessioni.
+All'interno della shell, Tab completa nomi dei comandi, opzioni, route, chiavi di storage e Backpack, nomi dei seeder e nomi dei playbook in base all'app connessa. La cronologia viene mantenuta in `.dart_tool/nylo/live_history` e persiste tra le sessioni.
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | Invia dati a uno stato con `updateState` |
 | `event` | Attiva uno dei tuoi eventi |
 | `toast` | Mostra una notifica toast |
+| `playbook` | Esegue i tuoi [playbook](/docs/{{ $version }}/playbooks), oppure li elenca |
 
 All'interno di `metro live`, ometti la parte `live:run` -- `route /profile` invece di `metro live:run route /profile`:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbook
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Esegui uno o piu' [playbook](/docs/{{ $version }}/playbooks) sulla tua app in esecuzione. Ogni step viene stampato man mano che avviene:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Indica piu' playbook per eseguirli uno dopo l'altro. Senza nomi, o con `--list`, il comando elenca i playbook dell'app.
+
+| Opzione | Descrizione |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Esegue a questo ritmo invece di quello proprio di ogni playbook |
+| `--data <json>` | Un oggetto JSON che ogni playbook dell'esecuzione legge in `data`, sopra i suoi valori predefiniti |
+| `--no-overlay` | Nasconde il dito e la didascalia dello step |
+| `--loop` | Riesegue i playbook all'infinito finche' non premi Ctrl+C |
+| `--list` | Elenca i playbook dell'app invece di eseguirne uno |
+
+Ctrl+C chiede all'app di fermarsi: gli step rimanenti vengono saltati, ma `tearDown` viene comunque eseguito. Premi Ctrl+C una seconda volta per smettere di attendere.
+
+All'interno della shell `metro live` il comando e' `playbook <name>`, e Tab completa i nomi dei playbook:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Riferimento dei Live Command
+
+I comandi alla base sono `playbooks.list`, `playbooks.run` e `playbooks.stop`. Un'esecuzione restituisce subito il proprio id e trasmette ogni step come evento `nylo.playbook`, quindi puo' superare il timeout di un comando. `live:status` elenca i playbook dell'app. I playbook sono arrivati nella versione 9 del protocollo Nylo Live.
 
 <div id="live-commands"></div>
 

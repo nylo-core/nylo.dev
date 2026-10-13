@@ -459,6 +459,20 @@ Field.picker("Country",
 
 The `options` parameter requires a `FormCollection` (not a raw list). See [FormCollection](#form-collection) for details. Style type: `FieldStylePicker`
 
+The picker lays out like a text field. Before an option is chosen, "Select Category" sits as the label. Once one is chosen, the label floats up as "Category" above the choice, with the dropdown icon as the suffix. The picker grows to fit its label and choice above `containerHeight` (default `50`). Text is 16pt, padding is 13pt and the corner radius is 12pt by default.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` replaces the picker's `InputDecoration`, as `FieldStyleDateTimePicker.decoration` does for a date field. If your decoration gives no label, dropdown icon or `prefixIcon` of its own, the field's are kept.
+
 #### List Tile Styles
 
 You can customize how items appear in the picker's bottom sheet using `PickerListTileStyle`. By default, the bottom sheet shows plain text tiles. Use the built-in presets to add selection indicators, or provide a fully custom builder.

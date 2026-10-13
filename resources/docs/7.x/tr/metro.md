@@ -26,6 +26,7 @@
   - [Interceptor olusturma](#make-interceptor "Interceptor olusturma")
   - [Env dosyasi olusturma](#make-env-file "Env dosyasi olusturma")
   - [Anahtar olusturma](#make-key "Anahtar olusturma")
+  - [Playbook olusturma](#make-playbook "Yeni bir playbook olusturma")
 - Uygulama Simgeleri
   - [Uygulama Simgeleri Olusturma](#build-app-icons "Uygulama Simgeleri Olusturma")
 - Ozel Komutlar
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` ve `live:run`, calisan uygulamaniza bagli bir kabuk acar; boylece calisirken onu inceleyebilir ve yonetebilirsiniz -- bkz. [Metro Live](/docs/{{ $version }}/metro-live).
+`live`, `live:devices`, `live:status` ve `live:run`, calisan uygulamaniza bagli bir kabuk acar; boylece calisirken onu inceleyebilir ve yonetebilirsiniz -- bkz. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>`, [playbook'larinizdan](/docs/{{ $version }}/playbooks) birini calisan uygulamada oynatir.
 
 <div id="make-controller"></div>
 
@@ -822,6 +824,37 @@ metro make:key
 # Belirli bir env dosyası için anahtar oluştur
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## Playbook olusturma
+
+Bir [playbook](/docs/{{ $version }}/playbooks) olusturun: uygulamanizin kendi uzerinde gerceklestirdigi bir kullanici yolculugu.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**Argumenler:**
+
+| Argumen | Aciklama |
+|----------|-------------|
+| `<name>` | Playbook'un adi. Duzenlemek icin `onboarding/sign_up` gibi alt klasorler kullanin |
+
+**Secenekler:**
+
+| Bayrak / Secenek | Kisaltma | Aciklama |
+|---------------|-------|-------------|
+| `--description` | | Metro playbook'lari listelerken gosterilen tek satirlik aciklama |
+| `--force` | `-f` | Dosya zaten mevcut olsa bile olusturur |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+Bu, `lib/app/playbooks/sign_up_playbook.dart` dosyasini (verdiginiz alt klasorun icinde) olusturur ve `lib/bootstrap/playbooks.dart` icine kaydeder; bu dosya ilk kullanimda olusturulur. Release derlemelerinde kayit defteri bos bir map'tir. Ayrica `AppProvider`'inizdeki `nylo.configure(...)` cagrisina `playbooks` degerini iletir.
+
+Uygulamaniz calisirken `metro live:run playbook sign_up` ile oynatin. Uygulama zaten calisiyorsa once hot restart yapin.
 
 <div id="build-app-icons"></div>
 

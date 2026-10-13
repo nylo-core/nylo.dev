@@ -32,6 +32,7 @@
 - [状态测试](#state-testing "状态测试")
 - [调试](#debugging "调试")
 - [导航和交互辅助方法](#nav-interaction "导航和交互辅助方法")
+- [测试剧本](#testing-playbooks "测试剧本")
 - [示例](#examples "示例")
 
 <div id="introduction"></div>
@@ -1161,6 +1162,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## 测试剧本
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+[剧本](/docs/{{ $version }}/playbooks)可以作为测试运行。`NyTesterClock(tester)` 会使用 tester 的时钟运行剧本，因此一个 natural 速度的流程大约只需一秒；当某一步没有通过时，`expectPlaybookPassed(report)` 会让测试失败，并附上该剧本的报告：
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+在集成测试中，请在 `testWidgets` 之前调用 `preparePlaybookBinding(binding)`，以便剧本的触摸操作能够到达应用。组件测试不需要这样做：
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

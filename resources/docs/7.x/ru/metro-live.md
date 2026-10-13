@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "Список запущенных приложений")
 - [live:status](#live-status "Показать статус приложения")
 - [live:run](#live-run "Запуск встроенной live-команды")
+- [Плейбуки](#playbooks "Запуск плейбуков из Metro")
 - Live-команды
   - [Создание Live-команды](#creating-a-live-command "Создание live-команды")
   - [Запуск Live-команды](#running-a-live-command "Запуск live-команды")
@@ -100,7 +101,7 @@ metro live:run route /profile --data @user.json
 
 ### Автодополнение и история
 
-Внутри оболочки Tab дополняет имена команд, опции, маршруты, ключи хранилища и Backpack, а также имена сидеров для подключённого приложения. История хранится в `.dart_tool/nylo/live_history` и сохраняется между сессиями.
+Внутри оболочки Tab дополняет имена команд, опции, маршруты, ключи хранилища и Backpack, имена сидеров и имена плейбуков для подключённого приложения. История хранится в `.dart_tool/nylo/live_history` и сохраняется между сессиями.
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | Отправить данные в состояние с помощью `updateState` |
 | `event` | Вызвать одно из ваших событий |
 | `toast` | Показать toast-уведомление |
+| `playbook` | Запускает ваши [плейбуки](/docs/{{ $version }}/playbooks) или выводит их список |
 
 Внутри `metro live` опустите часть `live:run` -- `route /profile` вместо `metro live:run route /profile`:
 
@@ -203,6 +206,44 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+<!-- uncertain: new Nylo term "Playbook" rendered as "плейбук" -- not seen in existing ru files -->
+## Плейбуки
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Запустите один или несколько [плейбуков](/docs/{{ $version }}/playbooks) на работающем приложении. Каждый шаг выводится по мере выполнения:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Укажите несколько плейбуков, чтобы запустить их один за другим. Без имён или с `--list` команда выводит список плейбуков приложения.
+
+| Опция | Описание |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Играть в этом темпе вместо собственного темпа каждого плейбука |
+| `--data <json>` | JSON-объект, который каждый плейбук запуска читает в `data` поверх своих значений по умолчанию |
+| `--no-overlay` | Скрыть палец и подпись шага |
+| `--loop` | Проигрывать плейбуки снова и снова до нажатия Ctrl+C |
+| `--list` | Вывести список плейбуков приложения вместо запуска |
+
+Ctrl+C просит приложение остановиться: оставшиеся шаги пропускаются, но `tearDown` всё равно выполняется. Нажмите Ctrl+C второй раз, чтобы прекратить ожидание.
+
+Внутри оболочки `metro live` команда выглядит как `playbook <name>`, а Tab дополняет имена плейбуков:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Справочник live-команд
+
+За этим стоят команды `playbooks.list`, `playbooks.run` и `playbooks.stop`. Запуск сразу возвращает свой id и передаёт каждый шаг событием `nylo.playbook`, поэтому может длиться дольше таймаута команды. `live:status` выводит список плейбуков приложения. Плейбуки появились в версии 9 протокола Nylo Live.
 
 <div id="live-commands"></div>
 

@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "실행 중인 앱 목록 표시")
 - [live:status](#live-status "앱 상태 표시")
 - [live:run](#live-run "내장 라이브 명령어 실행")
+- [플레이북](#playbooks "Metro에서 플레이북 재생")
 - 라이브 명령어
   - [라이브 명령어 생성](#creating-a-live-command "라이브 명령어 생성")
   - [라이브 명령어 실행](#running-a-live-command "라이브 명령어 실행")
@@ -100,7 +101,7 @@ metro live:run route /profile --data @user.json
 
 ### 탭 완성과 기록
 
-셸 안에서 Tab 키를 누르면 연결된 앱을 기준으로 명령어 이름, 옵션, 라우트, 스토리지와 Backpack 키, 시더 이름이 완성됩니다. 기록은 `.dart_tool/nylo/live_history`에 저장되며 세션 간에도 유지됩니다.
+셸 안에서 Tab 키를 누르면 연결된 앱을 기준으로 명령어 이름, 옵션, 라우트, 스토리지와 Backpack 키, 시더 이름, 플레이북 이름이 완성됩니다. 기록은 `.dart_tool/nylo/live_history`에 저장되며 세션 간에도 유지됩니다.
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | `updateState`로 state에 데이터 전송 |
 | `event` | 자신이 정의한 이벤트 중 하나를 발생 |
 | `toast` | 토스트 알림 표시 |
+| `playbook` | [플레이북](/docs/{{ $version }}/playbooks) 재생, 또는 목록 표시 |
 
 `metro live` 안에서는 `live:run` 부분을 생략합니다 -- `metro live:run route /profile` 대신 `route /profile`처럼 입력합니다:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## 플레이북
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+실행 중인 앱에서 하나 이상의 [플레이북](/docs/{{ $version }}/playbooks)을 재생합니다. 각 스텝은 실행되는 대로 출력됩니다:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+여러 플레이북 이름을 지정하면 연달아 재생됩니다. 이름을 지정하지 않거나 `--list`를 사용하면 앱의 플레이북 목록을 표시합니다.
+
+| 옵션 | 설명 |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | 각 플레이북 자체의 속도 대신 이 속도로 재생 |
+| `--data <json>` | 실행 중인 모든 플레이북이 `data`에서 읽는 JSON 객체. 기본값보다 우선합니다 |
+| `--no-overlay` | 손가락과 스텝 캡션을 숨김 |
+| `--loop` | Ctrl+C를 누를 때까지 플레이북을 계속 반복 재생 |
+| `--list` | 플레이북을 재생하는 대신 앱의 플레이북 목록 표시 |
+
+Ctrl+C는 앱에 중지를 요청합니다. 나머지 스텝은 건너뛰지만 `tearDown`은 계속 실행됩니다. Ctrl+C를 한 번 더 누르면 대기를 중단합니다.
+
+`metro live` 셸 안에서는 명령어가 `playbook <name>`이며, Tab 키로 플레이북 이름이 완성됩니다:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### 라이브 명령어 레퍼런스
+
+그 뒤에 있는 명령어는 `playbooks.list`, `playbooks.run`, `playbooks.stop`입니다. 실행은 ID를 즉시 반환하고 각 스텝을 `nylo.playbook` 이벤트로 스트리밍하므로, 명령어의 타임아웃보다 오래 실행될 수 있습니다. `live:status`는 앱의 플레이북 목록을 표시합니다. 플레이북은 Nylo Live 프로토콜 버전 9에서 도입되었습니다.
 
 <div id="live-commands"></div>
 

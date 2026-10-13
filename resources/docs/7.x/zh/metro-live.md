@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "列出正在运行的应用")
 - [live:status](#live-status "显示应用状态")
 - [live:run](#live-run "运行内置的 live 命令")
+- [剧本](#playbooks "通过 Metro 运行剧本")
 - 实时命令
   - [创建实时命令](#creating-a-live-command "创建实时命令")
   - [运行实时命令](#running-a-live-command "运行实时命令")
@@ -100,7 +101,7 @@ metro live:run route /profile --data @user.json
 
 ### Tab 补全与历史记录
 
-在 Shell 内，按 Tab 键可根据已连接的应用补全命令名称、选项、路由、存储与 Backpack 的键，以及填充器名称。历史记录保存在 `.dart_tool/nylo/live_history` 中，并在多次会话之间保留。
+在 Shell 内，按 Tab 键可根据已连接的应用补全命令名称、选项、路由、存储与 Backpack 的键，填充器名称以及剧本名称。历史记录保存在 `.dart_tool/nylo/live_history` 中，并在多次会话之间保留。
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | 通过 `updateState` 向某个 state 发送数据 |
 | `event` | 触发您自己定义的某个事件 |
 | `toast` | 显示提示消息 |
+| `playbook` | 运行您的[剧本](/docs/{{ $version }}/playbooks)，或列出它们 |
 
 在 `metro live` 内，省略 `live:run` 部分 -- 输入 `route /profile` 而不是 `metro live:run route /profile`：
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## 剧本
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+在正在运行的应用上运行一个或多个[剧本](/docs/{{ $version }}/playbooks)。每一步在发生时都会打印出来：
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+指定多个剧本名称可使其依次连续运行。不带名称，或使用 `--list` 时，该命令会列出应用的剧本。
+
+| 选项 | 描述 |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | 以此速度运行，而不是使用各剧本自身的速度 |
+| `--data <json>` | 本次运行中每个剧本都会在 `data` 中读取的 JSON 对象，优先于其默认值 |
+| `--no-overlay` | 隐藏手指和步骤字幕 |
+| `--loop` | 反复运行这些剧本，直到按下 Ctrl+C |
+| `--list` | 列出应用的剧本，而不是运行某个剧本 |
+
+按下 Ctrl+C 会请求应用停止：其余步骤将被跳过，但 `tearDown` 仍会运行。再按一次 Ctrl+C 可停止等待。
+
+在 `metro live` Shell 内，该命令为 `playbook <name>`，Tab 键可补全剧本名称：
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### 实时命令参考
+
+其背后的命令是 `playbooks.list`、`playbooks.run` 和 `playbooks.stop`。一次运行会立即返回其 id，并将每一步作为 `nylo.playbook` 事件以流的形式推送，因此运行时间可以超过命令的超时时间。`live:status` 会列出应用的剧本。剧本在 Nylo Live 协议版本 9 中引入。
 
 <div id="live-commands"></div>
 

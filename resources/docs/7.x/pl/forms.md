@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Parametr `options` wymaga `FormCollection` (nie surowej listy). Zobacz [FormCollection](#form-collection), aby poznać szczegóły. Typ stylu: `FieldStylePicker`
 
+Selektor układa się jak pole tekstowe. Zanim zostanie wybrana opcja, jako etykieta widnieje „Select Category". Po wyborze etykieta unosi się jako „Category" nad wybraną opcją, a ikona listy rozwijanej pełni rolę sufiksu. Selektor rośnie, aby zmieścić etykietę i wybór powyżej `containerHeight` (domyślnie `50`). Domyślnie tekst ma 16pt, padding 13pt, a promień zaokrąglenia 12pt.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` zastępuje `InputDecoration` selektora, tak jak `FieldStyleDateTimePicker.decoration` robi to dla pola daty. Jeśli Twoja dekoracja nie podaje własnej etykiety, ikony listy rozwijanej ani `prefixIcon`, zachowywane są te z pola.
+
 #### Style kafelków listy
 
 Możesz dostosować wygląd elementów w dolnym arkuszu selektora za pomocą `PickerListTileStyle`. Domyślnie dolny arkusz pokazuje zwykłe kafelki tekstowe. Użyj wbudowanych presetów, aby dodać wskaźniki zaznaczenia, lub zapewnij w pełni niestandardowy builder.

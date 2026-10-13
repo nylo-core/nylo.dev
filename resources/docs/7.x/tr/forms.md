@@ -459,6 +459,20 @@ Field.picker("Country",
 
 `options` parametresi bir `FormCollection` gerektirir (ham liste değil). Ayrıntılar için [FormCollection](#form-collection) bölümüne bakın. Stil türü: `FieldStylePicker`
 
+Picker, bir metin alanı gibi yerleşir. Bir seçenek seçilmeden önce etiket olarak "Select Category" durur. Biri seçildiğinde etiket, seçimin üstünde "Category" olarak yukarı kayar ve açılır liste simgesi sonek olarak yer alır. Picker, etiketine ve seçimine sığacak şekilde `containerHeight` (varsayılan `50`) değerinin üzerine kadar büyür. Varsayılan olarak metin 16pt, dolgu 13pt ve köşe yarıçapı 12pt'dir.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration`, `FieldStyleDateTimePicker.decoration`'ın bir tarih alanı için yaptığı gibi picker'ın `InputDecoration`'ını değiştirir. Dekorasyonunuz kendi etiketini, açılır liste simgesini veya `prefixIcon`'ını vermiyorsa alanınkiler korunur.
+
 #### Liste Kutucuğu Stilleri
 
 `PickerListTileStyle` kullanarak picker'ın alt sayfasında ögelerin görünümünü özelleştirebilirsiniz. Varsayılan olarak, alt sayfa düz metin kutucukları gösterir. Seçim göstergelerini eklemek için yerleşik şablonları kullanın veya tamamen özel bir builder sağlayın.

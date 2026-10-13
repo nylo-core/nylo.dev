@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Le parametre `options` necessite un `FormCollection` (pas une liste brute). Voir [FormCollection](#form-collection) pour plus de details. Type de style : `FieldStylePicker`
 
+Le selecteur est mis en page comme un champ de texte. Tant qu'aucune option n'est choisie, "Select Category" sert de label. Une fois une option choisie, le label remonte en flottant sous la forme "Category" au-dessus du choix, avec l'icone de liste deroulante en suffixe. Le selecteur s'agrandit pour accueillir son label et le choix au-dela de `containerHeight` (`50` par defaut). Le texte fait 16pt, le padding 13pt et le rayon des coins 12pt par defaut.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` remplace l'`InputDecoration` du selecteur, comme le fait `FieldStyleDateTimePicker.decoration` pour un champ de date. Si votre decoration ne fournit ni label, ni icone de liste deroulante, ni `prefixIcon` propre, ceux du champ sont conserves.
+
 #### Styles de tuile de liste
 
 Vous pouvez personnaliser l'apparence des elements dans la feuille inferieure du selecteur en utilisant `PickerListTileStyle`. Par defaut, la feuille inferieure affiche des tuiles de texte simple. Utilisez les presets integres pour ajouter des indicateurs de selection, ou fournissez un constructeur entierement personnalise.

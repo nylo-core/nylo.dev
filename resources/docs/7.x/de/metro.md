@@ -27,6 +27,7 @@
   - [Interceptor erstellen](#make-interceptor "Interceptor erstellen")
   - [Env-Datei erstellen](#make-env-file "Env-Datei erstellen")
   - [Key generieren](#make-key "Key generieren")
+  - [Playbook erstellen](#make-playbook "Neues Playbook erstellen")
 - App-Icons
   - [App-Icons erstellen](#build-app-icons "App-Icons erstellen")
 - Benutzerdefinierte Commands
@@ -109,6 +110,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -119,7 +121,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` und `live:run` öffnen eine Shell, die mit Ihrer laufenden App verbunden ist, sodass Sie sie untersuchen und steuern können, während sie läuft -- siehe [Metro Live](/docs/{{ $version }}/metro-live).
+`live`, `live:devices`, `live:status` und `live:run` öffnen eine Shell, die mit Ihrer laufenden App verbunden ist, sodass Sie sie untersuchen und steuern können, während sie läuft -- siehe [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` spielt eines Ihrer [Playbooks](/docs/{{ $version }}/playbooks) auf der laufenden App ab.
 
 <div id="make-controller"></div>
 
@@ -821,6 +823,37 @@ metro make:key
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## Playbook erstellen
+
+Erstellen Sie ein [Playbook](/docs/{{ $version }}/playbooks): eine User Journey, die Ihre App selbst durchführt.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**Argumente:**
+
+| Argument | Beschreibung |
+|----------|-------------|
+| `<name>` | Der Name des Playbooks. Verwenden Sie Unterordner wie `onboarding/sign_up`, um sie zu organisieren |
+
+**Optionen:**
+
+| Flag / Option | Kurz | Beschreibung |
+|---------------|-------|-------------|
+| `--description` | | Eine einzeilige Beschreibung, die angezeigt wird, wenn Metro Playbooks auflistet |
+| `--force` | `-f` | Erstellt die Datei auch dann, wenn sie bereits existiert |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+Dies erstellt `lib/app/playbooks/sign_up_playbook.dart` (innerhalb eines angegebenen Unterordners) und registriert es in `lib/bootstrap/playbooks.dart`; diese Datei wird bei der ersten Verwendung angelegt. Die Registry ist in Release-Builds eine leere Map. Außerdem wird `playbooks` an `nylo.configure(...)` in Ihrem `AppProvider` übergeben.
+
+Spielen Sie es ab, während Ihre App läuft, mit `metro live:run playbook sign_up`. Läuft die App bereits, führen Sie zuerst einen Hot Restart durch.
 
 <div id="build-app-icons"></div>
 

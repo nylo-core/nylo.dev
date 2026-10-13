@@ -26,6 +26,7 @@
   - [Interceptor 생성](#make-interceptor "Interceptor 생성")
   - [Env 파일 생성](#make-env-file "Env 파일 생성")
   - [Key 생성](#make-key "Key 생성")
+  - [플레이북 생성](#make-playbook "새 플레이북 생성")
 - App 아이콘
   - [App 아이콘 빌드](#build-app-icons "App 아이콘 빌드")
 - 커스텀 명령어
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status`, `live:run`은 실행 중인 앱에 연결된 셸을 열어 앱을 검사하고 조작할 수 있게 해줍니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live)를 참고하세요.
+`live`, `live:devices`, `live:status`, `live:run`은 실행 중인 앱에 연결된 셸을 열어 앱을 검사하고 조작할 수 있게 해줍니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live)를 참고하세요. `live:run playbook <name>`은 실행 중인 앱에서 [플레이북](/docs/{{ $version }}/playbooks) 중 하나를 재생합니다.
 
 <div id="make-controller"></div>
 
@@ -822,6 +824,37 @@ metro make:key
 # 특정 env 파일에 Key 생성
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## 플레이북 생성
+
+[플레이북](/docs/{{ $version }}/playbooks)을 생성합니다. 앱이 스스로 수행하는 사용자 여정입니다.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**인수:**
+
+| 인수 | 설명 |
+|----------|-------------|
+| `<name>` | 플레이북의 이름. `onboarding/sign_up`처럼 하위 폴더를 사용해 정리할 수 있습니다 |
+
+**옵션:**
+
+| 플래그 / 옵션 | 약어 | 설명 |
+|---------------|-------|-------------|
+| `--description` | | 한 줄 설명. Metro가 플레이북 목록을 표시할 때 보여집니다 |
+| `--force` | `-f` | 파일이 이미 존재하더라도 생성합니다 |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+이 명령은 `lib/app/playbooks/sign_up_playbook.dart`(지정한 하위 폴더 안)를 생성하고 `lib/bootstrap/playbooks.dart`에 등록합니다. 이 파일은 처음 사용할 때 생성됩니다. 레지스트리는 릴리스 빌드에서는 빈 맵입니다. 또한 `AppProvider`의 `nylo.configure(...)`에 `playbooks`도 전달합니다.
+
+앱이 실행 중일 때 `metro live:run playbook sign_up`으로 재생하세요. 앱이 이미 실행 중이라면 먼저 핫 리스타트하세요.
 
 <div id="build-app-icons"></div>
 

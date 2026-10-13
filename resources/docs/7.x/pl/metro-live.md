@@ -11,6 +11,7 @@
 - [live:devices](#live-devices "Lista uruchomionych aplikacji")
 - [live:status](#live-status "Status aplikacji")
 - [live:run](#live-run "Uruchamianie wbudowanego polecenia live")
+- [Playbooki](#playbooks "Odtwarzanie playbooków z Metro")
 - Polecenia Live
   - [Tworzenie polecenia Live](#creating-a-live-command "Tworzenie polecenia live")
   - [Uruchamianie polecenia Live](#running-a-live-command "Uruchamianie polecenia live")
@@ -102,7 +103,7 @@ Zacznij wartość od `@@`, jeśli naprawdę ma zaczynać się od `@`.
 
 ### Uzupełnianie tabulatorem i historia
 
-Wewnątrz powłoki Tab uzupełnia nazwy poleceń, opcje, trasy, klucze pamięci i Backpacka oraz nazwy seederów względem połączonej aplikacji. Historia jest przechowywana w `.dart_tool/nylo/live_history` i zachowuje się między sesjami.
+Wewnątrz powłoki Tab uzupełnia nazwy poleceń, opcje, trasy, klucze pamięci i Backpacka, nazwy seederów oraz nazwy playbooków względem połączonej aplikacji. Historia jest przechowywana w `.dart_tool/nylo/live_history` i zachowuje się między sesjami.
 
 <div id="running-a-script"></div>
 
@@ -156,6 +157,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -186,6 +188,7 @@ metro live:run <command> [arguments]
 | `state` | Wyślij dane do stanu za pomocą `updateState` |
 | `event` | Wywołaj jedno ze swoich zdarzeń |
 | `toast` | Pokaż powiadomienie toast |
+| `playbook` | Odtwórz swoje [playbooki](/docs/{{ $version }}/playbooks) albo wyświetl ich listę |
 
 Wewnątrz `metro live` pomiń część `live:run` -- `route /profile` zamiast `metro live:run route /profile`:
 
@@ -205,6 +208,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbooki
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Odtwórz jeden lub więcej [playbooków](/docs/{{ $version }}/playbooks) w uruchomionej aplikacji. Każdy krok jest wypisywany na bieżąco:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Podaj kilka nazw playbooków, aby odtworzyć je jeden po drugim. Bez nazw, albo z `--list`, polecenie wyświetla listę playbooków aplikacji.
+
+| Opcja | Opis |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Odtwarzaj w tym tempie zamiast w tempie właściwym dla każdego playbooka |
+| `--data <json>` | Obiekt JSON, który każdy playbook w tym przebiegu odczytuje w `data`, nadpisując swoje wartości domyślne |
+| `--no-overlay` | Ukryj palec i podpis kroku |
+| `--loop` | Odtwarzaj playbooki w kółko do naciśnięcia Ctrl+C |
+| `--list` | Wyświetl listę playbooków aplikacji zamiast odtwarzać jeden |
+
+Ctrl+C prosi aplikację o zatrzymanie: pozostałe kroki są pomijane, ale `tearDown` nadal się wykonuje. Naciśnij Ctrl+C drugi raz, aby przestać czekać.
+
+Wewnątrz powłoki `metro live` polecenie to `playbook <name>`, a Tab uzupełnia nazwy playbooków:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Opis poleceń Live
+
+Polecenia, które za tym stoją, to `playbooks.list`, `playbooks.run` i `playbooks.stop`. Uruchomienie od razu zwraca swój identyfikator i przesyła każdy krok jako zdarzenie `nylo.playbook`, więc może trwać dłużej niż limit czasu polecenia. `live:status` wyświetla playbooki aplikacji. Playbooki pojawiły się w wersji 9 protokołu Nylo Live.
 
 <div id="live-commands"></div>
 

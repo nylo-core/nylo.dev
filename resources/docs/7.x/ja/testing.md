@@ -32,6 +32,7 @@
 - [ステートテスト](#state-testing "ステートテスト")
 - [デバッグ](#debugging "デバッグ")
 - [ナビゲーションとインタラクションヘルパー](#nav-interaction "ナビゲーションとインタラクションヘルパー")
+- [プレイブックのテスト](#testing-playbooks "プレイブックのテスト")
 - [使用例](#examples "使用例")
 
 <div id="introduction"></div>
@@ -1161,6 +1162,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## プレイブックのテスト
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+[プレイブック](/docs/{{ $version }}/playbooks)はテストとして実行できます。`NyTesterClock(tester)` はテスターのクロックでプレイブックを実行するため、ナチュラル速度のジャーニーでも約 1 秒で終わります。`expectPlaybookPassed(report)` は、いずれかのステップが成功しなかった場合に、プレイブックのレポートとともにテストを失敗させます:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+統合テストでは、プレイブックのタッチがアプリに届くように、`testWidgets` の前に `preparePlaybookBinding(binding)` を呼び出してください。ウィジェットテストでは不要です:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

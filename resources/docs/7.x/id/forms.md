@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Parameter `options` memerlukan `FormCollection` (bukan list mentah). Lihat [FormCollection](#form-collection) untuk detail. Tipe gaya: `FieldStylePicker`
 
+Picker ditata seperti text field. Sebelum sebuah opsi dipilih, "Select Category" berada sebagai label. Setelah dipilih, label melayang naik sebagai "Category" di atas pilihan, dengan ikon dropdown sebagai suffix. Picker bertambah tinggi menyesuaikan label dan pilihannya di atas `containerHeight` (default `50`). Teks berukuran 16pt, padding 13pt, dan radius sudut 12pt secara default.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` menggantikan `InputDecoration` milik picker, seperti `FieldStyleDateTimePicker.decoration` pada field tanggal. Jika decoration Anda tidak memberikan label, ikon dropdown, atau `prefixIcon` sendiri, milik field tetap dipertahankan.
+
 #### Gaya List Tile
 
 Anda dapat menyesuaikan tampilan item di bottom sheet picker menggunakan `PickerListTileStyle`. Secara default, bottom sheet menampilkan tile teks polos. Gunakan preset bawaan untuk menambahkan indikator pemilihan, atau sediakan builder kustom sepenuhnya.

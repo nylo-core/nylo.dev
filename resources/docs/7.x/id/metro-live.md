@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "Daftar aplikasi yang berjalan")
 - [live:status](#live-status "Tampilkan status aplikasi")
 - [live:run](#live-run "Jalankan perintah live bawaan")
+- [Playbook](#playbooks "Memutar playbook dari Metro")
 - Perintah Live
   - [Membuat Perintah Live](#creating-a-live-command "Membuat perintah live")
   - [Menjalankan Perintah Live](#running-a-live-command "Menjalankan perintah live")
@@ -100,7 +101,7 @@ Awali nilai dengan `@@` jika nilai tersebut memang dimulai dengan `@`.
 
 ### Pelengkapan Tab dan Riwayat
 
-Di dalam shell, Tab melengkapi nama perintah, opsi, route, storage dan key Backpack, serta nama seeder terhadap aplikasi yang terhubung. Riwayat disimpan di `.dart_tool/nylo/live_history` dan tetap ada di antara sesi.
+Di dalam shell, Tab melengkapi nama perintah, opsi, route, storage dan key Backpack, nama seeder, serta nama playbook terhadap aplikasi yang terhubung. Riwayat disimpan di `.dart_tool/nylo/live_history` dan tetap ada di antara sesi.
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | Kirim data ke sebuah state dengan `updateState` |
 | `event` | Picu salah satu event Anda |
 | `toast` | Tampilkan notifikasi toast |
+| `playbook` | Putar [playbook](/docs/{{ $version }}/playbooks) Anda, atau tampilkan daftarnya |
 
 Di dalam `metro live`, hilangkan bagian `live:run` -- `route /profile` alih-alih `metro live:run route /profile`:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbook
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Putar satu atau lebih [playbook](/docs/{{ $version }}/playbooks) pada aplikasi Anda yang sedang berjalan. Setiap langkah dicetak saat terjadi:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Sebutkan beberapa playbook untuk memutarnya berurutan. Tanpa nama, atau dengan `--list`, perintah ini menampilkan daftar playbook aplikasi.
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Putar dengan kecepatan ini, bukan kecepatan bawaan masing-masing playbook |
+| `--data <json>` | Objek JSON yang dibaca setiap playbook dalam proses ini di `data`, di atas nilai defaultnya |
+| `--no-overlay` | Sembunyikan jari dan keterangan langkah |
+| `--loop` | Putar playbook berulang kali hingga Ctrl+C |
+| `--list` | Tampilkan daftar playbook aplikasi alih-alih memutar salah satunya |
+
+Ctrl+C meminta aplikasi berhenti: langkah yang tersisa dilewati, tetapi `tearDown` tetap berjalan. Tekan Ctrl+C sekali lagi untuk berhenti menunggu.
+
+Di dalam shell `metro live` perintahnya adalah `playbook <name>`, dan Tab melengkapi nama playbook:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Referensi Perintah Live
+
+Perintah di baliknya adalah `playbooks.list`, `playbooks.run`, dan `playbooks.stop`. Sebuah proses mengembalikan id-nya segera dan mengalirkan setiap langkah sebagai event `nylo.playbook`, sehingga dapat berlangsung lebih lama dari timeout perintah. `live:status` menampilkan daftar playbook aplikasi. Playbook hadir pada Nylo Live protocol versi 9.
 
 <div id="live-commands"></div>
 

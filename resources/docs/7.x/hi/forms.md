@@ -458,6 +458,20 @@ Field.picker("Country",
 
 `options` पैरामीटर के लिए `FormCollection` आवश्यक है (रॉ लिस्ट नहीं)। विवरण के लिए [FormCollection](#form-collection) देखें। स्टाइल प्रकार: `FieldStylePicker`
 
+पिकर एक टेक्स्ट फ़ील्ड की तरह लेआउट होता है। कोई विकल्प चुने जाने से पहले, "Select Category" लेबल के रूप में रहता है। विकल्प चुने जाने के बाद, लेबल "Category" के रूप में चुने गए विकल्प के ऊपर तैर जाता है, और ड्रॉपडाउन आइकन सफ़िक्स के रूप में रहता है। पिकर अपने लेबल और चुने गए विकल्प के अनुसार `containerHeight` (डिफ़ॉल्ट `50`) से ऊपर बढ़ जाता है। डिफ़ॉल्ट रूप से टेक्स्ट 16pt, पैडिंग 13pt और कोने की त्रिज्या 12pt है।
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` पिकर के `InputDecoration` को बदल देता है, ठीक वैसे ही जैसे `FieldStyleDateTimePicker.decoration` डेट फ़ील्ड के लिए करता है। यदि आपके decoration में अपना कोई लेबल, ड्रॉपडाउन आइकन या `prefixIcon` नहीं है, तो फ़ील्ड के अपने रखे जाते हैं।
+
 #### लिस्ट टाइल स्टाइल
 
 आप `PickerListTileStyle` का उपयोग करके पिकर के बॉटम शीट में आइटम्स की दिखावट को कस्टमाइज़ कर सकते हैं। डिफ़ॉल्ट रूप से, बॉटम शीट सादे टेक्स्ट टाइल्स दिखाता है। सिलेक्शन इंडिकेटर जोड़ने के लिए बिल्ट-इन प्रीसेट्स का उपयोग करें, या पूरी तरह से कस्टम बिल्डर प्रदान करें।

@@ -32,6 +32,7 @@
 - [Test d'etat](#state-testing "Test d'etat")
 - [Debogage](#debugging "Debogage")
 - [Assistants de navigation et d'interaction](#nav-interaction "Assistants de navigation et d'interaction")
+- [Tester les playbooks](#testing-playbooks "Tester les playbooks")
 - [Exemples](#examples "Exemples")
 
 <div id="introduction"></div>
@@ -1161,6 +1162,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## Tester les playbooks
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Un [playbook](/docs/{{ $version }}/playbooks) peut s'executer comme un test. `NyTesterClock(tester)` l'execute sur l'horloge du testeur, de sorte qu'un parcours a vitesse naturelle prend environ une seconde, et `expectPlaybookPassed(report)` fait echouer le test avec le rapport du playbook lorsqu'une etape n'a pas reussi :
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+Dans un test d'integration, appelez `preparePlaybookBinding(binding)` avant `testWidgets` afin que les touches du playbook atteignent l'application. Les tests de widgets n'en ont pas besoin :
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

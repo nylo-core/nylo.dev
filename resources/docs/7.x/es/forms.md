@@ -458,6 +458,20 @@ Field.picker("Country",
 
 El parámetro `options` requiere un `FormCollection` (no una lista directa). Consulta [FormCollection](#form-collection) para más detalles. Tipo de estilo: `FieldStylePicker`
 
+El selector se presenta como un campo de texto. Antes de elegir una opción, "Select Category" aparece como label. Una vez elegida, el label sube flotando como "Category" sobre la opción, con el ícono del menú desplegable como sufijo. El selector crece para ajustarse a su label y a la opción por encima de `containerHeight` (`50` por defecto). El texto es de 16pt, el padding de 13pt y el radio de las esquinas de 12pt por defecto.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` reemplaza la `InputDecoration` del selector, igual que `FieldStyleDateTimePicker.decoration` en un campo de fecha. Si tu decoration no aporta un label, un ícono desplegable ni un `prefixIcon` propios, se conservan los del campo.
+
 #### Estilos de ListTile
 
 Puedes personalizar cómo aparecen los elementos en la hoja inferior del selector usando `PickerListTileStyle`. Por defecto, la hoja inferior muestra tiles de texto simple. Usa los presets integrados para agregar indicadores de selección, o proporciona un constructor completamente personalizado.
@@ -1104,7 +1118,7 @@ Field.chips("Tags",
 
 | Método | Descripción |
 |--------|-------------|
-| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Enviar un formulario por su nombre |
+| `NyFormWidget.submit(name, onSuccess:, onFailure:, showToastError:)` | Enviar un formulario por su nombre. Devuelve un `Future<void>` que se completa cuando `onSuccess`/`onFailure` ha terminado |
 | `NyFormWidget.stateRefresh(name)` | Refrescar el estado de la UI del formulario |
 | `NyFormWidget.stateSetValue(name, key, value)` | Establecer un valor de campo por nombre del formulario |
 | `NyFormWidget.stateSetOptions(name, key, options)` | Establecer opciones de campo por nombre del formulario |

@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Der Parameter `options` erfordert eine `FormCollection` (keine rohe Liste). Siehe [FormCollection](#form-collection) für Details. Stiltyp: `FieldStylePicker`
 
+Der Picker ist wie ein Textfeld aufgebaut. Solange keine Option gewählt ist, steht "Select Category" als Label im Feld. Sobald eine gewählt wurde, schwebt das Label als "Category" über der Auswahl nach oben, und das Dropdown-Symbol dient als Suffix. Der Picker wächst über `containerHeight` (Standard `50`) hinaus, um Label und Auswahl aufzunehmen. Standardmäßig beträgt die Textgröße 16pt, das Padding 13pt und der Eckenradius 12pt.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` ersetzt die `InputDecoration` des Pickers, so wie `FieldStyleDateTimePicker.decoration` es bei einem Datumsfeld tut. Wenn Ihre Decoration kein eigenes Label, Dropdown-Symbol oder `prefixIcon` angibt, werden die des Feldes beibehalten.
+
 #### Listenkachel-Stile
 
 Sie können das Erscheinungsbild von Elementen im Bottom Sheet des Pickers mit `PickerListTileStyle` anpassen. Standardmäßig zeigt das Bottom Sheet einfache Text-Kacheln an. Verwenden Sie die integrierten Vorlagen, um Auswahlmarkierungen hinzuzufügen, oder stellen Sie einen vollständig benutzerdefinierten Builder bereit.

@@ -32,6 +32,7 @@
 - [Kiểm thử State](#state-testing "Kiểm thử State")
 - [Gỡ lỗi](#debugging "Gỡ lỗi")
 - [Helper Điều hướng và Tương tác](#nav-interaction "Helper Điều hướng và Tương tác")
+- [Kiểm thử Playbook](#testing-playbooks "Kiểm thử Playbook")
 - [Ví dụ](#examples "Ví dụ thực tế")
 
 <div id="introduction"></div>
@@ -1160,6 +1161,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## Kiểm thử Playbook
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Một [playbook](/docs/{{ $version }}/playbooks) có thể chạy như một bài test. `NyTesterClock(tester)` chạy nó theo đồng hồ của tester, nên một hành trình ở tốc độ natural mất khoảng một giây, và `expectPlaybookPassed(report)` làm test thất bại kèm báo cáo của playbook khi một bước không đạt:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+Trong integration test, gọi `preparePlaybookBinding(binding)` trước `testWidgets` để các thao tác chạm của playbook đến được ứng dụng. Widget test không cần điều này:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

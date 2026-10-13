@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "चल रहे ऐप्स की सूची")
 - [live:status](#live-status "ऐप की स्थिति दिखाएं")
 - [live:run](#live-run "एक बिल्ट-इन लाइव कमांड चलाएं")
+- [प्लेबुक्स](#playbooks "Metro से प्लेबुक्स चलाना")
 - लाइव कमांड
   - [एक लाइव कमांड बनाना](#creating-a-live-command "एक लाइव कमांड बनाना")
   - [एक लाइव कमांड चलाना](#running-a-live-command "एक लाइव कमांड चलाना")
@@ -100,7 +101,7 @@ metro live:run route /profile --data @user.json
 
 ### टैब पूर्णता और इतिहास
 
-शेल के अंदर, Tab कनेक्टेड ऐप के विरुद्ध कमांड नाम, विकल्प, रूट, स्टोरेज और Backpack कीज़, और सीडर नामों को पूरा करता है। इतिहास `.dart_tool/nylo/live_history` में रखा जाता है और सत्रों के बीच बना रहता है।
+शेल के अंदर, Tab कनेक्टेड ऐप के विरुद्ध कमांड नाम, विकल्प, रूट, स्टोरेज और Backpack कीज़, सीडर नामों और प्लेबुक नामों को पूरा करता है। इतिहास `.dart_tool/nylo/live_history` में रखा जाता है और सत्रों के बीच बना रहता है।
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | `updateState` के साथ एक स्टेट को डेटा भेजें |
 | `event` | अपने किसी इवेंट को फायर करें |
 | `toast` | एक टोस्ट नोटिफिकेशन दिखाएं |
+| `playbook` | अपनी [प्लेबुक्स](/docs/{{ $version }}/playbooks) चलाएं, या उनकी सूची दिखाएं |
 
 `metro live` के अंदर, `live:run` वाला हिस्सा छोड़ दें -- `metro live:run route /profile` की बजाय `route /profile`:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## प्लेबुक्स
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+अपने चल रहे ऐप पर एक या अधिक [प्लेबुक्स](/docs/{{ $version }}/playbooks) चलाएं। हर स्टेप होते ही प्रिंट होता है:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+कई प्लेबुक्स के नाम दें तो वे एक के बाद एक चलती हैं। कोई नाम न देने पर, या `--list` के साथ, कमांड ऐप की प्लेबुक्स की सूची दिखाता है।
+
+| विकल्प | विवरण |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | हर प्लेबुक की अपनी गति के बजाय इस गति से चलाएं |
+| `--data <json>` | एक JSON ऑब्जेक्ट जिसे रन की हर प्लेबुक अपने डिफ़ॉल्ट्स के ऊपर `data` में पढ़ती है |
+| `--no-overlay` | फ़िंगर और स्टेप कैप्शन छिपाएं |
+| `--loop` | Ctrl+C तक प्लेबुक्स को बार-बार चलाएं |
+| `--list` | किसी को चलाने के बजाय ऐप की प्लेबुक्स की सूची दिखाएं |
+
+Ctrl+C ऐप से रुकने को कहता है: बाकी स्टेप्स छोड़ दिए जाते हैं, लेकिन `tearDown` फिर भी चलता है। प्रतीक्षा बंद करने के लिए Ctrl+C दूसरी बार दबाएं।
+
+`metro live` शेल के अंदर कमांड `playbook <name>` है, और Tab प्लेबुक नाम पूरे करता है:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### लाइव कमांड रेफ़रेंस
+
+इसके पीछे के कमांड `playbooks.list`, `playbooks.run` और `playbooks.stop` हैं। एक रन तुरंत अपना id लौटाता है और हर स्टेप को `nylo.playbook` इवेंट के रूप में स्ट्रीम करता है, इसलिए वह किसी कमांड के टाइमआउट से अधिक समय तक चल सकता है। `live:status` ऐप की प्लेबुक्स की सूची दिखाता है। प्लेबुक्स Nylo Live प्रोटोकॉल संस्करण 9 में आईं।
 
 <div id="live-commands"></div>
 

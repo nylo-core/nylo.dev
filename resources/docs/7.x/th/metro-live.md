@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "แสดงรายการแอปที่กำลังทำงาน")
 - [live:status](#live-status "แสดงสถานะแอป")
 - [live:run](#live-run "รันคำสั่ง live ในตัว")
+- [Playbook](#playbooks "การเล่น playbook จาก Metro")
 - คำสั่ง Live
   - [การสร้างคำสั่ง Live](#creating-a-live-command "การสร้างคำสั่ง live")
   - [การรันคำสั่ง Live](#running-a-live-command "การรันคำสั่ง live")
@@ -100,7 +101,7 @@ metro live:run route /profile --data @user.json
 
 ### Tab Completion และประวัติ
 
-ภายใน shell, Tab จะเติมชื่อคำสั่ง, ตัวเลือก, route, คีย์ storage และ Backpack, และชื่อ seeder ให้สมบูรณ์โดยอ้างอิงจากแอปที่เชื่อมต่ออยู่ ประวัติจะถูกเก็บไว้ใน `.dart_tool/nylo/live_history` และคงอยู่ข้ามแต่ละ session
+ภายใน shell, Tab จะเติมชื่อคำสั่ง, ตัวเลือก, route, คีย์ storage และ Backpack, ชื่อ seeder และชื่อ playbook ให้สมบูรณ์โดยอ้างอิงจากแอปที่เชื่อมต่ออยู่ ประวัติจะถูกเก็บไว้ใน `.dart_tool/nylo/live_history` และคงอยู่ข้ามแต่ละ session
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | ส่งข้อมูลไปยัง state ด้วย `updateState` |
 | `event` | ยิง event หนึ่งของคุณ |
 | `toast` | แสดง toast notification |
+| `playbook` | เล่น [playbook](/docs/{{ $version }}/playbooks) ของคุณ หรือแสดงรายการ |
 
 ภายใน `metro live` ให้ตัดส่วน `live:run` ออก -- ใช้ `route /profile` แทน `metro live:run route /profile`:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbook
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+เล่น [playbook](/docs/{{ $version }}/playbooks) หนึ่งรายการหรือมากกว่าบนแอปที่กำลังทำงานอยู่ แต่ละ step จะถูกพิมพ์ออกมาเมื่อเกิดขึ้น:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+ระบุหลายชื่อเพื่อเล่นต่อเนื่องกัน หากไม่ระบุชื่อ หรือใช้ `--list` คำสั่งจะแสดงรายการ playbook ของแอป
+
+| ตัวเลือก | คำอธิบาย |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | เล่นด้วยจังหวะนี้แทนจังหวะของแต่ละ playbook เอง |
+| `--data <json>` | JSON object ที่ทุก playbook ในการรันนี้อ่านได้ใน `data` โดยมีผลเหนือค่าเริ่มต้นของมัน |
+| `--no-overlay` | ซ่อนนิ้วและคำบรรยาย step |
+| `--loop` | เล่น playbook ซ้ำไปเรื่อยๆ จนกว่าจะกด Ctrl+C |
+| `--list` | แสดงรายการ playbook ของแอปแทนการเล่น |
+
+Ctrl+C จะขอให้แอปหยุด: step ที่เหลือจะถูกข้าม แต่ `tearDown` ยังคงรัน กด Ctrl+C อีกครั้งเพื่อเลิกรอ
+
+ภายใน shell ของ `metro live` คำสั่งคือ `playbook <name>` และ Tab จะเติมชื่อ playbook ให้สมบูรณ์:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### เอกสารอ้างอิงคำสั่ง Live
+
+คำสั่งเบื้องหลังคือ `playbooks.list`, `playbooks.run` และ `playbooks.stop` การรันจะคืน id ทันทีและสตรีมแต่ละ step เป็น event `nylo.playbook` จึงสามารถใช้เวลานานกว่า timeout ของคำสั่งได้ `live:status` จะแสดงรายการ playbook ของแอป Playbook เริ่มมีใน Nylo Live protocol เวอร์ชัน 9
 
 <div id="live-commands"></div>
 

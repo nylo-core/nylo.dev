@@ -32,6 +32,7 @@
 - [Тестирование состояния](#state-testing "Тестирование состояния")
 - [Отладка](#debugging "Отладка")
 - [Навигация и хелперы взаимодействия](#nav-interaction "Навигация и хелперы взаимодействия")
+- [Тестирование плейбуков](#testing-playbooks "Тестирование плейбуков")
 - [Примеры](#examples "Практические примеры")
 
 <div id="introduction"></div>
@@ -1161,6 +1162,38 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+<!-- uncertain: new Nylo term "Playbook" rendered as "плейбук" -- not seen in existing ru files -->
+## Тестирование плейбуков
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+[Плейбук](/docs/{{ $version }}/playbooks) можно запустить как тест. `NyTesterClock(tester)` запускает его по часам тестера, поэтому сценарий в естественном темпе занимает около секунды, а `expectPlaybookPassed(report)` проваливает тест с отчётом плейбука, если шаг не прошёл:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+В интеграционном тесте вызовите `preparePlaybookBinding(binding)` перед `testWidgets`, чтобы касания плейбука доходили до приложения. В виджет-тестах это не требуется:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

@@ -26,6 +26,7 @@
   - [इंटरसेप्टर बनाना](#make-interceptor "इंटरसेप्टर बनाना")
   - [Env फ़ाइल बनाना](#make-env-file "Env फ़ाइल बनाना")
   - [कुंजी जेनरेट करना](#make-key "कुंजी जेनरेट करना")
+  - [प्लेबुक बनाना](#make-playbook "एक नई प्लेबुक बनाएं")
 - ऐप आइकन्स
   - [ऐप आइकन्स बिल्ड करना](#build-app-icons "ऐप आइकन्स बिल्ड करना")
 - कस्टम कमांड्स
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` और `live:run` आपके चल रहे ऐप से जुड़ा एक शेल खोलते हैं, ताकि आप उसका निरीक्षण कर सकें और उसे संचालित कर सकें जब वह चल रहा हो -- देखें [Metro Live](/docs/{{ $version }}/metro-live)।
+`live`, `live:devices`, `live:status` और `live:run` आपके चल रहे ऐप से जुड़ा एक शेल खोलते हैं, ताकि आप उसका निरीक्षण कर सकें और उसे संचालित कर सकें जब वह चल रहा हो -- देखें [Metro Live](/docs/{{ $version }}/metro-live)। `live:run playbook <name>` चल रहे ऐप पर आपकी किसी [प्लेबुक](/docs/{{ $version }}/playbooks) को चलाता है।
 
 <div id="make-controller"></div>
 
@@ -822,6 +824,37 @@ metro make:key
 # Generate key for a specific env file
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## प्लेबुक बनाना
+
+एक [प्लेबुक](/docs/{{ $version }}/playbooks) बनाएं: एक यूज़र जर्नी जिसे आपका ऐप खुद पर निष्पादित करता है।
+
+``` bash
+metro make:playbook sign_up
+```
+
+**आर्गुमेंट्स:**
+
+| आर्गुमेंट | विवरण |
+|----------|-------------|
+| `<name>` | प्लेबुक का नाम। उन्हें व्यवस्थित करने के लिए `onboarding/sign_up` जैसे सबफ़ोल्डर का उपयोग करें |
+
+**विकल्प:**
+
+| फ़्लैग / विकल्प | शॉर्ट | विवरण |
+|---------------|-------|-------------|
+| `--description` | | एक पंक्ति का विवरण, जो Metro द्वारा प्लेबुक्स की सूची दिखाने पर दिखता है |
+| `--force` | `-f` | फ़ाइल पहले से मौजूद होने पर भी उसे बनाता है |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+यह `lib/app/playbooks/sign_up_playbook.dart` बनाता है (आपके दिए किसी भी सबफ़ोल्डर के अंदर) और उसे `lib/bootstrap/playbooks.dart` में रजिस्टर करता है, जिसे पहली बार उपयोग पर बनाया जाता है। रिलीज़ बिल्ड में रजिस्ट्री एक खाली मैप होती है। यह आपके `AppProvider` में `nylo.configure(...)` को `playbooks` भी पास करता है।
+
+इसे अपने ऐप के चलते समय `metro live:run playbook sign_up` से चलाएं। यदि ऐप पहले से चल रहा है, तो पहले उसे हॉट रीस्टार्ट करें।
 
 <div id="build-app-icons"></div>
 

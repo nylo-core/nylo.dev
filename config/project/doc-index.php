@@ -344,6 +344,7 @@ return [
                 'backpack',
                 'commands',
                 'metro-live',
+                'playbooks',
             ],
         ],
     ],

@@ -459,6 +459,20 @@ Field.picker("Country",
 
 `options` パラメータには `FormCollection` が必要です（生のリストではありません）。詳細は [FormCollection](#form-collection) を参照してください。スタイルタイプ: `FieldStylePicker`
 
+ピッカーはテキストフィールドと同じようにレイアウトされます。オプションを選択する前は、ラベルとして「Select Category」が表示されます。選択後は、ラベルが「Category」として選択内容の上に浮かび上がり、ドロップダウンアイコンがサフィックスとして表示されます。ピッカーはラベルと選択内容に合わせて、`containerHeight`（デフォルト `50`）を超えて大きくなります。デフォルトでは、テキストは 16pt、パディングは 13pt、角丸は 12pt です。
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` はピッカーの `InputDecoration` を置き換えます。日付フィールドで `FieldStyleDateTimePicker.decoration` が行うのと同じです。decoration にラベル、ドロップダウンアイコン、`prefixIcon` が独自に指定されていない場合は、フィールド側のものがそのまま使われます。
+
 #### リストタイルスタイル
 
 `PickerListTileStyle` を使用して、ピッカーのボトムシートでのアイテム表示をカスタマイズできます。デフォルトでは、ボトムシートはプレーンテキストタイルを表示します。組み込みプリセットを使用して選択インジケーターを追加するか、完全にカスタムのビルダーを提供できます。

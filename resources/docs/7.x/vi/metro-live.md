@@ -13,6 +13,7 @@
 - [live:devices](#live-devices "Liệt kê các ứng dụng đang chạy")
 - [live:status](#live-status "Hiển thị trạng thái ứng dụng")
 - [live:run](#live-run "Chạy một live command dựng sẵn")
+- [Playbooks](#playbooks "Chạy playbook từ Metro")
 - Live Command
   - [Tạo một Live Command](#creating-a-live-command "Tạo một live command")
   - [Chạy một Live Command](#running-a-live-command "Chạy một live command")
@@ -100,7 +101,7 @@ Bắt đầu giá trị bằng `@@` khi nó thực sự bắt đầu bằng `@`.
 
 ### Tab Completion và Lịch sử
 
-Bên trong shell, Tab sẽ hoàn thành tên command, tùy chọn, route, storage và Backpack key, cũng như tên seeder dựa trên ứng dụng đang kết nối. Lịch sử được lưu trong `.dart_tool/nylo/live_history` và tồn tại giữa các phiên làm việc.
+Bên trong shell, Tab sẽ hoàn thành tên command, tùy chọn, route, storage và Backpack key, tên seeder và tên playbook dựa trên ứng dụng đang kết nối. Lịch sử được lưu trong `.dart_tool/nylo/live_history` và tồn tại giữa các phiên làm việc.
 
 <div id="running-a-script"></div>
 
@@ -154,6 +155,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -184,6 +186,7 @@ metro live:run <command> [arguments]
 | `state` | Gửi dữ liệu đến một state bằng `updateState` |
 | `event` | Kích hoạt một trong các event của bạn |
 | `toast` | Hiển thị một thông báo toast |
+| `playbook` | Chạy các [playbook](/docs/{{ $version }}/playbooks) của bạn, hoặc liệt kê chúng |
 
 Bên trong `metro live`, bỏ phần `live:run` -- `route /profile` thay vì `metro live:run route /profile`:
 
@@ -203,6 +206,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbooks
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Chạy một hoặc nhiều [playbook](/docs/{{ $version }}/playbooks) trên ứng dụng đang chạy của bạn. Mỗi bước được in ra khi nó diễn ra:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Nêu tên nhiều playbook để chạy chúng nối tiếp nhau. Khi không có tên, hoặc với `--list`, lệnh sẽ liệt kê các playbook của ứng dụng.
+
+| Tùy chọn | Mô tả |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Chạy với nhịp độ này thay vì nhịp độ riêng của mỗi playbook |
+| `--data <json>` | Một đối tượng JSON mà mọi playbook trong lần chạy đọc trong `data`, đè lên giá trị mặc định của chúng |
+| `--no-overlay` | Ẩn ngón tay và chú thích của bước |
+| `--loop` | Chạy lặp đi lặp lại các playbook cho đến khi nhấn Ctrl+C |
+| `--list` | Liệt kê các playbook của ứng dụng thay vì chạy một playbook |
+
+Ctrl+C yêu cầu ứng dụng dừng lại: các bước còn lại bị bỏ qua, nhưng `tearDown` vẫn chạy. Nhấn Ctrl+C lần thứ hai để ngừng chờ.
+
+Bên trong shell `metro live`, command là `playbook <name>`, và Tab hoàn thành tên playbook:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Tham chiếu Live Command
+
+Các command phía sau là `playbooks.list`, `playbooks.run` và `playbooks.stop`. Một lần chạy trả về id của nó ngay lập tức và phát trực tiếp từng bước dưới dạng event `nylo.playbook`, nên nó có thể kéo dài hơn timeout của một command. `live:status` liệt kê các playbook của ứng dụng. Playbook xuất hiện từ Nylo Live protocol phiên bản 9.
 
 <div id="live-commands"></div>
 

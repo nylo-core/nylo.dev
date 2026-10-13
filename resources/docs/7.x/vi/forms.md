@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Tham số `options` yêu cầu `FormCollection` (không phải list thô). Xem [FormCollection](#form-collection) để biết chi tiết. Loại kiểu: `FieldStylePicker`
 
+Picker có bố cục giống một trường văn bản. Trước khi chọn một tùy chọn, "Select Category" nằm ở vị trí label. Sau khi chọn, label nổi lên thành "Category" phía trên lựa chọn, với biểu tượng dropdown làm suffix. Picker tự mở rộng để vừa label và lựa chọn khi vượt quá `containerHeight` (mặc định `50`). Mặc định, văn bản cỡ 16pt, padding 13pt và bo góc 12pt.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` thay thế `InputDecoration` của picker, giống như `FieldStyleDateTimePicker.decoration` làm với trường ngày. Nếu decoration của bạn không có label, biểu tượng dropdown hoặc `prefixIcon` riêng, thì những thứ của trường sẽ được giữ lại.
+
 #### Kiểu List Tile
 
 Bạn có thể tùy chỉnh cách các mục hiển thị trong bottom sheet của picker bằng `PickerListTileStyle`. Mặc định, bottom sheet hiển thị các tile văn bản thuần. Sử dụng các preset tích hợp để thêm indicator chọn, hoặc cung cấp builder hoàn toàn tùy chỉnh.

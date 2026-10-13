@@ -26,6 +26,7 @@
   - [Make Interceptor](#make-interceptor "สร้าง interceptor ใหม่")
   - [Make Env File](#make-env-file "สร้างไฟล์ env ใหม่")
   - [Make Key](#make-key "สร้าง APP_KEY")
+  - [Make Playbook](#make-playbook "สร้าง playbook ใหม่")
 - App Icons
   - [การสร้าง App Icons](#build-app-icons "การสร้าง App Icons ด้วย Metro")
 - คำสั่งแบบกำหนดเอง
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` และ `live:run` เปิด shell ที่เชื่อมต่อกับแอปที่กำลังทำงานของคุณ เพื่อให้คุณตรวจสอบและขับเคลื่อนมันได้ในขณะที่มันกำลังทำงาน -- ดู [Metro Live](/docs/{{ $version }}/metro-live)
+`live`, `live:devices`, `live:status` และ `live:run` เปิด shell ที่เชื่อมต่อกับแอปที่กำลังทำงานของคุณ เพื่อให้คุณตรวจสอบและขับเคลื่อนมันได้ในขณะที่มันกำลังทำงาน -- ดู [Metro Live](/docs/{{ $version }}/metro-live) คำสั่ง `live:run playbook <name>` จะเล่นหนึ่งใน [playbook](/docs/{{ $version }}/playbooks) ของคุณบนแอปที่กำลังทำงานอยู่
 
 <div id="make-controller"></div>
 
@@ -821,6 +823,37 @@ metro make:key
 # สร้าง key สำหรับไฟล์ env เฉพาะ
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+## Make Playbook
+
+สร้าง [playbook](/docs/{{ $version }}/playbooks): user journey ที่แอปของคุณทำเองบนตัวมันเอง
+
+``` bash
+metro make:playbook sign_up
+```
+
+**อาร์กิวเมนต์:**
+
+| อาร์กิวเมนต์ | คำอธิบาย |
+|----------|-------------|
+| `<name>` | ชื่อของ playbook ใช้โฟลเดอร์ย่อย เช่น `onboarding/sign_up` เพื่อจัดระเบียบ |
+
+**ตัวเลือก:**
+
+| Flag / Option | ชื่อย่อ | คำอธิบาย |
+|---------------|-------|-------------|
+| `--description` | | คำอธิบายหนึ่งบรรทัด ที่แสดงเมื่อ Metro แสดงรายการ playbook |
+| `--force` | `-f` | สร้างไฟล์แม้ว่าจะมีอยู่แล้ว |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+คำสั่งนี้จะสร้าง `lib/app/playbooks/sign_up_playbook.dart` (อยู่ในโฟลเดอร์ย่อยที่คุณระบุ) และลงทะเบียนไว้ใน `lib/bootstrap/playbooks.dart` โดยจะสร้างไฟล์นั้นให้เมื่อใช้ครั้งแรก registry เป็น map ว่างใน release build และยังส่ง `playbooks` ให้ `nylo.configure(...)` ใน `AppProvider` ของคุณด้วย
+
+เล่นขณะที่แอปกำลังทำงานด้วย `metro live:run playbook sign_up` หากแอปทำงานอยู่แล้ว ให้ hot restart ก่อน
 
 <div id="build-app-icons"></div>
 

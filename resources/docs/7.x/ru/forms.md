@@ -459,6 +459,20 @@ Field.picker("Country",
 
 Параметр `options` требует `FormCollection` (не обычный список). Подробнее см. [FormCollection](#form-collection). Тип стиля: `FieldStylePicker`
 
+Пикер выглядит как текстовое поле. Пока вариант не выбран, в качестве метки отображается "Select Category". После выбора метка поднимается и становится "Category" над выбранным значением, а значок выпадающего списка выступает суффиксом. Пикер увеличивается, чтобы вместить метку и выбранное значение, при превышении `containerHeight` (по умолчанию `50`). По умолчанию размер текста 16pt, отступ 13pt, а радиус скругления 12pt.
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` заменяет `InputDecoration` пикера, так же как `FieldStyleDateTimePicker.decoration` делает это для поля даты. Если ваша decoration не задаёт собственную метку, значок выпадающего списка или `prefixIcon`, то используются значения поля.
+
 #### Стили элементов списка
 
 Вы можете настроить отображение элементов в нижнем модальном окне выбора с помощью `PickerListTileStyle`. По умолчанию нижнее модальное окно показывает простые текстовые элементы. Используйте встроенные пресеты для добавления индикаторов выбора или предоставьте полностью пользовательский построитель.

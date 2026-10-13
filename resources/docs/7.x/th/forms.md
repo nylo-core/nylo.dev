@@ -459,6 +459,20 @@ Field.picker("Country",
 
 พารามิเตอร์ `options` ต้องการ `FormCollection` (ไม่ใช่ raw list) ดู [FormCollection](#form-collection) สำหรับรายละเอียด ชนิดสไตล์: `FieldStylePicker`
 
+picker จัดวางเหมือน text field ก่อนเลือกตัวเลือก "Select Category" จะแสดงเป็น label เมื่อเลือกแล้ว label จะลอยขึ้นเป็น "Category" เหนือตัวเลือกที่เลือก โดยมีไอคอน dropdown เป็น suffix picker จะขยายให้พอดีกับ label และตัวเลือกที่เลือกเมื่อเกิน `containerHeight` (ค่าเริ่มต้น `50`) ค่าเริ่มต้นคือข้อความขนาด 16pt, padding 13pt และมุมโค้งมน 12pt
+
+``` dart
+Field.picker("Category",
+  options: FormCollection.from(["Electronics", "Clothing", "Books"]),
+  style: FieldStylePicker(
+    prefixIcon: Icon(Icons.category_outlined),
+    decoration: InputDecoration(filled: true),
+  ),
+)
+```
+
+`decoration` จะแทนที่ `InputDecoration` ของ picker เช่นเดียวกับที่ `FieldStyleDateTimePicker.decoration` ทำกับ field วันที่ หาก decoration ของคุณไม่ได้กำหนด label, ไอคอน dropdown หรือ `prefixIcon` ของตัวเอง ระบบจะคงค่าของ field ไว้
+
 #### สไตล์ List Tile
 
 คุณสามารถปรับแต่งลักษณะการแสดงรายการใน bottom sheet ของ picker โดยใช้ `PickerListTileStyle` โดยค่าเริ่มต้น bottom sheet จะแสดง tile ข้อความธรรมดา ใช้ preset ในตัวเพื่อเพิ่มตัวบ่งชี้การเลือก หรือให้ custom builder เต็มรูปแบบ

@@ -11,6 +11,7 @@
 - [live:devices](#live-devices "Çalışan uygulamaları listele")
 - [live:status](#live-status "Uygulama durumunu göster")
 - [live:run](#live-run "Yerleşik bir live komutu çalıştır")
+- [Playbook'lar](#playbooks "Playbook'ları Metro'dan oynatma")
 - Live Komutlar
   - [Live Komut Oluşturma](#creating-a-live-command "Bir live komutu oluşturma")
   - [Live Komutu Çalıştırma](#running-a-live-command "Bir live komutu çalıştırma")
@@ -102,7 +103,7 @@ Değer gerçekten `@` ile başlıyorsa, `@@` ile başlatın.
 
 ### Sekme Tamamlama ve Geçmiş
 
-Kabuğun içinde Tab tuşu, bağlı uygulamaya göre komut adlarını, seçenekleri, rotaları, storage ve Backpack anahtarlarını ve seeder adlarını tamamlar. Geçmiş `.dart_tool/nylo/live_history` içinde tutulur ve oturumlar arasında korunur.
+Kabuğun içinde Tab tuşu, bağlı uygulamaya göre komut adlarını, seçenekleri, rotaları, storage ve Backpack anahtarlarını, seeder adlarını ve playbook adlarını tamamlar. Geçmiş `.dart_tool/nylo/live_history` içinde tutulur ve oturumlar arasında korunur.
 
 <div id="running-a-script"></div>
 
@@ -156,6 +157,7 @@ Theme          default
 Authenticated  yes
 Live commands  cart:seed
 Seeders        demo_user
+Playbooks      sign_up
 ```
 
 <div id="live-run"></div>
@@ -186,6 +188,7 @@ metro live:run <command> [arguments]
 | `state` | `updateState` ile bir duruma veri gönder |
 | `event` | Kendi event'lerinizden birini tetikle |
 | `toast` | Bir toast bildirimi göster |
+| `playbook` | [Playbook'larınızı](/docs/{{ $version }}/playbooks) oynat veya listele |
 
 `metro live` içinde, `live:run` kısmını atlayın -- `metro live:run route /profile` yerine `route /profile`:
 
@@ -205,6 +208,43 @@ metro live:run toast "Item saved" --title Success
 ``` bash
 metro live:run data HomePage
 ```
+
+<div id="playbooks"></div>
+
+## Playbook'lar
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+Çalışan uygulamanızda bir veya daha fazla [playbook](/docs/{{ $version }}/playbooks) oynatın. Her adım gerçekleştikçe yazdırılır:
+
+``` bash
+metro live:run playbook sign_up
+metro live:run playbook sign_up add_to_bag --speed fast
+```
+
+Birkaç playbook adı vererek bunları art arda oynatın. Hiç ad verilmezse veya `--list` ile komut, uygulamanın playbook'larını listeler.
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--speed instant\|fast\|natural\|slow` | Her playbook'un kendi hızı yerine bu hızda oynat |
+| `--data <json>` | Çalıştırmadaki her playbook'un varsayılanlarının üzerine `data` içinde okuduğu bir JSON nesnesi |
+| `--no-overlay` | Parmağı ve adım başlığını gizle |
+| `--loop` | Ctrl+C'ye basılana kadar playbook'ları tekrar tekrar oynat |
+| `--list` | Birini oynatmak yerine uygulamanın playbook'larını listele |
+
+Ctrl+C uygulamadan durmasını ister: kalan adımlar atlanır, ancak `tearDown` yine de çalışır. Beklemeyi bırakmak için Ctrl+C'ye ikinci kez basın.
+
+`metro live` kabuğunun içinde komut `playbook <name>`'dir ve Tab playbook adlarını tamamlar:
+
+``` plaintext
+› playbook sign_up --speed fast
+```
+
+<div id="playbook-live-commands"></div>
+
+### Live Komut Başvurusu
+
+Bunun arkasındaki komutlar `playbooks.list`, `playbooks.run` ve `playbooks.stop`'tur. Bir çalıştırma kimliğini hemen döndürür ve her adımı bir `nylo.playbook` event'i olarak akıtır; böylece bir komutun zaman aşımından uzun sürebilir. `live:status` uygulamanın playbook'larını listeler. Playbook'lar Nylo Live protokolünün 9. sürümünde geldi.
 
 <div id="live-commands"></div>
 

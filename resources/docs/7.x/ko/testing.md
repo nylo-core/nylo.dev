@@ -32,6 +32,7 @@
 - [State 테스트](#state-testing "State 테스트")
 - [디버깅](#debugging "디버깅")
 - [내비게이션 및 인터랙션 헬퍼](#nav-interaction "내비게이션 및 인터랙션 헬퍼")
+- [플레이북 테스트](#testing-playbooks "플레이북 테스트")
 - [예제](#examples "예제")
 
 <div id="introduction"></div>
@@ -1161,6 +1162,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## 플레이북 테스트
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+[플레이북](/docs/{{ $version }}/playbooks)은 테스트로 실행할 수 있습니다. `NyTesterClock(tester)`는 tester의 클록으로 플레이북을 실행하므로 natural 속도의 여정도 약 1초면 끝납니다. `expectPlaybookPassed(report)`는 통과하지 못한 스텝이 있으면 플레이북의 리포트와 함께 테스트를 실패시킵니다:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+통합 테스트에서는 플레이북의 터치가 앱에 전달되도록 `testWidgets` 전에 `preparePlaybookBinding(binding)`을 호출하세요. 위젯 테스트에서는 필요하지 않습니다:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

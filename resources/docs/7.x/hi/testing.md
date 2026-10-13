@@ -32,6 +32,7 @@
 - [स्टेट टेस्टिंग](#state-testing "स्टेट टेस्टिंग")
 - [डीबगिंग](#debugging "डीबगिंग")
 - [नेविगेशन और इंटरेक्शन हेल्पर्स](#nav-interaction "नेविगेशन और इंटरेक्शन हेल्पर्स")
+- [प्लेबुक्स की टेस्टिंग](#testing-playbooks "प्लेबुक्स की टेस्टिंग")
 - [उदाहरण](#examples "उदाहरण")
 
 <div id="introduction"></div>
@@ -1160,6 +1161,37 @@ await tester.scrollTo(
   scrollable: find.byKey(Key('main_list')),
   delta: 200,
 );
+```
+
+<div id="testing-playbooks"></div>
+
+## प्लेबुक्स की टेस्टिंग
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
+
+एक [प्लेबुक](/docs/{{ $version }}/playbooks) को टेस्ट के रूप में चलाया जा सकता है। `NyTesterClock(tester)` उसे टेस्टर की क्लॉक पर चलाता है, इसलिए नेचुरल-स्पीड वाली जर्नी में लगभग एक सेकंड लगता है, और `expectPlaybookPassed(report)` किसी स्टेप के पास न होने पर टेस्ट को प्लेबुक की रिपोर्ट के साथ फ़ेल कर देता है:
+
+``` dart
+nyWidgetTest('signs up', (tester) async {
+  await tester.pumpWidget(const MyApp());
+
+  final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
+  expectPlaybookPassed(report);
+});
+```
+
+इंटीग्रेशन टेस्ट में, `testWidgets` से पहले `preparePlaybookBinding(binding)` कॉल करें ताकि प्लेबुक के टच ऐप तक पहुँचें। विजेट टेस्ट्स को इसकी ज़रूरत नहीं है:
+
+``` dart
+void main() {
+  preparePlaybookBinding(IntegrationTestWidgetsFlutterBinding.ensureInitialized());
+
+  testWidgets('sign up journey', (tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    expectPlaybookPassed(await SignUpPlaybook().run());
+  });
+}
 ```
 
 <div id="examples"></div>

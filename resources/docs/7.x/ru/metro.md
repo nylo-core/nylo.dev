@@ -26,6 +26,7 @@
   - [Создание перехватчика](#make-interceptor "Создание нового перехватчика")
   - [Создание файла окружения](#make-env-file "Создание нового файла окружения")
   - [Генерация ключа](#make-key "Генерация APP_KEY")
+  - [Создание плейбука](#make-playbook "Создание нового плейбука")
 - Иконки приложения
   - [Генерация иконок приложения](#build-app-icons "Генерация иконок приложения с Metro")
 - Пользовательские команды
@@ -108,6 +109,7 @@ All commands:
   make:interceptor
   make:command
   make:seeder
+  make:playbook
   make:env
   make:key
 
@@ -118,7 +120,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` и `live:run` открывают оболочку, подключённую к вашему запущенному приложению, что позволяет просматривать и управлять им во время его работы -- см. [Metro Live](/docs/{{ $version }}/metro-live).
+`live`, `live:devices`, `live:status` и `live:run` открывают оболочку, подключённую к вашему запущенному приложению, что позволяет просматривать и управлять им во время его работы -- см. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` запускает один из ваших [плейбуков](/docs/{{ $version }}/playbooks) на работающем приложении.
 
 <div id="make-controller"></div>
 
@@ -821,6 +823,38 @@ metro make:key
 # Сгенерировать ключ для определённого файла окружения
 metro make:key --file=.env.production
 ```
+
+<div id="make-playbook"></div>
+
+<!-- uncertain: new Nylo term "Playbook" rendered as "плейбук" -- not seen in existing ru files -->
+## Создание плейбука
+
+Создайте [плейбук](/docs/{{ $version }}/playbooks): пользовательский сценарий, который ваше приложение выполняет само.
+
+``` bash
+metro make:playbook sign_up
+```
+
+**Аргументы:**
+
+| Аргумент | Описание |
+|----------|----------|
+| `<name>` | Имя плейбука. Используйте подпапки, например `onboarding/sign_up`, чтобы упорядочить их |
+
+**Опции:**
+
+| Флаг / Опция | Сокращение | Описание |
+|--------------|------------|----------|
+| `--description` | | Однострочное описание, отображаемое, когда Metro выводит список плейбуков |
+| `--force` | `-f` | Создаёт файл, даже если он уже существует |
+
+``` bash
+metro make:playbook onboarding/sign_up --description "New user signs up"
+```
+
+Это создаст `lib/app/playbooks/sign_up_playbook.dart` (внутри указанной подпапки, если она есть) и зарегистрирует его в `lib/bootstrap/playbooks.dart`, создав этот файл при первом использовании. В релизных сборках реестр представляет собой пустой map. Также `playbooks` передаётся в `nylo.configure(...)` в вашем `AppProvider`.
+
+Запустите его, пока приложение работает, командой `metro live:run playbook sign_up`. Если приложение уже запущено, сначала выполните hot restart.
 
 <div id="build-app-icons"></div>
 
