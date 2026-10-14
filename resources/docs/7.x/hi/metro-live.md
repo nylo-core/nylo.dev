@@ -226,8 +226,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | हर प्लेबुक की अपनी गति के बजाय इस गति से चलाएं |
 | `--data <json>` | एक JSON ऑब्जेक्ट जिसे रन की हर प्लेबुक अपने डिफ़ॉल्ट्स के ऊपर `data` में पढ़ती है |
-| `--no-overlay` | फ़िंगर और स्टेप कैप्शन छिपाएं |
+| `--no-overlay` | काउंटडाउन छिपाएं, और जो प्लेबुक्स उन्हें दिखाती हैं उनकी उंगली और कैप्शन भी |
 | `--loop` | Ctrl+C तक प्लेबुक्स को बार-बार चलाएं |
+| `--record[=<file>]` | रन के दौरान डिवाइस की स्क्रीन रिकॉर्ड करें। `build/playbooks/<playbooks>-<device>-<time>.mp4` में सहेजी जाती है; `--record=demo.mp4` (या `.gif`) प्रोजेक्ट के सापेक्ष फ़ाइल चुनता है। ffmpeg चाहिए |
+| `--no-captions` | रिकॉर्डिंग की `.vtt` कैप्शन फ़ाइल और चैप्टर्स छोड़ दें |
+| `--clean-status-bar` | प्लेबुक्स चलते समय पूरे सिग्नल और बैटरी के साथ 9:41 दिखाएं, फिर पहले जैसा कर दें। `--record` के बिना भी काम करता है |
+| `--countdown <seconds>` | पहले स्टेप से पहले स्क्रीन पर 0-10 सेकंड की उलटी गिनती करें |
 | `--list` | किसी को चलाने के बजाय ऐप की प्लेबुक्स की सूची दिखाएं |
 
 Ctrl+C ऐप से रुकने को कहता है: बाकी स्टेप्स छोड़ दिए जाते हैं, लेकिन `tearDown` फिर भी चलता है। प्रतीक्षा बंद करने के लिए Ctrl+C दूसरी बार दबाएं।
@@ -238,11 +242,53 @@ Ctrl+C ऐप से रुकने को कहता है: बाकी �
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### रिकॉर्डिंग
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+<!-- uncertain: new Recording section; no prior locale context for recording terms -->
+रन का वीडियो सहेजने के लिए `--record` जोड़ें:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+`metro live` शेल के अंदर `playbook sign_up --record` टाइप करें।
+
+रिकॉर्डिंग के लिए ffmpeg चाहिए (उदाहरण के लिए `brew install ffmpeg`)। कुछ भी चलने से पहले Metro इसकी जाँच करता है।
+
+- **iOS Simulator** -- `xcrun simctl` से रिकॉर्ड होता है।
+- **Android एमुलेटर या डिवाइस** -- `adb screenrecord` से रिकॉर्ड होता है, जो 3 मिनट बाद रुक जाता है, या `scrcpy` इंस्टॉल होने पर उससे (कोई सीमा नहीं, और Android 11+ पर आवाज़ भी रिकॉर्ड होती है)। अगर कई Android डिवाइस जुड़े हैं और Metro नहीं बता पाता कि ऐप किस पर चल रहा है, तो `ANDROID_SERIAL` सेट करें।
+- **असली iPhone** -- कमांड लाइन से रिकॉर्ड नहीं किया जा सकता। QuickTime या Control Center से रिकॉर्ड करें और शुरू करने का समय पाने के लिए `--countdown 3` का उपयोग करें।
+
+नतीजा एक `.mp4` (H.264, स्थिर 60 fps) होता है जो ठीक रन जितनी देर का होता है, या 480px चौड़ा 15 fps `.gif`। हर स्टेप `.mp4` के बगल की `.vtt` फ़ाइल में एक कैप्शन और उसके अंदर एक चैप्टर बन जाता है। ये रन के स्टेप्स से बनते हैं, चाहे प्लेबुक ऑन-स्क्रीन कैप्शन दिखाती हो या नहीं। इन्हें छोड़ने के लिए `--no-captions` दें।
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+जो प्लेबुक फ़ेल होती है या रोकी जाती है वह भी सहेजी जाती है, इसलिए रिकॉर्डिंग बग रिपोर्ट का काम भी करती है। Ctrl+C प्लेबुक को रोकता है (`tearDown` फिर भी चलता है) और रिकॉर्डिंग फिर भी सहेजी जाती है।
+
+`--clean-status-bar` Simulator पर `simctl status_bar` से पहले से सेट की गई स्टेटस बार को बनाए रखता है। Android पर यह डेमो मोड इस्तेमाल करता है और बाद में उसे बंद कर देता है। कई ऐप्स (`--all`) के साथ, हर डिवाइस को अपनी फ़ाइल मिलती है जिसके नाम में डिवाइस का नाम होता है।
+
+प्लेबुक डिफ़ॉल्ट रूप से अपनी उंगली और कैप्शन छिपाती है। डेमो वीडियो के लिए प्लेबुक पर `showFinger` और `caption` सेट करें -- [फ़िंगर और कैप्शन](/docs/{{ $version }}/playbooks#finger-and-caption) देखें।
+
 <div id="playbook-live-commands"></div>
 
 ### लाइव कमांड रेफ़रेंस
 
-इसके पीछे के कमांड `playbooks.list`, `playbooks.run` और `playbooks.stop` हैं। एक रन तुरंत अपना id लौटाता है और हर स्टेप को `nylo.playbook` इवेंट के रूप में स्ट्रीम करता है, इसलिए वह किसी कमांड के टाइमआउट से अधिक समय तक चल सकता है। `live:status` ऐप की प्लेबुक्स की सूची दिखाता है। प्लेबुक्स Nylo Live प्रोटोकॉल संस्करण 9 में आईं।
+इसके पीछे के कमांड `playbooks.list`, `playbooks.run` और `playbooks.stop` हैं। एक रन तुरंत अपना id लौटाता है और हर स्टेप को `nylo.playbook` इवेंट के रूप में स्ट्रीम करता है, इसलिए वह किसी कमांड के टाइमआउट से अधिक समय तक चल सकता है। `live:status` ऐप की प्लेबुक्स की सूची दिखाता है। प्लेबुक्स Nylo Live प्रोटोकॉल संस्करण 9 में आईं। रिकॉर्डिंग सपोर्ट -- `playbooks.run` में `countdown` (हर सेकंड एक `countdown` इवेंट के साथ) और `status` में `simulator` (iOS Simulator का UDID) -- प्रोटोकॉल संस्करण 10 में आया।
 
 <div id="live-commands"></div>
 

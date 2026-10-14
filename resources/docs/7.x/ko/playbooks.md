@@ -29,7 +29,7 @@
 
 <x-doc-strip label="필수" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**플레이북**은 사용자 여정의 탭, 입력, 스크롤, 페이지 이동을 나열한 클래스입니다. 실행 중인 앱이 눈에 보이는 손가락과 각 스텝의 캡션과 함께 이를 스스로 수행합니다 -- 데모, 화면 녹화, 여정을 처음부터 끝까지 확인할 때 유용합니다.
+**플레이북**은 사용자 여정의 탭, 입력, 스크롤, 페이지 이동을 나열한 클래스입니다. 실행 중인 앱이 이를 스스로 수행하며, 손가락과 각 스텝의 캡션을 표시할 수도 있습니다 -- 데모, 화면 녹화, 여정을 처음부터 끝까지 확인할 때 유용합니다.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // 두 배 느리게
 
 ## 손가락과 캡션
 
-`showFinger`와 `caption`을 오버라이드하여 오버레이가 그리는 내용을 변경합니다:
+손가락과 스텝 캡션은 기본적으로 꺼져 있습니다. `showFinger`와 `caption`을 오버라이드하여 켭니다:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // 또는 .top
 ```
 
-`PlaybookCaption`은 `top`, `bottom`(기본값), `hidden` 중 하나입니다. 손가락이 없어도 탭과 스와이프는 그대로 수행됩니다. 한 번의 실행에서 오버레이 전체를 끄려면 Metro에서는 `--no-overlay`, Dart에서는 `run(overlay: false)`를 사용합니다.
+`showFinger`의 기본값은 `false`, `caption`의 기본값은 `PlaybookCaption.hidden`입니다. `PlaybookCaption`은 `top`, `bottom`, `hidden` 중 하나입니다. 탭과 스와이프는 어느 쪽이든 그대로 수행됩니다. 이 플레이북이 `play()`로 실행한 플레이북은 자체 설정을 사용하며, 끝나면 이 플레이북의 설정으로 돌아옵니다. 한 번의 실행에서 둘 다 숨기려면 Metro에서는 `--no-overlay`, Dart에서는 `run(overlay: false)`를 사용합니다.
+
+nylo_support 7.33.0({{ config('app.name') }} 7.4.0) 이전에는 손가락과 하단 캡션이 기본적으로 켜져 있었습니다. 이전 모습을 유지하려면 위의 오버라이드를 추가하세요.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` 안에서는 `playbook sign_up`을 입력합니다. 모든 옵션은 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)를 참고하세요.
+`metro live` 안에서는 `playbook sign_up`을 입력합니다. 모든 옵션은 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)를 참고하세요. `--record`를 추가하면 실행 영상을 저장합니다. [녹화](/docs/{{ $version }}/metro-live#recording-playbooks)를 참고하세요.
 
 <div id="running-on-boot"></div>
 

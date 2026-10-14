@@ -228,8 +228,12 @@ Birkaç playbook adı vererek bunları art arda oynatın. Hiç ad verilmezse vey
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | Her playbook'un kendi hızı yerine bu hızda oynat |
 | `--data <json>` | Çalıştırmadaki her playbook'un varsayılanlarının üzerine `data` içinde okuduğu bir JSON nesnesi |
-| `--no-overlay` | Parmağı ve adım başlığını gizle |
+| `--no-overlay` | Geri sayımı ve bunları gösteren playbook'ların parmağını ve başlıklarını gizle |
 | `--loop` | Ctrl+C'ye basılana kadar playbook'ları tekrar tekrar oynat |
+| `--record[=<file>]` | Çalıştırma boyunca cihazın ekranını kaydet. `build/playbooks/<playbooks>-<device>-<time>.mp4` konumuna kaydedilir; `--record=demo.mp4` (veya `.gif`) projeye göre dosyayı seçer. ffmpeg gerekir |
+| `--no-captions` | Kaydın `.vtt` başlık dosyasını ve bölümlerini dışarıda bırak |
+| `--clean-status-bar` | Playbook'lar oynarken tam sinyal ve pille 9:41 göster, sonra eski haline getir. `--record` olmadan da çalışır |
+| `--countdown <seconds>` | İlk adımdan önce ekranda 0-10 saniye geri say |
 | `--list` | Birini oynatmak yerine uygulamanın playbook'larını listele |
 
 Ctrl+C uygulamadan durmasını ister: kalan adımlar atlanır, ancak `tearDown` yine de çalışır. Beklemeyi bırakmak için Ctrl+C'ye ikinci kez basın.
@@ -240,11 +244,52 @@ Ctrl+C uygulamadan durmasını ister: kalan adımlar atlanır, ancak `tearDown` 
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### Kayıt
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+Çalıştırmanın videosunu kaydetmek için `--record` ekleyin:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+`metro live` kabuğunun içinde `playbook sign_up --record` yazın.
+
+Kayıt için ffmpeg gerekir (örneğin `brew install ffmpeg`). Metro, herhangi bir şey oynatılmadan önce bunu kontrol eder.
+
+- **iOS Simulator** -- `xcrun simctl` ile kaydedilir.
+- **Android emülatörü veya cihazı** -- 3 dakika sonra duran `adb screenrecord` ile ya da kuruluysa `scrcpy` ile kaydedilir (sınırsızdır ve Android 11+ üzerinde sesi de kaydeder). Birden fazla Android cihazı bağlıysa ve Metro uygulamayı hangisinin çalıştırdığını anlayamıyorsa `ANDROID_SERIAL` değerini ayarlayın.
+- **Fiziksel iPhone** -- komut satırından kaydedilemez. QuickTime veya Denetim Merkezi ile kaydedin ve başlamak için süre kazanmak üzere `--countdown 3` kullanın.
+
+Sonuç, çalıştırmayla tam aynı süren bir `.mp4` (H.264, sabit 60 fps) veya 480 piksel genişliğinde 15 fps bir `.gif` dosyasıdır. Her adım, `.mp4` dosyasının yanındaki bir `.vtt` dosyasında başlık, içinde ise bölüm olur. Playbook ekranda başlık göstersin ya da göstermesin, bunlar çalıştırmanın adımlarından üretilir. Atlamak için `--no-captions` verin.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+Başarısız olan veya durdurulan bir playbook yine de kaydedilir; böylece kayıt aynı zamanda bir hata raporu işlevi görür. Ctrl+C playbook'u durdurur (`tearDown` yine çalışır) ve kayıt yine de kaydedilir.
+
+`--clean-status-bar`, Simulator'da `simctl status_bar` ile zaten ayarladığınız durum çubuğunu korur. Android'de demo modunu kullanır ve sonra kapatır. Birden fazla uygulamada (`--all`) her cihaz, adında cihaz adı bulunan kendi dosyasını alır.
+
+Bir playbook varsayılan olarak parmağını ve başlıklarını gizler. Demo videosu için playbook'ta `showFinger` ve `caption` değerlerini ayarlayın -- bkz. [Parmak ve Başlık](/docs/{{ $version }}/playbooks#finger-and-caption).
+
 <div id="playbook-live-commands"></div>
 
 ### Live Komut Başvurusu
 
-Bunun arkasındaki komutlar `playbooks.list`, `playbooks.run` ve `playbooks.stop`'tur. Bir çalıştırma kimliğini hemen döndürür ve her adımı bir `nylo.playbook` event'i olarak akıtır; böylece bir komutun zaman aşımından uzun sürebilir. `live:status` uygulamanın playbook'larını listeler. Playbook'lar Nylo Live protokolünün 9. sürümünde geldi.
+Bunun arkasındaki komutlar `playbooks.list`, `playbooks.run` ve `playbooks.stop`'tur. Bir çalıştırma kimliğini hemen döndürür ve her adımı bir `nylo.playbook` event'i olarak akıtır; böylece bir komutun zaman aşımından uzun sürebilir. `live:status` uygulamanın playbook'larını listeler. Playbook'lar Nylo Live protokolünün 9. sürümünde geldi. Kayıt desteği -- `playbooks.run` içindeki `countdown` (her saniye bir `countdown` event'iyle) ve `status` içindeki `simulator` (iOS Simulator UDID'si) -- protokolün 10. sürümünde geldi.
 
 <div id="live-commands"></div>
 

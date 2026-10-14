@@ -28,7 +28,7 @@
 
 <x-doc-strip label="Requires" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-A **playbook** is a class that lists the taps, typing, scrolling and page changes of a user journey. Your running app performs them on itself, with a visible finger and a caption for each step -- handy for demos, screen recordings and checking a journey end to end.
+A **playbook** is a class that lists the taps, typing, scrolling and page changes of a user journey. Your running app performs them on itself, and can show a finger and a caption for each step -- handy for demos, screen recordings and checking a journey end to end.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -244,17 +244,19 @@ A speed passed to `run()`, `--speed` from Metro, or the speed of a playbook that
 
 ## Finger and Caption
 
-Override `showFinger` and `caption` to change what the overlay draws:
+The finger and the step captions are off by default. Override `showFinger` and `caption` to switch them on:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // or .top
 ```
 
-`PlaybookCaption` is `top`, `bottom` (the default) or `hidden`. Taps and swipes still happen without the finger. To turn the whole overlay off for a run, use `--no-overlay` from Metro or `run(overlay: false)` from Dart.
+`showFinger` defaults to `false` and `caption` to `PlaybookCaption.hidden`; `PlaybookCaption` is `top`, `bottom` or `hidden`. Taps and swipes happen either way. A playbook played by this one with `play()` uses its own setting, and this one's comes back when it finishes. To hide both for a run, use `--no-overlay` from Metro or `run(overlay: false)` from Dart.
+
+Before nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), the finger and the bottom caption were on by default. Add the overrides above to keep that look.
 
 <div id="registering-playbooks"></div>
 
@@ -301,7 +303,7 @@ With your app running in debug mode:
 metro live:run playbook sign_up --speed fast
 ```
 
-Inside `metro live`, type `playbook sign_up`. See [Metro Live](/docs/{{ $version }}/metro-live#playbooks) for every option.
+Inside `metro live`, type `playbook sign_up`. See [Metro Live](/docs/{{ $version }}/metro-live#playbooks) for every option. Add `--record` to save a video of the run; see [Recording](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

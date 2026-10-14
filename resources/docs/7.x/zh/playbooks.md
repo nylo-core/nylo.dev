@@ -29,7 +29,7 @@
 
 <x-doc-strip label="需要" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**剧本**（Playbook）是一个列出用户操作流程中的点击、输入、滚动和页面切换的类。正在运行的应用会自己执行这些操作，并显示可见的手指和每一步的字幕 -- 非常适合演示、屏幕录制以及端到端地检查某个流程。
+**剧本**（Playbook）是一个列出用户操作流程中的点击、输入、滚动和页面切换的类。正在运行的应用会自己执行这些操作，并且可以显示手指和每一步的字幕 -- 非常适合演示、屏幕录制以及端到端地检查某个流程。
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // 慢两倍
 
 ## 手指与字幕
 
-重写 `showFinger` 和 `caption` 以更改覆盖层的绘制内容：
+手指和步骤字幕默认是关闭的。重写 `showFinger` 和 `caption` 即可开启：
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // 或 .top
 ```
 
-`PlaybookCaption` 可以是 `top`、`bottom`（默认）或 `hidden`。即使没有手指，点击和滑动仍会发生。若要在某次运行中关闭整个覆盖层，请在 Metro 中使用 `--no-overlay`，或在 Dart 中使用 `run(overlay: false)`。
+`showFinger` 默认为 `false`，`caption` 默认为 `PlaybookCaption.hidden`；`PlaybookCaption` 可以是 `top`、`bottom` 或 `hidden`。无论哪种情况，点击和滑动都会发生。由本剧本通过 `play()` 运行的剧本使用它自己的设置，结束后会恢复为本剧本的设置。若要在某次运行中同时隐藏两者，请在 Metro 中使用 `--no-overlay`，或在 Dart 中使用 `run(overlay: false)`。
+
+在 nylo_support 7.33.0（{{ config('app.name') }} 7.4.0）之前，手指和底部字幕默认是开启的。添加上面的重写即可保留原来的效果。
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-在 `metro live` 中，输入 `playbook sign_up`。所有选项请参阅 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)。
+在 `metro live` 中，输入 `playbook sign_up`。所有选项请参阅 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)。添加 `--record` 可保存运行的视频；参见[录制](/docs/{{ $version }}/metro-live#recording-playbooks)。
 
 <div id="running-on-boot"></div>
 

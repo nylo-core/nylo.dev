@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**Playbook** là một class liệt kê các thao tác chạm, gõ, cuộn và chuyển trang của một hành trình người dùng. Ứng dụng đang chạy của bạn tự thực hiện chúng, với một ngón tay hiển thị trên màn hình và chú thích cho từng bước -- tiện cho demo, quay màn hình và kiểm tra một hành trình từ đầu đến cuối.
+**Playbook** là một class liệt kê các thao tác chạm, gõ, cuộn và chuyển trang của một hành trình người dùng. Ứng dụng đang chạy của bạn tự thực hiện chúng, và có thể hiển thị ngón tay cùng chú thích cho từng bước -- tiện cho demo, quay màn hình và kiểm tra một hành trình từ đầu đến cuối.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Tốc độ truyền vào `run()`, `--speed` từ Metro, hoặc tốc độ củ
 
 ## Ngón tay và Chú thích
 
-Ghi đè `showFinger` và `caption` để thay đổi những gì overlay hiển thị:
+Ngón tay và chú thích các bước mặc định bị tắt. Ghi đè `showFinger` và `caption` để bật chúng:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // hoặc .top
 ```
 
-`PlaybookCaption` là `top`, `bottom` (mặc định) hoặc `hidden`. Các thao tác chạm và vuốt vẫn diễn ra khi không có ngón tay. Để tắt toàn bộ overlay cho một lần chạy, dùng `--no-overlay` từ Metro hoặc `run(overlay: false)` từ Dart.
+`showFinger` mặc định là `false` và `caption` là `PlaybookCaption.hidden`; `PlaybookCaption` là `top`, `bottom` hoặc `hidden`. Các thao tác chạm và vuốt diễn ra trong cả hai trường hợp. Playbook được playbook này chạy bằng `play()` dùng thiết lập riêng của nó, và thiết lập của playbook này được khôi phục khi nó kết thúc. Để ẩn cả hai cho một lần chạy, dùng `--no-overlay` từ Metro hoặc `run(overlay: false)` từ Dart.
+
+Trước nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), ngón tay và chú thích phía dưới được bật mặc định. Thêm các ghi đè ở trên để giữ giao diện đó.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Khi ứng dụng của bạn đang chạy ở chế độ debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Bên trong `metro live`, gõ `playbook sign_up`. Xem [Metro Live](/docs/{{ $version }}/metro-live#playbooks) để biết mọi tùy chọn.
+Bên trong `metro live`, gõ `playbook sign_up`. Xem [Metro Live](/docs/{{ $version }}/metro-live#playbooks) để biết mọi tùy chọn. Thêm `--record` để lưu video của lần chạy; xem [Ghi hình](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

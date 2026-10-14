@@ -226,8 +226,12 @@ Nêu tên nhiều playbook để chạy chúng nối tiếp nhau. Khi không có
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | Chạy với nhịp độ này thay vì nhịp độ riêng của mỗi playbook |
 | `--data <json>` | Một đối tượng JSON mà mọi playbook trong lần chạy đọc trong `data`, đè lên giá trị mặc định của chúng |
-| `--no-overlay` | Ẩn ngón tay và chú thích của bước |
+| `--no-overlay` | Ẩn đồng hồ đếm ngược, cùng ngón tay và chú thích của các playbook có hiển thị chúng |
 | `--loop` | Chạy lặp đi lặp lại các playbook cho đến khi nhấn Ctrl+C |
+| `--record[=<file>]` | Ghi màn hình thiết bị trong suốt lần chạy. Lưu vào `build/playbooks/<playbooks>-<device>-<time>.mp4`; `--record=demo.mp4` (hoặc `.gif`) chọn tệp, tính từ thư mục dự án. Cần ffmpeg |
+| `--no-captions` | Bỏ tệp chú thích `.vtt` và các chapter của bản ghi |
+| `--clean-status-bar` | Hiển thị 9:41 với đầy đủ sóng và pin trong khi playbook chạy, rồi khôi phục lại. Cũng hoạt động khi không có `--record` |
+| `--countdown <seconds>` | Đếm ngược 0-10 giây trên màn hình trước bước đầu tiên |
 | `--list` | Liệt kê các playbook của ứng dụng thay vì chạy một playbook |
 
 Ctrl+C yêu cầu ứng dụng dừng lại: các bước còn lại bị bỏ qua, nhưng `tearDown` vẫn chạy. Nhấn Ctrl+C lần thứ hai để ngừng chờ.
@@ -238,11 +242,53 @@ Bên trong shell `metro live`, command là `playbook <name>`, và Tab hoàn thà
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### Ghi hình
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+<!-- uncertain: new Recording section; no prior locale context for recording terms -->
+Thêm `--record` để lưu video của lần chạy:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+Bên trong shell `metro live`, gõ `playbook sign_up --record`.
+
+Ghi hình cần ffmpeg (ví dụ `brew install ffmpeg`). Metro kiểm tra nó trước khi bất kỳ thứ gì chạy.
+
+- **iOS Simulator** -- ghi bằng `xcrun simctl`.
+- **Android emulator hoặc thiết bị** -- ghi bằng `adb screenrecord`, tự dừng sau 3 phút, hoặc bằng `scrcpy` nếu đã cài (không giới hạn, và ghi cả âm thanh trên Android 11+). Nếu có nhiều thiết bị Android được kết nối và Metro không biết thiết bị nào chạy ứng dụng, hãy đặt `ANDROID_SERIAL`.
+- **iPhone thật** -- không thể ghi từ dòng lệnh. Hãy ghi bằng QuickTime hoặc Control Center và dùng `--countdown 3` để có thời gian bắt đầu.
+
+Kết quả là một tệp `.mp4` (H.264, 60 fps ổn định) dài đúng bằng lần chạy, hoặc một tệp `.gif` rộng 480px, 15 fps. Mỗi bước trở thành một chú thích trong tệp `.vtt` cạnh tệp `.mp4` và một chapter bên trong nó. Chúng được tạo từ các bước của lần chạy dù playbook có hiển thị chú thích trên màn hình hay không. Truyền `--no-captions` để bỏ qua.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+Playbook thất bại hoặc bị dừng vẫn được lưu, nên bản ghi cũng đóng vai trò như một báo cáo lỗi. Ctrl+C dừng playbook (`tearDown` vẫn chạy) và bản ghi vẫn được lưu.
+
+`--clean-status-bar` giữ nguyên thanh trạng thái bạn đã đặt bằng `simctl status_bar` trên Simulator. Trên Android, nó dùng chế độ demo và tắt đi sau đó. Với nhiều ứng dụng (`--all`), mỗi thiết bị có tệp riêng chứa tên thiết bị.
+
+Playbook mặc định ẩn ngón tay và chú thích. Với video demo, hãy đặt `showFinger` và `caption` trên playbook -- xem [Ngón tay và Chú thích](/docs/{{ $version }}/playbooks#finger-and-caption).
+
 <div id="playbook-live-commands"></div>
 
 ### Tham chiếu Live Command
 
-Các command phía sau là `playbooks.list`, `playbooks.run` và `playbooks.stop`. Một lần chạy trả về id của nó ngay lập tức và phát trực tiếp từng bước dưới dạng event `nylo.playbook`, nên nó có thể kéo dài hơn timeout của một command. `live:status` liệt kê các playbook của ứng dụng. Playbook xuất hiện từ Nylo Live protocol phiên bản 9.
+Các command phía sau là `playbooks.list`, `playbooks.run` và `playbooks.stop`. Một lần chạy trả về id của nó ngay lập tức và phát trực tiếp từng bước dưới dạng event `nylo.playbook`, nên nó có thể kéo dài hơn timeout của một command. `live:status` liệt kê các playbook của ứng dụng. Playbook xuất hiện từ Nylo Live protocol phiên bản 9. Hỗ trợ ghi hình -- `countdown` trong `playbooks.run` (kèm event `countdown` mỗi giây) và `simulator` (UDID của iOS Simulator) trong `status` -- xuất hiện ở protocol phiên bản 10.
 
 <div id="live-commands"></div>
 

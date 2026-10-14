@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**Playbook**, bir kullanıcı yolculuğunun dokunuşlarını, yazmalarını, kaydırmalarını ve sayfa değişikliklerini listeleyen bir sınıftır. Çalışan uygulamanız bunları kendi üzerinde, görünür bir parmak ve her adım için bir başlıkla gerçekleştirir -- demolar, ekran kayıtları ve bir yolculuğu baştan sona kontrol etmek için kullanışlıdır.
+**Playbook**, bir kullanıcı yolculuğunun dokunuşlarını, yazmalarını, kaydırmalarını ve sayfa değişikliklerini listeleyen bir sınıftır. Çalışan uygulamanız bunları kendi üzerinde, bir parmak ve her adım için bir başlık gösterebilir gerçekleştirir -- demolar, ekran kayıtları ve bir yolculuğu baştan sona kontrol etmek için kullanışlıdır.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // iki kat daha yava�
 
 ## Parmak ve Başlık
 
-Katmanın ne çizeceğini değiştirmek için `showFinger` ve `caption` değerlerini geçersiz kılın:
+Parmak ve adım başlıkları varsayılan olarak kapalıdır. Bunları açmak için `showFinger` ve `caption` değerlerini geçersiz kılın:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // veya .top
 ```
 
-`PlaybookCaption`, `top`, `bottom` (varsayılan) veya `hidden` olabilir. Dokunuşlar ve kaydırmalar parmak olmadan da gerçekleşir. Bir çalıştırma için tüm katmanı kapatmak üzere Metro'dan `--no-overlay` veya Dart'tan `run(overlay: false)` kullanın.
+`showFinger` varsayılan olarak `false`, `caption` ise `PlaybookCaption.hidden` değerindedir; `PlaybookCaption`, `top`, `bottom` veya `hidden` olabilir. Dokunuşlar ve kaydırmalar her iki durumda da gerçekleşir. Bu playbook'un `play()` ile oynattığı bir playbook kendi ayarını kullanır ve bu playbook'unki, o bitince geri gelir. Bir çalıştırma için ikisini de gizlemek üzere Metro'dan `--no-overlay` veya Dart'tan `run(overlay: false)` kullanın.
+
+nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) öncesinde parmak ve alt başlık varsayılan olarak açıktı. Bu görünümü korumak için yukarıdaki geçersiz kılmaları ekleyin.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Uygulamanız debug modunda çalışırken:
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` içinde `playbook sign_up` yazın. Tüm seçenekler için [Metro Live](/docs/{{ $version }}/metro-live#playbooks) bölümüne bakın.
+`metro live` içinde `playbook sign_up` yazın. Tüm seçenekler için [Metro Live](/docs/{{ $version }}/metro-live#playbooks) bölümüne bakın. Çalıştırmanın videosunu kaydetmek için `--record` ekleyin; bkz. [Kayıt](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

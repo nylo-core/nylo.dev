@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Ein **Playbook** ist eine Klasse, die die Taps, Eingaben, Scrollvorgänge und Seitenwechsel einer User Journey auflistet. Ihre laufende App führt sie selbst aus, mit einem sichtbaren Finger und einer Beschriftung für jeden Schritt -- praktisch für Demos, Bildschirmaufnahmen und das Prüfen einer Journey von Anfang bis Ende.
+Ein **Playbook** ist eine Klasse, die die Taps, Eingaben, Scrollvorgänge und Seitenwechsel einer User Journey auflistet. Ihre laufende App führt sie selbst aus, und kann einen Finger und eine Beschriftung für jeden Schritt anzeigen -- praktisch für Demos, Bildschirmaufnahmen und das Prüfen einer Journey von Anfang bis Ende.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Ein an `run()` übergebenes Tempo, `--speed` von Metro oder das Tempo eines Play
 
 ## Finger und Beschriftung
 
-Überschreiben Sie `showFinger` und `caption`, um zu ändern, was das Overlay zeichnet:
+Der Finger und die Schrittbeschriftungen sind standardmäßig aus. Überschreiben Sie `showFinger` und `caption`, um sie einzuschalten:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // oder .top
 ```
 
-`PlaybookCaption` ist `top`, `bottom` (der Standard) oder `hidden`. Taps und Wischgesten finden auch ohne den Finger statt. Um das gesamte Overlay für einen Durchlauf auszuschalten, verwenden Sie `--no-overlay` von Metro oder `run(overlay: false)` aus Dart.
+`showFinger` ist standardmäßig `false` und `caption` standardmäßig `PlaybookCaption.hidden`; `PlaybookCaption` ist `top`, `bottom` oder `hidden`. Taps und Wischgesten finden in beiden Fällen statt. Ein Playbook, das von diesem per `play()` abgespielt wird, verwendet seine eigene Einstellung, und die von diesem kehrt zurück, wenn es fertig ist. Um beides für einen Durchlauf auszublenden, verwenden Sie `--no-overlay` von Metro oder `run(overlay: false)` aus Dart.
+
+Vor nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) waren der Finger und die untere Beschriftung standardmäßig an. Fügen Sie die obigen Overrides hinzu, um diese Darstellung beizubehalten.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Bei laufender App im Debug-Modus:
 metro live:run playbook sign_up --speed fast
 ```
 
-Geben Sie innerhalb von `metro live` `playbook sign_up` ein. Alle Optionen finden Sie unter [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
+Geben Sie innerhalb von `metro live` `playbook sign_up` ein. Alle Optionen finden Sie unter [Metro Live](/docs/{{ $version }}/metro-live#playbooks). Fügen Sie `--record` hinzu, um ein Video des Durchlaufs zu speichern; siehe [Aufnahme](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

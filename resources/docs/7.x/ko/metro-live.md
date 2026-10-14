@@ -226,8 +226,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | 각 플레이북 자체의 속도 대신 이 속도로 재생 |
 | `--data <json>` | 실행 중인 모든 플레이북이 `data`에서 읽는 JSON 객체. 기본값보다 우선합니다 |
-| `--no-overlay` | 손가락과 스텝 캡션을 숨김 |
+| `--no-overlay` | 카운트다운과, 이를 표시하는 플레이북의 손가락 및 캡션을 숨김 |
 | `--loop` | Ctrl+C를 누를 때까지 플레이북을 계속 반복 재생 |
+| `--record[=<file>]` | 실행 전후를 포함해 기기의 화면을 녹화합니다. `build/playbooks/<playbooks>-<device>-<time>.mp4`에 저장되며, `--record=demo.mp4`(또는 `.gif`)로 프로젝트 기준 상대 경로의 파일을 지정할 수 있습니다. ffmpeg가 필요합니다 |
+| `--no-captions` | 녹화의 `.vtt` 캡션 파일과 챕터를 생성하지 않음 |
+| `--clean-status-bar` | 플레이북이 재생되는 동안 상태 표시줄을 9:41, 신호와 배터리 가득 찬 상태로 표시하고 끝나면 원래대로 되돌림. `--record` 없이도 동작합니다 |
+| `--countdown <seconds>` | 첫 번째 스텝 전에 화면에서 0~10초 카운트다운 |
 | `--list` | 플레이북을 재생하는 대신 앱의 플레이북 목록 표시 |
 
 Ctrl+C는 앱에 중지를 요청합니다. 나머지 스텝은 건너뛰지만 `tearDown`은 계속 실행됩니다. Ctrl+C를 한 번 더 누르면 대기를 중단합니다.
@@ -238,11 +242,52 @@ Ctrl+C는 앱에 중지를 요청합니다. 나머지 스텝은 건너뛰지만 
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### 녹화
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+`--record`를 추가하면 실행 영상을 저장합니다:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+`metro live` 셸 안에서는 `playbook sign_up --record`를 입력합니다.
+
+녹화에는 ffmpeg가 필요합니다(예: `brew install ffmpeg`). Metro는 무엇이든 재생하기 전에 설치 여부를 확인합니다.
+
+- **iOS 시뮬레이터** -- `xcrun simctl`로 녹화합니다.
+- **Android 에뮬레이터 또는 기기** -- 3분 후 중지되는 `adb screenrecord`, 또는 설치되어 있으면 `scrcpy`(시간 제한 없음, Android 11 이상에서는 소리도 녹음)로 녹화합니다. 여러 Android 기기가 연결되어 있고 Metro가 어느 기기에서 앱이 실행 중인지 알 수 없다면 `ANDROID_SERIAL`을 설정하세요.
+- **실제 iPhone** -- 명령줄에서는 녹화할 수 없습니다. QuickTime 또는 제어 센터로 녹화하고, 시작할 시간을 확보하려면 `--countdown 3`을 사용하세요.
+
+결과물은 실행 시간과 정확히 같은 길이의 `.mp4`(H.264, 일정한 60 fps) 또는 너비 480px, 15 fps의 `.gif`입니다. 각 스텝은 `.mp4` 옆의 `.vtt` 파일에 캡션으로, `.mp4` 안에는 챕터로 만들어집니다. 이들은 플레이북이 화면에 캡션을 표시하는지와 상관없이 실행의 스텝에서 생성됩니다. 건너뛰려면 `--no-captions`를 전달하세요.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+실패했거나 중지된 플레이북도 저장되므로, 녹화본은 곧바로 버그 리포트로 쓸 수 있습니다. Ctrl+C는 플레이북을 중지하며(`tearDown`은 계속 실행됩니다) 녹화도 저장됩니다.
+
+`--clean-status-bar`는 시뮬레이터에서 `simctl status_bar`로 이미 설정해 둔 상태 표시줄을 그대로 유지합니다. Android에서는 데모 모드를 사용하고 끝나면 끕니다. 여러 앱(`--all`)의 경우 각 기기마다 기기 이름이 포함된 별도의 파일이 만들어집니다.
+
+플레이북은 기본적으로 손가락과 캡션을 숨깁니다. 데모 영상에서는 플레이북에 `showFinger`와 `caption`을 설정하세요 -- [손가락과 캡션](/docs/{{ $version }}/playbooks#finger-and-caption)을 참고하세요.
+
 <div id="playbook-live-commands"></div>
 
 ### 라이브 명령어 레퍼런스
 
-그 뒤에 있는 명령어는 `playbooks.list`, `playbooks.run`, `playbooks.stop`입니다. 실행은 ID를 즉시 반환하고 각 스텝을 `nylo.playbook` 이벤트로 스트리밍하므로, 명령어의 타임아웃보다 오래 실행될 수 있습니다. `live:status`는 앱의 플레이북 목록을 표시합니다. 플레이북은 Nylo Live 프로토콜 버전 9에서 도입되었습니다.
+그 뒤에 있는 명령어는 `playbooks.list`, `playbooks.run`, `playbooks.stop`입니다. 실행은 ID를 즉시 반환하고 각 스텝을 `nylo.playbook` 이벤트로 스트리밍하므로, 명령어의 타임아웃보다 오래 실행될 수 있습니다. `live:status`는 앱의 플레이북 목록을 표시합니다. 플레이북은 Nylo Live 프로토콜 버전 9에서 도입되었습니다. 녹화 지원 -- `playbooks.run`의 `countdown`(매초 `countdown` 이벤트 전송)과 `status`의 `simulator`(iOS 시뮬레이터 UDID) -- 은 프로토콜 버전 10에서 도입되었습니다.
 
 <div id="live-commands"></div>
 

@@ -28,7 +28,7 @@
 
 <x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Sebuah **playbook** adalah class yang mendaftar tap, pengetikan, scroll, dan perpindahan halaman dari sebuah alur perjalanan pengguna. Aplikasi Anda yang sedang berjalan melakukannya sendiri, dengan jari yang terlihat dan keterangan untuk setiap langkah -- berguna untuk demo, rekaman layar, dan memeriksa sebuah alur dari awal hingga akhir.
+Sebuah **playbook** adalah class yang mendaftar tap, pengetikan, scroll, dan perpindahan halaman dari sebuah alur perjalanan pengguna. Aplikasi Anda yang sedang berjalan melakukannya sendiri, dan dapat menampilkan jari serta keterangan untuk setiap langkah -- berguna untuk demo, rekaman layar, dan memeriksa sebuah alur dari awal hingga akhir.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -244,17 +244,19 @@ Kecepatan yang diberikan ke `run()`, `--speed` dari Metro, atau kecepatan playbo
 
 ## Jari dan Keterangan
 
-Override `showFinger` dan `caption` untuk mengubah apa yang digambar overlay:
+Jari dan keterangan langkah mati secara default. Override `showFinger` dan `caption` untuk menyalakannya:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // atau .top
 ```
 
-`PlaybookCaption` adalah `top`, `bottom` (default), atau `hidden`. Tap dan swipe tetap terjadi tanpa jari. Untuk mematikan seluruh overlay pada satu proses, gunakan `--no-overlay` dari Metro atau `run(overlay: false)` dari Dart.
+`showFinger` secara default `false` dan `caption` `PlaybookCaption.hidden`; `PlaybookCaption` adalah `top`, `bottom`, atau `hidden`. Tap dan swipe tetap terjadi di kedua kondisi. Playbook yang dimainkan oleh playbook ini dengan `play()` memakai pengaturannya sendiri, dan pengaturan playbook ini kembali setelah selesai. Untuk menyembunyikan keduanya pada satu proses, gunakan `--no-overlay` dari Metro atau `run(overlay: false)` dari Dart.
+
+Sebelum nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), jari dan keterangan bawah menyala secara default. Tambahkan override di atas untuk mempertahankan tampilan itu.
 
 <div id="registering-playbooks"></div>
 
@@ -301,7 +303,7 @@ Dengan aplikasi Anda berjalan dalam mode debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Di dalam `metro live`, ketik `playbook sign_up`. Lihat [Metro Live](/docs/{{ $version }}/metro-live#playbooks) untuk semua opsi.
+Di dalam `metro live`, ketik `playbook sign_up`. Lihat [Metro Live](/docs/{{ $version }}/metro-live#playbooks) untuk semua opsi. Tambahkan `--record` untuk menyimpan video dari proses; lihat [Merekam](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

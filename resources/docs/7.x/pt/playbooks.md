@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Requer" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Um **playbook** é uma classe que lista os toques, a digitação, a rolagem e as mudanças de página de uma jornada de usuário. Seu app em execução as realiza por conta própria, com um dedo visível e uma legenda para cada passo -- útil para demos, gravações de tela e para verificar uma jornada de ponta a ponta.
+Um **playbook** é uma classe que lista os toques, a digitação, a rolagem e as mudanças de página de uma jornada de usuário. Seu app em execução as realiza por conta própria, e pode mostrar um dedo e uma legenda para cada passo -- útil para demos, gravações de tela e para verificar uma jornada de ponta a ponta.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Uma velocidade passada para `run()`, `--speed` pelo Metro, ou a velocidade de um
 
 ## Dedo e Legenda
 
-Sobrescreva `showFinger` e `caption` para mudar o que o overlay desenha:
+O dedo e as legendas dos passos vêm desativados por padrão. Sobrescreva `showFinger` e `caption` para ativá-los:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // ou .top
 ```
 
-`PlaybookCaption` é `top`, `bottom` (o padrão) ou `hidden`. Toques e swipes continuam acontecendo sem o dedo. Para desativar todo o overlay em uma execução, use `--no-overlay` pelo Metro ou `run(overlay: false)` pelo Dart.
+`showFinger` tem como padrão `false` e `caption` tem como padrão `PlaybookCaption.hidden`; `PlaybookCaption` é `top`, `bottom` ou `hidden`. Toques e swipes acontecem de qualquer forma. Um playbook executado por este com `play()` usa sua própria configuração, e a deste volta quando ele termina. Para ocultar ambos em uma execução, use `--no-overlay` pelo Metro ou `run(overlay: false)` pelo Dart.
+
+Antes do nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), o dedo e a legenda inferior vinham ativados por padrão. Adicione as sobrescritas acima para manter essa aparência.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Com seu app rodando em modo debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Dentro do `metro live`, digite `playbook sign_up`. Veja [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para todas as opções.
+Dentro do `metro live`, digite `playbook sign_up`. Veja [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para todas as opções. Adicione `--record` para salvar um vídeo da execução; veja [Gravação](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

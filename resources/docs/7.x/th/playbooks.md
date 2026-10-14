@@ -28,7 +28,7 @@
 
 <x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**playbook** คือคลาสที่ระบุรายการการแตะ การพิมพ์ การเลื่อน และการเปลี่ยนหน้าของ user journey แอปที่กำลังทำงานของคุณจะทำสิ่งเหล่านั้นด้วยตัวเอง พร้อมนิ้วที่มองเห็นได้และคำบรรยายสำหรับแต่ละ step -- สะดวกสำหรับการสาธิต การบันทึกหน้าจอ และการตรวจสอบ journey ตั้งแต่ต้นจนจบ
+**playbook** คือคลาสที่ระบุรายการการแตะ การพิมพ์ การเลื่อน และการเปลี่ยนหน้าของ user journey แอปที่กำลังทำงานของคุณจะทำสิ่งเหล่านั้นด้วยตัวเอง และสามารถแสดงนิ้วกับคำบรรยายสำหรับแต่ละ step ได้ -- สะดวกสำหรับการสาธิต การบันทึกหน้าจอ และการตรวจสอบ journey ตั้งแต่ต้นจนจบ
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -244,17 +244,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // ช้าลงส
 
 ## นิ้วและคำบรรยาย
 
-override `showFinger` และ `caption` เพื่อเปลี่ยนสิ่งที่ overlay วาด:
+นิ้วและคำบรรยายของ step ถูกปิดไว้โดยค่าเริ่มต้น override `showFinger` และ `caption` เพื่อเปิดใช้งาน:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // หรือ .top
 ```
 
-`PlaybookCaption` คือ `top`, `bottom` (ค่าเริ่มต้น) หรือ `hidden` การแตะและการปัดยังคงเกิดขึ้นแม้ไม่มีนิ้ว หากต้องการปิด overlay ทั้งหมดสำหรับการรันครั้งหนึ่ง ให้ใช้ `--no-overlay` จาก Metro หรือ `run(overlay: false)` จาก Dart
+`showFinger` มีค่าเริ่มต้นเป็น `false` และ `caption` เป็น `PlaybookCaption.hidden`; `PlaybookCaption` คือ `top`, `bottom` หรือ `hidden` การแตะและการปัดเกิดขึ้นไม่ว่าจะเปิดหรือไม่ playbook ที่ถูกเล่นโดย playbook นี้ด้วย `play()` จะใช้การตั้งค่าของตัวเอง และการตั้งค่าของ playbook นี้จะกลับมาเมื่อเล่นจบ หากต้องการซ่อนทั้งสองอย่างสำหรับการรันครั้งหนึ่ง ให้ใช้ `--no-overlay` จาก Metro หรือ `run(overlay: false)` จาก Dart
+
+ก่อน nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) นิ้วและคำบรรยายด้านล่างเปิดอยู่โดยค่าเริ่มต้น เพิ่ม override ด้านบนเพื่อให้ได้ลักษณะเดิม
 
 <div id="registering-playbooks"></div>
 
@@ -301,7 +303,7 @@ playbook ที่ลงทะเบียนไว้จะรันภาย�
 metro live:run playbook sign_up --speed fast
 ```
 
-ภายใน `metro live` ให้พิมพ์ `playbook sign_up` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbooks) สำหรับทุกตัวเลือก
+ภายใน `metro live` ให้พิมพ์ `playbook sign_up` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbooks) สำหรับทุกตัวเลือก เพิ่ม `--record` เพื่อบันทึกวิดีโอของการรัน ดู [การบันทึก](/docs/{{ $version }}/metro-live#recording-playbooks)
 
 <div id="running-on-boot"></div>
 

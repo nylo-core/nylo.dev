@@ -226,8 +226,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | 以此速度运行，而不是使用各剧本自身的速度 |
 | `--data <json>` | 本次运行中每个剧本都会在 `data` 中读取的 JSON 对象，优先于其默认值 |
-| `--no-overlay` | 隐藏手指和步骤字幕 |
+| `--no-overlay` | 隐藏倒计时，以及显示手指和字幕的剧本中的手指和字幕 |
 | `--loop` | 反复运行这些剧本，直到按下 Ctrl+C |
+| `--record[=<file>]` | 在运行前后录制设备屏幕。保存到 `build/playbooks/<playbooks>-<device>-<time>.mp4`；`--record=demo.mp4`（或 `.gif`）可指定文件，路径相对于项目。需要 ffmpeg |
+| `--no-captions` | 不生成录制内容的 `.vtt` 字幕文件和章节 |
+| `--clean-status-bar` | 剧本运行期间将状态栏显示为 9:41、满格信号和满电量，结束后恢复原状。不带 `--record` 也可使用 |
+| `--countdown <seconds>` | 在第一步之前于屏幕上倒计时 0-10 秒 |
 | `--list` | 列出应用的剧本，而不是运行某个剧本 |
 
 按下 Ctrl+C 会请求应用停止：其余步骤将被跳过，但 `tearDown` 仍会运行。再按一次 Ctrl+C 可停止等待。
@@ -238,11 +242,52 @@ metro live:run playbook sign_up add_to_bag --speed fast
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### 录制
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+添加 `--record` 即可保存运行的视频：
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+在 `metro live` Shell 内，输入 `playbook sign_up --record`。
+
+录制需要 ffmpeg（例如 `brew install ffmpeg`）。Metro 会在运行任何内容之前先检查它是否存在。
+
+- **iOS 模拟器** -- 使用 `xcrun simctl` 录制。
+- **Android 模拟器或设备** -- 使用 `adb screenrecord` 录制（3 分钟后会停止），若已安装 `scrcpy` 则使用它（无时长限制，在 Android 11+ 上还会录制声音）。如果连接了多台 Android 设备，而 Metro 无法判断哪一台在运行应用，请设置 `ANDROID_SERIAL`。
+- **真实 iPhone** -- 无法通过命令行录制。请使用 QuickTime 或控制中心录制，并使用 `--countdown 3` 留出开始录制的时间。
+
+结果是一个时长与运行时间完全一致的 `.mp4`（H.264，稳定 60 fps），或一个宽 480px、15 fps 的 `.gif`。每一步都会成为 `.mp4` 旁 `.vtt` 文件中的一条字幕，以及 `.mp4` 内的一个章节。无论剧本是否在屏幕上显示字幕，它们都由运行的步骤生成。传入 `--no-captions` 可跳过它们。
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+失败或被中止的剧本同样会被保存，因此录制内容也可以直接充当错误报告。Ctrl+C 会停止剧本（`tearDown` 仍会运行），录制内容依然会被保存。
+
+`--clean-status-bar` 会保留你在模拟器上已通过 `simctl status_bar` 设置的状态栏。在 Android 上它使用演示模式，并在结束后将其关闭。对于多个应用（`--all`），每台设备都会得到各自的文件，文件名中带有设备名称。
+
+剧本默认隐藏手指和字幕。若要制作演示视频，请在剧本上设置 `showFinger` 和 `caption` -- 参见[手指与字幕](/docs/{{ $version }}/playbooks#finger-and-caption)。
+
 <div id="playbook-live-commands"></div>
 
 ### 实时命令参考
 
-其背后的命令是 `playbooks.list`、`playbooks.run` 和 `playbooks.stop`。一次运行会立即返回其 id，并将每一步作为 `nylo.playbook` 事件以流的形式推送，因此运行时间可以超过命令的超时时间。`live:status` 会列出应用的剧本。剧本在 Nylo Live 协议版本 9 中引入。
+其背后的命令是 `playbooks.list`、`playbooks.run` 和 `playbooks.stop`。一次运行会立即返回其 id，并将每一步作为 `nylo.playbook` 事件以流的形式推送，因此运行时间可以超过命令的超时时间。`live:status` 会列出应用的剧本。剧本在 Nylo Live 协议版本 9 中引入。录制支持 -- `playbooks.run` 中的 `countdown`（每秒发送一个 `countdown` 事件）以及 `status` 中的 `simulator`（iOS 模拟器 UDID） -- 在协议版本 10 中引入。
 
 <div id="live-commands"></div>
 

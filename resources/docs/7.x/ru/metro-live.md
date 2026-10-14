@@ -227,8 +227,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | Играть в этом темпе вместо собственного темпа каждого плейбука |
 | `--data <json>` | JSON-объект, который каждый плейбук запуска читает в `data` поверх своих значений по умолчанию |
-| `--no-overlay` | Скрыть палец и подпись шага |
-| `--loop` | Проигрывать плейбуки снова и снова до нажатия Ctrl+C |
+| `--no-overlay` | Скрыть обратный отсчёт, а также палец и подписи у плейбуков, которые их показывают |
+| `--loop` | Запускать плейбуки снова и снова до нажатия Ctrl+C |
+| `--record[=<file>]` | Записать экран устройства во время запуска. Сохраняется в `build/playbooks/<playbooks>-<device>-<time>.mp4`; `--record=demo.mp4` (или `.gif`) выбирает файл относительно проекта. Требуется ffmpeg |
+| `--no-captions` | Не создавать файл подписей `.vtt` и главы записи |
+| `--clean-status-bar` | Показывать 9:41 с полным сигналом и зарядом, пока идут плейбуки, а затем вернуть как было. Работает и без `--record` |
+| `--countdown <seconds>` | Показать на экране обратный отсчёт 0-10 секунд перед первым шагом |
 | `--list` | Вывести список плейбуков приложения вместо запуска |
 
 Ctrl+C просит приложение остановиться: оставшиеся шаги пропускаются, но `tearDown` всё равно выполняется. Нажмите Ctrl+C второй раз, чтобы прекратить ожидание.
@@ -239,11 +243,54 @@ Ctrl+C просит приложение остановиться: оставш�
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+<!-- uncertain: newly added Recording section; no prior locale context for register or terminology (e.g. chapters, status bar) -->
+
+### Запись
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+Добавьте `--record`, чтобы сохранить видео запуска:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+Внутри оболочки `metro live` введите `playbook sign_up --record`.
+
+Для записи нужен ffmpeg (например, `brew install ffmpeg`). Metro проверяет его наличие до начала воспроизведения.
+
+- **iOS Simulator** -- запись через `xcrun simctl`.
+- **Эмулятор или устройство Android** -- запись через `adb screenrecord`, который останавливается через 3 минуты, или через `scrcpy`, если он установлен (без ограничения, и записывает звук на Android 11+). Если подключено несколько устройств Android и Metro не может определить, на каком запущено приложение, задайте `ANDROID_SERIAL`.
+- **Физический iPhone** -- нельзя записать из командной строки. Записывайте через QuickTime или Пункт управления и используйте `--countdown 3`, чтобы успеть начать.
+
+Результат -- файл `.mp4` (H.264, стабильные 60 fps) ровно той же длительности, что и запуск, или `.gif` шириной 480px с 15 fps. Каждый шаг становится подписью в файле `.vtt` рядом с `.mp4` и главой внутри него. Они создаются по шагам запуска независимо от того, показывает ли плейбук подписи на экране. Передайте `--no-captions`, чтобы их не создавать.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+Плейбук, который завершился ошибкой или был остановлен, всё равно сохраняется, так что запись служит ещё и отчётом об ошибке. Ctrl+C останавливает плейбук (`tearDown` всё равно выполняется), и запись всё равно сохраняется.
+
+`--clean-status-bar` сохраняет строку состояния, которую вы уже задали через `simctl status_bar` на Simulator. На Android используется демо-режим, который потом отключается. При нескольких приложениях (`--all`) каждое устройство получает свой файл с именем устройства.
+
+По умолчанию плейбук скрывает палец и подписи. Для демо-видео задайте `showFinger` и `caption` в плейбуке -- см. [Палец и подпись](/docs/{{ $version }}/playbooks#finger-and-caption).
+
 <div id="playbook-live-commands"></div>
 
 ### Справочник live-команд
 
-За этим стоят команды `playbooks.list`, `playbooks.run` и `playbooks.stop`. Запуск сразу возвращает свой id и передаёт каждый шаг событием `nylo.playbook`, поэтому может длиться дольше таймаута команды. `live:status` выводит список плейбуков приложения. Плейбуки появились в версии 9 протокола Nylo Live.
+За этим стоят команды `playbooks.list`, `playbooks.run` и `playbooks.stop`. Запуск сразу возвращает свой id и передаёт каждый шаг событием `nylo.playbook`, поэтому может длиться дольше таймаута команды. `live:status` выводит список плейбуков приложения. Плейбуки появились в версии 9 протокола Nylo Live. Поддержка записи -- `countdown` в `playbooks.run` (с событием `countdown` каждую секунду) и `simulator` (UDID iOS Simulator) в `status` -- появилась в версии 10 протокола.
 
 <div id="live-commands"></div>
 

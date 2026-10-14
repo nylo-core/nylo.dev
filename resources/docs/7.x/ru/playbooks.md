@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**Плейбук** -- это класс, который перечисляет нажатия, ввод текста, прокрутку и смену страниц пользовательского сценария. Ваше запущенное приложение выполняет их само, с видимым пальцем и подписью к каждому шагу -- удобно для демо, записи экрана и сквозной проверки сценария.
+**Плейбук** -- это класс, который перечисляет нажатия, ввод текста, прокрутку и смену страниц пользовательского сценария. Ваше запущенное приложение выполняет их само, и может показывать палец и подпись к каждому шагу -- удобно для демо, записи экрана и сквозной проверки сценария.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // в два раза
 
 ## Палец и подпись
 
-Переопределите `showFinger` и `caption`, чтобы изменить то, что рисует оверлей:
+Палец и подписи шагов по умолчанию выключены. Переопределите `showFinger` и `caption`, чтобы включить их:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // или .top
 ```
 
-`PlaybookCaption` принимает значения `top`, `bottom` (по умолчанию) или `hidden`. Нажатия и свайпы выполняются и без пальца. Чтобы отключить весь оверлей на время запуска, используйте `--no-overlay` из Metro или `run(overlay: false)` из Dart.
+По умолчанию `showFinger` равен `false`, а `caption` -- `PlaybookCaption.hidden`; `PlaybookCaption` принимает значения `top`, `bottom` или `hidden`. Нажатия и свайпы выполняются в любом случае. Плейбук, запущенный из этого через `play()`, использует собственную настройку, а настройка этого возвращается после его завершения. Чтобы скрыть и то и другое на время запуска, используйте `--no-overlay` из Metro или `run(overlay: false)` из Dart.
+
+До nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) палец и нижняя подпись были включены по умолчанию. Добавьте переопределения выше, чтобы сохранить прежний вид.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-Внутри `metro live` введите `playbook sign_up`. Все опции см. в [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
+Внутри `metro live` введите `playbook sign_up`. Все опции см. в [Metro Live](/docs/{{ $version }}/metro-live#playbooks). Добавьте `--record`, чтобы сохранить видео запуска; см. [Запись](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

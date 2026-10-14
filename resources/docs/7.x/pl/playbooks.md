@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**Playbook** to klasa, która wylicza tapnięcia, pisanie, przewijanie i zmiany stron w ścieżce użytkownika. Uruchomiona aplikacja wykonuje je sama na sobie, z widocznym palcem i podpisem każdego kroku -- przydatne do dem, nagrań ekranu i sprawdzania ścieżki od początku do końca.
+**Playbook** to klasa, która wylicza tapnięcia, pisanie, przewijanie i zmiany stron w ścieżce użytkownika. Uruchomiona aplikacja wykonuje je sama na sobie i może pokazywać palec oraz podpis każdego kroku -- przydatne do dem, nagrań ekranu i sprawdzania ścieżki od początku do końca.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Tempo przekazane do `run()`, `--speed` z Metro albo tempo playbooka, który odtw
 
 ## Palec i podpis
 
-Nadpisz `showFinger` i `caption`, aby zmienić to, co rysuje nakładka:
+Palec i podpisy kroków są domyślnie wyłączone. Nadpisz `showFinger` i `caption`, aby je włączyć:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // lub .top
 ```
 
-`PlaybookCaption` to `top`, `bottom` (domyślnie) lub `hidden`. Tapnięcia i przesunięcia nadal się odbywają bez palca. Aby wyłączyć całą nakładkę na czas jednego uruchomienia, użyj `--no-overlay` z Metro lub `run(overlay: false)` z Darta.
+`showFinger` domyślnie ma wartość `false`, a `caption` -- `PlaybookCaption.hidden`; `PlaybookCaption` to `top`, `bottom` lub `hidden`. Tapnięcia i przesunięcia odbywają się w obu przypadkach. Playbook odtwarzany z tego playbooka przez `play()` używa własnego ustawienia, a ustawienie tego playbooka wraca po jego zakończeniu. Aby ukryć oba na czas jednego uruchomienia, użyj `--no-overlay` z Metro lub `run(overlay: false)` z Darta.
+
+Przed nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) palec i dolny podpis były domyślnie włączone. Dodaj powyższe nadpisania, aby zachować ten wygląd.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Gdy aplikacja działa w trybie debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Wewnątrz `metro live` wpisz `playbook sign_up`. Wszystkie opcje znajdziesz w [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
+Wewnątrz `metro live` wpisz `playbook sign_up`. Wszystkie opcje znajdziesz w [Metro Live](/docs/{{ $version }}/metro-live#playbooks). Dodaj `--record`, aby zapisać wideo z przebiegu; zobacz [Nagrywanie](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

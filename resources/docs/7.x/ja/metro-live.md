@@ -226,8 +226,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | 各プレイブック自身のペースではなく、このペースで再生 |
 | `--data <json>` | 実行内のすべてのプレイブックが `data` で読み取る JSON オブジェクト。デフォルト値より優先されます |
-| `--no-overlay` | 指とステップのキャプションを非表示にする |
+| `--no-overlay` | カウントダウンと、それらを表示するプレイブックの指およびキャプションを非表示にする |
 | `--loop` | Ctrl+C を押すまで、プレイブックを繰り返し再生 |
+| `--record[=<file>]` | 実行の前後を含めてデバイスの画面を録画します。`build/playbooks/<playbooks>-<device>-<time>.mp4` に保存されます。`--record=demo.mp4`（または `.gif`）でプロジェクトからの相対パスでファイルを指定できます。ffmpeg が必要です |
+| `--no-captions` | 録画の `.vtt` キャプションファイルとチャプターを出力しない |
+| `--clean-status-bar` | プレイブックの再生中、ステータスバーを 9:41、電波・バッテリー満タンで表示し、終了後に元に戻す。`--record` なしでも動作します |
+| `--countdown <seconds>` | 最初のステップの前に、画面上で 0〜10 秒のカウントダウンを行う |
 | `--list` | プレイブックを再生せず、アプリのプレイブックを一覧表示 |
 
 Ctrl+C を押すとアプリに停止を要求します。残りのステップはスキップされますが、`tearDown` は引き続き実行されます。もう一度 Ctrl+C を押すと、待機を終了します。
@@ -238,11 +242,52 @@ Ctrl+C を押すとアプリに停止を要求します。残りのステップ�
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### 録画
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+`--record` を追加すると、実行の動画を保存します:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+`metro live` シェル内では `playbook sign_up --record` と入力します。
+
+録画には ffmpeg が必要です（例: `brew install ffmpeg`）。Metro は何かを再生する前にその有無を確認します。
+
+- **iOS シミュレーター** -- `xcrun simctl` で録画されます。
+- **Android エミュレーターまたはデバイス** -- 3 分で停止する `adb screenrecord`、またはインストールされていれば `scrcpy`（時間制限なし、Android 11 以降では音声も録音）で録画されます。複数の Android デバイスが接続されていて、Metro がどれがアプリを実行しているか判別できない場合は、`ANDROID_SERIAL` を設定してください。
+- **実機の iPhone** -- コマンドラインからは録画できません。QuickTime またはコントロールセンターで録画し、開始する時間を確保するために `--countdown 3` を使用してください。
+
+結果は、実行時間とぴったり同じ長さの `.mp4`（H.264、一定の 60 fps）、または幅 480px・15 fps の `.gif` です。各ステップは、`.mp4` の隣にある `.vtt` ファイルのキャプションと、`.mp4` 内のチャプターになります。これらはプレイブックが画面上にキャプションを表示するかどうかに関係なく、実行のステップから生成されます。省略するには `--no-captions` を指定します。
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+失敗または停止したプレイブックも保存されるため、録画はそのままバグ報告として使えます。Ctrl+C はプレイブックを停止し（`tearDown` は引き続き実行されます）、録画も保存されます。
+
+`--clean-status-bar` は、シミュレーターで `simctl status_bar` により既に設定済みのステータスバーをそのまま維持します。Android ではデモモードを使用し、終了後にオフにします。複数のアプリ（`--all`）の場合、各デバイスにデバイス名を含む個別のファイルが作成されます。
+
+プレイブックはデフォルトで指とキャプションを表示しません。デモ動画では、プレイブックに `showFinger` と `caption` を設定してください -- [指とキャプション](/docs/{{ $version }}/playbooks#finger-and-caption)を参照してください。
+
 <div id="playbook-live-commands"></div>
 
 ### ライブコマンドリファレンス
 
-その裏側のコマンドは `playbooks.list`、`playbooks.run`、`playbooks.stop` です。実行は ID をすぐに返し、各ステップを `nylo.playbook` イベントとしてストリーミングするため、コマンドのタイムアウトより長く実行できます。`live:status` はアプリのプレイブックを一覧表示します。プレイブックは Nylo Live プロトコルバージョン 9 で導入されました。
+その裏側のコマンドは `playbooks.list`、`playbooks.run`、`playbooks.stop` です。実行は ID をすぐに返し、各ステップを `nylo.playbook` イベントとしてストリーミングするため、コマンドのタイムアウトより長く実行できます。`live:status` はアプリのプレイブックを一覧表示します。プレイブックは Nylo Live プロトコルバージョン 9 で導入されました。録画のサポート -- `playbooks.run` の `countdown`（毎秒 `countdown` イベントを送信）と、`status` の `simulator`（iOS シミュレーターの UDID） -- は、プロトコルバージョン 10 で導入されました。
 
 <div id="live-commands"></div>
 

@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Un **playbook** e' una classe che elenca i tap, la digitazione, lo scorrimento e i cambi di pagina di un percorso utente. La tua app in esecuzione li esegue su se stessa, con un dito visibile e una didascalia per ogni step -- utile per demo, registrazioni dello schermo e per verificare un percorso end to end.
+Un **playbook** e' una classe che elenca i tap, la digitazione, lo scorrimento e i cambi di pagina di un percorso utente. La tua app in esecuzione li esegue su se stessa, e puo' mostrare un dito e una didascalia per ogni step -- utile per demo, registrazioni dello schermo e per verificare un percorso end to end.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Una velocita' passata a `run()`, `--speed` da Metro, o la velocita' di un playbo
 
 ## Dito e Didascalia
 
-Sovrascrivi `showFinger` e `caption` per cambiare cio' che l'overlay disegna:
+Il dito e le didascalie degli step sono disattivati per impostazione predefinita. Sovrascrivi `showFinger` e `caption` per attivarli:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // oppure .top
 ```
 
-`PlaybookCaption` e' `top`, `bottom` (il valore predefinito) o `hidden`. I tap e gli swipe avvengono comunque senza il dito. Per disattivare l'intero overlay durante un'esecuzione, usa `--no-overlay` da Metro o `run(overlay: false)` da Dart.
+`showFinger` e' `false` per impostazione predefinita e `caption` e' `PlaybookCaption.hidden`; `PlaybookCaption` e' `top`, `bottom` o `hidden`. I tap e gli swipe avvengono in entrambi i casi. Un playbook eseguito da questo con `play()` usa la propria impostazione, e quella di questo ritorna al termine. Per nascondere entrambi durante un'esecuzione, usa `--no-overlay` da Metro o `run(overlay: false)` da Dart.
+
+Prima di nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), il dito e la didascalia in basso erano attivi per impostazione predefinita. Aggiungi gli override qui sopra per mantenere quell'aspetto.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Con la tua app in esecuzione in modalita' debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-All'interno di `metro live`, digita `playbook sign_up`. Vedi [Metro Live](/docs/{{ $version }}/metro-live#playbooks) per tutte le opzioni.
+All'interno di `metro live`, digita `playbook sign_up`. Vedi [Metro Live](/docs/{{ $version }}/metro-live#playbooks) per tutte le opzioni. Aggiungi `--record` per salvare un video dell'esecuzione; vedi [Registrazione](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

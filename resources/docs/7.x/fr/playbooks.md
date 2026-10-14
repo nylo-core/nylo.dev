@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Un **playbook** est une classe qui liste les appuis, saisies, defilements et changements de page d'un parcours utilisateur. Votre application en cours d'execution les effectue elle-meme, avec un doigt visible et une legende pour chaque etape -- pratique pour les demos, les enregistrements d'ecran et la verification d'un parcours de bout en bout.
+Un **playbook** est une classe qui liste les appuis, saisies, defilements et changements de page d'un parcours utilisateur. Votre application en cours d'execution les effectue elle-meme, et peut afficher un doigt et une legende pour chaque etape -- pratique pour les demos, les enregistrements d'ecran et la verification d'un parcours de bout en bout.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Une vitesse passee a `run()`, `--speed` depuis Metro, ou la vitesse d'un playboo
 
 ## Doigt et legende
 
-Redefinissez `showFinger` et `caption` pour changer ce que dessine la superposition :
+Le doigt et les legendes d'etape sont desactives par defaut. Redefinissez `showFinger` et `caption` pour les activer :
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // ou .top
 ```
 
-`PlaybookCaption` vaut `top`, `bottom` (par defaut) ou `hidden`. Les appuis et les glissements ont toujours lieu sans le doigt. Pour desactiver toute la superposition pour une execution, utilisez `--no-overlay` depuis Metro ou `run(overlay: false)` depuis Dart.
+`showFinger` vaut `false` par defaut et `caption` vaut `PlaybookCaption.hidden` ; `PlaybookCaption` vaut `top`, `bottom` ou `hidden`. Les appuis et les glissements ont lieu dans les deux cas. Un playbook joue par celui-ci avec `play()` utilise son propre reglage, et celui de ce playbook revient a la fin. Pour masquer les deux pendant une execution, utilisez `--no-overlay` depuis Metro ou `run(overlay: false)` depuis Dart.
+
+Avant nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), le doigt et la legende du bas etaient actives par defaut. Ajoutez les redefinitions ci-dessus pour conserver ce rendu.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Avec votre application lancee en mode debug :
 metro live:run playbook sign_up --speed fast
 ```
 
-Dans `metro live`, tapez `playbook sign_up`. Voir [Metro Live](/docs/{{ $version }}/metro-live#playbooks) pour toutes les options.
+Dans `metro live`, tapez `playbook sign_up`. Voir [Metro Live](/docs/{{ $version }}/metro-live#playbooks) pour toutes les options. Ajoutez `--record` pour sauvegarder une video de l'execution ; voir [Enregistrement](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

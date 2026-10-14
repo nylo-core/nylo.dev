@@ -29,7 +29,7 @@
 
 <x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-Un **playbook** es una clase que lista los toques, la escritura, los desplazamientos y los cambios de página de un recorrido de usuario. Tu app en ejecución los realiza por sí misma, con un dedo visible y un subtítulo en cada paso -- útil para demos, grabaciones de pantalla y comprobar un recorrido de principio a fin.
+Un **playbook** es una clase que lista los toques, la escritura, los desplazamientos y los cambios de página de un recorrido de usuario. Tu app en ejecución los realiza por sí misma, y puede mostrar un dedo y un subtítulo en cada paso -- útil para demos, grabaciones de pantalla y comprobar un recorrido de principio a fin.
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ Una velocidad pasada a `run()`, `--speed` desde Metro, o la velocidad de un play
 
 ## Dedo y subtítulo
 
-Sobrescribe `showFinger` y `caption` para cambiar lo que dibuja la superposición:
+El dedo y los subtítulos de los pasos están desactivados por defecto. Sobrescribe `showFinger` y `caption` para activarlos:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // o .top
 ```
 
-`PlaybookCaption` es `top`, `bottom` (la predeterminada) o `hidden`. Los toques y los deslizamientos siguen ocurriendo sin el dedo. Para desactivar toda la superposición en una ejecución, usa `--no-overlay` desde Metro o `run(overlay: false)` desde Dart.
+`showFinger` es `false` por defecto y `caption` es `PlaybookCaption.hidden`; `PlaybookCaption` es `top`, `bottom` o `hidden`. Los toques y los deslizamientos ocurren en ambos casos. Un playbook reproducido desde este con `play()` usa su propio ajuste, y el de este vuelve cuando termina. Para ocultar ambos en una ejecución, usa `--no-overlay` desde Metro o `run(overlay: false)` desde Dart.
+
+Antes de nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), el dedo y el subtítulo inferior estaban activados por defecto. Añade las sobrescrituras anteriores para conservar ese aspecto.
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ Con tu app en ejecución en modo debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Dentro de `metro live`, escribe `playbook sign_up`. Consulta [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para ver todas las opciones.
+Dentro de `metro live`, escribe `playbook sign_up`. Consulta [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para ver todas las opciones. Añade `--record` para guardar un vídeo de la ejecución; consulta [Grabación](/docs/{{ $version }}/metro-live#recording-playbooks).
 
 <div id="running-on-boot"></div>
 

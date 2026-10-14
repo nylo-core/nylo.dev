@@ -224,8 +224,12 @@ Name several playbooks to play them back to back. With no names, or with `--list
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | Play at this pace instead of each playbook's own |
 | `--data <json>` | A JSON object every playbook in the run reads in `data`, over its defaults |
-| `--no-overlay` | Hide the finger and the step caption |
+| `--no-overlay` | Hide the countdown, and the finger and captions of playbooks that show them |
 | `--loop` | Play the playbooks again and again until Ctrl+C |
+| `--record[=<file>]` | Record the device's screen around the run. Saved to `build/playbooks/<playbooks>-<device>-<time>.mp4`; `--record=demo.mp4` (or `.gif`) picks the file, relative to the project. Needs ffmpeg |
+| `--no-captions` | Leave out the `.vtt` captions file and the chapters of a recording |
+| `--clean-status-bar` | Show 9:41 with full signal and battery while the playbooks play, then put it back. Works without `--record` too |
+| `--countdown <seconds>` | Count down 0-10 seconds on screen before the first step |
 | `--list` | List the app's playbooks instead of playing one |
 
 Ctrl+C asks the app to stop: the remaining steps are skipped, but `tearDown` still runs. Press Ctrl+C a second time to stop waiting.
@@ -236,11 +240,52 @@ Inside the `metro live` shell the command is `playbook <name>`, and Tab complete
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+
+### Recording
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+
+Add `--record` to save a video of the run:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+Inside the `metro live` shell, type `playbook sign_up --record`.
+
+Recording needs ffmpeg (for example `brew install ffmpeg`). Metro checks for it before anything plays.
+
+- **iOS Simulator** -- recorded with `xcrun simctl`.
+- **Android emulator or device** -- recorded with `adb screenrecord`, which stops after 3 minutes, or with `scrcpy` when it's installed (no limit, and it records sound on Android 11+). If several Android devices are connected and Metro can't tell which one runs the app, set `ANDROID_SERIAL`.
+- **Physical iPhone** -- can't be recorded from the command line. Record with QuickTime or Control Center and use `--countdown 3` for time to start.
+
+The result is an `.mp4` (H.264, steady 60 fps) lasting exactly as long as the run, or a 480px-wide 15 fps `.gif`. Each step becomes a caption in a `.vtt` file beside the `.mp4` and a chapter inside it. They are generated from the run's steps whether or not the playbook shows on-screen captions. Pass `--no-captions` to skip them.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+A playbook that fails or is stopped is still saved, so a recording doubles as a bug report. Ctrl+C stops the playbook (`tearDown` still runs) and the recording is still saved.
+
+`--clean-status-bar` keeps a status bar you already set with `simctl status_bar` on the Simulator. On Android it uses demo mode and turns it off afterwards. With several apps (`--all`), each device gets its own file with the device name in it.
+
+A playbook hides its finger and captions by default. For a demo video, set `showFinger` and `caption` on the playbook -- see [Finger and Caption](/docs/{{ $version }}/playbooks#finger-and-caption).
+
 <div id="playbook-live-commands"></div>
 
 ### Live Command Reference
 
-The commands behind it are `playbooks.list`, `playbooks.run` and `playbooks.stop`. A run returns its id straight away and streams each step as a `nylo.playbook` event, so it can outlast a command's timeout. `live:status` lists the app's playbooks. Playbooks arrived in Nylo Live protocol version 9.
+The commands behind it are `playbooks.list`, `playbooks.run` and `playbooks.stop`. A run returns its id straight away and streams each step as a `nylo.playbook` event, so it can outlast a command's timeout. `live:status` lists the app's playbooks. Playbooks arrived in Nylo Live protocol version 9. Recording support -- `countdown` in `playbooks.run` (with a `countdown` event each second) and `simulator` (the iOS Simulator UDID) in `status` -- arrived in protocol version 10.
 
 <div id="live-commands"></div>
 

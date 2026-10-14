@@ -226,8 +226,12 @@ Sebutkan beberapa playbook untuk memutarnya berurutan. Tanpa nama, atau dengan `
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | Putar dengan kecepatan ini, bukan kecepatan bawaan masing-masing playbook |
 | `--data <json>` | Objek JSON yang dibaca setiap playbook dalam proses ini di `data`, di atas nilai defaultnya |
-| `--no-overlay` | Sembunyikan jari dan keterangan langkah |
+| `--no-overlay` | Sembunyikan hitung mundur, serta jari dan keterangan dari playbook yang menampilkannya |
 | `--loop` | Putar playbook berulang kali hingga Ctrl+C |
+| `--record[=<file>]` | Rekam layar perangkat selama proses. Disimpan ke `build/playbooks/<playbooks>-<device>-<time>.mp4`; `--record=demo.mp4` (atau `.gif`) memilih file, relatif terhadap proyek. Memerlukan ffmpeg |
+| `--no-captions` | Lewati file keterangan `.vtt` dan chapter pada rekaman |
+| `--clean-status-bar` | Tampilkan 9:41 dengan sinyal dan baterai penuh saat playbook diputar, lalu kembalikan seperti semula. Juga berfungsi tanpa `--record` |
+| `--countdown <seconds>` | Hitung mundur 0-10 detik di layar sebelum langkah pertama |
 | `--list` | Tampilkan daftar playbook aplikasi alih-alih memutar salah satunya |
 
 Ctrl+C meminta aplikasi berhenti: langkah yang tersisa dilewati, tetapi `tearDown` tetap berjalan. Tekan Ctrl+C sekali lagi untuk berhenti menunggu.
@@ -238,11 +242,53 @@ Di dalam shell `metro live` perintahnya adalah `playbook <name>`, dan Tab meleng
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+  
+  ### Merekam
+  
+  <x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+  
+  <!-- uncertain: new Recording section; no prior locale context for recording terms -->
+  Tambahkan `--record` untuk menyimpan video dari proses:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+Di dalam shell `metro live`, ketik `playbook sign_up --record`.
+
+Perekaman memerlukan ffmpeg (misalnya `brew install ffmpeg`). Metro memeriksanya sebelum apa pun diputar.
+
+- **iOS Simulator** -- direkam dengan `xcrun simctl`.
+- **Emulator atau perangkat Android** -- direkam dengan `adb screenrecord`, yang berhenti setelah 3 menit, atau dengan `scrcpy` bila terpasang (tanpa batas, dan merekam suara di Android 11+). Jika beberapa perangkat Android terhubung dan Metro tidak tahu mana yang menjalankan aplikasi, atur `ANDROID_SERIAL`.
+- **iPhone fisik** -- tidak dapat direkam dari command line. Rekam dengan QuickTime atau Control Center dan gunakan `--countdown 3` agar ada waktu untuk memulai.
+
+Hasilnya adalah file `.mp4` (H.264, 60 fps stabil) yang berdurasi persis sama dengan prosesnya, atau `.gif` selebar 480px dengan 15 fps. Setiap langkah menjadi keterangan dalam file `.vtt` di samping `.mp4` dan menjadi chapter di dalamnya. Keduanya dibuat dari langkah-langkah proses, baik playbook menampilkan keterangan di layar maupun tidak. Berikan `--no-captions` untuk melewatinya.
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+Playbook yang gagal atau dihentikan tetap disimpan, sehingga rekaman juga berfungsi sebagai laporan bug. Ctrl+C menghentikan playbook (`tearDown` tetap berjalan) dan rekaman tetap disimpan.
+
+`--clean-status-bar` mempertahankan status bar yang sudah Anda atur dengan `simctl status_bar` di Simulator. Di Android, ini memakai mode demo dan mematikannya sesudahnya. Dengan beberapa aplikasi (`--all`), setiap perangkat mendapat file sendiri dengan nama perangkat di dalamnya.
+
+Secara default playbook menyembunyikan jari dan keterangannya. Untuk video demo, atur `showFinger` dan `caption` pada playbook -- lihat [Jari dan Keterangan](/docs/{{ $version }}/playbooks#finger-and-caption).
+
 <div id="playbook-live-commands"></div>
 
 ### Referensi Perintah Live
 
-Perintah di baliknya adalah `playbooks.list`, `playbooks.run`, dan `playbooks.stop`. Sebuah proses mengembalikan id-nya segera dan mengalirkan setiap langkah sebagai event `nylo.playbook`, sehingga dapat berlangsung lebih lama dari timeout perintah. `live:status` menampilkan daftar playbook aplikasi. Playbook hadir pada Nylo Live protocol versi 9.
+Perintah di baliknya adalah `playbooks.list`, `playbooks.run`, dan `playbooks.stop`. Sebuah proses mengembalikan id-nya segera dan mengalirkan setiap langkah sebagai event `nylo.playbook`, sehingga dapat berlangsung lebih lama dari timeout perintah. `live:status` menampilkan daftar playbook aplikasi. Playbook hadir pada Nylo Live protocol versi 9. Dukungan perekaman -- `countdown` pada `playbooks.run` (dengan event `countdown` setiap detik) dan `simulator` (UDID iOS Simulator) pada `status` -- hadir pada protocol versi 10.
 
 <div id="live-commands"></div>
 

@@ -226,8 +226,12 @@ metro live:run playbook sign_up add_to_bag --speed fast
 |--------|-------------|
 | `--speed instant\|fast\|natural\|slow` | เล่นด้วยจังหวะนี้แทนจังหวะของแต่ละ playbook เอง |
 | `--data <json>` | JSON object ที่ทุก playbook ในการรันนี้อ่านได้ใน `data` โดยมีผลเหนือค่าเริ่มต้นของมัน |
-| `--no-overlay` | ซ่อนนิ้วและคำบรรยาย step |
+| `--no-overlay` | ซ่อนการนับถอยหลัง รวมถึงนิ้วและคำบรรยายของ playbook ที่แสดงสิ่งเหล่านี้ |
 | `--loop` | เล่น playbook ซ้ำไปเรื่อยๆ จนกว่าจะกด Ctrl+C |
+| `--record[=<file>]` | บันทึกหน้าจอของอุปกรณ์ตลอดการรัน บันทึกไปที่ `build/playbooks/<playbooks>-<device>-<time>.mp4`; `--record=demo.mp4` (หรือ `.gif`) เลือกไฟล์ โดยอิงจากโปรเจกต์ ต้องใช้ ffmpeg |
+| `--no-captions` | ไม่สร้างไฟล์คำบรรยาย `.vtt` และ chapter ของการบันทึก |
+| `--clean-status-bar` | แสดง 9:41 พร้อมสัญญาณและแบตเตอรี่เต็มขณะ playbook เล่น แล้วคืนค่าเดิม ใช้ได้โดยไม่ต้องมี `--record` ด้วย |
+| `--countdown <seconds>` | นับถอยหลัง 0-10 วินาทีบนหน้าจอก่อน step แรก |
 | `--list` | แสดงรายการ playbook ของแอปแทนการเล่น |
 
 Ctrl+C จะขอให้แอปหยุด: step ที่เหลือจะถูกข้าม แต่ `tearDown` ยังคงรัน กด Ctrl+C อีกครั้งเพื่อเลิกรอ
@@ -238,11 +242,53 @@ Ctrl+C จะขอให้แอปหยุด: step ที่เหลือ
 › playbook sign_up --speed fast
 ```
 
+<div id="recording-playbooks"></div>
+  
+  ### การบันทึก
+  
+  <x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.4.0+, nylo_support 7.33.0+" />
+  
+  <!-- uncertain: new Recording section; no prior locale context for recording terms -->
+  เพิ่ม `--record` เพื่อบันทึกวิดีโอของการรัน:
+
+``` bash
+metro live:run playbook sign_up --record
+metro live:run playbook sign_up --record=docs/sign-up.gif --speed slow
+metro live:run playbook sign_up --record --clean-status-bar --countdown 3
+```
+
+ภายใน shell ของ `metro live` ให้พิมพ์ `playbook sign_up --record`
+
+การบันทึกต้องใช้ ffmpeg (เช่น `brew install ffmpeg`) Metro จะตรวจสอบก่อนที่อะไรจะเริ่มเล่น
+
+- **iOS Simulator** -- บันทึกด้วย `xcrun simctl`
+- **Android emulator หรืออุปกรณ์** -- บันทึกด้วย `adb screenrecord` ซึ่งหยุดหลังจาก 3 นาที หรือด้วย `scrcpy` เมื่อติดตั้งไว้ (ไม่จำกัดเวลา และบันทึกเสียงได้บน Android 11+) หากมีอุปกรณ์ Android เชื่อมต่อหลายเครื่องและ Metro ไม่ทราบว่าเครื่องไหนรันแอป ให้ตั้งค่า `ANDROID_SERIAL`
+- **iPhone จริง** -- บันทึกจากบรรทัดคำสั่งไม่ได้ ให้บันทึกด้วย QuickTime หรือ Control Center และใช้ `--countdown 3` เพื่อให้มีเวลาเริ่ม
+
+ผลลัพธ์คือไฟล์ `.mp4` (H.264, 60 fps คงที่) ที่ยาวเท่ากับการรันพอดี หรือไฟล์ `.gif` กว้าง 480px ที่ 15 fps แต่ละ step จะกลายเป็นคำบรรยายในไฟล์ `.vtt` ข้างไฟล์ `.mp4` และเป็น chapter ภายในไฟล์ ไฟล์เหล่านี้สร้างจาก step ของการรัน ไม่ว่า playbook จะแสดงคำบรรยายบนหน้าจอหรือไม่ก็ตาม ใส่ `--no-captions` เพื่อข้าม
+
+``` plaintext
+· Recording iPhone 17
+Playbook "sign_up" (natural)
+  ✓   240ms  Tap "Create account"
+  ...
+✓ Playbook "sign_up" passed in 9.8s
+· Saving the recording
+✓ Saved build/playbooks/sign_up-iphone-17-20261014-101530.mp4 (11.2s)
+· Step captions in build/playbooks/sign_up-iphone-17-20261014-101530.vtt (8 steps)
+```
+
+playbook ที่ล้มเหลวหรือถูกหยุดจะยังถูกบันทึก ดังนั้นการบันทึกจึงใช้เป็นรายงานบั๊กได้ด้วย Ctrl+C จะหยุด playbook (`tearDown` ยังคงรัน) และการบันทึกจะยังถูกเก็บไว้
+
+`--clean-status-bar` จะคง status bar ที่คุณตั้งไว้แล้วด้วย `simctl status_bar` บน Simulator บน Android จะใช้ demo mode และปิดหลังจากนั้น เมื่อมีหลายแอป (`--all`) แต่ละอุปกรณ์จะได้ไฟล์ของตัวเองที่มีชื่ออุปกรณ์อยู่ในชื่อไฟล์
+
+โดยค่าเริ่มต้น playbook จะซ่อนนิ้วและคำบรรยาย สำหรับวิดีโอสาธิต ให้ตั้งค่า `showFinger` และ `caption` บน playbook -- ดู [นิ้วและคำบรรยาย](/docs/{{ $version }}/playbooks#finger-and-caption)
+
 <div id="playbook-live-commands"></div>
 
 ### เอกสารอ้างอิงคำสั่ง Live
 
-คำสั่งเบื้องหลังคือ `playbooks.list`, `playbooks.run` และ `playbooks.stop` การรันจะคืน id ทันทีและสตรีมแต่ละ step เป็น event `nylo.playbook` จึงสามารถใช้เวลานานกว่า timeout ของคำสั่งได้ `live:status` จะแสดงรายการ playbook ของแอป Playbook เริ่มมีใน Nylo Live protocol เวอร์ชัน 9
+คำสั่งเบื้องหลังคือ `playbooks.list`, `playbooks.run` และ `playbooks.stop` การรันจะคืน id ทันทีและสตรีมแต่ละ step เป็น event `nylo.playbook` จึงสามารถใช้เวลานานกว่า timeout ของคำสั่งได้ `live:status` จะแสดงรายการ playbook ของแอป Playbook เริ่มมีใน Nylo Live protocol เวอร์ชัน 9 การรองรับการบันทึก -- `countdown` ใน `playbooks.run` (พร้อม event `countdown` ทุกวินาที) และ `simulator` (UDID ของ iOS Simulator) ใน `status` -- เริ่มมีใน protocol เวอร์ชัน 10
 
 <div id="live-commands"></div>
 

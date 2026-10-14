@@ -29,7 +29,7 @@
 
 <x-doc-strip label="必須" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-**プレイブック**は、ユーザージャーニーのタップ、入力、スクロール、ページ遷移を列挙するクラスです。実行中のアプリが、目に見える指と各ステップのキャプションとともに、それらを自分自身で実行します -- デモ、画面録画、ジャーニーのエンドツーエンドの確認に便利です。
+**プレイブック**は、ユーザージャーニーのタップ、入力、スクロール、ページ遷移を列挙するクラスです。実行中のアプリが、それらを自分自身で実行し、指と各ステップのキャプションを表示することもできます -- デモ、画面録画、ジャーニーのエンドツーエンドの確認に便利です。
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -245,17 +245,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // 2 倍遅く
 
 ## 指とキャプション
 
-`showFinger` と `caption` をオーバーライドして、オーバーレイの描画内容を変更します:
+指とステップのキャプションはデフォルトでオフです。`showFinger` と `caption` をオーバーライドしてオンにします:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // または .top
 ```
 
-`PlaybookCaption` は `top`、`bottom`（デフォルト）、`hidden` のいずれかです。指がなくても、タップやスワイプは実行されます。実行中にオーバーレイ全体をオフにするには、Metro では `--no-overlay`、Dart では `run(overlay: false)` を使用します。
+`showFinger` のデフォルトは `false`、`caption` のデフォルトは `PlaybookCaption.hidden` です。`PlaybookCaption` は `top`、`bottom`、`hidden` のいずれかです。タップやスワイプはどちらの場合も実行されます。このプレイブックが `play()` で再生した別のプレイブックは、そのプレイブック自身の設定を使用し、終了するとこのプレイブックの設定に戻ります。実行中に両方を非表示にするには、Metro では `--no-overlay`、Dart では `run(overlay: false)` を使用します。
+
+nylo_support 7.33.0（{{ config('app.name') }} 7.4.0）より前は、指と下部のキャプションがデフォルトでオンでした。以前の見た目を維持するには、上記のオーバーライドを追加してください。
 
 <div id="registering-playbooks"></div>
 
@@ -302,7 +304,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` の中では `playbook sign_up` と入力します。すべてのオプションについては [Metro Live](/docs/{{ $version }}/metro-live#playbooks) を参照してください。
+`metro live` の中では `playbook sign_up` と入力します。すべてのオプションについては [Metro Live](/docs/{{ $version }}/metro-live#playbooks) を参照してください。`--record` を追加すると実行の動画を保存します。[録画](/docs/{{ $version }}/metro-live#recording-playbooks)を参照してください。
 
 <div id="running-on-boot"></div>
 

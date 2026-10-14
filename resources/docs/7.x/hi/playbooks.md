@@ -28,7 +28,7 @@
 
 <x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.3.0+, nylo_support 7.32.0+" />
 
-एक **प्लेबुक** एक क्लास है जो किसी यूज़र जर्नी के टैप, टाइपिंग, स्क्रॉलिंग और पेज बदलावों की सूची बनाती है। आपका चलता हुआ ऐप उन्हें खुद पर निष्पादित करता है, एक दिखाई देने वाली उंगली और हर स्टेप के कैप्शन के साथ -- डेमो, स्क्रीन रिकॉर्डिंग और किसी जर्नी को शुरू से अंत तक जाँचने के लिए उपयोगी।
+एक **प्लेबुक** एक क्लास है जो किसी यूज़र जर्नी के टैप, टाइपिंग, स्क्रॉलिंग और पेज बदलावों की सूची बनाती है। आपका चलता हुआ ऐप उन्हें खुद पर निष्पादित करता है, और हर स्टेप के लिए एक उंगली और कैप्शन दिखा सकता है -- डेमो, स्क्रीन रिकॉर्डिंग और किसी जर्नी को शुरू से अंत तक जाँचने के लिए उपयोगी।
 
 ``` dart
 import 'package:nylo_framework/nylo_framework.dart';
@@ -244,17 +244,19 @@ PlaybookSpeed get speed => PlaybookSpeed.natural.times(2); // दोगुना
 
 ## फ़िंगर और कैप्शन
 
-ओवरले जो बनाता है उसे बदलने के लिए `showFinger` और `caption` को ओवरराइड करें:
+उंगली और स्टेप कैप्शन डिफ़ॉल्ट रूप से बंद होते हैं। उन्हें चालू करने के लिए `showFinger` और `caption` को ओवरराइड करें:
 
 ``` dart
 @override
-bool get showFinger => false;
+bool get showFinger => true;
 
 @override
-PlaybookCaption get caption => PlaybookCaption.top;
+PlaybookCaption get caption => PlaybookCaption.bottom; // या .top
 ```
 
-`PlaybookCaption` `top`, `bottom` (डिफ़ॉल्ट) या `hidden` होता है। उंगली के बिना भी टैप और स्वाइप होते हैं। किसी रन के लिए पूरा ओवरले बंद करने हेतु, Metro से `--no-overlay` या Dart से `run(overlay: false)` का उपयोग करें।
+`showFinger` का डिफ़ॉल्ट `false` है और `caption` का `PlaybookCaption.hidden`; `PlaybookCaption` `top`, `bottom` या `hidden` होता है। टैप और स्वाइप दोनों स्थितियों में होते हैं। `play()` से इस प्लेबुक द्वारा चलाई गई प्लेबुक अपनी खुद की सेटिंग इस्तेमाल करती है, और खत्म होने पर इसकी सेटिंग लौट आती है। किसी रन के लिए दोनों छिपाने हेतु, Metro से `--no-overlay` या Dart से `run(overlay: false)` का उपयोग करें।
+
+nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) से पहले, उंगली और नीचे का कैप्शन डिफ़ॉल्ट रूप से चालू थे। वही रूप बनाए रखने के लिए ऊपर दिए ओवरराइड जोड़ें।
 
 <div id="registering-playbooks"></div>
 
@@ -301,7 +303,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` के अंदर, `playbook sign_up` टाइप करें। हर विकल्प के लिए [Metro Live](/docs/{{ $version }}/metro-live#playbooks) देखें।
+`metro live` के अंदर, `playbook sign_up` टाइप करें। हर विकल्प के लिए [Metro Live](/docs/{{ $version }}/metro-live#playbooks) देखें। वीडियो सहेजने के लिए `--record` जोड़ें; [रिकॉर्डिंग](/docs/{{ $version }}/metro-live#recording-playbooks) देखें।
 
 <div id="running-on-boot"></div>
 
