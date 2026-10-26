@@ -763,6 +763,11 @@ Registre decoders tipados com `decoders([Decode(User.fromJson)])` para decodific
 ```dart
 final Map<Type, dynamic> modelDecoders = decoders([
   Decode(User.fromJson),
+
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
 ]);
 ```
 

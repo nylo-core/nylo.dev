@@ -762,6 +762,11 @@ Register typed decoders with `decoders([Decode(User.fromJson)])` to decode a `Us
 ```dart
 final Map<Type, dynamic> modelDecoders = decoders([
   Decode(User.fromJson),
+
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
 ]);
 ```
 

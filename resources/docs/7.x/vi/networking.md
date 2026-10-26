@@ -762,6 +762,11 @@ Tham số kiểu bạn truyền vào `network<T>()` được khớp với map `m
 ```dart
 final Map<Type, dynamic> modelDecoders = decoders([
   Decode(User.fromJson),
+
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
 ]);
 ```
 
