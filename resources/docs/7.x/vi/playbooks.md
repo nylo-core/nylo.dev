@@ -6,6 +6,7 @@
 <a name="section-1"></a>
 - [Giới thiệu](#introduction "Giới thiệu về Playbook")
 - [Tạo Playbook](#creating-a-playbook "Tạo một playbook")
+- [Ghi lại Playbook](#recording-a-playbook "Ghi lại một playbook từ ứng dụng đang chạy")
 - [Các bước](#steps "Các bước mà một playbook có thể thực hiện")
 - [Mục tiêu](#targets "Tìm các thành phần trên màn hình")
   - [Chuỗi thuần](#plain-strings "Cách một chuỗi thuần được khớp")
@@ -14,6 +15,9 @@
 - [Chạy Playbook khác](#playing-other-playbooks "Chạy một playbook từ playbook khác")
 - [Tốc độ](#speed "PlaybookSpeed")
 - [Ngón tay và Chú thích](#finger-and-caption "Ngón tay và chú thích của bước")
+- [Ảnh chụp màn hình](#screenshots "Chụp ảnh màn hình trong một playbook")
+  - [Locale và Theme](#screenshots-locales-and-themes "Chụp một màn hình ở mọi locale và theme")
+  - [Thu thập từ code](#collecting-screenshots "Thu thập ảnh chụp bằng onScreenshot")
 - [Đăng ký Playbook](#registering-playbooks "Đăng ký playbook với Nylo")
 - [Chạy một Playbook](#running-a-playbook "Chạy một playbook")
   - [Từ Metro](#running-from-metro "Chạy từ Metro")
@@ -68,6 +72,67 @@ metro make:playbook sign_up
 
 Lệnh này tạo `lib/app/playbooks/sign_up_playbook.dart` và đăng ký nó với ứng dụng của bạn. Xem [Tạo Playbook](/docs/{{ $version }}/metro#make-playbook) để biết các tùy chọn của lệnh.
 
+Để bắt đầu từ mọi trang mà router của bạn thêm vào, hãy truyền `--from-routes`:
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+Metro viết một `visit()` và một [`screenshot()`](#screenshots) cho mỗi trang, nên một lần chạy chụp được toàn bộ ứng dụng của bạn.
+
+<div id="recording-a-playbook"></div>
+
+## Ghi lại Playbook
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Thay vì viết các bước, hãy ghi lại chúng. Khi ứng dụng đang chạy ở chế độ debug, mở `metro live` và gõ:
+
+``` plaintext
+› record sign_up
+```
+
+Sau đó hãy dùng ứng dụng. Mỗi lần chạm, nhấn giữ, nhập vào trường, cuộn và chuyển trang được viết thành một bước ngay khi nó xảy ra, và được in ra trong khi bạn thao tác:
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+Nhấn Enter để kết thúc. Playbook được ghi vào `lib/app/playbooks/sign_up_playbook.dart`, bố cục giống như một playbook do `make:playbook` tạo, và được đăng ký, nên nó chạy được ngay khi ứng dụng khởi động lại. `metro make:playbook sign_up --record` làm điều tương tự từ terminal: nó mở `metro live` và bắt đầu ghi ngay lập tức.
+
+Trong khi ghi, gõ một phím rồi nhấn Enter:
+
+| Phím | Mô tả |
+|-----|-------------|
+| `a` | Lần chạm tiếp theo được viết thành `see(...)` thay vì một thao tác chạm |
+| `d` | Lần chạm tiếp theo được viết thành `dontSee(...)` |
+| `s <title>` | Bắt đầu một `scene` với tiêu đề đó; các bước tiếp theo được lồng bên trong nó |
+| `u` | Xóa bước cuối cùng |
+| `p` | Tạm dừng ghi, ví dụ để đăng nhập bằng thông tin thật; `p` lần nữa để tiếp tục |
+| Enter | Kết thúc và ghi playbook |
+| Ctrl+C | Hủy bản ghi |
+
+Các mục tiêu được đặt tên theo cách trình chạy đọc chúng, ưu tiên văn bản hiển thị, và mỗi tên được kiểm tra với ứng dụng đang chạy trước khi được ghi, nên một bước đã ghi có thể chạy lại. Khi một chuỗi thuần khớp với nhiều hơn một widget, bước đó thu hẹp nó bằng `Find`: `tap(Find.text('Add').at(1))`. Một nút icon không có văn bản hoặc tooltip trở thành `tap(Find.icon(Icons.add))`. Một widget không có gì đặt tên được ghi thành `tap(Find.type<GestureDetector>().at(3))` dưới một comment `// TODO` kèm tệp và dòng nơi nó được tạo, và Metro liệt kê nó khi bản ghi kết thúc. Hãy gán cho nó một `Key`, rồi dùng key đó thay thế.
+
+- **Nhập liệu** trở thành một bước `type` đọc một placeholder `data[...]`, với giá trị đã nhập trong `defaults`. Một trường được để lại với phím hành động của bàn phím sẽ có `submit: true`. Một trường bị che sẽ có `secret: true`, giá trị của nó trong `defaults` và một cảnh báo phải đổi nó trước khi bạn commit. Truyền `--no-data` để ghi các giá trị đúng như đã gõ.
+- **Chuyển trang** sau một lần chạm trở thành `waitForPage(SignUpPage.path)` khi một trong các trang của bạn khai báo route đó, hoặc `waitForPage('/sign-up')` nếu không. Quay lại trở thành `back()`.
+- **Cuộn** được viết thành `scrollTo(...)` trên thứ bạn chạm tiếp theo, và chỉ khi việc cuộn đưa nó vào cây widget. Trình chạy tự hiển thị mọi thứ khác.
+- **Các thao tác vuốt không phải cuộn** -- một `Dismissible`, một `PageView`, một `Slider` -- chưa có động từ playbook nào, nên chúng được để lại thành một comment `// TODO` với điểm bắt đầu và điểm kết thúc.
+
+Việc ghi cần bản build debug và hoạt động trên simulator, emulator và thiết bị thật như nhau. Các thao tác chạm của chính playbook không bao giờ được ghi. Xem [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey) để biết các tùy chọn của lệnh.
+
 <div id="steps"></div>
 
 ## Các bước
@@ -89,6 +154,7 @@ Lệnh này tạo `lib/app/playbooks/sign_up_playbook.dart` và đăng ký nó v
 | `pause(seconds: 1)` | Đứng yên, ví dụ để demo có nhịp nghỉ |
 | `step(title, action)` | Chạy bất kỳ đoạn code nào với cùng các động từ, thông qua `PlaybookActor` |
 | `scene(title, steps)` | Nhóm các bước dưới một tiêu đề; chú thích của chúng bắt đầu bằng tiêu đề đó và kết quả được lồng trong báo cáo |
+| `screenshot(name)` | Chụp màn hình -- xem [Ảnh chụp màn hình](#screenshots) |
 | `play(playbook)` | Chạy một playbook khác -- xem [Chạy Playbook khác](#playing-other-playbooks) |
 
 ``` dart
@@ -153,7 +219,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | Văn bản hiển thị |
 | `Find.textContaining(text)` | Văn bản chứa chuỗi đó |
-| `Find.icon(icon)` | Một icon |
+| `Find.icon(icon, label:)` | Một icon. `label:` đặt tên cho nó trong chú thích các bước |
 | `Find.type<T>()` | Một widget kiểu `T` |
 | `Find.key(key)` | Một widget có key đó |
 | `Find.field(name)` | Một trường `NyForm` theo tên |
@@ -161,6 +227,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | Một tooltip |
 | `Find.semantics(label)` | Một semantics label |
 | `Find.where(test)` | Các widget vượt qua bài kiểm tra của bạn |
+
+Gán cho một icon một `label` và chú thích bước của nó sẽ đọc là `Tap the bag icon` thay vì `Tap icon f37d`:
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 Thu hẹp bất kỳ finder nào bằng `.inside(ancestor)`, `.at(index)` (đếm từ 0), `.first` hoặc `.last`.
 
@@ -259,6 +331,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // hoặc .top
 
 Trước nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), ngón tay và chú thích phía dưới được bật mặc định. Thêm các ghi đè ở trên để giữ giao diện đó.
 
+<div id="screenshots"></div>
+
+## Ảnh chụp màn hình
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Thêm một bước `screenshot` ở bất cứ nơi nào màn hình đáng được giữ lại:
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` lưu mỗi ảnh thành `screenshots/<playbook>/<name>.png`, không cần cờ nào. Một lần chạy từ code thu thập chúng bằng [`onScreenshot`](#collecting-screenshots), và mọi lần chạy khác, như `PLAYBOOK_ON_BOOT`, chỉ chờ màn hình ổn định. Một tên bắt đầu bằng chữ cái hoặc chữ số và dùng chữ cái, chữ số, `-`, `_` và `.`.
+
+| Tham số | Mô tả |
+|-----------|-------------|
+| `name` | Tên mà ảnh chụp được lưu dưới đó |
+| `locales` | Chụp một lần ở mỗi mã ngôn ngữ này. `Screenshot.allLocales` là mọi ngôn ngữ mà ứng dụng đóng gói |
+| `themes` | Chụp một lần ở mỗi id theme này. `Screenshot.allThemes` là mọi theme đã đăng ký |
+| `caption` | Văn bản phía trên màn hình khi lần chạy đóng khung ảnh chụp của nó, hoặc một khóa dịch |
+| `native` | Chụp bằng Metro, trên iOS Simulator và Android (mặc định `true`) |
+
+Trên iOS Simulator và Android, Metro chụp toàn bộ màn hình thiết bị, nên thanh trạng thái và bàn phím đều có trong ảnh, và ngón tay cùng chú thích được ẩn trong lúc đó. Thêm `--clean-status-bar` vào lần chạy để có 9:41 với đầy đủ sóng và pin. Ở nơi khác, và trong các lần chạy `--store` và `--frame`, ứng dụng tự chụp màn hình của nó. Truyền `native: false` để luôn dùng cách chụp của ứng dụng:
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+Để lưu màn hình của mọi bước, hãy chạy `metro live:run playbook <name> --screenshots`. Xem [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots) để biết các tùy chọn đặt kích thước ảnh chụp cho App Store và Google Play, và [Ảnh chụp màn hình](/docs/{{ $version }}/screenshots) để biết lớp `Screenshot` đứng sau chúng.
+
+<div id="screenshots-locales-and-themes"></div>
+
+### Locale và Theme
+
+Cho một bước `screenshot` `locales`, `themes` hoặc cả hai để chụp cùng một màn hình một lần ở mỗi giá trị:
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+Ứng dụng chuyển đổi tại chỗ, giữ nguyên trang và state của nó, và chuyển lại trước bước tiếp theo. Mỗi lần chụp được lưu trong một thư mục đặt tên theo locale và theme của nó:
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+Để chạy cả một playbook ở mọi ngôn ngữ và theme, hãy truyền `--locales` và `--themes` vào `metro live:run playbook`.
+
+<div id="collecting-screenshots"></div>
+
+### Thu thập từ code
+
+`run()` nhận `onScreenshot` để nhận các ảnh chụp của một lần chạy dưới dạng `PlaybookShot`, tiện cho một test hoặc công cụ của riêng bạn:
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` chọn những màn hình nào được chụp:
+
+| Chế độ | Chụp |
+|------|----------|
+| `PlaybookScreenshots.off` | Không gì cả |
+| `PlaybookScreenshots.failures` | Chỉ màn hình tại một bước thất bại |
+| `PlaybookScreenshots.marked` | Các bước `screenshot()`, và các bước thất bại |
+| `PlaybookScreenshots.auto` | Các bước `screenshot()` của một playbook có chúng, và mọi bước của một playbook không có. Cả các bước thất bại. Mặc định |
+| `PlaybookScreenshots.all` | Mọi bước, các bước `screenshot()`, và các bước thất bại |
+
+`pixelRatio` đặt kích thước ảnh chụp so với kích thước của thiết bị (mặc định `1.0`). Mỗi `PlaybookShot` có một `screenshot` để [lưu](/docs/{{ $version }}/screenshots#saving-a-screenshot) hoặc đọc `bytes`, một `kind`, cùng `name`, `locale` và `theme` mà nó được chụp.
+
 <div id="registering-playbooks"></div>
 
 ## Đăng ký Playbook
@@ -304,7 +467,7 @@ Khi ứng dụng của bạn đang chạy ở chế độ debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Bên trong `metro live`, gõ `playbook sign_up`. Xem [Metro Live](/docs/{{ $version }}/metro-live#playbooks) để biết mọi tùy chọn. Thêm `--record` để lưu video của lần chạy; xem [Ghi hình](/docs/{{ $version }}/metro-live#recording-playbooks).
+Bên trong `metro live`, gõ `playbook sign_up`. Xem [Metro Live](/docs/{{ $version }}/metro-live#playbooks) để biết mọi tùy chọn. Thêm `--record` để lưu video của lần chạy; xem [Ghi hình](/docs/{{ $version }}/metro-live#recording-playbooks). Nếu lần chạy ngừng chờ sau 20 giây, nhiều khả năng ứng dụng đã được khởi động bằng `flutter run --no-dds`; xem [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
 
 <div id="running-on-boot"></div>
 
@@ -334,7 +497,7 @@ if (!report.passed) {
 }
 ```
 
-`run()` nhận `speed`, `data`, `clock`, `overlay` (mặc định `true`) và `onEvent`. Một bước thất bại không ném lỗi -- hãy kiểm tra `report.passed`. Chỉ một playbook có thể chạy tại một thời điểm; dùng `play()` để chạy playbook này bên trong playbook khác.
+`run()` nhận `speed`, `data`, `clock`, `overlay` (mặc định `true`), `onEvent`, cùng `onScreenshot`, `screenshots` và `pixelRatio` để [thu thập ảnh chụp](#collecting-screenshots). Một bước thất bại không ném lỗi -- hãy kiểm tra `report.passed`. Chỉ một playbook có thể chạy tại một thời điểm; dùng `play()` để chạy playbook này bên trong playbook khác.
 
 Dừng một playbook đang chạy bằng `Playbook.stop()`. Các bước còn lại bị bỏ qua nhưng `tearDown` vẫn chạy. `Playbook.isRunning` cho bạn biết có playbook nào đang chạy hay không.
 
@@ -363,8 +526,8 @@ Playbook không bao giờ chạy trong bản build release, nên một hành tr�
 Chạy một playbook trong widget test bằng `NyTesterClock`, rồi xác nhận báo cáo của nó bằng `expectPlaybookPassed`:
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

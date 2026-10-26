@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - 指定されたルートを初期ルートにします
 - 開発中に特定のページをすばやくテストするのに便利です
 
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+ビルドにデータが必要なページも、そのデータを付けてプレビューできます。`previewRoute` に `data`、`queryParameters`、`stack` を渡します:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` と `queryParameters` は、`routeTo(ProductPage.path, data: {...}, queryParameters: {...})` で遷移した場合と同じようにページに渡されます。実際のナビゲーションで渡されたデータが優先されます。
+- `stack` は、その下に開くルートを列挙します。これにより、通常の起動後と同じように戻るボタンが機能します。ここでは、`ProductPage` から戻ると `HomePage` に移動します。
+- リリースビルドでは `previewRoute()` は無視されるため、ルーターに残したプレビューが本番の最初のページを変更することはありません。
+
+`stack` を使うには、アプリが `NyApp.materialApp` でビルドされている必要があります。独自の `MaterialApp` をビルドしている場合は、`NyRouter.previewInitialRoutes(onGenerateRoute)` を `onGenerateInitialRoutes` に渡してください:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **警告:** アプリのリリース前に `.previewRoute()` を削除することを忘れないでください!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | グループ内のすべてのルートにルートガードを適用 |
 | `prefix` | `String` | グループ内のすべてのルートパスにプレフィックスを追加 |
-| `transition_type` | `TransitionType` | グループ内のすべてのルートにトランジションを設定 |
+| `transition_type` | `TransitionType` | 独自のトランジションを設定していないグループ内のルートにトランジションを設定 |
 | `transition` | `PageTransitionType` | ページトランジションタイプを設定（非推奨、transition_type を使用してください） |
 | `transition_settings` | `PageTransitionSettings` | トランジション設定を設定 |
 

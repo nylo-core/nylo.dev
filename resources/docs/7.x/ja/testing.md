@@ -25,6 +25,7 @@
   - [インスタンスの作成](#creating-instances "インスタンスの作成")
 - [NyFaker](#ny-faker "NyFaker")
 - [テストキャッシュ](#test-cache "テストキャッシュ")
+- [ファイルストレージ](#file-storage "テストでのファイルストレージ")
 - [プラットフォームチャネルモッキング](#platform-channel-mocking "プラットフォームチャネルモッキング")
 - [ルートガードモッキング](#route-guard-mocking "ルートガードモッキング")
 - [アサーション](#assertions "アサーション")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` はテスト環境をセットアップし、`autoReset: true`（デフォルト）の場合、テスト間で自動ステートリセットを有効にします。
+
+また、アプリにイベントバスがない場合はイベントバスを追加するため、ウィジェットテストでフォームの送信ボタンがそのフォームに届きます。さらに、書き込み可能なすべてのディスクをメモリ内のフェイクに置き換えます -- [テストでのファイルストレージ](#file-storage)を参照してください。
 
 <div id="running-tests"></div>
 
@@ -722,6 +725,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## テストでのファイルストレージ
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` は、書き込み可能なすべての[ディスク](/docs/{{ $version }}/storage#file-storage)をメモリ内のフェイクにするため、テストがマシンに書き込むことはありません。`assets` などの読み取り専用ディスクは実物のままで、`NyTest.reset()` は各テストの後にフェイクを空にします。
+
+アサーション用にディスクを取得するには `FileStorage.fake()` を、保存するファイルを作るには `FakeFile` を使用します:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` には `assertExists`、`assertMissing`、`assertCount`、`assertDirectoryEmpty`、`assertEmpty` があります。これらは同期的なので、`await` は不要です。
+
+| FakeFile | 説明 |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | デコード可能な本物の PNG を `XFile` として作成（デフォルトは 10 x 10 ピクセル） |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | その分のゼロバイトのファイル。MIME タイプは名前から推測されるものになります |
+
+`FakeFile` のファイルはメモリ内にあるため、`nyWidgetTest` の中でも動作します。
+
 <div id="platform-channel-mocking"></div>
 
 ## プラットフォームチャネルモッキング
@@ -1174,7 +1207,7 @@ await tester.scrollTo(
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1193,6 +1226,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+プレイブックが撮影するスクリーンショットを保持するには、`onScreenshot` を渡して、各 `PlaybookShot` の `screenshot` または `bytes` を読み取ります。[コードからの収集](/docs/{{ $version }}/playbooks#collecting-screenshots)を参照してください:
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

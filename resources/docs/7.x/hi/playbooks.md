@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [परिचय](#introduction "प्लेबुक्स का परिचय")
 - [प्लेबुक बनाना](#creating-a-playbook "एक प्लेबुक बनाना")
+- [प्लेबुक रिकॉर्ड करना](#recording-a-playbook "चल रहे ऐप से प्लेबुक रिकॉर्ड करना")
 - [स्टेप्स](#steps "वे स्टेप्स जो एक प्लेबुक निष्पादित कर सकती है")
 - [टार्गेट्स](#targets "स्क्रीन पर चीज़ें ढूँढना")
   - [सादी स्ट्रिंग्स](#plain-strings "सादी स्ट्रिंग कैसे मैच होती है")
@@ -13,6 +14,9 @@
 - [अन्य प्लेबुक्स चलाना](#playing-other-playbooks "एक प्लेबुक से दूसरी प्लेबुक चलाना")
 - [स्पीड](#speed "PlaybookSpeed")
 - [फ़िंगर और कैप्शन](#finger-and-caption "फ़िंगर और स्टेप कैप्शन")
+- [स्क्रीनशॉट](#screenshots "प्लेबुक के दौरान स्क्रीनशॉट कैप्चर करना")
+  - [लोकेल और थीम](#screenshots-locales-and-themes "हर लोकेल और थीम में स्क्रीन कैप्चर करना")
+  - [कोड से इकट्ठा करना](#collecting-screenshots "onScreenshot से स्क्रीनशॉट इकट्ठा करना")
 - [प्लेबुक्स रजिस्टर करना](#registering-playbooks "Nylo के साथ प्लेबुक्स रजिस्टर करना")
 - [प्लेबुक चलाना](#running-a-playbook "एक प्लेबुक चलाना")
   - [Metro से](#running-from-metro "Metro से चलाना")
@@ -67,6 +71,67 @@ metro make:playbook sign_up
 
 यह `lib/app/playbooks/sign_up_playbook.dart` बनाता है और उसे आपके ऐप के साथ रजिस्टर करता है। कमांड के विकल्पों के लिए [प्लेबुक बनाना](/docs/{{ $version }}/metro#make-playbook) देखें।
 
+सीधे अपने राउटर द्वारा जोड़े गए हर पेज से शुरू करने के लिए, `--from-routes` पास करें:
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+Metro हर पेज के लिए एक `visit()` और एक [`screenshot()`](#screenshots) लिखता है, इसलिए एक रन आपके पूरे ऐप की तस्वीरें ले लेता है।
+
+<div id="recording-a-playbook"></div>
+
+## प्लेबुक रिकॉर्ड करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+स्टेप्स लिखने की जगह, उन्हें रिकॉर्ड करें। अपना ऐप डीबग मोड में चलाते हुए, `metro live` खोलें और टाइप करें:
+
+``` plaintext
+› record sign_up
+```
+
+फिर ऐप का उपयोग करें। हर टैप, लॉन्ग प्रेस, टाइप किया गया फ़ील्ड, स्क्रॉल और पेज बदलाव उसी क्षण एक स्टेप के रूप में लिखा जाता है, और साथ-साथ प्रिंट होता है:
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+खत्म करने के लिए Enter दबाएं। प्लेबुक `lib/app/playbooks/sign_up_playbook.dart` में लिखी जाती है, उसी ढाँचे में जैसा `make:playbook` बनाता है, और रजिस्टर हो जाती है, इसलिए ऐप के रीस्टार्ट होते ही वह चलने लगती है। `metro make:playbook sign_up --record` टर्मिनल से वही करता है: यह `metro live` खोलता है और तुरंत रिकॉर्डिंग शुरू कर देता है।
+
+रिकॉर्ड करते समय, एक कुंजी टाइप करें और Enter दबाएं:
+
+| कुंजी | विवरण |
+|-----|-------------|
+| `a` | अगला टैप टैप की जगह `see(...)` के रूप में लिखा जाता है |
+| `d` | अगला टैप `dontSee(...)` के रूप में लिखा जाता है |
+| `s <title>` | उस शीर्षक के साथ एक `scene` शुरू करता है; उसके बाद के स्टेप्स उसके अंदर नेस्ट होते हैं |
+| `u` | आखिरी स्टेप हटाता है |
+| `p` | रिकॉर्डिंग रोकता है, जैसे असली क्रेडेंशियल्स से साइन इन करने के लिए; दोबारा `p` उसे फिर शुरू करता है |
+| Enter | खत्म करता है और प्लेबुक लिखता है |
+| Ctrl+C | रिकॉर्डिंग को छोड़ देता है |
+
+टार्गेट्स को उसी तरह नाम दिया जाता है जैसे प्लेयर उन्हें पढ़ता है, पहले दिखाई देने वाला टेक्स्ट, और हर नाम को लिखे जाने से पहले चल रहे ऐप के विरुद्ध जाँचा जाता है, इसलिए रिकॉर्ड किया गया स्टेप दोबारा चलता है। जब कोई सादी स्ट्रिंग एक से अधिक विजेट से मैच करती है, तो स्टेप उसे `Find` से सीमित करता है: `tap(Find.text('Add').at(1))`। बिना टेक्स्ट या टूलटिप वाला आइकन बटन `tap(Find.icon(Icons.add))` बन जाता है। जिस विजेट को कोई चीज़ नाम नहीं देती वह `// TODO` टिप्पणी के तहत `tap(Find.type<GestureDetector>().at(3))` के रूप में लिखा जाता है, उस फ़ाइल और पंक्ति के साथ जहाँ वह बनाया गया था, और रिकॉर्डिंग खत्म होने पर Metro उसे सूचीबद्ध करता है। उसे एक `Key` दें, फिर उसकी जगह की (key) का उपयोग करें।
+
+- **टाइपिंग** एक `type` स्टेप बन जाती है जो `data[...]` प्लेसहोल्डर पढ़ता है, और टाइप किया गया मान `defaults` में होता है। कीबोर्ड की एक्शन की के साथ छोड़ा गया फ़ील्ड `submit: true` पाता है। छिपाया गया फ़ील्ड `secret: true` पाता है, उसका मान `defaults` में और कमिट करने से पहले उसे बदलने की चेतावनी। मान जैसे टाइप किए गए थे वैसे लिखने के लिए `--no-data` पास करें।
+- **टैप के बाद पेज बदलाव** `waitForPage(SignUpPage.path)` बन जाते हैं जब आपका कोई पेज वह रूट घोषित करता है, वरना `waitForPage('/sign-up')`। वापस जाना `back()` बन जाता है।
+- **स्क्रॉलिंग** अगले टैप की चीज़ पर `scrollTo(...)` के रूप में लिखी जाती है, और केवल तब जब स्क्रॉलिंग उसे ट्री में लाई हो। प्लेयर बाकी सब अपने आप दिखा देता है।
+- **स्वाइप जो स्क्रॉल नहीं हैं** -- `Dismissible`, `PageView`, `Slider` -- के लिए अभी कोई प्लेबुक क्रिया नहीं है, इसलिए उन्हें आरंभ और अंत बिंदुओं के साथ `// TODO` टिप्पणी के रूप में छोड़ दिया जाता है।
+
+रिकॉर्डिंग के लिए डीबग बिल्ड चाहिए और यह सिमुलेटर, एमुलेटर और डिवाइस सभी पर काम करती है। प्लेबुक के अपने टच कभी रिकॉर्ड नहीं होते। कमांड के विकल्पों के लिए [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey) देखें।
+
 <div id="steps"></div>
 
 ## स्टेप्स
@@ -88,6 +153,7 @@ metro make:playbook sign_up
 | `pause(seconds: 1)` | रुके रहें, जैसे डेमो को सांस लेने देने के लिए |
 | `step(title, action)` | `PlaybookActor` के ज़रिए उन्हीं क्रियाओं के साथ कोई भी कोड चलाएं |
 | `scene(title, steps)` | स्टेप्स को एक शीर्षक के तहत समूहित करें; उनके कैप्शन उसी से शुरू होते हैं और उनके नतीजे रिपोर्ट में नेस्ट होते हैं |
+| `screenshot(name)` | स्क्रीन कैप्चर करें -- देखें [स्क्रीनशॉट](#screenshots) |
 | `play(playbook)` | दूसरी प्लेबुक चलाएं -- देखें [अन्य प्लेबुक्स चलाना](#playing-other-playbooks) |
 
 ``` dart
@@ -152,7 +218,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | दिखाई देने वाला टेक्स्ट |
 | `Find.textContaining(text)` | वह टेक्स्ट जिसमें यह स्ट्रिंग शामिल हो |
-| `Find.icon(icon)` | एक आइकन |
+| `Find.icon(icon, label:)` | एक आइकन। `label:` स्टेप कैप्शन में उसे नाम देता है |
 | `Find.type<T>()` | प्रकार `T` का एक विजेट |
 | `Find.key(key)` | दी गई की (key) वाला एक विजेट |
 | `Find.field(name)` | नाम से एक `NyForm` फ़ील्ड |
@@ -160,6 +226,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | एक टूलटिप |
 | `Find.semantics(label)` | एक सिमेंटिक्स लेबल |
 | `Find.where(test)` | वे विजेट्स जो आपका टेस्ट पास करें |
+
+किसी आइकन को `label` दें और उसके स्टेप कैप्शन `Tap icon f37d` की जगह `Tap the bag icon` पढ़ेंगे:
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 किसी भी फ़ाइंडर को `.inside(ancestor)`, `.at(index)` (0 से गिनती), `.first` या `.last` से सीमित करें।
 
@@ -258,6 +330,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // या .top
 
 nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) से पहले, उंगली और नीचे का कैप्शन डिफ़ॉल्ट रूप से चालू थे। वही रूप बनाए रखने के लिए ऊपर दिए ओवरराइड जोड़ें।
 
+<div id="screenshots"></div>
+
+## स्क्रीनशॉट
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+जहाँ भी स्क्रीन रखने लायक हो वहाँ एक `screenshot` स्टेप जोड़ें:
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` हर एक को `screenshots/<playbook>/<name>.png` के रूप में सहेजता है, किसी फ़्लैग की ज़रूरत नहीं। कोड से किया गया रन उन्हें [`onScreenshot`](#collecting-screenshots) से इकट्ठा करता है, और कोई भी अन्य रन, जैसे `PLAYBOOK_ON_BOOT`, बस स्क्रीन के स्थिर होने की प्रतीक्षा करता है। नाम एक अक्षर या अंक से शुरू होता है और अक्षरों, अंकों, `-`, `_` और `.` का उपयोग करता है।
+
+| पैरामीटर | विवरण |
+|-----------|-------------|
+| `name` | वह नाम जिसके तहत स्क्रीनशॉट सहेजा जाता है |
+| `locales` | इन हर भाषा कोड में एक बार कैप्चर करें। `Screenshot.allLocales` ऐप में बंडल की गई हर भाषा है |
+| `themes` | इन हर थीम id में एक बार कैप्चर करें। `Screenshot.allThemes` हर रजिस्टर्ड थीम है |
+| `caption` | रन द्वारा अपने स्क्रीनशॉट फ़्रेम करने पर स्क्रीन के ऊपर का टेक्स्ट, या एक अनुवाद की |
+| `native` | Metro से कैप्चर करें, iOS Simulator और Android पर (डिफ़ॉल्ट `true`) |
+
+iOS Simulator और Android पर, Metro डिवाइस की पूरी स्क्रीन कैप्चर करता है, इसलिए उसमें स्टेटस बार और कीबोर्ड शामिल होते हैं, और ऐसा करते समय फ़िंगर और कैप्शन छिपे रहते हैं। पूरे सिग्नल और बैटरी के साथ 9:41 के लिए रन में `--clean-status-bar` जोड़ें। अन्यत्र, और `--store` तथा `--frame` रन में, ऐप अपनी स्क्रीन खुद कैप्चर करता है। हमेशा ऐप का कैप्चर उपयोग करने के लिए `native: false` पास करें:
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+हर स्टेप की स्क्रीन सहेजने के लिए, `metro live:run playbook <name> --screenshots` चलाएं। App Store और Google Play के लिए स्क्रीनशॉट का आकार बदलने वाले विकल्पों के लिए [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots) देखें, और उनके पीछे की `Screenshot` क्लास के लिए [स्क्रीनशॉट](/docs/{{ $version }}/screenshots) देखें।
+
+<div id="screenshots-locales-and-themes"></div>
+
+### लोकेल और थीम
+
+एक `screenshot` स्टेप को `locales`, `themes` या दोनों दें ताकि वही स्क्रीन हर एक में एक बार कैप्चर हो:
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+ऐप उसी जगह बदलता है, पेज और उसकी स्टेट को बनाए रखते हुए, और अगले स्टेप से पहले वापस बदल जाता है। हर कैप्चर उसकी लोकेल और थीम के नाम वाले फ़ोल्डर में सहेजा जाता है:
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+पूरी प्लेबुक को हर भाषा और थीम में चलाने के लिए, `metro live:run playbook` को `--locales` और `--themes` पास करें।
+
+<div id="collecting-screenshots"></div>
+
+### कोड से इकट्ठा करना
+
+`run()` किसी रन के स्क्रीनशॉट `PlaybookShot` के रूप में पाने के लिए `onScreenshot` लेता है, जो टेस्ट या आपके अपने टूलिंग के लिए उपयोगी है:
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` चुनता है कि कौन सी स्क्रीन कैप्चर होती हैं:
+
+| मोड | क्या कैप्चर करता है |
+|------|----------|
+| `PlaybookScreenshots.off` | कुछ नहीं |
+| `PlaybookScreenshots.failures` | केवल फ़ेल होने वाले स्टेप की स्क्रीन |
+| `PlaybookScreenshots.marked` | `screenshot()` स्टेप्स, और फ़ेल होने वाले स्टेप्स |
+| `PlaybookScreenshots.auto` | उस प्लेबुक के `screenshot()` स्टेप्स जिसमें कोई हो, और जिसमें कोई न हो उसका हर स्टेप। फ़ेल होने वाले स्टेप्स भी। डिफ़ॉल्ट |
+| `PlaybookScreenshots.all` | हर स्टेप, `screenshot()` स्टेप्स, और फ़ेल होने वाले स्टेप्स |
+
+`pixelRatio` स्क्रीनशॉट का आकार डिवाइस के सापेक्ष तय करता है (डिफ़ॉल्ट `1.0`)। हर `PlaybookShot` में [सहेजने](/docs/{{ $version }}/screenshots#saving-a-screenshot) के लिए एक `screenshot` या पढ़ने के लिए `bytes` होता है, एक `kind`, और वह `name`, `locale` और `theme` जिसके साथ वह लिया गया।
+
 <div id="registering-playbooks"></div>
 
 ## प्लेबुक्स रजिस्टर करना
@@ -303,7 +466,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` के अंदर, `playbook sign_up` टाइप करें। हर विकल्प के लिए [Metro Live](/docs/{{ $version }}/metro-live#playbooks) देखें। वीडियो सहेजने के लिए `--record` जोड़ें; [रिकॉर्डिंग](/docs/{{ $version }}/metro-live#recording-playbooks) देखें।
+`metro live` के अंदर, `playbook sign_up` टाइप करें। हर विकल्प के लिए [Metro Live](/docs/{{ $version }}/metro-live#playbooks) देखें। वीडियो सहेजने के लिए `--record` जोड़ें; [रिकॉर्डिंग](/docs/{{ $version }}/metro-live#recording-playbooks) देखें। यदि रन 20 सेकंड बाद प्रतीक्षा करना बंद कर दे, तो ऐप शायद `flutter run --no-dds` से शुरू किया गया था; [Metro Live](/docs/{{ $version }}/metro-live#playbooks) देखें।
 
 <div id="running-on-boot"></div>
 
@@ -333,7 +496,7 @@ if (!report.passed) {
 }
 ```
 
-`run()` `speed`, `data`, `clock`, `overlay` (डिफ़ॉल्ट `true`) और `onEvent` स्वीकार करता है। एक विफल स्टेप एक्सेप्शन नहीं फेंकता -- `report.passed` जाँचें। एक समय में केवल एक प्लेबुक चल सकती है; एक के अंदर दूसरी चलाने के लिए `play()` का उपयोग करें।
+`run()` `speed`, `data`, `clock`, `overlay` (डिफ़ॉल्ट `true`), `onEvent`, और [स्क्रीनशॉट इकट्ठा करने](#collecting-screenshots) के लिए `onScreenshot`, `screenshots` और `pixelRatio` स्वीकार करता है। एक विफल स्टेप एक्सेप्शन नहीं फेंकता -- `report.passed` जाँचें। एक समय में केवल एक प्लेबुक चल सकती है; एक के अंदर दूसरी चलाने के लिए `play()` का उपयोग करें।
 
 चल रही प्लेबुक को `Playbook.stop()` से रोकें। बाकी स्टेप्स छोड़ दिए जाते हैं लेकिन `tearDown` फिर भी चलता है। `Playbook.isRunning` बताता है कि कोई चल रही है या नहीं।
 
@@ -362,8 +525,8 @@ if (!report.passed) {
 एक प्लेबुक को विजेट टेस्ट में `NyTesterClock` के साथ चलाएं, फिर उसकी रिपोर्ट पर `expectPlaybookPassed` से जाँच करें:
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

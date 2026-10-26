@@ -486,6 +486,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 Une fois que vous appuyez sur la methode **_login**, elle bloquera toute requete subsequente jusqu'a ce que la requete originale soit terminee. Le helper `isLocked('login_to_app')` est utilise pour verifier si le bouton est verrouille. Dans l'exemple ci-dessus, vous pouvez voir que nous l'utilisons pour determiner quand afficher notre Widget de chargement.
 
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+Si `perform` leve une `Exception`, le verrou est d'abord libere, puis l'exception est transmise a `onError`, avec sa stack trace. Sans `onError`, elle est consignee dans les logs. Une `Error` (un bug) est relancee une fois le verrou libere.
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

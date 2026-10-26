@@ -25,6 +25,7 @@
 - मॉडल स्टोरेज
   - [मॉडल सेव](#model-save "मॉडल सेव")
   - [मॉडल कलेक्शन्स](#model-collections "मॉडल कलेक्शन्स")
+- [फ़ाइल स्टोरेज](#file-storage "फ़ाइल स्टोरेज")
 - [StorageKey एक्सटेंशन रेफ़रेंस](#storage-key-extension-reference "StorageKey एक्सटेंशन रेफ़रेंस")
 - [स्टोरेज एक्सेप्शन्स](#storage-exceptions "स्टोरेज एक्सेप्शन्स")
 - [लीगेसी माइग्रेशन](#legacy-migration "लीगेसी माइग्रेशन")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## फ़ाइल स्टोरेज
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` मान रखता है। फ़ाइल स्टोरेज फ़ाइलें रखता है, जैसे PDF, फ़ोटो और डाउनलोड, नामित डिस्क पर:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+बिना नाम के `disk()` डिफ़ॉल्ट डिस्क का उपयोग करता है। `FileStorage` में डिफ़ॉल्ट डिस्क के लिए वही मेथड्स हैं:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+पाँच डिस्क बिना किसी कॉन्फ़िगरेशन के काम करती हैं:
+
+| डिस्क | कहाँ | नोट्स |
+|------|-------|-------|
+| `local` | ऐप का सपोर्ट फ़ोल्डर | डिफ़ॉल्ट डिस्क |
+| `documents` | ऐप का डॉक्यूमेंट्स फ़ोल्डर | यूज़र की अपनी फ़ाइलें |
+| `cache` | ऐप का कैश फ़ोल्डर | OS इसे साफ़ कर सकता है |
+| `temp` | अस्थायी फ़ोल्डर | एक दिन बाद हटा दिया जाता है |
+| `assets` | आपका ऐप बंडल, `assets/` के अंतर्गत | रीड-ओनली |
+
+### अपलोड की गई फ़ाइल स्टोर करना
+
+`putFile` `image_picker`, `file_picker` या कैमरे की फ़ाइल (एक `XFile`) को रैंडम नाम से स्टोर करता है, और उसका पाथ लौटाता है:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+नाम चुनने के लिए `putFileAs('avatars', photo, 'me.jpg')` का उपयोग करें।
+
+### स्टोर की गई इमेज दिखाना
+
+`DiskImage` डिस्क पर मौजूद इमेज के लिए एक `ImageProvider` है:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+फ़ाइल को उसकी डिस्क के ज़रिए दोबारा लिखने पर स्क्रीन पर इमेज अपडेट हो जाती है।
+
+### कस्टम डिस्क
+
+अपनी डिस्क `nylo.configure` को पास करें। वे डिफ़ॉल्ट डिस्क में जुड़ जाती हैं, और डिफ़ॉल्ट के समान नाम वाली डिस्क उसे बदल देती है:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` में `path`, `assets`, `scoped` (दूसरी डिस्क के अंदर एक फ़ोल्डर) और `custom` (आपका अपना `DiskDriver`) भी हैं।
+
+डिस्क का उपयोग करने वाले कोड को टेस्ट करने के लिए, [टेस्ट में फ़ाइल स्टोरेज](/docs/{{ $version }}/testing#file-storage) देखें।
 
 <div id="storage-key-extension-reference"></div>
 

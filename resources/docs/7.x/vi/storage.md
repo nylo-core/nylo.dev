@@ -25,6 +25,7 @@
 - Lưu trữ Model
   - [Lưu Model](#model-save "Lưu Model")
   - [Model Collections](#model-collections "Model Collections")
+- [File Storage](#file-storage "File Storage")
 - [Tham chiếu Extension StorageKey](#storage-key-extension-reference "Tham chiếu Extension StorageKey")
 - [Ngoại lệ Storage](#storage-exceptions "Ngoại lệ Storage")
 - [Di chuyển cũ](#legacy-migration "Di chuyển cũ")
@@ -565,6 +566,83 @@ await userKyle.saveToCollection();
 // Đọc lại
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## File Storage
+
+<!-- uncertain: new section "File Storage" / "disk"; no prior locale paragraphs for register -->
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` lưu các giá trị. File storage lưu các tệp, như PDF, ảnh và các tệp tải xuống, trên các disk có tên:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` không có tên sẽ dùng disk mặc định. `FileStorage` có các phương thức tương tự cho disk mặc định:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Năm disk hoạt động mà không cần cấu hình nào:
+
+| Disk | Ở đâu | Ghi chú |
+|------|-------|-------|
+| `local` | Thư mục support của ứng dụng | Disk mặc định |
+| `documents` | Thư mục documents của ứng dụng | Các tệp thuộc về người dùng |
+| `cache` | Thư mục cache của ứng dụng | Hệ điều hành có thể xóa nó |
+| `temp` | Thư mục tạm | Được dọn sau một ngày |
+| `assets` | Bundle ứng dụng của bạn, dưới `assets/` | Chỉ đọc |
+
+### Lưu một tệp đã tải lên
+
+`putFile` lưu một tệp từ `image_picker`, `file_picker` hoặc camera (một `XFile`) dưới một tên ngẫu nhiên, và trả về đường dẫn của nó:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Dùng `putFileAs('avatars', photo, 'me.jpg')` để tự chọn tên.
+
+### Hiển thị một ảnh đã lưu
+
+`DiskImage` là một `ImageProvider` cho một ảnh trên một disk:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Ghi lại tệp qua disk của nó sẽ cập nhật ảnh trên màn hình.
+
+### Disk tùy chỉnh
+
+Truyền các disk của riêng bạn vào `nylo.configure`. Chúng được thêm vào các disk mặc định, và một disk trùng tên với disk mặc định sẽ thay thế nó:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` cũng có `path`, `assets`, `scoped` (một thư mục bên trong disk khác) và `custom` (`DiskDriver` của riêng bạn).
+
+Để kiểm thử code dùng disk, xem [File Storage trong Test](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

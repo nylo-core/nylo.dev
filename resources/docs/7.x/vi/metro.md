@@ -27,6 +27,8 @@
   - [Tạo Env File](#make-env-file "Tạo env file mới")
   - [Tạo Key](#make-key "Tạo APP_KEY")
   - [Tạo Playbook](#make-playbook "Tạo một playbook mới")
+- Lệnh dự án
+  - [Doctor](#doctor "Kiểm tra cách dự án của bạn được kết nối")
 - App Icons
   - [Tạo App Icons](#build-app-icons "Tạo App Icons với Metro")
 - Lệnh tùy chỉnh
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` và `live:run` mở một shell kết nối đến ứng dụng đang chạy của bạn, để bạn có thể kiểm tra và điều khiển nó trong khi nó đang chạy -- xem [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` chạy một trong các [playbook](/docs/{{ $version }}/playbooks) của bạn trên ứng dụng đang chạy.
+`live`, `live:devices`, `live:status` và `live:run` mở một shell kết nối đến ứng dụng đang chạy của bạn, để bạn có thể kiểm tra và điều khiển nó trong khi nó đang chạy -- xem [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` chạy một trong các [playbook](/docs/{{ $version }}/playbooks) của bạn trên ứng dụng đang chạy, và `live:run screenshot` lưu một ảnh PNG của nó -- xem [Ảnh chụp màn hình](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Tạo model mới](#making-a-new-model "Tạo model mới với Metro")
 - [Tạo model từ JSON](#make-model-from-json "Tạo model mới từ JSON với Metro")
+- [Tạo model OneOf](#make-a-one-of-model "Tạo model OneOf với Metro")
 - [Buộc tạo model](#forcefully-make-a-model "Buộc tạo model mới với Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Sau đó, bạn có thể dán JSON vào terminal và nó sẽ tạo model cho bạn.
+
+<div id="make-a-one-of-model"></div>
+
+### Tạo model OneOf
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Dùng tùy chọn `--one-of` để tạo một model cho phản hồi có thể có nhiều hình dạng. Đặt tên cho từng hình dạng, ngăn cách bằng dấu phẩy:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+Lệnh này tạo một kiểu cha `OrderResult` dạng sealed với các kiểu con `Accepted` và `Rejected` trong `lib/app/models/`, và đăng ký một mục `OneOf<OrderResult>.byKey('type', {...})` cho nó trong `lib/bootstrap/decoders.dart`. Truyền riêng `--one-of` và Metro sẽ hỏi bạn các tên.
+
+Hãy đổi khóa `'type'` thành trường mà API của bạn dùng, hoặc chuyển sang `OneOf.byStatus` hoặc `OneOf.byJson`. Xem [OneOf](/docs/{{ $version }}/decoders#one-of) để biết từng constructor.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -845,15 +867,50 @@ metro make:playbook sign_up
 | Cờ / Tùy chọn | Viết tắt | Mô tả |
 |---------------|-------|-------------|
 | `--description` | | Mô tả một dòng, hiển thị khi Metro liệt kê các playbook |
+| `--record` | | Thay vào đó ghi lại hành trình trên ứng dụng đang chạy của bạn: mở `metro live` và bắt đầu [ghi](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | Ghé thăm mọi trang mà router của bạn thêm vào và chụp [ảnh màn hình](/docs/{{ $version }}/playbooks#screenshots) từng trang |
 | `--force` | `-f` | Tạo tệp ngay cả khi nó đã tồn tại |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 Lệnh này tạo `lib/app/playbooks/sign_up_playbook.dart` (bên trong thư mục con nếu bạn chỉ định) và đăng ký nó trong `lib/bootstrap/playbooks.dart`, tạo tệp đó ở lần dùng đầu tiên. Registry là một map rỗng trong các bản build release. Lệnh cũng truyền `playbooks` vào `nylo.configure(...)` trong `AppProvider` của bạn.
 
 Chạy nó khi ứng dụng đang chạy bằng `metro live:run playbook sign_up`. Nếu ứng dụng đã chạy sẵn, hãy hot restart trước.
+
+Với `--from-routes`, Metro đọc các dòng `router.add(SomePage.path)` trong `lib/routes/router.dart` và viết một `visit()` cùng một `screenshot()` cho mỗi trang. Một trang nằm sau route guard, hoặc một trang nhận tham số route, sẽ có một comment cho biết `setUp` có thể cần gì để tới được nó.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<!-- uncertain: new section "Doctor"; surrounding context entirely new -->
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` liệt kê mọi thứ được kết nối sai trong dự án của bạn, kèm tệp cần sửa:
+
+``` bash
+metro doctor
+```
+
+Nó kiểm tra route, decoder, ngôn ngữ, env và asset của bạn:
+
+| Kiểm tra | Tìm kiếm |
+|-------|-----------|
+| Routes | Các trang có đường dẫn route nhưng chưa được thêm vào router |
+| Decoders | API service, controller và model đang được dùng nhưng chưa đăng ký trong `lib/bootstrap/decoders.dart` |
+| Languages | Các tệp ngôn ngữ thiếu khóa mà ngôn ngữ gốc có, hoặc không phải JSON hợp lệ |
+| Env | Các khóa trong `.env` mà `.env-example` không có |
+| Assets | Hình ảnh trong `assets/images` mà không có gì tham chiếu đến |
+
+Mỗi kiểm tra kết thúc bằng ok, một vấn đề hoặc một ghi chú. `metro doctor` thoát với mã khác 0 khi một kiểm tra phát hiện vấn đề, nên bạn có thể chạy nó trong CI. Thêm `--strict` để thất bại cả với các ghi chú, như hình ảnh không có gì tham chiếu đến:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

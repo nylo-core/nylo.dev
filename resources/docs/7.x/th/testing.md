@@ -25,6 +25,7 @@
   - [การสร้าง Instance](#creating-instances "การสร้าง Instance")
 - [NyFaker](#ny-faker "NyFaker")
 - [Test Cache](#test-cache "Test Cache")
+- [File Storage](#file-storage "File Storage ในการทดสอบ")
 - [การจำลอง Platform Channel](#platform-channel-mocking "การจำลอง Platform Channel")
 - [การจำลอง Route Guard](#route-guard-mocking "การจำลอง Route Guard")
 - [Assertion](#assertions "Assertion")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` ตั้งค่าสภาพแวดล้อมการทดสอบและเปิดใช้การรีเซ็ต state อัตโนมัติระหว่างเทสต์เมื่อ `autoReset: true` (ค่าเริ่มต้น)
+
+ยังเพิ่ม event bus เมื่อแอปของคุณไม่มี เพื่อให้ปุ่มส่งของฟอร์มเข้าถึงฟอร์มของมันใน widget test และสลับทุก disk ที่เขียนได้เป็น fake ในหน่วยความจำ -- ดู [File Storage ในการทดสอบ](#file-storage)
 
 <div id="running-tests"></div>
 
@@ -721,6 +724,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## File Storage ในการทดสอบ
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` ทำให้ทุก [disk](/docs/{{ $version }}/storage#file-storage) ที่เขียนได้เป็น fake ในหน่วยความจำ เทสต์จึงไม่เขียนลงเครื่องของคุณ disk แบบอ่านอย่างเดียว เช่น `assets` ยังคงเป็นของจริง และ `NyTest.reset()` จะล้าง fake หลังแต่ละเทสต์
+
+ใช้ `FileStorage.fake()` เพื่อรับ disk กลับมาสำหรับ assertion และ `FakeFile` เพื่อสร้างไฟล์ที่จะเก็บ:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` มี `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty` และ `assertEmpty` ทั้งหมดทำงานแบบ synchronous จึงไม่ต้อง `await`
+
+| FakeFile | คำอธิบาย |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | PNG จริงที่ถอดรหัสได้ ในรูป `XFile` (ค่าเริ่มต้น 10 x 10 พิกเซล) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | ไฟล์ที่มีไบต์ศูนย์ตามจำนวนนั้น พร้อม MIME type ตามที่ชื่อไฟล์บ่งบอก |
+
+ไฟล์ `FakeFile` อยู่ในหน่วยความจำ จึงใช้งานได้ภายใน `nyWidgetTest`
+
 <div id="platform-channel-mocking"></div>
 
 ## การจำลอง Platform Channel
@@ -1173,7 +1206,7 @@ await tester.scrollTo(
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1192,6 +1225,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+หากต้องการเก็บภาพหน้าจอที่ playbook ถ่าย ให้ส่ง `onScreenshot` และอ่าน `screenshot` หรือ `bytes` ของแต่ละ `PlaybookShot` ดู [การรวบรวมจากโค้ด](/docs/{{ $version }}/playbooks#collecting-screenshots):
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

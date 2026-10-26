@@ -6,6 +6,7 @@
 - [परिचय](#introduction "परिचय")
 - बेसिक्स
   - [check() के साथ डेटा वैलिडेट करना](#validating-data "check() के साथ डेटा वैलिडेट करना")
+  - [कंट्रोलर में वैलिडेट करना](#validating-in-a-controller "कंट्रोलर में वैलिडेट करना")
   - [वैलिडेशन रिज़ल्ट्स](#validation-results "वैलिडेशन रिज़ल्ट्स")
 - FormValidator
   - [FormValidator का उपयोग](#using-form-validator "FormValidator का उपयोग")
@@ -88,6 +89,36 @@ check((validate) {
 
 वैकल्पिक `label` पैरामीटर एक मानव-पठनीय नाम सेट करता है जो एरर मैसेज में उपयोग किया जाता है (उदा. "The Email must be a valid email address.")।
 
+<div id="validating-in-a-controller"></div>
+
+### कंट्रोलर में वैलिडेट करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` में वही `check()` होता है, इसलिए वह अपने पेज की स्टेट के बिना अपने फ़ील्ड्स वैलिडेट कर सकता है:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // सभी वैलिडेशन पास हुए
+  }
+}
+```
+
+`check()` `FormValidationResponseBag` लौटाता है, इसलिए कंट्रोलर नतीजा रख सकता है।
+
 <div id="validation-results"></div>
 
 ## वैलिडेशन रिज़ल्ट्स
@@ -139,6 +170,12 @@ if (result.isValid) {
   // एरर रिस्पॉन्स
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` पहले विफल होने वाले नियम का `FormValidationError` लौटाता है, या सभी नियम पास होने पर `null`। यह पूरी एरर सूची नहीं बनाता, इसलिए हर कीस्ट्रोक पर इसे कॉल करना सस्ता है:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

@@ -6,6 +6,7 @@
 - [소개](#introduction "소개")
 - 기본
   - [check()로 데이터 유효성 검사](#validating-data "check()로 데이터 유효성 검사")
+  - [컨트롤러에서 유효성 검사](#validating-in-a-controller "컨트롤러에서 유효성 검사")
   - [유효성 검사 결과](#validation-results "유효성 검사 결과")
 - FormValidator
   - [FormValidator 사용](#using-form-validator "FormValidator 사용")
@@ -88,6 +89,36 @@ check((validate) {
 
 선택적 `label` 매개변수는 오류 메시지에 사용되는 사람이 읽을 수 있는 이름을 설정합니다 (예: "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### 컨트롤러에서 유효성 검사
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController`에도 동일한 `check()`가 있으므로 페이지의 state 없이 자체 필드를 검사할 수 있습니다:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // 모든 유효성 검사 통과
+  }
+}
+```
+
+`check()`는 `FormValidationResponseBag`을 반환하므로 컨트롤러가 결과를 보관할 수 있습니다.
+
 <div id="validation-results"></div>
 
 ## 유효성 검사 결과
@@ -139,6 +170,12 @@ if (result.isValid) {
   // 오류 응답
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError`는 처음 실패한 규칙의 `FormValidationError`를 반환하며, 모든 규칙을 통과하면 `null`입니다. 전체 오류 목록을 만들지 않으므로 키 입력마다 호출해도 부담이 적습니다:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

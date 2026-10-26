@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+Al igual que `Text`, `StyledText` toma el estilo de texto de la aplicación, así que el texto sin color propio usa el color de texto de tu tema. `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` dibuja "Hello," a 100 con el color del tema.
+
 <div id="children-mode"></div>
 
 ## Modo hijos

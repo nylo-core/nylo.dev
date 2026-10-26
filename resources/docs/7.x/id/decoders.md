@@ -6,6 +6,8 @@
 - [Pengantar](#introduction "Pengantar")
 - Penggunaan
   - [Decoder Model](#model-decoders "Decoder Model")
+  - [Decoder Bertipe](#typed-decoders "Decode dan decoders()")
+  - [OneOf](#one-of "Mendekode respons yang bisa memiliki lebih dari satu bentuk")
   - [Decoder API](#api-decoders "Decoder API")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 Di file modelDecoders, kita perlu menyediakan `Type` sebagai kunci dan menangani transformasi di nilai seperti contoh di atas.
 
 Argumen `data` akan berisi payload dari permintaan API.
+
+<div id="typed-decoders"></div>
+
+## Decoder Bertipe
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])` membangun map `modelDecoders` Anda dari sebuah list. `Decode(User.fromJson)` mendekode sebuah `User`, dan juga `List<User>`, tanpa entri tersendiri:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+Gunakan `from` untuk membaca model dari dalam body yang dibungkus, seperti `{"data": {...}}`. Kunci bertitik seperti `'data.user'` membaca lebih dalam, dan untuk list, list itu sendiri dibaca dari `from`.
+
+`Decode` menerima `fromJson` yang menerima `dynamic` atau `Map<String, dynamic>`. Untuk closure, tentukan tipe parameternya:
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+Decoder closure dalam map `{...}`, seperti `User: (data) => User.fromJson(data)`, tetap berfungsi. Keduanya adalah `NyDecoder`, kelas yang di-extend oleh `Decode` dan `OneOf`. Sebuah `NyDecoder<T>` kustom mengimplementasikan `decode(json, response, decoders)` dan melihat seluruh `NyResponse`, sehingga dapat membaca kode status atau header.
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf` mendekode respons yang bisa memiliki lebih dari satu bentuk. Daftarkan di bawah tipe induk yang sama, lalu pilih bentuknya berdasarkan sebuah field di body, kode status, atau kondisi Anda sendiri:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+`OneOf` juga mendekode body 4xx dan 5xx, serta item `List<T>` satu per satu. Bentuk yang tidak dikenali membuat data respons bernilai null.
+
+| Constructor | Memilih bentuk berdasarkan |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | Nilai `key` di body. Kunci bertitik seperti `'data.type'` membaca field bersarang |
+| `OneOf.byStatus(types, otherwise:)` | Kode status. Kuncinya berupa kode seperti `404`, atau pola seperti `'4xx'` atau `'40x'` |
+| `OneOf.byJson(types, otherwise:)` | Kondisi Anda sendiri, masing-masing menerima body dan respons. Yang pertama mengembalikan true akan dipakai |
+| `OneOf(resolve)` | Fungsi yang menerima body dan respons lalu mengembalikan nilai, atau null |
+
+Berdasarkan kode status:
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+Kode yang persis sama diutamakan, lalu pola dengan `x` paling sedikit.
+
+Dengan kondisi Anda sendiri:
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+Dengan sebuah fungsi:
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+Baca bentuk dari sebuah respons dengan `dataAs<X>()` dan `dataIs<X>()`; lihat [NyResponse](/docs/{{$version}}/networking#ny-response).
+
+Metro membuatkan induk, subtipenya, dan entri `OneOf.byKey` untuk Anda:
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+Lihat [Membuat model OneOf](/docs/{{$version}}/metro#make-a-one-of-model).
 
 <div id="api-decoders"></div>
 

@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` แสดง locale ปัจจุบันของ `NyLocalization` โดยไม่ต้องรีสตาร์ตแอป ทุก widget จะถูกสร้างใหม่ ข้อความที่แปล สตริงของ Material เอง และทิศทางข้อความจึงเปลี่ยนตาม locale ขณะที่หน้า state และ navigation stack ยังคงอยู่ที่เดิม:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+ข้อความที่หน้าคำนวณไว้ครั้งเดียวและเก็บไว้ใน state จะยังคงเป็นเหมือนเดิม
+
+ภาษาที่ผู้ใช้บันทึกไว้จะถูกอ่านเมื่อแอปเริ่มทำงาน หากค่าที่บันทึกไม่ใช่รหัส locale เช่น `es` หรือ `pt_BR` ค่านั้นจะถูกบันทึกลง log และทิ้งไป และแอปจะเริ่มด้วยภาษาเริ่มต้น
+
 <div id="setting-a-default-locale"></div>
 
 ## ตั้งค่า Locale เริ่มต้น

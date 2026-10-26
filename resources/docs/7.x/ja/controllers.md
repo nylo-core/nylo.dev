@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+コントローラーでも、ページと同様に `check()` でバリデーションできます。[コントローラーでのバリデーション](/docs/{{ $version }}/validation#validating-in-a-controller) を参照してください。
+
 <div id="language-switching"></div>
 
 ## 言語切り替え
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+`perform` が `Exception` をスローしたときに対応するには `onError` を渡します。最初にロックが解放され、その後 `onError` が例外とスタックトレースを受け取ります:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

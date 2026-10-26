@@ -45,6 +45,7 @@
 - [表单布局](#form-layout "表单布局")
 - [字段可见性](#field-visibility "字段可见性")
 - [字段样式](#field-styling "字段样式")
+- [表单字段样式](#form-field-style "FormFieldStyle")
 - [NyFormWidget 静态方法](#ny-form-widget-static-methods "NyFormWidget 静态方法")
 - [NyFormWidget 构造函数参考](#ny-form-widget-constructor-reference "NyFormWidget 构造函数参考")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 多行文本输入。样式类型：`FieldStyleTextField`
 
+带有 `prefixIcon` 的文本区域，其标签会浮动到与单行字段相同的起始位置。图标默认在字段高度上居中。使用 `PrefixIconAlignment.top` 可使其与第一行文本对齐：
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` 接受相同的 `prefixIconAlignment` 参数。在样式的 `decoration` 中设置 `alignLabelWithHint: true`，可使静止状态的标签保持在第一行。
+
 <div id="phone-number-fields"></div>
 
 ### 电话号码字段
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` 会替换选择器的 `InputDecoration`，与 `FieldStyleDateTimePicker.decoration` 对日期字段的作用相同。如果您的 decoration 没有提供自己的标签、下拉图标或 `prefixIcon`，则会保留字段自带的。
 
+点击选择器中的"Clear"会以 `null` 调用字段的 `onChanged`，被清除的字段在验证时视为空，因此在选择新选项之前，`FormValidator.notEmpty()` 会再次失败。
+
 #### 列表磁贴样式
 
 您可以使用 `PickerListTileStyle` 自定义选择器底部弹窗中项目的显示方式。默认情况下，底部弹窗显示纯文本磁贴。使用内置预设添加选择指示器，或提供完全自定义的构建器。
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 `options` 参数需要一个 `FormCollection`。样式类型：`FieldStyleRadio`
+
+为每个选项设置 `description` 即可在标签下方显示副标题，并通过 `subtitleStyle` 设置其样式：
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` 会合并到默认的副标题样式之上，因此只设置 `color` 时会保留其字号。
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-`List` 中的字段以等宽 `Expanded` 的 `Row` 渲染。字段之间的间距由 `NyFormWidget` 上的 `crossAxisSpacing` 参数控制。
+`List` 中的字段以等宽 `Expanded` 的 `Row` 渲染。共用一行的字段之间的间隙由 `NyFormWidget` 上的 `crossAxisSpacing` 参数设置，字段之间的垂直间隙则由 `mainAxisSpacing` 设置：
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // 字段之间，从上到下
+  crossAxisSpacing: 8,   // 同一行的字段之间
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## 表单字段样式
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` 设置每个字段的绘制方式 -- 包括其框、边框和标签。可从四种外观中选择：
+
+| 样式 | 描述 |
+|-------|-------------|
+| `FormFieldStyle.filled()` | 带细边框的柔和灰色框，标签位于上方。默认样式 |
+| `FormFieldStyle.outlined()` | 透明框配清晰的边框，获得焦点时边框变粗 |
+| `FormFieldStyle.underlined()` | 没有框，只有字段下方的一条线 |
+| `FormFieldStyle.grouped()` | 多行位于同一张卡片中，标签位于值的旁边，如 iOS 设置 |
+
+在 `Nylo.configure` 中为整个应用设置（样板项目将其保存在 `DesignConfig.formFieldStyle` 中）：
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+通过重写 `fieldStyle` 为单个表单设置：
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+字段自身的 `style:` 优先于其表单的 `fieldStyle`，而表单的 `fieldStyle` 又优先于应用的设置。
+
+每种外观都接受 `dense` 以获得更矮的字段，除 `underlined` 外的所有外观都接受 `radius` 来设置框或卡片的圆角：
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### 分组字段
+
+在 `grouped` 表单中，相邻的文本、选择器、日期和开关字段共用一张卡片，行与行之间以线分隔。每个标签位于其字段旁边，宽度取自身所需，最多占该行的 40%。普通的 `Icon` 前缀会为标签让位，而其他前缀则保留，例如 `Field.currency(separateSymbol: true)` 的符号或国家代码 `prefixIcon`。
+
+在表单之外，可使用 `FormFieldGroup` 将字段放入同一张卡片：
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+字段的颜色取自您的主题，以 `colorScheme.primary` 作为强调色。若要自行选择颜色，参见[字段颜色](/docs/{{ $version }}/themes-and-styling#field-colors)。
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget 静态方法
@@ -1152,8 +1254,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // 行字段之间的水平间距
-  double mainAxisSpacing = 10,   // 字段之间的垂直间距
+  double crossAxisSpacing = 10,  // 共用一行的字段之间的间隙
+  double mainAxisSpacing = 10,   // 垂直间隙
   Map<String, dynamic>? initialData, // 初始字段值
   Function(Field field, dynamic value)? onChanged, // 字段变更回调
   Widget? header,                // 表单上方的组件

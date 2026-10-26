@@ -12,6 +12,8 @@
 - [live:status](#live-status "Status aplikacji")
 - [live:run](#live-run "Uruchamianie wbudowanego polecenia live")
 - [Playbooki](#playbooks "Odtwarzanie playbooków z Metro")
+- [Nagrywanie przebiegu](#recording-a-journey "Nagrywanie tego, co robisz, jako playbook")
+- [Zrzuty ekranu](#screenshots "Zapisywanie zrzutów ekranu uruchomionej aplikacji")
 - Polecenia Live
   - [Tworzenie polecenia Live](#creating-a-live-command "Tworzenie polecenia live")
   - [Uruchamianie polecenia Live](#running-a-live-command "Uruchamianie polecenia live")
@@ -73,7 +75,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Polecenia live tracą swój prefiks `metro live:` wewnątrz powłoki -- `status` zamiast `metro live:status`, `route /profile` zamiast `metro live:run route /profile`. Kilka poleceń działa tylko wewnątrz powłoki: `seed`, `seed:rollback`, `export`, `reload` i `restart`. Wpisz `help`, aby zobaczyć wszystkie polecenia, albo `help <command>`, aby zobaczyć opcje jednego polecenia. Wpisz `exit` (albo Ctrl+D), aby wyjść.
+Polecenia live tracą swój prefiks `metro live:` wewnątrz powłoki -- `status` zamiast `metro live:status`, `route /profile` zamiast `metro live:run route /profile`. Kilka poleceń działa tylko wewnątrz powłoki: `seed`, `seed:rollback`, `export`, `record`, `reload` i `restart`. Wpisz `help`, aby zobaczyć wszystkie polecenia, albo `help <command>`, aby zobaczyć opcje jednego polecenia. Wpisz `exit` (albo Ctrl+D), aby wyjść.
 
 Jeśli aplikacja zrestartuje się, gdy jesteś połączony, powłoka sama nawiąże połączenie ponownie.
 
@@ -189,6 +191,7 @@ metro live:run <command> [arguments]
 | `event` | Wywołaj jedno ze swoich zdarzeń |
 | `toast` | Pokaż powiadomienie toast |
 | `playbook` | Odtwórz swoje [playbooki](/docs/{{ $version }}/playbooks) albo wyświetl ich listę |
+| `screenshot` | Zapisz [zrzut ekranu](#screenshots) aplikacji lub jednego `ScreenshotArea` |
 
 Wewnątrz `metro live` pomiń część `live:run` -- `route /profile` zamiast `metro live:run route /profile`:
 
@@ -234,9 +237,18 @@ Podaj kilka nazw playbooków, aby odtworzyć je jeden po drugim. Bez nazw, albo 
 | `--no-captions` | Pomiń plik z podpisami `.vtt` i rozdziały nagrania |
 | `--clean-status-bar` | Pokaż 9:41 z pełnym zasięgiem i baterią podczas odtwarzania playbooków, a potem przywróć poprzedni stan. Działa także bez `--record` |
 | `--countdown <seconds>` | Odliczaj 0-10 sekund na ekranie przed pierwszym krokiem |
+| `--screenshots[=<mode>]` | Zapisz także ekran z każdego kroku. `<mode>` to `all`, `auto`, `marked`, `failures` lub `off`; zobacz [Zrzuty ekranu playbooków](#playbook-screenshots) |
+| `--scale <n>` | Rozmiar zrzutów ekranu względem rozmiaru samego urządzenia, do 4, np. `0.5` dla połowy |
+| `--locales <list>` | Odtwórz raz w każdym z tych języków, np. `en,es`, albo `all` języków aplikacji |
+| `--themes <list>` | Odtwórz raz w każdym z tych motywów, np. `light,dark`, albo `all` motywów aplikacji |
+| `--store <id>` | Rysuj zrzuty ekranu w rozmiarze sklepu z aplikacjami, np. `ios-6.9` |
+| `--frame` | Rysuj każdy ekran wewnątrz obrysu telefonu |
+| `--background <hex>` | Kolor wokół ekranu, np. `"#1B2027"` |
 | `--list` | Wyświetl listę playbooków aplikacji zamiast odtwarzać jeden |
 
 Ctrl+C prosi aplikację o zatrzymanie: pozostałe kroki są pomijane, ale `tearDown` nadal się wykonuje. Naciśnij Ctrl+C drugi raz, aby przestać czekać.
+
+Jeśli żaden krok nie dotrze do Metro w ciągu 20 sekund, Metro przestaje czekać i kończy przebieg błędem. Aplikacja odtwarza playbook, ale jej zdarzenia nie docierają, co zdarza się, gdy aplikację uruchomiono z `flutter run --no-dds`. Uruchom ją zwykłym `flutter run` i spróbuj ponownie.
 
 Wewnątrz powłoki `metro live` polecenie to `playbook <name>`, a Tab uzupełnia nazwy playbooków:
 
@@ -285,11 +297,93 @@ Playbook, który zakończy się błędem lub zostanie zatrzymany, jest nadal zap
 
 Playbook domyślnie ukrywa palec i podpisy. Do wideo demonstracyjnego ustaw w playbooku `showFinger` i `caption` -- zobacz [Palec i podpis](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Zrzuty ekranu
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Kroki [`screenshot()`](/docs/{{ $version }}/playbooks#screenshots) playbooka są zapisywane w `screenshots/<playbook>/` bez potrzeby użycia flagi. Dodaj opcje, aby przechwycić je w każdym języku i motywie albo dopasować rozmiar do strony sklepu:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` zapisuje też ekran po każdym kroku playbooka, który nie ma kroków `screenshot()`, a `--screenshots=all` robi to dla każdego playbooka. Ekran nieudanego kroku jest zapisywany w `build/playbooks/failures`; `--screenshots=off` to wyłącza.
+
+`--locales` i `--themes` odtwarzają playbook raz w każdym z nich, a własny język i motyw aplikacji są potem przywracane. `--store` bez wartości wyświetla dostępne rozmiary, a `--frame` rysuje każdy ekran w obrysie telefonu z `caption:` kroku nad nim. `--clean-status-bar` pokazuje 9:41 z pełnym zasięgiem i baterią na zrzutach wykonywanych przez Metro za pomocą iOS Simulatora lub `adb`.
+
 <div id="playbook-live-commands"></div>
 
 ### Opis poleceń Live
 
 Polecenia, które za tym stoją, to `playbooks.list`, `playbooks.run` i `playbooks.stop`. Uruchomienie od razu zwraca swój identyfikator i przesyła każdy krok jako zdarzenie `nylo.playbook`, więc może trwać dłużej niż limit czasu polecenia. `live:status` wyświetla playbooki aplikacji. Playbooki pojawiły się w wersji 9 protokołu Nylo Live. Obsługa nagrywania -- `countdown` w `playbooks.run` (ze zdarzeniem `countdown` co sekundę) oraz `simulator` (UDID iOS Simulatora) w `status` -- pojawiła się w wersji 10 protokołu.
+
+<div id="recording-a-journey"></div>
+
+## Nagrywanie przebiegu
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` zapisuje to, co robisz w uruchomionej aplikacji, jako [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook). Działa tylko wewnątrz powłoki `metro live`:
+
+``` plaintext
+› record sign_up
+```
+
+Korzystaj z aplikacji i naciśnij Enter, gdy przebieg się skończy. Playbook trafia do `lib/app/playbooks/sign_up_playbook.dart`, zarejestrowany w `lib/bootstrap/playbooks.dart`, a Metro proponuje gorący restart aplikacji i odtworzenie go w tempie `fast`.
+
+| Opcja | Opis |
+|--------|-------------|
+| `--description <text>` | Jednowierszowy opis, wyświetlany, gdy Metro wypisuje playbooki |
+| `--no-data` | Zapisz wpisane wartości tak, jak je wpisano, zamiast symboli zastępczych `data[...]` z ich wartościami domyślnymi |
+| `--no-replay` | Pomiń pytanie o odtworzenie |
+| `--force`, `-f` | Zastąp istniejący plik playbooka |
+
+Podczas nagrywania wpisz `a` i Enter, aby następne dotknięcie stało się `see()`, `d` dla `dontSee()`, `s <title>`, aby rozpocząć scenę, `u`, aby cofnąć ostatni krok, i `p`, aby wstrzymać. Ctrl+C odrzuca nagranie. `metro make:playbook sign_up --record` otwiera powłokę i od razu rozpoczyna nagrywanie.
+
+Polecenia, które za tym stoją, to `record.start`, `record.stop`, `record.undo`, `record.mark` i `record.status`. Nagranie przesyła każdy krok jako zdarzenie `nylo.record`. Nagrywanie pojawiło się w wersji 11 protokołu Nylo Live.
+
+<div id="screenshots"></div>
+
+## Zrzuty ekranu
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Zapisz PNG uruchomionej aplikacji:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Każdy plik jest zapisywany w `screenshots/` w Twoim projekcie, z nazwą `<mode>-<device>-<date>-<time>.png`. Na iOS Simulatorze i Androidzie Metro przechwytuje cały ekran urządzenia za pomocą Simulatora lub `adb`, więc widoczny jest pasek stanu i klawiatura. Każde inne urządzenie dostaje własne przechwycenie aplikacji, czyli strony aplikacji takie, jakie widzi użytkownik.
+
+| Opcja | Opis |
+|--------|-------------|
+| `--area <name>` | Przechwyć tylko `ScreenshotArea` o tej nazwie |
+| `--scale <n>` | Rozmiar względem rozmiaru samego urządzenia, do 4, np. `0.5` dla połowy |
+| `--locales <list>` | Przechwyć ekran w każdym z tych języków, np. `en,es`, albo `all` języków aplikacji |
+| `--themes <list>` | Przechwyć ekran w każdym z tych motywów, np. `light,dark`, albo `all` motywów aplikacji |
+| `--store <id>` | Rysuj w rozmiarze zrzutu ekranu sklepu z aplikacjami, np. `ios-6.9`. Samo `--store` wyświetla dostępne rozmiary |
+| `--frame` | Rysuj ekran wewnątrz obrysu telefonu, na tle |
+| `--caption <text>` | Tekst nad `--frame` albo klucz tłumaczenia |
+| `--background <hex>` | Kolor wokół ekranu, za `--frame` lub obok rozmiaru `--store` o innym kształcie, np. `"#1B2027"` |
+| `--out <path>` | Zapisz do tego pliku `.png` albo do folderu kończącego się na `/` (domyślnie: `screenshots/`) |
+| `--open` | Otwórz zrzut ekranu po zapisaniu |
+| `--copy` | Skopiuj zrzut ekranu do schowka |
+| `--native` | Przechwyć za pomocą iOS Simulatora lub `adb`. To ustawienie domyślne dla przechwycenia całego ekranu; `--no-native` używa własnego przechwycenia aplikacji |
+| `--clean-status-bar` | Pokaż 9:41 z pełnym zasięgiem i baterią w przechwyceniu `--native` |
+
+Z `--locales` lub `--themes` Metro zapisuje po jednym PNG dla każdej pary w folderze, nazwanym `es.png`, `dark.png` lub `es-dark.png`, przełączając aplikację w miejscu i przywracając ją potem. `--area`, `--scale`, `--store` i `--frame` używają własnego przechwycenia aplikacji.
+
+Wewnątrz powłoki `metro live` wpisz `screenshot --open`. Aby robić zrzuty ekranu z kodu własnej aplikacji, zobacz [Zrzuty ekranu](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

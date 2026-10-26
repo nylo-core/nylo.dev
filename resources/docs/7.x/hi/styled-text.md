@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+`Text` की तरह, `StyledText` ऐप की टेक्स्ट स्टाइल लेता है, इसलिए जिस टेक्स्ट का अपना कोई रंग नहीं होता वह आपकी थीम के टेक्स्ट रंग का उपयोग करता है। `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` "Hello," को 100 के आकार में थीम के रंग में बनाता है।
+
 <div id="children-mode"></div>
 
 ## चिल्ड्रन मोड

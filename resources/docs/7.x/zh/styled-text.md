@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+与 `Text` 一样，`StyledText` 会采用应用的文本样式，因此没有自带颜色的文本会使用主题的文本颜色。`StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` 会以主题颜色、字号 100 绘制 "Hello,"。
+
 <div id="children-mode"></div>
 
 ## 子组件模式

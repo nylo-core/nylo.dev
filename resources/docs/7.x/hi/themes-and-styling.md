@@ -13,6 +13,7 @@
   - [बेस स्टाइल्स](#base-styles "बेस स्टाइल्स")
   - [कलर स्टाइल्स विस्तारित करें](#extending-color-styles "कलर स्टाइल्स विस्तारित करें")
   - [थीम स्विच करना](#switching-theme "थीम स्विच करना")
+  - [फ़ील्ड कलर्स](#field-colors "फ़ील्ड कलर्स")
   - [फ़ॉन्ट्स](#fonts "फ़ॉन्ट्स")
   - [डिज़ाइन](#design "डिज़ाइन")
 - [टेक्स्ट एक्सटेंशन्स](#text-extensions "टेक्स्ट एक्सटेंशन्स")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+थीम को सहेजे बिना दिखाने के लिए, `NyThemeManager.instance.showTheme` का उपयोग करें। यह ऐप की थीम को उसी जगह बदलता है, पेज, उसकी स्टेट और नेविगेशन स्टैक को बनाए रखते हुए, और यूज़र की सहेजी गई पसंद और उनकी सिस्टम थीम सेटिंग को जैसा है वैसा छोड़ देता है -- प्रीव्यू या स्क्रीनशॉट के लिए उपयोगी। जब किसी थीम का वह id न हो तो यह `ArgumentError` throw करता है:
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## फ़ील्ड कलर्स
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[फ़ॉर्म फ़ील्ड्स](/docs/{{ $version }}/forms#form-field-style) डिफ़ॉल्ट रूप से आपकी थीम का अनुसरण करते हैं: उसकी ब्राइटनेस के लिए तटस्थ ग्रे, और फ़ोकस, चयन और चालू स्विच के लिए एक्सेंट के रूप में `colorScheme.primary`।
+
+रंग खुद चुनने के लिए, थीम में एक `NyFieldColors` एक्सटेंशन जोड़ें:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` लाइट या डार्क थीम के लिए पूरा सेट बनाता है, और `copyWith` उसका कोई भी रंग बदलता है, जैसे `fill`, `border`, `label`, `text`, `placeholder`, `error` या `divider`। फ़ील्ड के अपने `style` पर सेट किया गया रंग हमेशा इन पर भारी पड़ता है।
+
 <div id="fonts"></div>
 
 ## फ़ॉन्ट्स
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo` का उपयोग आपके ऐप का लोगो प्रदर्शित करने के लिए किया जाता है।
 
 आप **lib/resources/widgets/logo_widget.dart** को संशोधित करके अपना लोगो कैसे प्रदर्शित करना चाहते हैं इसे कस्टमाइज़ कर सकते हैं।
+
+`DesignConfig.formFieldStyle` तय करता है कि आपके [फ़ॉर्म फ़ील्ड्स](/docs/{{ $version }}/forms#form-field-style) कैसे बनाए जाते हैं: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` या `.grouped()`।
 
 `DesignConfig.loader` का उपयोग लोडर प्रदर्शित करने के लिए किया जाता है। {{ config('app.name') }} इस वेरिएबल का उपयोग कुछ हेल्पर मेथड्स में डिफ़ॉल्ट लोडर विजेट के रूप में करेगा।
 

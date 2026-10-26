@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` แทนที่ **ทั้ง** `initialRoute()` และ `authenticatedRoute()` ทำให้เส้นทางที่ระบุเป็นหน้าแรกที่แสดงโดยไม่คำนึงถึงสถานะการยืนยันตัวตน
 
+ส่ง `data`, `queryParameters` หรือ `stack` เพื่อเปิดหน้าที่ต้องใช้ข้อมูลเหล่านั้น เช่น `.previewRoute(data: {'id': 1}, stack: [HomePage.path])` บิลด์รีลีสจะละเว้น `previewRoute()` ดู [Preview Route](/docs/{{ $version }}/router#preview-route)
+
 > **คำเตือน:** ลบ `.previewRoute()` ก่อนเผยแพร่แอปของคุณ
 
 

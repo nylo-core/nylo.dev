@@ -6,6 +6,8 @@
 - [บทนำ](#introduction "บทนำ")
 - การใช้งาน
   - [Model Decoders](#model-decoders "Model Decoders")
+  - [Typed Decoders](#typed-decoders "Decode และ decoders()")
+  - [OneOf](#one-of "การถอดรหัส response ที่มีได้หลายรูปแบบ")
   - [API Decoders](#api-decoders "API Decoders")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 ในไฟล์ modelDecoders เราต้องให้ `Type` เป็น key และจัดการการแปลงใน value ดังตัวอย่างด้านบน
 
 อาร์กิวเมนต์ `data` จะมี payload จาก API request
+
+<div id="typed-decoders"></div>
+
+## Typed Decoders
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])` สร้างแมป `modelDecoders` ของคุณจากลิสต์ `Decode(User.fromJson)` จะถอดรหัส `User` และ `List<User>` ด้วย โดยไม่ต้องมีรายการของตัวเอง:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+ใช้ `from` เพื่ออ่านโมเดลจากภายใน body ที่ห่อไว้ เช่น `{"data": {...}}` คีย์ที่คั่นด้วยจุด เช่น `'data.user'` จะอ่านลึกลงไปอีก และสำหรับลิสต์ ตัวลิสต์เองจะถูกอ่านจาก `from`
+
+`Decode` รับ `fromJson` ที่ยอมรับ `dynamic` หรือ `Map<String, dynamic>` สำหรับ closure ให้ระบุชนิดของพารามิเตอร์:
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+closure decoder ในแมป `{...}` เช่น `User: (data) => User.fromJson(data)` ยังคงใช้งานได้ ทั้งสองแบบเป็น `NyDecoder` ซึ่งเป็นคลาสที่ `Decode` และ `OneOf` สืบทอดมา `NyDecoder<T>` แบบกำหนดเองจะ implement `decode(json, response, decoders)` และเห็น `NyResponse` ทั้งหมด จึงอ่านรหัสสถานะหรือ header ได้
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf` ถอดรหัส response ที่มีได้หลายรูปแบบ ลงทะเบียนไว้ภายใต้ชนิดแม่ที่ใช้ร่วมกัน แล้วเลือกรูปแบบจากฟิลด์ใน body จากรหัสสถานะ หรือจากเงื่อนไขของคุณเอง:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+`OneOf` ถอดรหัส body ของ 4xx และ 5xx ได้ด้วย และถอดรหัส `List<T>` ทีละรายการ รูปแบบที่ไม่รู้จักจะทำให้ข้อมูลของ response เป็น null
+
+| Constructor | เลือกรูปแบบโดย |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | ค่าของ `key` ใน body คีย์ที่คั่นด้วยจุด เช่น `'data.type'` จะอ่านฟิลด์ที่ซ้อนอยู่ |
+| `OneOf.byStatus(types, otherwise:)` | รหัสสถานะ คีย์คือรหัส เช่น `404` หรือรูปแบบ เช่น `'4xx'` หรือ `'40x'` |
+| `OneOf.byJson(types, otherwise:)` | เงื่อนไขของคุณเอง แต่ละเงื่อนไขรับ body และ response เงื่อนไขแรกที่คืนค่า true จะถูกใช้ |
+| `OneOf(resolve)` | ฟังก์ชันที่รับ body และ response แล้วคืนค่า หรือ null |
+
+ตามรหัสสถานะ:
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+รหัสที่ตรงเป๊ะมาก่อน จากนั้นเป็นรูปแบบที่มี `x` น้อยที่สุด
+
+ด้วยเงื่อนไขของคุณเอง:
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+ด้วยฟังก์ชัน:
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+อ่านรูปแบบจาก response ด้วย `dataAs<X>()` และ `dataIs<X>()` ดู [NyResponse](/docs/{{$version}}/networking#ny-response)
+
+Metro สร้างชนิดแม่ ชนิดย่อย และรายการ `OneOf.byKey` ให้คุณ:
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+ดู [สร้างโมเดล OneOf](/docs/{{$version}}/metro#make-a-one-of-model)
 
 <div id="api-decoders"></div>
 

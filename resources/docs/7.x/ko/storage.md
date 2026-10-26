@@ -25,6 +25,7 @@
 - Model 스토리지
   - [Model 저장](#model-save "Model 저장")
   - [Model Collection](#model-collections "Model Collection")
+- [파일 스토리지](#file-storage "파일 스토리지")
 - [StorageKey Extension 참조](#storage-key-extension-reference "StorageKey Extension 참조")
 - [스토리지 예외](#storage-exceptions "스토리지 예외")
 - [레거시 마이그레이션](#legacy-migration "레거시 마이그레이션")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // 다시 읽기
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## 파일 스토리지
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage`는 값을 보관하고, 파일 스토리지는 PDF, 사진, 다운로드 같은 파일을 이름이 지정된 디스크에 보관합니다:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+이름 없는 `disk()`는 기본 디스크를 사용합니다. `FileStorage`는 기본 디스크에 대해 동일한 메서드를 제공합니다:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+별도 설정 없이 다섯 개의 디스크를 사용할 수 있습니다:
+
+| 디스크 | 위치 | 비고 |
+|------|-------|-------|
+| `local` | 앱의 support 폴더 | 기본 디스크 |
+| `documents` | 앱의 documents 폴더 | 사용자에게 속한 파일 |
+| `cache` | 앱의 cache 폴더 | OS가 삭제할 수 있음 |
+| `temp` | 임시 폴더 | 하루 후 정리됨 |
+| `assets` | `assets/` 아래의 앱 번들 | 읽기 전용 |
+
+### 업로드된 파일 저장
+
+`putFile`은 `image_picker`, `file_picker` 또는 카메라의 파일(`XFile`)을 임의의 이름으로 저장하고 해당 경로를 반환합니다:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+이름을 직접 정하려면 `putFileAs('avatars', photo, 'me.jpg')`를 사용하세요.
+
+### 저장된 이미지 표시
+
+`DiskImage`는 디스크에 있는 이미지를 위한 `ImageProvider`입니다:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+디스크를 통해 파일을 다시 쓰면 화면의 이미지가 업데이트됩니다.
+
+### 커스텀 디스크
+
+`nylo.configure`에 직접 만든 디스크를 전달하세요. 기본 디스크에 추가되며, 기본 디스크와 같은 이름의 디스크는 이를 대체합니다:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig`에는 `path`, `assets`, `scoped`(다른 디스크 안의 폴더), `custom`(직접 만든 `DiskDriver`)도 있습니다.
+
+디스크를 사용하는 코드를 테스트하려면 [테스트의 파일 스토리지](/docs/{{ $version }}/testing#file-storage)를 참고하세요.
 
 <div id="storage-key-extension-reference"></div>
 

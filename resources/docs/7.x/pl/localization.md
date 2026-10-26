@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` pokazuje bieżącą lokalizację `NyLocalization` bez restartowania aplikacji. Każdy widget jest budowany ponownie, więc przetłumaczony tekst, własne teksty Material i kierunek tekstu podążają za lokalizacją, a strona, jej stan i stos nawigacji pozostają bez zmian:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+Tekst, który strona obliczyła raz i zachowała w swoim stanie, pozostaje taki, jaki był.
+
+Język zapisany przez użytkownika jest odczytywany przy starcie aplikacji. Jeśli zapisana wartość nie jest kodem lokalizacji, takim jak `es` lub `pt_BR`, zostaje zalogowana i odrzucona, a aplikacja startuje w domyślnym języku.
+
 <div id="setting-a-default-locale"></div>
 
 ## Ustawianie domyślnej lokalizacji

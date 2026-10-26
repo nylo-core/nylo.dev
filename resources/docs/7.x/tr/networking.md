@@ -185,6 +185,20 @@ class ApiService extends NyApiService {
 | `handleSuccess` | `Function(NyResponse<T>)?` | Başarı callback'i |
 | `handleFailure` | `Function(NyResponse<T>)?` | Hata callback'i |
 
+`handleSuccess` ve `handleFailure`, çağrının döndürdüğü değeri de değiştirebilir. Hiçbir şey döndürmeyen bir callback yanıtı olduğu gibi bırakır, bir `NyResponse` döndüren callback yanıtın yerine geçer ve diğer her değer yanıtın verisi olur. `handleFailure` ayrıca istek zaman aşımı veya bağlantı kaybı gibi bir hata fırlattığında da çalışır ve hata yanıtını alır:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // Istek basarisiz olursa misafir kullaniciya don
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // Belirli bir basligi al
 String? authHeader = response.getHeader('Authorization');
+```
+
+Bir yanıt birden fazla biçim alabildiğinde ([OneOf](/docs/{{$version}}/decoders#one-of) decoder'ı), bir biçimi `dataAs<X>()` ile okuyun veya `dataIs<X>()` ile kontrol edin:
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// Veri bir ValidationError olarak, baska bir sey ise null
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// Verinin bir TwoFactorRequired olup olmadigi
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 `network<T>()`'ye geçtiğiniz tür parametresi, doğru decoder'ı bulmak için `modelDecoders` haritanızla eşleştirilir.
+
+Tek satırla bir `User` ve bir `List<User>` çözmek için tipli decoder'ları `decoders([Decode(User.fromJson)])` ile, birden fazla biçimi olan bir yanıt için ise `OneOf` ile kaydedin:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **Ayrıca bakınız:** [Decoders](/docs/{{$version}}/decoders#model-decoders) model decoder'larını kaydetme hakkında ayrıntılar için.
 

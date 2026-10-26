@@ -25,6 +25,7 @@
   - [Membuat Instance](#creating-instances "Membuat Instance")
 - [NyFaker](#ny-faker "NyFaker")
 - [Cache Test](#test-cache "Cache Test")
+- [Penyimpanan File](#file-storage "Penyimpanan File dalam Test")
 - [Mocking Platform Channel](#platform-channel-mocking "Mocking Platform Channel")
 - [Mocking Route Guard](#route-guard-mocking "Mocking Route Guard")
 - [Assertion](#assertions "Assertion")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` menyiapkan lingkungan test dan mengaktifkan reset state otomatis antar test ketika `autoReset: true` (nilai default).
+
+Ia juga menambahkan event bus jika aplikasi Anda belum punya, sehingga tombol submit form sampai ke form-nya dalam widget test, dan menukar setiap disk yang dapat ditulis dengan fake di memori -- lihat [Penyimpanan File dalam Test](#file-storage).
 
 <div id="running-tests"></div>
 
@@ -721,6 +724,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## Penyimpanan File dalam Test
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` menjadikan setiap [disk](/docs/{{ $version }}/storage#file-storage) yang dapat ditulis sebagai fake di memori, sehingga test tidak pernah menulis ke mesin Anda. Disk hanya-baca seperti `assets` tetap asli, dan `NyTest.reset()` mengosongkan fake setelah setiap test.
+
+Gunakan `FileStorage.fake()` untuk mendapatkan kembali sebuah disk guna assertion, dan `FakeFile` untuk membuat file yang akan disimpan:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` memiliki `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty`, dan `assertEmpty`. Semuanya sinkron, jadi tidak memerlukan `await`.
+
+| FakeFile | Deskripsi |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | PNG asli yang dapat didekode sebagai `XFile` (default 10 kali 10 piksel) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | File berisi sejumlah kilobyte byte nol itu, dengan tipe MIME yang disarankan namanya |
+
+File `FakeFile` berada di memori, sehingga berfungsi di dalam `nyWidgetTest`.
+
 <div id="platform-channel-mocking"></div>
 
 ## Mocking Platform Channel
@@ -1173,7 +1206,7 @@ Sebuah [playbook](/docs/{{ $version }}/playbooks) dapat dijalankan sebagai test.
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1192,6 +1225,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+Untuk menyimpan screenshot yang diambil playbook, berikan `onScreenshot` dan baca `screenshot` atau `bytes` dari setiap `PlaybookShot`. Lihat [Mengumpulkan dari Kode](/docs/{{ $version }}/playbooks#collecting-screenshots):
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

@@ -6,6 +6,7 @@
 - [简介](#introduction "简介")
 - 基础
   - [使用 check() 验证数据](#validating-data "使用 check() 验证数据")
+  - [在控制器中验证](#validating-in-a-controller "在控制器中验证")
   - [验证结果](#validation-results "验证结果")
 - FormValidator
   - [使用 FormValidator](#using-form-validator "使用 FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 可选的 `label` 参数设置在错误消息中使用的可读名称（例如"Email 必须是有效的电子邮件地址。"）。
 
+<div id="validating-in-a-controller"></div>
+
+### 在控制器中验证
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` 拥有相同的 `check()`，因此无需借助页面的状态即可验证自己的字段：
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // 所有验证通过
+  }
+}
+```
+
+`check()` 会返回 `FormValidationResponseBag`，因此控制器可以保留该结果。
+
 <div id="validation-results"></div>
 
 ## 验证结果
@@ -139,6 +170,12 @@ if (result.isValid) {
   // 错误响应
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` 返回第一条未通过规则的 `FormValidationError`，如果所有规则都通过则返回 `null`。它不会构建完整的错误列表，因此在每次按键时调用都很廉价：
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

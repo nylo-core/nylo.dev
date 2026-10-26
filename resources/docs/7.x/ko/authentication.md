@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()`는 `initialRoute()`와 `authenticatedRoute()` **모두**를 재정의하여 인증 상태에 관계없이 지정된 라우트를 첫 페이지로 표시합니다.
 
+`data`, `queryParameters` 또는 `stack`을 전달하면 해당 값이 필요한 페이지를 열 수 있습니다. 예: `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`. 릴리스 빌드에서는 `previewRoute()`가 무시됩니다. [Preview Route](/docs/{{ $version }}/router#preview-route)를 참조하세요.
+
 > **경고:** 앱을 릴리스하기 전에 `.previewRoute()`를 제거하세요.
 
 

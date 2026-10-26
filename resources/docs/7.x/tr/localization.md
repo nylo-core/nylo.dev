@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()`, uygulamayı yeniden başlatmadan `NyLocalization`'ın geçerli dilini gösterir. Tüm widget'lar yeniden oluşturulur; böylece çevrilmiş metinler, Material'ın kendi metinleri ve metin yönü dile uyar, sayfa, durumu ve gezinme yığını ise olduğu yerde kalır:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+Bir sayfanın bir kez hesaplayıp durumunda sakladığı metin olduğu gibi kalır.
+
+Kullanıcının kaydettiği dil, uygulama başladığında okunur. Kaydedilen değer `es` veya `pt_BR` gibi bir dil kodu değilse loglanır ve silinir, uygulama varsayılan dilinde başlar.
+
 <div id="setting-a-default-locale"></div>
 
 ## Varsayılan Yerel Ayar Belirleme

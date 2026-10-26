@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+เช่นเดียวกับ `Text` `StyledText` ใช้ text style ของแอป ดังนั้นข้อความที่ไม่มีสีของตัวเองจะใช้สีข้อความของธีมของคุณ `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` จะวาด "Hello," ที่ขนาด 100 ด้วยสีของธีม
+
 <div id="children-mode"></div>
 
 ## โหมด Children

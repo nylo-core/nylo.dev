@@ -13,6 +13,7 @@
   - [Kiểu cơ sở](#base-styles "Kiểu cơ sở")
   - [Mở rộng kiểu màu](#extending-color-styles "Mở rộng kiểu màu")
   - [Chuyển đổi theme](#switching-theme "Chuyển đổi theme")
+  - [Màu của field](#field-colors "Màu của field")
   - [Font](#fonts "Font")
   - [Thiết kế](#design "Thiết kế")
 - [Text Extensions](#text-extensions "Text extensions")
@@ -340,6 +341,36 @@ TextButton(onPressed: () {
 ```
 
 
+Để hiển thị một theme mà không lưu nó, hãy dùng `NyThemeManager.instance.showTheme`. Nó chuyển theme của ứng dụng tại chỗ, giữ nguyên trang, state của nó và ngăn xếp điều hướng, đồng thời để nguyên lựa chọn đã lưu của người dùng và cài đặt theme hệ thống của họ -- tiện cho việc xem trước hoặc chụp ảnh màn hình. Nó ném `ArgumentError` khi không có theme nào có id đó:
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## Màu của field
+
+<!-- uncertain: new section "Field colors" — heading translation chosen alone -->
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Form field](/docs/{{ $version }}/forms#form-field-style) mặc định theo theme của bạn: các màu xám trung tính theo độ sáng của nó, và `colorScheme.primary` làm màu nhấn cho trạng thái focus, các lựa chọn và các công tắc đang bật.
+
+Để tự chọn màu, hãy thêm một extension `NyFieldColors` vào theme:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` tạo một bộ màu đầy đủ cho theme sáng hoặc tối, và `copyWith` thay đổi bất kỳ màu nào trong đó, như `fill`, `border`, `label`, `text`, `placeholder`, `error` hoặc `divider`. Một màu đặt trên `style` riêng của field luôn thắng các màu này.
+
 <div id="fonts"></div>
 
 ## Font
@@ -381,6 +412,8 @@ Tệp **lib/config/design.dart** được sử dụng để quản lý các ph�
 `DesignConfig.logo` được sử dụng để hiển thị Logo ứng dụng.
 
 Bạn có thể sửa đổi **lib/resources/widgets/logo_widget.dart** để tùy chỉnh cách hiển thị Logo.
+
+`DesignConfig.formFieldStyle` đặt cách [form field](/docs/{{ $version }}/forms#form-field-style) của bạn được vẽ: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` hoặc `.grouped()`.
 
 `DesignConfig.loader` được sử dụng để hiển thị trình tải. {{ config('app.name') }} sẽ sử dụng biến này trong một số phương thức trợ giúp làm widget tải mặc định.
 

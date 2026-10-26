@@ -42,11 +42,7 @@
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -189,6 +185,20 @@ class ApiService extends NyApiService {
 | `handleSuccess` | `Function(NyResponse<T>)?` | 成功回调 |
 | `handleFailure` | `Function(NyResponse<T>)?` | 失败回调 |
 
+`handleSuccess` 和 `handleFailure` 还可以改变调用的返回值。不返回任何内容的回调会保持响应不变，返回 `NyResponse` 的回调会替换该响应，返回任何其他值则会成为响应的数据。当请求抛出异常时（例如超时或连接中断），`handleFailure` 也会运行，并接收错误响应：
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // 请求失败时回退为访客用户
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -302,6 +312,23 @@ String result = response.when(
 String? authHeader = response.getHeader('Authorization');
 ```
 
+当响应可能具有多种结构时（即 [OneOf](/docs/{{$version}}/decoders#one-of) 解码器），可使用 `dataAs<X>()` 读取其中一种结构，或使用 `dataIs<X>()` 进行检查：
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// 以 ValidationError 形式获取数据，如果是其他类型则为 null
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// 数据是否为 TwoFactorRequired
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
+```
+
 
 <div id="base-options"></div>
 
@@ -311,8 +338,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +493,7 @@ Future<void> downloadFile(String url, String savePath) async {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +548,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +568,8 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- 禁用日志记录器
         );
@@ -626,7 +650,6 @@ await api<ApiService>(
 | 参数 | 类型 | 描述 |
 |-----------|------|-------------|
 | `request` | `Function(T)` | API 请求函数 |
-| `context` | `BuildContext?` | 构建上下文 |
 | `headers` | `Map<String, dynamic>` | 附加请求头 |
 | `bearerToken` | `String?` | Bearer 令牌 |
 | `baseUrl` | `String?` | 覆盖基础 URL |
@@ -703,7 +726,7 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   // 返回单个 User
   Future<User?> fetchUser() async {
@@ -733,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 您传递给 `network<T>()` 的类型参数会与 `modelDecoders` 映射匹配以找到正确的解码器。
+
+使用 `decoders([Decode(User.fromJson)])` 注册类型化解码器，一行代码即可解码 `User` 和 `List<User>`；对于具有多种结构的响应，则使用 `OneOf`：
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **另请参阅：** [解码器](/docs/{{$version}}/decoders#model-decoders) 了解注册模型解码器的详细信息。
 
@@ -876,7 +907,7 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -1021,8 +1052,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

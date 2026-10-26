@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+Giống như `Text`, `StyledText` nhận text style của ứng dụng, nên văn bản không có màu riêng sẽ dùng màu chữ của theme. `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` vẽ "Hello," với cỡ 100 theo màu của theme.
+
 <div id="children-mode"></div>
 
 ## Chế độ Children

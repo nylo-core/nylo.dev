@@ -25,6 +25,7 @@
 - Model ストレージ
   - [Model の保存](#model-save "Model の保存")
   - [Model コレクション](#model-collections "Model コレクション")
+- [ファイルストレージ](#file-storage "ファイルストレージ")
 - [StorageKey エクステンションリファレンス](#storage-key-extension-reference "StorageKey エクステンションリファレンス")
 - [ストレージ例外](#storage-exceptions "ストレージ例外")
 - [レガシーマイグレーション](#legacy-migration "レガシーマイグレーション")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // 読み戻し
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## ファイルストレージ
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` は値を保存します。ファイルストレージは、PDF、写真、ダウンロードなどのファイルを、名前付きのディスクに保存します:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+名前なしの `disk()` はデフォルトディスクを使用します。`FileStorage` には、デフォルトディスク用の同じメソッドがあります:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+設定なしで 5 つのディスクが使用できます:
+
+| ディスク | 場所 | 備考 |
+|------|-------|-------|
+| `local` | アプリのサポートフォルダ | デフォルトのディスク |
+| `documents` | アプリのドキュメントフォルダ | ユーザーに属するファイル |
+| `cache` | アプリのキャッシュフォルダ | OS によって消去されることがあります |
+| `temp` | 一時フォルダ | 1 日後に削除されます |
+| `assets` | `assets/` 配下のアプリバンドル | 読み取り専用 |
+
+### アップロードされたファイルの保存
+
+`putFile` は、`image_picker`、`file_picker`、またはカメラからのファイル（`XFile`）をランダムな名前で保存し、そのパスを返します:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+名前を指定するには `putFileAs('avatars', photo, 'me.jpg')` を使用します。
+
+### 保存された画像の表示
+
+`DiskImage` は、ディスク上の画像用の `ImageProvider` です:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+そのディスクを通じてファイルを再度書き込むと、画面上の画像が更新されます。
+
+### カスタムディスク
+
+独自のディスクを `nylo.configure` に渡します。デフォルトに追加され、デフォルトと同じ名前のディスクはそれを置き換えます:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` には、`path`、`assets`、`scoped`（別のディスク内のフォルダ）、`custom`（独自の `DiskDriver`）もあります。
+
+ディスクを使うコードをテストするには、[テストでのファイルストレージ](/docs/{{ $version }}/testing#file-storage)を参照してください。
 
 <div id="storage-key-extension-reference"></div>
 

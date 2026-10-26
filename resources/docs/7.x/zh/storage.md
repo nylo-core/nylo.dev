@@ -25,6 +25,7 @@
 - Model 存储
   - [Model 保存](#model-save "Model 保存")
   - [Model 集合](#model-collections "Model 集合")
+- [文件存储](#file-storage "文件存储")
 - [StorageKey 扩展参考](#storage-key-extension-reference "StorageKey 扩展参考")
 - [存储异常](#storage-exceptions "存储异常")
 - [旧版迁移](#legacy-migration "旧版迁移")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## 文件存储
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` 保存的是值。文件存储保存的是文件，例如 PDF、照片和下载内容，并存放在具名磁盘上：
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+不带名称的 `disk()` 使用默认磁盘。`FileStorage` 为默认磁盘提供了相同的方法：
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+无需任何配置即可使用五个磁盘：
+
+| 磁盘 | 位置 | 说明 |
+|------|-------|-------|
+| `local` | 应用的支持文件夹 | 默认磁盘 |
+| `documents` | 应用的文档文件夹 | 属于用户的文件 |
+| `cache` | 应用的缓存文件夹 | 操作系统可能会清除 |
+| `temp` | 临时文件夹 | 一天后清理 |
+| `assets` | 应用包中的 `assets/` 下 | 只读 |
+
+### 存储上传的文件
+
+`putFile` 会将来自 `image_picker`、`file_picker` 或相机的文件（`XFile`）以随机名称存储，并返回其路径：
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+使用 `putFileAs('avatars', photo, 'me.jpg')` 可自行选择名称。
+
+### 显示已存储的图片
+
+`DiskImage` 是用于磁盘上图片的 `ImageProvider`：
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+通过其磁盘再次写入该文件，屏幕上的图片会随之更新。
+
+### 自定义磁盘
+
+将您自己的磁盘传给 `nylo.configure`。它们会被添加到默认磁盘中，与默认磁盘同名的磁盘会将其替换：
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` 还有 `path`、`assets`、`scoped`（另一个磁盘内的文件夹）和 `custom`（您自己的 `DiskDriver`）。
+
+要测试使用磁盘的代码，参见[测试中的文件存储](/docs/{{ $version }}/testing#file-storage)。
 
 <div id="storage-key-extension-reference"></div>
 

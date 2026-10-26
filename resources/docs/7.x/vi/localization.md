@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` hiển thị locale hiện tại của `NyLocalization` mà không cần khởi động lại ứng dụng. Mọi widget được build lại, nên văn bản đã dịch, các chuỗi riêng của Material và hướng văn bản đều theo locale, trong khi trang, state của nó và ngăn xếp điều hướng vẫn giữ nguyên:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+Văn bản mà một trang đã tính toán một lần và lưu trong state của nó vẫn giữ như cũ.
+
+Ngôn ngữ do người dùng lưu được đọc khi ứng dụng khởi động. Nếu giá trị đã lưu không phải là mã locale, như `es` hoặc `pt_BR`, nó sẽ được ghi log và bị loại bỏ, và ứng dụng khởi động bằng ngôn ngữ mặc định.
+
 <div id="setting-a-default-locale"></div>
 
 ## Đặt ngôn ngữ mặc định

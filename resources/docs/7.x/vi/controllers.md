@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Controller cũng có thể xác thực bằng `check()`, giống như một trang. Xem [Xác thực trong Controller](/docs/{{ $version }}/validation#validating-in-a-controller).
+
 <div id="language-switching"></div>
 
 ## Chuyển đổi ngôn ngữ
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+Truyền `onError` để xử lý khi `perform` ném ra một `Exception`. Khóa được giải phóng trước, sau đó `onError` nhận ngoại lệ và stack trace của nó:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

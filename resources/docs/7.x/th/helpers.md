@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ NyLogger.info('This will print regardless of APP_DEBUG');
 ``` dart
 await sleep(2);              // 2 วินาที
 await sleep(0, 500_000);     // 500 มิลลิวินาที
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+จัดรูปแบบ `DateTime` เป็นระยะเวลาที่ผ่านมา เช่น `2 hours ago` เมื่อวันที่เลยช่วงเวลาสัมพัทธ์ไปแล้ว จะแสดงด้วย `pattern` แทน `locale` ใช้จัดรูปแบบเป็นภาษาอื่นที่ไม่ใช่ภาษาของแอป:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 hours ago
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

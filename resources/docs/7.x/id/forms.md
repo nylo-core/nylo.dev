@@ -45,6 +45,7 @@
 - [Tata Letak Form](#form-layout "Tata Letak Form")
 - [Visibilitas Field](#field-visibility "Visibilitas Field")
 - [Styling Field](#field-styling "Styling Field")
+- [Form Field Style](#form-field-style "FormFieldStyle")
 - [Method Statis NyFormWidget](#ny-form-widget-static-methods "Method Statis NyFormWidget")
 - [Referensi Konstruktor NyFormWidget](#ny-form-widget-constructor-reference "Referensi Konstruktor NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Input teks multi-baris. Tipe gaya: `FieldStyleTextField`
 
+Text area dengan `prefixIcon` memposisikan labelnya mengambang pada posisi awal yang sama dengan field satu baris. Ikon ditengahkan pada tinggi field secara default. Gunakan `PrefixIconAlignment.top` untuk menyejajarkannya dengan baris pertama teks:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` menerima parameter `prefixIconAlignment` yang sama. Atur `alignLabelWithHint: true` pada `decoration` gaya untuk mempertahankan label saat diam di baris pertama.
+
 <div id="phone-number-fields"></div>
 
 ### Field Nomor Telepon
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` menggantikan `InputDecoration` milik picker, seperti `FieldStyleDateTimePicker.decoration` pada field tanggal. Jika decoration Anda tidak memberikan label, ikon dropdown, atau `prefixIcon` sendiri, milik field tetap dipertahankan.
 
+Mengetuk "Clear" di picker memanggil `onChanged` milik field dengan `null`, dan field yang dikosongkan divalidasi sebagai kosong, sehingga `FormValidator.notEmpty()` gagal lagi sampai opsi baru dipilih.
+
 #### Gaya List Tile
 
 Anda dapat menyesuaikan tampilan item di bottom sheet picker menggunakan `PickerListTileStyle`. Secara default, bottom sheet menampilkan tile teks polos. Gunakan preset bawaan untuk menambahkan indikator pemilihan, atau sediakan builder kustom sepenuhnya.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 Parameter `options` memerlukan `FormCollection`. Tipe gaya: `FieldStyleRadio`
+
+Beri setiap opsi sebuah `description` untuk menampilkan subjudul di bawah labelnya, dan atur gayanya dengan `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` digabungkan dengan gaya subjudul bawaan, sehingga mengatur `color` saja tetap mempertahankan ukurannya.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Field dalam `List` dirender dalam `Row` dengan lebar `Expanded` yang sama. Jarak antar field dikontrol oleh parameter `crossAxisSpacing` pada `NyFormWidget`.
+Field dalam `List` dirender dalam `Row` dengan lebar `Expanded` yang sama. Jarak antar field yang berbagi satu baris diatur oleh parameter `crossAxisSpacing` pada `NyFormWidget`, dan jarak vertikal antar field oleh `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Antar field, dari atas ke bawah
+  crossAxisSpacing: 8,   // Antar field dalam baris yang sama
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Form Field Style
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` mengatur bagaimana setiap field digambar -- kotak, border, dan labelnya. Pilih salah satu dari empat tampilan:
+
+| Gaya | Deskripsi |
+|-------|-------------|
+| `FormFieldStyle.filled()` | Kotak abu-abu lembut dengan border tipis, label di atas. Bawaan |
+| `FormFieldStyle.outlined()` | Kotak transparan dengan border tegas yang menebal saat fokus |
+| `FormFieldStyle.underlined()` | Tanpa kotak, hanya garis di bawah field |
+| `FormFieldStyle.grouped()` | Baris-baris dalam satu kartu, dengan label di samping nilai, seperti pengaturan iOS |
+
+Atur untuk seluruh aplikasi Anda di `Nylo.configure` (boilerplate menyimpannya di `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Atur untuk satu form dengan meng-override `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+`style:` milik sebuah field mengalahkan `fieldStyle` milik form-nya, yang mengalahkan milik aplikasi.
+
+Setiap tampilan menerima `dense` untuk field yang lebih pendek, dan semuanya kecuali `underlined` menerima `radius` untuk sudut kotak atau kartu:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Field Grouped
+
+Dalam form `grouped`, field teks, picker, tanggal, dan switch yang berurutan berbagi satu kartu, dengan garis di antara baris. Setiap label berada di samping field-nya, memakai lebarnya sendiri hingga 40% dari baris. Prefix `Icon` biasa mengalah untuk label, sedangkan prefix lain tetap, seperti simbol `Field.currency(separateSymbol: true)` atau `prefixIcon` kode negara.
+
+Di luar form, letakkan field dalam satu kartu dengan `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Field mengambil warnanya dari tema Anda, dengan `colorScheme.primary` sebagai aksen. Lihat [Warna Field](/docs/{{ $version }}/themes-and-styling#field-colors) untuk memilihnya sendiri.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Method Statis NyFormWidget
@@ -1152,7 +1254,7 @@ Saat meng-extend `NyFormWidget`, ini adalah parameter konstruktor yang dapat And
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Jarak horizontal antar field dalam baris
+  double crossAxisSpacing = 10,  // Jarak antar field yang berbagi satu baris
   double mainAxisSpacing = 10,   // Jarak vertikal antar field
   Map<String, dynamic>? initialData, // Nilai field awal
   Function(Field field, dynamic value)? onChanged, // Callback perubahan field

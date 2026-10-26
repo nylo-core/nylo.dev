@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ Atrasa a execução pela duração indicada. O primeiro argumento são segundos;
 ``` dart
 await sleep(2);              // 2 segundos
 await sleep(0, 500_000);     // 500 milissegundos
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+Formata um `DateTime` como há quanto tempo ocorreu, como `2 hours ago`. Quando a data passa da janela relativa, ela é exibida com `pattern`. `locale` formata em um idioma diferente do app:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 hours ago
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

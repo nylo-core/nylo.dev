@@ -6,6 +6,7 @@
 - [Einleitung](#introduction "Einleitung")
 - Grundlagen
   - [Daten mit check() validieren](#validating-data "Daten mit check() validieren")
+  - [Validierung in einem Controller](#validating-in-a-controller "Validierung in einem Controller")
   - [Validierungsergebnisse](#validation-results "Validierungsergebnisse")
 - FormValidator
   - [FormValidator verwenden](#using-form-validator "FormValidator verwenden")
@@ -88,6 +89,36 @@ check((validate) {
 
 Der optionale `label`-Parameter setzt einen lesbaren Namen, der in Fehlermeldungen verwendet wird (z.B. "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Validierung in einem Controller
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Ein `NyController` hat dasselbe `check()`, sodass er seine eigenen Felder ohne den Zustand seiner Seite validieren kann:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // Alle Validierungen bestanden
+  }
+}
+```
+
+`check()` gibt die `FormValidationResponseBag` zurück, sodass der Controller das Ergebnis behalten kann.
+
 <div id="validation-results"></div>
 
 ## Validierungsergebnisse
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Fehlerantworten
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` gibt den `FormValidationError` der ersten fehlschlagenden Regel zurück oder `null`, wenn jede Regel bestanden wurde. Es baut nicht die vollständige Fehlerliste auf und ist daher bei jedem Tastenanschlag günstig aufzurufen:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

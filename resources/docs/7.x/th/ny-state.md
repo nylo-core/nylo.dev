@@ -486,6 +486,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 เมื่อคุณแตะเมธอด **_login** มันจะบล็อกคำขอที่ตามมาจนกว่าคำขอเดิมจะเสร็จสิ้น ตัวช่วย `isLocked('login_to_app')` ใช้ตรวจสอบว่าปุ่มถูกล็อกหรือไม่ ในตัวอย่างข้างต้น คุณจะเห็นว่าเราใช้มันเพื่อกำหนดว่าจะแสดง Widget โหลดเมื่อใด
 
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+หาก `perform` throw `Exception` ล็อกจะถูกปล่อยก่อน จากนั้น exception จะถูกส่งไปที่ `onError` พร้อม stack trace หากไม่มี `onError` จะถูกบันทึกลง log ส่วน `Error` (บั๊ก) จะถูก rethrow หลังจากปล่อยล็อกแล้ว
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

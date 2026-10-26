@@ -195,6 +195,31 @@ Metode `previewRoute()`:
 - Menjadikan rute yang ditentukan sebagai rute awal
 - Berguna untuk menguji halaman tertentu dengan cepat selama pengembangan
 
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Halaman yang membutuhkan data untuk dibangun dapat dipratinjau bersama data itu. Berikan `data`, `queryParameters`, dan `stack` ke `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` dan `queryParameters` sampai ke halaman seolah-olah Anda bernavigasi dengan `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Data dari navigasi sungguhan diprioritaskan.
+- `stack` mendaftar rute yang dibuka di bawahnya, sehingga tombol kembali berfungsi seperti setelah peluncuran normal. Di sini, kembali dari `ProductPage` menuju `HomePage`.
+- Build release mengabaikan `previewRoute()`, sehingga pratinjau yang tertinggal di router Anda tidak pernah mengubah halaman pertama di produksi.
+
+`stack` mengharuskan aplikasi dibangun dengan `NyApp.materialApp`. Jika Anda membangun `MaterialApp` sendiri, berikan `NyRouter.previewInitialRoutes(onGenerateRoute)` ke `onGenerateInitialRoutes` miliknya:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Peringatan:** Ingat untuk menghapus `.previewRoute()` sebelum merilis aplikasi Anda!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-----------|
 | `route_guards` | `List<RouteGuard>` | Terapkan route guards ke semua rute dalam grup |
 | `prefix` | `String` | Tambahkan prefix ke semua path rute dalam grup |
-| `transition_type` | `TransitionType` | Atur transisi untuk semua rute dalam grup |
+| `transition_type` | `TransitionType` | Atur transisi untuk rute dalam grup yang tidak menetapkan transisinya sendiri |
 | `transition` | `PageTransitionType` | Atur tipe transisi halaman (tidak digunakan lagi, gunakan transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Atur pengaturan transisi |
 

@@ -6,6 +6,8 @@
 - [Giri&#351;](#introduction "Giri&#351;")
 - Kullan&#305;m
   - [Model Kod &#199;&#246;z&#252;c&#252;ler](#model-decoders "Model Kod &#199;&#246;z&#252;c&#252;ler")
+  - [Tipli Kod &#199;&#246;z&#252;c&#252;ler](#typed-decoders "Decode ve decoders()")
+  - [OneOf](#one-of "Birden fazla bi&#231;imde olabilen bir yan&#305;t&#305; &#231;&#246;zme")
   - [API Kod &#199;&#246;z&#252;c&#252;ler](#api-decoders "API Kod &#199;&#246;z&#252;c&#252;ler")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 modelDecoders dosyas&#305;nda, anahtar olarak `Type` sa&#287;lamam&#305;z ve de&#287;erde yukar&#305;daki &#246;rnekteki gibi d&#246;n&#252;&#351;&#252;m&#252; yapmam&#305;z gerekir.
 
 `data` arg&#252;man&#305;, API iste&#287;inden gelen y&#252;k&#252; i&#231;erecektir.
+
+<div id="typed-decoders"></div>
+
+## Tipli Kod &#199;&#246;z&#252;c&#252;ler
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])`, `modelDecoders` map'inizi bir listeden olu&#351;turur. `Decode(User.fromJson)` bir `User`'&#305; ve ayr&#305;ca bir `List<User>`'&#305;, ayr&#305; bir girdi gerektirmeden &#231;&#246;zer:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+Modeli `{"data": {...}}` gibi sarmalanm&#305;&#351; bir g&#246;vdenin i&#231;inden okumak i&#231;in `from` kullan&#305;n. `'data.user'` gibi noktal&#305; bir anahtar daha derinden okur; liste i&#231;in ise listenin kendisi `from` i&#231;inden okunur.
+
+`Decode`, `dynamic` veya `Map<String, dynamic>` kabul eden bir `fromJson` al&#305;r. Bir closure i&#231;in parametresinin t&#252;r&#252;n&#252; belirtin:
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+`User: (data) => User.fromJson(data)` gibi `{...}` map'indeki closure kod &#231;&#246;z&#252;c&#252;ler &#231;al&#305;&#351;maya devam eder. &#304;kisi de bir `NyDecoder`'d&#305;r; `Decode` ve `OneOf` bu s&#305;n&#305;f&#305; geni&#351;letir. &#214;zel bir `NyDecoder<T>`, `decode(json, response, decoders)` metodunu uygular ve t&#252;m `NyResponse`'u g&#246;r&#252;r, b&#246;ylece durum kodunu veya ba&#351;l&#305;klar&#305; okuyabilir.
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf`, birden fazla bi&#231;im alabilen bir yan&#305;t&#305; &#231;&#246;zer. Payla&#351;&#305;lan &#252;st t&#252;r alt&#305;nda kaydedin ve bi&#231;imi g&#246;vdedeki bir alana, durum koduna veya kendi ko&#351;ullar&#305;n&#305;za g&#246;re se&#231;in:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+`OneOf` ayr&#305;ca 4xx ve 5xx g&#246;vdelerini ve bir `List<T>`'&#305; &#246;&#287;e &#246;&#287;e &#231;&#246;zer. Tan&#305;mad&#305;&#287;&#305; bir bi&#231;im, yan&#305;t verisini null b&#305;rak&#305;r.
+
+| Yap&#305;c&#305; | Bi&#231;imi &#351;una g&#246;re se&#231;er |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | G&#246;vdedeki `key` de&#287;erine g&#246;re. `'data.type'` gibi noktal&#305; bir anahtar i&#231; i&#231;e bir alan&#305; okur |
+| `OneOf.byStatus(types, otherwise:)` | Durum koduna g&#246;re. Anahtar `404` gibi bir kod veya `'4xx'` ya da `'40x'` gibi bir desen olabilir |
+| `OneOf.byJson(types, otherwise:)` | Her biri g&#246;vdeyi ve yan&#305;t&#305; alan kendi ko&#351;ullar&#305;n&#305;za g&#246;re. True d&#246;nd&#252;ren ilk ko&#351;ul kazan&#305;r |
+| `OneOf(resolve)` | G&#246;vdeyi ve yan&#305;t&#305; al&#305;p de&#287;eri veya null d&#246;nd&#252;ren bir fonksiyon |
+
+Durum koduna g&#246;re:
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+&#214;nce tam e&#351;le&#351;en kod, ard&#305;ndan en az `x` i&#231;eren desen kazan&#305;r.
+
+Kendi ko&#351;ullar&#305;n&#305;zla:
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+Bir fonksiyonla:
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+Bir yan&#305;ttan bi&#231;imi `dataAs<X>()` ve `dataIs<X>()` ile okuyun; bkz. [NyResponse](/docs/{{$version}}/networking#ny-response).
+
+Metro, &#252;st t&#252;r&#252;, alt t&#252;rlerini ve `OneOf.byKey` girdisini sizin i&#231;in olu&#351;turur:
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+Bkz. [OneOf modeli olu&#351;turma](/docs/{{$version}}/metro#make-a-one-of-model).
 
 <div id="api-decoders"></div>
 

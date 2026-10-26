@@ -485,6 +485,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 一旦您点击 **_login** 方法，它将阻止任何后续请求，直到原始请求完成。`isLocked('login_to_app')` 辅助方法用于检查按钮是否被锁定。在上面的示例中，您可以看到我们用它来确定何时显示加载组件。
 
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+如果 `perform` 抛出 `Exception`，锁会先被释放，然后该异常连同其堆栈跟踪会传给 `onError`。如果没有 `onError`，则会记录日志。`Error`（即 bug）会在锁释放后重新抛出。
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

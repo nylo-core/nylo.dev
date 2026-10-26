@@ -485,6 +485,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 **_login** metoduna dokunduğunuzda, orijinal istek tamamlanana kadar sonraki istekleri engelleyecektir. `isLocked('login_to_app')` yardımcısı, düğmenin kilitli olup olmadığını kontrol etmek için kullanılır. Yukarıdaki örnekte, yükleme Widget'ımızı ne zaman görüntüleyeceğimizi belirlemek için bunu kullandığımızı görebilirsiniz.
 
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`perform` bir `Exception` fırlatırsa kilit önce serbest bırakılır, ardından istisna yığın izi ile birlikte `onError`'a gider. `onError` verilmezse istisna loglanır. Bir `Error` (yani bir hata/bug) kilit serbest bırakıldıktan sonra yeniden fırlatılır.
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

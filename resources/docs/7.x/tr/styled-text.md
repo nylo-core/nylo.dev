@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+`Text` gibi `StyledText` de uygulamanın metin stilini alır; bu nedenle kendi rengi olmayan metin temanızın metin rengini kullanır. `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` "Hello," kısmını 100 boyutunda ve temanın renginde çizer.
+
 <div id="children-mode"></div>
 
 ## Children Modu

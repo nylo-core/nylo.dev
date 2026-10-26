@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+`Text`와 마찬가지로 `StyledText`는 앱의 텍스트 스타일을 따르므로, 자체 색상이 없는 텍스트는 테마의 텍스트 색상을 사용합니다. `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))`는 "Hello,"를 테마 색상으로 크기 100에 그립니다.
+
 <div id="children-mode"></div>
 
 ## Children 모드

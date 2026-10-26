@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+컨트롤러도 페이지처럼 `check()`로 유효성을 검사할 수 있습니다. [컨트롤러에서 유효성 검사](/docs/{{ $version }}/validation#validating-in-a-controller)를 참조하세요.
+
 <div id="language-switching"></div>
 
 ## 언어 전환
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+`perform`이 `Exception`을 던질 때 대응하려면 `onError`를 전달하세요. 잠금이 먼저 해제된 후 `onError`가 예외와 스택 트레이스를 받습니다:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

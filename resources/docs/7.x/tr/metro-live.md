@@ -12,6 +12,8 @@
 - [live:status](#live-status "Uygulama durumunu göster")
 - [live:run](#live-run "Yerleşik bir live komutu çalıştır")
 - [Playbook'lar](#playbooks "Playbook'ları Metro'dan oynatma")
+- [Bir Yolculuğu Kaydetme](#recording-a-journey "Yaptıklarınızı playbook olarak kaydetme")
+- [Ekran Görüntüleri](#screenshots "Çalışan uygulamanın ekran görüntülerini kaydetme")
 - Live Komutlar
   - [Live Komut Oluşturma](#creating-a-live-command "Bir live komutu oluşturma")
   - [Live Komutu Çalıştırma](#running-a-live-command "Bir live komutu çalıştırma")
@@ -73,7 +75,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Live komutları kabuğun içinde `metro live:` önekini kaybeder -- `metro live:status` yerine `status`, `metro live:run route /profile` yerine `route /profile`. Birkaç komut yalnızca kabuğun içinde çalışır: `seed`, `seed:rollback`, `export`, `reload` ve `restart`. Tüm komutları listelemek için `help`, bir komutun seçeneklerini görmek için `help <command>` yazın. Çıkmak için `exit` (veya Ctrl+D) yazın.
+Live komutları kabuğun içinde `metro live:` önekini kaybeder -- `metro live:status` yerine `status`, `metro live:run route /profile` yerine `route /profile`. Birkaç komut yalnızca kabuğun içinde çalışır: `seed`, `seed:rollback`, `export`, `record`, `reload` ve `restart`. Tüm komutları listelemek için `help`, bir komutun seçeneklerini görmek için `help <command>` yazın. Çıkmak için `exit` (veya Ctrl+D) yazın.
 
 Bağlıyken uygulama yeniden başlarsa, kabuk kendiliğinden yeniden bağlanır.
 
@@ -189,6 +191,7 @@ metro live:run <command> [arguments]
 | `event` | Kendi event'lerinizden birini tetikle |
 | `toast` | Bir toast bildirimi göster |
 | `playbook` | [Playbook'larınızı](/docs/{{ $version }}/playbooks) oynat veya listele |
+| `screenshot` | Uygulamanın veya tek bir `ScreenshotArea`'nın [ekran görüntüsünü](#screenshots) kaydet |
 
 `metro live` içinde, `live:run` kısmını atlayın -- `metro live:run route /profile` yerine `route /profile`:
 
@@ -234,9 +237,18 @@ Birkaç playbook adı vererek bunları art arda oynatın. Hiç ad verilmezse vey
 | `--no-captions` | Kaydın `.vtt` başlık dosyasını ve bölümlerini dışarıda bırak |
 | `--clean-status-bar` | Playbook'lar oynarken tam sinyal ve pille 9:41 göster, sonra eski haline getir. `--record` olmadan da çalışır |
 | `--countdown <seconds>` | İlk adımdan önce ekranda 0-10 saniye geri say |
+| `--screenshots[=<mode>]` | Her adımın ekranını da kaydet. `<mode>` değeri `all`, `auto`, `marked`, `failures` veya `off`'tur; bkz. [Playbook Ekran Görüntüleri](#playbook-screenshots) |
+| `--scale <n>` | Ekran görüntülerinin cihazın kendi boyutuna oranla boyutu, en fazla 4, örn. yarısı için `0.5` |
+| `--locales <list>` | Bu dillerin her birinde bir kez oynat, örn. `en,es`, veya uygulamanın dillerinin tümü için `all` |
+| `--themes <list>` | Bu temaların her birinde bir kez oynat, örn. `light,dark`, veya uygulamanın temalarının tümü için `all` |
+| `--store <id>` | Ekran görüntülerini bir uygulama mağazasının boyutunda çiz, örn. `ios-6.9` |
+| `--frame` | Her ekranı bir telefon çerçevesinin içine çiz |
+| `--background <hex>` | Ekranın çevresindeki renk, örn. `"#1B2027"` |
 | `--list` | Birini oynatmak yerine uygulamanın playbook'larını listele |
 
 Ctrl+C uygulamadan durmasını ister: kalan adımlar atlanır, ancak `tearDown` yine de çalışır. Beklemeyi bırakmak için Ctrl+C'ye ikinci kez basın.
+
+Hiçbir adım 20 saniye içinde Metro'ya ulaşmazsa Metro beklemeyi bırakır ve çalıştırmayı başarısız sayar. Uygulama playbook'u oynatıyordur, ancak event'leri ulaşmıyordur; bu, uygulama `flutter run --no-dds` ile başlatıldığında olur. Uygulamayı düz bir `flutter run` ile çalıştırıp tekrar deneyin.
 
 `metro live` kabuğunun içinde komut `playbook <name>`'dir ve Tab playbook adlarını tamamlar:
 
@@ -285,11 +297,93 @@ Başarısız olan veya durdurulan bir playbook yine de kaydedilir; böylece kay�
 
 Bir playbook varsayılan olarak parmağını ve başlıklarını gizler. Demo videosu için playbook'ta `showFinger` ve `caption` değerlerini ayarlayın -- bkz. [Parmak ve Başlık](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Ekran Görüntüleri
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Bir playbook'un [`screenshot()` adımları](/docs/{{ $version }}/playbooks#screenshots) herhangi bir bayrak gerekmeden `screenshots/<playbook>/` içine kaydedilir. Bunları her dilde ve temada yakalamak veya bir mağaza sayfası için boyutlandırmak üzere seçenekler ekleyin:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots`, hiç `screenshot()` adımı olmayan bir playbook'un her adımından sonra da ekranı kaydeder; `--screenshots=all` bunu her playbook için yapar. Başarısız bir adımın ekranı `build/playbooks/failures` içine kaydedilir; `--screenshots=off` bunu kapatır.
+
+`--locales` ve `--themes` playbook'u her birinde bir kez oynatır ve uygulamanın kendi dili ve teması sonrasında geri konur. `--store` değer verilmediğinde boyutları listeler ve `--frame` her ekranı, adımın `caption:` metni üstte olacak şekilde bir telefon çerçevesinin içine çizer. `--clean-status-bar`, Metro'nun iOS Simulator veya `adb` ile aldığı yakalamalarda tam sinyal ve bataryayla 9:41'i gösterir.
+
 <div id="playbook-live-commands"></div>
 
 ### Live Komut Başvurusu
 
 Bunun arkasındaki komutlar `playbooks.list`, `playbooks.run` ve `playbooks.stop`'tur. Bir çalıştırma kimliğini hemen döndürür ve her adımı bir `nylo.playbook` event'i olarak akıtır; böylece bir komutun zaman aşımından uzun sürebilir. `live:status` uygulamanın playbook'larını listeler. Playbook'lar Nylo Live protokolünün 9. sürümünde geldi. Kayıt desteği -- `playbooks.run` içindeki `countdown` (her saniye bir `countdown` event'iyle) ve `status` içindeki `simulator` (iOS Simulator UDID'si) -- protokolün 10. sürümünde geldi.
+
+<div id="recording-a-journey"></div>
+
+## Bir Yolculuğu Kaydetme
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record`, çalışan uygulamada yaptıklarınızı bir [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook) olarak yazar. Yalnızca `metro live` kabuğunun içinde çalışır:
+
+``` plaintext
+› record sign_up
+```
+
+Uygulamayı kullanın ve yolculuk bittiğinde Enter'a basın. Playbook `lib/app/playbooks/sign_up_playbook.dart` içine yazılır, `lib/bootstrap/playbooks.dart` içinde kaydedilir ve Metro uygulamayı hot restart edip `fast` hızında oynatmayı önerir.
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--description <text>` | Metro playbook'ları listelerken gösterilen tek satırlık bir açıklama |
+| `--no-data` | Yazılan değerleri, varsayılanlarıyla `data[...]` yer tutucuları yerine yazıldığı gibi yaz |
+| `--no-replay` | Geri oynatma sorusunu atla |
+| `--force`, `-f` | Zaten var olan bir playbook dosyasını değiştir |
+
+Kayıt sırasında, bir sonraki dokunuşu `see()` yapmak için `a` ve Enter, `dontSee()` için `d`, bir sahne başlatmak için `s <title>`, son adımı geri almak için `u` ve duraklatmak için `p` yazın. Ctrl+C kaydı iptal eder. `metro make:playbook sign_up --record` kabuğu açar ve kaydı tek seferde başlatır.
+
+Bunun arkasındaki komutlar `record.start`, `record.stop`, `record.undo`, `record.mark` ve `record.status`'tür. Bir kayıt her adımı bir `nylo.record` event'i olarak akıtır. Kayıt, Nylo Live protokolünün 11. sürümünde geldi.
+
+<div id="screenshots"></div>
+
+## Ekran Görüntüleri
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Çalışan uygulamanızın bir PNG'sini kaydedin:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Her dosya projenizdeki `screenshots/` içine `<mode>-<device>-<date>-<time>.png` adıyla kaydedilir. iOS Simulator ve Android'de Metro cihazın tüm ekranını Simulator veya `adb` ile yakalar, dolayısıyla durum çubuğu ve klavye dahildir. Diğer cihazlar uygulamanın kendi yakalamasını alır; bu, uygulamanın sayfalarının kullanıcının gördüğü hâlidir.
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--area <name>` | Yalnızca bu ada sahip `ScreenshotArea`'yı yakala |
+| `--scale <n>` | Cihazın kendi boyutuna oranla boyut, en fazla 4, örn. yarısı için `0.5` |
+| `--locales <list>` | Ekranı bu dillerin her birinde yakala, örn. `en,es`, veya uygulamanın dillerinin tümü için `all` |
+| `--themes <list>` | Ekranı bu temaların her birinde yakala, örn. `light,dark`, veya uygulamanın temalarının tümü için `all` |
+| `--store <id>` | Bir uygulama mağazasının ekran görüntüsü boyutunda çiz, örn. `ios-6.9`. Tek başına `--store` boyutları listeler |
+| `--frame` | Ekranı bir arka plan üzerinde bir telefon çerçevesinin içine çiz |
+| `--caption <text>` | `--frame` üstündeki metin veya bir çeviri anahtarı |
+| `--background <hex>` | Ekranın çevresindeki renk; bir `--frame` arkasında veya başka şekle sahip bir `--store` boyutunun yanında, örn. `"#1B2027"` |
+| `--out <path>` | Bu `.png` dosyasına veya `/` ile biten bir klasöre kaydet (varsayılan: `screenshots/`) |
+| `--open` | Kaydedildikten sonra ekran görüntüsünü aç |
+| `--copy` | Ekran görüntüsünü panoya kopyala |
+| `--native` | iOS Simulator veya `adb` ile yakala. Tüm ekran yakalamasında varsayılan budur; `--no-native` uygulamanın kendi yakalamasını kullanır |
+| `--clean-status-bar` | Bir `--native` yakalamada tam sinyal ve bataryayla 9:41'i göster |
+
+`--locales` veya `--themes` ile Metro her çift için bir klasöre `es.png`, `dark.png` veya `es-dark.png` adlı bir PNG kaydeder; uygulamayı yerinde değiştirir ve sonrasında geri koyar. `--area`, `--scale`, `--store` ve `--frame` uygulamanın kendi yakalamasını kullanır.
+
+`metro live` kabuğunun içinde `screenshot --open` yazın. Ekran görüntülerini uygulamanızın kendi kodundan almak için bkz. [Ekran Görüntüleri](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

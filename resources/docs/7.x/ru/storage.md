@@ -25,6 +25,7 @@
 - Хранение моделей
   - [Сохранение модели](#model-save "Сохранение модели")
   - [Коллекции моделей](#model-collections "Коллекции моделей")
+- [Файловое хранилище](#file-storage "Файловое хранилище")
 - [Справочник расширений StorageKey](#storage-key-extension-reference "Справочник расширений StorageKey")
 - [Исключения хранилища](#storage-exceptions "Исключения хранилища")
 - [Миграция с предыдущих версий](#legacy-migration "Миграция с предыдущих версий")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Прочитать обратно
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## Файловое хранилище
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` хранит значения. Файловое хранилище хранит файлы, такие как PDF, фотографии и загрузки, на именованных дисках:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` без имени использует диск по умолчанию. `FileStorage` имеет те же методы для диска по умолчанию:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Пять дисков работают без какой-либо настройки:
+
+| Диск | Расположение | Примечания |
+|------|-------|-------|
+| `local` | Папка поддержки приложения | Диск по умолчанию |
+| `documents` | Папка документов приложения | Файлы, принадлежащие пользователю |
+| `cache` | Папка кэша приложения | ОС может очистить её |
+| `temp` | Временная папка | Очищается через день |
+| `assets` | Бандл вашего приложения, в `assets/` | Только для чтения |
+
+### Сохранение загруженного файла
+
+`putFile` сохраняет файл из `image_picker`, `file_picker` или камеры (`XFile`) под случайным именем и возвращает его путь:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Используйте `putFileAs('avatars', photo, 'me.jpg')`, чтобы выбрать имя.
+
+### Отображение сохранённого изображения
+
+`DiskImage` — это `ImageProvider` для изображения на диске:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Повторная запись файла через его диск обновляет изображение на экране.
+
+### Пользовательские диски
+
+Передайте собственные диски в `nylo.configure`. Они добавляются к дискам по умолчанию, а диск с тем же именем, что и у диска по умолчанию, заменяет его:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+У `DiskConfig` также есть `path`, `assets`, `scoped` (папка внутри другого диска) и `custom` (ваш собственный `DiskDriver`).
+
+Чтобы протестировать код, использующий диски, см. [Файловое хранилище в тестах](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

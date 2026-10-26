@@ -45,6 +45,7 @@
 - [Form Layout](#form-layout "Form Layout")
 - [Field Visibility](#field-visibility "Field Visibility")
 - [Field Styling](#field-styling "Field Styling")
+- [Form Field Style](#form-field-style "FormFieldStyle")
 - [NyFormWidget Static Methods](#ny-form-widget-static-methods "NyFormWidget Static Methods")
 - [NyFormWidget Constructor Reference](#ny-form-widget-constructor-reference "NyFormWidget Constructor Reference")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Multi-line text input. Style type: `FieldStyleTextField`
 
+A text area with a `prefixIcon` floats its label to the same start position as a single-line field. The icon is centered on the field's height by default. Use `PrefixIconAlignment.top` to line it up with the first line of text:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` takes the same `prefixIconAlignment` parameter. Set `alignLabelWithHint: true` in the style's `decoration` to keep the resting label on the first line.
+
 <div id="phone-number-fields"></div>
 
 ### Phone Number Fields
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` replaces the picker's `InputDecoration`, as `FieldStyleDateTimePicker.decoration` does for a date field. If your decoration gives no label, dropdown icon or `prefixIcon` of its own, the field's are kept.
 
+Tapping "Clear" in the picker calls the field's `onChanged` with `null`, and the cleared field validates as empty, so `FormValidator.notEmpty()` fails again until a new option is chosen.
+
 #### List Tile Styles
 
 You can customize how items appear in the picker's bottom sheet using `PickerListTileStyle`. By default, the bottom sheet shows plain text tiles. Use the built-in presets to add selection indicators, or provide a fully custom builder.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 The `options` parameter requires a `FormCollection`. Style type: `FieldStyleRadio`
+
+Give each option a `description` to show a subtitle under its label, and style it with `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` is merged over the default subtitle style, so setting only a `color` keeps its size.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Fields in a `List` are rendered in a `Row` with equal `Expanded` widths. The spacing between fields is controlled by the `crossAxisSpacing` parameter on `NyFormWidget`.
+Fields in a `List` are rendered in a `Row` with equal `Expanded` widths. The gap between fields that share a row is set by the `crossAxisSpacing` parameter on `NyFormWidget`, and the vertical gap between fields by `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Between fields, top to bottom
+  crossAxisSpacing: 8,   // Between fields in the same row
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Form Field Style
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` sets how every field is drawn -- its box, border and label. Pick one of four looks:
+
+| Style | Description |
+|-------|-------------|
+| `FormFieldStyle.filled()` | A soft grey box with a hairline border, the label above. The default |
+| `FormFieldStyle.outlined()` | A transparent box with a crisp border that thickens when focused |
+| `FormFieldStyle.underlined()` | No box, just a line under the field |
+| `FormFieldStyle.grouped()` | Rows in one card, with the label beside the value, as in iOS settings |
+
+Set it for your whole app in `Nylo.configure` (the boilerplate keeps it in `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Set it for one form by overriding `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+A field's own `style:` wins over its form's `fieldStyle`, which wins over the app's.
+
+Each look takes `dense` for shorter fields, and all but `underlined` take `radius` for the corners of the box or card:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Grouped Fields
+
+In a `grouped` form, text, picker, date and switch fields that follow each other share one card, with a line between rows. Each label sits beside its field, taking its own width up to 40% of the row. A plain `Icon` prefix makes way for the label, while other prefixes stay, like the symbol of `Field.currency(separateSymbol: true)` or a country code `prefixIcon`.
+
+Outside a form, put fields in one card with `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Fields take their colors from your theme, with `colorScheme.primary` as the accent. See [Field Colors](/docs/{{ $version }}/themes-and-styling#field-colors) to choose them yourself.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget Static Methods
@@ -1152,8 +1254,8 @@ When extending `NyFormWidget`, these are the constructor parameters you can pass
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Horizontal spacing between row fields
-  double mainAxisSpacing = 10,   // Vertical spacing between fields
+  double crossAxisSpacing = 10,  // Gap between fields that share a row
+  double mainAxisSpacing = 10,   // Vertical gap between fields
   Map<String, dynamic>? initialData, // Initial field values
   Function(Field field, dynamic value)? onChanged, // Field change callback
   Widget? header,                // Widget above the form

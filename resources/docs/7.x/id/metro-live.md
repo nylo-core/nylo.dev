@@ -14,6 +14,8 @@
 - [live:status](#live-status "Tampilkan status aplikasi")
 - [live:run](#live-run "Jalankan perintah live bawaan")
 - [Playbook](#playbooks "Memutar playbook dari Metro")
+- [Merekam Journey](#recording-a-journey "Merekam apa yang Anda lakukan sebagai playbook")
+- [Screenshot](#screenshots "Menyimpan screenshot aplikasi yang berjalan")
 - Perintah Live
   - [Membuat Perintah Live](#creating-a-live-command "Membuat perintah live")
   - [Menjalankan Perintah Live](#running-a-live-command "Menjalankan perintah live")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Perintah live menghilangkan prefiks `metro live:` di dalam shell -- `status` alih-alih `metro live:status`, `route /profile` alih-alih `metro live:run route /profile`. Beberapa perintah hanya berjalan di dalam shell: `seed`, `seed:rollback`, `export`, `reload`, dan `restart`. Ketik `help` untuk melihat daftar semua perintah, atau `help <command>` untuk melihat opsi satu perintah. Ketik `exit` (atau Ctrl+D) untuk keluar.
+Perintah live menghilangkan prefiks `metro live:` di dalam shell -- `status` alih-alih `metro live:status`, `route /profile` alih-alih `metro live:run route /profile`. Beberapa perintah hanya berjalan di dalam shell: `seed`, `seed:rollback`, `export`, `record`, `reload`, dan `restart`. Ketik `help` untuk melihat daftar semua perintah, atau `help <command>` untuk melihat opsi satu perintah. Ketik `exit` (atau Ctrl+D) untuk keluar.
 
 Jika aplikasi restart saat Anda terhubung, shell akan menghubungkan kembali dengan sendirinya.
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | Picu salah satu event Anda |
 | `toast` | Tampilkan notifikasi toast |
 | `playbook` | Putar [playbook](/docs/{{ $version }}/playbooks) Anda, atau tampilkan daftarnya |
+| `screenshot` | Simpan [screenshot](#screenshots) aplikasi, atau satu `ScreenshotArea` |
 
 Di dalam `metro live`, hilangkan bagian `live:run` -- `route /profile` alih-alih `metro live:run route /profile`:
 
@@ -232,9 +235,18 @@ Sebutkan beberapa playbook untuk memutarnya berurutan. Tanpa nama, atau dengan `
 | `--no-captions` | Lewati file keterangan `.vtt` dan chapter pada rekaman |
 | `--clean-status-bar` | Tampilkan 9:41 dengan sinyal dan baterai penuh saat playbook diputar, lalu kembalikan seperti semula. Juga berfungsi tanpa `--record` |
 | `--countdown <seconds>` | Hitung mundur 0-10 detik di layar sebelum langkah pertama |
+| `--screenshots[=<mode>]` | Simpan juga layar setiap langkah. `<mode>` adalah `all`, `auto`, `marked`, `failures`, atau `off`; lihat [Screenshot Playbook](#playbook-screenshots) |
+| `--scale <n>` | Ukuran screenshot relatif terhadap ukuran asli perangkat, hingga 4, mis. `0.5` untuk setengah |
+| `--locales <list>` | Putar sekali di setiap locale ini, mis. `en,es`, atau `all` milik aplikasi |
+| `--themes <list>` | Putar sekali di setiap tema ini, mis. `light,dark`, atau `all` milik aplikasi |
+| `--store <id>` | Gambar screenshot pada ukuran app store, mis. `ios-6.9` |
+| `--frame` | Gambar setiap layar di dalam bingkai ponsel |
+| `--background <hex>` | Warna di sekitar layar, mis. `"#1B2027"` |
 | `--list` | Tampilkan daftar playbook aplikasi alih-alih memutar salah satunya |
 
 Ctrl+C meminta aplikasi berhenti: langkah yang tersisa dilewati, tetapi `tearDown` tetap berjalan. Tekan Ctrl+C sekali lagi untuk berhenti menunggu.
+
+Jika tidak ada langkah yang sampai ke Metro dalam 20 detik, Metro berhenti menunggu dan menggagalkan proses. Aplikasi sedang memutar playbook, tetapi event-nya tidak sampai, yang terjadi saat aplikasi dijalankan dengan `flutter run --no-dds`. Jalankan dengan `flutter run` biasa dan coba lagi.
 
 Di dalam shell `metro live` perintahnya adalah `playbook <name>`, dan Tab melengkapi nama playbook:
 
@@ -284,11 +296,93 @@ Playbook yang gagal atau dihentikan tetap disimpan, sehingga rekaman juga berfun
 
 Secara default playbook menyembunyikan jari dan keterangannya. Untuk video demo, atur `showFinger` dan `caption` pada playbook -- lihat [Jari dan Keterangan](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Screenshot
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Langkah `screenshot()`](/docs/{{ $version }}/playbooks#screenshots) pada playbook disimpan di `screenshots/<playbook>/` tanpa perlu flag. Tambahkan opsi untuk mengambilnya di setiap bahasa dan tema, atau untuk mengukurnya sesuai listing toko:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` juga menyimpan layar setelah setiap langkah pada playbook yang tidak memiliki langkah `screenshot()`, dan `--screenshots=all` melakukannya untuk setiap playbook. Layar dari langkah yang gagal disimpan di `build/playbooks/failures`; `--screenshots=off` mematikannya.
+
+`--locales` dan `--themes` memutar playbook sekali di masing-masing, dan locale serta tema milik aplikasi dikembalikan setelahnya. `--store` menampilkan daftar ukuran jika tanpa nilai, dan `--frame` menggambar setiap layar dalam bingkai ponsel dengan `caption:` langkah di atasnya. `--clean-status-bar` menampilkan 9:41 dengan sinyal dan baterai penuh pada tangkapan yang diambil Metro dengan iOS Simulator atau `adb`.
+
 <div id="playbook-live-commands"></div>
 
 ### Referensi Perintah Live
 
 Perintah di baliknya adalah `playbooks.list`, `playbooks.run`, dan `playbooks.stop`. Sebuah proses mengembalikan id-nya segera dan mengalirkan setiap langkah sebagai event `nylo.playbook`, sehingga dapat berlangsung lebih lama dari timeout perintah. `live:status` menampilkan daftar playbook aplikasi. Playbook hadir pada Nylo Live protocol versi 9. Dukungan perekaman -- `countdown` pada `playbooks.run` (dengan event `countdown` setiap detik) dan `simulator` (UDID iOS Simulator) pada `status` -- hadir pada protocol versi 10.
+
+<div id="recording-a-journey"></div>
+
+## Merekam Journey
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` menulis apa yang Anda lakukan di aplikasi yang berjalan sebagai [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook). Perintah ini hanya berjalan di dalam shell `metro live`:
+
+``` plaintext
+› record sign_up
+```
+
+Gunakan aplikasi, lalu tekan Enter saat journey selesai. Playbook tersimpan di `lib/app/playbooks/sign_up_playbook.dart`, terdaftar di `lib/bootstrap/playbooks.dart`, dan Metro menawarkan untuk hot restart aplikasi lalu memutarnya kembali dengan kecepatan `fast`.
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--description <text>` | Deskripsi satu baris, ditampilkan saat Metro menampilkan daftar playbook |
+| `--no-data` | Tulis nilai yang diketik apa adanya, alih-alih placeholder `data[...]` dengan nilai defaultnya |
+| `--no-replay` | Lewati pertanyaan tentang memutarnya kembali |
+| `--force`, `-f` | Ganti file playbook yang sudah ada |
+
+Saat merekam, ketik `a` lalu Enter agar ketukan berikutnya menjadi `see()`, `d` untuk `dontSee()`, `s <title>` untuk memulai sebuah scene, `u` untuk membatalkan langkah terakhir, dan `p` untuk jeda. Ctrl+C membuang rekaman. `metro make:playbook sign_up --record` membuka shell dan mulai merekam sekaligus.
+
+Perintah di baliknya adalah `record.start`, `record.stop`, `record.undo`, `record.mark`, dan `record.status`. Rekaman mengalirkan setiap langkah sebagai event `nylo.record`. Perekaman hadir pada Nylo Live protocol versi 11.
+
+<div id="screenshots"></div>
+
+## Screenshot
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Simpan PNG dari aplikasi Anda yang berjalan:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Setiap file disimpan di `screenshots/` dalam proyek Anda, dengan nama `<mode>-<device>-<date>-<time>.png`. Di iOS Simulator dan Android, Metro menangkap seluruh layar perangkat dengan Simulator atau `adb`, sehingga status bar dan keyboard ikut masuk. Perangkat lain memakai tangkapan bawaan aplikasi, yaitu halaman aplikasi seperti yang dilihat pengguna.
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--area <name>` | Tangkap hanya `ScreenshotArea` dengan nama ini |
+| `--scale <n>` | Ukuran relatif terhadap ukuran asli perangkat, hingga 4, mis. `0.5` untuk setengah |
+| `--locales <list>` | Tangkap layar di setiap locale ini, mis. `en,es`, atau `all` milik aplikasi |
+| `--themes <list>` | Tangkap layar di setiap tema ini, mis. `light,dark`, atau `all` milik aplikasi |
+| `--store <id>` | Gambar pada ukuran screenshot app store, mis. `ios-6.9`. Jika berdiri sendiri, `--store` menampilkan daftar ukuran |
+| `--frame` | Gambar layar di dalam bingkai ponsel, pada sebuah latar belakang |
+| `--caption <text>` | Teks di atas `--frame`, atau kunci terjemahan |
+| `--background <hex>` | Warna di sekitar layar, di belakang `--frame` atau di samping ukuran `--store` dengan bentuk lain, mis. `"#1B2027"` |
+| `--out <path>` | Simpan ke `.png` ini, atau ke folder yang berakhiran `/` (default: `screenshots/`) |
+| `--open` | Buka screenshot setelah disimpan |
+| `--copy` | Salin screenshot ke clipboard |
+| `--native` | Tangkap dengan iOS Simulator atau `adb`. Ini default untuk tangkapan seluruh layar; `--no-native` memakai tangkapan bawaan aplikasi |
+| `--clean-status-bar` | Tampilkan 9:41 dengan sinyal dan baterai penuh pada tangkapan `--native` |
+
+Dengan `--locales` atau `--themes`, Metro menyimpan satu PNG untuk setiap pasangan dalam sebuah folder, dengan nama `es.png`, `dark.png`, atau `es-dark.png`, mengganti aplikasi di tempat lalu mengembalikannya setelahnya. `--area`, `--scale`, `--store`, dan `--frame` memakai tangkapan bawaan aplikasi.
+
+Di dalam shell `metro live`, ketik `screenshot --open`. Untuk mengambil screenshot dari kode aplikasi Anda sendiri, lihat [Screenshot](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

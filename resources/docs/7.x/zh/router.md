@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - 将指定路由设为初始路由
 - 在开发期间快速测试特定页面时很有用
 
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+需要数据才能构建的页面也可以携带数据进行预览。向 `previewRoute` 传入 `data`、`queryParameters` 和 `stack`：
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` 和 `queryParameters` 会像您使用 `routeTo(ProductPage.path, data: {...}, queryParameters: {...})` 导航一样传递给页面。真实导航中的数据优先。
+- `stack` 列出要在下方打开的路由，使返回按钮的行为与正常启动后一致。在这里，从 `ProductPage` 返回会前往 `HomePage`。
+- 发布构建会忽略 `previewRoute()`，因此遗留在路由中的预览绝不会改变生产环境的首页。
+
+`stack` 需要使用 `NyApp.materialApp` 构建应用。如果您构建自己的 `MaterialApp`，请将 `NyRouter.previewInitialRoutes(onGenerateRoute)` 传给它的 `onGenerateInitialRoutes`：
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **警告：** 记得在发布应用之前移除 `.previewRoute()`！
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | 对组内所有路由应用路由守卫 |
 | `prefix` | `String` | 为组内所有路由路径添加前缀 |
-| `transition_type` | `TransitionType` | 为组内所有路由设置过渡效果 |
+| `transition_type` | `TransitionType` | 为组内未自行设置过渡效果的路由设置过渡效果 |
 | `transition` | `PageTransitionType` | 设置页面过渡类型（已弃用，使用 transition_type） |
 | `transition_settings` | `PageTransitionSettings` | 设置过渡设置 |
 

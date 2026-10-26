@@ -45,6 +45,7 @@
 - [เลย์เอาต์ฟอร์ม](#form-layout "เลย์เอาต์ฟอร์ม")
 - [การมองเห็น Field](#field-visibility "การมองเห็น Field")
 - [การจัดสไตล์ Field](#field-styling "การจัดสไตล์ Field")
+- [Form Field Style](#form-field-style "FormFieldStyle")
 - [NyFormWidget Static Methods](#ny-form-widget-static-methods "NyFormWidget Static Methods")
 - [NyFormWidget Constructor Reference](#ny-form-widget-constructor-reference "NyFormWidget Constructor Reference")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 การป้อนข้อความหลายบรรทัด ชนิดสไตล์: `FieldStyleTextField`
 
+text area ที่มี `prefixIcon` จะยก label ขึ้นไปยังตำแหน่งเริ่มต้นเดียวกับ field แบบบรรทัดเดียว โดยค่าเริ่มต้นไอคอนจะอยู่กึ่งกลางความสูงของ field ใช้ `PrefixIconAlignment.top` เพื่อจัดให้ตรงกับบรรทัดแรกของข้อความ:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` รับพารามิเตอร์ `prefixIconAlignment` เช่นเดียวกัน ตั้ง `alignLabelWithHint: true` ใน `decoration` ของสไตล์เพื่อให้ label ขณะพักอยู่ที่บรรทัดแรก
+
 <div id="phone-number-fields"></div>
 
 ### Phone Number Fields
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` จะแทนที่ `InputDecoration` ของ picker เช่นเดียวกับที่ `FieldStyleDateTimePicker.decoration` ทำกับ field วันที่ หาก decoration ของคุณไม่ได้กำหนด label, ไอคอน dropdown หรือ `prefixIcon` ของตัวเอง ระบบจะคงค่าของ field ไว้
 
+การแตะ "Clear" ใน picker จะเรียก `onChanged` ของ field ด้วย `null` และ field ที่ล้างแล้วจะถูกตรวจสอบว่าว่างเปล่า ดังนั้น `FormValidator.notEmpty()` จะล้มเหลวอีกครั้งจนกว่าจะเลือกตัวเลือกใหม่
+
 #### สไตล์ List Tile
 
 คุณสามารถปรับแต่งลักษณะการแสดงรายการใน bottom sheet ของ picker โดยใช้ `PickerListTileStyle` โดยค่าเริ่มต้น bottom sheet จะแสดง tile ข้อความธรรมดา ใช้ preset ในตัวเพื่อเพิ่มตัวบ่งชี้การเลือก หรือให้ custom builder เต็มรูปแบบ
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 พารามิเตอร์ `options` ต้องการ `FormCollection` ชนิดสไตล์: `FieldStyleRadio`
+
+กำหนด `description` ให้แต่ละตัวเลือกเพื่อแสดงคำอธิบายรองใต้ป้ายกำกับ และปรับสไตล์ด้วย `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` จะถูกรวมเข้ากับสไตล์คำอธิบายรองเริ่มต้น ดังนั้นการกำหนดเพียง `color` จะคงขนาดเดิมไว้
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Fields ใน `List` จะถูกแสดงใน `Row` ด้วยความกว้าง `Expanded` เท่ากัน ระยะห่างระหว่าง fields ถูกควบคุมโดยพารามิเตอร์ `crossAxisSpacing` บน `NyFormWidget`
+Fields ใน `List` จะถูกแสดงใน `Row` ด้วยความกว้าง `Expanded` เท่ากัน ช่องว่างระหว่าง fields ที่อยู่ในแถวเดียวกันกำหนดโดยพารามิเตอร์ `crossAxisSpacing` บน `NyFormWidget` และช่องว่างแนวตั้งระหว่าง fields กำหนดโดย `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // ระหว่าง fields จากบนลงล่าง
+  crossAxisSpacing: 8,   // ระหว่าง fields ในแถวเดียวกัน
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Form Field Style
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` กำหนดวิธีวาดทุก field -- กล่อง เส้นขอบ และ label ของมัน เลือกหนึ่งในสี่รูปลักษณ์:
+
+| สไตล์ | คำอธิบาย |
+|-------|-------------|
+| `FormFieldStyle.filled()` | กล่องสีเทาอ่อนพร้อมเส้นขอบบางเฉียบ โดย label อยู่ด้านบน ค่าเริ่มต้น |
+| `FormFieldStyle.outlined()` | กล่องโปร่งใสพร้อมเส้นขอบคมชัดที่หนาขึ้นเมื่อ focus |
+| `FormFieldStyle.underlined()` | ไม่มีกล่อง มีเพียงเส้นใต้ field |
+| `FormFieldStyle.grouped()` | แถวต่าง ๆ ในการ์ดเดียว โดย label อยู่ข้างค่า เหมือนการตั้งค่าใน iOS |
+
+ตั้งค่าสำหรับทั้งแอปของคุณใน `Nylo.configure` (boilerplate เก็บไว้ใน `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+ตั้งค่าสำหรับฟอร์มเดียวโดย override `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+`style:` ของ field เองมีผลเหนือ `fieldStyle` ของฟอร์ม ซึ่งมีผลเหนือของแอป
+
+ทุกรูปลักษณ์รับ `dense` เพื่อให้ field เตี้ยลง และทุกแบบยกเว้น `underlined` รับ `radius` สำหรับมุมของกล่องหรือการ์ด:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Grouped Fields
+
+ในฟอร์มแบบ `grouped` fields ประเภทข้อความ picker วันที่ และสวิตช์ที่อยู่ติดกันจะใช้การ์ดเดียวกัน โดยมีเส้นคั่นระหว่างแถว แต่ละ label อยู่ข้าง field ของมัน โดยใช้ความกว้างของตัวเองไม่เกิน 40% ของแถว prefix แบบ `Icon` ธรรมดาจะหลีกทางให้ label ส่วน prefix อื่นยังคงอยู่ เช่น สัญลักษณ์ของ `Field.currency(separateSymbol: true)` หรือ `prefixIcon` รหัสประเทศ
+
+นอกฟอร์ม ให้วาง fields ในการ์ดเดียวด้วย `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Fields ใช้สีจากธีมของคุณ โดยมี `colorScheme.primary` เป็นสีเน้น ดู [สีของฟิลด์](/docs/{{ $version }}/themes-and-styling#field-colors) เพื่อเลือกสีเอง
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget Static Methods
@@ -1152,8 +1254,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // ระยะห่างแนวนอนระหว่าง row fields
-  double mainAxisSpacing = 10,   // ระยะห่างแนวตั้งระหว่าง fields
+  double crossAxisSpacing = 10,  // ช่องว่างระหว่าง fields ที่อยู่ในแถวเดียวกัน
+  double mainAxisSpacing = 10,   // ช่องว่างแนวตั้งระหว่าง fields
   Map<String, dynamic>? initialData, // ค่าเริ่มต้นของ field
   Function(Field field, dynamic value)? onChanged, // callback เมื่อ field เปลี่ยน
   Widget? header,                // Widget เหนือฟอร์ม

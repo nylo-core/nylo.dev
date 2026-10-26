@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - निर्दिष्ट रूट को इनिशियल रूट बनाता है
 - डेवलपमेंट के दौरान विशिष्ट पेजों को तुरंत टेस्ट करने के लिए उपयोगी
 
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+जिस पेज को बनने के लिए डेटा चाहिए, उसे उसके साथ प्रीव्यू किया जा सकता है। `previewRoute` को `data`, `queryParameters` और `stack` पास करें:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` और `queryParameters` पेज तक ऐसे पहुँचते हैं जैसे आपने `routeTo(ProductPage.path, data: {...}, queryParameters: {...})` से नेविगेट किया हो। वास्तविक नेविगेशन का डेटा प्राथमिकता पाता है।
+- `stack` नीचे खोले जाने वाले रूट्स की सूची देता है, ताकि बैक बटन वैसे ही काम करे जैसे सामान्य लॉन्च के बाद करता है। यहाँ, `ProductPage` से वापस जाने पर `HomePage` खुलता है।
+- रिलीज़ बिल्ड `previewRoute()` को अनदेखा करते हैं, इसलिए आपके राउटर में छूटा हुआ प्रीव्यू प्रोडक्शन में पहला पेज कभी नहीं बदलता।
+
+`stack` के लिए ऐप का `NyApp.materialApp` से बना होना ज़रूरी है। यदि आप अपना `MaterialApp` बनाते हैं, तो उसके `onGenerateInitialRoutes` को `NyRouter.previewInitialRoutes(onGenerateRoute)` पास करें:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **चेतावनी:** अपना ऐप रिलीज़ करने से पहले `.previewRoute()` हटाना याद रखें!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | ग्रुप के सभी रूट्स पर रूट गार्ड्स लागू करें |
 | `prefix` | `String` | ग्रुप के सभी रूट पाथ में प्रीफ़िक्स जोड़ें |
-| `transition_type` | `TransitionType` | ग्रुप के सभी रूट्स के लिए ट्रांज़िशन सेट करें |
+| `transition_type` | `TransitionType` | ग्रुप के उन रूट्स के लिए ट्रांज़िशन सेट करें जो अपना खुद का सेट नहीं करते |
 | `transition` | `PageTransitionType` | पेज ट्रांज़िशन टाइप सेट करें (डिप्रिकेटेड, transition_type का उपयोग करें) |
 | `transition_settings` | `PageTransitionSettings` | ट्रांज़िशन सेटिंग्स सेट करें |
 

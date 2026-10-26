@@ -45,6 +45,7 @@
 - [フォームレイアウト](#form-layout "フォームレイアウト")
 - [フィールドの表示/非表示](#field-visibility "フィールドの表示/非表示")
 - [フィールドスタイリング](#field-styling "フィールドスタイリング")
+- [フォームフィールドスタイル](#form-field-style "FormFieldStyle")
 - [NyFormWidget 静的メソッド](#ny-form-widget-static-methods "NyFormWidget 静的メソッド")
 - [NyFormWidget コンストラクタリファレンス](#ny-form-widget-constructor-reference "NyFormWidget コンストラクタリファレンス")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 複数行テキスト入力。スタイルタイプ: `FieldStyleTextField`
 
+`prefixIcon` を持つテキストエリアでは、ラベルが 1 行フィールドと同じ開始位置に浮かびます。アイコンはデフォルトでフィールドの高さの中央に配置されます。`PrefixIconAlignment.top` を使うと、テキストの最初の行に揃えられます:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` にも同じ `prefixIconAlignment` パラメータがあります。スタイルの `decoration` で `alignLabelWithHint: true` を設定すると、通常時のラベルが最初の行に保たれます。
+
 <div id="phone-number-fields"></div>
 
 ### 電話番号フィールド
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` はピッカーの `InputDecoration` を置き換えます。日付フィールドで `FieldStyleDateTimePicker.decoration` が行うのと同じです。decoration にラベル、ドロップダウンアイコン、`prefixIcon` が独自に指定されていない場合は、フィールド側のものがそのまま使われます。
 
+ピッカーで「Clear」をタップすると、フィールドの `onChanged` が `null` で呼び出され、クリアされたフィールドは空としてバリデーションされるため、新しいオプションが選択されるまで `FormValidator.notEmpty()` は再び失敗します。
+
 #### リストタイルスタイル
 
 `PickerListTileStyle` を使用して、ピッカーのボトムシートでのアイテム表示をカスタマイズできます。デフォルトでは、ボトムシートはプレーンテキストタイルを表示します。組み込みプリセットを使用して選択インジケーターを追加するか、完全にカスタムのビルダーを提供できます。
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 `options` パラメータには `FormCollection` が必要です。スタイルタイプ: `FieldStyleRadio`
+
+各オプションに `description` を指定するとラベルの下にサブタイトルが表示され、`subtitleStyle` でスタイルを設定できます:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` はデフォルトのサブタイトルスタイルにマージされるため、`color` だけを指定してもサイズはそのまま保たれます。
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-`List` 内のフィールドは等しい `Expanded` 幅の `Row` でレンダリングされます。フィールド間のスペーシングは `NyFormWidget` の `crossAxisSpacing` パラメータで制御されます。
+`List` 内のフィールドは等しい `Expanded` 幅の `Row` でレンダリングされます。同じ行を共有するフィールド間の間隔は `NyFormWidget` の `crossAxisSpacing` パラメータで、フィールド間の垂直方向の間隔は `mainAxisSpacing` で設定します:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // フィールド間（上から下）
+  crossAxisSpacing: 8,   // 同じ行のフィールド間
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## フォームフィールドスタイル
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` は、すべてのフィールドの描画方法 -- ボックス、枠線、ラベル -- を設定します。4 つのルックから選択できます:
+
+| スタイル | 説明 |
+|-------|-------------|
+| `FormFieldStyle.filled()` | 細い枠線付きの柔らかいグレーのボックスで、ラベルは上に表示されます。デフォルトです |
+| `FormFieldStyle.outlined()` | 透明なボックスとくっきりした枠線で、フォーカス時に太くなります |
+| `FormFieldStyle.underlined()` | ボックスなしで、フィールドの下に線だけが表示されます |
+| `FormFieldStyle.grouped()` | 1 枚のカードに行が並び、ラベルが値の横に表示されます。iOS の設定画面のような見た目です |
+
+アプリ全体には `Nylo.configure` で設定します（ボイラープレートでは `DesignConfig.formFieldStyle` に保持されています）:
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+1 つのフォームに設定するには、`fieldStyle` をオーバーライドします:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+フィールド自身の `style:` はフォームの `fieldStyle` より優先され、フォームの `fieldStyle` はアプリの設定より優先されます。
+
+各ルックは、フィールドを低くする `dense` を取り、`underlined` 以外のすべては、ボックスまたはカードの角用の `radius` を取ります:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### グループ化されたフィールド
+
+`grouped` フォームでは、連続するテキスト、ピッカー、日付、スイッチのフィールドが 1 枚のカードを共有し、行の間に線が入ります。各ラベルはフィールドの横に表示され、自身の幅を取りますが、行の 40% までです。単純な `Icon` のプレフィックスはラベルに場所を譲り、`Field.currency(separateSymbol: true)` の記号や国コードの `prefixIcon` など、他のプレフィックスは残ります。
+
+フォームの外では、`FormFieldGroup` でフィールドを 1 枚のカードにまとめます:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+フィールドは、`colorScheme.primary` をアクセントとして、テーマから色を取得します。色を自分で選択するには、[フィールドの色](/docs/{{ $version }}/themes-and-styling#field-colors)を参照してください。
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget 静的メソッド
@@ -1152,8 +1254,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // 行内フィールド間の水平スペーシング
-  double mainAxisSpacing = 10,   // フィールド間の垂直スペーシング
+  double crossAxisSpacing = 10,  // 同じ行を共有するフィールド間の間隔
+  double mainAxisSpacing = 10,   // 垂直方向の間隔
   Map<String, dynamic>? initialData, // フィールド初期値
   Function(Field field, dynamic value)? onChanged, // フィールド変更コールバック
   Widget? header,                // フォーム上部のウィジェット

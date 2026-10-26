@@ -6,6 +6,7 @@
 <a name="section-1"></a>
 - [Introdução](#introduction "Introdução aos Playbooks")
 - [Criando um Playbook](#creating-a-playbook "Criando um playbook")
+- [Gravando um Playbook](#recording-a-playbook "Gravando um playbook a partir do app em execução")
 - [Passos](#steps "Os passos que um playbook pode executar")
 - [Alvos](#targets "Encontrando elementos na tela")
   - [Strings Simples](#plain-strings "Como uma string simples é associada")
@@ -14,6 +15,9 @@
 - [Executando Outros Playbooks](#playing-other-playbooks "Executando um playbook a partir de outro playbook")
 - [Velocidade](#speed "PlaybookSpeed")
 - [Dedo e Legenda](#finger-and-caption "O dedo e a legenda do passo")
+- [Screenshots](#screenshots "Capturando screenshots durante um playbook")
+  - [Idiomas e Temas](#screenshots-locales-and-themes "Capturando uma tela em todos os idiomas e temas")
+  - [Coletando pelo Código](#collecting-screenshots "Coletando screenshots com onScreenshot")
 - [Registrando Playbooks](#registering-playbooks "Registrando playbooks no Nylo")
 - [Executando um Playbook](#running-a-playbook "Executando um playbook")
   - [Pelo Metro](#running-from-metro "Executando pelo Metro")
@@ -68,6 +72,67 @@ metro make:playbook sign_up
 
 Isso cria `lib/app/playbooks/sign_up_playbook.dart` e o registra no seu app. Veja [Make Playbook](/docs/{{ $version }}/metro#make-playbook) para as opções do comando.
 
+Para começar a partir de todas as páginas que o seu router adiciona, passe `--from-routes`:
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+O Metro escreve um `visit()` e um [`screenshot()`](#screenshots) para cada página, então uma única execução fotografa o seu app inteiro.
+
+<div id="recording-a-playbook"></div>
+
+## Gravando um Playbook
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Em vez de escrever os passos, grave-os. Com o seu app rodando em modo debug, abra o `metro live` e digite:
+
+``` plaintext
+› record sign_up
+```
+
+Depois use o app. Cada toque, toque longo, campo digitado, rolagem e mudança de página é escrito como um passo no momento em que acontece, e impresso conforme você avança:
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+Pressione Enter para terminar. O playbook é escrito em `lib/app/playbooks/sign_up_playbook.dart`, com o mesmo layout de um criado por `make:playbook`, e registrado, então ele roda assim que o app reinicia. `metro make:playbook sign_up --record` faz o mesmo pelo terminal: abre o `metro live` e começa a gravar imediatamente.
+
+Durante a gravação, digite uma tecla e pressione Enter:
+
+| Tecla | Descrição |
+|-----|-------------|
+| `a` | O próximo toque é escrito como `see(...)` em vez de um toque |
+| `d` | O próximo toque é escrito como `dontSee(...)` |
+| `s <title>` | Inicia uma `scene` com esse título; os passos seguintes ficam aninhados nela |
+| `u` | Remove o último passo |
+| `p` | Pausa a gravação, por exemplo para entrar com credenciais reais; `p` novamente retoma |
+| Enter | Termina e escreve o playbook |
+| Ctrl+C | Descarta a gravação |
+
+Os alvos são nomeados do jeito que o player os lê, texto visível primeiro, e cada nome é verificado no app em execução antes de ser escrito, então um passo gravado é reproduzido. Quando uma string simples corresponde a mais de um widget, o passo a restringe com `Find`: `tap(Find.text('Add').at(1))`. Um botão de ícone sem texto nem tooltip vira `tap(Find.icon(Icons.add))`. Um widget que nada nomeia é escrito como `tap(Find.type<GestureDetector>().at(3))` sob um comentário `// TODO` com o arquivo e a linha em que foi criado, e o Metro o lista quando a gravação termina. Dê a ele uma `Key` e use a key no lugar.
+
+- **Digitação** vira um passo `type` que lê um placeholder `data[...]`, com o valor digitado em `defaults`. Um campo deixado com a tecla de ação do teclado recebe `submit: true`. Um campo ofuscado recebe `secret: true`, seu valor em `defaults` e um aviso para alterá-lo antes de fazer commit. Passe `--no-data` para escrever os valores como foram digitados.
+- **Mudanças de página** após um toque viram `waitForPage(SignUpPage.path)` quando uma das suas páginas declara a rota, ou `waitForPage('/sign-up')` caso contrário. Voltar vira `back()`.
+- **Rolagem** é escrita como `scrollTo(...)` no item em que você toca a seguir, e somente quando a rolagem o trouxe para a árvore. O player revela todo o resto por conta própria.
+- **Gestos de deslizar que não são rolagens** -- um `Dismissible`, um `PageView`, um `Slider` -- ainda não têm um verbo de playbook, então ficam como um comentário `// TODO` com os pontos de início e fim.
+
+A gravação precisa de um build de debug e funciona em simuladores, emuladores e dispositivos. Os toques do próprio playbook nunca são gravados. Veja [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey) para as opções do comando.
+
 <div id="steps"></div>
 
 ## Passos
@@ -89,6 +154,7 @@ Os `steps` de um playbook são construídos com os verbos que ele herda:
 | `pause(seconds: 1)` | Fica parado, por exemplo para deixar uma demo respirar |
 | `step(title, action)` | Executa qualquer código com os mesmos verbos, por meio de um `PlaybookActor` |
 | `scene(title, steps)` | Agrupa passos sob um título; as legendas deles começam com ele e os resultados ficam aninhados no relatório |
+| `screenshot(name)` | Captura a tela -- veja [Screenshots](#screenshots) |
 | `play(playbook)` | Executa outro playbook -- veja [Executando Outros Playbooks](#playing-other-playbooks) |
 
 ``` dart
@@ -153,7 +219,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | Texto visível |
 | `Find.textContaining(text)` | Texto que contém a string |
-| `Find.icon(icon)` | Um ícone |
+| `Find.icon(icon, label:)` | Um ícone. `label:` dá nome a ele nas legendas dos passos |
 | `Find.type<T>()` | Um widget do tipo `T` |
 | `Find.key(key)` | Um widget com a key |
 | `Find.field(name)` | Um campo de `NyForm` pelo nome |
@@ -161,6 +227,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | Um tooltip |
 | `Find.semantics(label)` | Um rótulo de semantics |
 | `Find.where(test)` | Widgets que passam no seu teste |
+
+Dê um `label` a um ícone e as legendas dos seus passos dizem `Tap the bag icon` em vez de `Tap icon f37d`:
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 Restrinja qualquer finder com `.inside(ancestor)`, `.at(index)` (contando a partir de 0), `.first` ou `.last`.
 
@@ -259,6 +331,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // ou .top
 
 Antes do nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0), o dedo e a legenda inferior vinham ativados por padrão. Adicione as sobrescritas acima para manter essa aparência.
 
+<div id="screenshots"></div>
+
+## Screenshots
+
+<x-doc-strip label="Requer" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Adicione um passo `screenshot` onde quer que a tela valha a pena ser guardada:
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` salva cada uma como `screenshots/<playbook>/<name>.png`, sem precisar de nenhuma flag. Uma execução pelo código as coleta com [`onScreenshot`](#collecting-screenshots), e qualquer outra execução, como `PLAYBOOK_ON_BOOT`, apenas espera a tela se estabilizar. Um nome começa com uma letra ou dígito e usa letras, dígitos, `-`, `_` e `.`.
+
+| Parâmetro | Descrição |
+|-----------|-------------|
+| `name` | O nome com o qual a captura é salva |
+| `locales` | Captura uma vez em cada um destes códigos de idioma. `Screenshot.allLocales` é todo idioma que o app inclui |
+| `themes` | Captura uma vez em cada um destes ids de tema. `Screenshot.allThemes` é todo tema registrado |
+| `caption` | O texto acima da tela quando a execução enquadra suas capturas, ou uma chave de tradução |
+| `native` | Captura com o Metro, no iOS Simulator e no Android (padrão `true`) |
+
+No iOS Simulator e no Android, o Metro captura a tela inteira do dispositivo, então a barra de status e o teclado aparecem nela, e o dedo e a legenda ficam ocultos enquanto isso. Adicione `--clean-status-bar` à execução para obter 9:41 com sinal e bateria completos. Em outros casos, e em execuções com `--store` e `--frame`, o app captura a própria tela. Passe `native: false` para sempre usar a captura do app:
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+Para salvar a tela de cada passo, execute `metro live:run playbook <name> --screenshots`. Veja [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots) para as opções que dimensionam as capturas para a App Store e o Google Play, e [Screenshots](/docs/{{ $version }}/screenshots) para a classe `Screenshot` por trás delas.
+
+<div id="screenshots-locales-and-themes"></div>
+
+### Idiomas e Temas
+
+Dê a um passo `screenshot` `locales`, `themes` ou ambos para capturar a mesma tela uma vez em cada um:
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+O app troca no lugar, mantendo a página e seu estado, e volta antes do próximo passo. Cada captura é salva em uma pasta com o nome do seu idioma e tema:
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+Para executar um playbook inteiro em todos os idiomas e temas, passe `--locales` e `--themes` para `metro live:run playbook`.
+
+<div id="collecting-screenshots"></div>
+
+### Coletando pelo Código
+
+`run()` aceita `onScreenshot` para receber as capturas de uma execução como `PlaybookShot`s, o que é útil para um teste ou para suas próprias ferramentas:
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` escolhe quais telas são capturadas:
+
+| Modo | Captura |
+|------|----------|
+| `PlaybookScreenshots.off` | Nada |
+| `PlaybookScreenshots.failures` | Apenas a tela de um passo que falha |
+| `PlaybookScreenshots.marked` | Os passos `screenshot()` e os passos que falham |
+| `PlaybookScreenshots.auto` | Os passos `screenshot()` de um playbook que tem algum, e todo passo de um que não tem. Os passos que falham também. O padrão |
+| `PlaybookScreenshots.all` | Todo passo, os passos `screenshot()` e os passos que falham |
+
+`pixelRatio` dimensiona as capturas em relação às do dispositivo (padrão `1.0`). Cada `PlaybookShot` tem um `screenshot` para [salvar](/docs/{{ $version }}/screenshots#saving-a-screenshot) ou do qual ler `bytes`, um `kind`, e o `name`, `locale` e `theme` com que foi tirada.
+
 <div id="registering-playbooks"></div>
 
 ## Registrando Playbooks
@@ -304,7 +467,7 @@ Com seu app rodando em modo debug:
 metro live:run playbook sign_up --speed fast
 ```
 
-Dentro do `metro live`, digite `playbook sign_up`. Veja [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para todas as opções. Adicione `--record` para salvar um vídeo da execução; veja [Gravação](/docs/{{ $version }}/metro-live#recording-playbooks).
+Dentro do `metro live`, digite `playbook sign_up`. Veja [Metro Live](/docs/{{ $version }}/metro-live#playbooks) para todas as opções. Adicione `--record` para salvar um vídeo da execução; veja [Gravação](/docs/{{ $version }}/metro-live#recording-playbooks). Se a execução parar de esperar após 20 segundos, o app provavelmente foi iniciado com `flutter run --no-dds`; veja [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
 
 <div id="running-on-boot"></div>
 
@@ -334,7 +497,7 @@ if (!report.passed) {
 }
 ```
 
-`run()` aceita `speed`, `data`, `clock`, `overlay` (padrão `true`) e `onEvent`. Um passo que falha não lança exceção -- verifique `report.passed`. Apenas um playbook pode rodar por vez; use `play()` para executar um dentro de outro.
+`run()` aceita `speed`, `data`, `clock`, `overlay` (padrão `true`), `onEvent`, e `onScreenshot`, `screenshots` e `pixelRatio` para [coletar screenshots](#collecting-screenshots). Um passo que falha não lança exceção -- verifique `report.passed`. Apenas um playbook pode rodar por vez; use `play()` para executar um dentro de outro.
 
 Pare um playbook em execução com `Playbook.stop()`. Os passos restantes são ignorados, mas `tearDown` ainda é executado. `Playbook.isRunning` informa se há um em execução.
 
@@ -363,8 +526,8 @@ Playbooks nunca são executados em um build de release, então uma jornada não 
 Execute um playbook em um widget test com `NyTesterClock` e depois faça asserções sobre o relatório com `expectPlaybookPassed`:
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

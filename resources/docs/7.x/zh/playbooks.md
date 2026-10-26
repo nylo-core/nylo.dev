@@ -6,6 +6,7 @@
 <a name="section-1"></a>
 - [简介](#introduction "Playbook（剧本）简介")
 - [创建剧本](#creating-a-playbook "创建剧本")
+- [录制剧本](#recording-a-playbook "从运行中的应用录制剧本")
 - [步骤](#steps "剧本可以执行的步骤")
 - [目标](#targets "在屏幕上查找元素")
   - [纯字符串](#plain-strings "纯字符串的匹配方式")
@@ -14,6 +15,9 @@
 - [运行其他剧本](#playing-other-playbooks "在一个剧本中运行另一个剧本")
 - [速度](#speed "PlaybookSpeed")
 - [手指与字幕](#finger-and-caption "手指与步骤字幕")
+- [截图](#screenshots "在剧本运行期间截图")
+  - [区域设置与主题](#screenshots-locales-and-themes "在每种区域设置和主题下截取屏幕")
+  - [从代码中收集](#collecting-screenshots "使用 onScreenshot 收集截图")
 - [注册剧本](#registering-playbooks "向 Nylo 注册剧本")
 - [运行剧本](#running-a-playbook "运行剧本")
   - [通过 Metro](#running-from-metro "通过 Metro 运行")
@@ -68,6 +72,67 @@ metro make:playbook sign_up
 
 这会创建 `lib/app/playbooks/sign_up_playbook.dart` 并将其注册到您的应用中。该命令的选项请参阅 [创建剧本](/docs/{{ $version }}/metro#make-playbook)。
 
+若要从路由器添加的每个页面开始，请传入 `--from-routes`：
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+Metro 会为每个页面写入一个 `visit()` 和一个 [`screenshot()`](#screenshots)，因此一次运行就能拍下整个应用。
+
+<div id="recording-a-playbook"></div>
+
+## 录制剧本
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+与其手写步骤，不如直接录制。在调试模式下运行应用时，打开 `metro live` 并输入：
+
+``` plaintext
+› record sign_up
+```
+
+然后使用应用。每一次点击、长按、输入的字段、滚动和页面切换都会在发生的瞬间被写成一个步骤，并实时打印出来：
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+按 Enter 完成。剧本会写入 `lib/app/playbooks/sign_up_playbook.dart`，其布局与 `make:playbook` 创建的相同，并完成注册，因此应用一重启就能运行。`metro make:playbook sign_up --record` 可在终端中完成同样的事情：它会打开 `metro live` 并立即开始录制。
+
+录制时，输入一个按键并按 Enter：
+
+| 按键 | 描述 |
+|-----|-------------|
+| `a` | 下一次点击会被写成 `see(...)`，而不是点击 |
+| `d` | 下一次点击会被写成 `dontSee(...)` |
+| `s <title>` | 以该标题开始一个 `scene`；之后的步骤嵌套在其中 |
+| `u` | 删除上一步 |
+| `p` | 暂停录制，例如用真实凭据登录；再按一次 `p` 恢复 |
+| Enter | 完成并写入剧本 |
+| Ctrl+C | 放弃录制 |
+
+目标按照播放器读取的方式命名，优先使用可见文本，并且每个名称在写入之前都会针对运行中的应用进行检查，因此录制的步骤可以重放。当一个纯字符串匹配多个组件时，该步骤会使用 `Find` 缩小范围：`tap(Find.text('Add').at(1))`。没有文本或工具提示的图标按钮会变成 `tap(Find.icon(Icons.add))`。没有任何名称可用的组件会被写成 `tap(Find.type<GestureDetector>().at(3))`，并附带一条 `// TODO` 注释，注明其创建所在的文件和行号，Metro 会在录制结束时列出它。请为它指定一个 `Key`，然后改用该 key。
+
+- **输入**会变成读取 `data[...]` 占位符的 `type` 步骤，输入的值放在 `defaults` 中。保留键盘操作键的字段会得到 `submit: true`。隐藏内容的字段会得到 `secret: true`，其值放在 `defaults` 中，并提示您在提交前更改。传入 `--no-data` 可按输入时的原样写入值。
+- 点击之后的**页面切换**，当您的某个页面声明了该路由时，会变成 `waitForPage(SignUpPage.path)`，否则变成 `waitForPage('/sign-up')`。返回会变成 `back()`。
+- **滚动**会被写成针对您接下来点击的对象的 `scrollTo(...)`，并且仅当滚动使其进入组件树时才会写入。播放器会自行显示其他所有内容。
+- **非滚动的滑动** -- `Dismissible`、`PageView`、`Slider` -- 目前还没有对应的剧本动词，因此会保留为带有起点和终点的 `// TODO` 注释。
+
+录制需要调试构建，可在模拟器、仿真器和真机上使用。剧本自身的触摸操作绝不会被录制。该命令的选项请参阅 [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey)。
+
 <div id="steps"></div>
 
 ## 步骤
@@ -89,6 +154,7 @@ metro make:playbook sign_up
 | `pause(seconds: 1)` | 保持静止，例如让演示有喘息的时间 |
 | `step(title, action)` | 通过 `PlaybookActor` 使用相同的动词运行任意代码 |
 | `scene(title, steps)` | 用标题对步骤分组；它们的字幕以该标题开头，结果在报告中嵌套显示 |
+| `screenshot(name)` | 截取屏幕 -- 参阅[截图](#screenshots) |
 | `play(playbook)` | 运行另一个剧本 -- 参阅 [运行其他剧本](#playing-other-playbooks) |
 
 ``` dart
@@ -153,7 +219,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | 可见文本 |
 | `Find.textContaining(text)` | 包含该字符串的文本 |
-| `Find.icon(icon)` | 图标 |
+| `Find.icon(icon, label:)` | 图标。`label:` 为它在步骤字幕中命名 |
 | `Find.type<T>()` | 类型为 `T` 的组件 |
 | `Find.key(key)` | 带有该 key 的组件 |
 | `Find.field(name)` | 按名称指定的 `NyForm` 字段 |
@@ -161,6 +227,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | 工具提示 |
 | `Find.semantics(label)` | 语义标签 |
 | `Find.where(test)` | 通过您的测试的组件 |
+
+为图标设置 `label` 后，其步骤字幕会显示为 `Tap the bag icon`，而不是 `Tap icon f37d`：
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 任何查找器都可以用 `.inside(ancestor)`、`.at(index)`（从 0 开始计数）、`.first` 或 `.last` 缩小范围。
 
@@ -259,6 +331,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // 或 .top
 
 在 nylo_support 7.33.0（{{ config('app.name') }} 7.4.0）之前，手指和底部字幕默认是开启的。添加上面的重写即可保留原来的效果。
 
+<div id="screenshots"></div>
+
+## 截图
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+在值得保留屏幕的地方添加一个 `screenshot` 步骤：
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` 会将每张截图保存为 `screenshots/<playbook>/<name>.png`，无需任何标志。通过代码运行时，会使用 [`onScreenshot`](#collecting-screenshots) 收集截图，而任何其他运行方式（例如 `PLAYBOOK_ON_BOOT`）只会等待屏幕稳定。名称以字母或数字开头，可使用字母、数字、`-`、`_` 和 `.`。
+
+| 参数 | 描述 |
+|-----------|-------------|
+| `name` | 截图保存时使用的名称 |
+| `locales` | 在这些语言代码中各截取一次。`Screenshot.allLocales` 是应用打包的所有语言 |
+| `themes` | 在这些主题 id 中各截取一次。`Screenshot.allThemes` 是所有已注册的主题 |
+| `caption` | 当运行为截图加框时，显示在屏幕上方的文字，或翻译键 |
+| `native` | 通过 Metro 在 iOS 模拟器和 Android 上截取（默认为 `true`） |
+
+在 iOS 模拟器和 Android 上，Metro 会截取设备的整个屏幕，因此状态栏和键盘也会包含在内，截取期间手指和字幕会被隐藏。为运行添加 `--clean-status-bar` 可显示 9:41，并带有满格信号和满电量。在其他情况下，以及在 `--store` 和 `--frame` 运行中，应用会截取自己的屏幕。传入 `native: false` 可始终使用应用自身的截取：
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+若要改为保存每一步的屏幕，请运行 `metro live:run playbook <name> --screenshots`。有关为 App Store 和 Google Play 调整截图尺寸的选项，参阅 [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots)；有关其背后的 `Screenshot` 类，参阅[截图](/docs/{{ $version }}/screenshots)。
+
+<div id="screenshots-locales-and-themes"></div>
+
+### 区域设置与主题
+
+为 `screenshot` 步骤指定 `locales`、`themes` 或两者，即可在每一种下各截取一次同一屏幕：
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+应用会就地切换，保留页面及其状态，并在下一步之前切换回来。每次截取都会保存在以其区域设置和主题命名的文件夹中：
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+若要让整个剧本在每种语言和主题下运行，请向 `metro live:run playbook` 传入 `--locales` 和 `--themes`。
+
+<div id="collecting-screenshots"></div>
+
+### 从代码中收集
+
+`run()` 接受 `onScreenshot`，以 `PlaybookShot` 的形式接收一次运行的截图，这对测试或您自己的工具很方便：
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` 决定截取哪些屏幕：
+
+| 模式 | 截取内容 |
+|------|----------|
+| `PlaybookScreenshots.off` | 不截取 |
+| `PlaybookScreenshots.failures` | 仅截取失败步骤处的屏幕 |
+| `PlaybookScreenshots.marked` | `screenshot()` 步骤以及失败的步骤 |
+| `PlaybookScreenshots.auto` | 含有 `screenshot()` 步骤的剧本截取这些步骤，没有的则截取每一步，失败的步骤同样会截取。默认值 |
+| `PlaybookScreenshots.all` | 每一步、`screenshot()` 步骤以及失败的步骤 |
+
+`pixelRatio` 设置截图相对于设备的尺寸（默认为 `1.0`）。每个 `PlaybookShot` 都有一个可以[保存](/docs/{{ $version }}/screenshots#saving-a-screenshot)或从中读取 `bytes` 的 `screenshot`，以及 `kind`，还有截取时使用的 `name`、`locale` 和 `theme`。
+
 <div id="registering-playbooks"></div>
 
 ## 注册剧本
@@ -304,7 +467,7 @@ final Map<String, Playbook Function()> playbooks = kReleaseMode ? const {} : {
 metro live:run playbook sign_up --speed fast
 ```
 
-在 `metro live` 中，输入 `playbook sign_up`。所有选项请参阅 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)。添加 `--record` 可保存运行的视频；参见[录制](/docs/{{ $version }}/metro-live#recording-playbooks)。
+在 `metro live` 中，输入 `playbook sign_up`。所有选项请参阅 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)。添加 `--record` 可保存运行的视频；参见[录制](/docs/{{ $version }}/metro-live#recording-playbooks)。如果运行在 20 秒后停止等待，很可能是应用以 `flutter run --no-dds` 启动的；参见 [Metro Live](/docs/{{ $version }}/metro-live#playbooks)。
 
 <div id="running-on-boot"></div>
 
@@ -334,7 +497,7 @@ if (!report.passed) {
 }
 ```
 
-`run()` 接受 `speed`、`data`、`clock`、`overlay`（默认为 `true`）和 `onEvent`。步骤失败不会抛出异常 -- 请检查 `report.passed`。同一时间只能运行一个剧本；若要在一个剧本中运行另一个，请使用 `play()`。
+`run()` 接受 `speed`、`data`、`clock`、`overlay`（默认为 `true`）、`onEvent`，以及用于[收集截图](#collecting-screenshots)的 `onScreenshot`、`screenshots` 和 `pixelRatio`。步骤失败不会抛出异常 -- 请检查 `report.passed`。同一时间只能运行一个剧本；若要在一个剧本中运行另一个，请使用 `play()`。
 
 使用 `Playbook.stop()` 可以停止正在运行的剧本。其余步骤会被跳过，但 `tearDown` 仍会运行。`Playbook.isRunning` 可以告诉您是否有剧本正在运行。
 
@@ -363,8 +526,8 @@ if (!report.passed) {
 在组件测试中使用 `NyTesterClock` 运行剧本，然后用 `expectPlaybookPassed` 对其报告进行断言：
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

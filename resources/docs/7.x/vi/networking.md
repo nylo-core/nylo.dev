@@ -185,6 +185,20 @@ Callback `request` nhận một thể hiện <a href="https://pub.dev/packages/d
 | `handleSuccess` | `Function(NyResponse<T>)?` | Callback khi thành công |
 | `handleFailure` | `Function(NyResponse<T>)?` | Callback khi thất bại |
 
+`handleSuccess` và `handleFailure` cũng có thể thay đổi giá trị mà lời gọi trả về. Một callback không trả về gì sẽ giữ nguyên response, một callback trả về `NyResponse` sẽ thay thế nó, và bất kỳ giá trị nào khác trở thành dữ liệu của response. `handleFailure` cũng chạy khi request ném lỗi, chẳng hạn khi hết thời gian chờ hoặc mất kết nối, và nhận response lỗi:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // Dùng người dùng khách khi request thất bại
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // Lấy một header cụ thể
 String? authHeader = response.getHeader('Authorization');
+```
+
+Khi một response có thể có nhiều hình dạng (decoder [OneOf](/docs/{{$version}}/decoders#one-of)), hãy đọc một hình dạng bằng `dataAs<X>()`, hoặc kiểm tra nó bằng `dataIs<X>()`:
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// Dữ liệu dưới dạng ValidationError, hoặc null nếu là thứ khác
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// Dữ liệu có phải là TwoFactorRequired hay không
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 Tham số kiểu bạn truyền vào `network<T>()` được khớp với map `modelDecoders` để tìm decoder phù hợp.
+
+Đăng ký typed decoder bằng `decoders([Decode(User.fromJson)])` để giải mã một `User` và một `List<User>` chỉ với một dòng, hoặc `OneOf` cho một response có nhiều hình dạng:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **Xem thêm:** [Decoders](/docs/{{$version}}/decoders#model-decoders) để biết chi tiết về việc đăng ký model decoders.
 

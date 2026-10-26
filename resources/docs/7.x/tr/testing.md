@@ -25,6 +25,7 @@
   - [Örnek Oluşturma](#creating-instances "Örnek Oluşturma")
 - [NyFaker](#ny-faker "NyFaker")
 - [Test Önbelleği](#test-cache "Test Önbelleği")
+- [File Storage](#file-storage "Testlerde Dosya Depolama")
 - [Platform Kanalı Mocklama](#platform-channel-mocking "Platform Kanalı Mocklama")
 - [Route Guard Mocklama](#route-guard-mocking "Route Guard Mocklama")
 - [Doğrulamalar](#assertions "Doğrulamalar")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` test ortamını kurar ve `autoReset: true` olduğunda (varsayılan) testler arasında otomatik durum sıfırlamayı etkinleştirir.
+
+Ayrıca uygulamanızda event bus yoksa bir tane ekler; böylece bir formun gönder düğmesi widget testinde formuna ulaşır ve yazılabilir her diski bellek içi bir sahteyle değiştirir -- bkz. [Testlerde Dosya Depolama](#file-storage).
 
 <div id="running-tests"></div>
 
@@ -722,6 +725,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## Testlerde Dosya Depolama
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()`, yazılabilir her [diski](/docs/{{ $version }}/storage#file-storage) bellek içi bir sahteye dönüştürür; böylece testler makinenize hiçbir şey yazmaz. `assets` gibi salt okunur diskler gerçek kalır ve `NyTest.reset()` her testten sonra sahtelerin içini boşaltır.
+
+Doğrulamalar için bir diski geri almak üzere `FileStorage.fake()`, saklanacak dosyalar oluşturmak için `FakeFile` kullanın:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk`, `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty` ve `assertEmpty` metotlarına sahiptir. Bunlar senkrondur, bu yüzden `await` gerektirmezler.
+
+| FakeFile | Açıklama |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | `XFile` olarak gerçek, çözülebilir bir PNG (varsayılan 10'a 10 piksel) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | O kadar sıfır baytlık bir dosya; MIME türü adından anlaşılandır |
+
+`FakeFile` dosyaları bellekte yaşar, bu yüzden `nyWidgetTest` içinde çalışırlar.
+
 <div id="platform-channel-mocking"></div>
 
 ## Platform Kanalı Mocklama
@@ -1174,7 +1207,7 @@ Bir [playbook](/docs/{{ $version }}/playbooks) test olarak çalışabilir. `NyTe
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1193,6 +1226,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+Bir playbook'un aldığı ekran görüntülerini saklamak için `onScreenshot` geçirin ve her `PlaybookShot` öğesinin `screenshot` veya `bytes` değerini okuyun. Bkz. [Collecting from Code](/docs/{{ $version }}/playbooks#collecting-screenshots):
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

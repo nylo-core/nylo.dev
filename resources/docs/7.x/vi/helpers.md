@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ Trì hoãn thực thi trong khoảng thời gian cho trước. Đối số đầ
 ``` dart
 await sleep(2);              // 2 giây
 await sleep(0, 500_000);     // 500 mili giây
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+Định dạng một `DateTime` thành khoảng thời gian đã trôi qua, như `2 giờ trước`. Khi ngày vượt quá khoảng thời gian tương đối, nó được hiển thị bằng `pattern`. `locale` định dạng bằng một ngôn ngữ khác với ngôn ngữ của ứng dụng:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 giờ trước
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

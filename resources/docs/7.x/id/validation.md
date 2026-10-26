@@ -6,6 +6,7 @@
 - [Pengantar](#introduction "Pengantar")
 - Dasar-Dasar
   - [Memvalidasi Data dengan check()](#validating-data "Memvalidasi Data dengan check()")
+  - [Memvalidasi di Controller](#validating-in-a-controller "Memvalidasi di controller")
   - [Hasil Validasi](#validation-results "Hasil Validasi")
 - FormValidator
   - [Menggunakan FormValidator](#using-form-validator "Menggunakan FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 Parameter `label` opsional mengatur nama yang mudah dibaca yang digunakan dalam pesan error (misalnya, "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Memvalidasi di Controller
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` memiliki `check()` yang sama, sehingga dapat memvalidasi field-nya sendiri tanpa state halamannya:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // Semua validasi berhasil
+  }
+}
+```
+
+`check()` mengembalikan `FormValidationResponseBag`, sehingga controller dapat menyimpan hasilnya.
+
 <div id="validation-results"></div>
 
 ## Hasil Validasi
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Respons error
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` mengembalikan `FormValidationError` dari aturan pertama yang gagal, atau `null` jika semua aturan lulus. Ia tidak membangun daftar error lengkap, sehingga murah dipanggil pada setiap ketukan tombol:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

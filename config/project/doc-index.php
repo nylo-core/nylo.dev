@@ -345,6 +345,7 @@ return [
                 'commands',
                 'metro-live',
                 'playbooks',
+                'screenshots',
             ],
         ],
     ],

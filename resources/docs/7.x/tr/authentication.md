@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()`, kimlik dogrulama durumundan bagimsiz olarak belirtilen rotayi ilk gosterilen sayfa yaparak hem `initialRoute()` hem de `authenticatedRoute()` gecersiz kilar.
 
+Bir sayfa veri gerektiriyorsa `data`, `queryParameters` veya `stack` gecirin, ornegin `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`. Release derlemeleri `previewRoute()` cagrisini yok sayar. Bkz. [Preview Route](/docs/{{ $version }}/router#preview-route).
+
 > **Uyari:** Uygulamanizi yayinlamadan once `.previewRoute()` kaldirin.
 
 

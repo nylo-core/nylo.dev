@@ -25,6 +25,7 @@
 - Pamiec modeli
   - [Zapis modelu](#model-save "Zapis modelu")
   - [Kolekcje modeli](#model-collections "Kolekcje modeli")
+- [Pamiec plikow](#file-storage "Pamiec plikow")
 - [Referencja rozszerzenia StorageKey](#storage-key-extension-reference "Referencja rozszerzenia StorageKey")
 - [Wyjatki pamieci](#storage-exceptions "Wyjatki pamieci")
 - [Migracja starszych wersji](#legacy-migration "Migracja starszych wersji")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Odczytaj
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## Pamiec plikow
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` przechowuje wartosci. Pamiec plikow przechowuje pliki, takie jak PDF-y, zdjecia i pobrane dane, na nazwanych dyskach:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` bez nazwy uzywa domyslnego dysku. `FileStorage` ma te same metody dla domyslnego dysku:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Piec dyskow dziala bez zadnej konfiguracji:
+
+| Dysk | Gdzie | Uwagi |
+|------|-------|-------|
+| `local` | Folder wsparcia aplikacji | Domyslny dysk |
+| `documents` | Folder dokumentow aplikacji | Pliki nalezace do uzytkownika |
+| `cache` | Folder pamieci podrecznej aplikacji | System moze go wyczyscic |
+| `temp` | Folder tymczasowy | Czyszczony po jednym dniu |
+| `assets` | Pakiet Twojej aplikacji, w `assets/` | Tylko do odczytu |
+
+### Zapisywanie przeslanego pliku
+
+`putFile` zapisuje plik z `image_picker`, `file_picker` lub aparatu (`XFile`) pod losowa nazwa i zwraca jego sciezke:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Uzyj `putFileAs('avatars', photo, 'me.jpg')`, aby wybrac nazwe.
+
+### Wyswietlanie zapisanego obrazu
+
+`DiskImage` to `ImageProvider` dla obrazu na dysku:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Ponowny zapis pliku przez jego dysk aktualizuje obraz na ekranie.
+
+### Wlasne dyski
+
+Przekaz wlasne dyski do `nylo.configure`. Sa dodawane do domyslnych, a dysk o tej samej nazwie co domyslny zastepuje go:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` ma rowniez `path`, `assets`, `scoped` (folder wewnatrz innego dysku) i `custom` (Twoj wlasny `DiskDriver`).
+
+Aby przetestowac kod korzystajacy z dyskow, zobacz [File Storage in Tests](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

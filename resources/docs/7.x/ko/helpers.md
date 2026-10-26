@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ NyLogger.info('This will print regardless of APP_DEBUG');
 ``` dart
 await sleep(2);              // 2초
 await sleep(0, 500_000);     // 500밀리초
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+`DateTime`을 `2 hours ago`처럼 얼마나 오래전인지로 포맷합니다. 날짜가 상대 표시 범위를 벗어나면 대신 `pattern`으로 표시됩니다. `locale`은 앱의 언어가 아닌 다른 언어로 포맷합니다:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 hours ago
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

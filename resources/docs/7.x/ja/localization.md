@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` は、アプリを再起動せずに `NyLocalization` の現在のロケールを反映させます。すべてのウィジェットが再ビルドされるため、翻訳テキスト、Material 自身の文字列、テキストの方向がロケールに追従し、ページ、その状態、ナビゲーションスタックはそのまま維持されます:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+ページが一度算出して状態に保持したテキストは、そのまま変わりません。
+
+ユーザーが保存した言語はアプリの起動時に読み込まれます。保存された値が `es` や `pt_BR` のようなロケールコードでない場合は、ログに記録されて破棄され、アプリはデフォルトの言語で起動します。
+
 <div id="setting-a-default-locale"></div>
 
 ## デフォルトロケールの設定

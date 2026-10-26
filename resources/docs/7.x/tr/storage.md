@@ -25,6 +25,7 @@
 - Model Depolama
   - [Model Kaydetme](#model-save "Model Kaydetme")
   - [Model Koleksiyonları](#model-collections "Model Koleksiyonları")
+- [Dosya Depolama](#file-storage "Dosya Depolama")
 - [StorageKey Uzantı Referansı](#storage-key-extension-reference "StorageKey Uzantı Referansı")
 - [Depolama İstisnaları](#storage-exceptions "Depolama İstisnaları")
 - [Eski Sürüm Göçü](#legacy-migration "Eski Sürüm Göçü")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## Dosya Depolama
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` değerleri saklar. Dosya depolama ise PDF'ler, fotoğraflar ve indirmeler gibi dosyaları adlandırılmış disklerde saklar:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+Adsız `disk()` varsayılan diski kullanır. `FileStorage`, varsayılan disk için aynı metotlara sahiptir:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Beş disk hiçbir yapılandırma olmadan çalışır:
+
+| Disk | Konum | Notlar |
+|------|-------|--------|
+| `local` | Uygulamanın destek klasörü | Varsayılan disk |
+| `documents` | Uygulamanın belgeler klasörü | Kullanıcıya ait dosyalar |
+| `cache` | Uygulamanın önbellek klasörü | İşletim sistemi temizleyebilir |
+| `temp` | Geçici klasör | Bir gün sonra temizlenir |
+| `assets` | Uygulama paketiniz, `assets/` altında | Salt okunur |
+
+### Yüklenen Bir Dosyayı Saklama
+
+`putFile`, `image_picker`, `file_picker` veya kameradan gelen bir dosyayı (`XFile`) rastgele bir adla saklar ve yolunu döndürür:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Adı kendiniz seçmek için `putFileAs('avatars', photo, 'me.jpg')` kullanın.
+
+### Saklanan Bir Görseli Gösterme
+
+`DiskImage`, bir diskteki görsel için bir `ImageProvider` sağlayıcısıdır:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Dosyayı diski üzerinden yeniden yazmak, ekrandaki görseli günceller.
+
+### Özel Diskler
+
+Kendi disklerinizi `nylo.configure` metoduna geçirin. Varsayılanlara eklenirler ve varsayılan bir diskle aynı ada sahip bir disk onun yerini alır:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` ayrıca `path`, `assets`, `scoped` (başka bir diskin içindeki bir klasör) ve `custom` (kendi `DiskDriver` sınıfınız) seçeneklerine sahiptir.
+
+Disk kullanan kodu test etmek için bkz. [Testlerde Dosya Depolama](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

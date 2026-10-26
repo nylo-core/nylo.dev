@@ -13,6 +13,8 @@
 - [live:devices](#live-devices "चल रहे ऐप्स की सूची")
 - [live:status](#live-status "ऐप की स्थिति दिखाएं")
 - [live:run](#live-run "एक बिल्ट-इन लाइव कमांड चलाएं")
+- [यात्रा रिकॉर्ड करना](#recording-a-journey "आप जो करते हैं उसे प्लेबुक के रूप में रिकॉर्ड करना")
+- [स्क्रीनशॉट](#screenshots "चल रहे ऐप के स्क्रीनशॉट सहेजना")
 - [प्लेबुक्स](#playbooks "Metro से प्लेबुक्स चलाना")
 - लाइव कमांड
   - [एक लाइव कमांड बनाना](#creating-a-live-command "एक लाइव कमांड बनाना")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-लाइव कमांड शेल के अंदर अपना `metro live:` प्रीफिक्स छोड़ देते हैं -- `metro live:status` की बजाय `status`, `metro live:run route /profile` की बजाय `route /profile`। कुछ कमांड केवल शेल के अंदर ही चलते हैं: `seed`, `seed:rollback`, `export`, `reload` और `restart`। हर कमांड को सूचीबद्ध करने के लिए `help` टाइप करें, या किसी एक कमांड के विकल्प देखने के लिए `help <command>` टाइप करें। बाहर निकलने के लिए `exit` (या Ctrl+D) टाइप करें।
+लाइव कमांड शेल के अंदर अपना `metro live:` प्रीफिक्स छोड़ देते हैं -- `metro live:status` की बजाय `status`, `metro live:run route /profile` की बजाय `route /profile`। कुछ कमांड केवल शेल के अंदर ही चलते हैं: `seed`, `seed:rollback`, `export`, `record`, `reload` और `restart`। हर कमांड को सूचीबद्ध करने के लिए `help` टाइप करें, या किसी एक कमांड के विकल्प देखने के लिए `help <command>` टाइप करें। बाहर निकलने के लिए `exit` (या Ctrl+D) टाइप करें।
 
 अगर कनेक्टेड रहते हुए ऐप रीस्टार्ट होता है, तो शेल अपने आप फिर से कनेक्ट हो जाता है।
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | अपने किसी इवेंट को फायर करें |
 | `toast` | एक टोस्ट नोटिफिकेशन दिखाएं |
 | `playbook` | अपनी [प्लेबुक्स](/docs/{{ $version }}/playbooks) चलाएं, या उनकी सूची दिखाएं |
+| `screenshot` | ऐप का, या किसी एक `ScreenshotArea` का [स्क्रीनशॉट](#screenshots) सहेजें |
 
 `metro live` के अंदर, `live:run` वाला हिस्सा छोड़ दें -- `metro live:run route /profile` की बजाय `route /profile`:
 
@@ -232,9 +235,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | रिकॉर्डिंग की `.vtt` कैप्शन फ़ाइल और चैप्टर्स छोड़ दें |
 | `--clean-status-bar` | प्लेबुक्स चलते समय पूरे सिग्नल और बैटरी के साथ 9:41 दिखाएं, फिर पहले जैसा कर दें। `--record` के बिना भी काम करता है |
 | `--countdown <seconds>` | पहले स्टेप से पहले स्क्रीन पर 0-10 सेकंड की उलटी गिनती करें |
+| `--screenshots[=<mode>]` | हर स्टेप की स्क्रीन भी सहेजें। `<mode>` `all`, `auto`, `marked`, `failures` या `off` है; [प्लेबुक स्क्रीनशॉट](#playbook-screenshots) देखें |
+| `--scale <n>` | डिवाइस के अपने आकार के सापेक्ष स्क्रीनशॉट का आकार, अधिकतम 4, जैसे आधे के लिए `0.5` |
+| `--locales <list>` | इन हर लोकेल में एक बार चलाएं, जैसे `en,es`, या ऐप के `all` |
+| `--themes <list>` | इन हर थीम में एक बार चलाएं, जैसे `light,dark`, या ऐप के `all` |
+| `--store <id>` | स्क्रीनशॉट ऐप स्टोर के आकार में बनाएं, जैसे `ios-6.9` |
+| `--frame` | हर स्क्रीन को फ़ोन की रूपरेखा के अंदर बनाएं |
+| `--background <hex>` | स्क्रीन के आसपास का रंग, जैसे `"#1B2027"` |
 | `--list` | किसी को चलाने के बजाय ऐप की प्लेबुक्स की सूची दिखाएं |
 
 Ctrl+C ऐप से रुकने को कहता है: बाकी स्टेप्स छोड़ दिए जाते हैं, लेकिन `tearDown` फिर भी चलता है। प्रतीक्षा बंद करने के लिए Ctrl+C दूसरी बार दबाएं।
+
+यदि 20 सेकंड में कोई स्टेप Metro तक नहीं पहुँचता, तो Metro प्रतीक्षा करना बंद कर देता है और रन को फ़ेल कर देता है। ऐप प्लेबुक चला रहा है, लेकिन उसके इवेंट्स नहीं पहुँच रहे, जो तब होता है जब ऐप `flutter run --no-dds` से शुरू किया गया हो। उसे सामान्य `flutter run` से चलाएं और फिर से कोशिश करें।
 
 `metro live` शेल के अंदर कमांड `playbook <name>` है, और Tab प्लेबुक नाम पूरे करता है:
 
@@ -284,12 +296,92 @@ Playbook "sign_up" (natural)
 
 प्लेबुक डिफ़ॉल्ट रूप से अपनी उंगली और कैप्शन छिपाती है। डेमो वीडियो के लिए प्लेबुक पर `showFinger` और `caption` सेट करें -- [फ़िंगर और कैप्शन](/docs/{{ $version }}/playbooks#finger-and-caption) देखें।
 
+<div id="playbook-screenshots"></div>
+
+### स्क्रीनशॉट
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+प्लेबुक के [`screenshot()` स्टेप्स](/docs/{{ $version }}/playbooks#screenshots) बिना किसी फ़्लैग के `screenshots/<playbook>/` में सहेजे जाते हैं। उन्हें हर भाषा और थीम में कैप्चर करने, या स्टोर लिस्टिंग के आकार में बनाने के लिए विकल्प जोड़ें:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` उस प्लेबुक के हर स्टेप के बाद की स्क्रीन भी सहेजता है जिसमें कोई `screenshot()` स्टेप नहीं है, और `--screenshots=all` यह हर प्लेबुक के लिए करता है। फ़ेल होने वाले स्टेप की स्क्रीन `build/playbooks/failures` में सहेजी जाती है; `--screenshots=off` इसे बंद कर देता है।
+
+`--locales` और `--themes` प्लेबुक को हर एक में एक बार चलाते हैं, और ऐप की अपनी लोकेल और थीम बाद में वापस रख दी जाती है। `--store` बिना मान के आकारों की सूची दिखाता है, और `--frame` हर स्क्रीन को फ़ोन की रूपरेखा में बनाता है जिसके ऊपर स्टेप का `caption:` होता है। `--clean-status-bar` iOS Simulator या `adb` से Metro द्वारा लिए गए कैप्चर में पूरे सिग्नल और बैटरी के साथ 9:41 दिखाता है।
 <div id="playbook-live-commands"></div>
 
 ### लाइव कमांड रेफ़रेंस
 
 इसके पीछे के कमांड `playbooks.list`, `playbooks.run` और `playbooks.stop` हैं। एक रन तुरंत अपना id लौटाता है और हर स्टेप को `nylo.playbook` इवेंट के रूप में स्ट्रीम करता है, इसलिए वह किसी कमांड के टाइमआउट से अधिक समय तक चल सकता है। `live:status` ऐप की प्लेबुक्स की सूची दिखाता है। प्लेबुक्स Nylo Live प्रोटोकॉल संस्करण 9 में आईं। रिकॉर्डिंग सपोर्ट -- `playbooks.run` में `countdown` (हर सेकंड एक `countdown` इवेंट के साथ) और `status` में `simulator` (iOS Simulator का UDID) -- प्रोटोकॉल संस्करण 10 में आया।
 
+<div id="recording-a-journey"></div>
+
+## यात्रा रिकॉर्ड करना
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` चल रहे ऐप में आप जो करते हैं उसे [प्लेबुक](/docs/{{ $version }}/playbooks#recording-a-playbook) के रूप में लिखता है। यह केवल `metro live` शेल के अंदर चलता है:
+
+``` plaintext
+› record sign_up
+```
+
+ऐप का उपयोग करें, और यात्रा पूरी होने पर Enter दबाएं। प्लेबुक `lib/app/playbooks/sign_up_playbook.dart` में बनती है, `lib/bootstrap/playbooks.dart` में रजिस्टर होती है, और Metro ऐप को हॉट रीस्टार्ट करके उसे `fast` स्पीड पर वापस चलाने का प्रस्ताव देता है।
+
+| विकल्प | विवरण |
+|--------|-------------|
+| `--description <text>` | एक-पंक्ति का विवरण, जो Metro के प्लेबुक्स सूचीबद्ध करने पर दिखता है |
+| `--no-data` | टाइप किए गए मान जैसे टाइप किए गए थे वैसे लिखें, डिफ़ॉल्ट वाले `data[...]` प्लेसहोल्डर्स की जगह |
+| `--no-replay` | उसे वापस चलाने के बारे में सवाल छोड़ दें |
+| `--force`, `-f` | पहले से मौजूद प्लेबुक फ़ाइल को बदल दें |
+
+रिकॉर्ड करते समय, अगले टैप को `see()` बनाने के लिए `a` और Enter टाइप करें, `dontSee()` के लिए `d`, सीन शुरू करने के लिए `s <title>`, आखिरी स्टेप पूर्ववत करने के लिए `u` और रोकने के लिए `p`। Ctrl+C रिकॉर्डिंग को छोड़ देता है। `metro make:playbook sign_up --record` शेल खोलता है और एक ही बार में रिकॉर्डिंग शुरू कर देता है।
+
+इसके पीछे के कमांड `record.start`, `record.stop`, `record.undo`, `record.mark` और `record.status` हैं। रिकॉर्डिंग हर स्टेप को `nylo.record` इवेंट के रूप में स्ट्रीम करती है। रिकॉर्डिंग Nylo Live प्रोटोकॉल संस्करण 11 में आई।
+
+<div id="screenshots"></div>
+
+## स्क्रीनशॉट
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+अपने चल रहे ऐप का PNG सहेजें:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+हर फ़ाइल आपके प्रोजेक्ट के `screenshots/` में सहेजी जाती है, जिसका नाम `<mode>-<device>-<date>-<time>.png` होता है। iOS Simulator और Android पर, Metro Simulator या `adb` से डिवाइस की पूरी स्क्रीन कैप्चर करता है, इसलिए उसमें स्टेटस बार और कीबोर्ड शामिल होते हैं। किसी भी अन्य डिवाइस को ऐप का अपना कैप्चर मिलता है, जो ऐप के पेज वैसे ही होते हैं जैसे यूज़र देखता है।
+
+| विकल्प | विवरण |
+|--------|-------------|
+| `--area <name>` | केवल इस नाम वाला `ScreenshotArea` कैप्चर करें |
+| `--scale <n>` | डिवाइस के अपने आकार के सापेक्ष आकार, अधिकतम 4, जैसे आधे के लिए `0.5` |
+| `--locales <list>` | स्क्रीन को इन हर लोकेल में कैप्चर करें, जैसे `en,es`, या ऐप के `all` |
+| `--themes <list>` | स्क्रीन को इन हर थीम में कैप्चर करें, जैसे `light,dark`, या ऐप के `all` |
+| `--store <id>` | ऐप स्टोर के स्क्रीनशॉट आकार में बनाएं, जैसे `ios-6.9`। अकेले `--store` आकारों की सूची दिखाता है |
+| `--frame` | स्क्रीन को बैकग्राउंड पर फ़ोन की रूपरेखा के अंदर बनाएं |
+| `--caption <text>` | `--frame` के ऊपर का टेक्स्ट, या एक अनुवाद की |
+| `--background <hex>` | स्क्रीन के आसपास का रंग, `--frame` के पीछे या दूसरे आकार के `--store` साइज़ के बगल में, जैसे `"#1B2027"` |
+| `--out <path>` | इस `.png` में सहेजें, या `/` पर समाप्त होने वाले फ़ोल्डर में (डिफ़ॉल्ट: `screenshots/`) |
+| `--open` | सहेजे जाने के बाद स्क्रीनशॉट खोलें |
+| `--copy` | स्क्रीनशॉट को क्लिपबोर्ड पर कॉपी करें |
+| `--native` | iOS Simulator या `adb` से कैप्चर करें। पूरी स्क्रीन के कैप्चर के लिए यह डिफ़ॉल्ट है; `--no-native` ऐप के अपने कैप्चर का उपयोग करता है |
+| `--clean-status-bar` | `--native` कैप्चर में पूरे सिग्नल और बैटरी के साथ 9:41 दिखाएं |
+
+`--locales` या `--themes` के साथ, Metro हर जोड़ी के लिए एक फ़ोल्डर में एक PNG सहेजता है, जिनके नाम `es.png`, `dark.png` या `es-dark.png` होते हैं, ऐप को उसी जगह बदलकर और बाद में वापस रखकर। `--area`, `--scale`, `--store` और `--frame` ऐप के अपने कैप्चर का उपयोग करते हैं।
+
+`metro live` शेल के अंदर, `screenshot --open` टाइप करें। अपने ऐप के अपने कोड से स्क्रीनशॉट लेने के लिए, [स्क्रीनशॉट](/docs/{{ $version }}/screenshots) देखें।
 <div id="live-commands"></div>
 
 ## लाइव कमांड

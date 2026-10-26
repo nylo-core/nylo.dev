@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - ทำให้ route ที่ระบุเป็น route เริ่มต้น
 - มีประโยชน์สำหรับการทดสอบหน้าเฉพาะอย่างรวดเร็วระหว่างการพัฒนา
 
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+หน้าที่ต้องใช้ข้อมูลในการสร้างสามารถพรีวิวพร้อมข้อมูลนั้นได้ ส่ง `data`, `queryParameters` และ `stack` ให้ `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` และ `queryParameters` ส่งถึงหน้าเสมือนว่าคุณนำทางด้วย `routeTo(ProductPage.path, data: {...}, queryParameters: {...})` ข้อมูลจากการนำทางจริงมีลำดับความสำคัญสูงกว่า
+- `stack` ระบุรายการ route ที่จะเปิดไว้ด้านล่าง เพื่อให้ปุ่มย้อนกลับทำงานเหมือนหลังการเปิดแอปตามปกติ ในที่นี้ การย้อนกลับจาก `ProductPage` จะไปที่ `HomePage`
+- บิลด์รีลีสจะละเว้น `previewRoute()` ดังนั้น preview ที่ถูกลืมไว้ใน router จะไม่เปลี่ยนหน้าแรกใน production
+
+`stack` ต้องใช้แอปที่สร้างด้วย `NyApp.materialApp` หากคุณสร้าง `MaterialApp` เอง ให้ส่ง `NyRouter.previewInitialRoutes(onGenerateRoute)` ให้ `onGenerateInitialRoutes` ของมัน:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **คำเตือน:** อย่าลืมลบ `.previewRoute()` ก่อนปล่อยแอปของคุณ!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | ใช้ route guards กับทุก routes ในกลุ่ม |
 | `prefix` | `String` | เพิ่มคำนำหน้าให้กับเส้นทาง route ทั้งหมดในกลุ่ม |
-| `transition_type` | `TransitionType` | ตั้งค่าการเปลี่ยนหน้าสำหรับทุก routes ในกลุ่ม |
+| `transition_type` | `TransitionType` | ตั้งค่าการเปลี่ยนหน้าสำหรับ routes ในกลุ่มที่ไม่ได้ตั้งค่าของตัวเอง |
 | `transition` | `PageTransitionType` | ตั้งค่าประเภทการเปลี่ยนหน้า (เลิกใช้แล้ว ใช้ transition_type) |
 | `transition_settings` | `PageTransitionSettings` | ตั้งค่าการเปลี่ยนหน้า |
 

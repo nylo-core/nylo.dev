@@ -485,6 +485,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 **_login** 메서드를 탭하면 원래 요청이 완료될 때까지 추가 요청을 차단합니다. `isLocked('login_to_app')` 헬퍼는 버튼이 잠겨 있는지 확인하는 데 사용됩니다. 위의 예시에서는 로딩 Widget을 언제 표시할지 결정하는 데 이를 사용하는 것을 볼 수 있습니다.
 
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`perform`이 `Exception`을 던지면 잠금이 먼저 해제되고, 예외는 스택 트레이스와 함께 `onError`로 전달됩니다. `onError`가 없으면 로그로 기록됩니다. `Error`(버그)는 잠금이 해제된 후 다시 던져집니다.
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

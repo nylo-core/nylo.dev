@@ -6,6 +6,7 @@
 - [はじめに](#introduction "はじめに")
 - 基本
   - [check() によるデータの検証](#validating-data "check() によるデータの検証")
+  - [コントローラーでのバリデーション](#validating-in-a-controller "コントローラーでのバリデーション")
   - [バリデーション結果](#validation-results "バリデーション結果")
 - FormValidator
   - [FormValidator の使用](#using-form-validator "FormValidator の使用")
@@ -88,6 +89,36 @@ check((validate) {
 
 オプションの `label` パラメータは、エラーメッセージで使用される人間が読みやすい名前を設定します（例: "The Email must be a valid email address."）。
 
+<div id="validating-in-a-controller"></div>
+
+### コントローラーでのバリデーション
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` にも同じ `check()` があるため、ページの状態がなくても自身のフィールドをバリデーションできます:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // すべてのバリデーションに合格しました
+  }
+}
+```
+
+`check()` は `FormValidationResponseBag` を返すため、コントローラーは結果を保持できます。
+
 <div id="validation-results"></div>
 
 ## バリデーション結果
@@ -139,6 +170,12 @@ if (result.isValid) {
   // エラーレスポンス
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` は、最初に失敗したルールの `FormValidationError` を返し、すべてのルールに合格した場合は `null` を返します。完全なエラーリストを構築しないため、キー入力のたびに呼び出しても負荷が小さいです:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

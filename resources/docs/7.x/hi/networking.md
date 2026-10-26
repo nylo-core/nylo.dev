@@ -185,6 +185,20 @@ class ApiService extends NyApiService {
 | `handleSuccess` | `Function(NyResponse<T>)?` | सफलता कॉलबैक |
 | `handleFailure` | `Function(NyResponse<T>)?` | विफलता कॉलबैक |
 
+`handleSuccess` और `handleFailure` कॉल की रिटर्न वैल्यू भी बदल सकते हैं। जो कॉलबैक कुछ नहीं लौटाता वह रिस्पॉन्स को जैसा है वैसा रखता है, जो कॉलबैक `NyResponse` लौटाता है वह उसे बदल देता है, और कोई भी अन्य मान रिस्पॉन्स का डेटा बन जाता है। `handleFailure` तब भी चलता है जब रिक्वेस्ट throw करे, जैसे टाइमआउट या कनेक्शन टूटने पर, और उसे एरर रिस्पॉन्स मिलता है:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // रिक्वेस्ट विफल होने पर guest यूज़र पर fallback करें
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // एक विशिष्ट header प्राप्त करें
 String? authHeader = response.getHeader('Authorization');
+
+जब कोई रिस्पॉन्स एक से अधिक रूप ले सकता है (एक [OneOf](/docs/{{$version}}/decoders#one-of) डीकोडर), तो `dataAs<X>()` से एक रूप पढ़ें, या `dataIs<X>()` से उसकी जाँच करें:
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// ValidationError के रूप में डेटा, या कुछ और होने पर null
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// क्या डेटा TwoFactorRequired है
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
+```
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 `network<T>()` को पास किया गया टाइप पैरामीटर सही डीकोडर खोजने के लिए आपके `modelDecoders` मैप से मैच किया जाता है।
+
+`decoders([Decode(User.fromJson)])` से typed डीकोडर्स रजिस्टर करें ताकि एक ही लाइन में `User` और `List<User>` डिकोड हों, या एक से अधिक रूप वाले रिस्पॉन्स के लिए `OneOf`:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **यह भी देखें:** [Decoders](/docs/{{$version}}/decoders#model-decoders) मॉडल डीकोडर्स रजिस्टर करने के विवरण के लिए।
 

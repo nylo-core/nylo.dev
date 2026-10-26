@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - Делает указанный маршрут начальным
 - Полезен для быстрого тестирования определённых страниц во время разработки
 
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Страницу, которой для построения нужны данные, можно просматривать вместе с ними. Передайте `data`, `queryParameters` и `stack` в `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` и `queryParameters` попадают на страницу так, как если бы вы перешли через `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Данные из реальной навигации имеют приоритет.
+- `stack` перечисляет маршруты, открываемые под страницей, поэтому кнопка «назад» работает так же, как после обычного запуска. Здесь возврат из `ProductPage` ведёт на `HomePage`.
+- Релизные сборки игнорируют `previewRoute()`, поэтому оставленный в роутере предпросмотр никогда не меняет первую страницу в продакшене.
+
+Для `stack` приложение должно быть собрано с помощью `NyApp.materialApp`. Если вы создаёте собственный `MaterialApp`, передайте `NyRouter.previewInitialRoutes(onGenerateRoute)` в его `onGenerateInitialRoutes`:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Внимание:** Не забудьте удалить `.previewRoute()` перед выпуском приложения!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Применить route guards ко всем маршрутам в группе |
 | `prefix` | `String` | Добавить префикс ко всем путям маршрутов в группе |
-| `transition_type` | `TransitionType` | Установить переход для всех маршрутов в группе |
+| `transition_type` | `TransitionType` | Установить переход для маршрутов в группе, которые не задают собственный |
 | `transition` | `PageTransitionType` | Установить тип перехода страницы (устарело, используйте transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Установить настройки перехода |
 

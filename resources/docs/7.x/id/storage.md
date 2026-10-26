@@ -25,6 +25,7 @@
 - Penyimpanan Model
   - [Simpan Model](#model-save "Simpan Model")
   - [Koleksi Model](#model-collections "Koleksi Model")
+- [Penyimpanan File](#file-storage "Penyimpanan File")
 - [Referensi Ekstensi StorageKey](#storage-key-extension-reference "Referensi Ekstensi StorageKey")
 - [Exception Penyimpanan](#storage-exceptions "Exception Penyimpanan")
 - [Migrasi Legacy](#legacy-migration "Migrasi Legacy")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## Penyimpanan File
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` menyimpan nilai. Penyimpanan file menyimpan file, seperti PDF, foto, dan unduhan, pada disk bernama:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` tanpa nama memakai disk default. `FileStorage` memiliki method yang sama untuk disk default:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Lima disk berfungsi tanpa konfigurasi apa pun:
+
+| Disk | Lokasi | Catatan |
+|------|-------|-------|
+| `local` | Folder dukungan aplikasi | Disk default |
+| `documents` | Folder dokumen aplikasi | File milik pengguna |
+| `cache` | Folder cache aplikasi | OS dapat membersihkannya |
+| `temp` | Folder sementara | Dibersihkan setelah sehari |
+| `assets` | Bundle aplikasi Anda, di bawah `assets/` | Hanya-baca |
+
+### Menyimpan File yang Diunggah
+
+`putFile` menyimpan file dari `image_picker`, `file_picker`, atau kamera (sebuah `XFile`) dengan nama acak, dan mengembalikan path-nya:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Gunakan `putFileAs('avatars', photo, 'me.jpg')` untuk memilih namanya.
+
+### Menampilkan Gambar yang Tersimpan
+
+`DiskImage` adalah `ImageProvider` untuk gambar pada sebuah disk:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Menulis ulang file melalui disk-nya memperbarui gambar di layar.
+
+### Disk Kustom
+
+Berikan disk Anda sendiri ke `nylo.configure`. Disk tersebut ditambahkan ke yang default, dan disk dengan nama yang sama dengan yang default menggantikannya:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` juga memiliki `path`, `assets`, `scoped` (folder di dalam disk lain), dan `custom` (`DiskDriver` Anda sendiri).
+
+Untuk menguji kode yang menggunakan disk, lihat [Penyimpanan File dalam Test](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

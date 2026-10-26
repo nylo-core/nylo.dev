@@ -14,6 +14,8 @@
 - [live:status](#live-status "Показать статус приложения")
 - [live:run](#live-run "Запуск встроенной live-команды")
 - [Плейбуки](#playbooks "Запуск плейбуков из Metro")
+- [Запись сценария](#recording-a-journey "Запись ваших действий как плейбука")
+- [Скриншоты](#screenshots "Сохранение скриншотов запущенного приложения")
 - Live-команды
   - [Создание Live-команды](#creating-a-live-command "Создание live-команды")
   - [Запуск Live-команды](#running-a-live-command "Запуск live-команды")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Live-команды опускают свой префикс `metro live:` внутри оболочки -- `status` вместо `metro live:status`, `route /profile` вместо `metro live:run route /profile`. Несколько команд работают только внутри оболочки: `seed`, `seed:rollback`, `export`, `reload` и `restart`. Введите `help`, чтобы увидеть все команды, или `help <command>`, чтобы посмотреть опции одной команды. Введите `exit` (или Ctrl+D), чтобы выйти.
+Live-команды опускают свой префикс `metro live:` внутри оболочки -- `status` вместо `metro live:status`, `route /profile` вместо `metro live:run route /profile`. Несколько команд работают только внутри оболочки: `seed`, `seed:rollback`, `export`, `record`, `reload` и `restart`. Введите `help`, чтобы увидеть все команды, или `help <command>`, чтобы посмотреть опции одной команды. Введите `exit` (или Ctrl+D), чтобы выйти.
 
 Если приложение перезапускается, пока вы подключены, оболочка переподключается автоматически.
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | Вызвать одно из ваших событий |
 | `toast` | Показать toast-уведомление |
 | `playbook` | Запускает ваши [плейбуки](/docs/{{ $version }}/playbooks) или выводит их список |
+| `screenshot` | Сохраняет [скриншот](#screenshots) приложения или одной `ScreenshotArea` |
 
 Внутри `metro live` опустите часть `live:run` -- `route /profile` вместо `metro live:run route /profile`:
 
@@ -233,9 +236,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | Не создавать файл подписей `.vtt` и главы записи |
 | `--clean-status-bar` | Показывать 9:41 с полным сигналом и зарядом, пока идут плейбуки, а затем вернуть как было. Работает и без `--record` |
 | `--countdown <seconds>` | Показать на экране обратный отсчёт 0-10 секунд перед первым шагом |
+| `--screenshots[=<mode>]` | Сохранять также экран каждого шага. `<mode>` -- `all`, `auto`, `marked`, `failures` или `off`; см. [Скриншоты плейбука](#playbook-screenshots) |
+| `--scale <n>` | Размер скриншотов относительно собственного размера устройства, до 4, например `0.5` для половины |
+| `--locales <list>` | Запустить один раз в каждой из этих локалей, например `en,es`, или `all` -- во всех локалях приложения |
+| `--themes <list>` | Запустить один раз в каждой из этих тем, например `light,dark`, или `all` -- во всех темах приложения |
+| `--store <id>` | Рисовать скриншоты в размере магазина приложений, например `ios-6.9` |
+| `--frame` | Рисовать каждый экран внутри контура телефона |
+| `--background <hex>` | Цвет вокруг экрана, например `"#1B2027"` |
 | `--list` | Вывести список плейбуков приложения вместо запуска |
 
 Ctrl+C просит приложение остановиться: оставшиеся шаги пропускаются, но `tearDown` всё равно выполняется. Нажмите Ctrl+C второй раз, чтобы прекратить ожидание.
+
+Если ни один шаг не достигает Metro в течение 20 секунд, Metro прекращает ожидание и завершает запуск с ошибкой. Приложение выполняет плейбук, но его события не поступают, что происходит, когда приложение запущено с `flutter run --no-dds`. Запустите его обычным `flutter run` и повторите попытку.
 
 Внутри оболочки `metro live` команда выглядит как `playbook <name>`, а Tab дополняет имена плейбуков:
 
@@ -286,11 +298,93 @@ Playbook "sign_up" (natural)
 
 По умолчанию плейбук скрывает палец и подписи. Для демо-видео задайте `showFinger` и `caption` в плейбуке -- см. [Палец и подпись](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Скриншоты
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Шаги `screenshot()`](/docs/{{ $version }}/playbooks#screenshots) плейбука сохраняются в `screenshots/<playbook>/` без каких-либо флагов. Добавьте опции, чтобы снимать их на каждом языке и в каждой теме или подгонять размер под страницу в магазине:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` также сохраняет экран после каждого шага плейбука, в котором нет шагов `screenshot()`, а `--screenshots=all` делает это для каждого плейбука. Экран упавшего шага сохраняется в `build/playbooks/failures`; `--screenshots=off` отключает это.
+
+`--locales` и `--themes` запускают плейбук по одному разу в каждой, после чего собственные локаль и тема приложения возвращаются на место. `--store` без значения выводит список размеров, а `--frame` рисует каждый экран в контуре телефона с `caption:` шага над ним. `--clean-status-bar` показывает 9:41 с полным сигналом и зарядом на снимках, которые Metro делает через iOS Simulator или `adb`.
+
 <div id="playbook-live-commands"></div>
 
 ### Справочник live-команд
 
 За этим стоят команды `playbooks.list`, `playbooks.run` и `playbooks.stop`. Запуск сразу возвращает свой id и передаёт каждый шаг событием `nylo.playbook`, поэтому может длиться дольше таймаута команды. `live:status` выводит список плейбуков приложения. Плейбуки появились в версии 9 протокола Nylo Live. Поддержка записи -- `countdown` в `playbooks.run` (с событием `countdown` каждую секунду) и `simulator` (UDID iOS Simulator) в `status` -- появилась в версии 10 протокола.
+
+<div id="recording-a-journey"></div>
+
+## Запись сценария
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` записывает ваши действия в запущенном приложении как [плейбук](/docs/{{ $version }}/playbooks#recording-a-playbook). Он работает только внутри оболочки `metro live`:
+
+``` plaintext
+› record sign_up
+```
+
+Пользуйтесь приложением и нажмите Enter, когда сценарий завершён. Плейбук появится в `lib/app/playbooks/sign_up_playbook.dart`, зарегистрированный в `lib/bootstrap/playbooks.dart`, а Metro предложит выполнить hot restart приложения и воспроизвести его на скорости `fast`.
+
+| Опция | Описание |
+|-------|----------|
+| `--description <text>` | Однострочное описание, отображаемое, когда Metro выводит список плейбуков |
+| `--no-data` | Записывать введённые значения как они были введены, вместо заполнителей `data[...]` с их значениями по умолчанию |
+| `--no-replay` | Пропустить вопрос о воспроизведении |
+| `--force`, `-f` | Заменить уже существующий файл плейбука |
+
+Во время записи введите `a` и Enter, чтобы следующее нажатие стало `see()`, `d` -- для `dontSee()`, `s <title>`, чтобы начать сцену, `u`, чтобы отменить последний шаг, и `p` для паузы. Ctrl+C отбрасывает запись. `metro make:playbook sign_up --record` открывает оболочку и начинает запись за один шаг.
+
+За этим стоят команды `record.start`, `record.stop`, `record.undo`, `record.mark` и `record.status`. Запись передаёт каждый шаг событием `nylo.record`. Запись появилась в версии 11 протокола Nylo Live.
+
+<div id="screenshots"></div>
+
+## Скриншоты
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Сохраните PNG вашего запущенного приложения:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Каждый файл сохраняется в `screenshots/` в вашем проекте под именем `<mode>-<device>-<date>-<time>.png`. На iOS Simulator и Android Metro снимает весь экран устройства через Simulator или `adb`, поэтому строка состояния и клавиатура попадают в кадр. Любое другое устройство получает собственный снимок приложения -- страницы приложения такими, какими их видит пользователь.
+
+| Опция | Описание |
+|-------|----------|
+| `--area <name>` | Снять только `ScreenshotArea` с этим именем |
+| `--scale <n>` | Размер относительно собственного размера устройства, до 4, например `0.5` для половины |
+| `--locales <list>` | Снять экран в каждой из этих локалей, например `en,es`, или `all` -- во всех локалях приложения |
+| `--themes <list>` | Снять экран в каждой из этих тем, например `light,dark`, или `all` -- во всех темах приложения |
+| `--store <id>` | Рисовать в размере скриншота магазина приложений, например `ios-6.9`. Сам по себе `--store` выводит список размеров |
+| `--frame` | Нарисовать экран внутри контура телефона на фоне |
+| `--caption <text>` | Текст над `--frame` или ключ перевода |
+| `--background <hex>` | Цвет вокруг экрана, за `--frame` или рядом с размером `--store` другой формы, например `"#1B2027"` |
+| `--out <path>` | Сохранить в этот `.png` или в папку, заканчивающуюся на `/` (по умолчанию: `screenshots/`) |
+| `--open` | Открыть скриншот после сохранения |
+| `--copy` | Скопировать скриншот в буфер обмена |
+| `--native` | Снимать через iOS Simulator или `adb`. Это значение по умолчанию для снимка всего экрана; `--no-native` использует собственный снимок приложения |
+| `--clean-status-bar` | Показывать 9:41 с полным сигналом и зарядом в снимке `--native` |
+
+С `--locales` или `--themes` Metro сохраняет по одному PNG для каждой пары в папке с именами `es.png`, `dark.png` или `es-dark.png`, переключая приложение на месте и возвращая его потом назад. `--area`, `--scale`, `--store` и `--frame` используют собственный снимок приложения.
+
+Внутри оболочки `metro live` введите `screenshot --open`. Чтобы делать скриншоты из кода вашего приложения, см. [Скриншоты](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

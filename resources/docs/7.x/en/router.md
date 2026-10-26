@@ -195,6 +195,31 @@ The `previewRoute()` method:
 - Makes the specified route the initial route
 - Useful for quickly testing specific pages during development
 
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+A page that needs data to build can be previewed with it. Pass `data`, `queryParameters` and `stack` to `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` and `queryParameters` reach the page as if you had navigated with `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Data from a real navigation takes priority.
+- `stack` lists routes to open underneath, so the back button works as it does after a normal launch. Here, back from `ProductPage` goes to `HomePage`.
+- Release builds ignore `previewRoute()`, so a preview left in your router never changes the first page in production.
+
+`stack` needs the app to be built with `NyApp.materialApp`. If you build your own `MaterialApp`, pass `NyRouter.previewInitialRoutes(onGenerateRoute)` to its `onGenerateInitialRoutes`:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Warning:** Remember to remove `.previewRoute()` before releasing your app!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Apply route guards to all routes in the group |
 | `prefix` | `String` | Add a prefix to all route paths in the group |
-| `transition_type` | `TransitionType` | Set transition for all routes in the group |
+| `transition_type` | `TransitionType` | Set transition for the routes in the group that don't set their own |
 | `transition` | `PageTransitionType` | Set page transition type (deprecated, use transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Set transition settings |
 

@@ -5,6 +5,7 @@
 <a name="section-1"></a>
 - [บทนำ](#introduction "บทนำเกี่ยวกับ Playbooks")
 - [การสร้าง Playbook](#creating-a-playbook "การสร้าง playbook")
+- [การบันทึก Playbook](#recording-a-playbook "การบันทึก playbook จากแอปที่กำลังทำงาน")
 - [Steps](#steps "steps ที่ playbook ทำได้")
 - [Targets](#targets "การค้นหาสิ่งต่างๆ บนหน้าจอ")
   - [สตริงธรรมดา](#plain-strings "วิธีจับคู่สตริงธรรมดา")
@@ -13,6 +14,9 @@
 - [การเล่น Playbook อื่น](#playing-other-playbooks "การรัน playbook จาก playbook อื่น")
 - [ความเร็ว](#speed "PlaybookSpeed")
 - [นิ้วและคำบรรยาย](#finger-and-caption "นิ้วและคำบรรยายของ step")
+- [Screenshots](#screenshots "การถ่ายภาพหน้าจอระหว่าง playbook")
+  - [Locale และธีม](#screenshots-locales-and-themes "การถ่ายภาพหน้าจอในทุก locale และธีม")
+  - [การรวบรวมจากโค้ด](#collecting-screenshots "การรวบรวมภาพหน้าจอด้วย onScreenshot")
 - [การลงทะเบียน Playbook](#registering-playbooks "การลงทะเบียน playbook กับ Nylo")
 - [การรัน Playbook](#running-a-playbook "การรัน playbook")
   - [จาก Metro](#running-from-metro "การรันจาก Metro")
@@ -67,6 +71,67 @@ metro make:playbook sign_up
 
 คำสั่งนี้จะสร้าง `lib/app/playbooks/sign_up_playbook.dart` และลงทะเบียนกับแอปของคุณ ดู [Make Playbook](/docs/{{ $version }}/metro#make-playbook) สำหรับตัวเลือกของคำสั่ง
 
+หากต้องการเริ่มจากทุกหน้าที่ router ของคุณเพิ่มไว้ ให้ส่ง `--from-routes`:
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+Metro เขียน `visit()` และ [`screenshot()`](#screenshots) ให้แต่ละหน้า การรันครั้งเดียวจึงถ่ายภาพทั้งแอปของคุณ
+
+<div id="recording-a-playbook"></div>
+
+## การบันทึก Playbook
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+แทนที่จะเขียน step ให้บันทึกมัน เมื่อแอปของคุณรันในโหมด debug ให้เปิด `metro live` แล้วพิมพ์:
+
+``` plaintext
+› record sign_up
+```
+
+จากนั้นใช้งานแอป การแตะ การกดค้าง ฟิลด์ที่พิมพ์ การเลื่อน และการเปลี่ยนหน้าแต่ละครั้งจะถูกเขียนเป็น step ทันทีที่เกิดขึ้น และพิมพ์ให้เห็นระหว่างทาง:
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+กด Enter เพื่อจบ playbook จะถูกเขียนไปที่ `lib/app/playbooks/sign_up_playbook.dart` โดยจัดรูปแบบเหมือนที่ `make:playbook` สร้าง และลงทะเบียนแล้ว จึงเล่นได้ทันทีที่แอปรีสตาร์ต `metro make:playbook sign_up --record` ทำสิ่งเดียวกันจากเทอร์มินัล: เปิด `metro live` และเริ่มบันทึกทันที
+
+ขณะบันทึก ให้พิมพ์ปุ่มแล้วกด Enter:
+
+| ปุ่ม | คำอธิบาย |
+|-----|-------------|
+| `a` | การแตะครั้งถัดไปจะถูกเขียนเป็น `see(...)` แทนการแตะ |
+| `d` | การแตะครั้งถัดไปจะถูกเขียนเป็น `dontSee(...)` |
+| `s <title>` | เริ่ม `scene` ด้วยชื่อนั้น step ที่ตามมาจะซ้อนอยู่ภายใน |
+| `u` | ลบ step ล่าสุด |
+| `p` | หยุดการบันทึกชั่วคราว เช่น เพื่อลงชื่อเข้าใช้ด้วยข้อมูลรับรองจริง กด `p` อีกครั้งเพื่อทำต่อ |
+| Enter | จบและเขียน playbook |
+| Ctrl+C | ทิ้งการบันทึก |
+
+target จะถูกตั้งชื่อตามที่ผู้เล่นอ่าน โดยเริ่มจากข้อความที่มองเห็น และแต่ละชื่อจะถูกตรวจสอบกับแอปที่กำลังทำงานก่อนเขียน เพื่อให้ step ที่บันทึกเล่นซ้ำได้ เมื่อสตริงธรรมดาตรงกับมากกว่าหนึ่ง widget step จะจำกัดให้แคบลงด้วย `Find`: `tap(Find.text('Add').at(1))` ปุ่มไอคอนที่ไม่มีข้อความหรือ tooltip จะกลายเป็น `tap(Find.icon(Icons.add))` widget ที่ไม่มีอะไรตั้งชื่อให้จะถูกเขียนเป็น `tap(Find.type<GestureDetector>().at(3))` ภายใต้คอมเมนต์ `// TODO` พร้อมไฟล์และบรรทัดที่สร้างมัน และ Metro จะแสดงรายการเมื่อการบันทึกจบ ให้ `Key` กับมัน แล้วใช้ key แทน
+
+- **การพิมพ์** กลายเป็น step `type` ที่อ่าน placeholder `data[...]` โดยมีค่าที่พิมพ์ไว้ใน `defaults` ฟิลด์ที่ปล่อยไว้กับปุ่ม action ของคีย์บอร์ดจะได้ `submit: true` ฟิลด์ที่ซ่อนข้อความจะได้ `secret: true` โดยมีค่าอยู่ใน `defaults` และมีคำเตือนให้เปลี่ยนก่อน commit ส่ง `--no-data` เพื่อเขียนค่าตามที่พิมพ์จริง
+- **การเปลี่ยนหน้า** หลังการแตะจะกลายเป็น `waitForPage(SignUpPage.path)` เมื่อหนึ่งในหน้าของคุณประกาศ route นั้น หรือ `waitForPage('/sign-up')` ในกรณีอื่น การย้อนกลับจะกลายเป็น `back()`
+- **การเลื่อน** ถูกเขียนเป็น `scrollTo(...)` บนสิ่งที่คุณแตะถัดไป และเฉพาะเมื่อการเลื่อนทำให้มันเข้ามาอยู่ใน tree เท่านั้น ผู้เล่นจะเปิดเผยทุกอย่างที่เหลือเอง
+- **การปัดที่ไม่ใช่การเลื่อน** -- `Dismissible`, `PageView`, `Slider` -- ยังไม่มีคำกริยาของ playbook จึงถูกทิ้งไว้เป็นคอมเมนต์ `// TODO` พร้อมจุดเริ่มต้นและจุดสิ้นสุด
+
+การบันทึกต้องใช้ debug build และทำงานบน simulator, emulator และอุปกรณ์จริงเหมือนกัน การสัมผัสของ playbook เองจะไม่ถูกบันทึก ดู [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey) สำหรับตัวเลือกของคำสั่ง
+
 <div id="steps"></div>
 
 ## Steps
@@ -88,6 +153,7 @@ metro make:playbook sign_up
 | `pause(seconds: 1)` | หยุดนิ่ง เช่น เพื่อให้การสาธิตได้พักหายใจ |
 | `step(title, action)` | รันโค้ดใดก็ได้ด้วย verb เดียวกัน ผ่าน `PlaybookActor` |
 | `scene(title, steps)` | จัดกลุ่ม step ภายใต้ชื่อเรื่อง คำบรรยายของ step เหล่านั้นจะขึ้นต้นด้วยชื่อนี้ และผลลัพธ์จะซ้อนอยู่ในรายงาน |
+| `screenshot(name)` | ถ่ายภาพหน้าจอ -- ดู [Screenshots](#screenshots) |
 | `play(playbook)` | รัน playbook อื่น -- ดู [การเล่น Playbook อื่น](#playing-other-playbooks) |
 
 ``` dart
@@ -152,7 +218,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | ข้อความที่มองเห็น |
 | `Find.textContaining(text)` | ข้อความที่มีสตริงนั้นอยู่ |
-| `Find.icon(icon)` | ไอคอน |
+| `Find.icon(icon, label:)` | ไอคอน `label:` ตั้งชื่อให้ในคำบรรยายของ step |
 | `Find.type<T>()` | widget ชนิด `T` |
 | `Find.key(key)` | widget ที่มี key นั้น |
 | `Find.field(name)` | field ของ `NyForm` ตามชื่อ |
@@ -160,6 +226,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | tooltip |
 | `Find.semantics(label)` | semantics label |
 | `Find.where(test)` | widget ที่ผ่านการทดสอบของคุณ |
+
+ให้ `label` กับไอคอน แล้วคำบรรยายของ step จะอ่านว่า `Tap the bag icon` แทน `Tap icon f37d`:
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 จำกัด finder ใดก็ได้ให้แคบลงด้วย `.inside(ancestor)`, `.at(index)` (นับจาก 0), `.first` หรือ `.last`
 
@@ -258,6 +330,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // หรือ .top
 
 ก่อน nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) นิ้วและคำบรรยายด้านล่างเปิดอยู่โดยค่าเริ่มต้น เพิ่ม override ด้านบนเพื่อให้ได้ลักษณะเดิม
 
+<div id="screenshots"></div>
+
+## Screenshots
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+เพิ่ม step `screenshot` ในจุดที่หน้าจอควรค่าแก่การเก็บไว้:
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` บันทึกแต่ละภาพเป็น `screenshots/<playbook>/<name>.png` โดยไม่ต้องใช้ flag การรันจากโค้ดจะรวบรวมภาพด้วย [`onScreenshot`](#collecting-screenshots) และการรันแบบอื่น เช่น `PLAYBOOK_ON_BOOT` จะเพียงรอให้หน้าจอนิ่ง ชื่อต้องขึ้นต้นด้วยตัวอักษรหรือตัวเลข และใช้ตัวอักษร ตัวเลข `-`, `_` และ `.`
+
+| พารามิเตอร์ | คำอธิบาย |
+|-----------|-------------|
+| `name` | ชื่อที่ใช้บันทึกภาพหน้าจอ |
+| `locales` | ถ่ายหนึ่งครั้งในแต่ละรหัสภาษาเหล่านี้ `Screenshot.allLocales` คือทุกภาษาที่แอปรวมมา |
+| `themes` | ถ่ายหนึ่งครั้งในแต่ละ id ธีมเหล่านี้ `Screenshot.allThemes` คือทุกธีมที่ลงทะเบียนไว้ |
+| `caption` | ข้อความเหนือหน้าจอเมื่อการรันใส่กรอบให้ภาพหน้าจอ หรือ translation key |
+| `native` | ถ่ายด้วย Metro บน iOS Simulator และ Android (ค่าเริ่มต้น `true`) |
+
+บน iOS Simulator และ Android Metro จับภาพทั้งหน้าจอของอุปกรณ์ จึงมี status bar และคีย์บอร์ดอยู่ในภาพ และนิ้วกับคำบรรยายจะถูกซ่อนระหว่างนั้น เพิ่ม `--clean-status-bar` ให้การรันเพื่อให้ได้ 9:41 พร้อมสัญญาณและแบตเตอรี่เต็ม ในที่อื่น และในการรันแบบ `--store` และ `--frame` แอปจะจับภาพหน้าจอของตัวเอง ส่ง `native: false` เพื่อใช้การจับภาพของแอปเสมอ:
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+หากต้องการบันทึกหน้าจอของทุก step แทน ให้รัน `metro live:run playbook <name> --screenshots` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots) สำหรับตัวเลือกที่ปรับขนาดภาพหน้าจอสำหรับ App Store และ Google Play และ [Screenshots](/docs/{{ $version }}/screenshots) สำหรับคลาส `Screenshot` ที่อยู่เบื้องหลัง
+
+<div id="screenshots-locales-and-themes"></div>
+
+### Locale และธีม
+
+ให้ step `screenshot` มี `locales`, `themes` หรือทั้งสองอย่าง เพื่อถ่ายหน้าจอเดียวกันหนึ่งครั้งในแต่ละรายการ:
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+แอปสลับในที่เดิม โดยคงหน้าและ state ไว้ และสลับกลับก่อน step ถัดไป แต่ละภาพจะถูกบันทึกในโฟลเดอร์ที่ตั้งชื่อตาม locale และธีมของมัน:
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+หากต้องการเล่นทั้ง playbook ในทุกภาษาและทุกธีมแทน ให้ส่ง `--locales` และ `--themes` ให้ `metro live:run playbook`
+
+<div id="collecting-screenshots"></div>
+
+### การรวบรวมจากโค้ด
+
+`run()` รับ `onScreenshot` เพื่อรับภาพหน้าจอของการรันในรูป `PlaybookShot` ซึ่งสะดวกสำหรับเทสต์หรือเครื่องมือของคุณเอง:
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` เลือกว่าจะจับภาพหน้าจอใด:
+
+| โหมด | จับภาพ |
+|------|----------|
+| `PlaybookScreenshots.off` | ไม่มีอะไร |
+| `PlaybookScreenshots.failures` | เฉพาะหน้าจอที่ step ที่ล้มเหลว |
+| `PlaybookScreenshots.marked` | step `screenshot()` และ step ที่ล้มเหลว |
+| `PlaybookScreenshots.auto` | step `screenshot()` ของ playbook ที่มี และทุก step ของ playbook ที่ไม่มี รวมถึง step ที่ล้มเหลวด้วย ค่าเริ่มต้น |
+| `PlaybookScreenshots.all` | ทุก step, step `screenshot()` และ step ที่ล้มเหลว |
+
+`pixelRatio` กำหนดขนาดภาพหน้าจอเทียบกับของอุปกรณ์ (ค่าเริ่มต้น `1.0`) แต่ละ `PlaybookShot` มี `screenshot` ให้[บันทึก](/docs/{{ $version }}/screenshots#saving-a-screenshot)หรืออ่าน `bytes` จาก `kind` และ `name`, `locale` และ `theme` ที่ใช้ถ่าย
+
 <div id="registering-playbooks"></div>
 
 ## การลงทะเบียน Playbook
@@ -303,7 +466,7 @@ playbook ที่ลงทะเบียนไว้จะรันภาย�
 metro live:run playbook sign_up --speed fast
 ```
 
-ภายใน `metro live` ให้พิมพ์ `playbook sign_up` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbooks) สำหรับทุกตัวเลือก เพิ่ม `--record` เพื่อบันทึกวิดีโอของการรัน ดู [การบันทึก](/docs/{{ $version }}/metro-live#recording-playbooks)
+ภายใน `metro live` ให้พิมพ์ `playbook sign_up` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbooks) สำหรับทุกตัวเลือก เพิ่ม `--record` เพื่อบันทึกวิดีโอของการรัน ดู [การบันทึก](/docs/{{ $version }}/metro-live#recording-playbooks) หากการรันหยุดรอหลังจาก 20 วินาที แอปน่าจะเริ่มด้วย `flutter run --no-dds` ดู [Metro Live](/docs/{{ $version }}/metro-live#playbooks)
 
 <div id="running-on-boot"></div>
 
@@ -333,7 +496,7 @@ if (!report.passed) {
 }
 ```
 
-`run()` รับ `speed`, `data`, `clock`, `overlay` (ค่าเริ่มต้น `true`) และ `onEvent` step ที่ล้มเหลวไม่ throw -- ให้ตรวจสอบ `report.passed` รันได้ทีละ playbook เท่านั้น ใช้ `play()` เพื่อรันตัวหนึ่งภายในอีกตัว
+`run()` รับ `speed`, `data`, `clock`, `overlay` (ค่าเริ่มต้น `true`), `onEvent` และ `onScreenshot`, `screenshots` และ `pixelRatio` สำหรับ[การรวบรวมภาพหน้าจอ](#collecting-screenshots) step ที่ล้มเหลวไม่ throw -- ให้ตรวจสอบ `report.passed` รันได้ทีละ playbook เท่านั้น ใช้ `play()` เพื่อรันตัวหนึ่งภายในอีกตัว
 
 หยุด playbook ที่กำลังรันด้วย `Playbook.stop()` step ที่เหลือจะถูกข้าม แต่ `tearDown` ยังคงรัน `Playbook.isRunning` บอกว่ามี playbook กำลังรันอยู่หรือไม่
 
@@ -362,8 +525,8 @@ Playbook จะไม่รันใน release build เพื่อไม่�
 รัน playbook ใน widget test ด้วย `NyTesterClock` จากนั้น assert รายงานของมันด้วย `expectPlaybookPassed`:
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

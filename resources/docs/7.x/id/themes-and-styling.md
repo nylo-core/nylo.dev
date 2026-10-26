@@ -13,6 +13,7 @@
   - [Style dasar](#base-styles "Style dasar")
   - [Memperluas style warna](#extending-color-styles "Memperluas style warna")
   - [Mengganti tema](#switching-theme "Mengganti tema")
+  - [Warna field](#field-colors "Warna field")
   - [Font](#fonts "Font")
   - [Desain](#design "Desain")
 - [Ekstensi Text](#text-extensions "Ekstensi Text")
@@ -339,6 +340,34 @@ TextButton(onPressed: () {
 ),
 ```
 
+Untuk menampilkan tema tanpa menyimpannya, gunakan `NyThemeManager.instance.showTheme`. Ia mengganti tema aplikasi di tempat, mempertahankan halaman, state-nya, dan stack navigasi, serta membiarkan pilihan tersimpan pengguna dan pengaturan tema sistem mereka apa adanya -- berguna untuk pratinjau atau screenshot. Ia melempar `ArgumentError` jika tidak ada tema dengan id tersebut:
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## Warna field
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Field form](/docs/{{ $version }}/forms#form-field-style) mengikuti tema Anda secara default: abu-abu netral sesuai kecerahannya, dan `colorScheme.primary` sebagai aksen untuk fokus, pilihan, dan switch yang menyala.
+
+Untuk memilih warnanya sendiri, tambahkan ekstensi `NyFieldColors` ke sebuah tema:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` membangun satu set lengkap untuk tema terang atau gelap, dan `copyWith` mengubah warna apa pun di dalamnya, seperti `fill`, `border`, `label`, `text`, `placeholder`, `error`, atau `divider`. Warna yang diatur pada `style` milik field sendiri selalu menang atas ini.
 
 <div id="fonts"></div>
 
@@ -381,6 +410,8 @@ File **lib/config/design.dart** digunakan untuk mengelola elemen desain untuk ap
 `DesignConfig.logo` digunakan untuk menampilkan Logo aplikasi Anda.
 
 Anda dapat memodifikasi **lib/resources/widgets/logo_widget.dart** untuk menyesuaikan cara Anda ingin menampilkan Logo Anda.
+
+`DesignConfig.formFieldStyle` mengatur bagaimana [field form](/docs/{{ $version }}/forms#form-field-style) Anda digambar: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()`, atau `.grouped()`.
 
 `DesignConfig.loader` digunakan untuk menampilkan loader. {{ config('app.name') }} akan menggunakan variabel ini di beberapa metode helper sebagai widget loader default.
 

@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` ghi đè **cả** `initialRoute()` và `authenticatedRoute()`, khiến route được chỉ định trở thành trang đầu tiên hiển thị bất kể trạng thái xác thực.
 
+Truyền `data`, `queryParameters` hoặc `stack` để mở một trang cần chúng, ví dụ `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`. Các bản build phát hành bỏ qua `previewRoute()`. Xem [Preview Route](/docs/{{ $version }}/router#preview-route).
+
 > **Cảnh báo:** Hãy xóa `.previewRoute()` trước khi phát hành ứng dụng.
 
 

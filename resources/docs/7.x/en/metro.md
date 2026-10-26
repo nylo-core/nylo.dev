@@ -27,6 +27,8 @@
   - [Make Env File](#make-env-file "Make a new env file")
   - [Make Key](#make-key "Generate APP_KEY")
   - [Make Playbook](#make-playbook "Make a new playbook")
+- Project Commands
+  - [Doctor](#doctor "Check how your project is wired up")
 - App Icons
   - [Building App Icons](#build-app-icons "Building App Icons with Metro")
 - Custom Commands
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` and `live:run` open a shell connected to your running app, so you can inspect and drive it while it's running -- see [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` plays one of your [playbooks](/docs/{{ $version }}/playbooks) on the running app.
+`live`, `live:devices`, `live:status` and `live:run` open a shell connected to your running app, so you can inspect and drive it while it's running -- see [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` plays one of your [playbooks](/docs/{{ $version }}/playbooks) on the running app, and `live:run screenshot` saves a PNG of it -- see [Screenshots](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Making a new model](#making-a-new-model "Make a new model with Metro")
 - [Make model from JSON](#make-model-from-json "Make a new model from JSON with Metro")
+- [Make a OneOf model](#make-a-one-of-model "Make a OneOf model with Metro")
 - [Forcefully make a model](#forcefully-make-a-model "Forcefully make a new model with Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Then, you can paste your JSON into the terminal and it will generate a model for you.
+
+<div id="make-a-one-of-model"></div>
+
+### Make a OneOf model
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Use the `--one-of` option to create a model for a response that can take more than one shape. Name each shape, separated by commas:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+This creates a sealed `OrderResult` parent with an `Accepted` and a `Rejected` subtype in `lib/app/models/`, and registers an `OneOf<OrderResult>.byKey('type', {...})` entry for it in `lib/bootstrap/decoders.dart`. Pass `--one-of` on its own and Metro asks you for the names.
+
+Change the `'type'` key to the field your API uses, or switch to `OneOf.byStatus` or `OneOf.byJson`. See [OneOf](/docs/{{ $version }}/decoders#one-of) for each constructor.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -845,15 +867,49 @@ metro make:playbook sign_up
 | Flag / Option | Short | Description |
 |---------------|-------|-------------|
 | `--description` | | A one-line description, shown when Metro lists playbooks |
+| `--record` | | Records the journey on your running app instead: opens `metro live` and starts [recording](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | Visits every page your router adds and takes a [screenshot](/docs/{{ $version }}/playbooks#screenshots) of each |
 | `--force` | `-f` | Creates the file even if it already exists |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 This creates `lib/app/playbooks/sign_up_playbook.dart` (inside any subfolder you gave) and registers it in `lib/bootstrap/playbooks.dart`, creating that file on first use. The registry is an empty map in release builds. It also passes `playbooks` to `nylo.configure(...)` in your `AppProvider`.
 
 Play it while your app is running with `metro live:run playbook sign_up`. If the app is already running, hot restart it first.
+
+With `--from-routes`, Metro reads the `router.add(SomePage.path)` lines in `lib/routes/router.dart` and writes a `visit()` and a `screenshot()` for each page. A page behind a route guard, or one that takes route parameters, gets a comment saying what `setUp` may need to reach it.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` lists everything that's wired wrong in your project, with the file to change:
+
+``` bash
+metro doctor
+```
+
+It checks your routes, decoders, languages, env and assets:
+
+| Check | Looks for |
+|-------|-----------|
+| Routes | Pages with a route path that aren't added to the router |
+| Decoders | API services, controllers and models in use that aren't registered in `lib/bootstrap/decoders.dart` |
+| Languages | Language files that are missing keys the base language has, or aren't valid JSON |
+| Env | Keys in `.env` that `.env-example` doesn't have |
+| Assets | Images in `assets/images` that nothing refers to |
+
+Each check ends as ok, a problem or a note. `metro doctor` exits with a non-zero code when a check finds a problem, so you can run it in CI. Add `--strict` to fail on notes too, such as images nothing refers to:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

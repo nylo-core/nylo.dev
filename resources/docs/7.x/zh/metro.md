@@ -27,6 +27,8 @@
   - [生成环境文件](#make-env-file "生成环境文件")
   - [生成密钥](#make-key "生成密钥")
   - [创建剧本](#make-playbook "创建新剧本")
+- 项目命令
+  - [Doctor](#doctor "检查项目的配置情况")
 - 应用图标
   - [构建应用图标](#build-app-icons "构建应用图标")
 - 自定义命令
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`、`live:devices`、`live:status`、`live:run` 会打开一个连接到正在运行的应用的 shell，让您可以在应用运行时检查和操作它 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live)。 `live:run playbook <name>` 会在正在运行的应用上运行您的某个[剧本](/docs/{{ $version }}/playbooks)。
+`live`、`live:devices`、`live:status`、`live:run` 会打开一个连接到正在运行的应用的 shell，让您可以在应用运行时检查和操作它 -- 参见 [Metro Live](/docs/{{ $version }}/metro-live)。 `live:run playbook <name>` 会在正在运行的应用上运行您的某个[剧本](/docs/{{ $version }}/playbooks)，`live:run screenshot` 则会保存其 PNG 截图 -- 参见[截图](/docs/{{ $version }}/metro-live#screenshots)。
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [创建新模型](#making-a-new-model "使用 Metro 创建新模型")
 - [从 JSON 创建模型](#make-model-from-json "使用 Metro 从 JSON 创建新模型")
+- [创建 OneOf 模型](#make-a-one-of-model "使用 Metro 创建 OneOf 模型")
 - [强制创建模型](#forcefully-make-a-model "使用 Metro 强制创建新模型")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 然后，您可以将 JSON 粘贴到终端中，它将为您生成模型。
+
+<div id="make-a-one-of-model"></div>
+
+### 创建 OneOf 模型
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+使用 `--one-of` 选项为可能具有多种结构的响应创建模型。为每种结构命名，以逗号分隔：
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+这会在 `lib/app/models/` 中创建一个 sealed 的 `OrderResult` 父类，以及 `Accepted` 和 `Rejected` 两个子类型，并在 `lib/bootstrap/decoders.dart` 中为其注册一个 `OneOf<OrderResult>.byKey('type', {...})` 条目。单独传入 `--one-of` 时，Metro 会询问您名称。
+
+将 `'type'` 键改为您的 API 所使用的字段，或改用 `OneOf.byStatus` 或 `OneOf.byJson`。各构造函数请参见 [OneOf](/docs/{{ $version }}/decoders#one-of)。
 
 <div id="forcefully-make-a-model"></div>
 
@@ -845,15 +867,49 @@ metro make:playbook sign_up
 | 标志 / 选项 | 简写 | 描述 |
 |---------------|-------|-------------|
 | `--description` | | 一行描述，Metro 列出剧本时会显示 |
+| `--record` | | 改为在正在运行的应用上录制流程：打开 `metro live` 并开始[录制](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | 访问路由器添加的每个页面，并为每个页面拍摄[截图](/docs/{{ $version }}/playbooks#screenshots) |
 | `--force` | `-f` | 即使文件已存在也会创建 |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 这会创建 `lib/app/playbooks/sign_up_playbook.dart`（位于您指定的子文件夹内），并将其注册到 `lib/bootstrap/playbooks.dart` 中，该文件会在首次使用时创建。在发布构建中，注册表是一个空的 map。它还会将 `playbooks` 传给 `AppProvider` 中的 `nylo.configure(...)`。
 
 在应用运行时使用 `metro live:run playbook sign_up` 来运行它。如果应用已在运行，请先热重启。
+
+使用 `--from-routes` 时，Metro 会读取 `lib/routes/router.dart` 中的 `router.add(SomePage.path)` 行，并为每个页面写入一个 `visit()` 和一个 `screenshot()`。位于路由守卫之后或需要路由参数的页面，会带有一条注释，说明 `setUp` 可能需要做什么才能到达该页面。
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` 会列出项目中所有配置有误的地方，并给出需要修改的文件：
+
+``` bash
+metro doctor
+```
+
+它会检查您的路由、解码器、语言、环境变量和资源：
+
+| 检查项 | 查找内容 |
+|-------|-----------|
+| 路由 | 具有路由路径但未添加到路由器的页面 |
+| 解码器 | 正在使用但未在 `lib/bootstrap/decoders.dart` 中注册的 API 服务、控制器和模型 |
+| 语言 | 缺少基础语言所含键的语言文件，或不是有效 JSON 的语言文件 |
+| 环境变量 | `.env` 中存在而 `.env-example` 中没有的键 |
+| 资源 | `assets/images` 中没有任何地方引用的图片 |
+
+每项检查的结果为正常、问题或提示。当某项检查发现问题时，`metro doctor` 会以非零代码退出，因此您可以在 CI 中运行它。添加 `--strict` 后，提示（例如没有任何地方引用的图片）也会导致失败：
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

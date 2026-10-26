@@ -6,6 +6,7 @@
 - [Wprowadzenie](#introduction "Wprowadzenie do walidacji")
 - Podstawy
   - [Walidacja danych za pomocą check()](#validating-data "Walidacja danych za pomocą check")
+  - [Walidacja w kontrolerze](#validating-in-a-controller "Walidacja w kontrolerze")
   - [Wyniki walidacji](#validation-results "Wyniki walidacji")
 - FormValidator
   - [Używanie FormValidator](#using-form-validator "Używanie FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 Opcjonalny parametr `label` ustawia czytelną dla człowieka nazwę używaną w komunikatach błędów (np. "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Walidacja w kontrolerze
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` ma to samo `check()`, więc może walidować własne pola bez stanu swojej strony:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // Wszystkie walidacje przeszły pomyślnie
+  }
+}
+```
+
+`check()` zwraca `FormValidationResponseBag`, więc kontroler może zachować wynik.
+
 <div id="validation-results"></div>
 
 ## Wyniki walidacji
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Odpowiedzi z błędami
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` zwraca `FormValidationError` pierwszej reguły, która nie przeszła, lub `null`, gdy wszystkie reguły przeszły. Nie buduje pełnej listy błędów, więc jego wywołanie przy każdym naciśnięciu klawisza jest tanie:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

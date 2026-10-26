@@ -13,6 +13,7 @@
   - [기본 스타일](#base-styles "기본 스타일")
   - [색상 스타일 확장](#extending-color-styles "색상 스타일 확장")
   - [테마 전환](#switching-theme "테마 전환")
+  - [필드 색상](#field-colors "필드 색상")
   - [폰트](#fonts "폰트")
   - [디자인](#design "디자인")
 - [텍스트 Extension](#text-extensions "텍스트 Extension")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+저장하지 않고 테마를 표시하려면 `NyThemeManager.instance.showTheme`을 사용하세요. 페이지, 상태, 내비게이션 스택을 유지한 채 앱의 테마를 제자리에서 전환하며, 사용자가 저장한 선택과 시스템 테마 설정은 그대로 둡니다 -- 미리보기나 스크린샷에 유용합니다. 해당 id의 테마가 없으면 `ArgumentError`를 던집니다:
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## 필드 색상
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[폼 필드](/docs/{{ $version }}/forms#form-field-style)는 기본적으로 테마를 따릅니다. 밝기에 맞는 중립적인 회색을 사용하고, 포커스, 선택, 켜진 스위치의 강조 색으로 `colorScheme.primary`를 사용합니다.
+
+색상을 직접 지정하려면 테마에 `NyFieldColors` extension을 추가하세요:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)`는 라이트 또는 다크 테마용 전체 색상 세트를 만들고, `copyWith`는 `fill`, `border`, `label`, `text`, `placeholder`, `error`, `divider` 같은 세트 내의 색상을 변경합니다. 필드 자체의 `style`에 설정한 색상이 항상 이 값보다 우선합니다.
+
 <div id="fonts"></div>
 
 ## 폰트
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo`는 앱의 로고를 표시하는 데 사용됩니다.
 
 **lib/resources/widgets/logo_widget.dart**를 수정하여 로고 표시 방법을 커스터마이즈할 수 있습니다.
+
+`DesignConfig.formFieldStyle`은 [폼 필드](/docs/{{ $version }}/forms#form-field-style)를 그리는 방식을 설정합니다: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` 또는 `.grouped()`.
 
 `DesignConfig.loader`는 로더를 표시하는 데 사용됩니다. {{ config('app.name') }}는 일부 헬퍼 메서드에서 이 변수를 기본 로더 Widget으로 사용합니다.
 

@@ -195,6 +195,31 @@ Phương thức `previewRoute()`:
 - Biến route được chỉ định thành route khởi tạo
 - Hữu ích để kiểm tra nhanh các trang cụ thể trong quá trình phát triển
 
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Một trang cần dữ liệu để dựng có thể được xem trước cùng với dữ liệu đó. Truyền `data`, `queryParameters` và `stack` vào `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` và `queryParameters` đến trang như thể bạn đã điều hướng bằng `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Dữ liệu từ một lần điều hướng thật được ưu tiên.
+- `stack` liệt kê các route được mở bên dưới, để nút quay lại hoạt động như sau một lần khởi chạy bình thường. Ở đây, quay lại từ `ProductPage` sẽ đến `HomePage`.
+- Các bản build release bỏ qua `previewRoute()`, nên một preview còn sót trong router của bạn không bao giờ thay đổi trang đầu tiên trong production.
+
+`stack` yêu cầu ứng dụng được build bằng `NyApp.materialApp`. Nếu bạn tự dựng `MaterialApp`, hãy truyền `NyRouter.previewInitialRoutes(onGenerateRoute)` vào `onGenerateInitialRoutes` của nó:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Cảnh báo:** Hãy xóa `.previewRoute()` trước khi phát hành ứng dụng!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Áp dụng route guards cho tất cả routes trong nhóm |
 | `prefix` | `String` | Thêm tiền tố cho tất cả đường dẫn route trong nhóm |
-| `transition_type` | `TransitionType` | Thiết lập hiệu ứng chuyển cho tất cả routes trong nhóm |
+| `transition_type` | `TransitionType` | Thiết lập hiệu ứng chuyển cho các routes trong nhóm không tự thiết lập hiệu ứng riêng |
 | `transition` | `PageTransitionType` | Thiết lập kiểu chuyển trang (đã lỗi thời, dùng transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Thiết lập cài đặt chuyển trang |
 

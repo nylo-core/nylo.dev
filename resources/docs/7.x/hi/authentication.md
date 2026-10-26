@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` **दोनों** `initialRoute()` और `authenticatedRoute()` को ओवरराइड करता है, जिससे निर्दिष्ट रूट ऑथ स्टेट की परवाह किए बिना पहला दिखाया जाने वाला पेज बन जाता है।
 
+`data`, `queryParameters` या `stack` पास करें ताकि ऐसा पेज खुले जिसे उनकी ज़रूरत है, जैसे `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`। रिलीज़ बिल्ड `previewRoute()` को अनदेखा करते हैं। देखें [प्रीव्यू रूट](/docs/{{ $version }}/router#preview-route)।
+
 > **चेतावनी:** अपना ऐप रिलीज़ करने से पहले `.previewRoute()` हटा दें।
 
 

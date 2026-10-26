@@ -25,6 +25,7 @@
 - Model Storage
   - [การบันทึก Model](#model-save "การบันทึก Model")
   - [Model Collections](#model-collections "Model Collections")
+- [File Storage](#file-storage "File Storage")
 - [อ้างอิง StorageKey Extension](#storage-key-extension-reference "อ้างอิง StorageKey Extension")
 - [Storage Exceptions](#storage-exceptions "Storage Exceptions")
 - [การย้ายจากเวอร์ชันเก่า](#legacy-migration "การย้ายจากเวอร์ชันเก่า")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## File Storage
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` เก็บค่า ส่วน File Storage เก็บไฟล์ เช่น PDF รูปภาพ และไฟล์ที่ดาวน์โหลด บน disk ที่มีชื่อ:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` ที่ไม่ระบุชื่อจะใช้ disk เริ่มต้น `FileStorage` มีเมธอดเดียวกันสำหรับ disk เริ่มต้น:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+มี disk ห้าตัวที่ใช้งานได้โดยไม่ต้องตั้งค่าใด ๆ:
+
+| Disk | ตำแหน่ง | หมายเหตุ |
+|------|-------|-------|
+| `local` | โฟลเดอร์ support ของแอป | disk เริ่มต้น |
+| `documents` | โฟลเดอร์ documents ของแอป | ไฟล์ที่เป็นของผู้ใช้ |
+| `cache` | โฟลเดอร์แคชของแอป | ระบบปฏิบัติการอาจล้างออก |
+| `temp` | โฟลเดอร์ชั่วคราว | ถูกลบหลังจากหนึ่งวัน |
+| `assets` | app bundle ของคุณ ภายใต้ `assets/` | อ่านได้อย่างเดียว |
+
+### การเก็บไฟล์ที่อัปโหลด
+
+`putFile` เก็บไฟล์จาก `image_picker`, `file_picker` หรือกล้อง (`XFile`) ภายใต้ชื่อแบบสุ่ม และคืนค่า path ของไฟล์:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+ใช้ `putFileAs('avatars', photo, 'me.jpg')` เพื่อเลือกชื่อเอง
+
+### การแสดงรูปภาพที่เก็บไว้
+
+`DiskImage` คือ `ImageProvider` สำหรับรูปภาพบน disk:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+การเขียนไฟล์ซ้ำผ่าน disk ของมันจะอัปเดตรูปภาพบนหน้าจอ
+
+### Disk แบบกำหนดเอง
+
+ส่ง disk ของคุณเองไปที่ `nylo.configure` disk เหล่านั้นจะถูกเพิ่มเข้ากับค่าเริ่มต้น และ disk ที่มีชื่อเดียวกับค่าเริ่มต้นจะแทนที่ค่าเริ่มต้นนั้น:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` ยังมี `path`, `assets`, `scoped` (โฟลเดอร์ภายใน disk อื่น) และ `custom` (`DiskDriver` ของคุณเอง)
+
+หากต้องการทดสอบโค้ดที่ใช้ disk ดู [File Storage ในการทดสอบ](/docs/{{ $version }}/testing#file-storage)
 
 <div id="storage-key-extension-reference"></div>
 

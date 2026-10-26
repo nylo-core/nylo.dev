@@ -27,6 +27,8 @@
   - [Env ファイルの作成](#make-env-file "Env ファイルの作成")
   - [キーの生成](#make-key "キーの生成")
   - [プレイブックの作成](#make-playbook "新しいプレイブックを作成")
+- プロジェクトコマンド
+  - [Doctor](#doctor "プロジェクトの構成を確認")
 - アプリアイコン
   - [アプリアイコンのビルド](#build-app-icons "アプリアイコンのビルド")
 - カスタムコマンド
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`、`live:devices`、`live:status`、`live:run` は実行中のアプリに接続したシェルを開き、実行中のアプリを検査・操作できるようにします -- 詳しくは [Metro Live](/docs/{{ $version }}/metro-live) を参照してください。 `live:run playbook <name>` は実行中のアプリで[プレイブック](/docs/{{ $version }}/playbooks)の 1 つを再生します。
+`live`、`live:devices`、`live:status`、`live:run` は実行中のアプリに接続したシェルを開き、実行中のアプリを検査・操作できるようにします -- 詳しくは [Metro Live](/docs/{{ $version }}/metro-live) を参照してください。 `live:run playbook <name>` は実行中のアプリで[プレイブック](/docs/{{ $version }}/playbooks)の 1 つを再生し、`live:run screenshot` はその PNG を保存します -- [スクリーンショット](/docs/{{ $version }}/metro-live#screenshots)を参照してください。
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [新しいモデルの作成](#making-a-new-model "新しいモデルの作成")
 - [JSON からモデルを作成](#make-model-from-json "JSON からモデルを作成")
+- [OneOf モデルの作成](#make-a-one-of-model "Metro で OneOf モデルを作成")
 - [モデルの強制作成](#forcefully-make-a-model "モデルの強制作成")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 その後、ターミナルに JSON を貼り付けると、モデルが生成されます。
+
+<div id="make-a-one-of-model"></div>
+
+### OneOf モデルの作成
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+複数の形を取りうるレスポンス用のモデルを作成するには、`--one-of` オプションを使用します。それぞれの形の名前をカンマ区切りで指定します:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+これにより、`lib/app/models/` に、`Accepted` と `Rejected` のサブタイプを持つ sealed な `OrderResult` 親クラスが作成され、`lib/bootstrap/decoders.dart` に `OneOf<OrderResult>.byKey('type', {...})` のエントリが登録されます。`--one-of` だけを渡すと、Metro が名前を尋ねます。
+
+`'type'` キーを API が使うフィールドに変更するか、`OneOf.byStatus` または `OneOf.byJson` に切り替えてください。各コンストラクタについては [OneOf](/docs/{{ $version }}/decoders#one-of) を参照してください。
 
 <div id="forcefully-make-a-model"></div>
 
@@ -845,15 +867,49 @@ metro make:playbook sign_up
 | フラグ / オプション | 短縮形 | 説明 |
 |---------------|-------|-------------|
 | `--description` | | 1 行の説明。Metro がプレイブックを一覧表示するときに表示されます |
+| `--record` | | 代わりに実行中のアプリでジャーニーを記録します: `metro live` を開き、[記録](/docs/{{ $version }}/playbooks#recording-a-playbook)を開始します |
+| `--from-routes` | | ルーターが追加するすべてのページを訪れ、それぞれの[スクリーンショット](/docs/{{ $version }}/playbooks#screenshots)を撮ります |
 | `--force` | `-f` | ファイルが既に存在していても作成します |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 これにより `lib/app/playbooks/sign_up_playbook.dart`（指定したサブフォルダの中）が作成され、`lib/bootstrap/playbooks.dart` に登録されます。このファイルは初回使用時に作成されます。レジストリはリリースビルドでは空のマップになります。また、`AppProvider` の `nylo.configure(...)` に `playbooks` も渡されます。
 
 アプリの実行中に `metro live:run playbook sign_up` で再生できます。アプリが既に実行中の場合は、先にホットリスタートしてください。
+
+`--from-routes` を指定すると、Metro は `lib/routes/router.dart` の `router.add(SomePage.path)` の行を読み取り、各ページに対して `visit()` と `screenshot()` を書き出します。ルートガードの背後にあるページや、ルートパラメータを取るページには、そこに到達するために `setUp` が必要とするかもしれないものを説明するコメントが付きます。
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` は、プロジェクト内で誤って構成されているものをすべて、変更すべきファイルとともに一覧表示します:
+
+``` bash
+metro doctor
+```
+
+ルート、デコーダー、言語、env、アセットを確認します:
+
+| チェック | 確認内容 |
+|-------|-----------|
+| ルート | ルートパスを持つが、ルーターに追加されていないページ |
+| デコーダー | 使用されているが `lib/bootstrap/decoders.dart` に登録されていない API Service、コントローラー、モデル |
+| 言語 | ベース言語にあるキーが欠けている、または有効な JSON ではない言語ファイル |
+| Env | `.env-example` にない `.env` のキー |
+| アセット | `assets/images` 内の、どこからも参照されていない画像 |
+
+各チェックは、ok、問題、または注意のいずれかで終了します。チェックで問題が見つかると `metro doctor` はゼロ以外のコードで終了するため、CI で実行できます。`--strict` を追加すると、どこからも参照されていない画像のような注意でも失敗になります:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()`은 앱을 재시작하지 않고 `NyLocalization`의 현재 로케일을 반영합니다. 모든 위젯이 다시 빌드되므로 번역된 텍스트, Material 자체 문자열, 텍스트 방향이 로케일을 따르며, 페이지와 상태, 내비게이션 스택은 그대로 유지됩니다:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+페이지가 한 번 계산해 상태에 보관한 텍스트는 이전 그대로 유지됩니다.
+
+사용자가 저장한 언어는 앱 시작 시 읽힙니다. 저장된 값이 `es` 또는 `pt_BR` 같은 로케일 코드가 아니면 로그에 기록된 후 버려지고, 앱은 기본 언어로 시작됩니다.
+
 <div id="setting-a-default-locale"></div>
 
 ## 기본 로케일 설정

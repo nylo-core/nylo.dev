@@ -195,6 +195,31 @@ El metodo `previewRoute()`:
 - Hace que la ruta especificada sea la ruta inicial
 - Util para probar rapidamente paginas especificas durante el desarrollo
 
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Una pagina que necesita datos para construirse puede previsualizarse con ellos. Pasa `data`, `queryParameters` y `stack` a `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` y `queryParameters` llegan a la pagina como si hubieras navegado con `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Los datos de una navegacion real tienen prioridad.
+- `stack` lista las rutas que se abren por debajo, para que el boton de retroceso funcione como tras un arranque normal. Aqui, retroceder desde `ProductPage` lleva a `HomePage`.
+- Las compilaciones de release ignoran `previewRoute()`, asi que una vista previa olvidada en tu router nunca cambia la primera pagina en produccion.
+
+`stack` requiere que la aplicacion se construya con `NyApp.materialApp`. Si construyes tu propio `MaterialApp`, pasa `NyRouter.previewInitialRoutes(onGenerateRoute)` a su `onGenerateInitialRoutes`:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Advertencia:** Recuerda eliminar `.previewRoute()` antes de lanzar tu aplicacion.
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Aplicar route guards a todas las rutas del grupo |
 | `prefix` | `String` | Agregar un prefijo a todas las rutas del grupo |
-| `transition_type` | `TransitionType` | Establecer transicion para todas las rutas del grupo |
+| `transition_type` | `TransitionType` | Establecer transicion para las rutas del grupo que no definen la suya |
 | `transition` | `PageTransitionType` | Establecer tipo de transicion de pagina (obsoleto, usar transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Establecer configuraciones de transicion |
 

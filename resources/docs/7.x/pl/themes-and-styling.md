@@ -13,6 +13,7 @@
   - [Style bazowe](#base-styles "Style bazowe")
   - [Rozszerzanie stylow kolorow](#extending-color-styles "Rozszerzanie stylow kolorow")
   - [Przelaczanie motywu](#switching-theme "Przelaczanie motywu")
+  - [Kolory pol](#field-colors "Kolory pol")
   - [Czcionki](#fonts "Czcionki")
   - [Design](#design "Design")
 - [Rozszerzenia tekstu](#text-extensions "Rozszerzenia tekstu")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+Aby pokazac motyw bez jego zapisywania, uzyj `NyThemeManager.instance.showTheme`. Przelacza on motyw aplikacji w miejscu, zachowujac strone, jej stan i stos nawigacji, a zapisany wybor uzytkownika oraz systemowe ustawienie motywu pozostawia bez zmian -- przydatne do podgladu lub zrzutu ekranu. Zglasza `ArgumentError`, gdy zaden motyw nie ma takiego id:
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## Kolory pol
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Pola formularza](/docs/{{ $version }}/forms#form-field-style) domyslnie podazaja za Twoim motywem: neutralne szarosci dopasowane do jasnosci motywu oraz `colorScheme.primary` jako akcent dla fokusu, zaznaczen i wlaczonych przelacznikow.
+
+Aby samodzielnie wybrac kolory, dodaj rozszerzenie `NyFieldColors` do motywu:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` buduje pelny zestaw dla jasnego lub ciemnego motywu, a `copyWith` zmienia dowolny kolor w nim, np. `fill`, `border`, `label`, `text`, `placeholder`, `error` lub `divider`. Kolor ustawiony we wlasnym `style` pola zawsze ma pierwszenstwo przed tymi.
+
 <div id="fonts"></div>
 
 ## Czcionki
@@ -381,6 +411,8 @@ Plik **lib/config/design.dart** sluzy do zarzadzania elementami projektu aplikac
 `DesignConfig.logo` sluzy do wyswietlania logo aplikacji.
 
 Mozesz zmodyfikowac **lib/resources/widgets/logo_widget.dart**, aby dostosowac sposob wyswietlania logo.
+
+`DesignConfig.formFieldStyle` okresla, jak rysowane sa Twoje [pola formularza](/docs/{{ $version }}/forms#form-field-style): `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` lub `.grouped()`.
 
 `DesignConfig.loader` sluzy do wyswietlania loadera. {{ config('app.name') }} uzyje tej zmiennej w niektorych metodach pomocniczych jako domyslny widget loadera.
 

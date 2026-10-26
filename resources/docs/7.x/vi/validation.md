@@ -6,6 +6,7 @@
 - [Giới thiệu](#introduction "Giới thiệu về validation")
 - Cơ bản
   - [Xác thực dữ liệu với check()](#validating-data "Xác thực dữ liệu với check")
+  - [Xác thực trong Controller](#validating-in-a-controller "Xác thực trong controller")
   - [Kết quả Validation](#validation-results "Kết quả validation")
 - FormValidator
   - [Sử dụng FormValidator](#using-form-validator "Sử dụng FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 Tham số `label` tùy chọn đặt tên dễ đọc được sử dụng trong thông báo lỗi (ví dụ: "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Xác thực trong Controller
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Một `NyController` có cùng `check()`, nên nó có thể xác thực các field của chính nó mà không cần state của trang:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // Tất cả validation đều đạt
+  }
+}
+```
+
+`check()` trả về `FormValidationResponseBag`, nên controller có thể giữ lại kết quả.
+
 <div id="validation-results"></div>
 
 ## Kết quả Validation
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Các phản hồi lỗi
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` trả về `FormValidationError` của quy tắc thất bại đầu tiên, hoặc `null` khi mọi quy tắc đều đạt. Nó không dựng danh sách lỗi đầy đủ, nên rất rẻ khi gọi ở mỗi lần gõ phím:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

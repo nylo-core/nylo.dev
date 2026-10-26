@@ -25,6 +25,7 @@
   - [इंस्टेंस बनाना](#creating-instances "इंस्टेंस बनाना")
 - [NyFaker](#ny-faker "NyFaker")
 - [टेस्ट कैश](#test-cache "टेस्ट कैश")
+- [फ़ाइल स्टोरेज](#file-storage "टेस्ट में फ़ाइल स्टोरेज")
 - [प्लेटफ़ॉर्म चैनल मॉकिंग](#platform-channel-mocking "प्लेटफ़ॉर्म चैनल मॉकिंग")
 - [रूट गार्ड मॉकिंग](#route-guard-mocking "रूट गार्ड मॉकिंग")
 - [असर्शन](#assertions "असर्शन")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` टेस्ट एनवायरनमेंट सेट अप करता है और जब `autoReset: true` (डिफ़ॉल्ट) होता है तो टेस्ट के बीच स्वचालित स्टेट रीसेट सक्षम करता है।
+
+यह तब एक इवेंट बस भी जोड़ता है जब आपके ऐप में कोई नहीं है, ताकि विजेट टेस्ट में फ़ॉर्म का सबमिट बटन उसके फ़ॉर्म तक पहुँचे, और हर लिखने योग्य डिस्क को इन-मेमोरी फ़ेक से बदल देता है -- [टेस्ट में फ़ाइल स्टोरेज](#file-storage) देखें।
 
 <div id="running-tests"></div>
 
@@ -721,6 +724,35 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## टेस्ट में फ़ाइल स्टोरेज
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` हर लिखने योग्य [डिस्क](/docs/{{ $version }}/storage#file-storage) को इन-मेमोरी फ़ेक बना देता है, इसलिए टेस्ट कभी आपकी मशीन पर नहीं लिखते। `assets` जैसी रीड-ओनली डिस्क असली रहती हैं, और `NyTest.reset()` हर टेस्ट के बाद फ़ेक्स को खाली कर देता है।
+
+एसर्शन के लिए डिस्क वापस पाने हेतु `FileStorage.fake()` का उपयोग करें, और स्टोर करने के लिए फ़ाइलें बनाने हेतु `FakeFile`:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` में `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty` और `assertEmpty` हैं। वे सिंक्रोनस हैं, इसलिए उन्हें `await` की ज़रूरत नहीं।
+
+| FakeFile | विवरण |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | `XFile` के रूप में एक असली, डिकोड होने योग्य PNG (डिफ़ॉल्ट 10 गुणा 10 पिक्सेल) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | उतने किलोबाइट शून्य बाइट्स की फ़ाइल, उस MIME टाइप के साथ जो उसका नाम सुझाता है |
+
+`FakeFile` फ़ाइलें मेमोरी में रहती हैं, इसलिए वे `nyWidgetTest` के अंदर काम करती हैं।
 <div id="platform-channel-mocking"></div>
 
 ## प्लेटफ़ॉर्म चैनल मॉकिंग
@@ -1173,7 +1205,7 @@ await tester.scrollTo(
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1194,6 +1226,16 @@ void main() {
 }
 ```
 
+प्लेबुक जो स्क्रीनशॉट लेती है उन्हें रखने के लिए, `onScreenshot` पास करें और हर `PlaybookShot` का `screenshot` या `bytes` पढ़ें। [कोड से इकट्ठा करना](/docs/{{ $version }}/playbooks#collecting-screenshots) देखें:
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
+```
 <div id="examples"></div>
 
 ## उदाहरण

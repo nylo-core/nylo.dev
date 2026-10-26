@@ -6,6 +6,8 @@
 - [소개](#introduction "소개")
 - 사용법
   - [Model Decoders](#model-decoders "Model Decoders")
+  - [Typed Decoders](#typed-decoders "Decode와 decoders()")
+  - [OneOf](#one-of "둘 이상의 형태를 가질 수 있는 응답 디코딩")
   - [API Decoders](#api-decoders "API Decoders")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 modelDecoders 파일에서 `Type`을 키로 제공하고 위 예제처럼 값에서 변환을 처리해야 합니다.
 
 `data` 인수에는 API 요청의 페이로드가 포함됩니다.
+
+<div id="typed-decoders"></div>
+
+## Typed Decoders
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])`는 목록으로 `modelDecoders` 맵을 구성합니다. `Decode(User.fromJson)`은 `User`를 디코딩하며 `List<User>`도 별도 항목 없이 디코딩합니다:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+`{"data": {...}}`처럼 감싸진 본문 안에서 모델을 읽으려면 `from`을 사용하세요. `'data.user'` 같은 점으로 구분된 키는 더 깊은 곳을 읽으며, 리스트의 경우 리스트 자체를 `from`에서 읽습니다.
+
+`Decode`는 `dynamic` 또는 `Map<String, dynamic>`을 받는 `fromJson`을 사용합니다. 클로저의 경우 매개변수에 타입을 지정하세요:
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+`User: (data) => User.fromJson(data)`처럼 `{...}` 맵에 클로저 디코더를 쓰는 방식도 계속 동작합니다. 둘 다 `NyDecoder`이며, `Decode`와 `OneOf`가 이 클래스를 확장합니다. 커스텀 `NyDecoder<T>`는 `decode(json, response, decoders)`를 구현하고 전체 `NyResponse`를 볼 수 있으므로 상태 코드나 헤더를 읽을 수 있습니다.
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf`는 둘 이상의 형태를 가질 수 있는 응답을 디코딩합니다. 공통 부모 타입으로 등록하고, 본문의 필드, 상태 코드 또는 직접 만든 조건으로 형태를 선택하세요:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+`OneOf`는 4xx 및 5xx 본문도 디코딩하며, `List<T>`는 항목별로 디코딩합니다. 인식하지 못하는 형태는 응답 데이터를 null로 둡니다.
+
+| 생성자 | 형태를 선택하는 기준 |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | 본문의 `key` 값. `'data.type'` 같은 점으로 구분된 키는 중첩된 필드를 읽습니다 |
+| `OneOf.byStatus(types, otherwise:)` | 상태 코드. 키는 `404` 같은 코드이거나 `'4xx'`, `'40x'` 같은 패턴입니다 |
+| `OneOf.byJson(types, otherwise:)` | 직접 만든 조건으로, 각각 본문과 응답을 받습니다. true를 반환하는 첫 번째 조건이 선택됩니다 |
+| `OneOf(resolve)` | 본문과 응답을 받아 값 또는 null을 반환하는 함수 |
+
+상태 코드로 선택:
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+정확한 코드가 우선하고, 그다음은 `x`가 가장 적은 패턴입니다.
+
+직접 만든 조건으로 선택:
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+함수로 선택:
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+응답에서 형태를 읽으려면 `dataAs<X>()`와 `dataIs<X>()`를 사용하세요. [NyResponse](/docs/{{$version}}/networking#ny-response)를 참조하세요.
+
+Metro가 부모, 하위 타입, `OneOf.byKey` 항목을 대신 생성합니다:
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+[OneOf 모델 만들기](/docs/{{$version}}/metro#make-a-one-of-model)를 참조하세요.
 
 <div id="api-decoders"></div>
 

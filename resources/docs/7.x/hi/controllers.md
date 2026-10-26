@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Controllers भी पेज की तरह `check()` से वैलिडेट कर सकते हैं। देखें [कंट्रोलर में वैलिडेट करना](/docs/{{ $version }}/validation#validating-in-a-controller)।
+
 <div id="language-switching"></div>
 
 ## भाषा स्विचिंग
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+जब `perform` कोई `Exception` throw करे तो प्रतिक्रिया देने के लिए `onError` पास करें। लॉक पहले रिलीज़ होता है, फिर `onError` को exception और उसका स्टैक ट्रेस मिलता है:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

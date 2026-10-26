@@ -45,6 +45,7 @@
 - [Diseño del formulario](#form-layout "Diseño del formulario")
 - [Visibilidad de campos](#field-visibility "Visibilidad de campos")
 - [Estilo de campos](#field-styling "Estilo de campos")
+- [Estilo de campo de formulario](#form-field-style "FormFieldStyle")
 - [Métodos estáticos de NyFormWidget](#ny-form-widget-static-methods "Métodos estáticos de NyFormWidget")
 - [Referencia del constructor de NyFormWidget](#ny-form-widget-constructor-reference "Referencia del constructor de NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -304,6 +305,19 @@ Field.textArea("Description")
 
 Entrada de texto multilínea. Tipo de estilo: `FieldStyleTextField`
 
+Un área de texto con un `prefixIcon` desplaza su etiqueta flotante a la misma posición inicial que un campo de una sola línea. El ícono se centra por defecto en la altura del campo. Usa `PrefixIconAlignment.top` para alinearlo con la primera línea de texto:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` acepta el mismo parámetro `prefixIconAlignment`. Establece `alignLabelWithHint: true` en la `decoration` del estilo para mantener la etiqueta en reposo en la primera línea.
+
 <div id="phone-number-fields"></div>
 
 ### Campos de número de teléfono
@@ -472,6 +486,8 @@ Field.picker("Category",
 
 `decoration` reemplaza la `InputDecoration` del selector, igual que `FieldStyleDateTimePicker.decoration` en un campo de fecha. Si tu decoration no aporta un label, un ícono desplegable ni un `prefixIcon` propios, se conservan los del campo.
 
+Al pulsar "Clear" en el selector se llama al `onChanged` del campo con `null`, y el campo limpiado se valida como vacío, así que `FormValidator.notEmpty()` vuelve a fallar hasta que se elija una nueva opción.
+
 #### Estilos de ListTile
 
 Puedes personalizar cómo aparecen los elementos en la hoja inferior del selector usando `PickerListTileStyle`. Por defecto, la hoja inferior muestra tiles de texto simple. Usa los presets integrados para agregar indicadores de selección, o proporciona un constructor completamente personalizado.
@@ -553,6 +569,22 @@ Field.radio("Newsletter",
 ```
 
 El parámetro `options` requiere un `FormCollection`. Tipo de estilo: `FieldStyleRadio`
+
+Añade una `description` a cada opción para mostrar un subtítulo bajo su etiqueta, y dale estilo con `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` se combina con el estilo de subtítulo predeterminado, así que al indicar solo un `color` se conserva su tamaño.
 
 <div id="chip-fields"></div>
 
@@ -1034,7 +1066,14 @@ fields() => [
 ];
 ```
 
-Los campos en una `List` se renderizan en un `Row` con anchos `Expanded` iguales. El espaciado entre campos se controla con el parámetro `crossAxisSpacing` en `NyFormWidget`.
+Los campos en una `List` se renderizan en un `Row` con anchos `Expanded` iguales. El espacio entre campos que comparten una fila se define con el parámetro `crossAxisSpacing` de `NyFormWidget`, y el espacio vertical entre campos con `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Entre campos, de arriba a abajo
+  crossAxisSpacing: 8,   // Entre campos de la misma fila
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1110,6 +1149,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Estilo de campo de formulario
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` define cómo se dibuja cada campo: su caja, su borde y su etiqueta. Elige uno de cuatro aspectos:
+
+| Estilo | Descripción |
+|--------|-------------|
+| `FormFieldStyle.filled()` | Una caja gris suave con un borde finísimo, con la etiqueta encima. El predeterminado |
+| `FormFieldStyle.outlined()` | Una caja transparente con un borde nítido que se engrosa al recibir el foco |
+| `FormFieldStyle.underlined()` | Sin caja, solo una línea bajo el campo |
+| `FormFieldStyle.grouped()` | Filas en una sola tarjeta, con la etiqueta junto al valor, como en los ajustes de iOS |
+
+Defínelo para toda tu aplicación en `Nylo.configure` (el boilerplate lo guarda en `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Defínelo para un formulario sobrescribiendo `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+El `style:` propio de un campo prevalece sobre el `fieldStyle` de su formulario, que prevalece sobre el de la aplicación.
+
+Cada aspecto acepta `dense` para campos más bajos, y todos menos `underlined` aceptan `radius` para las esquinas de la caja o la tarjeta:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Campos agrupados
+
+En un formulario `grouped`, los campos de texto, selector, fecha e interruptor que van seguidos comparten una tarjeta, con una línea entre filas. Cada etiqueta queda junto a su campo, ocupando su propio ancho hasta el 40% de la fila. Un prefijo `Icon` simple deja sitio a la etiqueta, mientras que otros prefijos se mantienen, como el símbolo de `Field.currency(separateSymbol: true)` o un `prefixIcon` con código de país.
+
+Fuera de un formulario, pon campos en una sola tarjeta con `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Los campos toman sus colores de tu tema, con `colorScheme.primary` como acento. Consulta [Colores de campo](/docs/{{ $version }}/themes-and-styling#field-colors) para elegirlos tú mismo.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Métodos estáticos de NyFormWidget
@@ -1150,8 +1252,8 @@ Al extender `NyFormWidget`, estos son los parámetros del constructor que puedes
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Espaciado horizontal entre campos en fila
-  double mainAxisSpacing = 10,   // Espaciado vertical entre campos
+  double crossAxisSpacing = 10,  // Espacio entre campos que comparten una fila
+  double mainAxisSpacing = 10,   // Espacio vertical entre campos
   Map<String, dynamic>? initialData, // Valores iniciales de los campos
   Function(Field field, dynamic value)? onChanged, // Callback de cambio de campo
   Widget? header,                // Widget encima del formulario

@@ -185,6 +185,20 @@ The `request` callback receives a <a href="https://pub.dev/packages/dio" target=
 | `handleSuccess` | `Function(NyResponse<T>)?` | Success callback |
 | `handleFailure` | `Function(NyResponse<T>)?` | Failure callback |
 
+`handleSuccess` and `handleFailure` can also change what the call returns. A callback that returns nothing keeps the response as it is, a callback that returns a `NyResponse` replaces it, and any other value becomes the response's data. `handleFailure` also runs when the request throws, such as on a timeout or a lost connection, and receives the error response:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // Fall back to a guest user when the request fails
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // Get a specific header
 String? authHeader = response.getHeader('Authorization');
+```
+
+When a response can take more than one shape (a [OneOf](/docs/{{$version}}/decoders#one-of) decoder), read one shape with `dataAs<X>()`, or check for it with `dataIs<X>()`:
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// The data as a ValidationError, or null if it is something else
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// Whether the data is a TwoFactorRequired
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 The type parameter you pass to `network<T>()` is matched against your `modelDecoders` map to find the right decoder.
+
+Register typed decoders with `decoders([Decode(User.fromJson)])` to decode a `User` and a `List<User>` with one line, or `OneOf` for a response with more than one shape:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **See also:** [Decoders](/docs/{{$version}}/decoders#model-decoders) for details on registering model decoders.
 

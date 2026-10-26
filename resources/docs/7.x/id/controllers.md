@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Controller juga dapat memvalidasi dengan `check()`, seperti halaman. Lihat [Memvalidasi di Controller](/docs/{{ $version }}/validation#validating-in-a-controller).
+
 <div id="language-switching"></div>
 
 ## Pergantian Bahasa
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+Berikan `onError` untuk bereaksi saat `perform` melempar `Exception`. Lock dilepaskan terlebih dahulu, lalu `onError` menerima exception tersebut beserta stack trace-nya:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

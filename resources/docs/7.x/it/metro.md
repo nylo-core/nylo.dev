@@ -27,6 +27,8 @@
   - [Make Env File](#make-env-file "Make Env File")
   - [Make Key](#make-key "Make Key")
   - [Make Playbook](#make-playbook "Make Playbook")
+- Comandi del Progetto
+  - [Doctor](#doctor "Controlla come e' collegato il tuo progetto")
 - Icone dell'App
   - [Generare Icone dell'App](#build-app-icons "Generare Icone dell'App")
 - Comandi Personalizzati
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` e `live:run` aprono una shell connessa alla tua app in esecuzione, cosi' puoi ispezionarla e pilotarla mentre e' in esecuzione -- vedi [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` esegue uno dei tuoi [playbook](/docs/{{ $version }}/playbooks) sull'app in esecuzione.
+`live`, `live:devices`, `live:status` e `live:run` aprono una shell connessa alla tua app in esecuzione, cosi' puoi ispezionarla e pilotarla mentre e' in esecuzione -- vedi [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` esegue uno dei tuoi [playbook](/docs/{{ $version }}/playbooks) sull'app in esecuzione, e `live:run screenshot` ne salva un PNG -- vedi [Screenshot](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Creare un nuovo modello](#making-a-new-model "Creare un nuovo modello con Metro")
 - [Creare un modello da JSON](#make-model-from-json "Creare un nuovo modello da JSON con Metro")
+- [Creare un modello OneOf](#make-a-one-of-model "Creare un modello OneOf con Metro")
 - [Forzare la creazione di un modello](#forcefully-make-a-model "Forzare la creazione di un nuovo modello con Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Poi puoi incollare il tuo JSON nel terminale e verra' generato un modello per te.
+
+<div id="make-a-one-of-model"></div>
+
+### Creare un modello OneOf
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Usa l'opzione `--one-of` per creare un modello per una risposta che puo' avere piu' di una forma. Indica ogni forma, separata da virgole:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+Questo crea un genitore `OrderResult` sealed con un sottotipo `Accepted` e uno `Rejected` in `lib/app/models/`, e registra per esso una voce `OneOf<OrderResult>.byKey('type', {...})` in `lib/bootstrap/decoders.dart`. Passa `--one-of` da solo e Metro ti chiede i nomi.
+
+Cambia la chiave `'type'` con il campo usato dalla tua API, oppure passa a `OneOf.byStatus` o `OneOf.byJson`. Vedi [OneOf](/docs/{{ $version }}/decoders#one-of) per ogni costruttore.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -845,15 +867,50 @@ metro make:playbook sign_up
 | Flag / Opzione | Abbreviazione | Descrizione |
 |---------------|-------|-------------|
 | `--description` | | Una descrizione di una riga, mostrata quando Metro elenca i playbook |
+| `--record` | | Registra invece il percorso sulla tua app in esecuzione: apre `metro live` e avvia la [registrazione](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | Visita ogni pagina che il tuo router aggiunge e ne cattura uno [screenshot](/docs/{{ $version }}/playbooks#screenshots) |
 | `--force` | `-f` | Crea il file anche se esiste gia' |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 Questo crea `lib/app/playbooks/sign_up_playbook.dart` (dentro l'eventuale sottocartella indicata) e lo registra in `lib/bootstrap/playbooks.dart`, creando quel file al primo utilizzo. Nelle build di release il registro e' una mappa vuota. Passa inoltre `playbooks` a `nylo.configure(...)` nel tuo `AppProvider`.
 
 Eseguilo mentre la tua app e' in esecuzione con `metro live:run playbook sign_up`. Se l'app e' gia' in esecuzione, fai prima un hot restart.
+
+Con `--from-routes`, Metro legge le righe `router.add(SomePage.path)` in `lib/routes/router.dart` e scrive un `visit()` e uno `screenshot()` per ogni pagina. Una pagina dietro un route guard, o che richiede parametri di rotta, riceve un commento che indica cosa potrebbe servire a `setUp` per raggiungerla.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.5.0+" />
+
+<!-- uncertain: new Nylo-specific command "doctor"; table headings translated -->
+`metro doctor` elenca tutto cio' che e' collegato in modo errato nel tuo progetto, con il file da modificare:
+
+``` bash
+metro doctor
+```
+
+Controlla le tue rotte, i decoder, le lingue, l'env e gli asset:
+
+| Controllo | Cerca |
+|-------|-----------|
+| Rotte | Pagine con un percorso di rotta che non sono aggiunte al router |
+| Decoder | API service, controller e modelli in uso che non sono registrati in `lib/bootstrap/decoders.dart` |
+| Lingue | File di lingua a cui mancano chiavi presenti nella lingua base, o che non sono JSON valido |
+| Env | Chiavi in `.env` che `.env-example` non ha |
+| Asset | Immagini in `assets/images` a cui nulla fa riferimento |
+
+Ogni controllo termina come ok, un problema o una nota. `metro doctor` esce con un codice diverso da zero quando un controllo trova un problema, cosi' puoi eseguirlo in CI. Aggiungi `--strict` per fallire anche sulle note, come le immagini a cui nulla fa riferimento:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

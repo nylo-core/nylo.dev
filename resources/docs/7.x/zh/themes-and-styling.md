@@ -13,6 +13,7 @@
   - [基础样式](#base-styles "基础样式")
   - [扩展颜色样式](#extending-color-styles "扩展颜色样式")
   - [切换主题](#switching-theme "切换主题")
+  - [字段颜色](#field-colors "字段颜色")
   - [字体](#fonts "字体")
   - [设计](#design "设计")
 - [文本扩展](#text-extensions "文本扩展")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+若要显示主题而不保存，请使用 `NyThemeManager.instance.showTheme`。它会就地切换应用的主题，保留页面、其状态和导航堆栈，并保持用户已保存的选择及其系统主题设置不变 -- 适合用于预览或截图。如果没有任何主题具有该 id，它会抛出 `ArgumentError`：
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## 字段颜色
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[表单字段](/docs/{{ $version }}/forms#form-field-style)默认跟随您的主题：根据其亮度使用中性灰色，并以 `colorScheme.primary` 作为焦点、选中项和已开启开关的强调色。
+
+若要自行选择颜色，请在主题中添加 `NyFieldColors` 扩展：
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` 会为浅色或深色主题构建一整套颜色，而 `copyWith` 可更改其中任何颜色，例如 `fill`、`border`、`label`、`text`、`placeholder`、`error` 或 `divider`。在字段自身的 `style` 上设置的颜色始终优先于这些颜色。
+
 <div id="fonts"></div>
 
 ## 字体
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo` 用于显示应用的 Logo。
 
 您可以修改 **lib/resources/widgets/logo_widget.dart** 来自定义 Logo 的显示方式。
+
+`DesignConfig.formFieldStyle` 设置您的[表单字段](/docs/{{ $version }}/forms#form-field-style)的绘制方式：`FormFieldStyle.filled()`、`.outlined()`、`.underlined()` 或 `.grouped()`。
 
 `DesignConfig.loader` 用于显示加载器。{{ config('app.name') }} 将在某些辅助方法中使用此变量作为默认加载器组件。
 

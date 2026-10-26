@@ -14,6 +14,8 @@
 - [live:status](#live-status "Hiển thị trạng thái ứng dụng")
 - [live:run](#live-run "Chạy một live command dựng sẵn")
 - [Playbooks](#playbooks "Chạy playbook từ Metro")
+- [Ghi lại hành trình](#recording-a-journey "Ghi lại những gì bạn làm thành một playbook")
+- [Ảnh chụp màn hình](#screenshots "Lưu ảnh chụp màn hình của ứng dụng đang chạy")
 - Live Command
   - [Tạo một Live Command](#creating-a-live-command "Tạo một live command")
   - [Chạy một Live Command](#running-a-live-command "Chạy một live command")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Live command bỏ tiền tố `metro live:` khi ở bên trong shell -- `status` thay vì `metro live:status`, `route /profile` thay vì `metro live:run route /profile`. Một vài command chỉ chạy được bên trong shell: `seed`, `seed:rollback`, `export`, `reload` và `restart`. Gõ `help` để liệt kê mọi command, hoặc `help <command>` để xem tùy chọn của một command. Gõ `exit` (hoặc Ctrl+D) để thoát.
+Live command bỏ tiền tố `metro live:` khi ở bên trong shell -- `status` thay vì `metro live:status`, `route /profile` thay vì `metro live:run route /profile`. Một vài command chỉ chạy được bên trong shell: `seed`, `seed:rollback`, `export`, `record`, `reload` và `restart`. Gõ `help` để liệt kê mọi command, hoặc `help <command>` để xem tùy chọn của một command. Gõ `exit` (hoặc Ctrl+D) để thoát.
 
 Nếu ứng dụng khởi động lại trong khi bạn đang kết nối, shell sẽ tự kết nối lại.
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | Kích hoạt một trong các event của bạn |
 | `toast` | Hiển thị một thông báo toast |
 | `playbook` | Chạy các [playbook](/docs/{{ $version }}/playbooks) của bạn, hoặc liệt kê chúng |
+| `screenshot` | Lưu một [ảnh chụp màn hình](#screenshots) của ứng dụng, hoặc của một `ScreenshotArea` |
 
 Bên trong `metro live`, bỏ phần `live:run` -- `route /profile` thay vì `metro live:run route /profile`:
 
@@ -232,9 +235,18 @@ Nêu tên nhiều playbook để chạy chúng nối tiếp nhau. Khi không có
 | `--no-captions` | Bỏ tệp chú thích `.vtt` và các chapter của bản ghi |
 | `--clean-status-bar` | Hiển thị 9:41 với đầy đủ sóng và pin trong khi playbook chạy, rồi khôi phục lại. Cũng hoạt động khi không có `--record` |
 | `--countdown <seconds>` | Đếm ngược 0-10 giây trên màn hình trước bước đầu tiên |
+| `--screenshots[=<mode>]` | Lưu cả màn hình của mỗi bước. `<mode>` là `all`, `auto`, `marked`, `failures` hoặc `off`; xem [Ảnh chụp màn hình của Playbook](#playbook-screenshots) |
+| `--scale <n>` | Kích thước ảnh chụp so với kích thước gốc của thiết bị, tối đa 4, ví dụ `0.5` là một nửa |
+| `--locales <list>` | Chạy một lần với mỗi locale này, ví dụ `en,es`, hoặc `all` cho tất cả locale của ứng dụng |
+| `--themes <list>` | Chạy một lần với mỗi theme này, ví dụ `light,dark`, hoặc `all` cho tất cả theme của ứng dụng |
+| `--store <id>` | Vẽ ảnh chụp theo kích thước của một cửa hàng ứng dụng, ví dụ `ios-6.9` |
+| `--frame` | Vẽ mỗi màn hình bên trong khung viền điện thoại |
+| `--background <hex>` | Màu xung quanh màn hình, ví dụ `"#1B2027"` |
 | `--list` | Liệt kê các playbook của ứng dụng thay vì chạy một playbook |
 
 Ctrl+C yêu cầu ứng dụng dừng lại: các bước còn lại bị bỏ qua, nhưng `tearDown` vẫn chạy. Nhấn Ctrl+C lần thứ hai để ngừng chờ.
+
+Nếu không có bước nào đến được Metro trong vòng 20 giây, Metro ngừng chờ và đánh dấu lần chạy là thất bại. Ứng dụng đang chạy playbook, nhưng các event của nó không đến nơi, điều này xảy ra khi ứng dụng được khởi động bằng `flutter run --no-dds`. Hãy chạy bằng `flutter run` thông thường và thử lại.
 
 Bên trong shell `metro live`, command là `playbook <name>`, và Tab hoàn thành tên playbook:
 
@@ -284,11 +296,94 @@ Playbook thất bại hoặc bị dừng vẫn được lưu, nên bản ghi cũ
 
 Playbook mặc định ẩn ngón tay và chú thích. Với video demo, hãy đặt `showFinger` và `caption` trên playbook -- xem [Ngón tay và Chú thích](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Ảnh chụp màn hình
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Các [bước `screenshot()`](/docs/{{ $version }}/playbooks#screenshots) của playbook được lưu trong `screenshots/<playbook>/` mà không cần cờ nào. Thêm các tùy chọn để chụp ở mọi ngôn ngữ và theme, hoặc để đặt kích thước cho trang giới thiệu trên cửa hàng:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` cũng lưu màn hình sau mỗi bước của một playbook không có bước `screenshot()` nào, và `--screenshots=all` làm điều đó cho mọi playbook. Màn hình của một bước thất bại được lưu trong `build/playbooks/failures`; `--screenshots=off` tắt việc này.
+
+`--locales` và `--themes` chạy playbook một lần với mỗi giá trị, và locale cùng theme của ứng dụng được khôi phục sau đó. `--store` liệt kê các kích thước khi không có giá trị, và `--frame` vẽ mỗi màn hình trong khung viền điện thoại với `caption:` của bước ở phía trên. `--clean-status-bar` hiển thị 9:41 với đầy đủ sóng và pin trong các ảnh chụp mà Metro thực hiện bằng iOS Simulator hoặc `adb`.
+
 <div id="playbook-live-commands"></div>
 
 ### Tham chiếu Live Command
 
 Các command phía sau là `playbooks.list`, `playbooks.run` và `playbooks.stop`. Một lần chạy trả về id của nó ngay lập tức và phát trực tiếp từng bước dưới dạng event `nylo.playbook`, nên nó có thể kéo dài hơn timeout của một command. `live:status` liệt kê các playbook của ứng dụng. Playbook xuất hiện từ Nylo Live protocol phiên bản 9. Hỗ trợ ghi hình -- `countdown` trong `playbooks.run` (kèm event `countdown` mỗi giây) và `simulator` (UDID của iOS Simulator) trong `status` -- xuất hiện ở protocol phiên bản 10.
+
+<div id="recording-a-journey"></div>
+
+## Ghi lại hành trình
+
+<!-- uncertain: new section; "journey" rendered as "hành trình" following playbooks.md -->
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` ghi lại những gì bạn làm trong ứng dụng đang chạy thành một [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook). Nó chỉ chạy bên trong shell `metro live`:
+
+``` plaintext
+› record sign_up
+```
+
+Hãy dùng ứng dụng, và nhấn Enter khi hành trình hoàn tất. Playbook được lưu tại `lib/app/playbooks/sign_up_playbook.dart`, được đăng ký trong `lib/bootstrap/playbooks.dart`, và Metro đề nghị hot restart ứng dụng rồi chạy lại nó ở tốc độ `fast`.
+
+| Tùy chọn | Mô tả |
+|--------|-------------|
+| `--description <text>` | Mô tả một dòng, hiển thị khi Metro liệt kê các playbook |
+| `--no-data` | Ghi các giá trị đã nhập đúng như đã gõ, thay vì các placeholder `data[...]` với giá trị mặc định của chúng |
+| `--no-replay` | Bỏ qua câu hỏi về việc chạy lại |
+| `--force`, `-f` | Thay thế tệp playbook đã tồn tại |
+
+Trong khi ghi, gõ `a` rồi Enter để biến lần chạm tiếp theo thành một `see()`, `d` cho một `dontSee()`, `s <title>` để bắt đầu một scene, `u` để hoàn tác bước cuối và `p` để tạm dừng. Ctrl+C hủy bản ghi. `metro make:playbook sign_up --record` mở shell và bắt đầu ghi chỉ trong một lần.
+
+Các command phía sau là `record.start`, `record.stop`, `record.undo`, `record.mark` và `record.status`. Một bản ghi phát trực tiếp từng bước dưới dạng event `nylo.record`. Việc ghi lại xuất hiện từ Nylo Live protocol phiên bản 11.
+
+<div id="screenshots"></div>
+
+## Ảnh chụp màn hình
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Lưu một ảnh PNG của ứng dụng đang chạy:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Mỗi tệp được lưu trong `screenshots/` của dự án, đặt tên là `<mode>-<device>-<date>-<time>.png`. Trên iOS Simulator và Android, Metro chụp toàn bộ màn hình thiết bị bằng Simulator hoặc `adb`, nên thanh trạng thái và bàn phím đều có trong ảnh. Mọi thiết bị khác dùng cách chụp của chính ứng dụng, tức là các trang của ứng dụng như người dùng nhìn thấy.
+
+| Tùy chọn | Mô tả |
+|--------|-------------|
+| `--area <name>` | Chỉ chụp `ScreenshotArea` có tên này |
+| `--scale <n>` | Kích thước so với kích thước gốc của thiết bị, tối đa 4, ví dụ `0.5` là một nửa |
+| `--locales <list>` | Chụp màn hình ở mỗi locale này, ví dụ `en,es`, hoặc `all` cho tất cả locale của ứng dụng |
+| `--themes <list>` | Chụp màn hình ở mỗi theme này, ví dụ `light,dark`, hoặc `all` cho tất cả theme của ứng dụng |
+| `--store <id>` | Vẽ theo kích thước ảnh chụp của một cửa hàng ứng dụng, ví dụ `ios-6.9`. Khi dùng riêng, `--store` liệt kê các kích thước |
+| `--frame` | Vẽ màn hình bên trong khung viền điện thoại, trên một nền |
+| `--caption <text>` | Văn bản phía trên `--frame`, hoặc một khóa dịch |
+| `--background <hex>` | Màu xung quanh màn hình, phía sau `--frame` hoặc bên cạnh kích thước `--store` có hình dạng khác, ví dụ `"#1B2027"` |
+| `--out <path>` | Lưu vào tệp `.png` này, hoặc vào một thư mục kết thúc bằng `/` (mặc định: `screenshots/`) |
+| `--open` | Mở ảnh chụp sau khi lưu |
+| `--copy` | Sao chép ảnh chụp vào clipboard |
+| `--native` | Chụp bằng iOS Simulator hoặc `adb`. Đây là mặc định cho việc chụp toàn màn hình; `--no-native` dùng cách chụp của chính ứng dụng |
+| `--clean-status-bar` | Hiển thị 9:41 với đầy đủ sóng và pin trong ảnh chụp `--native` |
+
+Với `--locales` hoặc `--themes`, Metro lưu một PNG cho mỗi cặp trong một thư mục, đặt tên là `es.png`, `dark.png` hoặc `es-dark.png`, chuyển ứng dụng tại chỗ và khôi phục sau đó. `--area`, `--scale`, `--store` và `--frame` dùng cách chụp của chính ứng dụng.
+
+Bên trong shell `metro live`, gõ `screenshot --open`. Để chụp ảnh từ chính code của ứng dụng, xem [Ảnh chụp màn hình](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

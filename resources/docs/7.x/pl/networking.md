@@ -185,6 +185,20 @@ Callback `request` otrzymuje instancję <a href="https://pub.dev/packages/dio" t
 | `handleSuccess` | `Function(NyResponse<T>)?` | Callback sukcesu |
 | `handleFailure` | `Function(NyResponse<T>)?` | Callback niepowodzenia |
 
+`handleSuccess` i `handleFailure` mogą również zmieniać to, co zwraca wywołanie. Callback, który niczego nie zwraca, pozostawia odpowiedź bez zmian, callback zwracający `NyResponse` zastępuje ją, a każda inna wartość staje się danymi odpowiedzi. `handleFailure` uruchamia się także, gdy zapytanie rzuci wyjątek, np. przy timeoucie lub utracie połączenia, i otrzymuje odpowiedź z błędem:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // Użyj użytkownika-gościa, gdy zapytanie się nie powiedzie
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // Pobierz konkretny nagłówek
 String? authHeader = response.getHeader('Authorization');
+```
+
+Gdy odpowiedź może mieć więcej niż jeden kształt (dekoder [OneOf](/docs/{{$version}}/decoders#one-of)), odczytaj jeden kształt za pomocą `dataAs<X>()` lub sprawdź go za pomocą `dataIs<X>()`:
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// Dane jako ValidationError lub null, jeśli są czymś innym
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// Czy dane są typu TwoFactorRequired
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 Parametr typu, który przekazujesz do `network<T>()`, jest dopasowywany do Twojej mapy `modelDecoders`, aby znaleźć odpowiedni dekoder.
+
+Zarejestruj dekodery typowane za pomocą `decoders([Decode(User.fromJson)])`, aby zdekodować `User` i `List<User>` jedną linią, lub użyj `OneOf` dla odpowiedzi o więcej niż jednym kształcie:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **Zobacz także:** [Decoders](/docs/{{$version}}/decoders#model-decoders) po szczegóły dotyczące rejestracji dekoderów modeli.
 

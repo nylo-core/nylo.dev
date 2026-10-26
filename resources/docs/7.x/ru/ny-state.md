@@ -486,6 +486,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 После нажатия метода **_login** он заблокирует любые последующие запросы до завершения оригинального. Хелпер `isLocked('login_to_app')` используется для проверки, заблокирована ли кнопка. В примере выше мы используем это для определения, когда показывать виджет загрузки.
 
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+Если `perform` выбрасывает `Exception`, сначала снимается блокировка, а затем исключение передаётся в `onError` вместе со стеком вызовов. Без `onError` оно логируется. `Error` (ошибка в коде) выбрасывается повторно после снятия блокировки.
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` ऐप को रीस्टार्ट किए बिना `NyLocalization` की मौजूदा लोकेल दिखाता है। हर विजेट फिर से बनता है, इसलिए अनुवादित टेक्स्ट, Material की अपनी स्ट्रिंग्स और टेक्स्ट की दिशा लोकेल का अनुसरण करते हैं, जबकि पेज, उसकी स्टेट और नेविगेशन स्टैक अपनी जगह पर रहते हैं:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+जो टेक्स्ट पेज ने एक बार निकालकर अपनी स्टेट में रख लिया था, वह वैसा ही रहता है।
+
+यूज़र द्वारा सहेजी गई भाषा ऐप शुरू होने पर पढ़ी जाती है। यदि सहेजा गया मान लोकेल कोड नहीं है, जैसे `es` या `pt_BR`, तो उसे लॉग करके हटा दिया जाता है, और ऐप अपनी डिफ़ॉल्ट भाषा में शुरू होता है।
+
 <div id="setting-a-default-locale"></div>
 
 ## डिफ़ॉल्ट लोकेल सेट करना

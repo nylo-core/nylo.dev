@@ -25,6 +25,7 @@
   - [创建实例](#creating-instances "创建实例")
 - [NyFaker](#ny-faker "NyFaker")
 - [测试缓存](#test-cache "测试缓存")
+- [文件存储](#file-storage "测试中的文件存储")
 - [平台通道模拟](#platform-channel-mocking "平台通道模拟")
 - [路由守卫模拟](#route-guard-mocking "路由守卫模拟")
 - [断言](#assertions "断言")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` 设置测试环境，并在 `autoReset: true`（默认值）时启用测试之间的自动状态重置。
+
+当您的应用没有事件总线时，它还会添加一个，以便表单的提交按钮在组件测试中能够到达其表单；同时它会将每个可写磁盘替换为内存中的模拟磁盘 -- 参见[测试中的文件存储](#file-storage)。
 
 <div id="running-tests"></div>
 
@@ -722,6 +725,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## 测试中的文件存储
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` 会将每个可写的[磁盘](/docs/{{ $version }}/storage#file-storage)变为内存中的模拟磁盘，因此测试绝不会向您的机器写入内容。`assets` 等只读磁盘保持真实，`NyTest.reset()` 会在每个测试之后清空这些模拟磁盘。
+
+使用 `FileStorage.fake()` 取回磁盘以进行断言，并使用 `FakeFile` 创建要存储的文件：
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` 提供 `assertExists`、`assertMissing`、`assertCount`、`assertDirectoryEmpty` 和 `assertEmpty`。它们是同步的，因此不需要 `await`。
+
+| FakeFile | 描述 |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | 一个真实、可解码的 PNG，以 `XFile` 形式提供（默认 10 x 10 像素） |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | 具有指定千字节数的全零字节文件，MIME 类型由其名称推断 |
+
+`FakeFile` 文件存在于内存中，因此可在 `nyWidgetTest` 内使用。
+
 <div id="platform-channel-mocking"></div>
 
 ## 平台通道模拟
@@ -1174,7 +1207,7 @@ await tester.scrollTo(
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1193,6 +1226,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+若要保留剧本截取的截图，请传入 `onScreenshot` 并读取每个 `PlaybookShot` 的 `screenshot` 或 `bytes`。参见[从代码中收集](/docs/{{ $version }}/playbooks#collecting-screenshots)：
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

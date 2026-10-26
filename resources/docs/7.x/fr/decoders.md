@@ -6,6 +6,8 @@
 - [Introduction](#introduction "Introduction")
 - Utilisation
   - [Decodeurs de modeles](#model-decoders "Decodeurs de modeles")
+  - [Decodeurs types](#typed-decoders "Decode et decoders()")
+  - [OneOf](#one-of "Decoder une reponse pouvant avoir plusieurs formes")
   - [Decodeurs d'API](#api-decoders "Decodeurs d'API")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 Dans le fichier modelDecoders, nous devons fournir le `Type` comme cle et gerer la transformation dans la valeur comme dans l'exemple ci-dessus.
 
 L'argument `data` contiendra la charge utile de la requete API.
+
+<div id="typed-decoders"></div>
+
+## Decodeurs types
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])` construit votre map `modelDecoders` a partir d'une liste. `Decode(User.fromJson)` decode un `User`, et aussi une `List<User>`, sans entree dediee :
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+Utilisez `from` pour lire le modele a l'interieur d'un corps enveloppe, comme `{"data": {...}}`. Une cle avec des points telle que `'data.user'` lit plus en profondeur, et pour une liste, la liste elle-meme est lue depuis `from`.
+
+`Decode` prend un `fromJson` qui accepte `dynamic` ou `Map<String, dynamic>`. Pour une closure, typez son parametre :
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+Les decodeurs closure dans une map `{...}`, comme `User: (data) => User.fromJson(data)`, continuent de fonctionner. Les deux sont un `NyDecoder`, la classe dont `Decode` et `OneOf` heritent. Un `NyDecoder<T>` personnalise implemente `decode(json, response, decoders)` et voit tout le `NyResponse`, il peut donc lire le code de statut ou les en-tetes.
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf` decode une reponse pouvant prendre plusieurs formes. Enregistrez-le sous le type parent commun, et choisissez la forme selon un champ du corps, selon le code de statut, ou avec vos propres conditions :
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+Un `OneOf` decode aussi les corps 4xx et 5xx, ainsi qu'une `List<T>` element par element. Une forme qu'il ne reconnait pas laisse les donnees de la reponse a null.
+
+| Constructeur | Choisit la forme selon |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | La valeur de `key` dans le corps. Une cle avec des points telle que `'data.type'` lit un champ imbrique |
+| `OneOf.byStatus(types, otherwise:)` | Le code de statut. Une cle est un code comme `404`, ou un motif comme `'4xx'` ou `'40x'` |
+| `OneOf.byJson(types, otherwise:)` | Vos propres conditions, chacune recevant le corps et la reponse. La premiere qui retourne true l'emporte |
+| `OneOf(resolve)` | Une fonction qui recoit le corps et la reponse et retourne la valeur, ou null |
+
+Par code de statut :
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+Un code exact l'emporte, puis le motif avec le moins de `x`.
+
+Avec vos propres conditions :
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+Avec une fonction :
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+Lisez la forme depuis une reponse avec `dataAs<X>()` et `dataIs<X>()` ; consultez [NyResponse](/docs/{{$version}}/networking#ny-response).
+
+Metro cree le parent, ses sous-types et l'entree `OneOf.byKey` pour vous :
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+Consultez [Make a OneOf model](/docs/{{$version}}/metro#make-a-one-of-model).
 
 <div id="api-decoders"></div>
 

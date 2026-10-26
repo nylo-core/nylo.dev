@@ -45,6 +45,7 @@
 - [फ़ॉर्म लेआउट](#form-layout "फ़ॉर्म लेआउट")
 - [फ़ील्ड विज़िबिलिटी](#field-visibility "फ़ील्ड विज़िबिलिटी")
 - [फ़ील्ड स्टाइलिंग](#field-styling "फ़ील्ड स्टाइलिंग")
+- [फ़ॉर्म फ़ील्ड स्टाइल](#form-field-style "FormFieldStyle")
 - [NyFormWidget स्टैटिक मेथड्स](#ny-form-widget-static-methods "NyFormWidget स्टैटिक मेथड्स")
 - [NyFormWidget कंस्ट्रक्टर रेफरेंस](#ny-form-widget-constructor-reference "NyFormWidget कंस्ट्रक्टर रेफरेंस")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -304,6 +305,19 @@ Field.textArea("Description")
 
 मल्टी-लाइन टेक्स्ट इनपुट। स्टाइल प्रकार: `FieldStyleTextField`
 
+`prefixIcon` वाला टेक्स्ट एरिया अपना लेबल एकल-पंक्ति फ़ील्ड जैसी ही शुरुआती स्थिति पर तैरा देता है। आइकन डिफ़ॉल्ट रूप से फ़ील्ड की ऊँचाई के केंद्र में होता है। उसे टेक्स्ट की पहली पंक्ति से मिलाने के लिए `PrefixIconAlignment.top` का उपयोग करें:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` वही `prefixIconAlignment` पैरामीटर लेता है। विश्राम की स्थिति का लेबल पहली पंक्ति पर रखने के लिए स्टाइल के `decoration` में `alignLabelWithHint: true` सेट करें।
+
 <div id="phone-number-fields"></div>
 
 ### फ़ोन नंबर फ़ील्ड्स
@@ -472,6 +486,8 @@ Field.picker("Category",
 
 `decoration` पिकर के `InputDecoration` को बदल देता है, ठीक वैसे ही जैसे `FieldStyleDateTimePicker.decoration` डेट फ़ील्ड के लिए करता है। यदि आपके decoration में अपना कोई लेबल, ड्रॉपडाउन आइकन या `prefixIcon` नहीं है, तो फ़ील्ड के अपने रखे जाते हैं।
 
+पिकर में "Clear" टैप करने पर फ़ील्ड का `onChanged` `null` के साथ कॉल होता है, और साफ़ किया गया फ़ील्ड खाली के रूप में वैलिडेट होता है, इसलिए नया विकल्प चुने जाने तक `FormValidator.notEmpty()` फिर से फ़ेल होता है।
+
 #### लिस्ट टाइल स्टाइल
 
 आप `PickerListTileStyle` का उपयोग करके पिकर के बॉटम शीट में आइटम्स की दिखावट को कस्टमाइज़ कर सकते हैं। डिफ़ॉल्ट रूप से, बॉटम शीट सादे टेक्स्ट टाइल्स दिखाता है। सिलेक्शन इंडिकेटर जोड़ने के लिए बिल्ट-इन प्रीसेट्स का उपयोग करें, या पूरी तरह से कस्टम बिल्डर प्रदान करें।
@@ -553,6 +569,22 @@ Field.radio("Newsletter",
 ```
 
 `options` पैरामीटर के लिए `FormCollection` आवश्यक है। स्टाइल प्रकार: `FieldStyleRadio`
+
+हर विकल्प को एक `description` दें ताकि उसके लेबल के नीचे एक सबटाइटल दिखे, और उसे `subtitleStyle` से स्टाइल करें:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` डिफ़ॉल्ट सबटाइटल स्टाइल के ऊपर मर्ज होता है, इसलिए केवल `color` सेट करने पर उसका आकार वही रहता है।
 
 <div id="chip-fields"></div>
 
@@ -1035,7 +1067,14 @@ fields() => [
 ];
 ```
 
-`List` में फ़ील्ड्स को समान `Expanded` चौड़ाई के साथ `Row` में रेंडर किया जाता है। फ़ील्ड्स के बीच की स्पेसिंग `NyFormWidget` पर `crossAxisSpacing` पैरामीटर द्वारा नियंत्रित होती है।
+`List` में फ़ील्ड्स को समान `Expanded` चौड़ाई के साथ `Row` में रेंडर किया जाता है। एक ही पंक्ति साझा करने वाले फ़ील्ड्स के बीच का गैप `NyFormWidget` पर `crossAxisSpacing` पैरामीटर से, और फ़ील्ड्स के बीच ऊर्ध्वाधर गैप `mainAxisSpacing` से तय होता है:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // फ़ील्ड्स के बीच, ऊपर से नीचे
+  crossAxisSpacing: 8,   // एक ही पंक्ति के फ़ील्ड्स के बीच
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1110,6 +1149,67 @@ Field.chips("Tags",
 )
 ```
 
+<div id="form-field-style"></div>
+
+## फ़ॉर्म फ़ील्ड स्टाइल
+
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` तय करता है कि हर फ़ील्ड कैसे बनाया जाता है -- उसका बॉक्स, बॉर्डर और लेबल। चार रूपों में से एक चुनें:
+
+| स्टाइल | विवरण |
+|-------|-------------|
+| `FormFieldStyle.filled()` | हेयरलाइन बॉर्डर वाला हल्का ग्रे बॉक्स, लेबल ऊपर। डिफ़ॉल्ट |
+| `FormFieldStyle.outlined()` | साफ़ बॉर्डर वाला पारदर्शी बॉक्स जो फ़ोकस होने पर मोटा हो जाता है |
+| `FormFieldStyle.underlined()` | कोई बॉक्स नहीं, फ़ील्ड के नीचे बस एक रेखा |
+| `FormFieldStyle.grouped()` | एक कार्ड में पंक्तियाँ, लेबल मान के बगल में, जैसे iOS सेटिंग्स में |
+
+इसे अपने पूरे ऐप के लिए `Nylo.configure` में सेट करें (बॉयलरप्लेट इसे `DesignConfig.formFieldStyle` में रखता है):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+एक फ़ॉर्म के लिए `fieldStyle` को ओवरराइड करके सेट करें:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+फ़ील्ड का अपना `style:` उसके फ़ॉर्म के `fieldStyle` पर भारी पड़ता है, जो ऐप के स्टाइल पर भारी पड़ता है।
+
+हर रूप छोटे फ़ील्ड्स के लिए `dense` लेता है, और `underlined` को छोड़कर सभी बॉक्स या कार्ड के कोनों के लिए `radius` लेते हैं:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### ग्रुप्ड फ़ील्ड्स
+
+`grouped` फ़ॉर्म में, एक-दूसरे के बाद आने वाले टेक्स्ट, पिकर, डेट और स्विच फ़ील्ड्स एक कार्ड साझा करते हैं, पंक्तियों के बीच एक रेखा के साथ। हर लेबल अपने फ़ील्ड के बगल में बैठता है, पंक्ति के 40% तक अपनी चौड़ाई लेकर। सादा `Icon` प्रीफ़िक्स लेबल के लिए जगह छोड़ देता है, जबकि अन्य प्रीफ़िक्स बने रहते हैं, जैसे `Field.currency(separateSymbol: true)` का सिंबल या देश कोड `prefixIcon`।
+
+फ़ॉर्म के बाहर, फ़ील्ड्स को `FormFieldGroup` से एक कार्ड में रखें:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+फ़ील्ड्स अपने रंग आपकी थीम से लेते हैं, `colorScheme.primary` को एक्सेंट के रूप में। उन्हें खुद चुनने के लिए [फ़ील्ड रंग](/docs/{{ $version }}/themes-and-styling#field-colors) देखें।
 
 <div id="ny-form-widget-static-methods"></div>
 
@@ -1151,8 +1251,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // पंक्ति फ़ील्ड्स के बीच क्षैतिज स्पेसिंग
-  double mainAxisSpacing = 10,   // फ़ील्ड्स के बीच ऊर्ध्वाधर स्पेसिंग
+  double crossAxisSpacing = 10,  // एक ही पंक्ति में फ़ील्ड्स के बीच का गैप
+  double mainAxisSpacing = 10,   // फ़ील्ड्स के बीच ऊर्ध्वाधर गैप
   Map<String, dynamic>? initialData, // इनिशियल फ़ील्ड वैल्यूज़
   Function(Field field, dynamic value)? onChanged, // फ़ील्ड बदलने पर कॉलबैक
   Widget? header,                // फ़ॉर्म के ऊपर विजेट

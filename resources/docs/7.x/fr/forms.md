@@ -45,6 +45,7 @@
 - [Disposition du formulaire](#form-layout "Disposition du formulaire")
 - [Visibilite des champs](#field-visibility "Visibilite des champs")
 - [Style des champs](#field-styling "Style des champs")
+- [Style de champ de formulaire](#form-field-style "FormFieldStyle")
 - [Methodes statiques NyFormWidget](#ny-form-widget-static-methods "Methodes statiques NyFormWidget")
 - [Reference du constructeur NyFormWidget](#ny-form-widget-constructor-reference "Reference du constructeur NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Saisie de texte multiligne. Type de style : `FieldStyleTextField`
 
+Une zone de texte avec un `prefixIcon` fait flotter son libelle a la meme position de depart qu'un champ d'une seule ligne. L'icone est centree sur la hauteur du champ par defaut. Utilisez `PrefixIconAlignment.top` pour l'aligner sur la premiere ligne de texte :
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` accepte le meme parametre `prefixIconAlignment`. Definissez `alignLabelWithHint: true` dans la `decoration` du style pour garder le libelle au repos sur la premiere ligne.
+
 <div id="phone-number-fields"></div>
 
 ### Champs numero de telephone
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` remplace l'`InputDecoration` du selecteur, comme le fait `FieldStyleDateTimePicker.decoration` pour un champ de date. Si votre decoration ne fournit ni label, ni icone de liste deroulante, ni `prefixIcon` propre, ceux du champ sont conserves.
 
+Appuyer sur "Clear" dans le selecteur appelle le `onChanged` du champ avec `null`, et le champ efface est valide comme vide, de sorte que `FormValidator.notEmpty()` echoue a nouveau jusqu'a ce qu'une nouvelle option soit choisie.
+
 #### Styles de tuile de liste
 
 Vous pouvez personnaliser l'apparence des elements dans la feuille inferieure du selecteur en utilisant `PickerListTileStyle`. Par defaut, la feuille inferieure affiche des tuiles de texte simple. Utilisez les presets integres pour ajouter des indicateurs de selection, ou fournissez un constructeur entierement personnalise.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 Le parametre `options` necessite un `FormCollection`. Type de style : `FieldStyleRadio`
+
+Donnez à chaque option une `description` pour afficher un sous-titre sous son libellé, et stylisez-le avec `subtitleStyle` :
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` est fusionné avec le style de sous-titre par défaut : définir uniquement une `color` conserve sa taille.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Les champs dans une `List` sont affiches dans un `Row` avec des largeurs `Expanded` egales. L'espacement entre les champs est controle par le parametre `crossAxisSpacing` sur `NyFormWidget`.
+Les champs dans une `List` sont affiches dans un `Row` avec des largeurs `Expanded` egales. L'ecart entre les champs qui partagent une ligne est defini par le parametre `crossAxisSpacing` de `NyFormWidget`, et l'ecart vertical entre les champs par `mainAxisSpacing` :
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Entre les champs, de haut en bas
+  crossAxisSpacing: 8,   // Entre les champs d'une meme ligne
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Style de champ de formulaire
+
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` definit la facon dont chaque champ est dessine -- sa boite, sa bordure et son libelle. Choisissez l'un des quatre styles :
+
+| Style | Description |
+|-------|-------------|
+| `FormFieldStyle.filled()` | Une boite gris doux avec une bordure fine, le libelle au-dessus. Le style par defaut |
+| `FormFieldStyle.outlined()` | Une boite transparente avec une bordure nette qui s'epaissit au focus |
+| `FormFieldStyle.underlined()` | Pas de boite, juste une ligne sous le champ |
+| `FormFieldStyle.grouped()` | Des lignes dans une seule carte, avec le libelle a cote de la valeur, comme dans les reglages iOS |
+
+Definissez-le pour toute votre application dans `Nylo.configure` (le boilerplate le garde dans `DesignConfig.formFieldStyle`) :
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Definissez-le pour un formulaire en surchargeant `fieldStyle` :
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+Le `style:` propre a un champ l'emporte sur le `fieldStyle` de son formulaire, qui l'emporte sur celui de l'application.
+
+Chaque style accepte `dense` pour des champs plus courts, et tous sauf `underlined` acceptent `radius` pour les coins de la boite ou de la carte :
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Champs groupes
+
+Dans un formulaire `grouped`, les champs texte, selecteur, date et interrupteur qui se suivent partagent une seule carte, avec une ligne entre les rangees. Chaque libelle se place a cote de son champ, en prenant sa propre largeur jusqu'a 40 % de la ligne. Un prefixe `Icon` simple cede la place au libelle, tandis que les autres prefixes restent, comme le symbole de `Field.currency(separateSymbol: true)` ou un `prefixIcon` de code pays.
+
+En dehors d'un formulaire, placez des champs dans une seule carte avec `FormFieldGroup` :
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Les champs tirent leurs couleurs de votre theme, avec `colorScheme.primary` comme accent. Consultez [Field Colors](/docs/{{ $version }}/themes-and-styling#field-colors) pour les choisir vous-meme.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Methodes statiques NyFormWidget
@@ -1152,8 +1254,8 @@ Lors de l'extension de `NyFormWidget`, voici les parametres du constructeur que 
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Espacement horizontal entre les champs de ligne
-  double mainAxisSpacing = 10,   // Espacement vertical entre les champs
+  double crossAxisSpacing = 10,  // Ecart entre les champs qui partagent une ligne
+  double mainAxisSpacing = 10,   // Ecart vertical
   Map<String, dynamic>? initialData, // Valeurs initiales des champs
   Function(Field field, dynamic value)? onChanged, // Callback de changement de champ
   Widget? header,                // Widget au-dessus du formulaire

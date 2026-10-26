@@ -27,6 +27,8 @@
   - [Env dosyasi olusturma](#make-env-file "Env dosyasi olusturma")
   - [Anahtar olusturma](#make-key "Anahtar olusturma")
   - [Playbook olusturma](#make-playbook "Yeni bir playbook olusturma")
+- Proje Komutlari
+  - [Doctor](#doctor "Projenizin nasil baglandigini kontrol edin")
 - Uygulama Simgeleri
   - [Uygulama Simgeleri Olusturma](#build-app-icons "Uygulama Simgeleri Olusturma")
 - Ozel Komutlar
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` ve `live:run`, calisan uygulamaniza bagli bir kabuk acar; boylece calisirken onu inceleyebilir ve yonetebilirsiniz -- bkz. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>`, [playbook'larinizdan](/docs/{{ $version }}/playbooks) birini calisan uygulamada oynatir.
+`live`, `live:devices`, `live:status` ve `live:run`, calisan uygulamaniza bagli bir kabuk acar; boylece calisirken onu inceleyebilir ve yonetebilirsiniz -- bkz. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>`, [playbook'larinizdan](/docs/{{ $version }}/playbooks) birini calisan uygulamada oynatir ve `live:run screenshot` onun bir PNG'sini kaydeder -- bkz. [Ekran Goruntuleri](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Yeni bir model olusturma](#making-a-new-model "Metro ile yeni bir model olusturma")
 - [JSON'dan model olusturma](#make-model-from-json "Metro ile JSON'dan yeni bir model olusturma")
+- [OneOf modeli olusturma](#make-a-one-of-model "Metro ile OneOf modeli olusturma")
 - [Zorunlu model olusturma](#forcefully-make-a-model "Metro ile zorunlu model olusturma")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Ardindan JSON verinizi terminale yapistirabilirsiniz ve sizin icin bir model olusturulacaktir.
+
+<div id="make-a-one-of-model"></div>
+
+### OneOf modeli olusturma
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Birden fazla bicim alabilen bir yanit icin model olusturmak uzere `--one-of` secenegini kullanin. Her bicimi virgulle ayirarak adlandirin:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+Bu, `lib/app/models/` icinde bir `Accepted` ve bir `Rejected` alt turuyle muhur (sealed) bir `OrderResult` ust sinifi olusturur ve `lib/bootstrap/decoders.dart` icine onun icin bir `OneOf<OrderResult>.byKey('type', {...})` girdisi kaydeder. `--one-of` secenegini tek basina verirseniz Metro sizden adlari ister.
+
+`'type'` anahtarini API'nizin kullandigi alanla degistirin veya `OneOf.byStatus` ya da `OneOf.byJson` kullanin. Her yapici icin bkz. [OneOf](/docs/{{ $version }}/decoders#one-of).
 
 <div id="forcefully-make-a-model"></div>
 
@@ -846,15 +868,49 @@ metro make:playbook sign_up
 | Bayrak / Secenek | Kisaltma | Aciklama |
 |---------------|-------|-------------|
 | `--description` | | Metro playbook'lari listelerken gosterilen tek satirlik aciklama |
+| `--record` | | Bunun yerine yolculugu calisan uygulamanizda kaydeder: `metro live` acar ve [kaydi](/docs/{{ $version }}/playbooks#recording-a-playbook) baslatir |
+| `--from-routes` | | Router'in ekledigi her sayfayi ziyaret eder ve her birinin [ekran goruntusunu](/docs/{{ $version }}/playbooks#screenshots) alir |
 | `--force` | `-f` | Dosya zaten mevcut olsa bile olusturur |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 Bu, `lib/app/playbooks/sign_up_playbook.dart` dosyasini (verdiginiz alt klasorun icinde) olusturur ve `lib/bootstrap/playbooks.dart` icine kaydeder; bu dosya ilk kullanimda olusturulur. Release derlemelerinde kayit defteri bos bir map'tir. Ayrica `AppProvider`'inizdeki `nylo.configure(...)` cagrisina `playbooks` degerini iletir.
 
 Uygulamaniz calisirken `metro live:run playbook sign_up` ile oynatin. Uygulama zaten calisiyorsa once hot restart yapin.
+
+`--from-routes` ile Metro, `lib/routes/router.dart` icindeki `router.add(SomePage.path)` satirlarini okur ve her sayfa icin bir `visit()` ve bir `screenshot()` yazar. Bir route guard'in arkasindaki veya route parametresi alan bir sayfa, ona ulasmak icin `setUp` icinde neye ihtiyac olabilecegini soyleyen bir yorum satiri alir.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor`, projenizde yanlis baglanmis her seyi, degistirilecek dosyayla birlikte listeler:
+
+``` bash
+metro doctor
+```
+
+Route'larinizi, decoder'larinizi, dillerinizi, env'inizi ve asset'lerinizi kontrol eder:
+
+| Kontrol | Aradigi sey |
+|-------|-----------|
+| Routes | Route yolu olan ancak router'a eklenmemis sayfalar |
+| Decoders | Kullanimda olan ancak `lib/bootstrap/decoders.dart` icinde kaydedilmemis API servisleri, controller'lar ve modeller |
+| Languages | Temel dilde bulunan anahtarlari eksik olan veya gecerli JSON olmayan dil dosyalari |
+| Env | `.env` icinde olup `.env-example` icinde olmayan anahtarlar |
+| Assets | `assets/images` icinde hicbir seyin kullanmadigi gorseller |
+
+Her kontrol ok, sorun veya not olarak biter. Bir kontrol sorun buldugunda `metro doctor` sifir olmayan bir kodla cikar, boylece CI'da calistirabilirsiniz. Hicbir seyin kullanmadigi gorseller gibi notlarda da basarisiz olmak icin `--strict` ekleyin:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

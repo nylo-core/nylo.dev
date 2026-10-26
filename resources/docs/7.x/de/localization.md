@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` zeigt die aktuelle Locale von `NyLocalization` an, ohne die App neu zu starten. Jedes Widget wird neu gebaut, sodass übersetzter Text, die eigenen Strings von Material und die Textrichtung der Locale folgen, während Seite, Zustand und Navigationsstack unverändert bleiben:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+Text, den eine Seite einmal berechnet und in ihrem Zustand behalten hat, bleibt unverändert.
+
+Eine vom Benutzer gespeicherte Sprache wird beim Start der App gelesen. Ist der gespeicherte Wert kein Locale-Code wie `es` oder `pt_BR`, wird er protokolliert und verworfen, und die App startet in ihrer Standardsprache.
+
 <div id="setting-a-default-locale"></div>
 
 ## Standard-Locale festlegen

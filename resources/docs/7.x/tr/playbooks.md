@@ -6,6 +6,7 @@
 <a name="section-1"></a>
 - [Giriş](#introduction "Playbook'lara giriş")
 - [Playbook Oluşturma](#creating-a-playbook "Bir playbook oluşturma")
+- [Playbook Kaydetme](#recording-a-playbook "Çalışan uygulamadan bir playbook kaydetme")
 - [Adımlar](#steps "Bir playbook'un gerçekleştirebileceği adımlar")
 - [Hedefler](#targets "Ekrandaki öğeleri bulma")
   - [Düz Metinler](#plain-strings "Düz bir metnin nasıl eşleştirildiği")
@@ -14,6 +15,9 @@
 - [Diğer Playbook'ları Oynatma](#playing-other-playbooks "Bir playbook'u başka bir playbook'tan çalıştırma")
 - [Hız](#speed "PlaybookSpeed")
 - [Parmak ve Başlık](#finger-and-caption "Parmak ve adım başlığı")
+- [Ekran Görüntüleri](#screenshots "Bir playbook sırasında ekran görüntüsü yakalama")
+  - [Diller ve Temalar](#screenshots-locales-and-themes "Bir ekranı her dilde ve temada yakalama")
+  - [Koddan Toplama](#collecting-screenshots "onScreenshot ile ekran görüntüleri toplama")
 - [Playbook'ları Kaydetme](#registering-playbooks "Playbook'ları Nylo'ya kaydetme")
 - [Bir Playbook Çalıştırma](#running-a-playbook "Bir playbook çalıştırma")
   - [Metro'dan](#running-from-metro "Metro'dan çalıştırma")
@@ -68,6 +72,67 @@ metro make:playbook sign_up
 
 Bu, `lib/app/playbooks/sign_up_playbook.dart` dosyasını oluşturur ve uygulamanıza kaydeder. Komutun seçenekleri için [Playbook olusturma](/docs/{{ $version }}/metro#make-playbook) bölümüne bakın.
 
+Router'ınızın eklediği her sayfadan başlamak için `--from-routes` verin:
+
+``` bash
+metro make:playbook tour --from-routes
+```
+
+Metro her sayfa için bir `visit()` ve bir [`screenshot()`](#screenshots) yazar, böylece tek bir çalıştırma tüm uygulamanızı fotoğraflar.
+
+<div id="recording-a-playbook"></div>
+
+## Playbook Kaydetme
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Adımları yazmak yerine kaydedin. Uygulamanız debug modunda çalışırken `metro live` açın ve şunu yazın:
+
+``` plaintext
+› record sign_up
+```
+
+Ardından uygulamayı kullanın. Her dokunuş, uzun basış, yazılan alan, kaydırma ve sayfa değişikliği olduğu anda bir adım olarak yazılır ve ilerledikçe yazdırılır:
+
+``` plaintext
+● Recording sign_up on iPhone 17. Use the app; each step is written as you go.
+· Enter finishes · a: the next tap becomes see() · d: dontSee() · s <title>: start a scene · u: undo the last step · p: pause or resume · Ctrl+C discards
+  1  visit(HomePage.path)
+  2  tap('Get started')
+  3  waitForPage(SignUpPage.path)
+  4  type('Email', data['email'])
+  5  type('Password', data['password'], secret: true, submit: true)
+  6  tap('Create account')
+  7  waitForPage(DashboardPage.path)
+  8  see('Welcome')
+✓ Recorded 8 steps in 41s
+✓ Registered as 'sign_up' in lib/bootstrap/playbooks.dart
+Play it back now at fast speed? It takes a hot restart. [Y/n]
+```
+
+Bitirmek için Enter'a basın. Playbook, `make:playbook`'un oluşturduğu gibi düzenlenmiş olarak `lib/app/playbooks/sign_up_playbook.dart` dosyasına yazılır ve kaydedilir; böylece uygulama yeniden başlar başlamaz oynar. `metro make:playbook sign_up --record` aynısını terminalden yapar: `metro live` açar ve kaydı hemen başlatır.
+
+Kayıt sırasında bir tuşa yazıp Enter'a basın:
+
+| Tuş | Açıklama |
+|-----|-------------|
+| `a` | Bir sonraki dokunuş dokunuş yerine `see(...)` olarak yazılır |
+| `d` | Bir sonraki dokunuş `dontSee(...)` olarak yazılır |
+| `s <title>` | Bu başlıkla bir `scene` başlatır; sonraki adımlar onun içine yerleşir |
+| `u` | Son adımı kaldırır |
+| `p` | Kaydı duraklatır, örn. gerçek kimlik bilgileriyle oturum açmak için; tekrar `p` devam ettirir |
+| Enter | Bitirir ve playbook'u yazar |
+| Ctrl+C | Kaydı iptal eder |
+
+Hedefler, oynatıcının okuduğu şekilde adlandırılır, önce görünür metin gelir ve her ad yazılmadan önce çalışan uygulamaya karşı kontrol edilir; böylece kaydedilen bir adım yeniden oynatılır. Düz bir metin birden fazla widget ile eşleştiğinde adım bunu `Find` ile daraltır: `tap(Find.text('Add').at(1))`. Metni veya tooltip'i olmayan bir simge düğmesi `tap(Find.icon(Icons.add))` olur. Hiçbir şeyin adlandırmadığı bir widget, oluşturulduğu dosya ve satırı içeren bir `// TODO` yorumunun altında `tap(Find.type<GestureDetector>().at(3))` olarak yazılır ve Metro kayıt bittiğinde bunu listeler. Ona bir `Key` verin, ardından anahtarı kullanın.
+
+- **Yazma**, `defaults` içinde yazılan değerle birlikte bir `data[...]` yer tutucusunu okuyan bir `type` adımı olur. Klavyenin eylem tuşuyla bırakılan bir alan `submit: true` alır. Gizlenmiş bir alan `secret: true`, değeri `defaults` içinde ve commit etmeden önce değiştirmeniz için bir uyarı alır. Değerleri yazıldığı gibi yazmak için `--no-data` verin.
+- Bir dokunuştan sonraki **sayfa değişiklikleri**, sayfalarınızdan biri route'u tanımlıyorsa `waitForPage(SignUpPage.path)`, aksi halde `waitForPage('/sign-up')` olur. Geri gitmek `back()` olur.
+- **Kaydırma**, bir sonraki dokunduğunuz şey üzerinde `scrollTo(...)` olarak yazılır ve yalnızca kaydırma onu ağaca getirdiyse yazılır. Oynatıcı geri kalan her şeyi kendisi ortaya çıkarır.
+- Kaydırma olmayan **sürüklemeler** -- bir `Dismissible`, bir `PageView`, bir `Slider` -- için henüz playbook fiili yoktur, bu yüzden başlangıç ve bitiş noktalarıyla bir `// TODO` yorumu olarak bırakılır.
+
+Kayıt bir debug derlemesi gerektirir ve simülatörlerde, emülatörlerde ve cihazlarda aynı şekilde çalışır. Bir playbook'un kendi dokunuşları asla kaydedilmez. Komutun seçenekleri için bkz. [Metro Live](/docs/{{ $version }}/metro-live#recording-a-journey).
+
 <div id="steps"></div>
 
 ## Adımlar
@@ -89,6 +154,7 @@ Bir playbook'un `steps` listesi, miras aldığı fiillerle oluşturulur:
 | `pause(seconds: 1)` | Hareketsiz bekle, örn. demonun nefes alması için |
 | `step(title, action)` | Aynı fiillerle herhangi bir kodu bir `PlaybookActor` aracılığıyla çalıştır |
 | `scene(title, steps)` | Adımları bir başlık altında grupla; başlıkları onunla başlar ve sonuçları raporda iç içe görünür |
+| `screenshot(name)` | Ekranı yakala -- bkz. [Ekran Görüntüleri](#screenshots) |
 | `play(playbook)` | Başka bir playbook çalıştır -- bkz. [Diğer Playbook'ları Oynatma](#playing-other-playbooks) |
 
 ``` dart
@@ -153,7 +219,7 @@ tap(Find.text('Add').at(1)),
 |--------|---------|
 | `Find.text(text)` | Görünür metin |
 | `Find.textContaining(text)` | Metni içeren metin |
-| `Find.icon(icon)` | Bir simge |
+| `Find.icon(icon, label:)` | Bir simge. `label:` adım başlıklarında ona bir ad verir |
 | `Find.type<T>()` | `T` türünde bir widget |
 | `Find.key(key)` | Anahtarı olan bir widget |
 | `Find.field(name)` | Ada göre bir `NyForm` alanı |
@@ -161,6 +227,12 @@ tap(Find.text('Add').at(1)),
 | `Find.tooltip(message)` | Bir tooltip |
 | `Find.semantics(label)` | Bir semantics etiketi |
 | `Find.where(test)` | Testinizi geçen widget'lar |
+
+Bir simgeye `label` verin; adım başlıkları `Tap icon f37d` yerine `Tap the bag icon` olarak okunur:
+
+``` dart
+tap(Find.icon(Icons.shopping_bag_outlined, label: 'bag')),
+```
 
 Herhangi bir bulucuyu `.inside(ancestor)`, `.at(index)` (0'dan başlayarak sayılır), `.first` veya `.last` ile daraltın.
 
@@ -259,6 +331,97 @@ PlaybookCaption get caption => PlaybookCaption.bottom; // veya .top
 
 nylo_support 7.33.0 ({{ config('app.name') }} 7.4.0) öncesinde parmak ve alt başlık varsayılan olarak açıktı. Bu görünümü korumak için yukarıdaki geçersiz kılmaları ekleyin.
 
+<div id="screenshots"></div>
+
+## Ekran Görüntüleri
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Ekranın saklamaya değer olduğu her yere bir `screenshot` adımı ekleyin:
+
+``` dart
+@override
+List<PlaybookStep> get steps => [
+  visit(ShopPage.path),
+  screenshot('shop'),
+  tap('Running shoes'),
+  tap('Add to bag'),
+  screenshot('cart', caption: 'Your bag, ready to go'),
+];
+```
+
+`metro live:run playbook <name>` her birini, hiçbir bayrak gerekmeden `screenshots/<playbook>/<name>.png` olarak kaydeder. Koddan yapılan bir çalıştırma bunları [`onScreenshot`](#collecting-screenshots) ile toplar ve `PLAYBOOK_ON_BOOT` gibi diğer her çalıştırma yalnızca ekranın oturmasını bekler. Bir ad bir harf veya rakamla başlar ve harfler, rakamlar, `-`, `_` ve `.` kullanır.
+
+| Parametre | Açıklama |
+|-----------|-------------|
+| `name` | Ekran görüntüsünün kaydedildiği ad |
+| `locales` | Bu dil kodlarının her birinde bir kez yakala. `Screenshot.allLocales` uygulamanın paketlediği her dildir |
+| `themes` | Bu tema kimliklerinin her birinde bir kez yakala. `Screenshot.allThemes` kayıtlı her temadır |
+| `caption` | Çalıştırma ekran görüntülerini çerçevelediğinde ekranın üstündeki metin veya bir çeviri anahtarı |
+| `native` | iOS Simulator ve Android'de Metro ile yakala (varsayılan `true`) |
+
+iOS Simulator ve Android'de Metro cihazın tüm ekranını yakalar, dolayısıyla durum çubuğu ve klavye dahildir; bunu yaparken parmak ve başlık gizlenir. Tam sinyal ve bataryayla 9:41 için çalıştırmaya `--clean-status-bar` ekleyin. Başka yerlerde ve `--store` ile `--frame` çalıştırmalarında uygulama kendi ekranını yakalar. Her zaman uygulamanın yakalamasını kullanmak için `native: false` verin:
+
+``` dart
+screenshot('checkout', native: false),
+```
+
+Her adımın ekranını kaydetmek için bunun yerine `metro live:run playbook <name> --screenshots` çalıştırın. Ekran görüntülerini App Store ve Google Play için boyutlandıran seçenekler için [Metro Live](/docs/{{ $version }}/metro-live#playbook-screenshots) bölümüne, arkalarındaki `Screenshot` sınıfı için [Ekran Görüntüleri](/docs/{{ $version }}/screenshots) bölümüne bakın.
+
+<div id="screenshots-locales-and-themes"></div>
+
+### Diller ve Temalar
+
+Aynı ekranı her birinde bir kez yakalamak için bir `screenshot` adımına `locales`, `themes` veya ikisini birden verin:
+
+``` dart
+screenshot('cart', locales: ['en', 'es'], themes: ['light', 'dark']),
+screenshot('home', locales: Screenshot.allLocales),
+```
+
+Uygulama sayfayı ve durumunu koruyarak yerinde değişir ve sonraki adımdan önce geri döner. Her yakalama, dilinin ve temasının adını taşıyan bir klasöre kaydedilir:
+
+``` plaintext
+screenshots/sign_up/en/cart.png
+screenshots/sign_up/en-dark/cart.png
+screenshots/sign_up/es/cart.png
+screenshots/sign_up/es-dark/cart.png
+```
+
+Bunun yerine bir playbook'un tamamını her dilde ve temada oynatmak için `metro live:run playbook` komutuna `--locales` ve `--themes` verin.
+
+<div id="collecting-screenshots"></div>
+
+### Koddan Toplama
+
+`run()`, bir çalıştırmanın ekran görüntülerini `PlaybookShot` olarak almak için `onScreenshot` kabul eder; bu bir test veya kendi araçlarınız için kullanışlıdır:
+
+``` dart
+final List<PlaybookShot> shots = [];
+
+final PlaybookReport report = await ShopPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+  pixelRatio: 2,
+);
+
+for (final PlaybookShot shot in shots) {
+  print('${shot.name} ${shot.locale} ${shot.theme}');
+}
+```
+
+`screenshots` hangi ekranların yakalanacağını seçer:
+
+| Mod | Yakaladığı |
+|------|----------|
+| `PlaybookScreenshots.off` | Hiçbir şey |
+| `PlaybookScreenshots.failures` | Yalnızca başarısız bir adımdaki ekran |
+| `PlaybookScreenshots.marked` | `screenshot()` adımları ve başarısız adımlar |
+| `PlaybookScreenshots.auto` | Herhangi biri olan bir playbook'un `screenshot()` adımları ve hiçbiri olmayanın her adımı. Başarısız adımlar da. Varsayılan |
+| `PlaybookScreenshots.all` | Her adım, `screenshot()` adımları ve başarısız adımlar |
+
+`pixelRatio`, ekran görüntülerini cihazınkine göre boyutlandırır (varsayılan `1.0`). Her `PlaybookShot`, [kaydedilecek](/docs/{{ $version }}/screenshots#saving-a-screenshot) veya `bytes` okunacak bir `screenshot`'a, bir `kind`'a ve alındığı `name`, `locale` ve `theme` değerlerine sahiptir.
+
 <div id="registering-playbooks"></div>
 
 ## Playbook'ları Kaydetme
@@ -304,7 +467,7 @@ Uygulamanız debug modunda çalışırken:
 metro live:run playbook sign_up --speed fast
 ```
 
-`metro live` içinde `playbook sign_up` yazın. Tüm seçenekler için [Metro Live](/docs/{{ $version }}/metro-live#playbooks) bölümüne bakın. Çalıştırmanın videosunu kaydetmek için `--record` ekleyin; bkz. [Kayıt](/docs/{{ $version }}/metro-live#recording-playbooks).
+`metro live` içinde `playbook sign_up` yazın. Tüm seçenekler için [Metro Live](/docs/{{ $version }}/metro-live#playbooks) bölümüne bakın. Çalıştırmanın videosunu kaydetmek için `--record` ekleyin; bkz. [Kayıt](/docs/{{ $version }}/metro-live#recording-playbooks). Çalıştırma 20 saniye sonra beklemeyi bırakırsa uygulama büyük olasılıkla `flutter run --no-dds` ile başlatılmıştır; bkz. [Metro Live](/docs/{{ $version }}/metro-live#playbooks).
 
 <div id="running-on-boot"></div>
 
@@ -334,7 +497,7 @@ if (!report.passed) {
 }
 ```
 
-`run()`, `speed`, `data`, `clock`, `overlay` (varsayılan `true`) ve `onEvent` kabul eder. Başarısız bir adım hata fırlatmaz -- `report.passed` değerini kontrol edin. Aynı anda yalnızca bir playbook çalışabilir; birini diğerinin içinde çalıştırmak için `play()` kullanın.
+`run()`, `speed`, `data`, `clock`, `overlay` (varsayılan `true`), `onEvent` ve [ekran görüntüsü toplamak](#collecting-screenshots) için `onScreenshot`, `screenshots` ve `pixelRatio` kabul eder. Başarısız bir adım hata fırlatmaz -- `report.passed` değerini kontrol edin. Aynı anda yalnızca bir playbook çalışabilir; birini diğerinin içinde çalıştırmak için `play()` kullanın.
 
 Çalışan bir playbook'u `Playbook.stop()` ile durdurun. Kalan adımlar atlanır ama `tearDown` yine de çalışır. `Playbook.isRunning`, birinin çalışıp çalışmadığını söyler.
 
@@ -363,8 +526,8 @@ Playbook'lar bir release derlemesinde asla çalışmaz, böylece bir yolculuk bi
 Bir playbook'u widget testinde `NyTesterClock` ile çalıştırın, ardından raporunu `expectPlaybookPassed` ile doğrulayın:
 
 ``` dart
-testWidgets('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+nyWidgetTest('signs up', (tester) async {
+  await tester.visit(SignUpPage.path);
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
 });

@@ -14,6 +14,8 @@
 - [live:status](#live-status "显示应用状态")
 - [live:run](#live-run "运行内置的 live 命令")
 - [剧本](#playbooks "通过 Metro 运行剧本")
+- [录制流程](#recording-a-journey "将你的操作录制为剧本")
+- [截图](#screenshots "保存运行中应用的截图")
 - 实时命令
   - [创建实时命令](#creating-a-live-command "创建实时命令")
   - [运行实时命令](#running-a-live-command "运行实时命令")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-在 Shell 内，实时命令会省略 `metro live:` 前缀 -- 输入 `status` 而不是 `metro live:status`，输入 `route /profile` 而不是 `metro live:run route /profile`。有几个命令只能在 Shell 内运行：`seed`、`seed:rollback`、`export`、`reload` 和 `restart`。输入 `help` 可列出所有命令，输入 `help <command>` 可查看某个命令的选项。输入 `exit`（或 Ctrl+D）可退出 Shell。
+在 Shell 内，实时命令会省略 `metro live:` 前缀 -- 输入 `status` 而不是 `metro live:status`，输入 `route /profile` 而不是 `metro live:run route /profile`。有几个命令只能在 Shell 内运行：`seed`、`seed:rollback`、`export`、`record`、`reload` 和 `restart`。输入 `help` 可列出所有命令，输入 `help <command>` 可查看某个命令的选项。输入 `exit`（或 Ctrl+D）可退出 Shell。
 
 如果应用在连接期间重启，Shell 会自动重新连接。
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | 触发您自己定义的某个事件 |
 | `toast` | 显示提示消息 |
 | `playbook` | 运行您的[剧本](/docs/{{ $version }}/playbooks)，或列出它们 |
+| `screenshot` | 保存应用或某个 `ScreenshotArea` 的[截图](#screenshots) |
 
 在 `metro live` 内，省略 `live:run` 部分 -- 输入 `route /profile` 而不是 `metro live:run route /profile`：
 
@@ -232,9 +235,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | 不生成录制内容的 `.vtt` 字幕文件和章节 |
 | `--clean-status-bar` | 剧本运行期间将状态栏显示为 9:41、满格信号和满电量，结束后恢复原状。不带 `--record` 也可使用 |
 | `--countdown <seconds>` | 在第一步之前于屏幕上倒计时 0-10 秒 |
+| `--screenshots[=<mode>]` | 同时保存每一步的屏幕。`<mode>` 为 `all`、`auto`、`marked`、`failures` 或 `off`；参见[剧本截图](#playbook-screenshots) |
+| `--scale <n>` | 截图相对于设备自身尺寸的大小，最大为 4，例如 `0.5` 表示一半 |
+| `--locales <list>` | 在这些区域设置中各运行一次，例如 `en,es`，或使用应用的 `all` |
+| `--themes <list>` | 在这些主题中各运行一次，例如 `light,dark`，或使用应用的 `all` |
+| `--store <id>` | 按应用商店的尺寸绘制截图，例如 `ios-6.9` |
+| `--frame` | 将每个屏幕绘制在手机轮廓内 |
+| `--background <hex>` | 屏幕周围的颜色，例如 `"#1B2027"` |
 | `--list` | 列出应用的剧本，而不是运行某个剧本 |
 
 按下 Ctrl+C 会请求应用停止：其余步骤将被跳过，但 `tearDown` 仍会运行。再按一次 Ctrl+C 可停止等待。
+
+如果 20 秒内没有任何步骤到达 Metro，Metro 会停止等待并使本次运行失败。应用正在运行该剧本，但其事件没有送达，这种情况会在应用以 `flutter run --no-dds` 启动时发生。请使用普通的 `flutter run` 运行后重试。
 
 在 `metro live` Shell 内，该命令为 `playbook <name>`，Tab 键可补全剧本名称：
 
@@ -283,11 +295,93 @@ Playbook "sign_up" (natural)
 
 剧本默认隐藏手指和字幕。若要制作演示视频，请在剧本上设置 `showFinger` 和 `caption` -- 参见[手指与字幕](/docs/{{ $version }}/playbooks#finger-and-caption)。
 
+<div id="playbook-screenshots"></div>
+
+### 截图
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+剧本中的 [`screenshot()` 步骤](/docs/{{ $version }}/playbooks#screenshots)会保存在 `screenshots/<playbook>/` 中，无需任何标志。添加选项即可在每种语言和主题下截图，或按应用商店列表的尺寸截图：
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` 还会在没有 `screenshot()` 步骤的剧本的每一步之后保存屏幕，而 `--screenshots=all` 会对每个剧本这样做。失败步骤的屏幕会保存在 `build/playbooks/failures` 中；`--screenshots=off` 可将其关闭。
+
+`--locales` 和 `--themes` 会在每个区域设置和主题中各运行一次剧本，之后会恢复应用自身的区域设置和主题。不带值的 `--store` 会列出各种尺寸，`--frame` 会将每个屏幕绘制在手机轮廓内，并在其上方显示该步骤的 `caption:`。`--clean-status-bar` 会在 Metro 通过 iOS 模拟器或 `adb` 进行的截图中显示 9:41，并带有满格信号和满电量。
+
 <div id="playbook-live-commands"></div>
 
 ### 实时命令参考
 
 其背后的命令是 `playbooks.list`、`playbooks.run` 和 `playbooks.stop`。一次运行会立即返回其 id，并将每一步作为 `nylo.playbook` 事件以流的形式推送，因此运行时间可以超过命令的超时时间。`live:status` 会列出应用的剧本。剧本在 Nylo Live 协议版本 9 中引入。录制支持 -- `playbooks.run` 中的 `countdown`（每秒发送一个 `countdown` 事件）以及 `status` 中的 `simulator`（iOS 模拟器 UDID） -- 在协议版本 10 中引入。
+
+<div id="recording-a-journey"></div>
+
+## 录制流程
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` 会将您在运行中的应用里的操作写成一个[剧本](/docs/{{ $version }}/playbooks#recording-a-playbook)。它只能在 `metro live` Shell 内运行：
+
+``` plaintext
+› record sign_up
+```
+
+使用应用，流程完成后按 Enter。剧本会保存到 `lib/app/playbooks/sign_up_playbook.dart`，并注册在 `lib/bootstrap/playbooks.dart` 中，随后 Metro 会询问是否热重启应用，并以 `fast` 速度回放。
+
+| 选项 | 描述 |
+|--------|-------------|
+| `--description <text>` | 一行描述，在 Metro 列出剧本时显示 |
+| `--no-data` | 按输入时的原样写入输入的值，而不是带默认值的 `data[...]` 占位符 |
+| `--no-replay` | 跳过是否回放的询问 |
+| `--force`, `-f` | 替换已存在的剧本文件 |
+
+录制过程中，输入 `a` 并按 Enter 可使下一次点击成为 `see()`，输入 `d` 为 `dontSee()`，输入 `s <title>` 开始一个场景，输入 `u` 撤销上一步，输入 `p` 暂停。Ctrl+C 会放弃本次录制。`metro make:playbook sign_up --record` 可一次完成打开 Shell 并开始录制。
+
+其背后的命令是 `record.start`、`record.stop`、`record.undo`、`record.mark` 和 `record.status`。录制会将每一步作为 `nylo.record` 事件以流的形式推送。录制在 Nylo Live 协议版本 11 中引入。
+
+<div id="screenshots"></div>
+
+## 截图
+
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+保存运行中应用的 PNG：
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+每个文件都保存在项目的 `screenshots/` 中，命名为 `<mode>-<device>-<date>-<time>.png`。在 iOS 模拟器和 Android 上，Metro 会通过模拟器或 `adb` 捕获设备的整个屏幕，因此状态栏和键盘也会包含在内。其他设备则使用应用自身的捕获，即用户所看到的应用页面。
+
+| 选项 | 描述 |
+|--------|-------------|
+| `--area <name>` | 仅捕获具有此名称的 `ScreenshotArea` |
+| `--scale <n>` | 相对于设备自身尺寸的大小，最大为 4，例如 `0.5` 表示一半 |
+| `--locales <list>` | 在这些区域设置中各捕获一次屏幕，例如 `en,es`，或使用应用的 `all` |
+| `--themes <list>` | 在这些主题中各捕获一次屏幕，例如 `light,dark`，或使用应用的 `all` |
+| `--store <id>` | 按应用商店的截图尺寸绘制，例如 `ios-6.9`。单独使用 `--store` 会列出各种尺寸 |
+| `--frame` | 将屏幕绘制在手机轮廓内，并带有背景 |
+| `--caption <text>` | `--frame` 上方的文字，或翻译键 |
+| `--background <hex>` | 屏幕周围的颜色，位于 `--frame` 后方，或位于其他形状的 `--store` 尺寸旁边，例如 `"#1B2027"` |
+| `--out <path>` | 保存到此 `.png`，或保存到以 `/` 结尾的文件夹中（默认：`screenshots/`） |
+| `--open` | 保存后打开截图 |
+| `--copy` | 将截图复制到剪贴板 |
+| `--native` | 使用 iOS 模拟器或 `adb` 捕获。这是整屏捕获的默认方式；`--no-native` 使用应用自身的捕获 |
+| `--clean-status-bar` | 在 `--native` 捕获中显示 9:41，并带有满格信号和满电量 |
+
+使用 `--locales` 或 `--themes` 时，Metro 会为每一组组合在一个文件夹中保存一个 PNG，命名为 `es.png`、`dark.png` 或 `es-dark.png`，并在原位切换应用，之后再恢复。`--area`、`--scale`、`--store` 和 `--frame` 使用应用自身的捕获。
+
+在 `metro live` Shell 内，输入 `screenshot --open`。若要在应用自己的代码中截图，参见[截图](/docs/{{ $version }}/screenshots)。
 
 <div id="live-commands"></div>
 

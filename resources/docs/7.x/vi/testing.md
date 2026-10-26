@@ -25,6 +25,7 @@
   - [Tạo thể hiện](#creating-instances "Tạo thể hiện")
 - [NyFaker](#ny-faker "NyFaker")
 - [Test Cache](#test-cache "Test Cache")
+- [File Storage](#file-storage "File Storage trong Test")
 - [Giả lập Platform Channel](#platform-channel-mocking "Giả lập Platform Channel")
 - [Giả lập Route Guard](#route-guard-mocking "Giả lập Route Guard")
 - [Xác nhận](#assertions "Xác nhận")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` thiết lập môi trường test và kích hoạt tự động đặt lại trạng thái giữa các test khi `autoReset: true` (mặc định).
+
+Nó cũng thêm một event bus khi ứng dụng của bạn chưa có, để nút gửi của form đến được form của nó trong widget test, và nó thay mọi disk có thể ghi bằng một bản giả trong bộ nhớ -- xem [File Storage trong Test](#file-storage).
 
 <div id="running-tests"></div>
 
@@ -721,6 +724,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## File Storage trong Test
+
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` biến mọi [disk](/docs/{{ $version }}/storage#file-storage) có thể ghi thành một bản giả trong bộ nhớ, nên test không bao giờ ghi vào máy của bạn. Các disk chỉ đọc như `assets` vẫn là thật, và `NyTest.reset()` làm rỗng các bản giả sau mỗi test.
+
+Dùng `FileStorage.fake()` để lấy lại một disk phục vụ việc xác nhận, và `FakeFile` để tạo các tệp cần lưu:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` có `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty` và `assertEmpty`. Chúng đồng bộ, nên không cần `await`.
+
+| FakeFile | Mô tả |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | Một PNG thật, giải mã được, dưới dạng `XFile` (mặc định 10 x 10 pixel) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | Một tệp có ngần ấy byte số không, với MIME type mà tên của nó gợi ý |
+
+Các tệp `FakeFile` nằm trong bộ nhớ, nên chúng hoạt động bên trong `nyWidgetTest`.
+
 <div id="platform-channel-mocking"></div>
 
 ## Giả lập Platform Channel
@@ -1173,7 +1206,7 @@ Một [playbook](/docs/{{ $version }}/playbooks) có thể chạy như một bà
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1192,6 +1225,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+Để giữ lại các ảnh chụp màn hình mà một playbook thực hiện, hãy truyền `onScreenshot` và đọc `screenshot` hoặc `bytes` của từng `PlaybookShot`. Xem [Thu thập từ code](/docs/{{ $version }}/playbooks#collecting-screenshots):
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

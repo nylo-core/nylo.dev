@@ -45,6 +45,7 @@
 - [Bố cục Form](#form-layout "Bố cục Form")
 - [Hiển thị trường](#field-visibility "Hiển thị trường")
 - [Tạo kiểu trường](#field-styling "Tạo kiểu trường")
+- [Form Field Style](#form-field-style "FormFieldStyle")
 - [Phương thức tĩnh NyFormWidget](#ny-form-widget-static-methods "Phương thức tĩnh NyFormWidget")
 - [Tham chiếu constructor NyFormWidget](#ny-form-widget-constructor-reference "Tham chiếu constructor NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Nhập văn bản nhiều dòng. Loại kiểu: `FieldStyleTextField`
 
+Một vùng văn bản có `prefixIcon` sẽ đưa nhãn nổi lên cùng vị trí bắt đầu như một trường một dòng. Mặc định icon được căn giữa theo chiều cao của trường. Dùng `PrefixIconAlignment.top` để căn nó với dòng văn bản đầu tiên:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` nhận cùng tham số `prefixIconAlignment`. Đặt `alignLabelWithHint: true` trong `decoration` của style để giữ nhãn ở trạng thái nghỉ trên dòng đầu tiên.
+
 <div id="phone-number-fields"></div>
 
 ### Trường số điện thoại
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` thay thế `InputDecoration` của picker, giống như `FieldStyleDateTimePicker.decoration` làm với trường ngày. Nếu decoration của bạn không có label, biểu tượng dropdown hoặc `prefixIcon` riêng, thì những thứ của trường sẽ được giữ lại.
 
+Nhấn "Clear" trong picker sẽ gọi `onChanged` của trường với `null`, và trường đã xóa được xác thực là rỗng, nên `FormValidator.notEmpty()` lại thất bại cho đến khi một tùy chọn mới được chọn.
+
 #### Kiểu List Tile
 
 Bạn có thể tùy chỉnh cách các mục hiển thị trong bottom sheet của picker bằng `PickerListTileStyle`. Mặc định, bottom sheet hiển thị các tile văn bản thuần. Sử dụng các preset tích hợp để thêm indicator chọn, hoặc cung cấp builder hoàn toàn tùy chỉnh.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 Tham số `options` yêu cầu `FormCollection`. Loại kiểu: `FieldStyleRadio`
+
+Thêm `description` cho mỗi tùy chọn để hiển thị dòng mô tả bên dưới nhãn, và tùy chỉnh kiểu bằng `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` được hợp nhất với kiểu mô tả mặc định, nên chỉ đặt `color` vẫn giữ nguyên kích thước.
 
 <div id="chip-fields"></div>
 
@@ -1035,7 +1067,14 @@ fields() => [
 ];
 ```
 
-Các trường trong `List` được hiển thị trong `Row` với chiều rộng `Expanded` bằng nhau. Khoảng cách giữa các trường được kiểm soát bởi tham số `crossAxisSpacing` trên `NyFormWidget`.
+Các trường trong `List` được hiển thị trong `Row` với chiều rộng `Expanded` bằng nhau. Khoảng cách giữa các trường chung một hàng được đặt bởi tham số `crossAxisSpacing` trên `NyFormWidget`, và khoảng cách dọc giữa các trường bởi `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Giữa các trường, từ trên xuống dưới
+  crossAxisSpacing: 8,   // Giữa các trường trong cùng một hàng
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1111,6 +1150,70 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Form Field Style
+
+<!-- uncertain: new section; "filled/outlined/underlined/grouped" kept as API names -->
+<x-doc-strip label="Yêu cầu" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` đặt cách mọi trường được vẽ -- hộp, đường viền và nhãn của nó. Chọn một trong bốn kiểu giao diện:
+
+| Style | Mô tả |
+|-------|-------------|
+| `FormFieldStyle.filled()` | Một hộp xám nhạt với đường viền mảnh, nhãn ở phía trên. Mặc định |
+| `FormFieldStyle.outlined()` | Một hộp trong suốt với đường viền sắc nét dày lên khi được focus |
+| `FormFieldStyle.underlined()` | Không có hộp, chỉ một đường kẻ dưới trường |
+| `FormFieldStyle.grouped()` | Các hàng trong một thẻ, với nhãn bên cạnh giá trị, như trong cài đặt iOS |
+
+Đặt nó cho toàn bộ ứng dụng trong `Nylo.configure` (boilerplate giữ nó trong `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Đặt nó cho một form bằng cách ghi đè `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+`style:` riêng của một trường thắng `fieldStyle` của form của nó, và cái này thắng của ứng dụng.
+
+Mỗi kiểu giao diện nhận `dense` cho các trường thấp hơn, và tất cả trừ `underlined` nhận `radius` cho các góc của hộp hoặc thẻ:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Trường nhóm
+
+Trong một form `grouped`, các trường văn bản, picker, ngày và switch đứng liền nhau dùng chung một thẻ, với một đường kẻ giữa các hàng. Mỗi nhãn nằm bên cạnh trường của nó, chiếm chiều rộng riêng của nó tối đa 40% của hàng. Một prefix `Icon` thuần sẽ nhường chỗ cho nhãn, trong khi các prefix khác vẫn giữ, như ký hiệu của `Field.currency(separateSymbol: true)` hoặc `prefixIcon` mã quốc gia.
+
+Bên ngoài một form, đặt các trường trong một thẻ bằng `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Các trường lấy màu từ theme của bạn, với `colorScheme.primary` làm màu nhấn. Xem [Màu của field](/docs/{{ $version }}/themes-and-styling#field-colors) để tự chọn chúng.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Phương thức tĩnh NyFormWidget
@@ -1151,7 +1254,7 @@ Khi kế thừa `NyFormWidget`, đây là các tham số constructor bạn có t
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Khoảng cách ngang giữa các trường trong hàng
+  double crossAxisSpacing = 10,  // Khoảng cách giữa các trường chung một hàng
   double mainAxisSpacing = 10,   // Khoảng cách dọc giữa các trường
   Map<String, dynamic>? initialData, // Giá trị ban đầu của trường
   Function(Field field, dynamic value)? onChanged, // Callback khi trường thay đổi

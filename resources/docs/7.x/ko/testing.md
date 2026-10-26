@@ -25,6 +25,7 @@
   - [인스턴스 생성](#creating-instances "인스턴스 생성")
 - [NyFaker](#ny-faker "NyFaker")
 - [테스트 캐시](#test-cache "테스트 캐시")
+- [파일 스토리지](#file-storage "테스트의 파일 스토리지")
 - [Platform Channel 모킹](#platform-channel-mocking "Platform Channel 모킹")
 - [Route Guard 모킹](#route-guard-mocking "Route Guard 모킹")
 - [어서션](#assertions "어서션")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()`은 테스트 환경을 설정하고 `autoReset: true`(기본값)일 때 테스트 간 자동 상태 리셋을 활성화합니다.
+
+또한 앱에 이벤트 버스가 없으면 추가하여 위젯 테스트에서 폼의 제출 버튼이 폼에 도달하게 하며, 쓰기 가능한 모든 디스크를 메모리 내 가짜로 교체합니다 -- [테스트의 파일 스토리지](#file-storage)를 참고하세요.
 
 <div id="running-tests"></div>
 
@@ -722,6 +725,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## 테스트의 파일 스토리지
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()`은 쓰기 가능한 모든 [디스크](/docs/{{ $version }}/storage#file-storage)를 메모리 내 가짜로 만들어, 테스트가 사용자의 컴퓨터에 아무것도 쓰지 않게 합니다. `assets` 같은 읽기 전용 디스크는 실제 그대로 유지되며, `NyTest.reset()`은 각 테스트 후 가짜를 비웁니다.
+
+어서션을 위해 디스크를 가져오려면 `FileStorage.fake()`를, 저장할 파일을 만들려면 `FakeFile`을 사용하세요:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk`에는 `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty`, `assertEmpty`가 있습니다. 동기식이므로 `await`가 필요 없습니다.
+
+| FakeFile | 설명 |
+|----------|-------------|
+| `FakeFile.image(name, width:, height:)` | `XFile`로서의 실제 디코딩 가능한 PNG (기본값 10 x 10 픽셀) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | 해당 킬로바이트 수만큼의 0 바이트로 된 파일. 이름이 암시하는 MIME 타입을 가집니다 |
+
+`FakeFile` 파일은 메모리에 있으므로 `nyWidgetTest` 안에서도 동작합니다.
+
 <div id="platform-channel-mocking"></div>
 
 ## Platform Channel 모킹
@@ -1174,7 +1207,7 @@ await tester.scrollTo(
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1193,6 +1226,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+플레이북이 찍는 스크린샷을 보관하려면 `onScreenshot`을 전달하고 각 `PlaybookShot`의 `screenshot` 또는 `bytes`를 읽으세요. [코드에서 수집](/docs/{{ $version }}/playbooks#collecting-screenshots)을 참고하세요:
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

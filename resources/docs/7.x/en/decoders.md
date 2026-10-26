@@ -6,6 +6,8 @@
 - [Introduction](#introduction "Introduction")
 - Usage
   - [Model Decoders](#model-decoders "Model Decoders")
+  - [Typed Decoders](#typed-decoders "Decode and decoders()")
+  - [OneOf](#one-of "Decoding a response that can have more than one shape")
   - [API Decoders](#api-decoders "API Decoders")
 
 
@@ -97,6 +99,98 @@ final modelDecoders = {
 In the modelDecoders file, we need to provide the `Type` as the key and handle the morph in the value like the above example.
 
 The `data` argument will contain the payload from the API request.
+
+<div id="typed-decoders"></div>
+
+## Typed Decoders
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`decoders([...])` builds your `modelDecoders` map from a list. `Decode(User.fromJson)` decodes a `User`, and a `List<User>` too, with no entry of its own:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+  Decode(Order.fromJson, from: 'data'),
+]);
+```
+
+Use `from` to read the model from inside a wrapped body, like `{"data": {...}}`. A dotted key such as `'data.user'` reads deeper, and for a list, the list itself is read from `from`.
+
+`Decode` takes a `fromJson` that accepts `dynamic` or `Map<String, dynamic>`. For a closure, type its parameter:
+
+```dart
+Decode((dynamic json) => User.fromJson(json)),
+```
+
+Closure decoders in a `{...}` map, like `User: (data) => User.fromJson(data)`, keep working. Both are a `NyDecoder`, the class `Decode` and `OneOf` extend. A custom `NyDecoder<T>` implements `decode(json, response, decoders)` and sees the whole `NyResponse`, so it can read the status code or headers.
+
+<div id="one-of"></div>
+
+## OneOf
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`OneOf` decodes a response that can take more than one shape. Register it under the shared parent type, and pick the shape by a field in the body, by status code, or with your own conditions:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  OneOf<LoginResult>.byKey('status', {
+    'success': LoginSuccess.fromJson,
+    'two_factor': TwoFactorRequired.fromJson,
+  }, otherwise: (json) => LoginFailed(ApiError.fromJson(json))),
+]);
+```
+
+A `OneOf` also decodes 4xx and 5xx bodies, and a `List<T>` item by item. A shape it doesn't recognise leaves the response data null.
+
+| Constructor | Picks the shape by |
+|-------------|--------------------|
+| `OneOf.byKey(key, types, otherwise:)` | The value of `key` in the body. A dotted key such as `'data.type'` reads a nested field |
+| `OneOf.byStatus(types, otherwise:)` | The status code. A key is a code such as `404`, or a pattern such as `'4xx'` or `'40x'` |
+| `OneOf.byJson(types, otherwise:)` | Your own conditions, each taking the body and the response. The first that returns true wins |
+| `OneOf(resolve)` | A function that takes the body and the response and returns the value, or null |
+
+By status code:
+
+```dart
+OneOf<OrderResult>.byStatus({
+  200: OrderPlaced.fromJson,
+  404: OrderNotFound.fromJson,
+  '4xx': (json) => OrderRejected(ApiError.fromJson(json)),
+}),
+```
+
+An exact code wins, then the pattern with the fewest `x`s.
+
+With your own conditions:
+
+```dart
+OneOf<SignUpResult>.byJson({
+  (json, response) => response.statusCode == 200 && json['status'] == 'ok': SignUpComplete.fromJson,
+  (json, response) => response.statusCode == 200 && json['status'] == 'verify': VerifyEmail.fromJson,
+}),
+```
+
+With a function:
+
+```dart
+OneOf<OrderResult>((json, response) => switch ((response.statusCode, json)) {
+  (200, {'status': 'placed'}) => OrderPlaced.fromJson(json),
+  (200, _) => OrderPending.fromJson(json),
+  _ => null,
+}),
+```
+
+Read the shape from a response with `dataAs<X>()` and `dataIs<X>()`; see [NyResponse](/docs/{{$version}}/networking#ny-response).
+
+Metro creates the parent, its subtypes and the `OneOf.byKey` entry for you:
+
+```bash
+metro make:model login_result --one-of="success,two_factor"
+```
+
+See [Make a OneOf model](/docs/{{$version}}/metro#make-a-one-of-model).
 
 <div id="api-decoders"></div>
 

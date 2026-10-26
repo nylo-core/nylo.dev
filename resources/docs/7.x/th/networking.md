@@ -186,6 +186,21 @@ callback `request` รับ instance <a href="https://pub.dev/packages/dio" tar
 | `handleFailure` | `Function(NyResponse<T>)?` | callback ล้มเหลว |
 
 
+`handleSuccess` และ `handleFailure` ยังเปลี่ยนสิ่งที่การเรียกคืนค่าได้ด้วย callback ที่ไม่คืนค่าอะไรจะคงสถานะ response ไว้ตามเดิม callback ที่คืน `NyResponse` จะแทนที่มัน และค่าอื่นใดจะกลายเป็นข้อมูลของ response `handleFailure` ทำงานเมื่อ request throw ด้วย เช่น timeout หรือการเชื่อมต่อขาด และรับ error response:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // ย้อนกลับไปใช้ผู้ใช้ guest เมื่อ request ล้มเหลว
+      return User.guest();
+    },
+  );
+}
+```
+
+
 <div id="network-response-helper"></div>
 
 ## networkResponse Helper
@@ -298,6 +313,23 @@ String result = response.when(
 String? authHeader = response.getHeader('Authorization');
 ```
 
+
+เมื่อ response มีได้หลายรูปแบบ (decoder แบบ [OneOf](/docs/{{$version}}/decoders#one-of)) ให้อ่านรูปแบบหนึ่งด้วย `dataAs<X>()` หรือตรวจสอบด้วย `dataIs<X>()`:
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// ข้อมูลในรูป ValidationError หรือ null หากเป็นอย่างอื่น
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// ข้อมูลเป็น TwoFactorRequired หรือไม่
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
+```
 
 <div id="base-options"></div>
 
@@ -725,6 +757,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 พารามิเตอร์ type ที่คุณส่งไปยัง `network<T>()` จะถูกจับคู่กับ map `modelDecoders` ของคุณเพื่อหา decoder ที่ถูกต้อง
+
+ลงทะเบียน typed decoder ด้วย `decoders([Decode(User.fromJson)])` เพื่อถอดรหัส `User` และ `List<User>` ในบรรทัดเดียว หรือใช้ `OneOf` สำหรับ response ที่มีได้หลายรูปแบบ:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **ดูเพิ่มเติม:** [Decoders](/docs/{{$version}}/decoders#model-decoders) สำหรับรายละเอียดเกี่ยวกับการลงทะเบียน model decoders
 

@@ -45,6 +45,7 @@
 - [폼 레이아웃](#form-layout "폼 레이아웃")
 - [필드 가시성](#field-visibility "필드 가시성")
 - [필드 스타일링](#field-styling "필드 스타일링")
+- [폼 필드 스타일](#form-field-style "FormFieldStyle")
 - [NyFormWidget 정적 메서드](#ny-form-widget-static-methods "NyFormWidget 정적 메서드")
 - [NyFormWidget 생성자 참조](#ny-form-widget-constructor-reference "NyFormWidget 생성자 참조")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 여러 줄 텍스트 입력입니다. 스타일 타입: `FieldStyleTextField`
 
+`prefixIcon`이 있는 텍스트 영역은 라벨이 한 줄 필드와 같은 시작 위치로 떠오릅니다. 아이콘은 기본적으로 필드 높이의 가운데에 정렬됩니다. 첫 번째 텍스트 줄에 맞추려면 `PrefixIconAlignment.top`을 사용하세요:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField`도 동일한 `prefixIconAlignment` 매개변수를 받습니다. 스타일의 `decoration`에 `alignLabelWithHint: true`를 설정하면 대기 상태의 라벨이 첫 번째 줄에 유지됩니다.
+
 <div id="phone-number-fields"></div>
 
 ### 전화번호 필드
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration`은 Picker의 `InputDecoration`을 대체하며, 날짜 필드에서 `FieldStyleDateTimePicker.decoration`이 하는 것과 같습니다. decoration에 자체 라벨, 드롭다운 아이콘 또는 `prefixIcon`이 없으면 필드의 것이 유지됩니다.
 
+Picker에서 "Clear"를 탭하면 필드의 `onChanged`가 `null`로 호출되고, 지워진 필드는 빈 값으로 검증되므로 새 옵션을 선택할 때까지 `FormValidator.notEmpty()`가 다시 실패합니다.
+
 #### 리스트 타일 스타일
 
 `PickerListTileStyle`을 사용하여 Picker의 바텀 시트에서 항목이 표시되는 방식을 커스터마이징할 수 있습니다. 기본적으로 바텀 시트는 일반 텍스트 타일을 표시합니다. 내장 프리셋을 사용하여 선택 표시기를 추가하거나 완전히 커스텀 빌더를 제공할 수 있습니다.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 `options` 매개변수에는 `FormCollection`이 필요합니다. 스타일 타입: `FieldStyleRadio`
+
+각 옵션에 `description`을 지정하면 레이블 아래에 부제목이 표시되며, `subtitleStyle`로 스타일을 지정할 수 있습니다:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle`은 기본 부제목 스타일에 병합되므로 `color`만 지정해도 크기는 그대로 유지됩니다.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-`List`에 있는 필드는 동일한 `Expanded` 너비로 `Row`에 렌더링됩니다. 필드 간 간격은 `NyFormWidget`의 `crossAxisSpacing` 매개변수로 제어됩니다.
+`List`에 있는 필드는 동일한 `Expanded` 너비로 `Row`에 렌더링됩니다. 같은 행을 공유하는 필드 사이의 간격은 `NyFormWidget`의 `crossAxisSpacing` 매개변수로, 필드 사이의 수직 간격은 `mainAxisSpacing`으로 설정합니다:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // 필드 사이 (위에서 아래로)
+  crossAxisSpacing: 8,   // 같은 행의 필드 사이
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## 폼 필드 스타일
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle`은 모든 필드가 그려지는 방식 -- 박스, 테두리, 라벨 -- 을 설정합니다. 네 가지 모양 중 하나를 선택하세요:
+
+| 스타일 | 설명 |
+|-------|-------------|
+| `FormFieldStyle.filled()` | 가는 테두리가 있는 부드러운 회색 박스, 라벨은 위에 표시. 기본값 |
+| `FormFieldStyle.outlined()` | 투명한 박스와 선명한 테두리, 포커스되면 테두리가 두꺼워짐 |
+| `FormFieldStyle.underlined()` | 박스 없이 필드 아래에 선만 표시 |
+| `FormFieldStyle.grouped()` | iOS 설정처럼 하나의 카드 안에 행들이 있고, 라벨이 값 옆에 표시됨 |
+
+`Nylo.configure`에서 앱 전체에 설정합니다 (보일러플레이트는 `DesignConfig.formFieldStyle`에 보관합니다):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+`fieldStyle`을 오버라이드하여 하나의 폼에 설정합니다:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+필드 자체의 `style:`이 폼의 `fieldStyle`보다 우선하고, 이는 다시 앱의 설정보다 우선합니다.
+
+각 모양은 더 짧은 필드를 위한 `dense`를 받으며, `underlined`를 제외한 모든 모양은 박스 또는 카드의 모서리를 위한 `radius`를 받습니다:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### 그룹 필드
+
+`grouped` 폼에서는 연속된 텍스트, Picker, 날짜, 스위치 필드가 행 사이에 선이 있는 하나의 카드를 공유합니다. 각 라벨은 필드 옆에 놓이며 자체 너비를 차지하되 행의 최대 40%까지입니다. 일반 `Icon` 접두사는 라벨에 자리를 양보하고, `Field.currency(separateSymbol: true)`의 기호나 국가 코드 `prefixIcon` 같은 다른 접두사는 그대로 유지됩니다.
+
+폼 밖에서는 `FormFieldGroup`으로 필드를 하나의 카드에 넣을 수 있습니다:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+필드는 테마에서 색상을 가져오며 `colorScheme.primary`를 강조 색으로 사용합니다. 직접 선택하려면 [필드 색상](/docs/{{ $version }}/themes-and-styling#field-colors)을 참고하세요.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget 정적 메서드
@@ -1152,7 +1254,7 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // 행 필드 사이의 수평 간격
+  double crossAxisSpacing = 10,  // 같은 행을 공유하는 필드 사이의 간격
   double mainAxisSpacing = 10,   // 필드 사이의 수직 간격
   Map<String, dynamic>? initialData, // 초기 필드 값
   Function(Field field, dynamic value)? onChanged, // 필드 변경 콜백

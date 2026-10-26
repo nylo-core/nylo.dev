@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Controller'lar da bir sayfa gibi `check()` ile doğrulama yapabilir. Bkz. [Validating in a Controller](/docs/{{ $version }}/validation#validating-in-a-controller).
+
 <div id="language-switching"></div>
 
 ## Dil Değiştirme
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+`perform` bir `Exception` fırlattığında tepki vermek için `onError` geçirin. Kilit önce serbest bırakılır, ardından `onError` istisnayı ve yığın izini (stack trace) alır:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

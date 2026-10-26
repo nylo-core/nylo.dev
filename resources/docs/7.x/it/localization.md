@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` mostra la lingua corrente di `NyLocalization` senza riavviare l'app. Ogni widget viene ricostruito, quindi il testo tradotto, le stringhe di Material e la direzione del testo seguono la lingua, mentre la pagina, il suo stato e lo stack di navigazione restano dove sono:
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+Il testo che una pagina ha calcolato una volta e conservato nel proprio stato resta com'era.
+
+Una lingua salvata dall'utente viene letta all'avvio dell'app. Se il valore salvato non e' un codice lingua, come `es` o `pt_BR`, viene registrato nel log e scartato, e l'app parte nella sua lingua predefinita.
+
 <div id="setting-a-default-locale"></div>
 
 ## Impostare una Lingua Predefinita

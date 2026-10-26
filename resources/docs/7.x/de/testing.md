@@ -25,6 +25,7 @@
   - [Instanzen erstellen](#creating-instances "Instanzen erstellen")
 - [NyFaker](#ny-faker "NyFaker")
 - [Test-Cache](#test-cache "Test-Cache")
+- [Dateispeicher](#file-storage "Dateispeicher in Tests")
 - [Platform-Channel-Mocking](#platform-channel-mocking "Platform-Channel-Mocking")
 - [Route-Guard-Mocking](#route-guard-mocking "Route-Guard-Mocking")
 - [Assertions](#assertions "Assertions")
@@ -69,6 +70,8 @@ void main() {
 ```
 
 `NyTest.init()` richtet die Testumgebung ein und aktiviert das automatische Zurücksetzen des Zustands zwischen Tests, wenn `autoReset: true` (Standardeinstellung).
+
+Außerdem fügt es einen Event-Bus hinzu, wenn Ihre App keinen hat, sodass der Absenden-Button eines Formulars in einem Widget-Test sein Formular erreicht, und es ersetzt jeden beschreibbaren Datenträger durch eine In-Memory-Attrappe -- siehe [Dateispeicher in Tests](#file-storage).
 
 <div id="running-tests"></div>
 
@@ -722,6 +725,36 @@ nyTest('cache operations', () async {
 });
 ```
 
+<div id="file-storage"></div>
+
+## Dateispeicher in Tests
+
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyTest.init()` macht jeden beschreibbaren [Datenträger](/docs/{{ $version }}/storage#file-storage) zu einer In-Memory-Attrappe, sodass Tests nie auf Ihren Rechner schreiben. Schreibgeschützte Datenträger wie `assets` bleiben echt, und `NyTest.reset()` leert die Attrappen nach jedem Test.
+
+Verwenden Sie `FileStorage.fake()`, um einen Datenträger für Assertions zurückzuerhalten, und `FakeFile`, um Dateien zum Speichern zu erzeugen:
+
+``` dart
+nyTest('saves the avatar', () async {
+  FakeDisk photos = FileStorage.fake('photos');
+
+  await ProfileController().saveAvatar(FakeFile.image('me.png'));
+
+  photos.assertExists('avatars/me.png');
+  photos.assertCount('avatars', 1);
+});
+```
+
+`FakeDisk` hat `assertExists`, `assertMissing`, `assertCount`, `assertDirectoryEmpty` und `assertEmpty`. Sie sind synchron und brauchen daher kein `await`.
+
+| FakeFile | Beschreibung |
+|----------|--------------|
+| `FakeFile.image(name, width:, height:)` | Ein echtes, dekodierbares PNG als `XFile` (standardmäßig 10 mal 10 Pixel) |
+| `FakeFile.create(name, kilobytes:, mimeType:)` | Eine Datei mit so vielen Null-Bytes und dem MIME-Typ, den ihr Name nahelegt |
+
+`FakeFile`-Dateien liegen im Speicher, sodass sie innerhalb von `nyWidgetTest` funktionieren.
+
 <div id="platform-channel-mocking"></div>
 
 ## Platform-Channel-Mocking
@@ -1174,7 +1207,7 @@ Ein [Playbook](/docs/{{ $version }}/playbooks) kann als Test laufen. `NyTesterCl
 
 ``` dart
 nyWidgetTest('signs up', (tester) async {
-  await tester.pumpWidget(const MyApp());
+  await tester.visit(SignUpPage.path);
 
   final report = await SignUpPlaybook().run(clock: NyTesterClock(tester));
   expectPlaybookPassed(report);
@@ -1193,6 +1226,17 @@ void main() {
     expectPlaybookPassed(await SignUpPlaybook().run());
   });
 }
+```
+
+Um die Screenshots eines Playbooks zu behalten, übergeben Sie `onScreenshot` und lesen `screenshot` oder `bytes` jedes `PlaybookShot`. Siehe [Aus Code sammeln](/docs/{{ $version }}/playbooks#collecting-screenshots):
+
+``` dart
+final shots = <PlaybookShot>[];
+final report = await SignUpPlaybook().run(
+  onScreenshot: shots.add,
+  screenshots: PlaybookScreenshots.marked,
+);
+expectPlaybookPassed(report);
 ```
 
 <div id="examples"></div>

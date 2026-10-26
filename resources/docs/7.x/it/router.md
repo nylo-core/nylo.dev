@@ -195,6 +195,31 @@ Il metodo `previewRoute()`:
 - Rende la rotta specificata la rotta iniziale
 - Utile per testare rapidamente pagine specifiche durante lo sviluppo
 
+<x-doc-strip label="Richiede" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Una pagina che ha bisogno di dati per essere costruita puo' essere visualizzata in anteprima con quei dati. Passa `data`, `queryParameters` e `stack` a `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` e `queryParameters` raggiungono la pagina come se avessi navigato con `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. I dati di una navigazione reale hanno la priorita'.
+- `stack` elenca le rotte da aprire sotto, cosi' il pulsante indietro funziona come dopo un normale avvio. Qui, tornare indietro da `ProductPage` porta a `HomePage`.
+- Le build di release ignorano `previewRoute()`, quindi un'anteprima dimenticata nel tuo router non cambia mai la prima pagina in produzione.
+
+`stack` richiede che l'app sia costruita con `NyApp.materialApp`. Se costruisci il tuo `MaterialApp`, passa `NyRouter.previewInitialRoutes(onGenerateRoute)` al suo `onGenerateInitialRoutes`:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Attenzione:** Ricorda di rimuovere `.previewRoute()` prima di rilasciare la tua app!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |--------------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Applica route guard a tutte le rotte del gruppo |
 | `prefix` | `String` | Aggiunge un prefisso a tutti i percorsi delle rotte del gruppo |
-| `transition_type` | `TransitionType` | Imposta la transizione per tutte le rotte del gruppo |
+| `transition_type` | `TransitionType` | Imposta la transizione per le rotte del gruppo che non ne impostano una propria |
 | `transition` | `PageTransitionType` | Imposta il tipo di transizione della pagina (deprecato, usa transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Imposta le impostazioni di transizione |
 

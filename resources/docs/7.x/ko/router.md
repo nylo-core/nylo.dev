@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - 지정된 라우트를 초기 라우트로 만듭니다
 - 개발 중 특정 페이지를 빠르게 테스트하는 데 유용합니다
 
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+빌드에 데이터가 필요한 페이지도 데이터와 함께 미리볼 수 있습니다. `previewRoute`에 `data`, `queryParameters`, `stack`을 전달하세요:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data`와 `queryParameters`는 `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`로 이동한 것처럼 페이지에 전달됩니다. 실제 내비게이션의 데이터가 우선합니다.
+- `stack`은 아래에 열어둘 라우트 목록으로, 뒤로 가기 버튼이 일반 실행 후처럼 동작하게 합니다. 여기서는 `ProductPage`에서 뒤로 가면 `HomePage`로 이동합니다.
+- 릴리스 빌드에서는 `previewRoute()`가 무시되므로, 라우터에 남아 있는 미리보기가 프로덕션의 첫 페이지를 바꾸지 않습니다.
+
+`stack`을 사용하려면 앱이 `NyApp.materialApp`으로 빌드되어야 합니다. 직접 `MaterialApp`을 빌드하는 경우 `NyRouter.previewInitialRoutes(onGenerateRoute)`를 `onGenerateInitialRoutes`에 전달하세요:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **경고:** 앱을 출시하기 전에 `.previewRoute()`를 제거하세요!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |---------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | 그룹의 모든 라우트에 Route Guard 적용 |
 | `prefix` | `String` | 그룹의 모든 라우트 경로에 접두사 추가 |
-| `transition_type` | `TransitionType` | 그룹의 모든 라우트에 전환 설정 |
+| `transition_type` | `TransitionType` | 자체 전환을 설정하지 않은 그룹 내 라우트에 전환 설정 |
 | `transition` | `PageTransitionType` | 페이지 전환 타입 설정 (사용 중단, transition_type 사용) |
 | `transition_settings` | `PageTransitionSettings` | 전환 설정 지정 |
 

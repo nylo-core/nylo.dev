@@ -195,6 +195,31 @@ Die `previewRoute()`-Methode:
 - Macht die angegebene Route zur initialen Route
 - Nützlich zum schnellen Testen bestimmter Seiten während der Entwicklung
 
+<x-doc-strip label="Voraussetzung" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Eine Seite, die Daten zum Aufbau braucht, kann mit ihnen in der Vorschau angezeigt werden. Übergeben Sie `data`, `queryParameters` und `stack` an `previewRoute`:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` und `queryParameters` erreichen die Seite, als hätten Sie mit `routeTo(ProductPage.path, data: {...}, queryParameters: {...})` navigiert. Daten aus einer echten Navigation haben Vorrang.
+- `stack` listet Routen auf, die darunter geöffnet werden, sodass der Zurück-Button wie nach einem normalen Start funktioniert. Hier führt Zurück von `ProductPage` zu `HomePage`.
+- Release-Builds ignorieren `previewRoute()`, sodass eine im Router vergessene Vorschau die erste Seite in der Produktion nie ändert.
+
+`stack` setzt voraus, dass die App mit `NyApp.materialApp` gebaut wird. Wenn Sie Ihre eigene `MaterialApp` bauen, übergeben Sie `NyRouter.previewInitialRoutes(onGenerateRoute)` an deren `onGenerateInitialRoutes`:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Warnung:** Denken Sie daran, `.previewRoute()` vor der Veröffentlichung Ihrer App zu entfernen!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |------------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Route Guards auf alle Routen in der Gruppe anwenden |
 | `prefix` | `String` | Ein Präfix zu allen Routenpfaden in der Gruppe hinzufügen |
-| `transition_type` | `TransitionType` | Übergang für alle Routen in der Gruppe festlegen |
+| `transition_type` | `TransitionType` | Übergang für die Routen in der Gruppe festlegen, die keinen eigenen setzen |
 | `transition` | `PageTransitionType` | Seitenübergangstyp festlegen (veraltet, verwenden Sie transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Übergangseinstellungen festlegen |
 

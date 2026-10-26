@@ -486,6 +486,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 जब आप **_login** मेथड पर टैप करते हैं, तो यह मूल रिक्वेस्ट पूरी होने तक किसी भी आगे की रिक्वेस्ट को ब्लॉक कर देगा। `isLocked('login_to_app')` हेल्पर का उपयोग यह जाँचने के लिए किया जाता है कि बटन लॉक है या नहीं। ऊपर के उदाहरण में, आप देख सकते हैं कि हम इसका उपयोग यह निर्धारित करने के लिए करते हैं कि हमारे लोडिंग विजेट को कब दिखाना है।
 
+<x-doc-strip label="आवश्यक" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+यदि `perform` कोई `Exception` throw करता है, तो लॉक पहले रिलीज़ होता है और फिर exception अपने स्टैक ट्रेस के साथ `onError` को जाता है। `onError` के बिना उसे लॉग किया जाता है। `Error` (एक बग) लॉक रिलीज़ होने के बाद दोबारा throw किया जाता है।
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

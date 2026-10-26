@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+I controller possono anche validare con `check()`, come fa una pagina. Vedi [Validazione in un Controller](/docs/{{ $version }}/validation#validating-in-a-controller).
+
 <div id="language-switching"></div>
 
 ## Cambio Lingua
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+Passa `onError` per reagire quando `perform` lancia un'`Exception`. Il lock viene rilasciato per primo, poi `onError` riceve l'eccezione e il relativo stack trace:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

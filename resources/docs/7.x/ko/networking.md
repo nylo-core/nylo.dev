@@ -42,11 +42,7 @@ API Service는 `lib/app/networking/`에 위치합니다. 새 프로젝트에는 
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -189,6 +185,20 @@ class ApiService extends NyApiService {
 | `handleSuccess` | `Function(NyResponse<T>)?` | 성공 콜백 |
 | `handleFailure` | `Function(NyResponse<T>)?` | 실패 콜백 |
 
+`handleSuccess`와 `handleFailure`는 호출이 반환하는 값도 바꿀 수 있습니다. 아무것도 반환하지 않는 콜백은 응답을 그대로 유지하고, `NyResponse`를 반환하는 콜백은 응답을 교체하며, 그 외의 값은 응답의 data가 됩니다. `handleFailure`는 타임아웃이나 연결 끊김처럼 요청이 예외를 던질 때도 실행되며 오류 응답을 받습니다:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // 요청이 실패하면 게스트 사용자로 대체
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -302,6 +312,23 @@ String result = response.when(
 String? authHeader = response.getHeader('Authorization');
 ```
 
+응답이 둘 이상의 형태를 가질 수 있는 경우([OneOf](/docs/{{$version}}/decoders#one-of) Decoder), `dataAs<X>()`로 한 가지 형태를 읽거나 `dataIs<X>()`로 해당 형태인지 확인하세요:
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// ValidationError로서의 data, 다른 타입이면 null
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// data가 TwoFactorRequired인지 여부
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
+```
+
 
 <div id="base-options"></div>
 
@@ -311,8 +338,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +493,7 @@ Interceptor를 사용하는 경우:
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +548,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +568,8 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- Logger 비활성화
         );
@@ -626,7 +650,6 @@ await api<ApiService>(
 | 매개변수 | 타입 | 설명 |
 |-----------|------|-------------|
 | `request` | `Function(T)` | API 요청 함수 |
-| `context` | `BuildContext?` | Build context |
 | `headers` | `Map<String, dynamic>` | 추가 헤더 |
 | `bearerToken` | `String?` | Bearer 토큰 |
 | `baseUrl` | `String?` | Base URL 재정의 |
@@ -703,7 +726,7 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   // 단일 User 반환
   Future<User?> fetchUser() async {
@@ -733,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 `network<T>()`에 전달하는 타입 매개변수가 `modelDecoders` 맵과 매칭되어 올바른 Decoder를 찾습니다.
+
+`decoders([Decode(User.fromJson)])`로 타입이 지정된 Decoder를 등록하면 한 줄로 `User`와 `List<User>`를 디코딩할 수 있으며, 둘 이상의 형태를 가진 응답에는 `OneOf`를 사용하세요:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **참고:** Model Decoder 등록에 대한 자세한 내용은 [Decoder](/docs/{{$version}}/decoders#model-decoders)를 참조하세요.
 
@@ -876,7 +907,7 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -1021,8 +1052,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

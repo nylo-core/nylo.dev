@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Kontrolery moga rowniez walidowac za pomoca `check()`, tak jak strona. Zobacz [Validating in a Controller](/docs/{{ $version }}/validation#validating-in-a-controller).
+
 <div id="language-switching"></div>
 
 ## Zmiana języka
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+Przekaz `onError`, aby zareagowac, gdy `perform` zglosi `Exception`. Blokada jest najpierw zwalniana, a nastepnie `onError` otrzymuje wyjatek oraz jego stack trace:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

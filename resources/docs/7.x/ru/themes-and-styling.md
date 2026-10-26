@@ -13,6 +13,7 @@
   - [Базовые стили](#base-styles "Базовые стили")
   - [Расширение стилей цветов](#extending-color-styles "Расширение стилей цветов")
   - [Переключение темы](#switching-theme "Переключение темы")
+  - [Цвета полей](#field-colors "Цвета полей")
   - [Шрифты](#fonts "Шрифты")
   - [Дизайн](#design "Дизайн")
 - [Расширения текста](#text-extensions "Расширения текста")
@@ -339,6 +340,35 @@ TextButton(onPressed: () {
 ),
 ```
 
+Чтобы показать тему, не сохраняя её, используйте `NyThemeManager.instance.showTheme`. Он переключает тему приложения на месте, сохраняя страницу, её состояние и стек навигации, а сохранённый выбор пользователя и системную настройку темы оставляет без изменений -- удобно для предпросмотра или скриншота. Он выбрасывает `ArgumentError`, если темы с таким id нет:
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## Цвета полей
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Поля формы](/docs/{{ $version }}/forms#form-field-style) по умолчанию следуют вашей теме: нейтральные серые для её яркости и `colorScheme.primary` как акцент для фокуса, выделений и включённых переключателей.
+
+Чтобы выбрать цвета самостоятельно, добавьте расширение `NyFieldColors` в тему:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` создаёт полный набор для светлой или тёмной темы, а `copyWith` изменяет любой цвет в нём, например `fill`, `border`, `label`, `text`, `placeholder`, `error` или `divider`. Цвет, заданный в собственном `style` поля, всегда имеет приоритет над ними.
+
 
 <div id="fonts"></div>
 
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo` используется для отображения логотипа вашего приложения.
 
 Вы можете изменить **lib/resources/widgets/logo_widget.dart**, чтобы настроить отображение логотипа.
+
+`DesignConfig.formFieldStyle` задаёт оформление ваших [полей формы](/docs/{{ $version }}/forms#form-field-style): `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` или `.grouped()`.
 
 `DesignConfig.loader` используется для отображения индикатора загрузки. {{ config('app.name') }} будет использовать эту переменную в некоторых вспомогательных методах как виджет загрузки по умолчанию.
 

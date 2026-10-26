@@ -25,6 +25,7 @@
 - Model Storage
   - [Model Save](#model-save "Model Save")
   - [Model Collections](#model-collections "Model Collections")
+- [File Storage](#file-storage "File Storage")
 - [StorageKey Extension Reference](#storage-key-extension-reference "StorageKey Extension Reference")
 - [Storage Exceptions](#storage-exceptions "Storage Exceptions")
 - [Legacy Migration](#legacy-migration "Legacy Migration")
@@ -565,6 +566,82 @@ await userKyle.saveToCollection();
 // Read back
 List<User> users = await NyStorage.readCollection<User>(User.key);
 ```
+
+<div id="file-storage"></div>
+
+## File Storage
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+`NyStorage` keeps values. File storage keeps files, such as PDFs, photos and downloads, on named disks:
+
+``` dart
+await disk('documents').put('reports/q3.pdf', pdfBytes);
+
+String text = await disk('documents').get('notes.txt');
+bool exists = await disk('documents').exists('reports/q3.pdf');
+await disk('documents').delete('reports/q3.pdf');
+```
+
+`disk()` with no name uses the default disk. `FileStorage` has the same methods for the default disk:
+
+``` dart
+await FileStorage.put('notes.txt', 'Hello');
+```
+
+Five disks work without any configuration:
+
+| Disk | Where | Notes |
+|------|-------|-------|
+| `local` | The app's support folder | The default disk |
+| `documents` | The app's documents folder | Files that belong to the user |
+| `cache` | The app's cache folder | The OS may clear it |
+| `temp` | The temporary folder | Pruned after a day |
+| `assets` | Your app bundle, under `assets/` | Read-only |
+
+### Storing an Uploaded File
+
+`putFile` stores a file from `image_picker`, `file_picker` or the camera (an `XFile`) under a random name, and returns its path:
+
+``` dart
+XFile? photo = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (photo != null) {
+  String path = await disk().putFile('avatars', photo);
+  // avatars/k3v0q...9q.jpg
+}
+```
+
+Use `putFileAs('avatars', photo, 'me.jpg')` to choose the name.
+
+### Showing a Stored Image
+
+`DiskImage` is an `ImageProvider` for an image on a disk:
+
+``` dart
+CircleAvatar(backgroundImage: DiskImage('avatars/me.jpg'))
+Image(image: DiskImage('thumbs/42.jpg', disk: 'cache'))
+```
+
+Writing the file again through its disk updates the image on screen.
+
+### Custom Disks
+
+Pass your own disks to `nylo.configure`. They are added to the defaults, and a disk with the same name as a default replaces it:
+
+``` dart
+await nylo.configure(
+  // ...
+  disks: {
+    'exports': DiskConfig.local(DiskRoot.documents, prefix: 'exports'),
+    'scratch': DiskConfig.memory(),
+  },
+  defaultDisk: 'exports',
+);
+```
+
+`DiskConfig` also has `path`, `assets`, `scoped` (a folder inside another disk) and `custom` (your own `DiskDriver`).
+
+To test code that uses disks, see [File Storage in Tests](/docs/{{ $version }}/testing#file-storage).
 
 <div id="storage-key-extension-reference"></div>
 

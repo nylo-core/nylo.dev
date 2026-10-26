@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` überschreibt **sowohl** `initialRoute()` als auch `authenticatedRoute()` und macht die angegebene Route zur ersten angezeigten Seite, unabhängig vom Auth-Status.
 
+Übergeben Sie `data`, `queryParameters` oder `stack`, um eine Seite zu öffnen, die sie braucht, z. B. `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`. Release-Builds ignorieren `previewRoute()`. Siehe [Preview-Route](/docs/{{ $version }}/router#preview-route).
+
 > **Warnung:** Entfernen Sie `.previewRoute()` vor der Veröffentlichung Ihrer App.
 
 

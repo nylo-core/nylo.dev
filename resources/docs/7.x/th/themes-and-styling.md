@@ -13,6 +13,7 @@
   - [สไตล์พื้นฐาน](#base-styles "สไตล์พื้นฐาน")
   - [การขยายสไตล์สี](#extending-color-styles "การขยายสไตล์สี")
   - [การเปลี่ยนธีม](#switching-theme "การเปลี่ยนธีม")
+  - [สีของฟิลด์](#field-colors "สีของฟิลด์")
   - [ฟอนต์](#fonts "ฟอนต์")
   - [การออกแบบ](#design "การออกแบบ")
 - [Text Extensions](#text-extensions "Text Extensions")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+หากต้องการแสดงธีมโดยไม่บันทึก ให้ใช้ `NyThemeManager.instance.showTheme` มันสลับธีมของแอปในที่เดิม โดยคงหน้า state และ navigation stack ไว้ และไม่แตะต้องตัวเลือกที่ผู้ใช้บันทึกไว้และการตั้งค่าธีมของระบบ เหมาะสำหรับการพรีวิวหรือสกรีนช็อต มันจะ throw `ArgumentError` เมื่อไม่มีธีมที่มี id นั้น:
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## สีของฟิลด์
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[ฟิลด์ฟอร์ม](/docs/{{ $version }}/forms#form-field-style) เป็นไปตามธีมของคุณโดยค่าเริ่มต้น: สีเทากลางตามความสว่างของธีม และ `colorScheme.primary` เป็นสีเน้นสำหรับ focus การเลือก และสวิตช์ที่เปิดอยู่
+
+หากต้องการเลือกสีเอง ให้เพิ่ม extension `NyFieldColors` ลงในธีม:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` สร้างชุดสีครบสำหรับธีมสว่างหรือมืด และ `copyWith` เปลี่ยนสีใดก็ได้ในชุดนั้น เช่น `fill`, `border`, `label`, `text`, `placeholder`, `error` หรือ `divider` สีที่ตั้งบน `style` ของฟิลด์เองจะมีผลเหนือสีเหล่านี้เสมอ
+
 <div id="fonts"></div>
 
 ## ฟอนต์
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo` ใช้สำหรับแสดงโลโก้ของแอป
 
 คุณสามารถแก้ไข **lib/resources/widgets/logo_widget.dart** เพื่อปรับแต่งวิธีแสดงโลโก้ของคุณ
+
+`DesignConfig.formFieldStyle` กำหนดวิธีวาด[ฟิลด์ฟอร์ม](/docs/{{ $version }}/forms#form-field-style) ของคุณ: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` หรือ `.grouped()`
 
 `DesignConfig.loader` ใช้สำหรับแสดงตัวโหลด {{ config('app.name') }} จะใช้ตัวแปรนี้ในเมธอดช่วยเหลือบางตัวเป็น loader widget เริ่มต้น
 

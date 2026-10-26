@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+控制器也可以像页面一样使用 `check()` 进行验证。参见[在控制器中验证](/docs/{{ $version }}/validation#validating-in-a-controller)。
+
 <div id="language-switching"></div>
 
 ## 语言切换
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+当 `perform` 抛出 `Exception` 时，传入 `onError` 即可做出响应。锁会先被释放，然后 `onError` 接收该异常及其堆栈跟踪：
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

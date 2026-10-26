@@ -185,6 +185,20 @@ Callback `request` menerima instance <a href="https://pub.dev/packages/dio" targ
 | `handleSuccess` | `Function(NyResponse<T>)?` | Callback sukses |
 | `handleFailure` | `Function(NyResponse<T>)?` | Callback gagal |
 
+`handleSuccess` dan `handleFailure` juga dapat mengubah apa yang dikembalikan oleh pemanggilan. Callback yang tidak mengembalikan apa pun membiarkan response apa adanya, callback yang mengembalikan `NyResponse` menggantikannya, dan nilai lain apa pun menjadi data response. `handleFailure` juga berjalan saat request melempar error, seperti saat timeout atau koneksi terputus, dan menerima response error:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // Gunakan user tamu saat request gagal
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -296,6 +310,23 @@ String result = response.when(
 
 // Dapatkan header tertentu
 String? authHeader = response.getHeader('Authorization');
+```
+
+Saat sebuah response dapat memiliki lebih dari satu bentuk (decoder [OneOf](/docs/{{$version}}/decoders#one-of)), baca satu bentuk dengan `dataAs<X>()`, atau periksa dengan `dataIs<X>()`:
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// Data sebagai ValidationError, atau null jika berupa hal lain
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// Apakah data adalah TwoFactorRequired
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
 ```
 
 
@@ -725,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 Parameter tipe yang Anda berikan ke `network<T>()` dicocokkan dengan map `modelDecoders` Anda untuk menemukan decoder yang tepat.
+
+Daftarkan decoder bertipe dengan `decoders([Decode(User.fromJson)])` untuk mendekode `User` dan `List<User>` dengan satu baris, atau `OneOf` untuk response dengan lebih dari satu bentuk:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **Lihat juga:** [Decoders](/docs/{{$version}}/decoders#model-decoders) untuk detail tentang mendaftarkan model decoder.
 

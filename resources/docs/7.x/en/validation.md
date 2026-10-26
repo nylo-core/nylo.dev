@@ -6,6 +6,7 @@
 - [Introduction](#introduction "Introduction to validation")
 - Basics
   - [Validating Data with check()](#validating-data "Validating data with check")
+  - [Validating in a Controller](#validating-in-a-controller "Validating in a controller")
   - [Validation Results](#validation-results "Validation results")
 - FormValidator
   - [Using FormValidator](#using-form-validator "Using FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 The optional `label` parameter sets a human-readable name used in error messages (e.g., "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Validating in a Controller
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+A `NyController` has the same `check()`, so it can validate its own fields without its page's state:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // All validations passed
+  }
+}
+```
+
+`check()` returns the `FormValidationResponseBag`, so the controller can keep the result.
+
 <div id="validation-results"></div>
 
 ## Validation Results
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Error responses
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` returns the first failing rule's `FormValidationError`, or `null` when every rule passed. It doesn't build the full error list, so it is cheap to call on every keystroke:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

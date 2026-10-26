@@ -276,6 +276,19 @@ class _SettingsPageState extends NyPage<SettingsPage> {
 }
 ```
 
+<x-doc-strip label="需要" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`NyApp.refreshLocale()` 无需重启应用即可显示 `NyLocalization` 的当前区域设置。所有组件都会重新构建，因此翻译文本、Material 自带的字符串以及文本方向都会跟随区域设置，而页面、其状态和导航堆栈保持原位：
+
+``` dart
+await NyLocalization.instance.setLocale(locale: Locale('es'));
+NyApp.refreshLocale();
+```
+
+页面计算一次并保存在其状态中的文本保持不变。
+
+用户保存的语言会在应用启动时读取。如果保存的值不是区域设置代码（例如 `es` 或 `pt_BR`），则会被记录日志并丢弃，应用将以默认语言启动。
+
 <div id="setting-a-default-locale"></div>
 
 ## 设置默认区域设置

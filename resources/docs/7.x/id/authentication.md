@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` menggantikan **keduanya** `initialRoute()` dan `authenticatedRoute()`, membuat rute yang ditentukan menjadi halaman pertama yang ditampilkan terlepas dari status auth.
 
+Berikan `data`, `queryParameters`, atau `stack` untuk membuka halaman yang membutuhkannya, mis. `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`. Build release mengabaikan `previewRoute()`. Lihat [Preview Route](/docs/{{ $version }}/router#preview-route).
+
 > **Peringatan:** Hapus `.previewRoute()` sebelum merilis aplikasi Anda.
 
 

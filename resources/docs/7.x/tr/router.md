@@ -195,6 +195,31 @@ appRouter() => nyRoutes((router) {
 - Belirtilen rotayi baslangic rotasi yapar
 - Gelistirme sirasinda belirli sayfalari hizlica test etmek icin kullanislidir
 
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Olusturulmak icin veriye ihtiyac duyan bir sayfa, bu veriyle onizlenebilir. `previewRoute` metoduna `data`, `queryParameters` ve `stack` gecirin:
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` ve `queryParameters`, sayfaya `routeTo(ProductPage.path, data: {...}, queryParameters: {...})` ile gezinmissiniz gibi ulasir. Gercek bir gezinmeden gelen veri onceliklidir.
+- `stack`, altta acilacak rotalari listeler; boylece geri tusu normal bir baslatmadan sonraki gibi calisir. Burada `ProductPage` sayfasindan geri gitmek `HomePage` sayfasina doner.
+- Release derlemeleri `previewRoute()` cagrisini yok sayar; bu nedenle router'inizda unutulan bir onizleme uretimde ilk sayfayi asla degistirmez.
+
+`stack`, uygulamanin `NyApp.materialApp` ile olusturulmasini gerektirir. Kendi `MaterialApp` widget'inizi olusturuyorsaniz, `onGenerateInitialRoutes` parametresine `NyRouter.previewInitialRoutes(onGenerateRoute)` gecirin:
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Uyari:** Uygulamanizi yayinlamadan once `.previewRoute()` kaldirmayi unutmayin!
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |------|-----|----------|
 | `route_guards` | `List<RouteGuard>` | Gruptaki tum rotalara rota koruyuculari uygula |
 | `prefix` | `String` | Gruptaki tum rota yollarina onek ekle |
-| `transition_type` | `TransitionType` | Gruptaki tum rotalar icin gecis ayarla |
+| `transition_type` | `TransitionType` | Gruptaki, kendi gecisini ayarlamayan rotalar icin gecis ayarla |
 | `transition` | `PageTransitionType` | Sayfa gecis turunu ayarla (kullanimdan kaldirildi, transition_type kullanin) |
 | `transition_settings` | `PageTransitionSettings` | Gecis ayarlarini belirle |
 

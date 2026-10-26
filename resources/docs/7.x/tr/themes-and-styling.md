@@ -13,6 +13,7 @@
   - [Temel stiller](#base-styles "Temel stiller")
   - [Renk stillerini genişletme](#extending-color-styles "Renk stillerini genişletme")
   - [Tema değiştirme](#switching-theme "Tema değiştirme")
+  - [Alan renkleri](#field-colors "Alan renkleri")
   - [Yazı tipleri](#fonts "Yazı tipleri")
   - [Tasarım](#design "Tasarım")
 - [Metin Uzantıları](#text-extensions "Metin Uzantıları")
@@ -340,6 +341,35 @@ TextButton(onPressed: () {
 ```
 
 
+Bir temayı kaydetmeden göstermek için `NyThemeManager.instance.showTheme` kullanın. Uygulamanın temasını yerinde değiştirir; sayfayı, state'ini ve gezinme yığınını korur, kullanıcının kayıtlı seçimine ve sistem tema ayarına dokunmaz -- önizleme veya ekran görüntüsü için kullanışlıdır. Bu id'ye sahip bir tema yoksa `ArgumentError` fırlatır:
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+``` dart
+NyThemeManager.instance.showTheme("dark_theme");
+```
+
+<div id="field-colors"></div>
+
+## Alan renkleri
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[Form alanları](/docs/{{ $version }}/forms#form-field-style) varsayılan olarak temanızı izler: temanın parlaklığına uygun nötr griler ve odak, seçimler ve açık olan anahtarlar için vurgu rengi olarak `colorScheme.primary`.
+
+Renkleri kendiniz seçmek için bir temaya `NyFieldColors` uzantısı ekleyin:
+
+``` dart
+ThemeData(
+  extensions: [
+    NyFieldColors.fromTheme(Brightness.dark, accent: Color(0xFF4D9FFF))
+        .copyWith(fill: Color(0xFF1B1F24)),
+  ],
+)
+```
+
+`NyFieldColors.fromTheme(brightness, accent:)` açık veya koyu bir tema için tam bir set oluşturur; `copyWith` ise içindeki `fill`, `border`, `label`, `text`, `placeholder`, `error` veya `divider` gibi herhangi bir rengi değiştirir. Bir alanın kendi `style` değerinde ayarlanan renk her zaman bunlara göre önceliklidir.
+
 <div id="fonts"></div>
 
 ## Yazı tipleri
@@ -381,6 +411,8 @@ static final TextStyle appFont = TextStyle(fontFamily: "ZenTokyoZoo"); // ZenTok
 `DesignConfig.logo` uygulamanızın Logosunu görüntülemek için kullanılır.
 
 Logonuzu nasıl görüntülemek istediğinizi özelleştirmek için **lib/resources/widgets/logo_widget.dart** dosyasını değiştirebilirsiniz.
+
+`DesignConfig.formFieldStyle`, [form alanlarınızın](/docs/{{ $version }}/forms#form-field-style) nasıl çizileceğini belirler: `FormFieldStyle.filled()`, `.outlined()`, `.underlined()` veya `.grouped()`.
 
 `DesignConfig.loader` bir yükleyici görüntülemek için kullanılır. {{ config('app.name') }}, bazı yardımcı metotlarda bu değişkeni varsayılan yükleyici widget'ı olarak kullanacaktır.
 

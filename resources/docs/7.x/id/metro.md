@@ -27,6 +27,8 @@
   - [Membuat Env File](#make-env-file "Membuat Env File")
   - [Membuat Key](#make-key "Membuat Key")
   - [Membuat Playbook](#make-playbook "Membuat playbook baru")
+- Perintah Proyek
+  - [Doctor](#doctor "Periksa bagaimana proyek Anda terhubung")
 - App Icons
   - [Membangun App Icons](#build-app-icons "Membangun App Icons")
 - Perintah Kustom
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status`, dan `live:run` membuka shell yang terhubung ke aplikasi Anda yang sedang berjalan, sehingga Anda dapat memeriksa dan menggerakkannya saat sedang berjalan -- lihat [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` memutar salah satu [playbook](/docs/{{ $version }}/playbooks) Anda pada aplikasi yang sedang berjalan.
+`live`, `live:devices`, `live:status`, dan `live:run` membuka shell yang terhubung ke aplikasi Anda yang sedang berjalan, sehingga Anda dapat memeriksa dan menggerakkannya saat sedang berjalan -- lihat [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` memutar salah satu [playbook](/docs/{{ $version }}/playbooks) Anda pada aplikasi yang sedang berjalan, dan `live:run screenshot` menyimpan PNG darinya -- lihat [Screenshot](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Membuat model baru](#making-a-new-model "Membuat model baru dengan Metro")
 - [Membuat model dari JSON](#make-model-from-json "Membuat model baru dari JSON dengan Metro")
+- [Membuat model OneOf](#make-a-one-of-model "Membuat model OneOf dengan Metro")
 - [Membuat model secara paksa](#forcefully-make-a-model "Membuat model baru secara paksa dengan Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Kemudian, Anda dapat menempelkan JSON Anda ke terminal dan itu akan menghasilkan model untuk Anda.
+
+<div id="make-a-one-of-model"></div>
+
+### Membuat model OneOf
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Gunakan opsi `--one-of` untuk membuat model bagi response yang dapat memiliki lebih dari satu bentuk. Sebutkan setiap bentuk, dipisahkan dengan koma:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+Ini membuat induk `OrderResult` bertipe sealed dengan subtipe `Accepted` dan `Rejected` di `lib/app/models/`, dan mendaftarkan entri `OneOf<OrderResult>.byKey('type', {...})` untuknya di `lib/bootstrap/decoders.dart`. Berikan `--one-of` saja dan Metro akan menanyakan nama-namanya.
+
+Ubah kunci `'type'` menjadi field yang digunakan API Anda, atau beralih ke `OneOf.byStatus` atau `OneOf.byJson`. Lihat [OneOf](/docs/{{ $version }}/decoders#one-of) untuk setiap constructor.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -846,15 +868,49 @@ metro make:playbook sign_up
 | Flag / Opsi | Singkat | Deskripsi |
 |---------------|-------|-------------|
 | `--description` | | Deskripsi satu baris, ditampilkan saat Metro mendaftar playbook |
+| `--record` | | Merekam journey pada aplikasi Anda yang berjalan: membuka `metro live` dan memulai [perekaman](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | Mengunjungi setiap halaman yang ditambahkan router Anda dan mengambil [screenshot](/docs/{{ $version }}/playbooks#screenshots) masing-masing |
 | `--force` | `-f` | Membuat file meskipun sudah ada |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 Ini membuat `lib/app/playbooks/sign_up_playbook.dart` (di dalam subfolder apa pun yang Anda berikan) dan mendaftarkannya di `lib/bootstrap/playbooks.dart`, yang dibuat saat pertama kali digunakan. Registry-nya berupa map kosong pada build release. Ini juga meneruskan `playbooks` ke `nylo.configure(...)` di `AppProvider` Anda.
 
 Putar saat aplikasi Anda berjalan dengan `metro live:run playbook sign_up`. Jika aplikasi sudah berjalan, lakukan hot restart terlebih dahulu.
+
+Dengan `--from-routes`, Metro membaca baris `router.add(SomePage.path)` di `lib/routes/router.dart` dan menulis `visit()` serta `screenshot()` untuk setiap halaman. Halaman di balik route guard, atau yang menerima parameter route, mendapat komentar yang menjelaskan apa yang mungkin dibutuhkan `setUp` untuk mencapainya.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="Persyaratan" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` menampilkan semua yang salah terhubung di proyek Anda, beserta file yang perlu diubah:
+
+``` bash
+metro doctor
+```
+
+Perintah ini memeriksa route, decoder, bahasa, env, dan aset Anda:
+
+| Pemeriksaan | Mencari |
+|-------|-----------|
+| Route | Halaman dengan path route yang belum ditambahkan ke router |
+| Decoder | API service, controller, dan model yang digunakan tetapi belum terdaftar di `lib/bootstrap/decoders.dart` |
+| Bahasa | File bahasa yang kekurangan kunci yang dimiliki bahasa dasar, atau bukan JSON yang valid |
+| Env | Kunci di `.env` yang tidak ada di `.env-example` |
+| Aset | Gambar di `assets/images` yang tidak dirujuk oleh apa pun |
+
+Setiap pemeriksaan berakhir sebagai ok, masalah, atau catatan. `metro doctor` keluar dengan kode bukan nol saat sebuah pemeriksaan menemukan masalah, sehingga Anda dapat menjalankannya di CI. Tambahkan `--strict` agar gagal juga pada catatan, seperti gambar yang tidak dirujuk oleh apa pun:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

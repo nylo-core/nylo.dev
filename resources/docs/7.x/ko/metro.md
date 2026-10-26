@@ -27,6 +27,8 @@
   - [Env 파일 생성](#make-env-file "Env 파일 생성")
   - [Key 생성](#make-key "Key 생성")
   - [플레이북 생성](#make-playbook "새 플레이북 생성")
+- 프로젝트 명령어
+  - [Doctor](#doctor "프로젝트 구성 상태 점검")
 - App 아이콘
   - [App 아이콘 빌드](#build-app-icons "App 아이콘 빌드")
 - 커스텀 명령어
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status`, `live:run`은 실행 중인 앱에 연결된 셸을 열어 앱을 검사하고 조작할 수 있게 해줍니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live)를 참고하세요. `live:run playbook <name>`은 실행 중인 앱에서 [플레이북](/docs/{{ $version }}/playbooks) 중 하나를 재생합니다.
+`live`, `live:devices`, `live:status`, `live:run`은 실행 중인 앱에 연결된 셸을 열어 앱을 검사하고 조작할 수 있게 해줍니다 -- 자세한 내용은 [Metro Live](/docs/{{ $version }}/metro-live)를 참고하세요. `live:run playbook <name>`은 실행 중인 앱에서 [플레이북](/docs/{{ $version }}/playbooks) 중 하나를 재생하고, `live:run screenshot`은 앱의 PNG를 저장합니다 -- [스크린샷](/docs/{{ $version }}/metro-live#screenshots)을 참고하세요.
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [새 Model 만들기](#making-a-new-model "Make a new model with Metro")
 - [JSON으로 Model 생성](#make-model-from-json "Make a new model from JSON with Metro")
+- [OneOf Model 생성](#make-a-one-of-model "Make a OneOf model with Metro")
 - [Model 강제 생성](#forcefully-make-a-model "Forcefully make a new model with Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 그런 다음 터미널에 JSON을 붙여넣으면 Model이 자동으로 생성됩니다.
+
+<div id="make-a-one-of-model"></div>
+
+### OneOf Model 생성
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+둘 이상의 형태를 가질 수 있는 응답용 Model을 만들려면 `--one-of` 옵션을 사용하세요. 각 형태의 이름을 쉼표로 구분해 지정합니다:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+이 명령은 `lib/app/models/`에 `Accepted`와 `Rejected` 하위 타입을 가진 sealed `OrderResult` 부모를 생성하고, `lib/bootstrap/decoders.dart`에 `OneOf<OrderResult>.byKey('type', {...})` 항목을 등록합니다. `--one-of`만 단독으로 전달하면 Metro가 이름을 물어봅니다.
+
+`'type'` 키를 API에서 사용하는 필드로 변경하거나 `OneOf.byStatus` 또는 `OneOf.byJson`으로 전환하세요. 각 생성자에 대해서는 [OneOf](/docs/{{ $version }}/decoders#one-of)를 참고하세요.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -846,15 +868,49 @@ metro make:playbook sign_up
 | 플래그 / 옵션 | 약어 | 설명 |
 |---------------|-------|-------------|
 | `--description` | | 한 줄 설명. Metro가 플레이북 목록을 표시할 때 보여집니다 |
+| `--record` | | 대신 실행 중인 앱에서 여정을 녹화합니다: `metro live`를 열고 [녹화](/docs/{{ $version }}/playbooks#recording-a-playbook)를 시작합니다 |
+| `--from-routes` | | 라우터가 추가한 모든 페이지를 방문하고 각각의 [스크린샷](/docs/{{ $version }}/playbooks#screenshots)을 찍습니다 |
 | `--force` | `-f` | 파일이 이미 존재하더라도 생성합니다 |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 이 명령은 `lib/app/playbooks/sign_up_playbook.dart`(지정한 하위 폴더 안)를 생성하고 `lib/bootstrap/playbooks.dart`에 등록합니다. 이 파일은 처음 사용할 때 생성됩니다. 레지스트리는 릴리스 빌드에서는 빈 맵입니다. 또한 `AppProvider`의 `nylo.configure(...)`에 `playbooks`도 전달합니다.
 
 앱이 실행 중일 때 `metro live:run playbook sign_up`으로 재생하세요. 앱이 이미 실행 중이라면 먼저 핫 리스타트하세요.
+
+`--from-routes`를 사용하면 Metro가 `lib/routes/router.dart`의 `router.add(SomePage.path)` 줄을 읽고 각 페이지에 대해 `visit()`와 `screenshot()`을 작성합니다. 라우트 가드 뒤에 있거나 라우트 매개변수가 필요한 페이지에는 도달하기 위해 `setUp`에 무엇이 필요할 수 있는지 설명하는 주석이 추가됩니다.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor`는 프로젝트에서 잘못 연결된 모든 항목을 변경해야 할 파일과 함께 나열합니다:
+
+``` bash
+metro doctor
+```
+
+라우트, 디코더, 언어, env, 에셋을 점검합니다:
+
+| 점검 | 확인 대상 |
+|-------|-----------|
+| 라우트 | 라우트 경로가 있지만 라우터에 추가되지 않은 페이지 |
+| 디코더 | 사용 중이지만 `lib/bootstrap/decoders.dart`에 등록되지 않은 API 서비스, 컨트롤러, 모델 |
+| 언어 | 기본 언어에 있는 키가 누락되었거나 유효한 JSON이 아닌 언어 파일 |
+| Env | `.env-example`에 없는 `.env`의 키 |
+| 에셋 | `assets/images`에서 아무것도 참조하지 않는 이미지 |
+
+각 점검은 ok, 문제 또는 참고로 끝납니다. 점검에서 문제가 발견되면 `metro doctor`는 0이 아닌 코드로 종료하므로 CI에서 실행할 수 있습니다. `--strict`를 추가하면 아무것도 참조하지 않는 이미지 같은 참고 사항에서도 실패합니다:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 

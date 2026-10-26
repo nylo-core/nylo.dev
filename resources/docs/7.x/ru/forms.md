@@ -45,6 +45,7 @@
 - [Макет формы](#form-layout "Макет формы")
 - [Видимость полей](#field-visibility "Видимость полей")
 - [Стилизация полей](#field-styling "Стилизация полей")
+- [Стиль полей формы](#form-field-style "FormFieldStyle")
 - [Статические методы NyFormWidget](#ny-form-widget-static-methods "Статические методы NyFormWidget")
 - [Справочник конструктора NyFormWidget](#ny-form-widget-constructor-reference "Справочник конструктора NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Многострочный текстовый ввод. Тип стиля: `FieldStyleTextField`
 
+Текстовая область с `prefixIcon` поднимает свою метку в ту же начальную позицию, что и однострочное поле. По умолчанию значок центрируется по высоте поля. Используйте `PrefixIconAlignment.top`, чтобы выровнять его по первой строке текста:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` принимает тот же параметр `prefixIconAlignment`. Задайте `alignLabelWithHint: true` в `decoration` стиля, чтобы метка в состоянии покоя оставалась на первой строке.
+
 <div id="phone-number-fields"></div>
 
 ### Поля номера телефона
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` заменяет `InputDecoration` пикера, так же как `FieldStyleDateTimePicker.decoration` делает это для поля даты. Если ваша decoration не задаёт собственную метку, значок выпадающего списка или `prefixIcon`, то используются значения поля.
 
+Нажатие «Clear» в пикере вызывает `onChanged` поля с `null`, а очищенное поле проходит валидацию как пустое, поэтому `FormValidator.notEmpty()` снова не проходит, пока не будет выбрана новая опция.
+
 #### Стили элементов списка
 
 Вы можете настроить отображение элементов в нижнем модальном окне выбора с помощью `PickerListTileStyle`. По умолчанию нижнее модальное окно показывает простые текстовые элементы. Используйте встроенные пресеты для добавления индикаторов выбора или предоставьте полностью пользовательский построитель.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 Параметр `options` требует `FormCollection`. Тип стиля: `FieldStyleRadio`
+
+Задайте каждой опции `description`, чтобы показать подзаголовок под её меткой, и оформите его с помощью `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` объединяется со стилем подзаголовка по умолчанию, поэтому если указать только `color`, размер сохранится.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Поля в `List` отображаются в `Row` с равными ширинами `Expanded`. Расстояние между полями контролируется параметром `crossAxisSpacing` в `NyFormWidget`.
+Поля в `List` отображаются в `Row` с равными ширинами `Expanded`. Расстояние между полями, делящими один ряд, задаётся параметром `crossAxisSpacing` в `NyFormWidget`, а вертикальное расстояние между полями -- параметром `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Между полями, сверху вниз
+  crossAxisSpacing: 8,   // Между полями в одном ряду
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Стиль полей формы
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` задаёт, как рисуется каждое поле -- его рамка, граница и метка. Выберите один из четырёх видов:
+
+| Стиль | Описание |
+|-------|----------|
+| `FormFieldStyle.filled()` | Мягкий серый блок с тонкой границей, метка сверху. По умолчанию |
+| `FormFieldStyle.outlined()` | Прозрачный блок с чёткой границей, которая утолщается в фокусе |
+| `FormFieldStyle.underlined()` | Без блока, только линия под полем |
+| `FormFieldStyle.grouped()` | Строки в одной карточке, метка рядом со значением, как в настройках iOS |
+
+Задайте его для всего приложения в `Nylo.configure` (в boilerplate он хранится в `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Задайте его для одной формы, переопределив `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+Собственный `style:` поля главнее `fieldStyle` его формы, который главнее стиля приложения.
+
+Каждый вид принимает `dense` для более низких полей, а все, кроме `underlined`, принимают `radius` для углов блока или карточки:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Сгруппированные поля
+
+В форме `grouped` текстовые поля, пикеры, поля даты и переключатели, идущие подряд, делят одну карточку с линией между строками. Каждая метка стоит рядом со своим полем и занимает свою ширину, но не более 40% строки. Обычный префикс `Icon` уступает место метке, а другие префиксы остаются, например символ `Field.currency(separateSymbol: true)` или `prefixIcon` с кодом страны.
+
+Вне формы помещайте поля в одну карточку с помощью `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Поля берут свои цвета из вашей темы, с `colorScheme.primary` в качестве акцента. Чтобы выбрать их самостоятельно, см. [Цвета полей](/docs/{{ $version }}/themes-and-styling#field-colors).
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Статические методы NyFormWidget
@@ -1152,8 +1254,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Горизонтальный отступ между полями в ряду
-  double mainAxisSpacing = 10,   // Вертикальный отступ между полями
+  double crossAxisSpacing = 10,  // Расстояние между полями, делящими один ряд
+  double mainAxisSpacing = 10,   // Вертикальное расстояние между полями
   Map<String, dynamic>? initialData, // Начальные значения полей
   Function(Field field, dynamic value)? onChanged, // Обратный вызов при изменении поля
   Widget? header,                // Виджет над формой

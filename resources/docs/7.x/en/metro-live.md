@@ -12,6 +12,8 @@
 - [live:status](#live-status "Show app status")
 - [live:run](#live-run "Run a built-in live command")
 - [Playbooks](#playbooks "Playing playbooks from Metro")
+- [Recording a Journey](#recording-a-journey "Recording what you do as a playbook")
+- [Screenshots](#screenshots "Saving screenshots of the running app")
 - Live Commands
   - [Creating a Live Command](#creating-a-live-command "Creating a live command")
   - [Running a Live Command](#running-a-live-command "Running a live command")
@@ -69,7 +71,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-Live commands drop their `metro live:` prefix inside the shell -- `status` instead of `metro live:status`, `route /profile` instead of `metro live:run route /profile`. A few commands only run inside the shell: `seed`, `seed:rollback`, `export`, `reload` and `restart`. Type `help` to list every command, or `help <command>` to see one command's options. Type `exit` (or Ctrl+D) to leave.
+Live commands drop their `metro live:` prefix inside the shell -- `status` instead of `metro live:status`, `route /profile` instead of `metro live:run route /profile`. A few commands only run inside the shell: `seed`, `seed:rollback`, `export`, `record`, `reload` and `restart`. Type `help` to list every command, or `help <command>` to see one command's options. Type `exit` (or Ctrl+D) to leave.
 
 If the app restarts while you're connected, the shell reconnects on its own.
 
@@ -185,6 +187,7 @@ metro live:run <command> [arguments]
 | `event` | Fire one of your events |
 | `toast` | Show a toast notification |
 | `playbook` | Play your [playbooks](/docs/{{ $version }}/playbooks), or list them |
+| `screenshot` | Save a [screenshot](#screenshots) of the app, or of one `ScreenshotArea` |
 
 Inside `metro live`, drop the `live:run` part -- `route /profile` instead of `metro live:run route /profile`:
 
@@ -230,9 +233,18 @@ Name several playbooks to play them back to back. With no names, or with `--list
 | `--no-captions` | Leave out the `.vtt` captions file and the chapters of a recording |
 | `--clean-status-bar` | Show 9:41 with full signal and battery while the playbooks play, then put it back. Works without `--record` too |
 | `--countdown <seconds>` | Count down 0-10 seconds on screen before the first step |
+| `--screenshots[=<mode>]` | Save every step's screen too. `<mode>` is `all`, `auto`, `marked`, `failures` or `off`; see [Playbook Screenshots](#playbook-screenshots) |
+| `--scale <n>` | The size of screenshots relative to the device's own, up to 4, e.g. `0.5` for half |
+| `--locales <list>` | Play once in each of these locales, e.g. `en,es`, or `all` of the app's |
+| `--themes <list>` | Play once in each of these themes, e.g. `light,dark`, or `all` of the app's |
+| `--store <id>` | Draw screenshots at an app store's size, e.g. `ios-6.9` |
+| `--frame` | Draw each screen inside a phone outline |
+| `--background <hex>` | The color around the screen, e.g. `"#1B2027"` |
 | `--list` | List the app's playbooks instead of playing one |
 
 Ctrl+C asks the app to stop: the remaining steps are skipped, but `tearDown` still runs. Press Ctrl+C a second time to stop waiting.
+
+If no step reaches Metro within 20 seconds, Metro stops waiting and fails the run. The app is playing the playbook, but its events aren't arriving, which happens when the app was started with `flutter run --no-dds`. Run it with a plain `flutter run` and try again.
 
 Inside the `metro live` shell the command is `playbook <name>`, and Tab completes playbook names:
 
@@ -281,11 +293,93 @@ A playbook that fails or is stopped is still saved, so a recording doubles as a 
 
 A playbook hides its finger and captions by default. For a demo video, set `showFinger` and `caption` on the playbook -- see [Finger and Caption](/docs/{{ $version }}/playbooks#finger-and-caption).
 
+<div id="playbook-screenshots"></div>
+
+### Screenshots
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+A playbook's [`screenshot()` steps](/docs/{{ $version }}/playbooks#screenshots) are saved in `screenshots/<playbook>/` with no flag needed. Add options to capture them in every language and theme, or to size them for a store listing:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` also saves the screen after every step of a playbook that has no `screenshot()` steps, and `--screenshots=all` does it for every playbook. A failing step's screen is saved in `build/playbooks/failures`; `--screenshots=off` turns that off.
+
+`--locales` and `--themes` play the playbook once in each, and the app's own locale and theme are put back afterwards. `--store` lists the sizes when it has no value, and `--frame` draws each screen in a phone outline with the step's `caption:` above it. `--clean-status-bar` shows 9:41 with full signal and battery in the captures Metro takes with the iOS Simulator or `adb`.
+
 <div id="playbook-live-commands"></div>
 
 ### Live Command Reference
 
 The commands behind it are `playbooks.list`, `playbooks.run` and `playbooks.stop`. A run returns its id straight away and streams each step as a `nylo.playbook` event, so it can outlast a command's timeout. `live:status` lists the app's playbooks. Playbooks arrived in Nylo Live protocol version 9. Recording support -- `countdown` in `playbooks.run` (with a `countdown` event each second) and `simulator` (the iOS Simulator UDID) in `status` -- arrived in protocol version 10.
+
+<div id="recording-a-journey"></div>
+
+## Recording a Journey
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` writes what you do in the running app as a [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook). It only runs inside the `metro live` shell:
+
+``` plaintext
+› record sign_up
+```
+
+Use the app, and press Enter when the journey is done. The playbook lands in `lib/app/playbooks/sign_up_playbook.dart`, registered in `lib/bootstrap/playbooks.dart`, and Metro offers to hot restart the app and play it back at `fast` speed.
+
+| Option | Description |
+|--------|-------------|
+| `--description <text>` | A one-line description, shown when Metro lists playbooks |
+| `--no-data` | Write typed values as they were typed, instead of `data[...]` placeholders with their defaults |
+| `--no-replay` | Skip the question about playing it back |
+| `--force`, `-f` | Replace a playbook file that already exists |
+
+While it records, type `a` and Enter to make the next tap a `see()`, `d` for a `dontSee()`, `s <title>` to start a scene, `u` to undo the last step and `p` to pause. Ctrl+C discards the recording. `metro make:playbook sign_up --record` opens the shell and starts recording in one go.
+
+The commands behind it are `record.start`, `record.stop`, `record.undo`, `record.mark` and `record.status`. A recording streams each step as a `nylo.record` event. Recording arrived in Nylo Live protocol version 11.
+
+<div id="screenshots"></div>
+
+## Screenshots
+
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Save a PNG of your running app:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+Each file is saved in `screenshots/` in your project, named `<mode>-<device>-<date>-<time>.png`. On the iOS Simulator and Android, Metro captures the device's whole screen with the Simulator or `adb`, so the status bar and keyboard are in it. Any other device gets the app's own capture, which is the app's pages as the user sees them.
+
+| Option | Description |
+|--------|-------------|
+| `--area <name>` | Capture only the `ScreenshotArea` with this name |
+| `--scale <n>` | The size relative to the device's own, up to 4, e.g. `0.5` for half |
+| `--locales <list>` | Capture the screen in each of these locales, e.g. `en,es`, or `all` of the app's |
+| `--themes <list>` | Capture the screen in each of these themes, e.g. `light,dark`, or `all` of the app's |
+| `--store <id>` | Draw at an app store's screenshot size, e.g. `ios-6.9`. On its own, `--store` lists the sizes |
+| `--frame` | Draw the screen inside a phone outline, on a background |
+| `--caption <text>` | Text above the `--frame`, or a translation key |
+| `--background <hex>` | The color around the screen, behind a `--frame` or beside a `--store` size of another shape, e.g. `"#1B2027"` |
+| `--out <path>` | Save to this `.png`, or into a folder ending in `/` (default: `screenshots/`) |
+| `--open` | Open the screenshot once it's saved |
+| `--copy` | Copy the screenshot to the clipboard |
+| `--native` | Capture with the iOS Simulator or `adb`. This is the default for a whole-screen capture; `--no-native` uses the app's own capture |
+| `--clean-status-bar` | Show 9:41 with full signal and battery in a `--native` capture |
+
+With `--locales` or `--themes`, Metro saves one PNG for each pair in a folder, named `es.png`, `dark.png` or `es-dark.png`, switching the app in place and putting it back afterwards. `--area`, `--scale`, `--store` and `--frame` use the app's own capture.
+
+Inside the `metro live` shell, type `screenshot --open`. To take screenshots from your app's own code, see [Screenshots](/docs/{{ $version }}/screenshots).
 
 <div id="live-commands"></div>
 

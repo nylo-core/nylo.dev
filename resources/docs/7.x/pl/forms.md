@@ -45,6 +45,7 @@
 - [Układ formularza](#form-layout "Układ formularza")
 - [Widoczność pól](#field-visibility "Widoczność pól")
 - [Stylizacja pól](#field-styling "Stylizacja pól")
+- [Styl pól formularza](#form-field-style "FormFieldStyle")
 - [Metody statyczne NyFormWidget](#ny-form-widget-static-methods "Metody statyczne NyFormWidget")
 - [Referencja konstruktora NyFormWidget](#ny-form-widget-constructor-reference "Referencja konstruktora NyFormWidget")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Wielowierszowe pole tekstowe. Typ stylu: `FieldStyleTextField`
 
+Pole tekstowe wielowierszowe z `prefixIcon` przesuwa swoją etykietę do tej samej pozycji początkowej co pole jednowierszowe. Ikona jest domyślnie wyśrodkowana względem wysokości pola. Użyj `PrefixIconAlignment.top`, aby wyrównać ją z pierwszą linią tekstu:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` przyjmuje ten sam parametr `prefixIconAlignment`. Ustaw `alignLabelWithHint: true` w `decoration` stylu, aby etykieta w stanie spoczynku pozostała w pierwszej linii.
+
 <div id="phone-number-fields"></div>
 
 ### Pola numeru telefonu
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration` zastępuje `InputDecoration` selektora, tak jak `FieldStyleDateTimePicker.decoration` robi to dla pola daty. Jeśli Twoja dekoracja nie podaje własnej etykiety, ikony listy rozwijanej ani `prefixIcon`, zachowywane są te z pola.
 
+Dotknięcie "Clear" w selektorze wywołuje `onChanged` pola z wartością `null`, a wyczyszczone pole waliduje się jako puste, więc `FormValidator.notEmpty()` znów zawodzi, dopóki nie zostanie wybrana nowa opcja.
+
 #### Style kafelków listy
 
 Możesz dostosować wygląd elementów w dolnym arkuszu selektora za pomocą `PickerListTileStyle`. Domyślnie dolny arkusz pokazuje zwykłe kafelki tekstowe. Użyj wbudowanych presetów, aby dodać wskaźniki zaznaczenia, lub zapewnij w pełni niestandardowy builder.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 Parametr `options` wymaga `FormCollection`. Typ stylu: `FieldStyleRadio`
+
+Nadaj każdej opcji `description`, aby wyświetlić podtytuł pod jej etykietą, i ostyluj go za pomocą `subtitleStyle`:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` jest łączony z domyślnym stylem podtytułu, więc ustawienie samego `color` zachowuje jego rozmiar.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Pola w `List` są renderowane w `Row` z równymi szerokościami `Expanded`. Odstępy między polami są kontrolowane przez parametr `crossAxisSpacing` w `NyFormWidget`.
+Pola w `List` są renderowane w `Row` z równymi szerokościami `Expanded`. Odstęp między polami dzielącymi wiersz jest ustawiany przez parametr `crossAxisSpacing` w `NyFormWidget`, a pionowy odstęp między polami przez `mainAxisSpacing`:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Między polami, od góry do dołu
+  crossAxisSpacing: 8,   // Między polami w tym samym wierszu
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Styl pól formularza
+
+<x-doc-strip label="Wymagania" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle` określa, jak rysowane jest każde pole -- jego ramka, obramowanie i etykieta. Wybierz jeden z czterech wyglądów:
+
+| Styl | Opis |
+|------|------|
+| `FormFieldStyle.filled()` | Miękkie szare pole z cienkim obramowaniem, etykieta powyżej. Domyślny |
+| `FormFieldStyle.outlined()` | Przezroczyste pole z wyraźnym obramowaniem, które pogrubia się po zaznaczeniu |
+| `FormFieldStyle.underlined()` | Bez pola, tylko linia pod polem |
+| `FormFieldStyle.grouped()` | Wiersze w jednej karcie, z etykietą obok wartości, jak w ustawieniach iOS |
+
+Ustaw go dla całej aplikacji w `Nylo.configure` (boilerplate trzyma go w `DesignConfig.formFieldStyle`):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Ustaw go dla jednego formularza, nadpisując `fieldStyle`:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+Własny `style:` pola ma pierwszeństwo przed `fieldStyle` jego formularza, który ma pierwszeństwo przed stylem aplikacji.
+
+Każdy wygląd przyjmuje `dense` dla niższych pól, a wszystkie poza `underlined` przyjmują `radius` dla rogów pola lub karty:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Pola zgrupowane
+
+W formularzu `grouped` pola tekstowe, selektory, pola daty i przełączniki następujące po sobie dzielą jedną kartę, z linią między wierszami. Każda etykieta znajduje się obok swojego pola i zajmuje własną szerokość, do 40% wiersza. Zwykły prefiks `Icon` ustępuje miejsca etykiecie, a inne prefiksy pozostają, jak symbol `Field.currency(separateSymbol: true)` lub `prefixIcon` z kodem kraju.
+
+Poza formularzem umieść pola w jednej karcie za pomocą `FormFieldGroup`:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Pola pobierają kolory z Twojego motywu, z `colorScheme.primary` jako akcentem. Zobacz [Field Colors](/docs/{{ $version }}/themes-and-styling#field-colors), aby wybrać je samodzielnie.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## Metody statyczne NyFormWidget
@@ -1152,8 +1254,8 @@ Rozszerzając `NyFormWidget`, możesz przekazać następujące parametry konstru
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Odstęp poziomy między polami w wierszu
-  double mainAxisSpacing = 10,   // Odstęp pionowy między polami
+  double crossAxisSpacing = 10,  // Odstęp między polami dzielącymi wiersz
+  double mainAxisSpacing = 10,   // Pionowy odstęp między polami
   Map<String, dynamic>? initialData, // Początkowe wartości pól
   Function(Field field, dynamic value)? onChanged, // Callback przy zmianie pola
   Widget? header,                // Widget powyżej formularza

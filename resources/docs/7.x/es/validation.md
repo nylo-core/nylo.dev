@@ -6,6 +6,7 @@
 - [Introduccion](#introduction "Introduccion a la validacion")
 - Basicos
   - [Validar Datos con check()](#validating-data "Validar datos con check")
+  - [Validar en un Controlador](#validating-in-a-controller "Validar en un controlador")
   - [Resultados de Validacion](#validation-results "Resultados de validacion")
 - FormValidator
   - [Usando FormValidator](#using-form-validator "Usando FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 El parametro opcional `label` establece un nombre legible usado en los mensajes de error (ej., "The Email must be a valid email address.").
 
+<div id="validating-in-a-controller"></div>
+
+### Validar en un Controlador
+
+<x-doc-strip label="Requiere" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+Un `NyController` tiene el mismo `check()`, asi que puede validar sus propios campos sin el estado de su pagina:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // Todas las validaciones pasaron
+  }
+}
+```
+
+`check()` devuelve el `FormValidationResponseBag`, asi que el controlador puede conservar el resultado.
+
 <div id="validation-results"></div>
 
 ## Resultados de Validacion
@@ -139,6 +170,12 @@ if (result.isValid) {
   // Respuestas de error
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` devuelve el `FormValidationError` de la primera regla que falla, o `null` cuando todas las reglas pasaron. No construye la lista completa de errores, asi que es barato llamarlo en cada pulsacion de tecla:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

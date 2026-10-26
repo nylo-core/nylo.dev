@@ -398,6 +398,8 @@ appRouter() => nyRoutes((router) {
 
 `previewRoute()` 会覆盖 `initialRoute()` 和 `authenticatedRoute()`，无论认证状态如何，都会将指定路由设为首先显示的页面。
 
+传入 `data`、`queryParameters` 或 `stack` 即可打开需要这些参数的页面，例如 `.previewRoute(data: {'id': 1}, stack: [HomePage.path])`。发布构建会忽略 `previewRoute()`。参见[预览路由](/docs/{{ $version }}/router#preview-route)。
+
 > **警告：** 在发布应用之前，请移除 `.previewRoute()`。
 
 

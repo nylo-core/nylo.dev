@@ -51,6 +51,8 @@ StyledText.template(
 )
 ```
 
+Как и `Text`, `StyledText` использует текстовый стиль приложения, поэтому текст без собственного цвета берёт цвет текста вашей темы. `StyledText.template("Hello, @{{World}}", style: TextStyle(fontSize: 100))` рисует «Hello,» размером 100 цветом темы.
+
 <div id="children-mode"></div>
 
 ## Режим Children

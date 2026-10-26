@@ -486,6 +486,18 @@ class _LoginPageState extends NyState<LoginPage> {
 
 Once you tap the **_login** method, it will block any subsequent requests until the original request has finished. The `isLocked('login_to_app')` helper is used to check if the button is locked. In the example above, you can see we use that to determine when to display our loading Widget.
 
+<x-doc-strip label="Requires" items="{{ config('app.name') }} 7.2.4+, nylo_support 7.31.0+" />
+
+If `perform` throws an `Exception`, the lock is released first and the exception then goes to `onError`, along with its stack trace. Without `onError` it is logged. An `Error` (a bug) is rethrown once the lock is released.
+
+``` dart
+await lockRelease('login_to_app', perform: () async {
+  await api<ApiService>((request) => request.login(email, password));
+}, onError: (error, stackTrace) {
+  showToastDanger(description: "Couldn't log you in");
+});
+```
+
 <div id="is-locked"></div>
 
 ### isLocked

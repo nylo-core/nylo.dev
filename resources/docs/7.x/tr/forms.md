@@ -45,6 +45,7 @@
 - [Form Düzeni](#form-layout "Form Düzeni")
 - [Alan Görünürlüğü](#field-visibility "Alan Görünürlüğü")
 - [Alan Stilleri](#field-styling "Alan Stilleri")
+- [Form Alan Stili](#form-field-style "FormFieldStyle")
 - [NyFormWidget Statik Metotları](#ny-form-widget-static-methods "NyFormWidget Statik Metotları")
 - [NyFormWidget Kurucu Referansı](#ny-form-widget-constructor-reference "NyFormWidget Kurucu Referansı")
 - [NyFormActions](#ny-form-actions "NyFormActions")
@@ -305,6 +306,19 @@ Field.textArea("Description")
 
 Çok satırlı metin girişi. Stil türü: `FieldStyleTextField`
 
+`prefixIcon` içeren bir metin alanı, etiketini tek satırlı bir alanla aynı başlangıç konumuna yüzdürür. Simge varsayılan olarak alanın yüksekliğine göre ortalanır. Simgeyi metnin ilk satırıyla hizalamak için `PrefixIconAlignment.top` kullanın:
+
+``` dart
+Field.textArea("Notes",
+  style: FieldStyleTextField(
+    prefixIcon: Icon(Icons.notes),
+    prefixIconAlignment: PrefixIconAlignment.top,
+  ),
+)
+```
+
+`InputField` aynı `prefixIconAlignment` parametresini alır. Beklemedeki etiketi ilk satırda tutmak için stilin `decoration` değerinde `alignLabelWithHint: true` ayarlayın.
+
 <div id="phone-number-fields"></div>
 
 ### Telefon Numarası Alanları
@@ -473,6 +487,8 @@ Field.picker("Category",
 
 `decoration`, `FieldStyleDateTimePicker.decoration`'ın bir tarih alanı için yaptığı gibi picker'ın `InputDecoration`'ını değiştirir. Dekorasyonunuz kendi etiketini, açılır liste simgesini veya `prefixIcon`'ını vermiyorsa alanınkiler korunur.
 
+Picker'da "Clear"a dokunmak alanın `onChanged` callback'ini `null` ile çağırır ve temizlenen alan boş olarak doğrulanır; bu yüzden yeni bir seçenek seçilene kadar `FormValidator.notEmpty()` yeniden başarısız olur.
+
 #### Liste Kutucuğu Stilleri
 
 `PickerListTileStyle` kullanarak picker'ın alt sayfasında ögelerin görünümünü özelleştirebilirsiniz. Varsayılan olarak, alt sayfa düz metin kutucukları gösterir. Seçim göstergelerini eklemek için yerleşik şablonları kullanın veya tamamen özel bir builder sağlayın.
@@ -554,6 +570,22 @@ Field.radio("Newsletter",
 ```
 
 `options` parametresi bir `FormCollection` gerektirir. Stil türü: `FieldStyleRadio`
+
+Her seçeneğe etiketinin altında bir alt başlık göstermek için bir `description` verin ve bunu `subtitleStyle` ile biçimlendirin:
+
+``` dart
+Field.radio("Plan",
+  options: FormCollection.from([
+    {"value": "starter", "label": "Starter", "description": "Free, for side projects"},
+    {"value": "team", "label": "Team", "description": "Up to 10 people"},
+  ]),
+  style: FieldStyleRadio(
+    subtitleStyle: TextStyle(color: Colors.teal),
+  ),
+)
+```
+
+`subtitleStyle` varsayılan alt başlık stiliyle birleştirilir, bu yüzden yalnızca bir `color` ayarlamak boyutunu korur.
 
 <div id="chip-fields"></div>
 
@@ -1036,7 +1068,14 @@ fields() => [
 ];
 ```
 
-Bir `List` içindeki alanlar, eşit `Expanded` genişliklere sahip bir `Row` içinde render edilir. Alanlar arasındaki boşluk, `NyFormWidget` üzerindeki `crossAxisSpacing` parametresiyle kontrol edilir.
+Bir `List` içindeki alanlar, eşit `Expanded` genişliklere sahip bir `Row` içinde render edilir. Aynı satırı paylaşan alanlar arasındaki boşluk `NyFormWidget` üzerindeki `crossAxisSpacing` parametresiyle, alanlar arasındaki dikey boşluk ise `mainAxisSpacing` ile ayarlanır:
+
+``` dart
+ProfileForm(
+  mainAxisSpacing: 16,   // Alanlar arasında, yukarıdan aşağıya
+  crossAxisSpacing: 8,   // Aynı satırdaki alanlar arasında
+)
+```
 
 
 <div id="field-visibility"></div>
@@ -1112,6 +1151,69 @@ Field.chips("Tags",
 ```
 
 
+<div id="form-field-style"></div>
+
+## Form Alan Stili
+
+<x-doc-strip label="Gereksinimler" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+`FormFieldStyle`, her alanın nasıl çizileceğini belirler -- kutusu, kenarlığı ve etiketi. Dört görünümden birini seçin:
+
+| Stil | Açıklama |
+|-------|-------------|
+| `FormFieldStyle.filled()` | İnce bir kenarlığa sahip yumuşak gri bir kutu, etiket üstte. Varsayılan |
+| `FormFieldStyle.outlined()` | Odaklandığında kalınlaşan net bir kenarlığa sahip şeffaf bir kutu |
+| `FormFieldStyle.underlined()` | Kutu yok, yalnızca alanın altında bir çizgi |
+| `FormFieldStyle.grouped()` | Tek bir kartta satırlar, etiket değerin yanında, iOS ayarlarındaki gibi |
+
+Tüm uygulamanız için `Nylo.configure` içinde ayarlayın (boilerplate bunu `DesignConfig.formFieldStyle` içinde tutar):
+
+``` dart
+await nylo.configure(
+  // ...
+  formFieldStyle: FormFieldStyle.outlined(),
+);
+```
+
+Tek bir form için `fieldStyle` değerini override ederek ayarlayın:
+
+``` dart
+class ProfileForm extends NyFormWidget {
+  ProfileForm({super.key});
+
+  @override
+  FormFieldStyle get fieldStyle => FormFieldStyle.grouped();
+
+  @override
+  fields() => [
+    Field.text("Name"),
+    Field.email("Email"),
+    Field.switchBox("Notifications"),
+  ];
+}
+```
+
+Bir alanın kendi `style:` değeri formunun `fieldStyle` değerine, o da uygulamanınkine göre önceliklidir.
+
+Her görünüm daha kısa alanlar için `dense` alır; `underlined` hariç hepsi kutu veya kartın köşeleri için `radius` alır:
+
+``` dart
+FormFieldStyle.outlined(radius: 8, dense: true)
+```
+
+### Gruplanmış Alanlar
+
+`grouped` bir formda, art arda gelen metin, picker, tarih ve switch alanları satırlar arasında bir çizgi olan tek bir kartı paylaşır. Her etiket kendi alanının yanında durur ve satırın en fazla %40'ına kadar kendi genişliğini kullanır. Düz bir `Icon` öneki etikete yer açar; `Field.currency(separateSymbol: true)` simgesi veya ülke kodu `prefixIcon` gibi diğer önekler ise kalır.
+
+Form dışında, alanları `FormFieldGroup` ile tek bir karta koyun:
+
+``` dart
+FormFieldGroup(children: [name.widget!, email.widget!])
+```
+
+Alanlar renklerini temanızdan alır; vurgu rengi `colorScheme.primary` olur. Renkleri kendiniz seçmek için [Alan Renkleri](/docs/{{ $version }}/themes-and-styling#field-colors) bölümüne bakın.
+
+
 <div id="ny-form-widget-static-methods"></div>
 
 ## NyFormWidget Statik Metotları
@@ -1152,8 +1254,8 @@ NyFormWidget.stateClearData("LoginForm");
 ``` dart
 LoginForm(
   Key? key,
-  double crossAxisSpacing = 10,  // Satırdaki alanlar arasındaki yatay boşluk
-  double mainAxisSpacing = 10,   // Alanlar arasındaki dikey boşluk
+  double crossAxisSpacing = 10,  // Aynı satırı paylaşan alanlar arasındaki boşluk
+  double mainAxisSpacing = 10,   // Dikey boşluk
   Map<String, dynamic>? initialData, // Başlangıç alan değerleri
   Function(Field field, dynamic value)? onChanged, // Alan değişikliği callback'i
   Widget? header,                // Formun üstündeki widget

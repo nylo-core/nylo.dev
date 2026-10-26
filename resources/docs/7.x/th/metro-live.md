@@ -14,6 +14,8 @@
 - [live:status](#live-status "แสดงสถานะแอป")
 - [live:run](#live-run "รันคำสั่ง live ในตัว")
 - [Playbook](#playbooks "การเล่น playbook จาก Metro")
+- [การบันทึก Journey](#recording-a-journey "การบันทึกสิ่งที่คุณทำเป็น playbook")
+- [Screenshots](#screenshots "การบันทึกภาพหน้าจอของแอปที่กำลังทำงาน")
 - คำสั่ง Live
   - [การสร้างคำสั่ง Live](#creating-a-live-command "การสร้างคำสั่ง live")
   - [การรันคำสั่ง Live](#running-a-live-command "การรันคำสั่ง live")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-คำสั่ง live จะตัดคำนำหน้า `metro live:` ออกภายใน shell -- ใช้ `status` แทน `metro live:status`, `route /profile` แทน `metro live:run route /profile` มีเพียงไม่กี่คำสั่งที่รันได้เฉพาะภายใน shell เท่านั้น: `seed`, `seed:rollback`, `export`, `reload` และ `restart` พิมพ์ `help` เพื่อแสดงรายการคำสั่งทั้งหมด หรือ `help <command>` เพื่อดูตัวเลือกของคำสั่งใดคำสั่งหนึ่ง พิมพ์ `exit` (หรือ Ctrl+D) เพื่อออก
+คำสั่ง live จะตัดคำนำหน้า `metro live:` ออกภายใน shell -- ใช้ `status` แทน `metro live:status`, `route /profile` แทน `metro live:run route /profile` มีเพียงไม่กี่คำสั่งที่รันได้เฉพาะภายใน shell เท่านั้น: `seed`, `seed:rollback`, `export`, `record`, `reload` และ `restart` พิมพ์ `help` เพื่อแสดงรายการคำสั่งทั้งหมด หรือ `help <command>` เพื่อดูตัวเลือกของคำสั่งใดคำสั่งหนึ่ง พิมพ์ `exit` (หรือ Ctrl+D) เพื่อออก
 
 หากแอป restart ขณะที่คุณเชื่อมต่ออยู่ shell จะเชื่อมต่อใหม่ให้เอง
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | ยิง event หนึ่งของคุณ |
 | `toast` | แสดง toast notification |
 | `playbook` | เล่น [playbook](/docs/{{ $version }}/playbooks) ของคุณ หรือแสดงรายการ |
+| `screenshot` | บันทึก[ภาพหน้าจอ](#screenshots)ของแอป หรือของ `ScreenshotArea` หนึ่งรายการ |
 
 ภายใน `metro live` ให้ตัดส่วน `live:run` ออก -- ใช้ `route /profile` แทน `metro live:run route /profile`:
 
@@ -232,9 +235,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | ไม่สร้างไฟล์คำบรรยาย `.vtt` และ chapter ของการบันทึก |
 | `--clean-status-bar` | แสดง 9:41 พร้อมสัญญาณและแบตเตอรี่เต็มขณะ playbook เล่น แล้วคืนค่าเดิม ใช้ได้โดยไม่ต้องมี `--record` ด้วย |
 | `--countdown <seconds>` | นับถอยหลัง 0-10 วินาทีบนหน้าจอก่อน step แรก |
+| `--screenshots[=<mode>]` | บันทึกหน้าจอของทุก step ด้วย `<mode>` คือ `all`, `auto`, `marked`, `failures` หรือ `off` ดู [Screenshots ของ Playbook](#playbook-screenshots) |
+| `--scale <n>` | ขนาดของภาพหน้าจอเทียบกับขนาดของอุปกรณ์เอง สูงสุด 4 เช่น `0.5` สำหรับครึ่งหนึ่ง |
+| `--locales <list>` | เล่นหนึ่งครั้งในแต่ละ locale เหล่านี้ เช่น `en,es` หรือ `all` ของแอป |
+| `--themes <list>` | เล่นหนึ่งครั้งในแต่ละธีมเหล่านี้ เช่น `light,dark` หรือ `all` ของแอป |
+| `--store <id>` | วาดภาพหน้าจอในขนาดของ app store เช่น `ios-6.9` |
+| `--frame` | วาดแต่ละหน้าจอภายในกรอบโทรศัพท์ |
+| `--background <hex>` | สีรอบหน้าจอ เช่น `"#1B2027"` |
 | `--list` | แสดงรายการ playbook ของแอปแทนการเล่น |
 
 Ctrl+C จะขอให้แอปหยุด: step ที่เหลือจะถูกข้าม แต่ `tearDown` ยังคงรัน กด Ctrl+C อีกครั้งเพื่อเลิกรอ
+
+หากไม่มี step ใดไปถึง Metro ภายใน 20 วินาที Metro จะหยุดรอและทำให้การรันล้มเหลว แอปกำลังเล่น playbook แต่ event ของมันไม่ได้เข้ามา ซึ่งเกิดขึ้นเมื่อแอปเริ่มด้วย `flutter run --no-dds` ให้รันด้วย `flutter run` ธรรมดาแล้วลองอีกครั้ง
 
 ภายใน shell ของ `metro live` คำสั่งคือ `playbook <name>` และ Tab จะเติมชื่อ playbook ให้สมบูรณ์:
 
@@ -284,11 +296,93 @@ playbook ที่ล้มเหลวหรือถูกหยุดจะ�
 
 โดยค่าเริ่มต้น playbook จะซ่อนนิ้วและคำบรรยาย สำหรับวิดีโอสาธิต ให้ตั้งค่า `showFinger` และ `caption` บน playbook -- ดู [นิ้วและคำบรรยาย](/docs/{{ $version }}/playbooks#finger-and-caption)
 
+<div id="playbook-screenshots"></div>
+
+### Screenshots
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+[step `screenshot()`](/docs/{{ $version }}/playbooks#screenshots) ของ playbook จะถูกบันทึกใน `screenshots/<playbook>/` โดยไม่ต้องใช้ flag เพิ่มตัวเลือกเพื่อถ่ายในทุกภาษาและทุกธีม หรือปรับขนาดสำหรับหน้ารายการใน store:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` ยังบันทึกหน้าจอหลังทุก step ของ playbook ที่ไม่มี step `screenshot()` และ `--screenshots=all` ทำเช่นนั้นกับทุก playbook หน้าจอของ step ที่ล้มเหลวจะถูกบันทึกใน `build/playbooks/failures` และ `--screenshots=off` จะปิดสิ่งนั้น
+
+`--locales` และ `--themes` เล่น playbook หนึ่งครั้งในแต่ละรายการ และ locale กับธีมของแอปเองจะถูกคืนค่าหลังจากนั้น `--store` จะแสดงรายการขนาดเมื่อไม่มีค่า และ `--frame` วาดแต่ละหน้าจอในกรอบโทรศัพท์พร้อม `caption:` ของ step เหนือกรอบ `--clean-status-bar` แสดง 9:41 พร้อมสัญญาณและแบตเตอรี่เต็มในภาพที่ Metro ถ่ายด้วย iOS Simulator หรือ `adb`
+
 <div id="playbook-live-commands"></div>
 
 ### เอกสารอ้างอิงคำสั่ง Live
 
 คำสั่งเบื้องหลังคือ `playbooks.list`, `playbooks.run` และ `playbooks.stop` การรันจะคืน id ทันทีและสตรีมแต่ละ step เป็น event `nylo.playbook` จึงสามารถใช้เวลานานกว่า timeout ของคำสั่งได้ `live:status` จะแสดงรายการ playbook ของแอป Playbook เริ่มมีใน Nylo Live protocol เวอร์ชัน 9 การรองรับการบันทึก -- `countdown` ใน `playbooks.run` (พร้อม event `countdown` ทุกวินาที) และ `simulator` (UDID ของ iOS Simulator) ใน `status` -- เริ่มมีใน protocol เวอร์ชัน 10
+
+<div id="recording-a-journey"></div>
+
+## การบันทึก Journey
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` เขียนสิ่งที่คุณทำในแอปที่กำลังทำงานเป็น [playbook](/docs/{{ $version }}/playbooks#recording-a-playbook) มันรันได้เฉพาะภายใน shell ของ `metro live`:
+
+``` plaintext
+› record sign_up
+```
+
+ใช้งานแอป แล้วกด Enter เมื่อ journey จบ playbook จะอยู่ที่ `lib/app/playbooks/sign_up_playbook.dart` และลงทะเบียนใน `lib/bootstrap/playbooks.dart` และ Metro จะเสนอให้ hot restart แอปและเล่นกลับที่ความเร็ว `fast`
+
+| ตัวเลือก | คำอธิบาย |
+|--------|-------------|
+| `--description <text>` | คำอธิบายหนึ่งบรรทัด ที่แสดงเมื่อ Metro แสดงรายการ playbook |
+| `--no-data` | เขียนค่าที่พิมพ์ตามที่พิมพ์จริง แทนที่จะเป็น placeholder `data[...]` พร้อมค่าเริ่มต้น |
+| `--no-replay` | ข้ามคำถามเกี่ยวกับการเล่นกลับ |
+| `--force`, `-f` | แทนที่ไฟล์ playbook ที่มีอยู่แล้ว |
+
+ขณะบันทึก พิมพ์ `a` แล้วกด Enter เพื่อให้การแตะครั้งถัดไปเป็น `see()`, `d` สำหรับ `dontSee()`, `s <title>` เพื่อเริ่ม scene, `u` เพื่อยกเลิก step ล่าสุด และ `p` เพื่อหยุดชั่วคราว Ctrl+C จะทิ้งการบันทึก `metro make:playbook sign_up --record` เปิด shell และเริ่มบันทึกในครั้งเดียว
+
+คำสั่งเบื้องหลังคือ `record.start`, `record.stop`, `record.undo`, `record.mark` และ `record.status` การบันทึกจะสตรีมแต่ละ step เป็น event `nylo.record` การบันทึกเริ่มมีใน Nylo Live protocol เวอร์ชัน 11
+
+<div id="screenshots"></div>
+
+## Screenshots
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+บันทึก PNG ของแอปที่กำลังทำงานของคุณ:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+แต่ละไฟล์จะถูกบันทึกใน `screenshots/` ในโปรเจกต์ของคุณ โดยตั้งชื่อเป็น `<mode>-<device>-<date>-<time>.png` บน iOS Simulator และ Android Metro จับภาพทั้งหน้าจอของอุปกรณ์ด้วย Simulator หรือ `adb` ดังนั้นจึงมี status bar และคีย์บอร์ดอยู่ในภาพ อุปกรณ์อื่นใดจะใช้การจับภาพของแอปเอง ซึ่งคือหน้าของแอปตามที่ผู้ใช้เห็น
+
+| ตัวเลือก | คำอธิบาย |
+|--------|-------------|
+| `--area <name>` | จับภาพเฉพาะ `ScreenshotArea` ที่มีชื่อนี้ |
+| `--scale <n>` | ขนาดเทียบกับขนาดของอุปกรณ์เอง สูงสุด 4 เช่น `0.5` สำหรับครึ่งหนึ่ง |
+| `--locales <list>` | จับภาพหน้าจอในแต่ละ locale เหล่านี้ เช่น `en,es` หรือ `all` ของแอป |
+| `--themes <list>` | จับภาพหน้าจอในแต่ละธีมเหล่านี้ เช่น `light,dark` หรือ `all` ของแอป |
+| `--store <id>` | วาดในขนาดภาพหน้าจอของ app store เช่น `ios-6.9` เมื่อใช้ `--store` เพียงอย่างเดียวจะแสดงรายการขนาด |
+| `--frame` | วาดหน้าจอภายในกรอบโทรศัพท์ บนพื้นหลัง |
+| `--caption <text>` | ข้อความเหนือ `--frame` หรือ translation key |
+| `--background <hex>` | สีรอบหน้าจอ หลัง `--frame` หรือข้างขนาด `--store` ที่มีรูปทรงอื่น เช่น `"#1B2027"` |
+| `--out <path>` | บันทึกเป็นไฟล์ `.png` นี้ หรือลงในโฟลเดอร์ที่ลงท้ายด้วย `/` (ค่าเริ่มต้น: `screenshots/`) |
+| `--open` | เปิดภาพหน้าจอเมื่อบันทึกแล้ว |
+| `--copy` | คัดลอกภาพหน้าจอไปยังคลิปบอร์ด |
+| `--native` | จับภาพด้วย iOS Simulator หรือ `adb` นี่คือค่าเริ่มต้นสำหรับการจับภาพทั้งหน้าจอ `--no-native` ใช้การจับภาพของแอปเอง |
+| `--clean-status-bar` | แสดง 9:41 พร้อมสัญญาณและแบตเตอรี่เต็มในการจับภาพแบบ `--native` |
+
+เมื่อใช้ `--locales` หรือ `--themes` Metro จะบันทึก PNG หนึ่งไฟล์สำหรับแต่ละคู่ในโฟลเดอร์ ตั้งชื่อเป็น `es.png`, `dark.png` หรือ `es-dark.png` โดยสลับแอปในที่เดิมและคืนค่าหลังจากนั้น `--area`, `--scale`, `--store` และ `--frame` ใช้การจับภาพของแอปเอง
+
+ภายใน shell ของ `metro live` พิมพ์ `screenshot --open` หากต้องการถ่ายภาพหน้าจอจากโค้ดของแอปเอง ดู [Screenshots](/docs/{{ $version }}/screenshots)
 
 <div id="live-commands"></div>
 

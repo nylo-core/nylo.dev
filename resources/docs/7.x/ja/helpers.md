@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ NyLogger.info('This will print regardless of APP_DEBUG');
 ``` dart
 await sleep(2);              // 2秒
 await sleep(0, 500_000);     // 500ミリ秒
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+`DateTime` を `2 hours ago` のような経過時間として整形します。日付が相対表示の範囲を過ぎると、代わりに `pattern` で表示されます。`locale` を指定すると、アプリの言語とは別の言語で整形できます:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 hours ago
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

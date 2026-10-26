@@ -195,6 +195,31 @@ La methode `previewRoute()` :
 - Fait de la route specifiee la route initiale
 - Utile pour tester rapidement des pages specifiques pendant le developpement
 
+<x-doc-strip label="Nécessite" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Une page qui a besoin de donnees pour se construire peut etre previsualisee avec celles-ci. Passez `data`, `queryParameters` et `stack` a `previewRoute` :
+
+``` dart
+router.add(ProductPage.path).previewRoute(
+  data: {'id': 1},
+  queryParameters: {'tab': 'reviews'},
+  stack: [HomePage.path],
+);
+```
+
+- `data` et `queryParameters` parviennent a la page comme si vous aviez navigue avec `routeTo(ProductPage.path, data: {...}, queryParameters: {...})`. Les donnees d'une vraie navigation sont prioritaires.
+- `stack` liste les routes a ouvrir en dessous, de sorte que le bouton retour fonctionne comme apres un lancement normal. Ici, le retour depuis `ProductPage` mene a `HomePage`.
+- Les builds de release ignorent `previewRoute()`, donc un apercu oublie dans votre routeur ne change jamais la premiere page en production.
+
+`stack` necessite que l'application soit construite avec `NyApp.materialApp`. Si vous construisez votre propre `MaterialApp`, passez `NyRouter.previewInitialRoutes(onGenerateRoute)` a son `onGenerateInitialRoutes` :
+
+``` dart
+MaterialApp(
+  onGenerateRoute: onGenerateRoute,
+  onGenerateInitialRoutes: NyRouter.previewInitialRoutes(onGenerateRoute),
+)
+```
+
 > **Attention :** N'oubliez pas de supprimer `.previewRoute()` avant de publier votre application !
 
 <div id="authenticated-route"></div>
@@ -583,7 +608,7 @@ appRouter() => nyRoutes((router) {
 |--------|------|-------------|
 | `route_guards` | `List<RouteGuard>` | Appliquer des gardes de route a toutes les routes du groupe |
 | `prefix` | `String` | Ajouter un prefixe a tous les chemins de route du groupe |
-| `transition_type` | `TransitionType` | Definir la transition pour toutes les routes du groupe |
+| `transition_type` | `TransitionType` | Definir la transition pour les routes du groupe qui ne definissent pas la leur |
 | `transition` | `PageTransitionType` | Definir le type de transition de page (obsolete, utilisez transition_type) |
 | `transition_settings` | `PageTransitionSettings` | Definir les parametres de transition |
 

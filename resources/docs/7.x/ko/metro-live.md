@@ -14,6 +14,8 @@
 - [live:status](#live-status "앱 상태 표시")
 - [live:run](#live-run "내장 라이브 명령어 실행")
 - [플레이북](#playbooks "Metro에서 플레이북 재생")
+- [여정 녹화](#recording-a-journey "수행한 동작을 플레이북으로 녹화")
+- [스크린샷](#screenshots "실행 중인 앱의 스크린샷 저장")
 - 라이브 명령어
   - [라이브 명령어 생성](#creating-a-live-command "라이브 명령어 생성")
   - [라이브 명령어 실행](#running-a-live-command "라이브 명령어 실행")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-라이브 명령어는 셸 안에서 `metro live:` 접두사를 생략합니다 -- `metro live:status` 대신 `status`, `metro live:run route /profile` 대신 `route /profile`처럼 입력합니다. 일부 명령어는 셸 안에서만 실행됩니다: `seed`, `seed:rollback`, `export`, `reload`, `restart`입니다. `help`를 입력하면 모든 명령어가 나열되고, `help <command>`로 특정 명령어의 옵션을 확인할 수 있습니다. `exit`(또는 Ctrl+D)를 입력하면 셸을 종료합니다.
+라이브 명령어는 셸 안에서 `metro live:` 접두사를 생략합니다 -- `metro live:status` 대신 `status`, `metro live:run route /profile` 대신 `route /profile`처럼 입력합니다. 일부 명령어는 셸 안에서만 실행됩니다: `seed`, `seed:rollback`, `export`, `record`, `reload`, `restart`입니다. `help`를 입력하면 모든 명령어가 나열되고, `help <command>`로 특정 명령어의 옵션을 확인할 수 있습니다. `exit`(또는 Ctrl+D)를 입력하면 셸을 종료합니다.
 
 연결되어 있는 동안 앱이 재시작되면, 셸은 자동으로 다시 연결됩니다.
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | 자신이 정의한 이벤트 중 하나를 발생 |
 | `toast` | 토스트 알림 표시 |
 | `playbook` | [플레이북](/docs/{{ $version }}/playbooks) 재생, 또는 목록 표시 |
+| `screenshot` | 앱 또는 하나의 `ScreenshotArea`의 [스크린샷](#screenshots) 저장 |
 
 `metro live` 안에서는 `live:run` 부분을 생략합니다 -- `metro live:run route /profile` 대신 `route /profile`처럼 입력합니다:
 
@@ -232,9 +235,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | 녹화의 `.vtt` 캡션 파일과 챕터를 생성하지 않음 |
 | `--clean-status-bar` | 플레이북이 재생되는 동안 상태 표시줄을 9:41, 신호와 배터리 가득 찬 상태로 표시하고 끝나면 원래대로 되돌림. `--record` 없이도 동작합니다 |
 | `--countdown <seconds>` | 첫 번째 스텝 전에 화면에서 0~10초 카운트다운 |
+| `--screenshots[=<mode>]` | 모든 스텝의 화면도 저장합니다. `<mode>`는 `all`, `auto`, `marked`, `failures`, `off` 중 하나이며, [플레이북 스크린샷](#playbook-screenshots)을 참고하세요 |
+| `--scale <n>` | 기기 자체 크기에 대한 스크린샷의 상대 크기(최대 4). 예: 절반이면 `0.5` |
+| `--locales <list>` | 지정한 각 로케일에서 한 번씩 재생. 예: `en,es`, 또는 앱의 `all` |
+| `--themes <list>` | 지정한 각 테마에서 한 번씩 재생. 예: `light,dark`, 또는 앱의 `all` |
+| `--store <id>` | 앱 스토어 크기로 스크린샷을 그림. 예: `ios-6.9` |
+| `--frame` | 각 화면을 휴대폰 외곽선 안에 그림 |
+| `--background <hex>` | 화면 주변의 색상. 예: `"#1B2027"` |
 | `--list` | 플레이북을 재생하는 대신 앱의 플레이북 목록 표시 |
 
 Ctrl+C는 앱에 중지를 요청합니다. 나머지 스텝은 건너뛰지만 `tearDown`은 계속 실행됩니다. Ctrl+C를 한 번 더 누르면 대기를 중단합니다.
+
+20초 안에 어떤 스텝도 Metro에 도달하지 않으면 Metro는 대기를 멈추고 실행을 실패 처리합니다. 앱은 플레이북을 재생하고 있지만 이벤트가 도착하지 않는 상태이며, 앱이 `flutter run --no-dds`로 시작되었을 때 발생합니다. 일반 `flutter run`으로 실행한 뒤 다시 시도하세요.
 
 `metro live` 셸 안에서는 명령어가 `playbook <name>`이며, Tab 키로 플레이북 이름이 완성됩니다:
 
@@ -283,11 +295,93 @@ Playbook "sign_up" (natural)
 
 플레이북은 기본적으로 손가락과 캡션을 숨깁니다. 데모 영상에서는 플레이북에 `showFinger`와 `caption`을 설정하세요 -- [손가락과 캡션](/docs/{{ $version }}/playbooks#finger-and-caption)을 참고하세요.
 
+<div id="playbook-screenshots"></div>
+
+### 스크린샷
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+플레이북의 [`screenshot()` 스텝](/docs/{{ $version }}/playbooks#screenshots)은 플래그 없이도 `screenshots/<playbook>/`에 저장됩니다. 옵션을 추가하면 모든 언어와 테마에서 캡처하거나 스토어 등록용 크기로 만들 수 있습니다:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots`는 `screenshot()` 스텝이 없는 플레이북의 모든 스텝 이후 화면도 저장하며, `--screenshots=all`은 모든 플레이북에 대해 이를 수행합니다. 실패한 스텝의 화면은 `build/playbooks/failures`에 저장되며, `--screenshots=off`로 끌 수 있습니다.
+
+`--locales`와 `--themes`는 각각에서 플레이북을 한 번씩 재생하며, 끝나면 앱 자체의 로케일과 테마가 복원됩니다. `--store`는 값이 없으면 사용 가능한 크기를 나열하고, `--frame`은 각 화면을 휴대폰 외곽선 안에 그리며 그 위에 스텝의 `caption:`을 표시합니다. `--clean-status-bar`는 Metro가 iOS 시뮬레이터 또는 `adb`로 찍는 캡처에서 상태 표시줄을 9:41, 신호와 배터리 가득 찬 상태로 표시합니다.
+
 <div id="playbook-live-commands"></div>
 
 ### 라이브 명령어 레퍼런스
 
 그 뒤에 있는 명령어는 `playbooks.list`, `playbooks.run`, `playbooks.stop`입니다. 실행은 ID를 즉시 반환하고 각 스텝을 `nylo.playbook` 이벤트로 스트리밍하므로, 명령어의 타임아웃보다 오래 실행될 수 있습니다. `live:status`는 앱의 플레이북 목록을 표시합니다. 플레이북은 Nylo Live 프로토콜 버전 9에서 도입되었습니다. 녹화 지원 -- `playbooks.run`의 `countdown`(매초 `countdown` 이벤트 전송)과 `status`의 `simulator`(iOS 시뮬레이터 UDID) -- 은 프로토콜 버전 10에서 도입되었습니다.
+
+<div id="recording-a-journey"></div>
+
+## 여정 녹화
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record`는 실행 중인 앱에서 수행한 동작을 [플레이북](/docs/{{ $version }}/playbooks#recording-a-playbook)으로 기록합니다. `metro live` 셸 안에서만 실행됩니다:
+
+``` plaintext
+› record sign_up
+```
+
+앱을 사용한 뒤 여정이 끝나면 Enter를 누르세요. 플레이북은 `lib/app/playbooks/sign_up_playbook.dart`에 생성되고 `lib/bootstrap/playbooks.dart`에 등록되며, Metro가 앱을 핫 리스타트하고 `fast` 속도로 재생할지 물어봅니다.
+
+| 옵션 | 설명 |
+|--------|-------------|
+| `--description <text>` | Metro가 플레이북 목록을 표시할 때 보여주는 한 줄 설명 |
+| `--no-data` | 입력한 값을 기본값이 있는 `data[...]` 플레이스홀더 대신 입력한 그대로 기록 |
+| `--no-replay` | 재생할지 묻는 질문을 건너뜀 |
+| `--force`, `-f` | 이미 존재하는 플레이북 파일을 교체 |
+
+녹화하는 동안 `a`와 Enter를 입력하면 다음 탭이 `see()`가 되고, `d`는 `dontSee()`, `s <title>`은 장면 시작, `u`는 마지막 스텝 실행 취소, `p`는 일시정지입니다. Ctrl+C는 녹화를 버립니다. `metro make:playbook sign_up --record`는 셸을 열고 녹화를 한 번에 시작합니다.
+
+그 뒤에 있는 명령어는 `record.start`, `record.stop`, `record.undo`, `record.mark`, `record.status`입니다. 녹화는 각 스텝을 `nylo.record` 이벤트로 스트리밍합니다. 녹화는 Nylo Live 프로토콜 버전 11에서 도입되었습니다.
+
+<div id="screenshots"></div>
+
+## 스크린샷
+
+<x-doc-strip label="필수" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+실행 중인 앱의 PNG를 저장합니다:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+각 파일은 프로젝트의 `screenshots/`에 `<mode>-<device>-<date>-<time>.png`라는 이름으로 저장됩니다. iOS 시뮬레이터와 Android에서는 Metro가 시뮬레이터 또는 `adb`로 기기의 전체 화면을 캡처하므로 상태 표시줄과 키보드도 포함됩니다. 그 외의 기기는 앱 자체 캡처를 사용하며, 이는 사용자가 보는 그대로의 앱 페이지입니다.
+
+| 옵션 | 설명 |
+|--------|-------------|
+| `--area <name>` | 이 이름의 `ScreenshotArea`만 캡처 |
+| `--scale <n>` | 기기 자체 크기에 대한 상대 크기(최대 4). 예: 절반이면 `0.5` |
+| `--locales <list>` | 지정한 각 로케일에서 화면 캡처. 예: `en,es`, 또는 앱의 `all` |
+| `--themes <list>` | 지정한 각 테마에서 화면 캡처. 예: `light,dark`, 또는 앱의 `all` |
+| `--store <id>` | 앱 스토어 스크린샷 크기로 그림. 예: `ios-6.9`. `--store`만 쓰면 사용 가능한 크기를 나열합니다 |
+| `--frame` | 화면을 배경 위의 휴대폰 외곽선 안에 그림 |
+| `--caption <text>` | `--frame` 위의 텍스트, 또는 번역 키 |
+| `--background <hex>` | `--frame` 뒤 또는 다른 비율의 `--store` 크기 옆에 표시되는 화면 주변의 색상. 예: `"#1B2027"` |
+| `--out <path>` | 이 `.png`에 저장하거나, `/`로 끝나는 폴더에 저장 (기본값: `screenshots/`) |
+| `--open` | 저장한 후 스크린샷 열기 |
+| `--copy` | 스크린샷을 클립보드에 복사 |
+| `--native` | iOS 시뮬레이터 또는 `adb`로 캡처. 전체 화면 캡처의 기본값이며, `--no-native`는 앱 자체 캡처를 사용합니다 |
+| `--clean-status-bar` | `--native` 캡처에서 상태 표시줄을 9:41, 신호와 배터리 가득 찬 상태로 표시 |
+
+`--locales` 또는 `--themes`를 사용하면 Metro는 각 조합마다 `es.png`, `dark.png`, `es-dark.png`라는 이름의 PNG를 폴더에 하나씩 저장하며, 앱을 제자리에서 전환하고 끝나면 원래대로 되돌립니다. `--area`, `--scale`, `--store`, `--frame`은 앱 자체 캡처를 사용합니다.
+
+`metro live` 셸 안에서는 `screenshot --open`을 입력하세요. 앱 자체 코드에서 스크린샷을 찍으려면 [스크린샷](/docs/{{ $version }}/screenshots)을 참고하세요.
 
 <div id="live-commands"></div>
 

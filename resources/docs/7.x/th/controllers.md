@@ -324,6 +324,8 @@ class RegisterController extends NyController {
 }
 ```
 
+Controller ยังตรวจสอบความถูกต้องด้วย `check()` ได้เหมือนกับหน้า ดู [การตรวจสอบใน Controller](/docs/{{ $version }}/validation#validating-in-a-controller)
+
 <div id="language-switching"></div>
 
 ## การสลับภาษา
@@ -370,6 +372,18 @@ class CheckoutController extends NyController {
     );
   }
 }
+```
+
+ส่ง `onError` เพื่อตอบสนองเมื่อ `perform` throw `Exception` ล็อกจะถูกปล่อยก่อน จากนั้น `onError` จะได้รับ exception และ stack trace ของมัน:
+
+``` dart
+lockRelease(
+  "purchase_lock",
+  perform: () async => await processPayment(),
+  onError: (error, stackTrace) {
+    showToastDanger(description: "Payment failed");
+  },
+);
 ```
 
 <div id="confirm-actions"></div>

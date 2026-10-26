@@ -14,6 +14,8 @@
 - [live:status](#live-status "アプリの状態を表示")
 - [live:run](#live-run "組み込みの live コマンドを実行")
 - [プレイブック](#playbooks "Metro からプレイブックを再生")
+- [ジャーニーの記録](#recording-a-journey "操作内容をプレイブックとして記録")
+- [スクリーンショット](#screenshots "実行中のアプリのスクリーンショットを保存")
 - ライブコマンド
   - [ライブコマンドの作成](#creating-a-live-command "ライブコマンドの作成")
   - [ライブコマンドの実行](#running-a-live-command "ライブコマンドの実行")
@@ -71,7 +73,7 @@ Type help to see commands, and exit to leave.
 iPhone 15 Pro /home ›
 ```
 
-ライブコマンドは、シェル内では `metro live:` の接頭辞を省略します -- `metro live:status` の代わりに `status`、`metro live:run route /profile` の代わりに `route /profile` のように入力します。一部のコマンドはシェル内でのみ実行できます: `seed`、`seed:rollback`、`export`、`reload`、`restart` です。`help` と入力するとすべてのコマンドが一覧表示され、`help <command>` で特定のコマンドのオプションを確認できます。`exit`（または Ctrl+D）と入力するとシェルを終了します。
+ライブコマンドは、シェル内では `metro live:` の接頭辞を省略します -- `metro live:status` の代わりに `status`、`metro live:run route /profile` の代わりに `route /profile` のように入力します。一部のコマンドはシェル内でのみ実行できます: `seed`、`seed:rollback`、`export`、`record`、`reload`、`restart` です。`help` と入力するとすべてのコマンドが一覧表示され、`help <command>` で特定のコマンドのオプションを確認できます。`exit`（または Ctrl+D）と入力するとシェルを終了します。
 
 接続中にアプリが再起動した場合、シェルは自動的に再接続します。
 
@@ -187,6 +189,7 @@ metro live:run <command> [arguments]
 | `event` | 自分のイベントの 1 つを発火 |
 | `toast` | トースト通知を表示 |
 | `playbook` | [プレイブック](/docs/{{ $version }}/playbooks)を再生、または一覧表示 |
+| `screenshot` | アプリ、または 1 つの `ScreenshotArea` の[スクリーンショット](#screenshots)を保存 |
 
 `metro live` の中では、`live:run` の部分を省略します -- `metro live:run route /profile` の代わりに `route /profile` のように入力します:
 
@@ -232,9 +235,18 @@ metro live:run playbook sign_up add_to_bag --speed fast
 | `--no-captions` | 録画の `.vtt` キャプションファイルとチャプターを出力しない |
 | `--clean-status-bar` | プレイブックの再生中、ステータスバーを 9:41、電波・バッテリー満タンで表示し、終了後に元に戻す。`--record` なしでも動作します |
 | `--countdown <seconds>` | 最初のステップの前に、画面上で 0〜10 秒のカウントダウンを行う |
+| `--screenshots[=<mode>]` | 各ステップの画面も保存します。`<mode>` は `all`、`auto`、`marked`、`failures`、`off` です。[プレイブックのスクリーンショット](#playbook-screenshots)を参照 |
+| `--scale <n>` | デバイス自身のサイズに対するスクリーンショットのサイズ（最大 4）。例: `0.5` で半分 |
+| `--locales <list>` | これらのロケールそれぞれで 1 回ずつ再生します。例: `en,es`、またはアプリの `all` |
+| `--themes <list>` | これらのテーマそれぞれで 1 回ずつ再生します。例: `light,dark`、またはアプリの `all` |
+| `--store <id>` | アプリストアのサイズでスクリーンショットを描画します。例: `ios-6.9` |
+| `--frame` | 各画面をスマートフォンの枠の中に描画する |
+| `--background <hex>` | 画面の周囲の色。例: `"#1B2027"` |
 | `--list` | プレイブックを再生せず、アプリのプレイブックを一覧表示 |
 
 Ctrl+C を押すとアプリに停止を要求します。残りのステップはスキップされますが、`tearDown` は引き続き実行されます。もう一度 Ctrl+C を押すと、待機を終了します。
+
+20 秒以内にどのステップも Metro に届かない場合、Metro は待機を止めて実行を失敗とします。アプリはプレイブックを再生していますが、そのイベントが届いていません。これは、アプリが `flutter run --no-dds` で起動された場合に起こります。通常の `flutter run` で実行して、もう一度試してください。
 
 `metro live` シェル内ではコマンドは `playbook <name>` で、Tab キーでプレイブック名を補完できます:
 
@@ -283,11 +295,93 @@ Playbook "sign_up" (natural)
 
 プレイブックはデフォルトで指とキャプションを表示しません。デモ動画では、プレイブックに `showFinger` と `caption` を設定してください -- [指とキャプション](/docs/{{ $version }}/playbooks#finger-and-caption)を参照してください。
 
+<div id="playbook-screenshots"></div>
+
+### スクリーンショット
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+プレイブックの [`screenshot()` ステップ](/docs/{{ $version }}/playbooks#screenshots)は、フラグなしで `screenshots/<playbook>/` に保存されます。すべての言語とテーマで撮影したり、ストア掲載用のサイズにしたりするには、オプションを追加します:
+
+``` bash
+metro live:run playbook checkout
+metro live:run playbook checkout --locales en,es --themes light,dark
+metro live:run playbook checkout --store ios-6.9 --frame --background "#1B2027"
+metro live:run playbook checkout --screenshots --scale 0.5
+metro live:run playbook checkout --locales all --clean-status-bar
+```
+
+`--screenshots` は、`screenshot()` ステップのないプレイブックでも各ステップの後の画面を保存し、`--screenshots=all` はすべてのプレイブックで保存します。失敗したステップの画面は `build/playbooks/failures` に保存されます。`--screenshots=off` でこれを無効にできます。
+
+`--locales` と `--themes` は、それぞれでプレイブックを 1 回ずつ再生し、その後アプリ自身のロケールとテーマを元に戻します。`--store` は値なしで指定するとサイズを一覧表示し、`--frame` は各画面をスマートフォンの枠の中に、ステップの `caption:` をその上に描画します。`--clean-status-bar` は、iOS シミュレーターまたは `adb` で Metro が撮影するキャプチャに、9:41、電波・バッテリー満タンを表示します。
+
 <div id="playbook-live-commands"></div>
 
 ### ライブコマンドリファレンス
 
 その裏側のコマンドは `playbooks.list`、`playbooks.run`、`playbooks.stop` です。実行は ID をすぐに返し、各ステップを `nylo.playbook` イベントとしてストリーミングするため、コマンドのタイムアウトより長く実行できます。`live:status` はアプリのプレイブックを一覧表示します。プレイブックは Nylo Live プロトコルバージョン 9 で導入されました。録画のサポート -- `playbooks.run` の `countdown`（毎秒 `countdown` イベントを送信）と、`status` の `simulator`（iOS シミュレーターの UDID） -- は、プロトコルバージョン 10 で導入されました。
+
+<div id="recording-a-journey"></div>
+
+## ジャーニーの記録
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`record` は、実行中のアプリで行った操作を[プレイブック](/docs/{{ $version }}/playbooks#recording-a-playbook)として書き出します。`metro live` シェル内でのみ実行できます:
+
+``` plaintext
+› record sign_up
+```
+
+アプリを操作し、ジャーニーが終わったら Enter を押します。プレイブックは `lib/app/playbooks/sign_up_playbook.dart` に作成されて `lib/bootstrap/playbooks.dart` に登録され、Metro はアプリをホットリスタートして `fast` の速度で再生するかどうかを尋ねます。
+
+| オプション | 説明 |
+|--------|-------------|
+| `--description <text>` | 1 行の説明。Metro がプレイブックを一覧表示するときに表示されます |
+| `--no-data` | 入力された値を、デフォルト値を持つ `data[...]` のプレースホルダーではなく、入力されたとおりに書き出す |
+| `--no-replay` | 再生するかどうかの質問を省略する |
+| `--force`, `-f` | 既に存在するプレイブックファイルを置き換える |
+
+記録中に、`a` と Enter で次のタップを `see()` に、`d` で `dontSee()` に、`s <title>` でシーンの開始に、`u` で直前のステップの取り消しに、`p` で一時停止にできます。Ctrl+C で記録を破棄します。`metro make:playbook sign_up --record` は、シェルを開いて記録を一度に開始します。
+
+その裏側のコマンドは `record.start`、`record.stop`、`record.undo`、`record.mark`、`record.status` です。記録は各ステップを `nylo.record` イベントとしてストリーミングします。記録は Nylo Live プロトコルバージョン 11 で導入されました。
+
+<div id="screenshots"></div>
+
+## スクリーンショット
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+実行中のアプリの PNG を保存します:
+
+``` bash
+metro live:run screenshot
+metro live:run screenshot --open
+metro live:run screenshot --area receipt --copy
+metro live:run screenshot --store ios-6.9 --frame
+```
+
+各ファイルはプロジェクトの `screenshots/` に、`<mode>-<device>-<date>-<time>.png` という名前で保存されます。iOS シミュレーターと Android では、Metro がシミュレーターまたは `adb` でデバイスの画面全体をキャプチャするため、ステータスバーとキーボードも含まれます。それ以外のデバイスでは、アプリ自身のキャプチャが使われ、これはユーザーが見るとおりのアプリのページです。
+
+| オプション | 説明 |
+|--------|-------------|
+| `--area <name>` | この名前の `ScreenshotArea` だけをキャプチャする |
+| `--scale <n>` | デバイス自身のサイズに対するサイズ（最大 4）。例: `0.5` で半分 |
+| `--locales <list>` | これらのロケールそれぞれで画面をキャプチャします。例: `en,es`、またはアプリの `all` |
+| `--themes <list>` | これらのテーマそれぞれで画面をキャプチャします。例: `light,dark`、またはアプリの `all` |
+| `--store <id>` | アプリストアのスクリーンショットサイズで描画します。例: `ios-6.9`。`--store` だけを指定するとサイズを一覧表示します |
+| `--frame` | 画面をスマートフォンの枠の中に、背景付きで描画する |
+| `--caption <text>` | `--frame` の上に表示するテキスト、または翻訳キー |
+| `--background <hex>` | 画面の周囲の色。`--frame` の背後、または形状の異なる `--store` サイズの横に表示されます。例: `"#1B2027"` |
+| `--out <path>` | この `.png` に保存、または `/` で終わるフォルダに保存（デフォルト: `screenshots/`） |
+| `--open` | 保存後にスクリーンショットを開く |
+| `--copy` | スクリーンショットをクリップボードにコピーする |
+| `--native` | iOS シミュレーターまたは `adb` でキャプチャします。画面全体のキャプチャではこれがデフォルトです。`--no-native` はアプリ自身のキャプチャを使用します |
+| `--clean-status-bar` | `--native` キャプチャで、9:41、電波・バッテリー満タンを表示する |
+
+`--locales` または `--themes` を指定すると、Metro はそれぞれの組み合わせごとに 1 つの PNG を、`es.png`、`dark.png`、`es-dark.png` という名前でフォルダに保存し、アプリをその場で切り替えて、その後元に戻します。`--area`、`--scale`、`--store`、`--frame` はアプリ自身のキャプチャを使用します。
+
+`metro live` シェル内では `screenshot --open` と入力します。アプリ自身のコードからスクリーンショットを撮るには、[スクリーンショット](/docs/{{ $version }}/screenshots)を参照してください。
 
 <div id="live-commands"></div>
 

@@ -42,11 +42,7 @@ API サービスは `lib/app/networking/` に配置されます。新規プロ�
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
-      : super(
-          buildContext,
-          decoders: modelDecoders,
-        );
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');
@@ -189,6 +185,20 @@ class ApiService extends NyApiService {
 | `handleSuccess` | `Function(NyResponse<T>)?` | 成功時コールバック |
 | `handleFailure` | `Function(NyResponse<T>)?` | 失敗時コールバック |
 
+`handleSuccess` と `handleFailure` は、呼び出しの戻り値を変更することもできます。何も返さないコールバックはレスポンスをそのまま維持し、`NyResponse` を返すコールバックはレスポンスを置き換え、それ以外の値はレスポンスのデータになります。`handleFailure` は、タイムアウトや接続切断などでリクエストが例外をスローした場合にも実行され、エラーレスポンスを受け取ります:
+
+```dart
+Future<User?> fetchUser(int id) async {
+  return await network<User>(
+    request: (request) => request.get("/users/$id"),
+    handleFailure: (NyResponse<User> response) {
+      // リクエストが失敗したらゲストユーザーにフォールバックする
+      return User.guest();
+    },
+  );
+}
+```
+
 
 <div id="network-response-helper"></div>
 
@@ -302,6 +312,23 @@ String result = response.when(
 String? authHeader = response.getHeader('Authorization');
 ```
 
+レスポンスが複数の形を取りうる場合（[OneOf](/docs/{{$version}}/decoders#one-of) デコーダー）、`dataAs<X>()` で一つの形を読み取るか、`dataIs<X>()` でその形かどうかを確認します:
+
+<x-doc-strip label="必須" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+```dart
+NyResponse<LoginResult> response = await apiService.login(email, password);
+
+// ValidationError としてのデータ。別の型の場合は null
+ValidationError? failed = response.dataAs<ValidationError>();
+if (failed != null) form.setErrors(failed.errors);
+
+// データが TwoFactorRequired かどうか
+if (response.dataIs<TwoFactorRequired>()) {
+  // ...
+}
+```
+
 
 <div id="base-options"></div>
 
@@ -311,8 +338,7 @@ String? authHeader = response.getHeader('Authorization');
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     baseOptions: (BaseOptions baseOptions) {
       return baseOptions
@@ -467,7 +493,7 @@ Future<void> downloadFile(String url, String savePath) async {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   Map<Type, Interceptor> get interceptors => {
@@ -522,8 +548,7 @@ class LoggingInterceptor extends Interceptor {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     useNetworkLogger: true,
     networkLogger: NetworkLogger(
@@ -543,9 +568,8 @@ class ApiService extends NyApiService {
 
 ```
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext})
+  ApiService()
       : super(
-          buildContext,
           decoders: modelDecoders,
           useNetworkLogger: false, // <-- ロガーを無効にする
         );
@@ -626,7 +650,6 @@ await api<ApiService>(
 | パラメータ | 型 | 説明 |
 |-----------|------|-------------|
 | `request` | `Function(T)` | API リクエスト関数 |
-| `context` | `BuildContext?` | ビルドコンテキスト |
 | `headers` | `Map<String, dynamic>` | 追加ヘッダー |
 | `bearerToken` | `String?` | Bearer トークン |
 | `baseUrl` | `String?` | ベース URL を上書き |
@@ -703,7 +726,7 @@ class UserApiService extends NyApiService {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   // 単一の User を返す
   Future<User?> fetchUser() async {
@@ -733,6 +756,14 @@ final Map<Type, dynamic> modelDecoders = {
 ```
 
 `network<T>()` に渡す型パラメータは、`modelDecoders` マップと照合されて適切なデコーダーが見つけられます。
+
+`decoders([Decode(User.fromJson)])` で型付きデコーダーを登録すると、1行で `User` と `List<User>` をデコードできます。複数の形を持つレスポンスには `OneOf` を使用します:
+
+```dart
+final Map<Type, dynamic> modelDecoders = decoders([
+  Decode(User.fromJson),
+]);
+```
 
 **参照:** モデルデコーダーの登録の詳細については [Decoders](/docs/{{$version}}/decoders#model-decoders) をご覧ください。
 
@@ -876,7 +907,7 @@ apiService.setRetryIf((dioException) => dioException.response?.statusCode == 500
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
+  ApiService() : super(decoders: modelDecoders);
 
   @override
   bool get checkConnectivityBeforeRequest => true;
@@ -1021,8 +1052,7 @@ final Map<Type, dynamic> apiDecoders = {
 
 ```dart
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(
-    buildContext,
+  ApiService() : super(
     decoders: modelDecoders,
     initDio: (Dio dio) {
       dio.options.validateStatus = (status) => status! < 500;

@@ -267,6 +267,7 @@ Obj.get(user, 'profile.name');    // 'Anna'
 <div style="padding: 0.375rem 0;"><a href="#method-badge-helpers"><code>setBadgeNumber</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-shownextlog"><code>showNextLog</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-sleep"><code>sleep</code></a></div>
+<div style="padding: 0.375rem 0;"><a href="#method-totimeagostring"><code>toTimeAgoString</code></a></div>
 <div style="padding: 0.375rem 0;"><a href="#method-trans"><code>trans</code></a></div>
 </div>
 
@@ -2431,6 +2432,22 @@ Menunda eksekusi untuk durasi yang ditentukan. Argumen pertama adalah detik; arg
 ``` dart
 await sleep(2);              // 2 detik
 await sleep(0, 500_000);     // 500 milidetik
+```
+
+<div id="method-totimeagostring"></div>
+
+#### `toTimeAgoString()`
+
+Memformat `DateTime` sebagai berapa lama yang lalu, seperti `2 hours ago`. Setelah tanggal melewati jendela relatif, tanggal ditampilkan dengan `pattern`. `locale` memformat dalam bahasa selain bahasa aplikasi:
+
+``` dart
+final DateTime date = DateTime(2025, 12, 4, 15, 47);
+
+date.toTimeAgoString();
+// 2 hours ago
+
+date.toTimeAgoString(locale: 'fr', pattern: "d MMM yyyy 'à' HH:mm");
+// 4 déc. 2025 à 15:47
 ```
 
 <div id="method-trans"></div>

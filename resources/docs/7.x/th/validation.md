@@ -6,6 +6,7 @@
 - [บทนำ](#introduction "บทนำเกี่ยวกับการตรวจสอบความถูกต้อง")
 - พื้นฐาน
   - [การตรวจสอบข้อมูลด้วย check()](#validating-data "การตรวจสอบข้อมูลด้วย check")
+  - [การตรวจสอบใน Controller](#validating-in-a-controller "การตรวจสอบใน controller")
   - [ผลการตรวจสอบ](#validation-results "ผลการตรวจสอบ")
 - FormValidator
   - [การใช้งาน FormValidator](#using-form-validator "การใช้งาน FormValidator")
@@ -88,6 +89,36 @@ check((validate) {
 
 พารามิเตอร์ `label` ที่เป็นตัวเลือกจะตั้งชื่อที่อ่านง่ายสำหรับใช้ในข้อความผิดพลาด (เช่น "The Email must be a valid email address.")
 
+<div id="validating-in-a-controller"></div>
+
+### การตรวจสอบใน Controller
+
+<x-doc-strip label="ข้อกำหนด" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.36.0+" />
+
+`NyController` มี `check()` เช่นเดียวกัน จึงตรวจสอบฟิลด์ของตัวเองได้โดยไม่ต้องผ่าน state ของหน้า:
+
+``` dart
+class RegisterController extends NyController {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void register() {
+    check((validate) {
+      validate.that(email.text, label: "Email").email();
+      validate.that(password.text, label: "Password").notEmpty();
+    }, onSuccess: submit, onValidationError: (FormValidationResponseBag bag) {
+      showToastDanger(description: bag.firstErrorMessage ?? '');
+    });
+  }
+
+  void submit() {
+    // ผ่านการตรวจสอบทั้งหมดแล้ว
+  }
+}
+```
+
+`check()` คืนค่า `FormValidationResponseBag` ดังนั้น controller จึงเก็บผลลัพธ์ไว้ได้
+
 <div id="validation-results"></div>
 
 ## ผลการตรวจสอบ
@@ -139,6 +170,12 @@ if (result.isValid) {
   // response ผิดพลาด
   List<FormValidationError> errors = result.errorResponses;
 }
+```
+
+`firstError` คืนค่า `FormValidationError` ของกฎแรกที่ไม่ผ่าน หรือ `null` เมื่อผ่านทุกกฎ มันไม่สร้างรายการข้อผิดพลาดทั้งหมด จึงเรียกทุกครั้งที่พิมพ์ได้อย่างประหยัด:
+
+``` dart
+FormValidationError? error = result.firstError;
 ```
 
 <div id="using-form-validator"></div>

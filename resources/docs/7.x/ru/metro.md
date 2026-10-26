@@ -27,6 +27,8 @@
   - [Создание файла окружения](#make-env-file "Создание нового файла окружения")
   - [Генерация ключа](#make-key "Генерация APP_KEY")
   - [Создание плейбука](#make-playbook "Создание нового плейбука")
+- Команды проекта
+  - [Doctor](#doctor "Проверьте, как связан ваш проект")
 - Иконки приложения
   - [Генерация иконок приложения](#build-app-icons "Генерация иконок приложения с Metro")
 - Пользовательские команды
@@ -113,6 +115,9 @@ All commands:
   make:env
   make:key
 
+[Project Commands]
+  doctor
+
 [Live Commands]
   live
   live:devices
@@ -120,7 +125,7 @@ All commands:
   live:run
 ```
 
-`live`, `live:devices`, `live:status` и `live:run` открывают оболочку, подключённую к вашему запущенному приложению, что позволяет просматривать и управлять им во время его работы -- см. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` запускает один из ваших [плейбуков](/docs/{{ $version }}/playbooks) на работающем приложении.
+`live`, `live:devices`, `live:status` и `live:run` открывают оболочку, подключённую к вашему запущенному приложению, что позволяет просматривать и управлять им во время его работы -- см. [Metro Live](/docs/{{ $version }}/metro-live). `live:run playbook <name>` запускает один из ваших [плейбуков](/docs/{{ $version }}/playbooks) на работающем приложении, а `live:run screenshot` сохраняет его PNG-снимок -- см. [Скриншоты](/docs/{{ $version }}/metro-live#screenshots).
 
 <div id="make-controller"></div>
 
@@ -158,6 +163,7 @@ metro make:controller profile_controller --force
 
 - [Создание новой модели](#making-a-new-model "Создание новой модели с Metro")
 - [Создание модели из JSON](#make-model-from-json "Создание модели из JSON с Metro")
+- [Создание модели OneOf](#make-a-one-of-model "Создание модели OneOf с Metro")
 - [Принудительное создание модели](#forcefully-make-a-model "Принудительное создание модели с Metro")
 <div id="making-a-new-model"></div>
 
@@ -184,6 +190,22 @@ metro make:model product --json
 ```
 
 Затем вы можете вставить JSON в терминал, и модель будет сгенерирована автоматически.
+
+<div id="make-a-one-of-model"></div>
+
+### Создание модели OneOf
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+, nylo_support 7.37.0+" />
+
+Используйте опцию `--one-of`, чтобы создать модель для ответа, который может иметь несколько форм. Назовите каждую форму через запятую:
+
+``` bash
+metro make:model order_result --one-of="accepted,rejected"
+```
+
+Это создаёт sealed-родителя `OrderResult` с подтипами `Accepted` и `Rejected` в `lib/app/models/` и регистрирует для него запись `OneOf<OrderResult>.byKey('type', {...})` в `lib/bootstrap/decoders.dart`. Если передать `--one-of` без значения, Metro спросит у вас имена.
+
+Измените ключ `'type'` на поле, которое использует ваш API, или переключитесь на `OneOf.byStatus` или `OneOf.byJson`. См. [OneOf](/docs/{{ $version }}/decoders#one-of) для каждого конструктора.
 
 <div id="forcefully-make-a-model"></div>
 
@@ -846,15 +868,49 @@ metro make:playbook sign_up
 | Флаг / Опция | Сокращение | Описание |
 |--------------|------------|----------|
 | `--description` | | Однострочное описание, отображаемое, когда Metro выводит список плейбуков |
+| `--record` | | Вместо этого записывает сценарий в вашем запущенном приложении: открывает `metro live` и начинает [запись](/docs/{{ $version }}/playbooks#recording-a-playbook) |
+| `--from-routes` | | Посещает каждую страницу, добавленную вашим роутером, и делает [скриншот](/docs/{{ $version }}/playbooks#screenshots) каждой |
 | `--force` | `-f` | Создаёт файл, даже если он уже существует |
 
 ``` bash
 metro make:playbook onboarding/sign_up --description "New user signs up"
+metro make:playbook sign_up --record
+metro make:playbook tour --from-routes
 ```
 
 Это создаст `lib/app/playbooks/sign_up_playbook.dart` (внутри указанной подпапки, если она есть) и зарегистрирует его в `lib/bootstrap/playbooks.dart`, создав этот файл при первом использовании. В релизных сборках реестр представляет собой пустой map. Также `playbooks` передаётся в `nylo.configure(...)` в вашем `AppProvider`.
 
 Запустите его, пока приложение работает, командой `metro live:run playbook sign_up`. Если приложение уже запущено, сначала выполните hot restart.
+
+С `--from-routes` Metro читает строки `router.add(SomePage.path)` в `lib/routes/router.dart` и пишет `visit()` и `screenshot()` для каждой страницы. Страница за защитой маршрута или страница с параметрами маршрута получает комментарий о том, что может понадобиться в `setUp`, чтобы до неё добраться.
+
+<div id="doctor"></div>
+
+## Doctor
+
+<x-doc-strip label="Требуется" items="{{ config('app.name') }} 7.5.0+" />
+
+`metro doctor` перечисляет всё, что неправильно связано в вашем проекте, с указанием файла для изменения:
+
+``` bash
+metro doctor
+```
+
+Он проверяет ваши маршруты, декодеры, языки, env и ресурсы:
+
+| Проверка | Ищет |
+|----------|------|
+| Маршруты | Страницы с путём маршрута, не добавленные в роутер |
+| Декодеры | Используемые API-сервисы, контроллеры и модели, не зарегистрированные в `lib/bootstrap/decoders.dart` |
+| Языки | Языковые файлы, в которых нет ключей базового языка или которые не являются корректным JSON |
+| Env | Ключи в `.env`, которых нет в `.env-example` |
+| Ресурсы | Изображения в `assets/images`, на которые ничто не ссылается |
+
+Каждая проверка завершается как ok, проблема или заметка. `metro doctor` завершается с ненулевым кодом, когда проверка находит проблему, поэтому его можно запускать в CI. Добавьте `--strict`, чтобы падать и на заметках, например на изображениях, на которые ничто не ссылается:
+
+``` bash
+metro doctor --strict
+```
 
 <div id="build-app-icons"></div>
 
