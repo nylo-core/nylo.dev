@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Отступы при наличии заголовка |
 | `contentPadding` | `EdgeInsets?` | null | Отступы вокруг основного содержимого |
 | `actionsPadding` | `EdgeInsets?` | null | Отступы вокруг секции действий |
-| `backgroundColor` | `Color?` | null | Цвет фона модального окна |
+| `backgroundColor` | `Color?` | null | Цвет фона модального окна, также используется для области содержимого, если не задан `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | Цвет фона области содержимого, переопределяет `backgroundColor` |
 | `showHandle` | `bool` | `true` | Показать ручку перетаскивания сверху |
 | `closeButtonColor` | `Color?` | null | Цвет фона кнопки закрытия |
 | `closeButtonIconColor` | `Color?` | null | Цвет иконки кнопки закрытия |
 | `modalDecoration` | `BoxDecoration?` | null | Пользовательское оформление контейнера |
 | `handleColor` | `Color?` | null | Цвет ручки перетаскивания |
+| `useRootNavigator` | `bool` | `true` | Показать модальное окно в корневом навигаторе |
 
 <div id="actions"></div>
 

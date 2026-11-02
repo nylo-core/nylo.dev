@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Padding khi có header |
 | `contentPadding` | `EdgeInsets?` | null | Padding xung quanh nội dung chính |
 | `actionsPadding` | `EdgeInsets?` | null | Padding xung quanh phần hành động |
-| `backgroundColor` | `Color?` | null | Màu nền modal |
+| `backgroundColor` | `Color?` | null | Màu nền modal, cũng được dùng cho vùng nội dung trừ khi đặt `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | Màu nền của vùng nội dung, ghi đè `backgroundColor` |
 | `showHandle` | `bool` | `true` | Hiển thị thanh kéo ở trên cùng |
 | `closeButtonColor` | `Color?` | null | Màu nền nút đóng |
 | `closeButtonIconColor` | `Color?` | null | Màu biểu tượng nút đóng |
 | `modalDecoration` | `BoxDecoration?` | null | Tùy chỉnh giao diện cho container modal |
 | `handleColor` | `Color?` | null | Màu thanh kéo |
+| `useRootNavigator` | `bool` | `true` | Hiển thị modal trên root navigator |
 
 <div id="actions"></div>
 

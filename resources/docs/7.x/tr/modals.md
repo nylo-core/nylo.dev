@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Ba&#351;l&#305;k mevcut oldu&#287;unda dolgu |
 | `contentPadding` | `EdgeInsets?` | null | Ana i&#231;eri&#287;in etraf&#305;ndaki dolgu |
 | `actionsPadding` | `EdgeInsets?` | null | Eylemler b&#246;l&#252;m&#252;n&#252;n etraf&#305;ndaki dolgu |
-| `backgroundColor` | `Color?` | null | Modal arka plan rengi |
+| `backgroundColor` | `Color?` | null | Modal arka plan rengi, `modalBackgroundColor` ayarlanmad&#305;k&#231;a i&#231;erik alan&#305; i&#231;in de kullan&#305;l&#305;r |
+| `modalBackgroundColor` | `Color?` | null | &#304;&#231;erik alan&#305;n&#305;n arka plan rengi, `backgroundColor` de&#287;erini ge&#231;ersiz k&#305;lar |
 | `showHandle` | `bool` | `true` | &#220;stteki s&#252;r&#252;kleme tutamac&#305;n&#305; g&#246;ster |
 | `closeButtonColor` | `Color?` | null | Kapatma d&#252;&#287;mesi arka plan rengi |
 | `closeButtonIconColor` | `Color?` | null | Kapatma d&#252;&#287;mesi ikon rengi |
 | `modalDecoration` | `BoxDecoration?` | null | Modal kapsay&#305;c&#305; i&#231;in &#246;zel dekorasyon |
 | `handleColor` | `Color?` | null | S&#252;r&#252;kleme tutamac&#305;n&#305;n rengi |
+| `useRootNavigator` | `bool` | `true` | Modal'&#305; k&#246;k navigat&#246;rde g&#246;ster |
 
 <div id="actions"></div>
 

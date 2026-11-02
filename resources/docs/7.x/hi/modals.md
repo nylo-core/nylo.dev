@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | हेडर मौजूद होने पर पैडिंग |
 | `contentPadding` | `EdgeInsets?` | null | मुख्य कंटेंट के चारों ओर पैडिंग |
 | `actionsPadding` | `EdgeInsets?` | null | एक्शन सेक्शन के चारों ओर पैडिंग |
-| `backgroundColor` | `Color?` | null | मोडल का बैकग्राउंड रंग |
+| `backgroundColor` | `Color?` | null | मोडल का बैकग्राउंड रंग, जब तक `modalBackgroundColor` सेट न हो, कंटेंट एरिया के लिए भी इसी का उपयोग होता है |
+| `modalBackgroundColor` | `Color?` | null | कंटेंट एरिया का बैकग्राउंड रंग, `backgroundColor` को ओवरराइड करता है |
 | `showHandle` | `bool` | `true` | शीर्ष पर ड्रैग हैंडल दिखाएँ |
 | `closeButtonColor` | `Color?` | null | बंद बटन का बैकग्राउंड रंग |
 | `closeButtonIconColor` | `Color?` | null | बंद बटन का आइकन रंग |
 | `modalDecoration` | `BoxDecoration?` | null | मोडल कंटेनर के लिए कस्टम डेकोरेशन |
 | `handleColor` | `Color?` | null | ड्रैग हैंडल का रंग |
+| `useRootNavigator` | `bool` | `true` | मोडल को रूट नेविगेटर पर दिखाएँ |
 
 <div id="actions"></div>
 

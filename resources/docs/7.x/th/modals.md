@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | ระยะห่างเมื่อมีส่วนหัว |
 | `contentPadding` | `EdgeInsets?` | null | ระยะห่างรอบเนื้อหาหลัก |
 | `actionsPadding` | `EdgeInsets?` | null | ระยะห่างรอบส่วนการดำเนินการ |
-| `backgroundColor` | `Color?` | null | สีพื้นหลัง modal |
+| `backgroundColor` | `Color?` | null | สีพื้นหลัง modal และใช้กับพื้นที่เนื้อหาด้วย เว้นแต่จะตั้งค่า `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | สีพื้นหลังของพื้นที่เนื้อหา โดยแทนที่ `backgroundColor` |
 | `showHandle` | `bool` | `true` | แสดงที่จับลากด้านบน |
 | `closeButtonColor` | `Color?` | null | สีพื้นหลังปุ่มปิด |
 | `closeButtonIconColor` | `Color?` | null | สีไอคอนปุ่มปิด |
 | `modalDecoration` | `BoxDecoration?` | null | การตกแต่งที่กำหนดเองสำหรับคอนเทนเนอร์ modal |
 | `handleColor` | `Color?` | null | สีของที่จับลาก |
+| `useRootNavigator` | `bool` | `true` | แสดง modal บน root navigator |
 
 <div id="actions"></div>
 

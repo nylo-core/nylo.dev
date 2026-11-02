@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Padding when header is present |
 | `contentPadding` | `EdgeInsets?` | null | Padding around the main content |
 | `actionsPadding` | `EdgeInsets?` | null | Padding around the actions section |
-| `backgroundColor` | `Color?` | null | Modal background color |
+| `backgroundColor` | `Color?` | null | Modal background color, used for the content area too unless `modalBackgroundColor` is set |
+| `modalBackgroundColor` | `Color?` | null | Background color of the content area, overriding `backgroundColor` |
 | `showHandle` | `bool` | `true` | Show the drag handle at the top |
 | `closeButtonColor` | `Color?` | null | Close button background color |
 | `closeButtonIconColor` | `Color?` | null | Close button icon color |
 | `modalDecoration` | `BoxDecoration?` | null | Custom decoration for the modal container |
 | `handleColor` | `Color?` | null | Color of the drag handle |
+| `useRootNavigator` | `bool` | `true` | Show the modal on the root navigator |
 
 <div id="actions"></div>
 

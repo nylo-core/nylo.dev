@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | 헤더가 있을 때의 패딩 |
 | `contentPadding` | `EdgeInsets?` | null | 메인 콘텐츠 주변 패딩 |
 | `actionsPadding` | `EdgeInsets?` | null | 액션 섹션 주변 패딩 |
-| `backgroundColor` | `Color?` | null | 모달 배경 색상 |
+| `backgroundColor` | `Color?` | null | 모달 배경 색상. `modalBackgroundColor`가 설정되지 않으면 콘텐츠 영역에도 사용 |
+| `modalBackgroundColor` | `Color?` | null | 콘텐츠 영역 배경 색상. `backgroundColor`를 재정의 |
 | `showHandle` | `bool` | `true` | 상단 드래그 핸들 표시 |
 | `closeButtonColor` | `Color?` | null | 닫기 버튼 배경 색상 |
 | `closeButtonIconColor` | `Color?` | null | 닫기 버튼 아이콘 색상 |
 | `modalDecoration` | `BoxDecoration?` | null | 모달 컨테이너의 커스텀 데코레이션 |
 | `handleColor` | `Color?` | null | 드래그 핸들 색상 |
+| `useRootNavigator` | `bool` | `true` | 루트 네비게이터에 모달 표시 |
 
 <div id="actions"></div>
 

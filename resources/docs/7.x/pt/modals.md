@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Preenchimento quando o cabecalho esta presente |
 | `contentPadding` | `EdgeInsets?` | null | Preenchimento ao redor do conteudo principal |
 | `actionsPadding` | `EdgeInsets?` | null | Preenchimento ao redor da secao de acoes |
-| `backgroundColor` | `Color?` | null | Cor de fundo do modal |
+| `backgroundColor` | `Color?` | null | Cor de fundo do modal, usada tambem na area de conteudo, a menos que `modalBackgroundColor` seja definido |
+| `modalBackgroundColor` | `Color?` | null | Cor de fundo da area de conteudo, sobrescreve `backgroundColor` |
 | `showHandle` | `bool` | `true` | Mostrar a alca de arraste no topo |
 | `closeButtonColor` | `Color?` | null | Cor de fundo do botao fechar |
 | `closeButtonIconColor` | `Color?` | null | Cor do icone do botao fechar |
 | `modalDecoration` | `BoxDecoration?` | null | Decoracao personalizada para o container do modal |
 | `handleColor` | `Color?` | null | Cor da alca de arraste |
+| `useRootNavigator` | `bool` | `true` | Mostrar o modal no navigator raiz |
 
 <div id="actions"></div>
 

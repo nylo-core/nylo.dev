@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | ヘッダー存在時のパディング |
 | `contentPadding` | `EdgeInsets?` | null | メインコンテンツ周りのパディング |
 | `actionsPadding` | `EdgeInsets?` | null | アクションセクション周りのパディング |
-| `backgroundColor` | `Color?` | null | モーダルの背景色 |
+| `backgroundColor` | `Color?` | null | モーダルの背景色。`modalBackgroundColor` が未設定の場合はコンテンツ領域にも使用 |
+| `modalBackgroundColor` | `Color?` | null | コンテンツ領域の背景色。`backgroundColor` を上書き |
 | `showHandle` | `bool` | `true` | 上部のドラッグハンドルを表示 |
 | `closeButtonColor` | `Color?` | null | 閉じるボタンの背景色 |
 | `closeButtonIconColor` | `Color?` | null | 閉じるボタンのアイコン色 |
 | `modalDecoration` | `BoxDecoration?` | null | モーダルコンテナのカスタムデコレーション |
 | `handleColor` | `Color?` | null | ドラッグハンドルの色 |
+| `useRootNavigator` | `bool` | `true` | ルートナビゲーターでモーダルを表示 |
 
 <div id="actions"></div>
 

@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | 头部存在时的内边距 |
 | `contentPadding` | `EdgeInsets?` | null | 主内容周围的内边距 |
 | `actionsPadding` | `EdgeInsets?` | null | 操作区域周围的内边距 |
-| `backgroundColor` | `Color?` | null | 模态框背景颜色 |
+| `backgroundColor` | `Color?` | null | 模态框背景颜色，未设置 `modalBackgroundColor` 时也用于内容区域 |
+| `modalBackgroundColor` | `Color?` | null | 内容区域的背景颜色，覆盖 `backgroundColor` |
 | `showHandle` | `bool` | `true` | 显示顶部拖拽手柄 |
 | `closeButtonColor` | `Color?` | null | 关闭按钮背景颜色 |
 | `closeButtonIconColor` | `Color?` | null | 关闭按钮图标颜色 |
 | `modalDecoration` | `BoxDecoration?` | null | 模态框容器的自定义装饰 |
 | `handleColor` | `Color?` | null | 拖拽手柄的颜色 |
+| `useRootNavigator` | `bool` | `true` | 在根导航器上显示模态框 |
 
 <div id="actions"></div>
 

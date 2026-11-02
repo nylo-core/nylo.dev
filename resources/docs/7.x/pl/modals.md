@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Padding gdy obecny jest nagłówek |
 | `contentPadding` | `EdgeInsets?` | null | Padding wokół głównej treści |
 | `actionsPadding` | `EdgeInsets?` | null | Padding wokół sekcji akcji |
-| `backgroundColor` | `Color?` | null | Kolor tła modala |
+| `backgroundColor` | `Color?` | null | Kolor tła modala, używany także dla obszaru treści, chyba że ustawiono `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | Kolor tła obszaru treści, nadpisuje `backgroundColor` |
 | `showHandle` | `bool` | `true` | Wyświetla uchwyt do przeciągania na górze |
 | `closeButtonColor` | `Color?` | null | Kolor tła przycisku zamykania |
 | `closeButtonIconColor` | `Color?` | null | Kolor ikony przycisku zamykania |
 | `modalDecoration` | `BoxDecoration?` | null | Niestandardowa dekoracja kontenera modala |
 | `handleColor` | `Color?` | null | Kolor uchwytu do przeciągania |
+| `useRootNavigator` | `bool` | `true` | Wyświetla modal w głównym nawigatorze |
 
 <div id="actions"></div>
 

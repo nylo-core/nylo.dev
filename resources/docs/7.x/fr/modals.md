@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Espacement lorsqu'un en-tete est present |
 | `contentPadding` | `EdgeInsets?` | null | Espacement autour du contenu principal |
 | `actionsPadding` | `EdgeInsets?` | null | Espacement autour de la section des actions |
-| `backgroundColor` | `Color?` | null | Couleur de fond de la modale |
+| `backgroundColor` | `Color?` | null | Couleur de fond de la modale, utilisee aussi pour la zone de contenu sauf si `modalBackgroundColor` est defini |
+| `modalBackgroundColor` | `Color?` | null | Couleur de fond de la zone de contenu, remplace `backgroundColor` |
 | `showHandle` | `bool` | `true` | Afficher la poignee de glissement en haut |
 | `closeButtonColor` | `Color?` | null | Couleur de fond du bouton de fermeture |
 | `closeButtonIconColor` | `Color?` | null | Couleur de l'icone du bouton de fermeture |
 | `modalDecoration` | `BoxDecoration?` | null | Decoration personnalisee du conteneur de la modale |
 | `handleColor` | `Color?` | null | Couleur de la poignee de glissement |
+| `useRootNavigator` | `bool` | `true` | Afficher la modale sur le navigateur racine |
 
 <div id="actions"></div>
 

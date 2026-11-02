@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Relleno cuando hay encabezado |
 | `contentPadding` | `EdgeInsets?` | null | Relleno alrededor del contenido principal |
 | `actionsPadding` | `EdgeInsets?` | null | Relleno alrededor de la seccion de acciones |
-| `backgroundColor` | `Color?` | null | Color de fondo del modal |
+| `backgroundColor` | `Color?` | null | Color de fondo del modal, usado también para el área de contenido salvo que se defina `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | Color de fondo del área de contenido, sobrescribe `backgroundColor` |
 | `showHandle` | `bool` | `true` | Mostrar el indicador de arrastre en la parte superior |
 | `closeButtonColor` | `Color?` | null | Color de fondo del botón de cerrar |
 | `closeButtonIconColor` | `Color?` | null | Color del ícono del botón de cerrar |
 | `modalDecoration` | `BoxDecoration?` | null | Decoración personalizada del contenedor del modal |
 | `handleColor` | `Color?` | null | Color del indicador de arrastre |
+| `useRootNavigator` | `bool` | `true` | Mostrar el modal en el navegador raíz |
 
 <div id="actions"></div>
 

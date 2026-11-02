@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Padding saat header ada |
 | `contentPadding` | `EdgeInsets?` | null | Padding di sekitar konten utama |
 | `actionsPadding` | `EdgeInsets?` | null | Padding di sekitar bagian aksi |
-| `backgroundColor` | `Color?` | null | Warna latar belakang modal |
+| `backgroundColor` | `Color?` | null | Warna latar belakang modal, juga digunakan untuk area konten kecuali `modalBackgroundColor` diatur |
+| `modalBackgroundColor` | `Color?` | null | Warna latar belakang area konten, menimpa `backgroundColor` |
 | `showHandle` | `bool` | `true` | Menampilkan handle tarik di bagian atas |
 | `closeButtonColor` | `Color?` | null | Warna latar belakang tombol tutup |
 | `closeButtonIconColor` | `Color?` | null | Warna ikon tombol tutup |
 | `modalDecoration` | `BoxDecoration?` | null | Dekorasi kustom untuk container modal |
 | `handleColor` | `Color?` | null | Warna handle tarik |
+| `useRootNavigator` | `bool` | `true` | Menampilkan modal di root navigator |
 
 <div id="actions"></div>
 

@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Abstand bei vorhandener Kopfzeile |
 | `contentPadding` | `EdgeInsets?` | null | Abstand um den Hauptinhalt |
 | `actionsPadding` | `EdgeInsets?` | null | Abstand um den Aktionsbereich |
-| `backgroundColor` | `Color?` | null | Hintergrundfarbe des Modals |
+| `backgroundColor` | `Color?` | null | Hintergrundfarbe des Modals, wird auch für den Inhaltsbereich verwendet, sofern `modalBackgroundColor` nicht gesetzt ist |
+| `modalBackgroundColor` | `Color?` | null | Hintergrundfarbe des Inhaltsbereichs, überschreibt `backgroundColor` |
 | `showHandle` | `bool` | `true` | Ziehgriff oben anzeigen |
 | `closeButtonColor` | `Color?` | null | Hintergrundfarbe der Schließen-Schaltfläche |
 | `closeButtonIconColor` | `Color?` | null | Symbolfarbe der Schließen-Schaltfläche |
 | `modalDecoration` | `BoxDecoration?` | null | Benutzerdefinierte Dekoration für den Modal-Container |
 | `handleColor` | `Color?` | null | Farbe des Ziehgriffs |
+| `useRootNavigator` | `bool` | `true` | Modal auf dem Root-Navigator anzeigen |
 
 <div id="actions"></div>
 

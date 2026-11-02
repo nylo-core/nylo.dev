@@ -180,12 +180,14 @@ BottomSheetModal.showLogout(
 | `headerPadding` | `EdgeInsets?` | null | Padding quando l'header e' presente |
 | `contentPadding` | `EdgeInsets?` | null | Padding attorno al contenuto principale |
 | `actionsPadding` | `EdgeInsets?` | null | Padding attorno alla sezione azioni |
-| `backgroundColor` | `Color?` | null | Colore di sfondo del modal |
+| `backgroundColor` | `Color?` | null | Colore di sfondo del modal, usato anche per l'area del contenuto a meno che non sia impostato `modalBackgroundColor` |
+| `modalBackgroundColor` | `Color?` | null | Colore di sfondo dell'area del contenuto, sovrascrive `backgroundColor` |
 | `showHandle` | `bool` | `true` | Mostra la maniglia di trascinamento in cima |
 | `closeButtonColor` | `Color?` | null | Colore di sfondo del pulsante di chiusura |
 | `closeButtonIconColor` | `Color?` | null | Colore dell'icona del pulsante di chiusura |
 | `modalDecoration` | `BoxDecoration?` | null | Decorazione personalizzata per il contenitore del modal |
 | `handleColor` | `Color?` | null | Colore della maniglia di trascinamento |
+| `useRootNavigator` | `bool` | `true` | Mostra il modal sul navigator root |
 
 <div id="actions"></div>
 
