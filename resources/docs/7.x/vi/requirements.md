@@ -14,14 +14,22 @@
 
 ## Yêu cầu hệ thống
 
-<x-doc-strip label="Tổng quan" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Tất cả nền tảng Flutter" linkText="Cài đặt Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="Tổng quan" items="Flutter 3.47.0+, Dart SDK 3.13+, Tất cả nền tảng Flutter" linkText="Cài đặt Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 yêu cầu các phiên bản tối thiểu sau:
 
 | Yêu cầu | Phiên bản tối thiểu |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 trở lên |
-| **Dart SDK** | 3.10.7 trở lên |
+| **Flutter** | 3.47.0 trở lên |
+| **Dart SDK** | 3.13 trở lên |
+
+Các ứng dụng {{ config('app.name') }} import `package:material_ui/material_ui.dart` cho các widget Material và khai báo `material_ui: ^1.11.0` trong `dependencies` của `pubspec.yaml`. Với các widget Cupertino, hãy thêm `cupertino_ui: ^1.1.6` và import `package:cupertino_ui/cupertino_ui.dart`.
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### Hỗ trợ nền tảng
 
@@ -59,13 +67,13 @@ flutter --version
 Bạn sẽ thấy đầu ra tương tự như:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Cập nhật Flutter (nếu cần)
 
-Nếu phiên bản Flutter của bạn thấp hơn 3.38.4, hãy nâng cấp lên bản phát hành ổn định mới nhất:
+Nếu phiên bản Flutter của bạn thấp hơn 3.47.0, hãy nâng cấp lên bản phát hành ổn định mới nhất:
 
 ``` bash
 flutter channel stable

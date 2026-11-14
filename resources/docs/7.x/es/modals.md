@@ -45,7 +45,7 @@ Esto genera dos cosas:
 1. **Un widget de contenido del modal** en `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Modal de Opciones de Pago
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 El patrón recomendado es crear una clase `BottomSheetModal` con métodos estáticos para cada tipo de modal. El boilerplate proporciona esta estructura:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

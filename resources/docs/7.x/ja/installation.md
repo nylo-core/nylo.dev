@@ -16,7 +16,7 @@
 
 3つのコマンドで、空のフォルダーから、ルーティング、ネットワーク、テーマ、コード生成が設定済みの Flutter アプリを起動できます。
 
-<x-doc-strip label="始める前に" items="Flutter SDK をインストール済み, Dart 3" linkText="すべての要件" linkHref="/ja/docs/{{ $version }}/requirements" />
+<x-doc-strip label="始める前に" items="Flutter 3.47.0+ と Dart 3.13+" linkText="すべての要件" linkHref="/ja/docs/{{ $version }}/requirements" />
 
 ## インストール
 

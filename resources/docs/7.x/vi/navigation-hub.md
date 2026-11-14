@@ -62,7 +62,7 @@ Lệnh này sẽ tạo các tệp trong thư mục `resources/pages/navigation_h
 Đây là giao diện của Navigation Hub được tạo:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/pages/navigation_hubs/base/tabs/home_tab_widget.dart';
 import '/resources/pages/navigation_hubs/base/tabs/settings_tab_widget.dart';
@@ -492,7 +492,7 @@ metro make:journey_widget welcome,phone_number_step,add_photos_step
 Đây là giao diện của widget JourneyState được tạo:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/pages/navigation_hubs/onboarding/onboarding_navigation_hub.dart';
 import '/resources/widgets/buttons/buttons.dart';
 import 'package:nylo_framework/nylo_framework.dart';

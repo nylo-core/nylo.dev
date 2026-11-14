@@ -16,7 +16,7 @@
 
 只需三个命令，即可从空文件夹创建并运行一个已配置好路由、网络、主题和代码生成的 Flutter 应用。
 
-<x-doc-strip label="开始之前" items="已安装 Flutter SDK, Dart 3" linkText="完整要求" linkHref="/zh/docs/{{ $version }}/requirements" />
+<x-doc-strip label="开始之前" items="Flutter 3.47.0+ 和 Dart 3.13+" linkText="完整要求" linkHref="/zh/docs/{{ $version }}/requirements" />
 
 ## 安装
 

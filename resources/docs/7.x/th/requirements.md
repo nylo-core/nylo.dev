@@ -14,14 +14,22 @@
 
 ## ความต้องการของระบบ
 
-<x-doc-strip label="ภาพรวม" items="Flutter 3.38.4+, Dart SDK 3.10.7+, ทุกแพลตฟอร์มของ Flutter" linkText="ติดตั้ง Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="ภาพรวม" items="Flutter 3.47.0+, Dart SDK 3.13+, ทุกแพลตฟอร์มของ Flutter" linkText="ติดตั้ง Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 ต้องการเวอร์ชันขั้นต่ำดังต่อไปนี้:
 
 | ความต้องการ | เวอร์ชันขั้นต่ำ |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 หรือสูงกว่า |
-| **Dart SDK** | 3.10.7 หรือสูงกว่า |
+| **Flutter** | 3.47.0 หรือสูงกว่า |
+| **Dart SDK** | 3.13 หรือสูงกว่า |
+
+แอป {{ config('app.name') }} import `package:material_ui/material_ui.dart` สำหรับ Material widget และระบุ `material_ui: ^1.11.0` ไว้ใน `dependencies` ของ `pubspec.yaml` สำหรับ Cupertino widget ให้เพิ่ม `cupertino_ui: ^1.1.6` และ import `package:cupertino_ui/cupertino_ui.dart`
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### การรองรับแพลตฟอร์ม
 
@@ -59,13 +67,13 @@ flutter --version
 คุณควรเห็นผลลัพธ์คล้ายกับ:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### อัปเดต Flutter (หากจำเป็น)
 
-หากเวอร์ชัน Flutter ของคุณต่ำกว่า 3.38.4 ให้อัปเกรดเป็นรุ่นเสถียรล่าสุด:
+หากเวอร์ชัน Flutter ของคุณต่ำกว่า 3.47.0 ให้อัปเกรดเป็นรุ่นเสถียรล่าสุด:
 
 ``` bash
 flutter channel stable

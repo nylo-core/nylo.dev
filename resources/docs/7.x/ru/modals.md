@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. **Виджет содержимого модального окна** в `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Модальное окно опций оплаты
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 Рекомендуемый паттерн — создание класса `BottomSheetModal` со статическими методами для каждого типа модального окна. Шаблон предоставляет следующую структуру:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

@@ -62,7 +62,7 @@ Questo creerà i file nella directory `resources/pages/navigation_hubs/base/`:
 Ecco come appare un Navigation Hub generato:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/pages/navigation_hubs/base/tabs/home_tab_widget.dart';
 import '/resources/pages/navigation_hubs/base/tabs/settings_tab_widget.dart';
@@ -490,7 +490,7 @@ metro make:journey_widget welcome,phone_number_step,add_photos_step
 Ecco come appare un widget JourneyState generato:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/pages/navigation_hubs/onboarding/onboarding_navigation_hub.dart';
 import '/resources/widgets/buttons/buttons.dart';
 import 'package:nylo_framework/nylo_framework.dart';

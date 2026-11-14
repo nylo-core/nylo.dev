@@ -55,7 +55,7 @@ Jesli chcesz miec wiele motywow w swojej aplikacji, utwoz reczne pliki motywu w 
 **Krok 1:** Utworz plik motywu w `lib/resources/themes/bright/bright_theme.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/base_theme.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -66,7 +66,7 @@ ThemeData brightTheme(ColorStyles color) =>
 **Krok 2:** Utworz plik kolorow w `lib/resources/themes/bright/bright_theme_colors.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/color_styles.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -136,7 +136,7 @@ Wartosci kolorow sa zorganizowane w grupy (`general`, `appBar`, `bottomTabBar`) 
 
 ``` dart
 // lib/resources/themes/light/light_theme_colors.dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -248,7 +248,7 @@ Trzy domyslne grupy (`general`, `appBar`, `bottomTabBar`) sa punktem wyjscia, ni
 Zgrupuj powiazane kolory w malej, niezmiennej klasie:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconColors {
   final Color iconBackground;

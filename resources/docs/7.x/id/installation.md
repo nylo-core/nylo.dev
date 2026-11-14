@@ -16,7 +16,7 @@
 
 Tiga perintah membawa Anda dari folder kosong ke aplikasi Flutter yang berjalan, dengan routing, networking, tema, dan pembuatan kode yang sudah disiapkan.
 
-<x-doc-strip label="Sebelum memulai" items="Flutter SDK terinstal, Dart 3" linkText="Persyaratan lengkap" linkHref="/id/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Sebelum memulai" items="Flutter 3.47.0+ dan Dart 3.13+" linkText="Persyaratan lengkap" linkHref="/id/docs/{{ $version }}/requirements" />
 
 ## Instalasi
 

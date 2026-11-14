@@ -114,7 +114,7 @@ Wenn Sie einen Diff der Änderungen zwischen v6 und v7 sehen möchten, können S
 
 Verwenden Sie diese Checkliste, um Ihren Migrationsfortschritt zu verfolgen:
 
-- [ ] `pubspec.yaml` aktualisieren (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
+- [ ] `pubspec.yaml` aktualisieren (Dart >=3.13.0, Flutter >=3.47.0, nylo_framework: ^7.6.0)
 - [ ] `flutter pub get` ausführen
 - [ ] `metro make:key` ausführen, um APP_KEY zu generieren
 - [ ] `metro make:env` ausführen, um verschlüsselte Umgebung zu generieren
@@ -149,11 +149,12 @@ Aktualisieren Sie Ihre `pubspec.yaml`:
 
 ``` yaml
 environment:
-  sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.38.4"
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: ">=3.47.0"
 
 dependencies:
-  nylo_framework: ^7.0.0
+  nylo_framework: ^7.6.0
+  material_ui: ^1.11.0
   # ... weitere Abhängigkeiten
 ```
 

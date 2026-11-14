@@ -16,7 +16,7 @@
 
 세 개의 명령으로 빈 폴더에서 라우팅, 네트워킹, 테마 및 코드 생성이 미리 구성된 Flutter 앱을 실행할 수 있습니다.
 
-<x-doc-strip label="시작하기 전에" items="Flutter SDK 설치됨, Dart 3" linkText="전체 요구 사항" linkHref="/ko/docs/{{ $version }}/requirements" />
+<x-doc-strip label="시작하기 전에" items="Flutter 3.47.0+ 및 Dart 3.13+" linkText="전체 요구 사항" linkHref="/ko/docs/{{ $version }}/requirements" />
 
 ## 설치하기
 

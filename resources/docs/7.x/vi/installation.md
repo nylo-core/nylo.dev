@@ -16,7 +16,7 @@
 
 Ba lệnh sẽ đưa bạn từ một thư mục trống đến ứng dụng Flutter đang chạy, với định tuyến, mạng, theme và tạo mã đã được thiết lập sẵn.
 
-<x-doc-strip label="Trước khi bắt đầu" items="Đã cài Flutter SDK, Dart 3" linkText="Yêu cầu đầy đủ" linkHref="/vi/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Trước khi bắt đầu" items="Flutter 3.47.0+ và Dart 3.13+" linkText="Yêu cầu đầy đủ" linkHref="/vi/docs/{{ $version }}/requirements" />
 
 ## Cài đặt
 

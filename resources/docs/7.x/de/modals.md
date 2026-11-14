@@ -45,7 +45,7 @@ Dies erstellt zwei Dinge:
 1. **Ein Modal-Inhalts-Widget** unter `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment-Optionen-Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 Das empfohlene Muster ist die Erstellung einer `BottomSheetModal`-Klasse mit statischen Methoden für jeden Modal-Typ. Die Projektvorlage bietet diese Struktur:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

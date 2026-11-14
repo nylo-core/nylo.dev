@@ -17,7 +17,7 @@
 
 Три команды превращают пустую папку в работающее Flutter-приложение с уже настроенными маршрутизацией, сетью, темами и генерацией кода.
 
-<x-doc-strip label="Перед началом" items="Flutter SDK установлен, Dart 3" linkText="Полные требования" linkHref="/ru/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Перед началом" items="Flutter 3.47.0+ и Dart 3.13+" linkText="Полные требования" linkHref="/ru/docs/{{ $version }}/requirements" />
 
 ## Установка
 

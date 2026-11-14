@@ -57,8 +57,8 @@ Ensure you have the following installed:
 
 | Requirement | Minimum Version |
 |-------------|-----------------|
-| Flutter | 3.38.4 or higher |
-| Dart SDK | 3.10.7 or higher |
+| Flutter | 3.47.0 or higher |
+| Dart SDK | 3.13 or higher |
 
 ### Link Local Packages
 
@@ -203,8 +203,8 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.38.x
-- Dart SDK: 3.10.x
+- Flutter: 3.47.x
+- Dart SDK: 3.13.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux
 - Device: iPhone 15/Pixel 8 (if applicable)

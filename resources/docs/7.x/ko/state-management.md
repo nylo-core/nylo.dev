@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 이렇게 하면 `lib/resources/widgets/`에 다음이 생성됩니다:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ class _ProfileCardState extends NyState<ProfileCard> {
 **2단계:** 스캐폴드를 상태 관리 위젯으로 변환합니다.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

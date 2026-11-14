@@ -291,7 +291,7 @@ metro make:stateful_widget profile_card
 Ini menghasilkan berikut di `lib/resources/widgets/`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -326,7 +326,7 @@ Scaffold memberi Anda widget `NyState` yang berfungsi — tetapi **belum dikelol
 **Langkah 2:** Konversi scaffold menjadi widget berstate terkelola.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

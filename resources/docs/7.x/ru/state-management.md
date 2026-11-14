@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 Это создаёт следующее в `lib/resources/widgets/`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ Scaffold создаёт рабочий виджет `NyState` — но он **е
 **Шаг 2:** Преобразуйте scaffold в виджет с управляемым состоянием.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

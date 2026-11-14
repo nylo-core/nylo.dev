@@ -14,14 +14,22 @@
 
 ## 系统要求
 
-<x-doc-strip label="概览" items="Flutter 3.38.4+, Dart SDK 3.10.7+, 所有 Flutter 平台" linkText="安装 Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="概览" items="Flutter 3.47.0+, Dart SDK 3.13+, 所有 Flutter 平台" linkText="安装 Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 需要以下最低版本：
 
 | 要求 | 最低版本 |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 或更高 |
-| **Dart SDK** | 3.10.7 或更高 |
+| **Flutter** | 3.47.0 或更高 |
+| **Dart SDK** | 3.13 或更高 |
+
+{{ config('app.name') }} 应用导入 `package:material_ui/material_ui.dart` 来使用 Material 组件，并在 `pubspec.yaml` 的 `dependencies` 中列出 `material_ui: ^1.11.0`。如需使用 Cupertino 组件，请添加 `cupertino_ui: ^1.1.6` 并导入 `package:cupertino_ui/cupertino_ui.dart`。
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### 平台支持
 
@@ -59,13 +67,13 @@ flutter --version
 您应该看到类似以下的输出：
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### 更新 Flutter（如需要）
 
-如果您的 Flutter 版本低于 3.38.4，请升级到最新的稳定版本：
+如果您的 Flutter 版本低于 3.47.0，请升级到最新的稳定版本：
 
 ``` bash
 flutter channel stable

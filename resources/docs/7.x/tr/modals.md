@@ -45,7 +45,7 @@ Bu iki &#351;ey olu&#351;turur:
 1. `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart` konumunda **bir modal i&#231;erik widget'&#305;**:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment Options Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 &#214;nerilen yakla&#351;&#305;m, her modal t&#252;r&#252; i&#231;in statik metotlar&#305; olan bir `BottomSheetModal` s&#305;n&#305;f&#305; olu&#351;turmakt&#305;r. &#350;ablon bu yap&#305;y&#305; sa&#287;lar:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

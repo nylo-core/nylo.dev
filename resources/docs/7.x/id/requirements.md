@@ -14,14 +14,22 @@
 
 ## Persyaratan Sistem
 
-<x-doc-strip label="Sekilas" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Semua platform Flutter" linkText="Instal Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="Sekilas" items="Flutter 3.47.0+, Dart SDK 3.13+, Semua platform Flutter" linkText="Instal Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 memerlukan versi minimum berikut:
 
 | Persyaratan | Versi Minimum |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 atau lebih tinggi |
-| **Dart SDK** | 3.10.7 atau lebih tinggi |
+| **Flutter** | 3.47.0 atau lebih tinggi |
+| **Dart SDK** | 3.13 atau lebih tinggi |
+
+Aplikasi {{ config('app.name') }} mengimpor `package:material_ui/material_ui.dart` untuk widget Material dan mencantumkan `material_ui: ^1.11.0` di `dependencies` pada `pubspec.yaml`. Untuk widget Cupertino, tambahkan `cupertino_ui: ^1.1.6` dan impor `package:cupertino_ui/cupertino_ui.dart`.
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### Dukungan Platform
 
@@ -59,13 +67,13 @@ flutter --version
 Anda akan melihat output yang mirip dengan:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Perbarui Flutter (jika diperlukan)
 
-Jika versi Flutter Anda di bawah 3.38.4, perbarui ke rilis stabil terbaru:
+Jika versi Flutter Anda di bawah 3.47.0, perbarui ke rilis stabil terbaru:
 
 ``` bash
 flutter channel stable

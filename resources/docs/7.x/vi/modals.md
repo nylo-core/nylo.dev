@@ -45,7 +45,7 @@ Lệnh này tạo hai thứ:
 1. **Widget nội dung modal** tại `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment Options Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 Mẫu được khuyến nghị là tạo class `BottomSheetModal` với các phương thức static cho mỗi loại modal. Boilerplate cung cấp cấu trúc này:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

@@ -114,7 +114,7 @@
 
 अपनी माइग्रेशन प्रगति को ट्रैक करने के लिए इस चेकलिस्ट का उपयोग करें:
 
-- [ ] `pubspec.yaml` अपडेट करें (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
+- [ ] `pubspec.yaml` अपडेट करें (Dart >=3.13.0, Flutter >=3.47.0, nylo_framework: ^7.6.0)
 - [ ] `flutter pub get` चलाएं
 - [ ] APP_KEY जेनरेट करने के लिए `metro make:key` चलाएं
 - [ ] एन्क्रिप्टेड environment जेनरेट करने के लिए `metro make:env` चलाएं
@@ -149,11 +149,12 @@
 
 ``` yaml
 environment:
-  sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.38.4"
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: ">=3.47.0"
 
 dependencies:
-  nylo_framework: ^7.0.0
+  nylo_framework: ^7.6.0
+  material_ui: ^1.11.0
   # ... अन्य dependencies
 ```
 

@@ -55,7 +55,7 @@
 **Шаг 1:** Создайте файл темы в `lib/resources/themes/bright/bright_theme.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/base_theme.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -66,7 +66,7 @@ ThemeData brightTheme(ColorStyles color) =>
 **Шаг 2:** Создайте файл цветов в `lib/resources/themes/bright/bright_theme_colors.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/color_styles.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -136,7 +136,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 
 ``` dart
 // lib/resources/themes/light/light_theme_colors.dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -248,7 +248,7 @@ abstract class ColorStyles extends ThemeColor {
 Сгруппируйте связанные цвета в небольшой неизменяемый класс:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconColors {
   final Color iconBackground;

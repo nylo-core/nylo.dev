@@ -16,7 +16,7 @@
 
 तीन कमांड आपको एक खाली फ़ोल्डर से चलती हुई Flutter ऐप तक ले जाते हैं, जिसमें रूटिंग, नेटवर्किंग, थीम और कोड जेनरेशन पहले से सेट होते हैं।
 
-<x-doc-strip label="शुरू करने से पहले" items="Flutter SDK इंस्टॉल, Dart 3" linkText="पूरी आवश्यकताएँ" linkHref="/hi/docs/{{ $version }}/requirements" />
+<x-doc-strip label="शुरू करने से पहले" items="Flutter 3.47.0+ और Dart 3.13+" linkText="पूरी आवश्यकताएँ" linkHref="/hi/docs/{{ $version }}/requirements" />
 
 ## इंस्टॉल
 

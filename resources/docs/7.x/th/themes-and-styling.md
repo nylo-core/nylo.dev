@@ -55,7 +55,7 @@
 **ขั้นตอนที่ 1:** สร้างไฟล์ธีมที่ `lib/resources/themes/bright/bright_theme.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/base_theme.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -66,7 +66,7 @@ ThemeData brightTheme(ColorStyles color) =>
 **ขั้นตอนที่ 2:** สร้างไฟล์สีที่ `lib/resources/themes/bright/bright_theme_colors.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/color_styles.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -136,7 +136,7 @@ final List<BaseThemeConfig<ColorStyles>> appThemes = [
 
 ``` dart
 // lib/resources/themes/light/light_theme_colors.dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -248,7 +248,7 @@ abstract class ColorStyles extends ThemeColor {
 จัดกลุ่มสีที่เกี่ยวข้องเป็นคลาสที่ไม่เปลี่ยนแปลงขนาดเล็ก:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconColors {
   final Color iconBackground;

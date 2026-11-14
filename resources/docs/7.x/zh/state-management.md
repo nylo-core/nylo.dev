@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 这会在 `lib/resources/widgets/` 中生成以下内容：
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ class _ProfileCardState extends NyState<ProfileCard> {
 **第 2 步：** 将脚手架转换为状态管理组件。
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

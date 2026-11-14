@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 これにより `lib/resources/widgets/` に以下が生成されます:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ class _ProfileCardState extends NyState<ProfileCard> {
 **ステップ 2:** スキャフォールドを状態管理ウィジェットに変換します。
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

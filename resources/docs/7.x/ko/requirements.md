@@ -14,14 +14,22 @@
 
 ## 시스템 요구 사항
 
-<x-doc-strip label="한눈에 보기" items="Flutter 3.38.4+, Dart SDK 3.10.7+, 모든 Flutter 플랫폼" linkText="Flutter 설치" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="한눈에 보기" items="Flutter 3.47.0+, Dart SDK 3.13+, 모든 Flutter 플랫폼" linkText="Flutter 설치" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7은 다음 최소 버전이 필요합니다:
 
 | 요구 사항 | 최소 버전 |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 이상 |
-| **Dart SDK** | 3.10.7 이상 |
+| **Flutter** | 3.47.0 이상 |
+| **Dart SDK** | 3.13 이상 |
+
+{{ config('app.name') }} 앱은 Material 위젯을 위해 `package:material_ui/material_ui.dart`를 임포트하고 `pubspec.yaml`의 `dependencies`에 `material_ui: ^1.11.0`을 명시합니다. Cupertino 위젯을 사용하려면 `cupertino_ui: ^1.1.6`을 추가하고 `package:cupertino_ui/cupertino_ui.dart`를 임포트하세요.
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### 플랫폼 지원
 
@@ -59,13 +67,13 @@ flutter --version
 다음과 유사한 출력이 표시되어야 합니다:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Flutter 업데이트 (필요한 경우)
 
-Flutter 버전이 3.38.4 미만인 경우, 최신 안정 버전으로 업그레이드하세요:
+Flutter 버전이 3.47.0 미만인 경우, 최신 안정 버전으로 업그레이드하세요:
 
 ``` bash
 flutter channel stable

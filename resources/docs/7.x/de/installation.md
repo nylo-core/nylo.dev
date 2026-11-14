@@ -16,7 +16,7 @@
 
 Drei Befehle führen Sie von einem leeren Ordner zu einer laufenden Flutter-App, in der Routing, Networking, Themes und Codegenerierung bereits eingerichtet sind.
 
-<x-doc-strip label="Bevor Sie beginnen" items="Flutter SDK installiert, Dart 3" linkText="Alle Voraussetzungen" linkHref="/de/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Bevor Sie beginnen" items="Flutter 3.47.0+ und Dart 3.13+" linkText="Alle Voraussetzungen" linkHref="/de/docs/{{ $version }}/requirements" />
 
 ## Installieren
 

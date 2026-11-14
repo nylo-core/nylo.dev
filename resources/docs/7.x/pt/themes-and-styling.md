@@ -55,7 +55,7 @@ Se você deseja ter múltiplos temas para seu app, crie os arquivos de tema manu
 **Passo 1:** Crie o arquivo de tema em `lib/resources/themes/bright/bright_theme.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/base_theme.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -66,7 +66,7 @@ ThemeData brightTheme(ColorStyles color) =>
 **Passo 2:** Crie o arquivo de cores em `lib/resources/themes/bright/bright_theme_colors.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/color_styles.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -136,7 +136,7 @@ Os valores de cores são organizados em grupos (`general`, `appBar`, `bottomTabB
 
 ``` dart
 // lib/resources/themes/light/light_theme_colors.dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -248,7 +248,7 @@ Os três grupos padrão (`general`, `appBar`, `bottomTabBar`) são um ponto de p
 Agrupe cores relacionadas em uma pequena classe imutável:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconColors {
   final Color iconBackground;

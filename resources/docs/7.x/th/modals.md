@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. **widget เนื้อหา modal** ที่ `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment Options Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 รูปแบบที่แนะนำคือการสร้างคลาส `BottomSheetModal` พร้อมเมธอดแบบ static สำหรับแต่ละประเภท modal โครงร่างพื้นฐานมีโครงสร้างนี้:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

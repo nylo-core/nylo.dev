@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. **模态框内容组件**，位于 `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`：
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// 支付选项模态框
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 推荐的模式是创建一个 `BottomSheetModal` 类，为每种模态框类型提供静态方法。项目模板提供了这种结构：
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

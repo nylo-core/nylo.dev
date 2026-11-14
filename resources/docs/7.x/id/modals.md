@@ -45,7 +45,7 @@ Ini menghasilkan dua hal:
 1. **Widget konten modal** di `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment Options Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 Pola yang direkomendasikan adalah membuat kelas `BottomSheetModal` dengan metode statis untuk setiap tipe modal. Boilerplate menyediakan struktur ini:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

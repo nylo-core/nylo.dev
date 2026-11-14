@@ -55,7 +55,7 @@ Uygulamanız için birden fazla tema istiyorsanız, `lib/resources/themes/` alt�
 **Adım 1:** `lib/resources/themes/bright/bright_theme.dart` konumunda tema dosyasını oluşturun:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/base_theme.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -66,7 +66,7 @@ ThemeData brightTheme(ColorStyles color) =>
 **Adım 2:** `lib/resources/themes/bright/bright_theme_colors.dart` konumunda renk dosyasını oluşturun:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '/resources/themes/color_styles.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -136,7 +136,7 @@ Renk değerleri, framework tarafından tanımlanan gruplara (`general`, `appBar`
 
 ``` dart
 // lib/resources/themes/light/light_theme_colors.dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/themes/color_styles.dart';
 
@@ -248,7 +248,7 @@ Bu varsayılanların ötesinde alanlar eklemek için — kendi düğmeleriniz, s
 İlgili renkleri küçük, değişmez bir sınıfta gruplandırın:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconColors {
   final Color iconBackground;

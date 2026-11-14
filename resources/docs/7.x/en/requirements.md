@@ -14,14 +14,22 @@
 
 ## System Requirements
 
-<x-doc-strip label="At a glance" items="Flutter 3.38.4+, Dart SDK 3.10.7+, All Flutter platforms" linkText="Install Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="At a glance" items="Flutter 3.47.0+, Dart SDK 3.13+, All Flutter platforms" linkText="Install Flutter" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 requires the following minimum versions:
 
 | Requirement | Minimum Version |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 or higher |
-| **Dart SDK** | 3.10.7 or higher |
+| **Flutter** | 3.47.0 or higher |
+| **Dart SDK** | 3.13 or higher |
+
+{{ config('app.name') }} apps import `package:material_ui/material_ui.dart` for Material widgets and list `material_ui: ^1.11.0` in the `dependencies` of `pubspec.yaml`. For Cupertino widgets, add `cupertino_ui: ^1.1.6` and import `package:cupertino_ui/cupertino_ui.dart`.
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### Platform Support
 
@@ -59,13 +67,13 @@ flutter --version
 You should see output similar to:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Update Flutter (if needed)
 
-If your Flutter version is below 3.38.4, upgrade to the latest stable release:
+If your Flutter version is below 3.47.0, upgrade to the latest stable release:
 
 ``` bash
 flutter channel stable

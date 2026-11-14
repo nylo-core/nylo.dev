@@ -16,7 +16,7 @@
 
 Trzy polecenia wystarczą, aby przejść od pustego folderu do działającej aplikacji Flutter z gotowym routingiem, siecią, motywami i generowaniem kodu.
 
-<x-doc-strip label="Zanim zaczniesz" items="Zainstalowany Flutter SDK, Dart 3" linkText="Pełne wymagania" linkHref="/pl/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Zanim zaczniesz" items="Flutter 3.47.0+ i Dart 3.13+" linkText="Pełne wymagania" linkHref="/pl/docs/{{ $version }}/requirements" />
 
 ## Instalacja
 

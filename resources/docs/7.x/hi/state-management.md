@@ -291,7 +291,7 @@ metro make:stateful_widget profile_card
 यह `lib/resources/widgets/` में निम्नलिखित जनरेट करता है:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -326,7 +326,7 @@ class _ProfileCardState extends NyState<ProfileCard> {
 **स्टेप 2:** स्कैफोल्ड को स्टेट मैनेज्ड विजेट में बदलें।
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

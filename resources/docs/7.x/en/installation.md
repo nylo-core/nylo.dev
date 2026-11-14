@@ -17,7 +17,7 @@
 
 Three commands take you from an empty folder to a running Flutter app with routing, networking, themes and code generation already wired up.
 
-<x-doc-strip label="Before you start" items="Flutter SDK installed, Dart 3" linkText="Full requirements" linkHref="/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Before you start" items="Flutter 3.47.0+ and Dart 3.13+" linkText="Full requirements" linkHref="/docs/{{ $version }}/requirements" />
 
 ## Install
 

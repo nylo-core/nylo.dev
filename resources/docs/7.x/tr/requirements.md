@@ -14,14 +14,22 @@
 
 ## Sistem Gereksinimleri
 
-<x-doc-strip label="Kısa bakış" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Tüm Flutter platformları" linkText="Flutter'ı yükle" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="Kısa bakış" items="Flutter 3.47.0+, Dart SDK 3.13+, Tüm Flutter platformları" linkText="Flutter'ı yükle" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 a&#351;a&#287;&#305;daki minimum s&#252;r&#252;mleri gerektirir:
 
 | Gereksinim | Minimum S&#252;r&#252;m |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 veya &#252;zeri |
-| **Dart SDK** | 3.10.7 veya &#252;zeri |
+| **Flutter** | 3.47.0 veya &#252;zeri |
+| **Dart SDK** | 3.13 veya &#252;zeri |
+
+{{ config('app.name') }} uygulamaları Material widget'ları için `package:material_ui/material_ui.dart` import eder ve `pubspec.yaml` dosyasının `dependencies` bölümünde `material_ui: ^1.11.0` bulundurur. Cupertino widget'ları için `cupertino_ui: ^1.1.6` ekleyin ve `package:cupertino_ui/cupertino_ui.dart` import edin.
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### Platform Deste&#287;i
 
@@ -59,13 +67,13 @@ flutter --version
 &#350;una benzer bir &#231;&#305;kt&#305; g&#246;rmelisiniz:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Flutter'&#305; G&#252;ncelleme (gerekirse)
 
-Flutter s&#252;r&#252;m&#252;n&#252;z 3.38.4'&#305;n alt&#305;ndaysa, en son kararl&#305; s&#252;r&#252;me y&#252;kseltin:
+Flutter s&#252;r&#252;m&#252;n&#252;z 3.47.0'&#305;n alt&#305;ndaysa, en son kararl&#305; s&#252;r&#252;me y&#252;kseltin:
 
 ``` bash
 flutter channel stable

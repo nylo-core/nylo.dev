@@ -57,8 +57,8 @@ A&#351;a&#287;&#305;dakilerin kurulu oldu&#287;undan emin olun:
 
 | Gereksinim | Minimum S&#252;r&#252;m |
 |-------------|-----------------|
-| Flutter | 3.38.4 veya &#252;zeri |
-| Dart SDK | 3.10.7 veya &#252;zeri |
+| Flutter | 3.47.0 veya &#252;zeri |
+| Dart SDK | 3.13 veya &#252;zeri |
 
 ### Yerel Paketleri Ba&#287;lama
 
@@ -203,8 +203,8 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.38.x
-- Dart SDK: 3.10.x
+- Flutter: 3.47.x
+- Dart SDK: 3.13.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux
 - Device: iPhone 15/Pixel 8 (if applicable)

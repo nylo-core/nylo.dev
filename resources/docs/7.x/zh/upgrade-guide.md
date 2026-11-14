@@ -114,7 +114,7 @@
 
 使用此清单跟踪您的迁移进度：
 
-- [ ] 更新 `pubspec.yaml`（Dart >=3.10.7、Flutter >=3.38.4、nylo_framework: ^7.0.0）
+- [ ] 更新 `pubspec.yaml`（Dart >=3.13.0、Flutter >=3.47.0、nylo_framework: ^7.6.0）
 - [ ] 运行 `flutter pub get`
 - [ ] 运行 `metro make:key` 生成 APP_KEY
 - [ ] 运行 `metro make:env` 生成加密的环境配置
@@ -149,11 +149,12 @@
 
 ``` yaml
 environment:
-  sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.38.4"
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: ">=3.47.0"
 
 dependencies:
-  nylo_framework: ^7.0.0
+  nylo_framework: ^7.6.0
+  material_ui: ^1.11.0
   # ... 其他依赖
 ```
 

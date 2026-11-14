@@ -16,7 +16,7 @@
 
 Üç komut sizi boş bir klasörden yönlendirme, ağ, temalar ve kod üretimi hazır olan çalışan bir Flutter uygulamasına götürür.
 
-<x-doc-strip label="Başlamadan önce" items="Flutter SDK yüklü, Dart 3" linkText="Tüm gereksinimler" linkHref="/tr/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Başlamadan önce" items="Flutter 3.47.0+ ve Dart 3.13+" linkText="Tüm gereksinimler" linkHref="/tr/docs/{{ $version }}/requirements" />
 
 ## Kurulum
 

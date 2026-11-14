@@ -57,8 +57,8 @@ git clone https://github.com/YOUR-USERNAME/support
 
 | 요구사항 | 최소 버전 |
 |-------------|-----------------|
-| Flutter | 3.38.4 이상 |
-| Dart SDK | 3.10.7 이상 |
+| Flutter | 3.47.0 이상 |
+| Dart SDK | 3.13 이상 |
 
 ### 로컬 패키지 연결
 
@@ -203,8 +203,8 @@ What should happen
 What actually happens
 
 ### Environment
-- Flutter: 3.38.x
-- Dart SDK: 3.10.x
+- Flutter: 3.47.x
+- Dart SDK: 3.13.x
 - nylo_framework: ^7.0.0
 - OS: macOS/Windows/Linux
 - Device: iPhone 15/Pixel 8 (if applicable)

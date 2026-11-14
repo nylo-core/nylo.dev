@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 Lệnh này tạo ra trong `lib/resources/widgets/`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ Scaffold cho bạn một widget `NyState` hoạt động được — nhưng **c
 **Bước 2:** Chuyển đổi scaffold thành widget được quản lý state.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

@@ -16,7 +16,7 @@
 
 คำสั่งสามคำสั่งจะพาคุณจากโฟลเดอร์ว่างไปยังแอป Flutter ที่ทำงานได้ พร้อมระบบเส้นทาง เครือข่าย ธีม และการสร้างโค้ดที่ตั้งค่าไว้แล้ว
 
-<x-doc-strip label="ก่อนเริ่มต้น" items="ติดตั้ง Flutter SDK แล้ว, Dart 3" linkText="ความต้องการทั้งหมด" linkHref="/th/docs/{{ $version }}/requirements" />
+<x-doc-strip label="ก่อนเริ่มต้น" items="Flutter 3.47.0+ และ Dart 3.13+" linkText="ความต้องการทั้งหมด" linkHref="/th/docs/{{ $version }}/requirements" />
 
 ## ติดตั้ง
 

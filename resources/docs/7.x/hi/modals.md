@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. **एक मोडल कंटेंट विजेट** `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart` पर:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Payment Options Modal
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 अनुशंसित पैटर्न एक `BottomSheetModal` क्लास बनाना है जिसमें प्रत्येक मोडल प्रकार के लिए स्टैटिक मेथड हों। बॉयलरप्लेट यह संरचना प्रदान करता है:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

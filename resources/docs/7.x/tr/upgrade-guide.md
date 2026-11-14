@@ -114,7 +114,7 @@ v6 ve v7 arasindaki degisikliklerin bir farkini gormek istiyorsaniz, GitHub'daki
 
 Gecis ilerlemenizi takip etmek icin bu kontrol listesini kullanin:
 
-- [ ] `pubspec.yaml` guncelle (Dart >=3.10.7, Flutter >=3.38.4, nylo_framework: ^7.0.0)
+- [ ] `pubspec.yaml` guncelle (Dart >=3.13.0, Flutter >=3.47.0, nylo_framework: ^7.6.0)
 - [ ] `flutter pub get` calistir
 - [ ] APP_KEY olusturmak icin `metro make:key` calistir
 - [ ] Sifrelenmis ortam olusturmak icin `metro make:env` calistir
@@ -149,11 +149,12 @@ Gecis ilerlemenizi takip etmek icin bu kontrol listesini kullanin:
 
 ``` yaml
 environment:
-  sdk: '>=3.10.7 <4.0.0'
-  flutter: ">=3.38.4"
+  sdk: '>=3.13.0 <4.0.0'
+  flutter: ">=3.47.0"
 
 dependencies:
-  nylo_framework: ^7.0.0
+  nylo_framework: ^7.6.0
+  material_ui: ^1.11.0
   # ... diger bagimliliklar
 ```
 

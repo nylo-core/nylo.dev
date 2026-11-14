@@ -17,7 +17,7 @@
 
 Três comandos levam você de uma pasta vazia a um aplicativo Flutter em execução, com roteamento, rede, temas e geração de código já configurados.
 
-<x-doc-strip label="Antes de começar" items="Flutter SDK instalado, Dart 3" linkText="Requisitos completos" linkHref="/pt/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Antes de começar" items="Flutter 3.47.0+ e Dart 3.13+" linkText="Requisitos completos" linkHref="/pt/docs/{{ $version }}/requirements" />
 
 ## Instalar
 

@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`에 **모달 콘텐츠 위젯**:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// 결제 옵션 모달
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 권장 패턴은 각 모달 타입에 대한 정적 메서드가 있는 `BottomSheetModal` 클래스를 만드는 것입니다. 보일러플레이트는 다음 구조를 제공합니다:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

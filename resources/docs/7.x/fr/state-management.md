@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 Cela genere ce qui suit dans `lib/resources/widgets/` :
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ L'echafaudage vous donne un widget `NyState` fonctionnel — mais il n'est **pas
 **Etape 2 :** Convertissez l'echafaudage en widget a etat gere.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

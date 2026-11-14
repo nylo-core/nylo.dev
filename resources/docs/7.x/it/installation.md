@@ -16,7 +16,7 @@
 
 Tre comandi ti portano da una cartella vuota a un'app Flutter funzionante, con routing, rete, temi e generazione del codice già configurati.
 
-<x-doc-strip label="Prima di iniziare" items="Flutter SDK installato, Dart 3" linkText="Requisiti completi" linkHref="/it/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Prima di iniziare" items="Flutter 3.47.0+ e Dart 3.13+" linkText="Requisiti completi" linkHref="/it/docs/{{ $version }}/requirements" />
 
 ## Installa
 

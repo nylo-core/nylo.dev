@@ -45,7 +45,7 @@ metro make:bottom_sheet_modal payment_options
 1. **モーダルコンテンツウィジェット** `lib/resources/widgets/bottom_sheet_modals/modals/payment_options_modal.dart`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// 支払いオプションモーダル
 ///
@@ -106,7 +106,7 @@ BottomSheetModal.showLogout(context);
 推奨されるパターンは、各モーダルタイプの静的メソッドを持つ `BottomSheetModal` クラスを作成することです。ボイラープレートはこの構造を提供します:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class BottomSheetModal extends NyBaseModal {

@@ -14,14 +14,22 @@
 
 ## システム要件
 
-<x-doc-strip label="概要" items="Flutter 3.38.4+, Dart SDK 3.10.7+, Flutter の全プラットフォーム" linkText="Flutter をインストール" linkHref="https://docs.flutter.dev/get-started/install" />
+<x-doc-strip label="概要" items="Flutter 3.47.0+, Dart SDK 3.13+, Flutter の全プラットフォーム" linkText="Flutter をインストール" linkHref="https://docs.flutter.dev/get-started/install" />
 
 {{ config('app.name') }} v7 には以下の最低バージョンが必要です:
 
 | 要件 | 最低バージョン |
 |-------------|-----------------|
-| **Flutter** | 3.38.4 以上 |
-| **Dart SDK** | 3.10.7 以上 |
+| **Flutter** | 3.47.0 以上 |
+| **Dart SDK** | 3.13 以上 |
+
+{{ config('app.name') }} アプリは Material ウィジェットに `package:material_ui/material_ui.dart` をインポートし、`pubspec.yaml` の `dependencies` に `material_ui: ^1.11.0` を記述します。Cupertino ウィジェットを使う場合は、`cupertino_ui: ^1.1.6` を追加し、`package:cupertino_ui/cupertino_ui.dart` をインポートしてください。
+
+``` yaml
+dependencies:
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
+```
 
 ### プラットフォームサポート
 
@@ -59,13 +67,13 @@ flutter --version
 以下のような出力が表示されるはずです:
 
 ```
-Flutter 3.38.4 • channel stable
-Dart SDK version: 3.10.7
+Flutter 3.47.0 • channel stable
+Dart SDK version: 3.13.0
 ```
 
 ### Flutter の更新（必要な場合）
 
-Flutter のバージョンが 3.38.4 未満の場合、最新の安定版にアップグレードしてください:
+Flutter のバージョンが 3.47.0 未満の場合、最新の安定版にアップグレードしてください:
 
 ``` bash
 flutter channel stable

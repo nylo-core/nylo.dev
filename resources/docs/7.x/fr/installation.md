@@ -16,7 +16,7 @@
 
 Trois commandes suffisent pour passer d'un dossier vide à une application Flutter opérationnelle, avec le routage, le réseau, les thèmes et la génération de code déjà configurés.
 
-<x-doc-strip label="Avant de commencer" items="SDK Flutter installé, Dart 3" linkText="Configuration requise" linkHref="/fr/docs/{{ $version }}/requirements" />
+<x-doc-strip label="Avant de commencer" items="Flutter 3.47.0+ et Dart 3.13+" linkText="Configuration requise" linkHref="/fr/docs/{{ $version }}/requirements" />
 
 ## Installer
 

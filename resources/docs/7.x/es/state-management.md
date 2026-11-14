@@ -289,7 +289,7 @@ metro make:stateful_widget profile_card
 Esto genera lo siguiente en `lib/resources/widgets/`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -324,7 +324,7 @@ El andamiaje te da un widget `NyState` funcional — pero **aún no está gestio
 **Paso 2:** Convierte el andamiaje en un widget gestionado por estado.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {

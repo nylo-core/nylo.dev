@@ -290,7 +290,7 @@ metro make:stateful_widget profile_card
 Questo genera quanto segue in `lib/resources/widgets/`:
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -325,7 +325,7 @@ Lo scaffold ti fornisce un widget `NyState` funzionante — ma **non e' ancora c
 **Passo 2:** Converti lo scaffold in un widget con stato gestito.
 
 ``` dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProfileCard extends StatefulWidget {
