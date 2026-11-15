@@ -370,6 +370,7 @@ displayModal(
   isScrollControlled: true,
   height: MediaQuery.of(context).size.height * 0.8,
   showCloseButton: true,
+  headerPadding: EdgeInsets.only(top: 60),
   header: Padding(
     padding: EdgeInsets.all(16),
     child: Text("Terms of Service", style: TextStyle(fontSize: 20)),
